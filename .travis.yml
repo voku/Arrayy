@@ -1,12 +1,36 @@
 language: php
+sudo: false
+
 php:
-  - 5.6
-  - 5.5
-  - 5.4
   - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
   - 7.0
+  - nightly
   - hhvm
 
-# This triggers builds to run on the new TravisCI infrastructure.
-# See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
-sudo: false
+before_script:
+  - php --version
+  - mkdir -p $(dirname ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini)
+  - touch ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "php-config -> orig"
+  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sed -i.bkp "s/^extension\ =\ mbstring.so$/#extension = mbstring.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sed -i.bkp "s/^extension\ =\ intl.so$/#extension = intl.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sed -i.bkp "s/^extension\ =\ iconv.so$/#extension = iconv.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "php-config -> new"
+  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction --prefer-source
+  - composer dump-autoload -o
+
+script:
+  - mkdir -p build/logs
+  - php vendor/bin/phpunit -c phpunit.xml.dist
+
+after_script:
+  - php vendor/bin/coveralls -v
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
+  - bash <(curl -s https://codecov.io/bash)
