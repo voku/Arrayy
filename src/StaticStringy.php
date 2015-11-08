@@ -65,7 +65,7 @@ namespace Stringy;
  * @method static string reverse(string $stringInput, string $encoding = null)
  * @method static string safeTruncate(string $stringInput, int $length, string $substring = '', string $encoding = null)
  * @method static string shuffle(string $stringInput, string $encoding = null)
- * @method static string slugify(string $stringInput, string $replacement = '-', string $encoding = null)
+ * @method static string slugify(string $stringInput, string $replacement = '-', string $language = 'de', boolean $strToLower = true)
  * @method static string startsWith(string $stringInput, string $substring, bool $caseSensitive = true, string $encoding = null)
  * @method static string slice(string $stringInput, int $start, int $end = null, string $encoding = null)
  * @method static string split(string $stringInput, string $pattern, int $limit = null, string $encoding = null)
@@ -74,7 +74,7 @@ namespace Stringy;
  * @method static string swapCase(string $stringInput, string $encoding = null)
  * @method static string tidy(string $stringInput, string $encoding = null)
  * @method static string titleize(string $stringInput, string $encoding = null)
- * @method static string toAscii(string $stringInput, bool $removeUnsupported = true, string $encoding = null)
+ * @method static string toAscii(string $stringInput, bool $removeUnsupported = true)
  * @method static string toBoolean(string $stringInput, string $encoding = null)
  * @method static string toLowerCase(string $stringInput, string $encoding = null)
  * @method static string toSpaces(string $stringInput, int $tabLength = 4, string $encoding = null)
@@ -155,7 +155,7 @@ class StaticStringy
       'reverse'                => 2,
       'safeTruncate'           => 4,
       'shuffle'                => 2,
-      'slugify'                => 3,
+      'slugify'                => 5,
       'startsWith'             => 4,
       'slice'                  => 4,
       'split'                  => 4,
@@ -164,7 +164,7 @@ class StaticStringy
       'swapCase'               => 2,
       'tidy'                   => 2,
       'titleize'               => 3,
-      'toAscii'                => 3,
+      'toAscii'                => 2,
       'toBoolean'              => 2,
       'toLowerCase'            => 2,
       'toSpaces'               => 3,

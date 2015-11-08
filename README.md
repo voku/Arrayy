@@ -569,7 +569,7 @@ s('fòôbàř')->last(3); // 'bàř'
 
 ##### length()
 
-Returns the length of the string. An alias for PHP's mb_strlen() function.
+Returns the length of the string.
 
 ```php
 s('fòôbàř')->length(); // 6
@@ -853,8 +853,7 @@ s('OFF')->toBoolean(); // false
 
 ##### toLowerCase()
 
-Converts all characters in the string to lowercase. An alias for PHP's
-mb_strtolower().
+Converts all characters in the string to lowercase.
 
 ```php
 s('FÒÔBÀŘ')->toLowerCase(); // 'fòôbàř'
@@ -890,8 +889,7 @@ s('fòô bàř')->toTitleCase(); // 'Fòô Bàř'
 
 ##### toUpperCase()
 
-Converts all characters in the string to uppercase. An alias for PHP's
-mb_strtoupper().
+Converts all characters in the string to uppercase.
 
 ```php
 s('fòôbàř')->toUpperCase(); // 'FÒÔBÀŘ'

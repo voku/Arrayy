@@ -669,11 +669,11 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         return array(
             array('foo bar', 'fòô bàř'),
             array(' TEST ', ' ŤÉŚŢ '),
-            array('f = z = 3', 'φ = ź = 3'),
-            array('perevirka', 'перевірка'),
-            array('lysaya gora', 'лысая гора'),
+            array('ph = z = 3', 'φ = ź = 3'),
+            array('pierievirka', 'перевірка'),
+            array('lysaia ghora', 'лысая гора'),
             array('shchuka', 'щука'),
-            array('', '漢字'),
+            array('Han Zi ', '漢字'),
             array('xin chao the gioi', 'xin chào thế giới'),
             array('XIN CHAO THE GIOI', 'XIN CHÀO THẾ GIỚI'),
             array('dam phat chet luon', 'đấm phát chết luôn'),
@@ -683,7 +683,6 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
             array(' ', ' '), // medium mathematical space (U+205F)
             array(' ', '　'), // ideographic space (U+3000)
             array('', '𐍉'), // some uncommon, unsupported character (U+10349)
-            array('𐍉', '𐍉', false),
         );
     }
 
@@ -1043,13 +1042,13 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
             array('foo-bar', ' foo  bar '),
             array('foo-bar', 'foo -.-"-...bar'),
             array('another-foo-bar', 'another..& foo -.-"-...bar'),
-            array('foo-dbar', " Foo d'Bar "),
+            array('foo-d-bar', " Foo d'Bar "),
             array('a-string-with-dashes', 'A string-with-dashes'),
             array('using-strings-like-foo-bar', 'Using strings like fòô bàř'),
             array('numbers-1234', 'numbers 1234'),
             array('perevirka-ryadka', 'перевірка рядка'),
-            array('bukvar-s-bukvoy-y', 'букварь с буквой ы'),
-            array('podekhal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'),
+            array('bukvar-s-bukvoj-y', 'букварь с буквой ы'),
+            array('podehal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'),
             array('foo:bar:baz', 'Foo bar baz', ':'),
             array('a_string_with_underscores', 'A_string with_underscores', '_'),
             array('a_string_with_dashes', 'A string-with-dashes', '_'),

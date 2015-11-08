@@ -2,8 +2,14 @@
 
 namespace Stringy;
 
+use voku\helper\URLify;
 use voku\helper\UTF8;
 
+/**
+ * Class Stringy
+ *
+ * @package Stringy
+ */
 class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 {
   /**
@@ -46,6 +52,8 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       );
     }
 
+    // init
+    UTF8::checkForSupport();
     $this->str = (string)$str;
 
     if ($encoding) {
@@ -231,7 +239,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * default the comparison is case-sensitive, but can be made insensitive by
    * setting $caseSensitive to false.
    *
-   * @param  array $needles       Substrings to look for
+   * @param  array $needles       SubStrings to look for
    * @param  bool  $caseSensitive Whether or not to enforce case-sensitivity
    *
    * @return bool   Whether or not $str contains $needle
@@ -257,7 +265,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * default the comparison is case-sensitive, but can be made insensitive by
    * setting $caseSensitive to false.
    *
-   * @param  array $needles       Substrings to look for
+   * @param  array $needles       SubStrings to look for
    * @param  bool  $caseSensitive Whether or not to enforce case-sensitivity
    *
    * @return bool   Whether or not $str contains $needle
@@ -478,9 +486,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
 
   /**
-   * Convert all HTML entities to their applicable characters. An alias of
-   * html_entity_decode. For a list of flags, refer to
-   * http://php.net/manual/en/function.html-entity-decode.php
+   * Convert all HTML entities to their applicable characters.
    *
    * @param  int|null $flags Optional flags
    *
@@ -488,15 +494,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function htmlDecode($flags = ENT_COMPAT)
   {
-    $str = html_entity_decode($this->str, $flags, $this->encoding);
+    $str = UTF8::html_entity_decode($this->str, $flags, $this->encoding);
 
     return static::create($str, $this->encoding);
   }
 
   /**
-   * Convert all applicable characters to HTML entities. An alias of
-   * htmlentities. Refer to http://php.net/manual/en/function.htmlentities.php
-   * for a list of flags.
+   * Convert all applicable characters to HTML entities.
    *
    * @param  int|null $flags Optional flags
    *
@@ -504,7 +508,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function htmlEncode($flags = ENT_COMPAT)
   {
-    $str = htmlentities($this->str, $flags, $this->encoding);
+    $str = UTF8::htmlentities($this->str, $flags, $this->encoding);
 
     return static::create($str, $this->encoding);
   }
@@ -517,7 +521,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function humanize()
   {
-    $str = str_replace(array('_id', '_'), array('', ' '), $this->str);
+    $str = UTF8::str_replace(array('_id', '_'), array('', ' '), $this->str);
 
     return static::create($str, $this->encoding)->trim()->upperCaseFirst();
   }
@@ -695,7 +699,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns the length of the string. An alias for PHP's UTF8::strlen() function.
+   * Returns the length of the string.
    *
    * @return int The number of characters in $str given the encoding
    */
@@ -1007,11 +1011,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Replaces all occurrences of $pattern in $str by $replacement. An alias
-   * for mb_ereg_replace(). Note that the 'i' option with multibyte patterns
-   * in mb_ereg_replace() requires PHP 5.6+ for correct results. This is due
-   * to a lack of support in the bundled version of Oniguruma in PHP < 5.6,
-   * and current versions of HHVM (3.8 and below).
+   * Replaces all occurrences of $pattern in $str by $replacement.
    *
    * @param  string $pattern     The regular expression pattern
    * @param  string $replacement The string to replace with
@@ -1075,7 +1075,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns a repeated string given a multiplier. An alias for str_repeat.
+   * Returns a repeated string given a multiplier.
    *
    * @param  int $multiplier The number of times to repeat the string
    *
@@ -1083,7 +1083,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function repeat($multiplier)
   {
-    $repeated = str_repeat($this->str, $multiplier);
+    $repeated = UTF8::str_repeat($this->str, $multiplier);
 
     return static::create($repeated, $this->encoding);
   }
@@ -1098,7 +1098,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function replace($search, $replacement)
   {
-    return $this->regexReplace(preg_quote($search, '/'), str_replace('\\', '\\\\', $replacement));
+    return $this->regexReplace(preg_quote($search, '/'), UTF8::str_replace('\\', '\\\\', $replacement));
   }
 
   /**
@@ -1108,13 +1108,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function reverse()
   {
-    $strLength = $this->length();
-    $reversed = '';
-
-    // Loop from last index of string to first
-    for ($i = $strLength - 1; $i >= 0; $i--) {
-      $reversed .= UTF8::substr($this->str, $i, 1, $this->encoding);
-    }
+    $reversed = UTF8::strrev($this->str);
 
     return static::create($reversed, $this->encoding);
   }
@@ -1156,21 +1150,15 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     return $stringy;
   }
 
-  /*
-   * A multibyte str_shuffle() function. It returns a string with its
+  /**
+   * A multibyte string shuffle function. It returns a string with its
    * characters in random order.
    *
    * @return Stringy Object with a shuffled $str
    */
   public function shuffle()
   {
-    $indexes = range(0, $this->length() - 1);
-    shuffle($indexes);
-
-    $shuffledStr = '';
-    foreach ($indexes as $i) {
-      $shuffledStr .= UTF8::substr($this->str, $i, 1, $this->encoding);
-    }
+    $shuffledStr = UTF8::str_shuffle($this->str);
 
     return static::create($shuffledStr, $this->encoding);
   }
@@ -1182,23 +1170,17 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * $replacement. The replacement defaults to a single dash, and the string
    * is also converted to lowercase.
    *
-   * @param  string $replacement The string used to replace whitespace
+   * @param string $replacement The string used to replace whitespace
+   * @param string $language    The language for the url
+   * @param bool   $strToLower  string to lower
    *
    * @return Stringy Object whose $str has been converted to an URL slug
    */
-  public function slugify($replacement = '-')
+  public function slugify($replacement = '-', $language = 'de', $strToLower = true)
   {
-    $stringy = $this->toAscii();
+    $slug = URLify::slug($this->str, $language, $replacement, $strToLower);
 
-    $quotedReplacement = preg_quote($replacement, '/');
-    $pattern = "/[^a-zA-Z\d\s-_$quotedReplacement]/u";
-    $stringy->str = preg_replace($pattern, '', $stringy);
-
-    return $stringy
-        ->toLowerCase()
-        ->delimit($replacement)
-        ->removeLeft($replacement)
-        ->removeRight($replacement);
+    return static::create($slug, $this->encoding);
   }
 
   /**
@@ -1371,21 +1353,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function tidy()
   {
-    $str = preg_replace(
-        array(
-            '/\x{2026}/u',
-            '/[\x{201C}\x{201D}]/u',
-            '/[\x{2018}\x{2019}]/u',
-            '/[\x{2013}\x{2014}]/u',
-        ),
-        array(
-            '...',
-            '"',
-            "'",
-            '-',
-        ),
-        $this->str
-    );
+    $str = UTF8::normalize_msword($this->str);
 
     return static::create($str, $this->encoding);
   }
@@ -1426,22 +1394,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * replaced with their closest ASCII counterparts, and the rest are removed
    * unless instructed otherwise.
    *
-   * @param  bool $removeUnsupported    Whether or not to remove the
-   *                                    unsupported characters
-   *
    * @return Stringy Object whose $str contains only ASCII characters
    */
-  public function toAscii($removeUnsupported = true)
+  public function toAscii()
   {
-    $str = $this->str;
-
-    foreach ($this->charsArray() as $key => $value) {
-      $str = str_replace($value, $key, $str);
-    }
-
-    if ($removeUnsupported) {
-      $str = preg_replace('/[^\x20-\x7E]/u', '', $str);
-    }
+    $str = UTF8::toAscii($this->str);
 
     return static::create($str, $this->encoding);
   }
@@ -1503,8 +1460,8 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function toSpaces($tabLength = 4)
   {
-    $spaces = str_repeat(' ', $tabLength);
-    $str = str_replace("\t", $spaces, $this->str);
+    $spaces = UTF8::str_repeat(' ', $tabLength);
+    $str = UTF8::str_replace("\t", $spaces, $this->str);
 
     return static::create($str, $this->encoding);
   }
@@ -1520,8 +1477,8 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function toTabs($tabLength = 4)
   {
-    $spaces = str_repeat(' ', $tabLength);
-    $str = str_replace($spaces, "\t", $this->str);
+    $spaces = UTF8::str_repeat(' ', $tabLength);
+    $str = UTF8::str_replace($spaces, "\t", $this->str);
 
     return static::create($str, $this->encoding);
   }
@@ -1631,7 +1588,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     // Need to further trim the string so we can append the substring
     $substringLength = UTF8::strlen($substring, $stringy->encoding);
-    $length = $length - $substringLength;
+    $length -= $substringLength;
 
     $truncated = UTF8::substr($stringy->str, 0, $length, $stringy->encoding);
     $stringy->str = $truncated . $substring;
@@ -1683,149 +1640,6 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns the replacements for the toAscii() method.
-   *
-   * @return array An array of replacements.
-   */
-  protected function charsArray()
-  {
-    static $charsArray;
-
-    if (isset($charsArray)) {
-      return $charsArray;
-    }
-
-    $charsArray = array(
-        'a'    => array(
-            'à', 'á', 'ả', 'ã', 'ạ', 'ă', 'ắ', 'ằ', 'ẳ', 'ẵ',
-            'ặ', 'â', 'ấ', 'ầ', 'ẩ', 'ẫ', 'ậ', 'ā', 'ą', 'å',
-            'α', 'ά', 'ἀ', 'ἁ', 'ἂ', 'ἃ', 'ἄ', 'ἅ', 'ἆ', 'ἇ',
-            'ᾀ', 'ᾁ', 'ᾂ', 'ᾃ', 'ᾄ', 'ᾅ', 'ᾆ', 'ᾇ', 'ὰ', 'ά',
-            'ᾰ', 'ᾱ', 'ᾲ', 'ᾳ', 'ᾴ', 'ᾶ', 'ᾷ', 'а', 'أ'),
-        'b'    => array('б', 'β', 'Ъ', 'Ь', 'ب'),
-        'c'    => array('ç', 'ć', 'č', 'ĉ', 'ċ'),
-        'd'    => array('ď', 'ð', 'đ', 'ƌ', 'ȡ', 'ɖ', 'ɗ', 'ᵭ', 'ᶁ', 'ᶑ',
-                        'д', 'δ', 'د', 'ض'),
-        'e'    => array('é', 'è', 'ẻ', 'ẽ', 'ẹ', 'ê', 'ế', 'ề', 'ể', 'ễ',
-                        'ệ', 'ë', 'ē', 'ę', 'ě', 'ĕ', 'ė', 'ε', 'έ', 'ἐ',
-                        'ἑ', 'ἒ', 'ἓ', 'ἔ', 'ἕ', 'ὲ', 'έ', 'е', 'ё', 'э',
-                        'є', 'ə'),
-        'f'    => array('ф', 'φ', 'ف'),
-        'g'    => array('ĝ', 'ğ', 'ġ', 'ģ', 'г', 'ґ', 'γ', 'ج'),
-        'h'    => array('ĥ', 'ħ', 'η', 'ή', 'ح', 'ه'),
-        'i'    => array('í', 'ì', 'ỉ', 'ĩ', 'ị', 'î', 'ï', 'ī', 'ĭ', 'į',
-                        'ı', 'ι', 'ί', 'ϊ', 'ΐ', 'ἰ', 'ἱ', 'ἲ', 'ἳ', 'ἴ',
-                        'ἵ', 'ἶ', 'ἷ', 'ὶ', 'ί', 'ῐ', 'ῑ', 'ῒ', 'ΐ', 'ῖ',
-                        'ῗ', 'і', 'ї', 'и'),
-        'j'    => array('ĵ', 'ј', 'Ј'),
-        'k'    => array('ķ', 'ĸ', 'к', 'κ', 'Ķ', 'ق', 'ك'),
-        'l'    => array('ł', 'ľ', 'ĺ', 'ļ', 'ŀ', 'л', 'λ', 'ل'),
-        'm'    => array('м', 'μ', 'م'),
-        'n'    => array('ñ', 'ń', 'ň', 'ņ', 'ŉ', 'ŋ', 'ν', 'н', 'ن'),
-        'o'    => array('ó', 'ò', 'ỏ', 'õ', 'ọ', 'ô', 'ố', 'ồ', 'ổ', 'ỗ',
-                        'ộ', 'ơ', 'ớ', 'ờ', 'ở', 'ỡ', 'ợ', 'ø', 'ō', 'ő',
-                        'ŏ', 'ο', 'ὀ', 'ὁ', 'ὂ', 'ὃ', 'ὄ', 'ὅ', 'ὸ', 'ό',
-                        'о', 'و', 'θ'),
-        'p'    => array('п', 'π'),
-        'r'    => array('ŕ', 'ř', 'ŗ', 'р', 'ρ', 'ر'),
-        's'    => array('ś', 'š', 'ş', 'с', 'σ', 'ș', 'ς', 'س', 'ص'),
-        't'    => array('ť', 'ţ', 'т', 'τ', 'ț', 'ت', 'ط'),
-        'u'    => array('ú', 'ù', 'ủ', 'ũ', 'ụ', 'ư', 'ứ', 'ừ', 'ử', 'ữ',
-                        'ự', 'û', 'ū', 'ů', 'ű', 'ŭ', 'ų', 'µ', 'у'),
-        'v'    => array('в'),
-        'w'    => array('ŵ', 'ω', 'ώ'),
-        'x'    => array('χ'),
-        'y'    => array('ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ', 'ÿ', 'ŷ', 'й', 'ы', 'υ',
-                        'ϋ', 'ύ', 'ΰ', 'ي'),
-        'z'    => array('ź', 'ž', 'ż', 'з', 'ζ', 'ز'),
-        'aa'   => array('ع'),
-        'ae'   => array('ä', 'æ'),
-        'ch'   => array('ч'),
-        'dj'   => array('ђ', 'đ'),
-        'dz'   => array('џ'),
-        'gh'   => array('غ'),
-        'kh'   => array('х', 'خ'),
-        'lj'   => array('љ'),
-        'nj'   => array('њ'),
-        'oe'   => array('ö', 'œ'),
-        'ps'   => array('ψ'),
-        'sh'   => array('ш'),
-        'shch' => array('щ'),
-        'ss'   => array('ß'),
-        'th'   => array('þ', 'ث', 'ذ', 'ظ'),
-        'ts'   => array('ц'),
-        'ue'   => array('ü'),
-        'ya'   => array('я'),
-        'yu'   => array('ю'),
-        'zh'   => array('ж'),
-        '(c)'  => array('©'),
-        'A'    => array('Á', 'À', 'Ả', 'Ã', 'Ạ', 'Ă', 'Ắ', 'Ằ', 'Ẳ', 'Ẵ',
-                        'Ặ', 'Â', 'Ấ', 'Ầ', 'Ẩ', 'Ẫ', 'Ậ', 'Å', 'Ā', 'Ą',
-                        'Α', 'Ά', 'Ἀ', 'Ἁ', 'Ἂ', 'Ἃ', 'Ἄ', 'Ἅ', 'Ἆ', 'Ἇ',
-                        'ᾈ', 'ᾉ', 'ᾊ', 'ᾋ', 'ᾌ', 'ᾍ', 'ᾎ', 'ᾏ', 'Ᾰ', 'Ᾱ',
-                        'Ὰ', 'Ά', 'ᾼ', 'А'),
-        'B'    => array('Б', 'Β'),
-        'C'    => array('Ç','Ć', 'Č', 'Ĉ', 'Ċ'),
-        'D'    => array('Ď', 'Ð', 'Đ', 'Ɖ', 'Ɗ', 'Ƌ', 'ᴅ', 'ᴆ', 'Д', 'Δ'),
-        'E'    => array('É', 'È', 'Ẻ', 'Ẽ', 'Ẹ', 'Ê', 'Ế', 'Ề', 'Ể', 'Ễ',
-                        'Ệ', 'Ë', 'Ē', 'Ę', 'Ě', 'Ĕ', 'Ė', 'Ε', 'Έ', 'Ἐ',
-                        'Ἑ', 'Ἒ', 'Ἓ', 'Ἔ', 'Ἕ', 'Έ', 'Ὲ', 'Е', 'Ё', 'Э',
-                        'Є', 'Ə'),
-        'F'    => array('Ф', 'Φ'),
-        'G'    => array('Ğ', 'Ġ', 'Ģ', 'Г', 'Ґ', 'Γ'),
-        'H'    => array('Η', 'Ή'),
-        'I'    => array('Í', 'Ì', 'Ỉ', 'Ĩ', 'Ị', 'Î', 'Ï', 'Ī', 'Ĭ', 'Į',
-                        'İ', 'Ι', 'Ί', 'Ϊ', 'Ἰ', 'Ἱ', 'Ἳ', 'Ἴ', 'Ἵ', 'Ἶ',
-                        'Ἷ', 'Ῐ', 'Ῑ', 'Ὶ', 'Ί', 'И', 'І', 'Ї'),
-        'K'    => array('К', 'Κ'),
-        'L'    => array('Ĺ', 'Ł', 'Л', 'Λ', 'Ļ'),
-        'M'    => array('М', 'Μ'),
-        'N'    => array('Ń', 'Ñ', 'Ň', 'Ņ', 'Ŋ', 'Н', 'Ν'),
-        'O'    => array('Ó', 'Ò', 'Ỏ', 'Õ', 'Ọ', 'Ô', 'Ố', 'Ồ', 'Ổ', 'Ỗ',
-                        'Ộ', 'Ơ', 'Ớ', 'Ờ', 'Ở', 'Ỡ', 'Ợ', 'Ø', 'Ō', 'Ő',
-                        'Ŏ', 'Ο', 'Ό', 'Ὀ', 'Ὁ', 'Ὂ', 'Ὃ', 'Ὄ', 'Ὅ', 'Ὸ',
-                        'Ό', 'О', 'Θ', 'Ө'),
-        'P'    => array('П', 'Π'),
-        'R'    => array('Ř', 'Ŕ', 'Р', 'Ρ'),
-        'S'    => array('Ş', 'Ŝ', 'Ș', 'Š', 'Ś', 'С', 'Σ'),
-        'T'    => array('Ť', 'Ţ', 'Ŧ', 'Ț', 'Т', 'Τ'),
-        'U'    => array('Ú', 'Ù', 'Ủ', 'Ũ', 'Ụ', 'Ư', 'Ứ', 'Ừ', 'Ử', 'Ữ',
-                        'Ự', 'Û', 'Ū', 'Ů', 'Ű', 'Ŭ', 'Ų', 'У'),
-        'V'    => array('В'),
-        'W'    => array('Ω', 'Ώ'),
-        'X'    => array('Χ'),
-        'Y'    => array('Ý', 'Ỳ', 'Ỷ', 'Ỹ', 'Ỵ', 'Ÿ', 'Ῠ', 'Ῡ', 'Ὺ', 'Ύ',
-                        'Ы', 'Й', 'Υ', 'Ϋ'),
-        'Z'    => array('Ź', 'Ž', 'Ż', 'З', 'Ζ'),
-        'AE'   => array('Ä', 'Æ'),
-        'CH'   => array('Ч'),
-        'DJ'   => array('Ђ'),
-        'DZ'   => array('Џ'),
-        'KH'   => array('Х'),
-        'LJ'   => array('Љ'),
-        'NJ'   => array('Њ'),
-        'OE'   => array('Ö'),
-        'PS'   => array('Ψ'),
-        'SH'   => array('Ш'),
-        'SHCH' => array('Щ'),
-        'SS'   => array('ẞ'),
-        'TH'   => array('Þ'),
-        'TS'   => array('Ц'),
-        'UE'   => array('Ü'),
-        'YA'   => array('Я'),
-        'YU'   => array('Ю'),
-        'ZH'   => array('Ж'),
-        ' '    => array("\xC2\xA0", "\xE2\x80\x80", "\xE2\x80\x81",
-                        "\xE2\x80\x82", "\xE2\x80\x83", "\xE2\x80\x84",
-                        "\xE2\x80\x85", "\xE2\x80\x86", "\xE2\x80\x87",
-                        "\xE2\x80\x88", "\xE2\x80\x89", "\xE2\x80\x8A",
-                        "\xE2\x80\xAF", "\xE2\x81\x9F", "\xE3\x80\x80"),
-    );
-
-    return $charsArray;
-  }
-
-  /**
    * Adds the specified amount of left and right padding to the given string.
    * The default character used is a space.
    *
@@ -1849,7 +1663,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     $leftPadding = UTF8::substr(
-        str_repeat(
+        UTF8::str_repeat(
             $padStr,
             ceil($left / $length)
         ),
@@ -1859,7 +1673,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     );
 
     $rightPadding = UTF8::substr(
-        str_repeat(
+        UTF8::str_repeat(
             $padStr,
             ceil($right / $length)
         ),
