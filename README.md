@@ -395,6 +395,14 @@ Ensures that the string ends with $substring. If it doesn't, it's appended.
 s('foobar')->ensureRight('.com'); // 'foobar.com'
 ```
 
+##### escape()
+
+Escape html via UTF8::htmlspecialchars(), so we can use this data in our templates.
+
+```php
+s('<∂∆ onerror="alert(xss)">')->escape(); // '&lt;∂∆ onerror=&quot;alert(xss)&quot;&gt;'
+```
+
 ##### first(int $n)
 
 Returns the first $n characters of the string.
