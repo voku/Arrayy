@@ -24,6 +24,7 @@ namespace Stringy;
  * @method static string endsWith(string $stringInput, string $substring, bool $caseSensitive = true, string $encoding = null)
  * @method static string ensureLeft(string $stringInput, string $substring, string $encoding = null)
  * @method static string ensureRight(string $stringInput, string $substring, string $encoding = null)
+ * @method static string escape(string $stringInput, string $encoding = null)
  * @method static string first(string $stringInput, int $n, string $encoding = null)
  * @method static string hasLowerCase(string $stringInput, string $encoding = null)
  * @method static string hasUpperCase(string $stringInput, string $encoding = null)
@@ -117,6 +118,7 @@ class StaticStringy
       'endsWith'               => 4,
       'ensureLeft'             => 3,
       'ensureRight'            => 3,
+      'escape'                 => 2,
       'first'                  => 3,
       'getEncoding'            => 2,
       'hasLowerCase'           => 2,

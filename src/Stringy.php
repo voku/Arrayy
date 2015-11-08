@@ -1184,6 +1184,22 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * escape html
+   *
+   * @return Stringy
+   */
+  public function escape()
+  {
+    $str = UTF8::htmlspecialchars(
+        $this->str,
+        ENT_QUOTES | ENT_SUBSTITUTE,
+        $this->encoding
+    );
+
+    return static::create($str, $this->encoding);
+  }
+
+  /**
    * Returns true if the string begins with $substring, false otherwise. By
    * default, the comparison is case-sensitive, but can be made insensitive
    * by setting $caseSensitive to false.
