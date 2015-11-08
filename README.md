@@ -1,14 +1,14 @@
-![Stringy](http://danielstjules.com/github/stringy-logo.png)
+WARNING: this is only a Fork of "https://github.com/danielstjules/Stringy"
 
 A PHP string manipulation library with multibyte support. Compatible with PHP
-5.3+, PHP 7, and HHVM. Refer to the [1.x branch](https://github.com/danielstjules/Stringy/tree/1.x)
+5.3+, PHP 7, and HHVM. Refer to the [1.x branch](https://github.com/voku/Stringy/tree/1.x)
 for older documentation.
 
 ``` php
 s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
 ```
 
-[![Build Status](https://api.travis-ci.org/danielstjules/Stringy.svg?branch=master)](https://travis-ci.org/danielstjules/Stringy)
+[![Build Status](https://api.travis-ci.org/voku/Stringy.svg?branch=master)](https://travis-ci.org/voku/Stringy)
 
 * [Why?](#why)
 * [Installation](#installation)
@@ -128,7 +128,7 @@ in your composer.json file:
 
 ```json
 "require": {
-    "danielstjules/stringy": "~2.1"
+    "voku/stringy": "~2.1"
 }
 ```
 
@@ -150,13 +150,6 @@ And in either case, I'd suggest using an alias.
 ```php
 use Stringy\Stringy as S;
 ```
-
-Please note that Stringy relies on the `mbstring` PHP module for its underlying
-multibyte support. This is a non-default, but very common module. For example,
-with debian and ubuntu, it's included in libapache2-mod-php5, php5-cli, and
-php5-fpm. For OSX users, it's a default for any version of PHP installed with
-homebrew. If compiling PHP from scratch, it can be included with the
-`--enable-mbstring` flag.
 
 ## OO and Chaining
 
