@@ -52,6 +52,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       );
     }
 
+
+    // don't throw a notice on PHP 5.3
+    if (!defined('ENT_SUBSTITUTE')) {
+      define('ENT_SUBSTITUTE', 8);
+    }
+
     // init
     UTF8::checkForSupport();
     $this->str = (string)$str;
@@ -1195,6 +1201,20 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         ENT_QUOTES | ENT_SUBSTITUTE,
         $this->encoding
     );
+
+    return static::create($str, $this->encoding);
+  }
+
+  /**
+   * remove html
+   *
+   * @param $allowableTags
+   *
+   * @return Stringy
+   */
+  public function removeHtml($allowableTags = null)
+  {
+    $str = UTF8::strip_tags($this->str, $allowableTags);
 
     return static::create($str, $this->encoding);
   }

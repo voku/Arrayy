@@ -1123,6 +1123,30 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @dataProvider removeHtmlProvider()
+   */
+  public function testRemoveHtml($expected, $str, $allowableTags, $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->removeHtml($allowableTags);
+    $this->assertStringy($result);
+    $this->assertEquals($expected, $result);
+    $this->assertEquals($str, $stringy);
+  }
+
+  public function removeHtmlProvider()
+  {
+    return array(
+        array('', ''),
+        array('raboof &lt;3', 'raboof <3', '3'),
+        array('řàbôòf&lt;foo&lt;lall&gt;&gt;&gt;', 'řàbôòf<foo<lall>>>', 'lall'),
+        array('řàb &lt;ô&gt;òf', 'řàb <ô>òf', ô),
+        array('&lt;∂∆ onerro=&quot;alert(xss)&quot;&gt; ˚åß', '<∂∆ onerro="alert(xss)"> ˚åß'),
+        array('&#039;œ … &#039;’)', '\'œ … \'’)'),
+    );
+  }
+
+  /**
    * @dataProvider containsProvider()
    */
   public function testContains($expected, $haystack, $needle,
