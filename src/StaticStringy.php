@@ -61,6 +61,8 @@ namespace Stringy;
  * @method static string regexReplace(string $stringInput, string $pattern, string $replacement)
  * @method static string removeLeft(string $stringInput, string $substring, string $encoding = null)
  * @method static string removeRight(string $stringInput, string $substring, string $encoding = null)
+ * @method static string removeHtml(string $stringInput, string $allowableTags = null, string $encoding = null)
+ * @method static string removeXss(string $stringInput, string $encoding = null)
  * @method static string repeat(string $stringInput, int $multiplier, string $encoding = null)
  * @method static string replace(string $stringInput, string $search, string $replacement, string $encoding = null)
  * @method static string reverse(string $stringInput, string $encoding = null)
@@ -152,6 +154,8 @@ class StaticStringy
       'regexReplace'           => 5,
       'removeLeft'             => 3,
       'removeRight'            => 3,
+      'removeHtml'             => 3,
+      'removeXss'              => 2,
       'repeat'                 => 3,
       'replace'                => 4,
       'reverse'                => 2,

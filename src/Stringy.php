@@ -2,6 +2,7 @@
 
 namespace Stringy;
 
+use voku\helper\AntiXSS;
 use voku\helper\URLify;
 use voku\helper\UTF8;
 
@@ -1201,6 +1202,24 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         ENT_QUOTES | ENT_SUBSTITUTE,
         $this->encoding
     );
+
+    return static::create($str, $this->encoding);
+  }
+
+  /**
+   * remove xss from html
+   *
+   * @return Stringy
+   */
+  public function removeXss()
+  {
+    static $antiXss = null;
+
+    if ($antiXss === null) {
+      $antiXss = new AntiXSS();
+    }
+
+    $str = $antiXss->xss_clean($this->str);
 
     return static::create($str, $this->encoding);
   }

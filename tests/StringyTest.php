@@ -1141,8 +1141,32 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('raboof ', 'raboof <3', '3'),
         array('řàbôòf>', 'řàbôòf<foo<lall>>>', 'lall'),
         array('řàb òf\', ô', 'řàb <ô>òf\', ô'),
-        array(' ˚åß', '<∂∆ onerro="alert(xss)"> ˚åß'),
+        array(' ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'),
         array('\'œ … \'’)', '\'œ … \'’)'),
+    );
+  }
+
+  /**
+   * @dataProvider removeXssProvider()
+   */
+  public function testRemoveXss($expected, $str, $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->removeXss();
+    $this->assertStringy($result);
+    $this->assertEquals($expected, $result);
+    $this->assertEquals($str, $stringy);
+  }
+
+  public function removeXssProvider()
+  {
+    return array(
+        array('', ''),
+        array('Hello, i try to alert&#40;\'Hack\'&#41;; your site', 'Hello, i try to <script>alert(\'Hack\');</script> your site'),
+        array('<IMG >', '<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>'),
+        array('', '<XSS STYLE="behavior: url(xss.htc);">'),
+        array('<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'),
+        array('\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'),
     );
   }
 
