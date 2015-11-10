@@ -707,6 +707,22 @@ Returns a new string with the suffix $substring removed, if present.
 s('fòôbàř')->removeRight('bàř'); // 'fòô'
 ```
 
+##### removeHtml(string $allowableTags)
+
+Returns a new string without HTML-Tags.
+
+```php
+s('řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>')->removeHtml('<br><br/>'); // 'řàb òf\', ô<br/>foo lall'
+```
+
+##### removeXss()
+
+Returns a new string without XSS.
+
+```php
+s('<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>')->removeXss(); // '<IMG >'
+```
+
 ##### repeat(int $multiplier)
 
 Returns a repeated string given a multiplier. An alias for str_repeat.

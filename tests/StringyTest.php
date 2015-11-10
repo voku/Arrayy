@@ -1138,9 +1138,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     return array(
         array('', ''),
-        array('raboof ', 'raboof <3', '3'),
-        array('řàbôòf>', 'řàbôòf<foo<lall>>>', 'lall'),
-        array('řàb òf\', ô', 'řàb <ô>òf\', ô'),
+        array('raboof ', 'raboof <3', '<3>'),
+        array('řàbôòf>', 'řàbôòf<foo<lall>>>', '<lall><lall/>'),
+        array('řàb òf\', ô<br/>foo lall', 'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>', '<br><br/>'),
         array(' ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'),
         array('\'œ … \'’)', '\'œ … \'’)'),
     );
