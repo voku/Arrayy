@@ -35,8 +35,7 @@
     "voku/anti-xss": "~1.2.9"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.*",
-    "satooshi/php-coveralls": "0.7.*@dev"
+    "phpunit/phpunit": "4.*"
   },
   "support": {
     "issues": "https://github.com/voku/Stringy/issues",
