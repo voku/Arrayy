@@ -12,8 +12,7 @@ WARNING: this is only a Fork of "https://github.com/danielstjules/Stringy"
 
 
 A PHP string manipulation library with multibyte support. Compatible with PHP
-5.3+, PHP 7, and HHVM. Refer to the [1.x branch](https://github.com/voku/Stringy/tree/1.x)
-for older documentation.
+5.3+, PHP 7, and HHVM.
 
 ``` php
 s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
