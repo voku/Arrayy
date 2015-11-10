@@ -1,5 +1,16 @@
 WARNING: this is only a Fork of "https://github.com/danielstjules/Stringy"
 
+[![Stories in Ready](https://badge.waffle.io/voku/Stringy.png?label=ready&title=Ready)](https://waffle.io/voku/Stringy)
+[![Build Status](https://api.travis-ci.org/voku/Stringy.svg?branch=master)](https://travis-ci.org/voku/Stringy)
+[![Coverage Status](https://coveralls.io/repos/voku/Stringy/badge.svg?branch=master&service=github)](https://coveralls.io/github/voku/Stringy?branch=master)
+[![codecov.io](https://codecov.io/github/voku/Stringy/coverage.svg?branch=master)](https://codecov.io/github/voku/Stringy?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/Stringy/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/Stringy/?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/97c46467e585467d884bac1130cb45e5)](https://www.codacy.com/app/voku/Stringy)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/76973bbc-7cf6-4df6-8791-80ed9c7612ee/mini.png)](https://insight.sensiolabs.com/projects/76973bbc-7cf6-4df6-8791-80ed9c7612ee)
+[![Total Downloads](https://poser.pugx.org/voku/Stringy/downloads)](https://packagist.org/packages/voku/Stringy)
+[![License](https://poser.pugx.org/voku/Stringy/license.svg)](https://packagist.org/packages/voku/Stringy)
+
+
 A PHP string manipulation library with multibyte support. Compatible with PHP
 5.3+, PHP 7, and HHVM. Refer to the [1.x branch](https://github.com/voku/Stringy/tree/1.x)
 for older documentation.
@@ -7,8 +18,6 @@ for older documentation.
 ``` php
 s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
 ```
-
-[![Build Status](https://api.travis-ci.org/voku/Stringy.svg?branch=master)](https://travis-ci.org/voku/Stringy)
 
 * [Why?](#why)
 * [Installation](#installation)
@@ -121,7 +130,12 @@ s('fòôbàř')->toUpperCase(); // 'FÒÔBÀŘ'
 s('fòôbàř')->length();      // '6'
 ```
 
-## Installation
+## Installation via "composer require"
+```shell
+composer require voku/stringy
+```
+
+## Installation via composer (manually)
 
 If you're using Composer to manage dependencies, you can include the following
 in your composer.json file:
