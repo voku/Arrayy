@@ -467,8 +467,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     $strLength = $this->length();
 
     $endOfStr = UTF8::substr(
-        $this->str, $strLength - $substringLength,
-        $substringLength, $this->encoding
+        $this->str,
+        $strLength - $substringLength,
+        $substringLength,
+        $this->encoding
     );
 
     if (!$caseSensitive) {
@@ -529,8 +531,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function chars()
   {
+    // init
     $chars = array();
-    for ($i = 0, $l = $this->length(); $i < $l; $i++) {
+    $l = $this->length();
+
+    for ($i = 0; $i < $l; $i++) {
       $chars[] = $this->at($i)->str;
     }
 
@@ -637,7 +642,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     $first = UTF8::substr($this->str, 0, 1, $this->encoding);
     $rest = UTF8::substr(
-        $this->str, 1, $this->length() - 1,
+        $this->str,
+        1,
+        $this->length() - 1,
         $this->encoding
     );
 
@@ -741,13 +748,17 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function isJson()
   {
-    if (!$this->length()) {
+    if (!isset($this->str[0])) {
       return false;
     }
 
     json_decode($this->str);
 
-    return (json_last_error() === JSON_ERROR_NONE);
+    if (json_last_error() === JSON_ERROR_NONE) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -758,7 +769,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function isLowerCase()
   {
-    return $this->matchesPattern('^[[:lower:]]*$');
+    if ($this->matchesPattern('^[[:lower:]]*$')) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -768,8 +783,20 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function isSerialized()
   {
+    if (!isset($this->str[0])) {
+      return false;
+    }
+
     /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    return $this->str === 'b:0;' || @unserialize($this->str) !== false;
+    if (
+        $this->str === 'b:0;'
+        ||
+        @unserialize($this->str) !== false
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -936,6 +963,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function offsetExists($offset)
   {
+    // init
     $length = $this->length();
     $offset = (int)$offset;
 
@@ -960,10 +988,15 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function offsetGet($offset)
   {
+    // init
     $offset = (int)$offset;
     $length = $this->length();
 
-    if (($offset >= 0 && $length <= $offset) || $length < abs($offset)) {
+    if (
+        ($offset >= 0 && $length <= $offset)
+        ||
+        $length < abs($offset)
+    ) {
       throw new \OutOfBoundsException('No character exists at the index');
     }
 
