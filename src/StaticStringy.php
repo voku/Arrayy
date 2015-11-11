@@ -160,6 +160,8 @@ class StaticStringy
       'removeXss'              => 2,
       'repeat'                 => 3,
       'replace'                => 4,
+      'replaceBeginning'       => 4,
+      'replaceEnding'          => 4,
       'reverse'                => 2,
       'safeTruncate'           => 4,
       'shuffle'                => 2,

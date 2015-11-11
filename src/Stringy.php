@@ -1236,6 +1236,36 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Replaces all occurrences of $search from the beginning of string with $replacement
+   *
+   * @param string $search
+   * @param string $replacement
+   *
+   * @return Stringy Object with the resulting $str after the replacements
+   */
+  public function replaceBeginning($search, $replacement)
+  {
+    $str = $this->regexReplace('^' . preg_quote($search, '/'), UTF8::str_replace('\\', '\\\\', $replacement));
+
+    return static::create($str, $this->encoding);
+  }
+
+  /**
+   * Replaces all occurrences of $search from the ending of string with $replacement
+   *
+   * @param string $search
+   * @param string $replacement
+   *
+   * @return Stringy Object with the resulting $str after the replacements
+   */
+  public function replaceEnding($search, $replacement)
+  {
+    $str = $this->regexReplace(preg_quote($search, '/') . '$', UTF8::str_replace('\\', '\\\\', $replacement));
+
+    return static::create($str, $this->encoding);
+  }
+
+  /**
    * Returns a reversed string. A multibyte version of strrev().
    *
    * @return Stringy Object with a reversed $str

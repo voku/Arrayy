@@ -750,6 +750,22 @@ Replaces all occurrences of $search in $str by $replacement.
 s('fòô bàř fòô bàř')->replace('fòô ', ''); // 'bàř bàř'
 ```
 
+##### replaceBeginning(string $search, string $replacement)
+
+Replaces all occurrences of $search in $str by $replacement.
+
+```php
+s('fòô bàř fòô bàř')->replaceBeginning('fòô', ''); // ' bàř bàř'
+```
+
+##### replaceEnding(string $search, string $replacement)
+
+Replaces all occurrences of $search in $str by $replacement.
+
+```php
+s('fòô bàř fòô bàř')->replaceEnding('bàř', ''); // 'fòô bàř fòô '
+```
+
 ##### reverse()
 
 Returns a reversed string. A multibyte version of strrev().

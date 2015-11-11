@@ -2436,6 +2436,75 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @dataProvider replaceBeginningProvider()
+   */
+  public function testReplaceBeginning($expected, $str, $search, $replacement,
+                              $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->replaceBeginning($search, $replacement);
+    $this->assertStringy($result);
+    $this->assertEquals($expected, $result);
+    $this->assertEquals($str, $stringy);
+  }
+
+  public function replaceBeginningProvider()
+  {
+    return array(
+        array('', '', '', ''),
+        array('foo', '', '', 'foo'),
+        array('foo', '\s', '\s', 'foo'),
+        array('foo bar', 'foo bar', '', ''),
+        array('foo bar', 'foo bar', 'f(o)o', '\1'),
+        array('\1 bar', 'foo bar', 'foo', '\1'),
+        array('bar', 'foo bar', 'foo ', ''),
+        array('far bar', 'foo bar', 'foo', 'far'),
+        array('bar foo bar', 'foo bar foo bar', 'foo ', ''),
+        array('', '', '', '', 'UTF-8'),
+        array('fòô', '', '', 'fòô', 'UTF-8'),
+        array('fòô', '\s', '\s', 'fòô', 'UTF-8'),
+        array('fòô bàř', 'fòô bàř', '', '', 'UTF-8'),
+        array('bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'),
+        array('far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'),
+        array('bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'),
+    );
+  }
+
+  /**
+   * @dataProvider replaceEndingProvider()
+   */
+  public function testReplaceEnding($expected, $str, $search, $replacement, $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->replaceEnding($search, $replacement);
+    $this->assertStringy($result);
+    $this->assertEquals($expected, $result);
+    $this->assertEquals($str, $stringy);
+  }
+
+  public function replaceEndingProvider()
+  {
+    return array(
+        array('', '', '', ''),
+        array('foo', '', '', 'foo'),
+        array('foo', '\s', '\s', 'foo'),
+        array('foo bar', 'foo bar', '', ''),
+        array('foo bar', 'foo bar', 'f(o)o', '\1'),
+        array('foo bar', 'foo bar', 'foo', '\1'),
+        array('foo bar', 'foo bar', 'foo ', ''),
+        array('foo lall', 'foo bar', 'bar', 'lall'),
+        array('foo bar foo ', 'foo bar foo bar', 'bar', ''),
+        array('', '', '', '', 'UTF-8'),
+        array('fòô', '', '', 'fòô', 'UTF-8'),
+        array('fòô', '\s', '\s', 'fòô', 'UTF-8'),
+        array('fòô bàř', 'fòô bàř', '', '', 'UTF-8'),
+        array('fòô', 'fòô bàř', ' bàř', '', 'UTF-8'),
+        array('fòôfar', 'fòô bàř', ' bàř', 'far', 'UTF-8'),
+        array('fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'),
+    );
+  }
+
+  /**
    * @dataProvider regexReplaceProvider()
    */
   public function testregexReplace($expected, $str, $pattern, $replacement,
