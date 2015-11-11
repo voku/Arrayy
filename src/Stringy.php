@@ -61,7 +61,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     // init
     UTF8::checkForSupport();
-    $this->str = (string)$str;
+    $this->str = (string) $str;
 
     if ($encoding) {
       $this->encoding = $encoding;
@@ -157,7 +157,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function indexOf($needle, $offset = 0)
   {
-    return UTF8::strpos($this->str, (string)$needle, (int)$offset, $this->encoding);
+    return UTF8::strpos($this->str, (string) $needle, (int) $offset, $this->encoding);
   }
 
   /**
@@ -429,7 +429,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       $startOfStr = UTF8::strtolower($startOfStr, $this->encoding);
     }
 
-    return (string)$substring === $startOfStr;
+    return (string) $substring === $startOfStr;
   }
 
   /**
@@ -478,7 +478,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       $endOfStr = UTF8::strtolower($endOfStr, $this->encoding);
     }
 
-    return (string)$substring === $endOfStr;
+    return (string) $substring === $endOfStr;
   }
 
   /**
@@ -666,7 +666,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function indexOfLast($needle, $offset = 0)
   {
-    return UTF8::strrpos($this->str, (string)$needle, (int)$offset, $this->encoding);
+    return UTF8::strrpos($this->str, (string) $needle, (int) $offset, $this->encoding);
   }
 
   /**
@@ -965,7 +965,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     // init
     $length = $this->length();
-    $offset = (int)$offset;
+    $offset = (int) $offset;
 
     if ($offset >= 0) {
       return ($length > $offset);
@@ -982,7 +982,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @param  mixed $offset The index from which to retrieve the char
    *
-   * @return mixed                 The character at the specified index
+   * @return string                 The character at the specified index
    * @throws \OutOfBoundsException If the positive or negative offset does
    *                               not exist
    */
@@ -1494,7 +1494,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     $stringy->str = preg_replace_callback(
         '/[\S]/u',
-        function ($match) use ($encoding) {
+        function($match) use ($encoding) {
           $marchToUpper = UTF8::strtoupper($match[0], $encoding);
 
           if ($match[0] == $marchToUpper) {
@@ -1539,13 +1539,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     $stringy->str = preg_replace_callback(
         '/([\S]+)/u',
-        function ($match) use ($encoding, $ignore) {
+        function($match) use ($encoding, $ignore) {
           if ($ignore && in_array($match[0], $ignore, true)) {
             return $match[0];
           } else {
             $stringy = new Stringy($match[0], $encoding);
 
-            return (string)$stringy->toLowerCase()->upperCaseFirst();
+            return (string) $stringy->toLowerCase()->upperCaseFirst();
           }
         },
         $stringy->str
@@ -1627,9 +1627,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     if (array_key_exists($key, $map)) {
       return $map[$key];
     } elseif (is_numeric($this->str)) {
-      return ((int)$this->str > 0);
+      return ((int) $this->str > 0);
     } else {
-      return (bool)$this->regexReplace('[[:space:]]', '')->str;
+      return (bool) $this->regexReplace('[[:space:]]', '')->str;
     }
   }
 
@@ -1799,7 +1799,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     $stringy->str = preg_replace_callback(
         '/[-_\s]+(.)?/u',
-        function ($match) use ($encoding) {
+        function($match) use ($encoding) {
           if (isset($match[1])) {
             return UTF8::strtoupper($match[1], $encoding);
           } else {
@@ -1811,7 +1811,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     $stringy->str = preg_replace_callback(
         '/[\d]+(.)?/u',
-        function ($match) use ($encoding) {
+        function($match) use ($encoding) {
           return UTF8::strtoupper($match[0], $encoding);
         },
         $stringy->str
