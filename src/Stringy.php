@@ -1444,6 +1444,26 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     return $stringy;
   }
 
+
+  /**
+   * Returns true if the string is base64 encoded, false otherwise.
+   *
+   * @return bool Whether or not $str is base64 encoded
+   */
+  public function isBase64()
+  {
+    if (
+        $this->str !== ''
+        &&
+        base64_encode(base64_decode($this->str, true)) === $this->str
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
   /**
    * Returns an ASCII version of the string. A set of non-ASCII characters are
    * replaced with their closest ASCII counterparts, and the rest are removed

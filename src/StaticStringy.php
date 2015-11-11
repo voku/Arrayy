@@ -36,6 +36,7 @@ namespace Stringy;
  * @method static string insert(string $stringInput, string $substring, int $index = 0, string $encoding = null)
  * @method static string isAlpha(string $stringInput, string $encoding = null)
  * @method static string isAlphanumeric(string $stringInput, string $encoding = null)
+ * @method static string isBase64(string $stringInput, string $encoding = null)
  * @method static string isBlank(string $stringInput, string $encoding = null)
  * @method static string isHexadecimal(string $stringInput, string $encoding = null)
  * @method static string isJson(string $stringInput, string $encoding = null)
@@ -133,6 +134,7 @@ class StaticStringy
       'insert'                 => 4,
       'isAlpha'                => 2,
       'isAlphanumeric'         => 2,
+      'isBase64'               => 2,
       'isBlank'                => 2,
       'isHexadecimal'          => 2,
       'isJson'                 => 2,
