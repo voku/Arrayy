@@ -78,7 +78,7 @@ namespace Stringy;
  * @method static string swapCase(string $stringInput, string $encoding = null)
  * @method static string tidy(string $stringInput, string $encoding = null)
  * @method static string titleize(string $stringInput, string $encoding = null)
- * @method static string toAscii(string $stringInput, bool $removeUnsupported = true)
+ * @method static string toAscii(string $stringInput)
  * @method static string toBoolean(string $stringInput, string $encoding = null)
  * @method static string toLowerCase(string $stringInput, string $encoding = null)
  * @method static string toSpaces(string $stringInput, int $tabLength = 4, string $encoding = null)

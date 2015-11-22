@@ -661,10 +661,10 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider toAsciiProvider()
    */
-  public function testToAscii($expected, $str, $removeUnsupported = true)
+  public function testToAscii($expected, $str)
   {
     $stringy = S::create($str);
-    $result = $stringy->toAscii($removeUnsupported);
+    $result = $stringy->toAscii();
     $this->assertStringy($result);
     $this->assertEquals($expected, $result);
     $this->assertEquals($str, $stringy);
