@@ -128,7 +128,7 @@ mb_strtoupper('fòôbàř');    // 'FÒÔBÀŘ'
 mb_strlen('fòôbàř');        // '6'
 
 // Stringy
-$stringy = S::create('fòôbàř');
+$stringy = Stringy\Stringy::create('fòôbàř');
 $stringy->toUpperCase();    // 'FÒÔBÀŘ'
 $stringy->length();         // '6'
 ```
