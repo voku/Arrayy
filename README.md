@@ -128,8 +128,9 @@ mb_strtoupper('fòôbàř');    // 'FÒÔBÀŘ'
 mb_strlen('fòôbàř');        // '6'
 
 // Stringy
-s('fòôbàř')->toUpperCase(); // 'FÒÔBÀŘ'
-s('fòôbàř')->length();      // '6'
+$stringy = S::create('fòôbàř');
+$stringy->toUpperCase();    // 'FÒÔBÀŘ'
+$stringy->length();         // '6'
 ```
 
 ## Installation via "composer require"
