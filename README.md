@@ -18,7 +18,7 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
 ```
 
 * [Why?](#why)
-* [Installation](#installation)
+* [Installation](#installation-via-composer-require)
 * [OO and Chaining](#oo-and-chaining)
 * [Implemented Interfaces](#implemented-interfaces)
 * [PHP 5.6 Creation](#php-56-creation)
