@@ -18,6 +18,7 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
 ```
 
 * [Why?](#why)
+* [Alternative](#alternative)
 * [Installation](#installation-via-composer-require)
 * [OO and Chaining](#oo-and-chaining)
 * [Implemented Interfaces](#implemented-interfaces)
