@@ -18,7 +18,8 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
 ```
 
 * [Why?](#why)
-* [Installation](#installation)
+* [Alternative](#alternative)
+* [Installation](#installation-via-composer-require)
 * [OO and Chaining](#oo-and-chaining)
 * [Implemented Interfaces](#implemented-interfaces)
 * [PHP 5.6 Creation](#php-56-creation)
@@ -128,8 +129,20 @@ mb_strtoupper('fòôbàř');    // 'FÒÔBÀŘ'
 mb_strlen('fòôbàř');        // '6'
 
 // Stringy
-s('fòôbàř')->toUpperCase(); // 'FÒÔBÀŘ'
-s('fòôbàř')->length();      // '6'
+$stringy = Stringy\Stringy::create('fòôbàř');
+$stringy->toUpperCase();    // 'FÒÔBÀŘ'
+$stringy->length();         // '6'
+```
+
+## Alternative
+
+If you like a more Functional Way to edit strings, then you can take a look at [voku/portable-utf8](https://github.com/voku/portable-utf8), also "voku/Stringy" used the functions from the "Portable UTF-8"-Class but in a more Object Oriented Way.
+
+```php
+// Portable UTF-8
+use voku\helper\UTF8;
+UTF8::strtoupper('fòôbàř');    // 'FÒÔBÀŘ'
+UTF8::strlen('fòôbàř');        // '6'
 ```
 
 ## Installation via "composer require"
