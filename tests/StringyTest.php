@@ -558,8 +558,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider titleizeProvider()
    */
-  public function testTitleize($expected, $str, $ignore = null,
-                               $encoding = null)
+  public function testTitleize($expected, $str, $ignore = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->titleize($ignore);
@@ -695,8 +694,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider padProvider()
    */
-  public function testPad($expected, $str, $length, $padStr = ' ',
-                          $padType = 'right', $encoding = null)
+  public function testPad($expected, $str, $length, $padStr = ' ', $padType = 'right', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->pad($length, $padStr, $padType);
@@ -742,8 +740,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider padLeftProvider()
    */
-  public function testPadLeft($expected, $str, $length, $padStr = ' ',
-                              $encoding = null)
+  public function testPadLeft($expected, $str, $length, $padStr = ' ', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->padLeft($length, $padStr);
@@ -768,8 +765,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider padRightProvider()
    */
-  public function testPadRight($expected, $str, $length, $padStr = ' ',
-                               $encoding = null)
+  public function testPadRight($expected, $str, $length, $padStr = ' ', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->padRight($length, $padStr);
@@ -794,8 +790,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider padBothProvider()
    */
-  public function testPadBoth($expected, $str, $length, $padStr = ' ',
-                              $encoding = null)
+  public function testPadBoth($expected, $str, $length, $padStr = ' ', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->padBoth($length, $padStr);
@@ -824,8 +819,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider startsWithProvider()
    */
-  public function testStartsWith($expected, $str, $substring,
-                                 $caseSensitive = true, $encoding = null)
+  public function testStartsWith($expected, $str, $substring, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->startsWith($substring, $caseSensitive);
@@ -854,8 +848,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider endsWithProvider()
    */
-  public function testEndsWith($expected, $str, $substring,
-                               $caseSensitive = true, $encoding = null)
+  public function testEndsWith($expected, $str, $substring, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->endsWith($substring, $caseSensitive);
@@ -1066,8 +1059,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider betweenProvider()
    */
-  public function testBetween($expected, $str, $start, $end, $offset = null,
-                              $encoding = null)
+  public function testBetween($expected, $str, $start, $end, $offset = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->between($start, $end, $offset);
@@ -1162,8 +1154,14 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     return array(
         array('', ''),
-        array('Hello, i try to alert&#40;\'Hack\'&#41;; your site', 'Hello, i try to <script>alert(\'Hack\');</script> your site'),
-        array('<IMG >', '<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>'),
+        array(
+            'Hello, i try to alert&#40;\'Hack\'&#41;; your site',
+            'Hello, i try to <script>alert(\'Hack\');</script> your site',
+        ),
+        array(
+            '<IMG >',
+            '<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>',
+        ),
         array('', '<XSS STYLE="behavior: url(xss.htc);">'),
         array('<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'),
         array('\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'),
@@ -1173,8 +1171,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider containsProvider()
    */
-  public function testContains($expected, $haystack, $needle,
-                               $caseSensitive = true, $encoding = null)
+  public function testContains($expected, $haystack, $needle, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->contains($needle, $caseSensitive);
@@ -1213,8 +1210,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider containsAnyProvider()
    */
-  public function testcontainsAny($expected, $haystack, $needles,
-                                  $caseSensitive = true, $encoding = null)
+  public function testcontainsAny($expected, $haystack, $needles, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->containsAny($needles, $caseSensitive);
@@ -1267,8 +1263,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider containsAllProvider()
    */
-  public function testContainsAll($expected, $haystack, $needles,
-                                  $caseSensitive = true, $encoding = null)
+  public function testContainsAll($expected, $haystack, $needles, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->containsAll($needles, $caseSensitive);
@@ -1344,8 +1339,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider insertProvider()
    */
-  public function testInsert($expected, $str, $substring, $index,
-                             $encoding = null)
+  public function testInsert($expected, $str, $substring, $index, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->insert($substring, $index);
@@ -1371,8 +1365,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider truncateProvider()
    */
-  public function testTruncate($expected, $str, $length, $substring = '',
-                               $encoding = null)
+  public function testTruncate($expected, $str, $length, $substring = '', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->truncate($length, $substring);
@@ -1412,8 +1405,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider safeTruncateProvider()
    */
-  public function testSafeTruncate($expected, $str, $length, $substring = '',
-                                   $encoding = null)
+  public function testSafeTruncate($expected, $str, $length, $substring = '', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->safeTruncate($length, $substring);
@@ -1565,8 +1557,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider trimLeftProvider()
    */
-  public function testTrimLeft($expected, $str, $chars = null,
-                               $encoding = null)
+  public function testTrimLeft($expected, $str, $chars = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->trimLeft($chars);
@@ -1597,8 +1588,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider trimRightProvider()
    */
-  public function testTrimRight($expected, $str, $chars = null,
-                                $encoding = null)
+  public function testTrimRight($expected, $str, $chars = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->trimRight($chars);
@@ -1629,8 +1619,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider longestCommonPrefixProvider()
    */
-  public function testLongestCommonPrefix($expected, $str, $otherStr,
-                                          $encoding = null)
+  public function testLongestCommonPrefix($expected, $str, $otherStr, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonPrefix($otherStr);
@@ -1658,8 +1647,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider longestCommonSuffixProvider()
    */
-  public function testLongestCommonSuffix($expected, $str, $otherStr,
-                                          $encoding = null)
+  public function testLongestCommonSuffix($expected, $str, $otherStr, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonSuffix($otherStr);
@@ -1687,8 +1675,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider longestCommonSubstringProvider()
    */
-  public function testLongestCommonSubstring($expected, $str, $otherStr,
-                                             $encoding = null)
+  public function testLongestCommonSubstring($expected, $str, $otherStr, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonSubstring($otherStr);
@@ -1738,8 +1725,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider sliceProvider()
    */
-  public function testSlice($expected, $str, $start, $end = null,
-                            $encoding = null)
+  public function testSlice($expected, $str, $start, $end = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->slice($start, $end);
@@ -1773,8 +1759,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider splitProvider()
    */
-  public function testSplit($expected, $str, $pattern, $limit = null,
-                            $encoding = null)
+  public function testSplit($expected, $str, $pattern, $limit = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->split($pattern, $limit);
@@ -1817,8 +1802,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider substrProvider()
    */
-  public function testSubstr($expected, $str, $start, $length = null,
-                             $encoding = null)
+  public function testSubstr($expected, $str, $start, $length = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->substr($start, $length);
@@ -2266,15 +2250,16 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $this->assertEquals($expected, $result);
     $this->assertEquals($str, $stringy);
   }
+
   public function isBase64Provider()
   {
     return array(
         array(false, ' '),
         array(false, ''),
-        array(true, base64_encode('FooBar') ),
-        array(true, base64_encode(' ') ),
-        array(true, base64_encode('FÒÔBÀŘ') ),
-        array(true, base64_encode('συγγραφέας') ),
+        array(true, base64_encode('FooBar')),
+        array(true, base64_encode(' ')),
+        array(true, base64_encode('FÒÔBÀŘ')),
+        array(true, base64_encode('συγγραφέας')),
         array(false, 'Foobar'),
     );
   }
@@ -2369,8 +2354,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider countSubstrProvider()
    */
-  public function testCountSubstr($expected, $str, $substring,
-                                  $caseSensitive = true, $encoding = null)
+  public function testCountSubstr($expected, $str, $substring, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->countSubstr($substring, $caseSensitive);
@@ -2403,8 +2387,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider replaceProvider()
    */
-  public function testReplace($expected, $str, $search, $replacement,
-                              $encoding = null)
+  public function testReplace($expected, $str, $search, $replacement, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->replace($search, $replacement);
@@ -2441,8 +2424,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider replaceBeginningProvider()
    */
-  public function testReplaceBeginning($expected, $str, $search, $replacement,
-                              $encoding = null)
+  public function testReplaceBeginning($expected, $str, $search, $replacement, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->replaceBeginning($search, $replacement);
@@ -2510,8 +2492,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider regexReplaceProvider()
    */
-  public function testregexReplace($expected, $str, $pattern, $replacement,
-                                   $options = 'msr', $encoding = null)
+  public function testregexReplace($expected, $str, $pattern, $replacement, $options = 'msr', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->regexReplace($pattern, $replacement, $options);
