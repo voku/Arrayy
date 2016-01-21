@@ -15,7 +15,7 @@ namespace Stringy;
  * @method static array  chars(string $stringInput, string $encoding = null)
  * @method static string collapseWhitespace(string $stringInput, string $encoding = null)
  * @method static bool   contains(string $stringInput, string $needle, bool $caseSensitive = true, string $encoding = null)
- * @method static bool   containsAll(string $stringInput, string $needle, bool $caseSensitive = true, string $encoding = null)
+ * @method static bool   containsAll(string $stringInput, array $needle, bool $caseSensitive = true, string $encoding = null)
  * @method static bool   containsAny(string $stringInput, string $needle, bool $caseSensitive = true, string $encoding = null)
  * @method static int    count(string $stringInput, string $encoding = null)
  * @method static int    countSubstr(string $stringInput, string $substring, bool $caseSensitive = true, string $encoding = null)
