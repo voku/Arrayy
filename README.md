@@ -7,7 +7,9 @@ WARNING: this is only a Fork of "https://github.com/danielstjules/Stringy"
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/Stringy/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/Stringy/?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/97c46467e585467d884bac1130cb45e5)](https://www.codacy.com/app/voku/Stringy)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/76973bbc-7cf6-4df6-8791-80ed9c7612ee/mini.png)](https://insight.sensiolabs.com/projects/76973bbc-7cf6-4df6-8791-80ed9c7612ee)
-[![Latest Stable Version](https://poser.pugx.org/voku/stringy/v/stable)](https://packagist.org/packages/voku/stringy) [![Total Downloads](https://poser.pugx.org/voku/stringy/downloads)](https://packagist.org/packages/voku/stringy) [![Latest Unstable Version](https://poser.pugx.org/voku/stringy/v/unstable)](https://packagist.org/packages/voku/stringy) [![License](https://poser.pugx.org/voku/stringy/license)](https://packagist.org/packages/voku/stringy)
+[![Latest Stable Version](https://poser.pugx.org/voku/stringy/v/stable)](https://packagist.org/packages/voku/stringy) [![Total Downloads](https://poser.pugx.org/voku/stringy/downloads)](https://packagist.org/packages/voku/stringy) [![Latest Unstable Version](https://poser.pugx.org/voku/stringy/v/unstable)](https://packagist.org/packages/voku/stringy)
+[![PHP 7 ready](http://php7ready.timesplinter.ch/voku/Stringy/badge.svg)](https://travis-ci.org/voku/Stringy)
+[![License](https://poser.pugx.org/voku/stringy/license)](https://packagist.org/packages/voku/stringy)
 
 
 A PHP string manipulation library with multibyte support. Compatible with PHP
