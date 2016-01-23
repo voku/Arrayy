@@ -53,7 +53,6 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       );
     }
 
-
     // don't throw a notice on PHP 5.3
     if (!defined('ENT_SUBSTITUTE')) {
       define('ENT_SUBSTITUTE', 8);

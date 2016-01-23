@@ -4,38 +4,45 @@ require __DIR__ . '/../src/StaticStringy.php';
 
 use Stringy\StaticStringy as S;
 
-class StaticStringyTestCase extends PHPUnit_Framework_TestCase
+/**
+ * Class StaticStringyTest
+ */
+class StaticStringyTest extends PHPUnit_Framework_TestCase
 {
   /**
    * @expectedException BadMethodCallException
    */
   public function testBadMethodCall()
   {
+    /** @noinspection PhpUndefinedMethodInspection */
+    /** @noinspection PhpUnusedLocalVariableInspection */
+    /** @noinspection OnlyWritesOnParameterInspection */
     $result = S::invalidMethod('foo');
   }
 
   public function testEmptyArgsInvocation()
   {
+    /** @noinspection PhpParamsInspection */
     $result = S::toLowerCase();
-    $this->assertEquals('', (string)$result);
+    static::assertEquals('', (string)$result);
   }
 
   public function testInvocation()
   {
     $result = S::toLowerCase('FOOBAR');
-    $this->assertEquals('foobar', (string)$result);
+    static::assertEquals('foobar', (string)$result);
   }
 
   public function testPartialArgsInvocation()
   {
     $result = S::slice('foobar', 0, 3);
-    $this->assertEquals('foo', (string)$result);
+    static::assertEquals('foo', (string)$result);
   }
 
   public function testFullArgsInvocation()
   {
     $result = S::slice('fòôbàř', 0, 3, 'UTF-8');
-    $this->assertEquals('fòô', (string)$result);
+    static::assertEquals('fòô', (string)$result);
   }
 
   /**
@@ -54,7 +61,7 @@ class StaticStringyTestCase extends PHPUnit_Framework_TestCase
     foreach ($properties['methodArgs'] as $method => $expected) {
       $num = $stringyClass->getMethod($method)->getNumberOfParameters() + 2;
 
-      $this->assertEquals($expected, $num, 'Invalid num args for ' . $method);
+      static::assertEquals($expected, $num, 'Invalid num args for ' . $method);
     }
   }
 }
