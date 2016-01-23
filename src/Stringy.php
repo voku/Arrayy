@@ -61,7 +61,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     // init
     UTF8::checkForSupport();
-    $this->str = (string) $str;
+    $this->str = (string)$str;
 
     if ($encoding) {
       $this->encoding = $encoding;
@@ -157,7 +157,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function indexOf($needle, $offset = 0)
   {
-    return UTF8::strpos($this->str, (string) $needle, (int) $offset, $this->encoding);
+    return UTF8::strpos($this->str, (string)$needle, (int)$offset, $this->encoding);
   }
 
   /**
@@ -429,7 +429,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       $startOfStr = UTF8::strtolower($startOfStr, $this->encoding);
     }
 
-    return (string) $substring === $startOfStr;
+    return (string)$substring === $startOfStr;
   }
 
   /**
@@ -478,7 +478,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       $endOfStr = UTF8::strtolower($endOfStr, $this->encoding);
     }
 
-    return (string) $substring === $endOfStr;
+    return (string)$substring === $endOfStr;
   }
 
   /**
@@ -666,7 +666,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function indexOfLast($needle, $offset = 0)
   {
-    return UTF8::strrpos($this->str, (string) $needle, (int) $offset, $this->encoding);
+    return UTF8::strrpos($this->str, (string)$needle, (int)$offset, $this->encoding);
   }
 
   /**
@@ -840,6 +840,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     $array = preg_split('/[\r\n]{1,2}/u', $this->str);
     /** @noinspection CallableInLoopTerminationConditionInspection */
+    /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < count($array); $i++) {
       $array[$i] = static::create($array[$i], $this->encoding);
     }
@@ -965,7 +966,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     // init
     $length = $this->length();
-    $offset = (int) $offset;
+    $offset = (int)$offset;
 
     if ($offset >= 0) {
       return ($length > $offset);
@@ -1460,6 +1461,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /** @noinspection CallableInLoopTerminationConditionInspection */
+    /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < count($array); $i++) {
       $array[$i] = static::create($array[$i], $this->encoding);
     }
@@ -1494,7 +1496,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     $stringy->str = preg_replace_callback(
         '/[\S]/u',
-        function($match) use ($encoding) {
+        function ($match) use ($encoding) {
           $marchToUpper = UTF8::strtoupper($match[0], $encoding);
 
           if ($match[0] == $marchToUpper) {
@@ -1539,13 +1541,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     $stringy->str = preg_replace_callback(
         '/([\S]+)/u',
-        function($match) use ($encoding, $ignore) {
+        function ($match) use ($encoding, $ignore) {
           if ($ignore && in_array($match[0], $ignore, true)) {
             return $match[0];
           } else {
             $stringy = new Stringy($match[0], $encoding);
 
-            return (string) $stringy->toLowerCase()->upperCaseFirst();
+            return (string)$stringy->toLowerCase()->upperCaseFirst();
           }
         },
         $stringy->str
@@ -1627,9 +1629,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     if (array_key_exists($key, $map)) {
       return $map[$key];
     } elseif (is_numeric($this->str)) {
-      return ((int) $this->str > 0);
+      return ((int)$this->str > 0);
     } else {
-      return (bool) $this->regexReplace('[[:space:]]', '')->str;
+      return (bool)$this->regexReplace('[[:space:]]', '')->str;
     }
   }
 
@@ -1799,7 +1801,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     $stringy->str = preg_replace_callback(
         '/[-_\s]+(.)?/u',
-        function($match) use ($encoding) {
+        function ($match) use ($encoding) {
           if (isset($match[1])) {
             return UTF8::strtoupper($match[1], $encoding);
           } else {
@@ -1811,13 +1813,61 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     $stringy->str = preg_replace_callback(
         '/[\d]+(.)?/u',
-        function($match) use ($encoding) {
+        function ($match) use ($encoding) {
           return UTF8::strtoupper($match[0], $encoding);
         },
         $stringy->str
     );
 
     return $stringy;
+  }
+
+  /**
+   * Convert a string to e.g.: "snake_case"
+   *
+   * @return Stringy Object with $str in snake_case
+   */
+  public function snakeize()
+  {
+    $str = $this->str;
+
+    $str = UTF8::normalize_whitespace($str);
+    $str = str_replace('-', '_', $str);
+
+    $str = preg_replace_callback(
+        '/([\d|A-Z])/u',
+        function ($matches) {
+          $match = $matches[1];
+          $matchInt = (int)$match;
+
+          if ("$matchInt" == $match) {
+            return '_' . $match . '_';
+          } else {
+            return '_' . UTF8::strtolower($match);
+          }
+        },
+        $str
+    );
+
+    $str = preg_replace(
+        array(
+
+            '/\s+/',      // convert spaces to "_"
+            '/^\s+|\s+$/',  // trim leading & trailing spaces
+            '/_+/',         // remove double "_"
+        ),
+        array(
+            '_',
+            '',
+            '_'
+        ),
+        $str
+    );
+
+    $str = UTF8::trim($str, '_'); // trim leading & trailing "_"
+    $str = UTF8::trim($str); // trim leading & trailing whitespace
+
+    return static::create($str, $this->encoding);
   }
 
   /**

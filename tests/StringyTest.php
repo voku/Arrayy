@@ -4,6 +4,9 @@ require __DIR__ . '/../src/Stringy.php';
 
 use Stringy\Stringy as S;
 
+/**
+ * Class StringyTestCase
+ */
 class StringyTestCase extends PHPUnit_Framework_TestCase
 {
   /**
@@ -13,22 +16,22 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
    */
   public function assertStringy($actual)
   {
-    $this->assertInstanceOf('Stringy\Stringy', $actual);
+    self::assertInstanceOf('Stringy\Stringy', $actual);
   }
 
   public function testConstruct()
   {
     $stringy = new S('foo bar', 'UTF-8');
-    $this->assertStringy($stringy);
-    $this->assertEquals('foo bar', (string)$stringy);
-    $this->assertEquals('UTF-8', $stringy->getEncoding());
+    self::assertStringy($stringy);
+    self::assertEquals('foo bar', (string)$stringy);
+    self::assertEquals('UTF-8', $stringy->getEncoding());
   }
 
   public function testEmptyConstruct()
   {
     $stringy = new S();
-    $this->assertStringy($stringy);
-    $this->assertEquals('', (string)$stringy);
+    self::assertStringy($stringy);
+    self::assertEquals('', (string)$stringy);
   }
 
   /**
@@ -36,8 +39,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
    */
   public function testConstructWithArray()
   {
+    /** @noinspection PhpExpressionResultUnusedInspection */
     (string)new S(array());
-    $this->fail('Expecting exception when the constructor is passed an array');
+    static::fail('Expecting exception when the constructor is passed an array');
   }
 
   /**
@@ -45,8 +49,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
    */
   public function testMissingToString()
   {
+    /** @noinspection PhpExpressionResultUnusedInspection */
     (string)new S(new stdClass());
-    $this->fail(
+    static::fail(
         'Expecting exception when the constructor is passed an ' .
         'object without a __toString method'
     );
@@ -54,12 +59,18 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider toStringProvider()
+   *
+   * @param $expected
+   * @param $str
    */
   public function testToString($expected, $str)
   {
-    $this->assertEquals($expected, (string)new S($str));
+    self::assertEquals($expected, (string)new S($str));
   }
 
+  /**
+   * @return array
+   */
   public function toStringProvider()
   {
     return array(
@@ -75,24 +86,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testCreate()
   {
     $stringy = S::create('foo bar', 'UTF-8');
-    $this->assertStringy($stringy);
-    $this->assertEquals('foo bar', (string)$stringy);
-    $this->assertEquals('UTF-8', $stringy->getEncoding());
+    self::assertStringy($stringy);
+    self::assertEquals('foo bar', (string)$stringy);
+    self::assertEquals('UTF-8', $stringy->getEncoding());
   }
 
   public function testChaining()
   {
     $stringy = S::create("Fòô     Bàř", 'UTF-8');
-    $this->assertStringy($stringy);
+    self::assertStringy($stringy);
     $result = $stringy->collapseWhitespace()->swapCase()->upperCaseFirst();
-    $this->assertEquals('FÒÔ bÀŘ', $result);
+    self::assertEquals('FÒÔ bÀŘ', $result);
   }
 
   public function testCount()
   {
     $stringy = S::create('Fòô', 'UTF-8');
-    $this->assertEquals(3, $stringy->count());
-    $this->assertEquals(3, count($stringy));
+    self::assertEquals(3, $stringy->count());
+    self::assertEquals(3, count($stringy));
   }
 
   public function testGetIterator()
@@ -109,20 +120,26 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
       $keyValResult[$pos] = $char;
     }
 
-    $this->assertEquals(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $valResult);
-    $this->assertEquals(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $keyValResult);
+    self::assertEquals(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $valResult);
+    self::assertEquals(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $keyValResult);
   }
 
   /**
    * @dataProvider offsetExistsProvider()
+   *
+   * @param $expected
+   * @param $offset
    */
   public function testOffsetExists($expected, $offset)
   {
     $stringy = S::create('fòô', 'UTF-8');
-    $this->assertEquals($expected, $stringy->offsetExists($offset));
-    $this->assertEquals($expected, isset($stringy[$offset]));
+    self::assertEquals($expected, $stringy->offsetExists($offset));
+    self::assertEquals($expected, isset($stringy[$offset]));
   }
 
+  /**
+   * @return array
+   */
   public function offsetExistsProvider()
   {
     return array(
@@ -139,10 +156,10 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create('fòô', 'UTF-8');
 
-    $this->assertEquals('f', $stringy->offsetGet(0));
-    $this->assertEquals('ô', $stringy->offsetGet(2));
+    self::assertEquals('f', $stringy->offsetGet(0));
+    self::assertEquals('ô', $stringy->offsetGet(2));
 
-    $this->assertEquals('ô', $stringy[2]);
+    self::assertEquals('ô', $stringy[2]);
   }
 
   /**
@@ -151,6 +168,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testOffsetGetOutOfBounds()
   {
     $stringy = S::create('fòô', 'UTF-8');
+    /** @noinspection PhpUnusedLocalVariableInspection */
+    /** @noinspection OnlyWritesOnParameterInspection */
     $test = $stringy[3];
   }
 
@@ -159,7 +178,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
    */
   public function testOffsetSet()
   {
+    /** @noinspection OnlyWritesOnParameterInspection */
     $stringy = S::create('fòô', 'UTF-8');
+    /** @noinspection OnlyWritesOnParameterInspection */
     $stringy[1] = 'invalid';
   }
 
@@ -174,13 +195,22 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider indexOfProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $subStr
+   * @param int  $offset
+   * @param null $encoding
    */
   public function testIndexOf($expected, $str, $subStr, $offset = 0, $encoding = null)
   {
     $result = S::create($str, $encoding)->indexOf($subStr, $offset);
-    $this->assertEquals($expected, $result);
+    self::assertEquals($expected, $result);
   }
 
+  /**
+   * @return array
+   */
   public function indexOfProvider()
   {
     return array(
@@ -199,13 +229,22 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider indexOfLastProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $subStr
+   * @param int  $offset
+   * @param null $encoding
    */
   public function testIndexOfLast($expected, $str, $subStr, $offset = 0, $encoding = null)
   {
     $result = S::create($str, $encoding)->indexOfLast($subStr, $offset);
-    $this->assertEquals($expected, $result);
+    self::assertEquals($expected, $result);
   }
 
+  /**
+   * @return array
+   */
   public function indexOfLastProvider()
   {
     return array(
@@ -224,14 +263,22 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider appendProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $string
+   * @param null $encoding
    */
   public function testAppend($expected, $str, $string, $encoding = null)
   {
     $result = S::create($str, $encoding)->append($string);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
   }
 
+  /**
+   * @return array
+   */
   public function appendProvider()
   {
     return array(
@@ -242,14 +289,22 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider prependProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $string
+   * @param null $encoding
    */
   public function testPrepend($expected, $str, $string, $encoding = null)
   {
     $result = S::create($str, $encoding)->prepend($string);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
   }
 
+  /**
+   * @return array
+   */
   public function prependProvider()
   {
     return array(
@@ -260,17 +315,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider charsProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testChars($expected, $str, $encoding = null)
   {
     $result = S::create($str, $encoding)->chars();
-    $this->assertInternalType('array', $result);
+    self::assertInternalType('array', $result);
     foreach ($result as $char) {
-      $this->assertInternalType('string', $char);
+      self::assertInternalType('string', $char);
     }
-    $this->assertEquals($expected, $result);
+    self::assertEquals($expected, $result);
   }
 
+  /**
+   * @return array
+   */
   public function charsProvider()
   {
     return array(
@@ -282,21 +344,30 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider linesProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testLines($expected, $str, $encoding = null)
   {
     $result = S::create($str, $encoding)->lines();
 
-    $this->assertInternalType('array', $result);
+    self::assertInternalType('array', $result);
     foreach ($result as $line) {
-      $this->assertStringy($line);
+      self::assertStringy($line);
     }
 
-    for ($i = 0; $i < count($expected); $i++) {
-      $this->assertEquals($expected[$i], $result[$i]);
+    $counter = count($expected);
+    /** @noinspection ForeachInvariantsInspection */
+    for ($i = 0; $i < $counter; $i++) {
+      self::assertEquals($expected[$i], $result[$i]);
     }
   }
 
+  /**
+   * @return array
+   */
   public function linesProvider()
   {
     return array(
@@ -320,14 +391,21 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider upperCaseFirstProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testUpperCaseFirst($expected, $str, $encoding = null)
   {
     $result = S::create($str, $encoding)->upperCaseFirst();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
   }
 
+  /**
+   * @return array
+   */
   public function upperCaseFirstProvider()
   {
     return array(
@@ -341,16 +419,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider lowerCaseFirstProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testLowerCaseFirst($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->lowerCaseFirst();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function lowerCaseFirstProvider()
   {
     return array(
@@ -363,17 +448,69 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @dataProvider snakeizeProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
+   */
+  public function testSnakeize($expected, $str, $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->snakeize();
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
+  }
+
+  /**
+   * @return array
+   */
+  public function snakeizeProvider()
+  {
+    return array(
+        array('snake_case', 'SnakeCase'),
+        array('snake_case', 'Snake-Case'),
+        array('snake_case', 'snake case'),
+        array('snake_case', 'snake -case'),
+        array('snake_case', 'snake - case'),
+        array('snake_case', 'snake_case'),
+        array('camel_c_test', 'camel c test'),
+        array('string_with_1_number', 'string_with 1 number'),
+        array('string_with_1_number', 'string_with1number'),
+        array('string_with_2_2_numbers', 'string-with-2-2 numbers'),
+        array('data_rate', 'data_rate'),
+        array('background_color', 'background-color'),
+        array('yes_we_can', 'yes_we_can'),
+        array('moz_something', '-moz-something'),
+        array('car_speed', '_car_speed_'),
+        array('serve_h_t_t_p', 'ServeHTTP'),
+        array('1_camel_2_case', '1camel2case'),
+        array('camel_σase', 'camel σase', 'UTF-8'),
+        array('Στανιλ_case', 'Στανιλ case', 'UTF-8'),
+        array('σamel_case', 'σamel  Case', 'UTF-8'),
+    );
+  }
+
+  /**
    * @dataProvider camelizeProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testCamelize($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->camelize();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function camelizeProvider()
   {
     return array(
@@ -401,16 +538,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider upperCamelizeProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testUpperCamelize($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->upperCamelize();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function upperCamelizeProvider()
   {
     return array(
@@ -432,16 +576,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider dasherizeProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testDasherize($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->dasherize();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function dasherizeProvider()
   {
     return array(
@@ -469,16 +620,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider underscoredProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testUnderscored($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->underscored();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function underscoredProvider()
   {
     return array(
@@ -503,16 +661,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider delimitProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $delimiter
+   * @param null $encoding
    */
   public function testDelimit($expected, $str, $delimiter, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->delimit($delimiter);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function delimitProvider()
   {
     return array(
@@ -535,16 +701,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider swapCaseProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testSwapCase($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->swapCase();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function swapCaseProvider()
   {
     return array(
@@ -557,16 +730,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider titleizeProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $ignore
+   * @param null $encoding
    */
   public function testTitleize($expected, $str, $ignore = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->titleize($ignore);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function titleizeProvider()
   {
     $ignore = array('at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the');
@@ -586,16 +767,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider humanizeProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testHumanize($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->humanize();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function humanizeProvider()
   {
     return array(
@@ -607,16 +795,22 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider tidyProvider()
+   *
+   * @param $expected
+   * @param $str
    */
   public function testTidy($expected, $str)
   {
     $stringy = S::create($str);
     $result = $stringy->tidy();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function tidyProvider()
   {
     return array(
@@ -629,16 +823,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider collapseWhitespaceProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testCollapseWhitespace($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->collapseWhitespace();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function collapseWhitespaceProvider()
   {
     return array(
@@ -659,16 +860,22 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider toAsciiProvider()
+   *
+   * @param $expected
+   * @param $str
    */
   public function testToAscii($expected, $str)
   {
     $stringy = S::create($str);
     $result = $stringy->toAscii();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function toAsciiProvider()
   {
     return array(
@@ -693,16 +900,26 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider padProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param        $length
+   * @param string $padStr
+   * @param string $padType
+   * @param null   $encoding
    */
   public function testPad($expected, $str, $length, $padStr = ' ', $padType = 'right', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->pad($length, $padStr, $padType);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function padProvider()
   {
     return array(
@@ -734,21 +951,30 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testPadException()
   {
     $stringy = S::create('foo');
-    $result = $stringy->pad(5, 'foo', 'bar');
+    $stringy->pad(5, 'foo', 'bar');
   }
 
   /**
    * @dataProvider padLeftProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param        $length
+   * @param string $padStr
+   * @param null   $encoding
    */
   public function testPadLeft($expected, $str, $length, $padStr = ' ', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->padLeft($length, $padStr);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function padLeftProvider()
   {
     return array(
@@ -764,16 +990,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider padRightProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param        $length
+   * @param string $padStr
+   * @param null   $encoding
    */
   public function testPadRight($expected, $str, $length, $padStr = ' ', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->padRight($length, $padStr);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function padRightProvider()
   {
     return array(
@@ -789,16 +1024,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider padBothProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param        $length
+   * @param string $padStr
+   * @param null   $encoding
    */
   public function testPadBoth($expected, $str, $length, $padStr = ' ', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->padBoth($length, $padStr);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function padBothProvider()
   {
     return array(
@@ -818,16 +1062,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider startsWithProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $substring
+   * @param bool $caseSensitive
+   * @param null $encoding
    */
   public function testStartsWith($expected, $str, $substring, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->startsWith($substring, $caseSensitive);
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function startsWithProvider()
   {
     return array(
@@ -847,16 +1100,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider endsWithProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $substring
+   * @param bool $caseSensitive
+   * @param null $encoding
    */
   public function testEndsWith($expected, $str, $substring, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->endsWith($substring, $caseSensitive);
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function endsWithProvider()
   {
     return array(
@@ -876,16 +1138,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider toBooleanProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testToBoolean($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->toBoolean();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function toBooleanProvider()
   {
     return array(
@@ -909,16 +1178,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider toSpacesProvider()
+   *
+   * @param     $expected
+   * @param     $str
+   * @param int $tabLength
    */
   public function testToSpaces($expected, $str, $tabLength = 4)
   {
     $stringy = S::create($str);
     $result = $stringy->toSpaces($tabLength);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function toSpacesProvider()
   {
     return array(
@@ -933,16 +1209,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider toTabsProvider()
+   *
+   * @param     $expected
+   * @param     $str
+   * @param int $tabLength
    */
   public function testToTabs($expected, $str, $tabLength = 4)
   {
     $stringy = S::create($str);
     $result = $stringy->toTabs($tabLength);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function toTabsProvider()
   {
     return array(
@@ -956,16 +1239,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider toLowerCaseProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testToLowerCase($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->toLowerCase();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function toLowerCaseProvider()
   {
     return array(
@@ -979,16 +1269,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider toTitleCaseProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testToTitleCase($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->toTitleCase();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function toTitleCaseProvider()
   {
     return array(
@@ -1002,16 +1299,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider toUpperCaseProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testToUpperCase($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->toUpperCase();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function toUpperCaseProvider()
   {
     return array(
@@ -1025,16 +1329,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider slugifyProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param string $replacement
    */
   public function testSlugify($expected, $str, $replacement = '-')
   {
     $stringy = S::create($str);
     $result = $stringy->slugify($replacement);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function slugifyProvider()
   {
     return array(
@@ -1058,16 +1369,26 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider betweenProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $start
+   * @param      $end
+   * @param null $offset
+   * @param null $encoding
    */
   public function testBetween($expected, $str, $start, $end, $offset = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->between($start, $end, $offset);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function betweenProvider()
   {
     return array(
@@ -1092,16 +1413,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider escapeProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testEscape($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->escape();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function escapeProvider()
   {
     return array(
@@ -1116,16 +1444,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider removeHtmlProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param string $allowableTags
+   * @param null   $encoding
    */
   public function testRemoveHtml($expected, $str, $allowableTags = '', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeHtml($allowableTags);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function removeHtmlProvider()
   {
     return array(
@@ -1140,16 +1476,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider removeXssProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testRemoveXss($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeXss();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function removeXssProvider()
   {
     return array(
@@ -1170,16 +1513,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider containsProvider()
+   *
+   * @param      $expected
+   * @param      $haystack
+   * @param      $needle
+   * @param bool $caseSensitive
+   * @param null $encoding
    */
   public function testContains($expected, $haystack, $needle, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->contains($needle, $caseSensitive);
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($haystack, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($haystack, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function containsProvider()
   {
     return array(
@@ -1209,16 +1561,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider containsAnyProvider()
+   *
+   * @param      $expected
+   * @param      $haystack
+   * @param      $needles
+   * @param bool $caseSensitive
+   * @param null $encoding
    */
   public function testcontainsAny($expected, $haystack, $needles, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->containsAny($needles, $caseSensitive);
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($haystack, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($haystack, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function containsAnyProvider()
   {
     // One needle
@@ -1262,16 +1623,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider containsAllProvider()
+   *
+   * @param      $expected
+   * @param      $haystack
+   * @param      $needles
+   * @param bool $caseSensitive
+   * @param null $encoding
    */
   public function testContainsAll($expected, $haystack, $needles, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->containsAll($needles, $caseSensitive);
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($haystack, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($haystack, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function containsAllProvider()
   {
     // One needle
@@ -1315,16 +1685,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider surroundProvider()
+   *
+   * @param $expected
+   * @param $str
+   * @param $substring
    */
   public function testSurround($expected, $str, $substring)
   {
     $stringy = S::create($str);
     $result = $stringy->surround($substring);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function surroundProvider()
   {
     return array(
@@ -1338,16 +1715,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider insertProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $substring
+   * @param      $index
+   * @param null $encoding
    */
   public function testInsert($expected, $str, $substring, $index, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->insert($substring, $index);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function insertProvider()
   {
     return array(
@@ -1364,16 +1750,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider truncateProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param        $length
+   * @param string $substring
+   * @param null   $encoding
    */
   public function testTruncate($expected, $str, $length, $substring = '', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->truncate($length, $substring);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function truncateProvider()
   {
     return array(
@@ -1404,16 +1799,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider safeTruncateProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param        $length
+   * @param string $substring
+   * @param null   $encoding
    */
   public function testSafeTruncate($expected, $str, $length, $substring = '', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->safeTruncate($length, $substring);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function safeTruncateProvider()
   {
     return array(
@@ -1444,16 +1848,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider reverseProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testReverse($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->reverse();
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function reverseProvider()
   {
     return array(
@@ -1467,16 +1878,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider repeatProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $multiplier
+   * @param null $encoding
    */
   public function testRepeat($expected, $str, $multiplier, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->repeat($multiplier);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function repeatProvider()
   {
     return array(
@@ -1492,6 +1911,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider shuffleProvider()
+   *
+   * @param      $str
+   * @param null $encoding
    */
   public function testShuffle($str, $encoding = null)
   {
@@ -1499,22 +1921,26 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $encoding = $encoding ?: mb_internal_encoding();
     $result = $stringy->shuffle();
 
-    $this->assertStringy($result);
-    $this->assertEquals($str, $stringy);
-    $this->assertEquals(
+    self::assertStringy($result);
+    self::assertEquals($str, $stringy);
+    self::assertEquals(
         mb_strlen($str, $encoding),
         mb_strlen($result, $encoding)
     );
 
     // We'll make sure that the chars are present after shuffle
-    for ($i = 0; $i < mb_strlen($str, $encoding); $i++) {
+    $length = mb_strlen($str, $encoding);
+    for ($i = 0; $i < $length; $i++) {
       $char = mb_substr($str, $i, 1, $encoding);
       $countBefore = mb_substr_count($str, $char, $encoding);
       $countAfter = mb_substr_count($result, $char, $encoding);
-      $this->assertEquals($countBefore, $countAfter);
+      self::assertEquals($countBefore, $countAfter);
     }
   }
 
+  /**
+   * @return array
+   */
   public function shuffleProvider()
   {
     return array(
@@ -1526,16 +1952,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider trimProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $chars
+   * @param null $encoding
    */
   public function testTrim($expected, $str, $chars = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->trim($chars);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function trimProvider()
   {
     return array(
@@ -1556,16 +1990,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider trimLeftProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $chars
+   * @param null $encoding
    */
   public function testTrimLeft($expected, $str, $chars = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->trimLeft($chars);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function trimLeftProvider()
   {
     return array(
@@ -1587,16 +2029,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider trimRightProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $chars
+   * @param null $encoding
    */
   public function testTrimRight($expected, $str, $chars = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->trimRight($chars);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function trimRightProvider()
   {
     return array(
@@ -1618,16 +2068,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider longestCommonPrefixProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $otherStr
+   * @param null $encoding
    */
   public function testLongestCommonPrefix($expected, $str, $otherStr, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonPrefix($otherStr);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function longestCommonPrefixProvider()
   {
     return array(
@@ -1646,16 +2104,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider longestCommonSuffixProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $otherStr
+   * @param null $encoding
    */
   public function testLongestCommonSuffix($expected, $str, $otherStr, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonSuffix($otherStr);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function longestCommonSuffixProvider()
   {
     return array(
@@ -1674,16 +2140,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider longestCommonSubstringProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $otherStr
+   * @param null $encoding
    */
   public function testLongestCommonSubstring($expected, $str, $otherStr, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonSubstring($otherStr);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function longestCommonSubstringProvider()
   {
     return array(
@@ -1702,16 +2176,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider lengthProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testLength($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->length();
-    $this->assertInternalType('int', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('int', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function lengthProvider()
   {
     return array(
@@ -1724,16 +2205,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider sliceProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $start
+   * @param null $end
+   * @param null $encoding
    */
   public function testSlice($expected, $str, $start, $end = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->slice($start, $end);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function sliceProvider()
   {
     return array(
@@ -1758,22 +2248,33 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider splitProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $pattern
+   * @param null $limit
+   * @param null $encoding
    */
   public function testSplit($expected, $str, $pattern, $limit = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->split($pattern, $limit);
 
-    $this->assertInternalType('array', $result);
+    self::assertInternalType('array', $result);
     foreach ($result as $string) {
-      $this->assertStringy($string);
+      self::assertStringy($string);
     }
 
-    for ($i = 0; $i < count($expected); $i++) {
-      $this->assertEquals($expected[$i], $result[$i]);
+    $counter = count($expected);
+    /** @noinspection ForeachInvariantsInspection */
+    for ($i = 0; $i < $counter; $i++) {
+      self::assertEquals($expected[$i], $result[$i]);
     }
   }
 
+  /**
+   * @return array
+   */
   public function splitProvider()
   {
     return array(
@@ -1801,16 +2302,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider substrProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $start
+   * @param null $length
+   * @param null $encoding
    */
   public function testSubstr($expected, $str, $start, $length = null, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->substr($start, $length);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function substrProvider()
   {
     return array(
@@ -1828,16 +2338,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider atProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $index
+   * @param null $encoding
    */
   public function testAt($expected, $str, $index, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->at($index);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function atProvider()
   {
     return array(
@@ -1854,16 +2372,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider firstProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $n
+   * @param null $encoding
    */
   public function testFirst($expected, $str, $n, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->first($n);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function firstProvider()
   {
     return array(
@@ -1884,16 +2410,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider lastProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $n
+   * @param null $encoding
    */
   public function testLast($expected, $str, $n, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->last($n);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function lastProvider()
   {
     return array(
@@ -1914,16 +2448,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider ensureLeftProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $substring
+   * @param null $encoding
    */
   public function testEnsureLeft($expected, $str, $substring, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->ensureLeft($substring);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function ensureLeftProvider()
   {
     return array(
@@ -1942,16 +2484,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider ensureRightProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $substring
+   * @param null $encoding
    */
   public function testEnsureRight($expected, $str, $substring, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->ensureRight($substring);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function ensureRightProvider()
   {
     return array(
@@ -1970,16 +2520,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider removeLeftProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $substring
+   * @param null $encoding
    */
   public function testRemoveLeft($expected, $str, $substring, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeLeft($substring);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function removeLeftProvider()
   {
     return array(
@@ -2000,16 +2558,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider removeRightProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $substring
+   * @param null $encoding
    */
   public function testRemoveRight($expected, $str, $substring, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeRight($substring);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function removeRightProvider()
   {
     return array(
@@ -2030,16 +2596,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider isAlphaProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testIsAlpha($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->isAlpha();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function isAlphaProvider()
   {
     return array(
@@ -2058,16 +2631,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider isAlphanumericProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testIsAlphanumeric($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->isAlphanumeric();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function isAlphanumericProvider()
   {
     return array(
@@ -2089,16 +2669,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider isBlankProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testIsBlank($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->isBlank();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function isBlankProvider()
   {
     return array(
@@ -2122,16 +2709,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider isJsonProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testIsJson($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->isJson();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function isJsonProvider()
   {
     return array(
@@ -2160,16 +2754,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider isLowerCaseProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testIsLowerCase($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->isLowerCase();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function isLowerCaseProvider()
   {
     return array(
@@ -2186,16 +2787,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider hasLowerCaseProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testHasLowerCase($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->hasLowerCase();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function hasLowerCaseProvider()
   {
     return array(
@@ -2216,16 +2824,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider isSerializedProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testIsSerialized($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->isSerialized();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function isSerializedProvider()
   {
     return array(
@@ -2241,16 +2856,22 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider isBase64Provider()
+   *
+   * @param $expected
+   * @param $str
    */
   public function testIsBase64($expected, $str)
   {
     $stringy = S::create($str);
     $result = $stringy->isBase64();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function isBase64Provider()
   {
     return array(
@@ -2266,16 +2887,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider isUpperCaseProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testIsUpperCase($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->isUpperCase();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function isUpperCaseProvider()
   {
     return array(
@@ -2292,16 +2920,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider hasUpperCaseProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testHasUpperCase($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->hasUpperCase();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function hasUpperCaseProvider()
   {
     return array(
@@ -2322,16 +2957,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider isHexadecimalProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
    */
   public function testIsHexadecimal($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->isHexadecimal();
-    $this->assertInternalType('boolean', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('boolean', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function isHexadecimalProvider()
   {
     return array(
@@ -2353,16 +2995,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider countSubstrProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $substring
+   * @param bool $caseSensitive
+   * @param null $encoding
    */
   public function testCountSubstr($expected, $str, $substring, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->countSubstr($substring, $caseSensitive);
-    $this->assertInternalType('int', $result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertInternalType('int', $result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function countSubstrProvider()
   {
     return array(
@@ -2386,16 +3037,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider replaceProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $search
+   * @param      $replacement
+   * @param null $encoding
    */
   public function testReplace($expected, $str, $search, $replacement, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->replace($search, $replacement);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function replaceProvider()
   {
     return array(
@@ -2423,16 +3083,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider replaceBeginningProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $search
+   * @param      $replacement
+   * @param null $encoding
    */
   public function testReplaceBeginning($expected, $str, $search, $replacement, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->replaceBeginning($search, $replacement);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function replaceBeginningProvider()
   {
     return array(
@@ -2457,16 +3126,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider replaceEndingProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $search
+   * @param      $replacement
+   * @param null $encoding
    */
   public function testReplaceEnding($expected, $str, $search, $replacement, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->replaceEnding($search, $replacement);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function replaceEndingProvider()
   {
     return array(
@@ -2491,16 +3169,26 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider regexReplaceProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param        $pattern
+   * @param        $replacement
+   * @param string $options
+   * @param null   $encoding
    */
   public function testregexReplace($expected, $str, $pattern, $replacement, $options = 'msr', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->regexReplace($pattern, $replacement, $options);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function regexReplaceProvider()
   {
     return array(
@@ -2517,16 +3205,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider htmlEncodeProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param int  $flags
+   * @param null $encoding
    */
   public function testHtmlEncode($expected, $str, $flags = ENT_COMPAT, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->htmlEncode($flags);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function htmlEncodeProvider()
   {
     return array(
@@ -2540,16 +3236,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider htmlDecodeProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param int  $flags
+   * @param null $encoding
    */
   public function testHtmlDecode($expected, $str, $flags = ENT_COMPAT, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->htmlDecode($flags);
-    $this->assertStringy($result);
-    $this->assertEquals($expected, $result);
-    $this->assertEquals($str, $stringy);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
   }
 
+  /**
+   * @return array
+   */
   public function htmlDecodeProvider()
   {
     return array(

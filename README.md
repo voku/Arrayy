@@ -843,6 +843,14 @@ of the string.
 s('fòôbàř')->slice(3, -1); // 'bà'
 ```
 
+##### snakeize()
+
+Returns a lowercase string with underscore, the convention traditionally had no specific name: the Python style guide refers to it simply as "lower_case_with_underscores". The name "snake_case" comes from the Ruby community.
+
+```php
+s('foo1 Bar')->snakeize(); // 'foo_1_bar'
+```
+
 ##### split(string $pattern [, int $limit ])
 
 Splits the string with the provided regular expression, returning an
