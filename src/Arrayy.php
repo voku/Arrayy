@@ -561,6 +561,111 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   ////////////////////////////////////////////////////////////////////
 
   /**
+   * Merge the new $array into the current array, replace already existing keys
+   * from the current array with the key,values from the new $array
+   * and create new indexes.
+   *
+   * @param array $array
+   *
+   * @return self
+   */
+  public function mergeAppendNewIndex(array $array = array())
+  {
+    return self::create(array_merge($this->array, $array));
+  }
+
+  /**
+   * Merge the current array into the new $array, replace already existing keys
+   * from new $array with the key,values from the current array
+   * and create new indexes.
+   *
+   * @param array $array
+   *
+   * @return self
+   */
+  public function mergePrependNewIndex(array $array = array())
+  {
+    return self::create(array_merge($array, $this->array));
+  }
+
+  /**
+   * Merge the new $array into the current array and
+   * keep keys and values from the current array.
+   *
+   * @param array $array
+   *
+   * @return self
+   */
+  public function mergeAppendKeepIndex(array $array = array())
+  {
+    /** @noinspection AdditionOperationOnArraysInspection */
+    return self::create($this->array + $array);
+  }
+
+  /**
+   * Merge the the current array into the $array, keep keys and values from the new $array.
+   *
+   * @param array $array
+   *
+   * @return self
+   */
+  public function mergePrependKeepIndex(array $array = array())
+  {
+    /** @noinspection AdditionOperationOnArraysInspection */
+    return self::create($array + $this->array);
+  }
+
+  /**
+   * Merge the new $array into the current array, keep keys from the current array
+   * and overwrite values with the new $array.
+   *
+   * @param $array
+   *
+   * @return self
+   */
+  public function mergeReplaceAppend(array $array = array())
+  {
+    return self::create(array_replace($this->array, $array));
+  }
+
+  /**
+   * Merge the the current array into the $array, keep keys from the new $array
+   * and overwrite values with the old from the current array.
+   *
+   * @param $array
+   *
+   * @return self
+   */
+  public function mergeReplacePrepend(array $array = array())
+  {
+    return self::create(array_replace($array, $this->array));
+  }
+
+  /**
+   * Return values that are only in the current array.
+   *
+   * @param array $array
+   *
+   * @return self
+   */
+  public function diff(array $array = array())
+  {
+    return self::create(array_diff($this->array, $array));
+  }
+
+  /**
+   * Return values that are only in the new $array.
+   *
+   * @param array $array
+   *
+   * @return self
+   */
+  public function diffReverse(array $array = array())
+  {
+    return self::create(array_diff($array, $this->array));
+  }
+
+  /**
    * Replace a value in an array.
    *
    * @param string $replace The string to replace
