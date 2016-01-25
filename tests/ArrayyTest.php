@@ -80,32 +80,62 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @dataProvider searchProvider()
+   * @dataProvider searchIndexProvider()
    *
    * @param       $expected
    * @param array $array
    * @param mixed $value
    */
-  public function testSearch($expected, $array, $value)
+  public function testSearchIndex($expected, $array, $value)
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->search($value)->getArray());
+    self::assertEquals($expected, $arrayy->searchIndex($value)->getArray());
   }
 
   /**
    * @return array
    */
-  public function searchProvider()
+  public function searchIndexProvider()
   {
     return array(
         array(array(), array(null), ''),
         array(array(), array(false), true),
-        array(array(0 => false), array(false), false),
-        array(array(0 => true), array(true), true),
-        array(array(0 => -9), array(-9, 1, 0, false), -9),
-        array(array(1.18), array(1.18), 1.18),
-        array(array('foo'), array('string', 'foo'), 'foo'),
+        array(array(0), array(false), false),
+        array(array(0), array(true), true),
+        array(array(2), array(-9, 1, 0, false), -0),
+        array(array(0), array(1.18), 1.18),
+        array(array(1), array('string', 'foo'), 'foo'),
+    );
+  }
+
+  /**
+   * @dataProvider searchValueProvider()
+   *
+   * @param       $expected
+   * @param array $array
+   * @param mixed $value
+   */
+  public function testSearchValue($expected, $array, $value)
+  {
+    $arrayy = new A($array);
+
+    self::assertEquals($expected, $arrayy->searchValue($value)->getArray());
+  }
+
+  /**
+   * @return array
+   */
+  public function searchValueProvider()
+  {
+    return array(
+        array(array(), array(null), ''),
+        array(array(), array(false), 1),
+        array(array(0 => false), array(false), 0),
+        array(array(true), array(true), 0),
+        array(array(0 => 1), array(-9, 1, 0, false), 1),
+        array(array(1.18), array(1.18), 0),
+        array(array('foo'), array('string', 'foo'), 1),
     );
   }
 
@@ -891,6 +921,7 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
         array(array(0 => -9), array(-9, -6), -6),
         array(array(0 => -9, 1, 2), array(-9, 1, 2, 3), 3),
         array(array(1.18, 1.5), array(1.18, 1.5, 1.2), 1.2),
+        array(array('fòô' => 'bàř'), array('fòô' => 'bàř', 0 => 'foo'), 'foo'),
         array(
             array(3 => 'string', 'foo', 'lall'),
             array(
@@ -935,6 +966,43 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
                 0 => 'string',
                 1 => 'foo',
                 2 => 'lall',
+            ),
+        ),
+    );
+  }
+
+  /**
+   * @dataProvider reverseProvider()
+   *
+   * @param $array
+   * @param $result
+   */
+  public function testReverse($array, $result)
+  {
+    $arrayy = A::create($array)->reverse();
+
+    self::assertEquals($result, $arrayy->getArray());
+  }
+
+  /**
+   * @return array
+   */
+  public function reverseProvider()
+  {
+    return array(
+        array(array(), array()),
+        array(array(0 => false), array(false)),
+        array(array(0 => true), array(true)),
+        array(array(0 => -9, -9), array(0 => -9, 1 => -9)),
+        array(array(0 => -9, 1, 2), array(0 => 2, 1 => 1, 2 => -9)),
+        array(array(1.18, 1.5), array(1.5, 1.18)),
+        array(
+            array(3 => 'string', 'foo', 'lall', 'foo'),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
             ),
         ),
     );

@@ -8,7 +8,7 @@ use voku\helper\UTF8;
 /**
  * Methods to manage arrays.
  */
-class Arrayy extends CollectionMethods implements ArrayAccess
+class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate, \ArrayAccess
 {
 
   /**
@@ -152,6 +152,17 @@ class Arrayy extends CollectionMethods implements ArrayAccess
   }
 
   /**
+   * Returns a new ArrayIterator, thus implementing the IteratorAggregate
+   * interface.
+   *
+   * @return \ArrayIterator An iterator for the values in the array
+   */
+  public function getIterator()
+  {
+    return new \ArrayIterator($this->array);
+  }
+
+  /**
    * call object as function
    *
    * @param mixed $key
@@ -198,20 +209,43 @@ class Arrayy extends CollectionMethods implements ArrayAccess
   ////////////////////////////////////////////////////////////////////
 
   /**
-   * Search for the index of a value in an array.
+   * Search for the value of the current array via $index.
    *
-   * @param string $value
+   * @param mixed $index
    *
    * @return self
    */
-  public function search($value)
+  public function searchValue($index)
+  {
+    // init
+    $return = array();
+
+    if (null !== $index) {
+      $keyExists = isset($this->array[$index]);
+
+      if ($keyExists !== false) {
+        $return = array($this->array[$index]);
+      }
+    }
+
+    return self::create((array)$return);
+  }
+
+  /**
+   * Search for the index of the current array via $value.
+   *
+   * @param mixed $value
+   *
+   * @return self
+   */
+  public function searchIndex($value)
   {
     $key = array_search($value, $this->array, true);
 
     if ($key === false) {
       $return = array();
     } else {
-      $return = $this->array[$key];
+      $return = array($key);
     }
 
     return self::create((array)$return);
@@ -291,6 +325,18 @@ class Arrayy extends CollectionMethods implements ArrayAccess
     }
 
     return round(array_sum($this->array) / $count, $decimals);
+  }
+
+  /**
+   * Count the values from the current array.
+   *
+   * INFO: only a alias for "$arrayy->size()"
+   *
+   * @return int
+   */
+  public function length()
+  {
+    return $this->size();
   }
 
   /**
@@ -755,6 +801,18 @@ class Arrayy extends CollectionMethods implements ArrayAccess
   public function append($value)
   {
     $this->array[] = $value;
+
+    return self::create($this->array);
+  }
+
+  /**
+   * Return the array in the reverse order.
+   *
+   * @return self
+   */
+  public function reverse()
+  {
+    $this->array = array_reverse($this->array);
 
     return self::create($this->array);
   }
