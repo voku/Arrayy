@@ -752,7 +752,7 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
     self::assertEquals(array('foo', 'bar'), $arrayy->getArray());
 
     $array = array('_____foo  ', '__bar   ');
-    $arrayy = A::create($array)->invoke('trim', ['_', ' ']);
+    $arrayy = A::create($array)->invoke('trim', array('_', ' '));
     self::assertEquals(array('foo  ', '__bar'), $arrayy->getArray());
   }
 
