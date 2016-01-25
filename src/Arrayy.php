@@ -185,7 +185,7 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   /**
    * get the current array from the "Arrayy"-object
    *
-   * @return array
+   * @return null|callable
    */
   public function getArray()
   {
@@ -543,7 +543,7 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
    *
    * @param \Closure $closure
    *
-   * @return mixed
+   * @return Arrayy
    */
   public function at(\Closure $closure)
   {
@@ -792,7 +792,7 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   /**
    * Find all items in an array that pass the truth test.
    *
-   * @param null $closure
+   * @param \Closure $closure
    *
    * @return self
    */

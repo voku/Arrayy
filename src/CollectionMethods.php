@@ -168,7 +168,7 @@ abstract class CollectionMethods
    * @param      $collection
    * @param      $property
    * @param      $value
-   * @param null $comparisonOp
+   * @param string $comparisonOp
    *
    * @return array|object
    */
@@ -383,7 +383,7 @@ abstract class CollectionMethods
    * Internal mechanic of set method.
    *
    * @param $collection
-   * @param $key
+   * @param string $key
    * @param $value
    *
    * @return mixed
@@ -430,7 +430,7 @@ abstract class CollectionMethods
    * @param $collection
    * @param $key
    *
-   * @return bool
+   * @return false|null
    */
   protected static function internalRemove(&$collection, $key)
   {
