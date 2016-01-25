@@ -634,10 +634,10 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
     $this->expectOutputString($result);
   }
 
-  public function testReplaceValue()
+  public function testReplaceOneValue()
   {
     $testArray = array('bar', 'foo' => 'foo', 'foobar' => 'foobar');
-    $arrayy = A::create($testArray)->replaceValue('foo', 'replaced');
+    $arrayy = A::create($testArray)->replaceOneValue('foo', 'replaced');
     self::assertEquals('replaced', $arrayy['foo']);
     self::assertEquals('foobar', $arrayy['foobar']);
   }

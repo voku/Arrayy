@@ -666,14 +666,14 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   }
 
   /**
-   * Replace a value in an array.
+   * Replace the first matched value in an array.
    *
    * @param string $search The string to replace
    * @param string $replacement    What to replace it with
    *
    * @return self
    */
-  public function replaceValue($search, $replacement = '')
+  public function replaceOneValue($search, $replacement = '')
   {
     $array = $this->array;
     $key = array_search($search, $array, true);
