@@ -473,7 +473,7 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
     $a = ['foo', 'bar'];
     $b = ['bar', 'baz'];
     $array = A::create($a)->intersection($b);
-    self::assertEquals(['bar'], $array->getArray());
+    self::assertEquals(array('bar'), $array->getArray());
   }
 
   public function testIntersectsBooleanFlag()
@@ -745,15 +745,15 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
   {
     $array = array('   foo  ', '   bar   ');
     $arrayy = A::create($array)->invoke('trim');
-    self::assertEquals(['foo', 'bar'], $arrayy->getArray());
+    self::assertEquals(array('foo', 'bar'), $arrayy->getArray());
 
     $array = array('_____foo', '____bar   ');
     $arrayy = A::create($array)->invoke('trim', ' _');
-    self::assertEquals(['foo', 'bar'], $arrayy->getArray());
+    self::assertEquals(array('foo', 'bar'), $arrayy->getArray());
 
     $array = array('_____foo  ', '__bar   ');
     $arrayy = A::create($array)->invoke('trim', ['_', ' ']);
-    self::assertEquals(['foo  ', '__bar'], $arrayy->getArray());
+    self::assertEquals(array('foo  ', '__bar'), $arrayy->getArray());
   }
 
   public function testReject()
