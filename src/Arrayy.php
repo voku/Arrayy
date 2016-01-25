@@ -668,16 +668,36 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   /**
    * Replace a value in an array.
    *
-   * @param string $replace The string to replace
-   * @param string $with    What to replace it with
+   * @param string $search The string to replace
+   * @param string $replacement    What to replace it with
    *
    * @return self
    */
-  public function replaceValue($replace, $with = '')
+  public function replaceValue($search, $replacement = '')
+  {
+    $array = $this->array;
+    $key = array_search($search, $array, true);
+
+    if ($key !== false) {
+      $array[$key] = $replacement;
+    }
+
+    return self::create((array)$array);
+  }
+
+  /**
+   * Replace values in an array.
+   *
+   * @param string $search The string to replace
+   * @param string $replacement    What to replace it with
+   *
+   * @return self
+   */
+  public function replaceValues($search, $replacement = '')
   {
     $array = $this->each(
-        function ($value) use ($replace, $with) {
-          return UTF8::str_replace($replace, $with, $value);
+        function ($value) use ($search, $replacement) {
+          return UTF8::str_replace($search, $replacement, $value);
         }
     );
 

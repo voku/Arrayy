@@ -636,8 +636,18 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
 
   public function testReplaceValue()
   {
-    $arrayy = A::create(array('bar', 'foo' => 'foo'))->replaceValue('foo', 'replaced');
+    $testArray = array('bar', 'foo' => 'foo', 'foobar' => 'foobar');
+    $arrayy = A::create($testArray)->replaceValue('foo', 'replaced');
     self::assertEquals('replaced', $arrayy['foo']);
+    self::assertEquals('foobar', $arrayy['foobar']);
+  }
+
+  public function testReplaceValues()
+  {
+    $testArray = array('bar', 'foo' => 'foo', 'foobar' => 'foobar');
+    $arrayy = A::create($testArray)->replaceValues('foo', 'replaced');
+    self::assertEquals('replaced', $arrayy['foo']);
+    self::assertEquals('replacedbar', $arrayy['foobar']);
   }
 
   public function testReplaceKeys()
