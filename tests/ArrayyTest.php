@@ -470,8 +470,8 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
 
   public function testCanGetIntersectionOfTwoArrays()
   {
-    $a = ['foo', 'bar'];
-    $b = ['bar', 'baz'];
+    $a = array('foo', 'bar');
+    $b = array('bar', 'baz');
     $array = A::create($a)->intersection($b);
     self::assertEquals(array('bar'), $array->getArray());
   }
