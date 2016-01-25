@@ -7,6 +7,13 @@ use Arrayy\Arrayy as A;
  */
 class ArrayyTestCase extends PHPUnit_Framework_TestCase
 {
+  public function testConstruct()
+  {
+    $arrayy = new A(array('foo bar', 'UTF-8'));
+    self::assertArrayy($arrayy);
+    self::assertEquals('foo bar,UTF-8', (string)$arrayy);
+  }
+
   /**
    * Asserts that a variable is of a Arrayy instance.
    *
@@ -15,13 +22,6 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
   public function assertArrayy($actual)
   {
     self::assertInstanceOf('Arrayy\Arrayy', $actual);
-  }
-
-  public function testConstruct()
-  {
-    $arrayy = new A(array('foo bar', 'UTF-8'));
-    self::assertArrayy($arrayy);
-    self::assertEquals('foo bar,UTF-8', (string)$arrayy);
   }
 
   public function testEmptyConstruct()
@@ -1003,6 +1003,106 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
                 1 => 'lall',
                 2 => 'foo',
                 3 => 'string',
+            ),
+        ),
+    );
+  }
+
+  /**
+   * @dataProvider mergeAppendNewIndexProvider()
+   *
+   * @param $array
+   * @param $arrayNew
+   * @param $result
+   */
+  public function testMergeAppendNewIndex($array, $arrayNew, $result)
+  {
+    $arrayy = A::create($array)->mergeAppendNewIndex();
+
+    self::assertEquals($result, $arrayy->getArray());
+  }
+
+  /**
+   * @return array
+   */
+  public function mergeAppendNewIndexProvider()
+  {
+    return array(
+        array(array(), array(), array()),
+        array(array(0 => false), array(false), array(false)),
+        array(array(0 => true), array(true), array(true)),
+        array(
+            array(
+                0 => -9,
+                -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+            ),
+        ),
+        array(
+            array(
+                0 => -9,
+                1,
+                2,
+            ),
+            array(
+                0 => 2,
+                1 => 1,
+                2 => -9,
+            ),
+            array(
+                0 => -9,
+                1 => 1,
+                2 => 2,
+            ),
+        ),
+        array(
+            array(1.18, 1.5),
+            array(1.5, 1.18),
+            array(1.18, 1.5),
+        ),
+        array(
+            array(
+                1     => 'one',
+                2     => 'two',
+                'foo' => 'bar1',
+            ),
+            array(
+                3     => 'three',
+                4     => 'four',
+                6     => 'six',
+                'foo' => 'bar2',
+            ),
+            array(
+                0     => 'one',
+                1     => 'two',
+                'foo' => 'bar1',
+            ),
+        ),
+        array(
+            array(
+                3 => 'string',
+                'foo',
+                'lall',
+                'foo',
+            ),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
+            ),
+            array(
+                0 => 'string',
+                1 => 'foo',
+                2 => 'lall',
+                3 => 'foo',
             ),
         ),
     );
