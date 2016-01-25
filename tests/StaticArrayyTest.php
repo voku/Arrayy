@@ -30,13 +30,13 @@ class StaticArrayyTest extends PHPUnit_Framework_TestCase
 
   public function testPartialArgsInvocation()
   {
-    $result = A::replaceValue(array('foo', 'bar'), 'foo');
+    $result = A::replaceOneValue(array('foo', 'bar'), 'foo');
     self::assertEquals(array('', 'bar'), $result->getArray());
   }
 
   public function testFullArgsInvocation()
   {
-    $result = A::replaceValue(array('foo', 'bar'), 'foo', 'test');
+    $result = A::replaceOneValue(array('foo', 'bar'), 'foo', 'test');
     self::assertEquals(array('test', 'bar'), $result->getArray());
   }
 
