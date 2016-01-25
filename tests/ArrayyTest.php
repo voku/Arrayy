@@ -1017,7 +1017,7 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
    */
   public function testMergeAppendNewIndex($array, $arrayNew, $result)
   {
-    $arrayy = A::create($array)->mergeAppendNewIndex();
+    $arrayy = A::create($array)->mergeAppendNewIndex($arrayNew);
 
     self::assertEquals($result, $arrayy->getArray());
   }
@@ -1029,8 +1029,8 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
   {
     return array(
         array(array(), array(), array()),
-        array(array(0 => false), array(false), array(false)),
-        array(array(0 => true), array(true), array(true)),
+        array(array(0 => false), array(false), array(false, false)),
+        array(array(0 => true), array(true), array(true, true)),
         array(
             array(
                 0 => -9,
@@ -1043,6 +1043,8 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
             array(
                 0 => -9,
                 1 => -9,
+                2 => -9,
+                3 => -9,
             ),
         ),
         array(
@@ -1060,12 +1062,15 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
                 0 => -9,
                 1 => 1,
                 2 => 2,
+                3 => 2,
+                4 => 1,
+                5 => -9,
             ),
         ),
         array(
             array(1.18, 1.5),
             array(1.5, 1.18),
-            array(1.18, 1.5),
+            array(1.18, 1.5, 1.5, 1.18),
         ),
         array(
             array(
@@ -1082,7 +1087,10 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
             array(
                 0     => 'one',
                 1     => 'two',
-                'foo' => 'bar1',
+                'foo' => 'bar2',
+                2     => 'three',
+                3     => 'four',
+                4     => 'six',
             ),
         ),
         array(
@@ -1103,8 +1111,14 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
                 1 => 'foo',
                 2 => 'lall',
                 3 => 'foo',
+                4 => 'foo',
+                5 => 'lall',
+                6 => 'foo',
+                7 => 'string',
             ),
         ),
     );
   }
+
+
 }
