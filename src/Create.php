@@ -1,6 +1,6 @@
 <?php
 
-use Arrayy\Arrayy;
+namespace Arrayy;
 
 if (!function_exists('Arrayy\create')) {
   /**
