@@ -1130,5 +1130,109 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
     );
   }
 
+  /**
+   * @dataProvider mergePrependKeepIndexProvider()
+   *
+   * @param $array
+   * @param $arrayNew
+   * @param $result
+   */
+  public function testMergePrependKeepIndex($array, $arrayNew, $result)
+  {
+    $arrayy = A::create($array)->mergePrependKeepIndex($arrayNew);
 
+    self::assertEquals($result, $arrayy->getArray());
+  }
+
+  /**
+   * @return array
+   */
+  public function mergePrependKeepIndexProvider()
+  {
+    return array(
+        array(array(), array(), array()),
+        array(array(0 => false), array(false), array(false)),
+        array(array(0 => true), array(true), array(true)),
+        array(
+            array(
+                0 => -9,
+                -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+            ),
+        ),
+        array(
+            array(
+                0 => -9,
+                1,
+                2,
+            ),
+            array(
+                0 => 2,
+                1 => 1,
+                2 => -9,
+            ),
+            array(
+                0 => 2,
+                1 => 1,
+                2 => -9,
+            ),
+        ),
+        array(
+            array(1.18, 1.5),
+            array(1.5, 1.18),
+            array(1.5, 1.18),
+        ),
+        array(
+            array(
+                1     => 'one',
+                2     => 'two',
+                'foo' => 'bar1',
+            ),
+            array(
+                3     => 'three',
+                4     => 'four',
+                6     => 'six',
+                'foo' => 'bar2',
+            ),
+            array(
+                1     => 'one',
+                'foo' => 'bar2',
+                2     => 'two',
+                3     => 'three',
+                4     => 'four',
+                6     => 'six',
+            ),
+        ),
+        array(
+            array(
+                3 => 'string',
+                'foo',
+                'lall',
+                'foo',
+            ),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
+            ),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
+                4 => 'foo',
+                5 => 'lall',
+                6 => 'foo',
+            ),
+        ),
+    );
+  }
 }
