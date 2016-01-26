@@ -180,14 +180,17 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
 
     $b = $arrayy->filterBy('name', 'baz');
     self::assertCount(1, $b);
+    /** @noinspection OffsetOperationsInspection */
     self::assertEquals(2365, $b[0]['value']);
 
     $b = $arrayy->filterBy('name', ['baz']);
     self::assertCount(1, $b);
+    /** @noinspection OffsetOperationsInspection */
     self::assertEquals(2365, $b[0]['value']);
 
     $c = $arrayy->filterBy('value', 2468);
     self::assertCount(1, $c);
+    /** @noinspection OffsetOperationsInspection */
     self::assertEquals('primary', $c[0]['group']);
 
     $d = $arrayy->filterBy('group', 'primary');
@@ -195,6 +198,7 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
 
     $e = $arrayy->filterBy('value', 2000, 'lt');
     self::assertCount(1, $e);
+    /** @noinspection OffsetOperationsInspection */
     self::assertEquals(1468, $e[0]['value']);
 
     $e = $arrayy->filterBy('value', array(2468, 2365), 'contains');
@@ -220,7 +224,7 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
     $keys = $arrayyTmp->keys();
 
     $matcher = array(1, 2, 3,);
-    self::assertEquals($matcher, $keys);
+    self::assertEquals($matcher, $keys->getArray());
   }
 
   public function testValues()
@@ -229,14 +233,14 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
     $values = $arrayyTmp->values();
 
     $matcher = array(0 => 'foo', 1 => 'foo2', 2 => 'bar');
-    self::assertEquals($matcher, $values);
+    self::assertEquals($matcher, $values->getArray());
   }
 
   public function testSort()
   {
     $testArray = array(5, 3, 1, 2, 4);
     $under = A::create($testArray)->sort(null, 'desc');
-    self::assertEquals(array(5, 4, 3, 2, 1), $under);
+    self::assertEquals(array(5, 4, 3, 2, 1), $under->getArray());
 
     $testArray = range(1, 5);
     $under = A::create($testArray)->sort(
@@ -244,7 +248,7 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
           return $value % 2 === 0;
         }
     );
-    self::assertEquals(array(1, 3, 5, 2, 4), $under);
+    self::assertEquals(array(1, 3, 5, 2, 4), $under->getArray());
   }
 
   public function testCanGroupValues()
@@ -258,7 +262,7 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
         array(1, 3, 5),
         array(2, 4),
     );
-    self::assertEquals($matcher, $under);
+    self::assertEquals($matcher, $under->getArray());
   }
 
   public function testCanGroupValuesWithSavingKeys()
@@ -271,13 +275,13 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
         array(0 => 1, 2 => 3, 4 => 5),
         array(1 => 2, 3 => 4),
     );
-    self::assertEquals($matcher, $under);
+    self::assertEquals($matcher, $under->getArray());
   }
 
   public function testCanGroupValuesWithNonExistingKey()
   {
-    self::assertEquals([], A::create(range(1, 5))->group('unknown', true));
-    self::assertEquals([], A::create(range(1, 5))->group('unknown', false));
+    self::assertEquals([], A::create(range(1, 5))->group('unknown', true)->getArray());
+    self::assertEquals([], A::create(range(1, 5))->group('unknown', false)->getArray());
   }
 
   public function testCanIndexBy()
@@ -292,7 +296,7 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
         50 => array('name' => 'larry', 'age' => 50),
         60 => array('name' => 'curly', 'age' => 60),
     );
-    self::assertEquals($expected, A::create($array)->indexBy('age'));
+    self::assertEquals($expected, A::create($array)->indexBy('age')->getArray());
   }
 
   public function testIndexByReturnSome()
@@ -306,7 +310,7 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
         40 => array('name' => 'moe', 'age' => 40),
         50 => array('name' => 'larry', 'age' => 50),
     );
-    self::assertEquals($expected, A::create($array)->indexBy('age'));
+    self::assertEquals($expected, A::create($array)->indexBy('age')->getArray());
   }
 
   public function testIndexByReturnEmpty()
@@ -316,6 +320,6 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
         array('name' => 'larry', 'age' => 50),
         array('name' => 'curly'),
     );
-    self::assertEquals([], A::create($array)->indexBy('vaaaa'));
+    self::assertEquals([], A::create($array)->indexBy('vaaaa')->getArray());
   }
 }

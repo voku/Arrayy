@@ -142,7 +142,7 @@ abstract class ArrayyAbstract
    * @param        $value
    * @param string $comparisonOp
    *
-   * @return array
+   * @return Arrayy
    */
   public function filterBy($property, $value, $comparisonOp = null)
   {
@@ -199,7 +199,7 @@ abstract class ArrayyAbstract
         )
     );
 
-    return $result;
+    return Arrayy::create($result);
   }
 
   /**
@@ -209,11 +209,13 @@ abstract class ArrayyAbstract
    * @param        $value
    * @param string $comparisonOp
    *
-   * @return array
+   * @return Arrayy
    */
   public function findBy($property, $value, $comparisonOp = 'eq')
   {
-    return $this->filterBy($property, $value, $comparisonOp);
+    $return = $this->filterBy($property, $value, $comparisonOp);
+
+    return Arrayy::create($return);
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -223,21 +225,25 @@ abstract class ArrayyAbstract
   /**
    * Get all keys from the current array.
    *
-   * @return array
+   * @return Arrayy
    */
   public function keys()
   {
-    return array_keys((array)$this->array);
+    $return = array_keys((array)$this->array);
+
+    return Arrayy::create($return);
   }
 
   /**
    * Get all values from a array.
    *
-   * @return array
+   * @return Arrayy
    */
   public function values()
   {
-    return array_values((array)$this->array);
+    $return = array_values((array)$this->array);
+
+    return Arrayy::create($return);
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -267,7 +273,7 @@ abstract class ArrayyAbstract
    * @param null   $sorter
    * @param string $direction
    *
-   * @return array
+   * @return Arrayy
    */
   public function sort($sorter = null, $direction = 'asc')
   {
@@ -298,7 +304,7 @@ abstract class ArrayyAbstract
     // Sort by the results and replace by original values
     array_multisort($results, $directionType, SORT_REGULAR, $array);
 
-    return $array;
+    return Arrayy::create($array);
   }
 
   /**
@@ -307,7 +313,7 @@ abstract class ArrayyAbstract
    * @param string $grouper a callable function name
    * @param bool   $saveKeys
    *
-   * @return array
+   * @return Arrayy
    */
   public function group($grouper, $saveKeys = false)
   {
@@ -332,7 +338,7 @@ abstract class ArrayyAbstract
 
     }
 
-    return $result;
+    return Arrayy::create($result);
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -411,7 +417,7 @@ abstract class ArrayyAbstract
    *
    * @param mixed $key
    *
-   * @return array
+   * @return Arrayy
    */
   public function indexBy($key)
   {
@@ -423,6 +429,6 @@ abstract class ArrayyAbstract
       }
     }
 
-    return $results;
+    return Arrayy::create($results);
   }
 }
