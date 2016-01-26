@@ -183,7 +183,7 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
     /** @noinspection OffsetOperationsInspection */
     self::assertEquals(2365, $b[0]['value']);
 
-    $b = $arrayy->filterBy('name', ['baz']);
+    $b = $arrayy->filterBy('name', array('baz'));
     self::assertCount(1, $b);
     /** @noinspection OffsetOperationsInspection */
     self::assertEquals(2365, $b[0]['value']);
