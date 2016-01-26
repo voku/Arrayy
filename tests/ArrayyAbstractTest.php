@@ -280,8 +280,8 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
 
   public function testCanGroupValuesWithNonExistingKey()
   {
-    self::assertEquals([], A::create(range(1, 5))->group('unknown', true)->getArray());
-    self::assertEquals([], A::create(range(1, 5))->group('unknown', false)->getArray());
+    self::assertEquals(array(), A::create(range(1, 5))->group('unknown', true)->getArray());
+    self::assertEquals(array(), A::create(range(1, 5))->group('unknown', false)->getArray());
   }
 
   public function testCanIndexBy()
