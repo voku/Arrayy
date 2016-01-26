@@ -68,4 +68,36 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
         array('foo', array(' string  ', 'foo' => 'foo'), 'foo'),
     );
   }
+
+  /**
+   * @dataProvider setProvider()
+   *
+   * @param array $array
+   * @param mixed $key
+   * @param mixed $value
+   */
+  public function testSet($array, $key, $value)
+  {
+    $arrayy = new A($array);
+    $arrayy = $arrayy->set($key, $value)->getArray();
+    self::assertEquals($value, $arrayy[$key]);
+  }
+
+  /**
+   * @return array
+   */
+  public function setProvider()
+  {
+    return array(
+        array(array(null), 0, 'foo'),
+        array(array(false), 0, true),
+        array(array(true), 1, 'foo'),
+        array(array(false), 1, 'foo'),
+        array(array(true), 0, 'foo'),
+        array(array(-9, 1, 0, false), 1, 'foo'),
+        array(array(1.18), 0, 1),
+        array(array(' string  ', 'foo'), 'foo', 'lall'),
+        array(array(' string  ', 'foo' => 'foo'), 'foo', 'lall'),
+    );
+  }
 }

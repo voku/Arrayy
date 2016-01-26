@@ -82,13 +82,13 @@ abstract class ArrayyAbstract
    * @param string $key   The key to set
    * @param mixed  $value Its value
    *
-   * @return array
+   * @return Arrayy
    */
   public function set($key, $value)
   {
     $this->internalSet($key, $value);
 
-    return $this->array;
+    return Arrayy::create($this->array);
   }
 
   /**
@@ -103,7 +103,7 @@ abstract class ArrayyAbstract
   {
     // If the key doesn't exist, set it
     if (!$this->has($key)) {
-      $this->array = $this->set($key, $default);
+      $this->array = $this->set($key, $default)->getArray();
     }
 
     return $this->get($key);
@@ -268,7 +268,7 @@ abstract class ArrayyAbstract
    * @param $key
    * @param $value
    *
-   * @return mixed
+   * @return Arrayy
    */
   public function replace($replace, $key, $value)
   {
