@@ -320,6 +320,6 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
         array('name' => 'larry', 'age' => 50),
         array('name' => 'curly'),
     );
-    self::assertEquals([], A::create($array)->indexBy('vaaaa')->getArray());
+    self::assertEquals(array(), A::create($array)->indexBy('vaaaa')->getArray());
   }
 }
