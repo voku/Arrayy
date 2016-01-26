@@ -523,7 +523,7 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   }
 
   /**
-   * Get the last elements from index $from.
+   * Get the last elements from index $from until the end of this array.
    *
    * @param int $from
    *
