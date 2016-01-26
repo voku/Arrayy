@@ -1131,6 +1131,224 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @dataProvider mergePrependNewIndexProvider()
+   *
+   * @param $array
+   * @param $arrayNew
+   * @param $result
+   */
+  public function testMergePrependNewIndex($array, $arrayNew, $result)
+  {
+    $arrayy = A::create($array)->mergePrependNewIndex($arrayNew);
+
+    self::assertEquals($result, $arrayy->getArray());
+  }
+
+  /**
+   * @return array
+   */
+  public function mergePrependNewIndexProvider()
+  {
+    return array(
+        array(array(), array(), array()),
+        array(array(0 => false), array(false), array(false, false)),
+        array(array(0 => true), array(true), array(true, true)),
+        array(
+            array(
+                0 => -9,
+                -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+                2 => -9,
+                3 => -9,
+            ),
+        ),
+        array(
+            array(
+                0 => -9,
+                1,
+                2,
+            ),
+            array(
+                0 => 2,
+                1 => 1,
+                2 => -9,
+            ),
+            array(
+                0 => 2,
+                1 => 1,
+                2 => -9,
+                3 => -9,
+                4 => 1,
+                5 => 2,
+            ),
+        ),
+        array(
+            array(1.18, 1.5),
+            array(1.5, 1.18),
+            array(1.5, 1.18, 1.18, 1.5),
+        ),
+        array(
+            array(
+                1     => 'one',
+                2     => 'two',
+                'foo' => 'bar1',
+            ),
+            array(
+                3     => 'three',
+                4     => 'four',
+                6     => 'six',
+                'foo' => 'bar2',
+            ),
+            array(
+                1     => 'four',
+                'foo' => 'bar1',
+                2     => 'six',
+                3     => 'one',
+                4     => 'two',
+                0     => 'three',
+            ),
+        ),
+        array(
+            array(
+                3 => 'string',
+                'foo',
+                'lall',
+                'foo',
+            ),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
+            ),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
+                4 => 'string',
+                5 => 'foo',
+                6 => 'lall',
+                7 => 'foo',
+            ),
+        ),
+    );
+  }
+
+  /**
+   * @dataProvider mergeAppendKeepIndexProvider()
+   *
+   * @param $array
+   * @param $arrayNew
+   * @param $result
+   */
+  public function testMergeAppendKeepIndex($array, $arrayNew, $result)
+  {
+    $arrayy = A::create($array)->mergeAppendKeepIndex($arrayNew);
+
+    self::assertEquals($result, $arrayy->getArray());
+  }
+
+  /**
+   * @return array
+   */
+  public function mergeAppendKeepIndexProvider()
+  {
+    return array(
+        array(array(), array(), array()),
+        array(array(0 => false), array(false), array(false)),
+        array(array(0 => true), array(true), array(true)),
+        array(
+            array(
+                0 => -9,
+                -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+            ),
+        ),
+        array(
+            array(
+                0 => -9,
+                1,
+                2,
+            ),
+            array(
+                0 => 2,
+                1 => 1,
+                2 => -9,
+            ),
+            array(
+                0 => -9,
+                1 => 1,
+                2 => 2,
+            ),
+        ),
+        array(
+            array(1.18, 1.5),
+            array(1.5, 1.18),
+            array(1.18, 1.5),
+        ),
+        array(
+            array(
+                1     => 'one',
+                2     => 'two',
+                'foo' => 'bar1',
+            ),
+            array(
+                3     => 'three',
+                4     => 'four',
+                6     => 'six',
+                'foo' => 'bar2',
+            ),
+            array(
+                1     => 'one',
+                'foo' => 'bar1',
+                2     => 'two',
+                3     => 'three',
+                4     => 'four',
+                6     => 'six',
+            ),
+        ),
+        array(
+            array(
+                3 => 'string',
+                'foo',
+                'lall',
+                'foo',
+            ),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
+            ),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
+                4 => 'foo',
+                5 => 'lall',
+                6 => 'foo',
+            ),
+        ),
+    );
+  }
+
+  /**
    * @dataProvider mergePrependKeepIndexProvider()
    *
    * @param $array
@@ -1232,6 +1450,183 @@ class ArrayyTestCase extends PHPUnit_Framework_TestCase
                 5 => 'lall',
                 6 => 'foo',
             ),
+        ),
+    );
+  }
+
+  /**
+   * @dataProvider diffProvider()
+   *
+   * @param $array
+   * @param $arrayNew
+   * @param $result
+   */
+  public function testDiff($array, $arrayNew, $result)
+  {
+    $arrayy = A::create($array)->diff($arrayNew);
+
+    self::assertEquals($result, $arrayy->getArray());
+  }
+
+  /**
+   * @return array
+   */
+  public function diffProvider()
+  {
+    return array(
+        array(array(), array(), array()),
+        array(array(0 => false), array(false), array()),
+        array(array(0 => true), array(true), array()),
+        array(
+            array(
+                0 => -9,
+                -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+            ),
+            array(),
+        ),
+        array(
+            array(
+                0 => -9,
+                1,
+                2,
+            ),
+            array(
+                0 => 2,
+                1 => 1,
+                2 => -9,
+            ),
+            array(),
+        ),
+        array(
+            array(1.18, 1.5),
+            array(1.5, 1.18),
+            array(),
+        ),
+        array(
+            array(
+                1     => 'one',
+                2     => 'two',
+                'foo' => 'bar1',
+            ),
+            array(
+                3     => 'three',
+                4     => 'four',
+                6     => 'six',
+                'foo' => 'bar2',
+            ),
+            array(
+                1     => 'one',
+                'foo' => 'bar1',
+                2     => 'two',
+            ),
+        ),
+        array(
+            array(
+                3 => 'string',
+                'foo',
+                'lall',
+                'foo',
+            ),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
+            ),
+            array(),
+        ),
+    );
+  }
+
+  /**
+   * @dataProvider diffReverseProvider()
+   *
+   * @param $array
+   * @param $arrayNew
+   * @param $result
+   */
+  public function testdiffReverse($array, $arrayNew, $result)
+  {
+    $arrayy = A::create($array)->diffReverse($arrayNew);
+
+    self::assertEquals($result, $arrayy->getArray());
+  }
+
+  /**
+   * @return array
+   */
+  public function diffReverseProvider()
+  {
+    return array(
+        array(array(), array(), array()),
+        array(array(0 => false), array(false), array()),
+        array(array(0 => true), array(true), array()),
+        array(
+            array(
+                0 => -9,
+                -9,
+            ),
+            array(
+                0 => -9,
+                1 => -9,
+            ),
+            array(),
+        ),
+        array(
+            array(
+                0 => -9,
+                1,
+                2,
+            ),
+            array(
+                0 => 2,
+                1 => 1,
+                2 => -9,
+            ),
+            array(),
+        ),
+        array(
+            array(1.18, 1.5),
+            array(1.5, 1.18),
+            array(),
+        ),
+        array(
+            array(
+                1     => 'one',
+                2     => 'two',
+                'foo' => 'bar1',
+            ),
+            array(
+                3     => 'three',
+                4     => 'four',
+                6     => 'six',
+                'foo' => 'bar2',
+            ),
+            array(
+                'foo' => 'bar2',
+                3     => 'three',
+                4     => 'four',
+                6     => 'six',
+            ),
+        ),
+        array(
+            array(
+                3 => 'string',
+                'foo',
+                'lall',
+                'foo',
+            ),
+            array(
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
+                3 => 'string',
+            ),
+            array(),
         ),
     );
   }

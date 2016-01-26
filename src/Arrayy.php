@@ -185,7 +185,7 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   /**
    * get the current array from the "Arrayy"-object
    *
-   * @return null|callable
+   * @return array
    */
   public function getArray()
   {
@@ -561,9 +561,10 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   ////////////////////////////////////////////////////////////////////
 
   /**
-   * Merge the new $array into the current array, replace already existing keys
-   * from the current array with the key,values from the new $array
-   * and create new indexes.
+   * Merge the new $array into the current array.
+   *
+   * - replace duplicate keys from the current array with the key,values from the new $array
+   * - create new indexes
    *
    * @param array $array
    *
@@ -575,9 +576,10 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   }
 
   /**
-   * Merge the current array into the new $array, replace already existing keys
-   * from new $array with the key,values from the current array
-   * and create new indexes.
+   * Merge the current array into the new $array.
+   *
+   * - replace duplicate keys from new $array with the key,values from the current array
+   * - create new indexes
    *
    * @param array $array
    *
@@ -589,8 +591,9 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
   }
 
   /**
-   * Merge the new $array into the current array and
-   * keep keys and values from the current array.
+   * Merge the new $array into the current array.
+   *
+   * - keep key,value from the current array, also if the index is in the new $array
    *
    * @param array $array
    *
@@ -598,12 +601,13 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
    */
   public function mergeAppendKeepIndex(array $array = array())
   {
-    /** @noinspection AdditionOperationOnArraysInspection */
-    return self::create($this->array + $array);
+    return self::create(array_replace($array, $this->array));
   }
 
   /**
-   * Merge the the current array into the $array, keep keys and values from the new $array.
+   * Merge the the current array into the $array.
+   *
+   * - use key,value from the new $array, also if the index is in the current array
    *
    * @param array $array
    *
@@ -611,34 +615,7 @@ class Arrayy extends CollectionMethods implements \Countable, \IteratorAggregate
    */
   public function mergePrependKeepIndex(array $array = array())
   {
-    /** @noinspection AdditionOperationOnArraysInspection */
-    return self::create($array + $this->array);
-  }
-
-  /**
-   * Merge the new $array into the current array, keep keys from the current array
-   * and overwrite values with the new $array.
-   *
-   * @param $array
-   *
-   * @return self
-   */
-  public function mergeReplaceAppend(array $array = array())
-  {
     return self::create(array_replace($this->array, $array));
-  }
-
-  /**
-   * Merge the the current array into the $array, keep keys from the new $array
-   * and overwrite values with the old from the current array.
-   *
-   * @param $array
-   *
-   * @return self
-   */
-  public function mergeReplacePrepend(array $array = array())
-  {
-    return self::create(array_replace($array, $this->array));
   }
 
   /**
