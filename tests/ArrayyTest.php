@@ -5,7 +5,7 @@ use Arrayy\Arrayy as A;
 /**
  * Class ArrayyTestCase
  */
-class ArrayyTestCase extends PHPUnit_Framework_TestCase
+class ArrayyTest extends PHPUnit_Framework_TestCase
 {
   public function testConstruct()
   {
