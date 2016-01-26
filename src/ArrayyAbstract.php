@@ -94,6 +94,8 @@ abstract class ArrayyAbstract
   /**
    * Get a value from a array and set it if it was not.
    *
+   * WARNING: this method only set the value, if the $key is not already set
+   *
    * @param string $key     The key
    * @param mixed  $default The default value to set if it isn't
    *
@@ -112,7 +114,7 @@ abstract class ArrayyAbstract
   /**
    * Remove a value from an array using dot notation.
    *
-   * @param $key
+   * @param mixed $key
    *
    * @return mixed
    */
@@ -130,25 +132,6 @@ abstract class ArrayyAbstract
     $this->internalRemove($key);
 
     return $this->array;
-  }
-
-  /**
-   * Fetches all columns $property from a multimensionnal array.
-   *
-   * @param $property
-   *
-   * @return array
-   */
-  public function pluck($property)
-  {
-    $plucked = array_map(
-        function ($value) use ($property) {
-          return $this->get($property, null, $value);
-        },
-        (array)$this->array
-    );
-
-    return $plucked;
   }
 
   /**
