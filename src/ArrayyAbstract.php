@@ -185,17 +185,19 @@ abstract class ArrayyAbstract
 
     $result = array_values(
         array_filter(
-            (array)$this->array, function ($item) use (
-            $property,
-            $value,
-            $ops,
-            $comparisonOp
-        ) {
-          $item = (array)$item;
-          $item[$property] = $this->get($property, array(), $item);
+            (array)$this->array,
+            function ($item) use (
+                $property,
+                $value,
+                $ops,
+                $comparisonOp
+            ) {
+              $item = (array)$item;
+              $itemArrayy = new Arrayy($item);
+              $item[$property] = $itemArrayy->get($property, array());
 
-          return $ops[$comparisonOp]($item, $property, $value);
-        }
+              return $ops[$comparisonOp]($item, $property, $value);
+            }
         )
     );
 
