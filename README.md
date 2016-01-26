@@ -21,7 +21,6 @@ a::create('Array', 'Array')->unique()->append('y')->implode() // Arrayy
     * [append](#appendmixed-value)
     * [prepend](#prependmixed-value)
     * TODO ... add more examples ... v1
-* [Extensions](#extensions)
 * [Tests](#tests)
 * [License](#license)
 
