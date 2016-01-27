@@ -213,6 +213,22 @@ $closure = function ($value, $key) {
 a([1, 4, 7])->matches($closure); // true
 ```
 
+##### isAssoc() : boolean
+
+Check if we have named keys in the current array.
+
+```php
+a(['foo' => 'bar', 2, 3])->isAssoc(); // true
+```
+
+##### isMultiArray() : boolean
+
+Check if the current array is a multi-array.
+
+```php
+a(['foo' => [1, 2 , 3]])->isMultiArray(); // true
+```
+
 ##### contains(mixed $value) : boolean
 
 Check if an item is in an array.

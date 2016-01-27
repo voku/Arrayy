@@ -249,7 +249,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Check if all items in an array match a truth test.
+   * Check if all items in current array match a truth test.
    *
    * @param \Closure $closure
    *
@@ -270,7 +270,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Check if any item in an array matches a truth test.
+   * Check if any item in the current array matches a truth test.
    *
    * @param \Closure $closure
    *
@@ -291,7 +291,31 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Check if an item is in an array.
+   * Check if we have named keys in the current array.
+   *
+   * @return bool
+   */
+  public function isAssoc()
+  {
+    if (count($this->array) === 0) {
+      return false;
+    }
+
+    return (bool)count(array_filter(array_keys($this->array), 'is_string'));
+  }
+
+  /**
+   * Check if the current array is a multi-array.
+   *
+   * @return bool
+   */
+  public function isMultiArray()
+  {
+    return !(count($this->array) === count($this->array, COUNT_RECURSIVE));
+  }
+
+  /**
+   * Check if an item is in the current array.
    *
    * @param mixed $value
    *
@@ -303,7 +327,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Returns the average value of an array.
+   * Returns the average value of the current array.
    *
    * @param int $decimals The number of decimals to return
    *

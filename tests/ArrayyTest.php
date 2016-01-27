@@ -560,6 +560,73 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
   }
 
+  /**
+   * @dataProvider isAssocProvider()
+   *
+   * @param array $array
+   * @param bool  $result
+   */
+  public function testIsAssoc($array, $result)
+  {
+    $resultTmp = A::create($array)->isAssoc();
+
+    self::assertEquals($result, $resultTmp);
+  }
+
+  /**
+   * @return array
+   */
+  public function isAssocProvider()
+  {
+    return array(
+        array(array(0 => true), false),
+        array(array(0 => -9, 0), false),
+        array(array(-8 => -9, 1, 2 => false), false),
+        array(array(-8 => -9, 1, 2 => false), false),
+        array(array(1.18, false), false),
+        array(array(0 => 1, 1 => 2, 2 => 3, 3 => 4), false),
+        array(array(1, 2, 3, 4), false),
+        array(array(0, 1, 2, 3), false),
+        array(array('foo' => false, 'foo', 'lall'), true),
+        array(array('foo' => false, 'foo', 'lall'), true),
+        array(array('foo' => false, 'foo', 'lall'), true),
+    );
+  }
+
+  /**
+   * @dataProvider isMultiArrayProvider()
+   *
+   * @param array $array
+   * @param bool  $result
+   */
+  public function testisMultiArray($array, $result)
+  {
+    $resultTmp = A::create($array)->isMultiArray();
+
+    self::assertEquals($result, $resultTmp);
+  }
+
+  /**
+   * @return array
+   */
+  public function isMultiArrayProvider()
+  {
+    return array(
+        array(array(0 => true), false),
+        array(array(0 => -9, 0), false),
+        array(array(-8 => -9, 1, 2 => false), false),
+        array(array(-8 => -9, 1, 2 => false), false),
+        array(array(1.18, false), false),
+        array(array(0 => 1, 1 => 2, 2 => 3, 3 => 4), false),
+        array(array(1, 2, 3, 4), false),
+        array(array(0, 1, 2, 3), false),
+        array(array('foo' => false, 'foo', 'lall'), false),
+        array(array('foo' => false, 'foo', 'lall'), false),
+        array(array('foo' => false, 'foo', 'lall'), false),
+        array(array('foo' => array('foo', 'lall')), true),
+        array(array('foo' => array('foo', 'lall'), 'bar' => array('foo', 'lall')), true),
+    );
+  }
 
   public function testCanGetIntersectionOfTwoArrays()
   {
