@@ -229,7 +229,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Search for the index of the current array via $value.
+   * Search for the first index of the current array via $value.
    *
    * @param mixed $value
    *
@@ -307,7 +307,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param int $decimals The number of decimals to return
    *
-   * @return int The average value
+   * @return int|double The average value
    */
   public function average($decimals = null)
   {
@@ -426,14 +426,14 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Get a random string from an array.
    *
-   * @param null $take
+   * @param null|int $take how many values you will take?
    *
    * @return self
    */
   public function random($take = null)
   {
-    if ($take !== null) {
-      return $this->array[array_rand($this->array)];
+    if ($take === null) {
+      return Arrayy::create((array)$this->array[array_rand($this->array)]);
     }
 
     shuffle($this->array);
@@ -472,7 +472,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Get the first value from an array.
    *
-   * @param int|null $take
+   * @param int|null $take how many values you will take?
    *
    * @return self
    */

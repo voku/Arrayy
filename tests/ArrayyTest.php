@@ -7,13 +7,6 @@ use Arrayy\Arrayy as A;
  */
 class ArrayyTest extends PHPUnit_Framework_TestCase
 {
-  public function testConstruct()
-  {
-    $arrayy = new A(array('foo bar', 'UTF-8'));
-    self::assertArrayy($arrayy);
-    self::assertEquals('foo bar,UTF-8', (string)$arrayy);
-  }
-
   /**
    * Asserts that a variable is of a Arrayy instance.
    *
@@ -22,6 +15,58 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function assertArrayy($actual)
   {
     self::assertInstanceOf('Arrayy\Arrayy', $actual);
+  }
+
+  public function testConstruct()
+  {
+    $arrayy = new A(array('foo bar', 'UTF-8'));
+    self::assertArrayy($arrayy);
+    self::assertEquals('foo bar,UTF-8', (string)$arrayy);
+  }
+
+  public function testSet()
+  {
+    $arrayy = new A(array('foo bar', 'UTF-8'));
+    $arrayy[1] = 'öäü';
+    self::assertArrayy($arrayy);
+    self::assertEquals('foo bar,öäü', (string)$arrayy);
+  }
+
+  public function testGet()
+  {
+    $arrayy = new A(array('foo bar', 'öäü'));
+    self::assertArrayy($arrayy);
+    self::assertEquals('öäü', $arrayy[1]);
+  }
+
+  public function testUnset()
+  {
+    $arrayy = new A(array('foo bar', 'öäü'));
+    unset($arrayy[1]);
+    self::assertArrayy($arrayy);
+    self::assertEquals('foo bar', $arrayy[0]);
+    self::assertEquals(null, $arrayy[1]);
+  }
+
+  public function testIsSet()
+  {
+    $arrayy = new A(array('foo bar', 'öäü'));
+    self::assertArrayy($arrayy);
+    self::assertEquals(true, isset($arrayy[0]));
+  }
+
+  public function testForEach()
+  {
+    $arrayy = new A(array(1 => 'foo bar', 'öäü'));
+
+    foreach ($arrayy as $key => $value) {
+      if ($key === 1) {
+        self::assertEquals('foo bar', $arrayy[$key]);
+      } else if ($key === 2) {
+        self::assertEquals('öäü', $arrayy[$key]);
+      }
+    }
+
   }
 
   public function testEmptyConstruct()
@@ -139,6 +184,26 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
   }
 
+  public function testMatchesSimple()
+  {
+    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @param $value
+     * @param $key
+     *
+     * @return bool
+     */
+    $closure = function ($value, $key) {
+      return ($value % 2 === 0);
+    };
+
+    $result = A::create(array(2, 4, 8))->matches($closure);
+    self::assertEquals(true, $result);
+
+    $result = A::create(array(2, 3, 8))->matches($closure);
+    self::assertEquals(false, $result);
+  }
+
   /**
    * @dataProvider matchesProvider()
    *
@@ -174,6 +239,26 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(1.18), array(1.18), true),
         array(array('string', 'foo', 'lall'), array('string', 'foo'), false),
     );
+  }
+
+  public function testMatchesAnySimple()
+  {
+    /** @noinspection PhpUnusedParameterInspection */
+    /**
+     * @param $value
+     * @param $key
+     *
+     * @return bool
+     */
+    $closure = function ($value, $key) {
+      return ($value % 2 === 0);
+    };
+
+    $result = A::create(array(1, 4, 7))->matchesAny($closure);
+    self::assertEquals(true, $result);
+
+    $result = A::create(array(1, 3, 7))->matchesAny($closure);
+    self::assertEquals(false, $result);
   }
 
   /**
@@ -383,12 +468,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
    */
   public function testFind($array, $search, $result)
   {
-    $arrayy = A::create($array);
-
     $closure = function ($value) use ($search) {
       return $value === $search;
     };
 
+    $arrayy = A::create($array);
     $resultMatch = $arrayy->find($closure);
 
     self::assertEquals($result, $resultMatch);
@@ -439,18 +523,24 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
   }
 
+  public function testSimpleRandom()
+  {
+    $result = A::create(array(-8 => -9, 1, 2 => false))->random(3);
+    self::assertEquals(3, count($result));
+  }
+
   /**
    * @dataProvider randomProvider()
    *
-   * @param $array
+   * @param array $array
+   * @param bool  $take
    */
-  public function testRandom($array)
+  public function testRandom($array, $take = null)
   {
     $arrayy = A::create($array);
+    $result = $arrayy->random($take)->getArray();
 
-    $tmpArray = $arrayy->random()->getArray();
-
-    self::assertEquals(true, in_array($tmpArray[0], $array, true));
+    self::assertEquals(true, in_array($result[0], $array, true));
   }
 
   /**
@@ -462,8 +552,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(0 => true)),
         array(array(0 => -9, 0)),
         array(array(-8 => -9, 1, 2 => false)),
+        array(array(-8 => -9, 1, 2 => false), 2),
         array(array(1.18, false)),
         array(array('foo' => false, 'foo', 'lall')),
+        array(array('foo' => false, 'foo', 'lall'), 1),
+        array(array('foo' => false, 'foo', 'lall'), 3),
     );
   }
 

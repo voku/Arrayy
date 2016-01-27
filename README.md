@@ -129,12 +129,158 @@ function importing, and PHP 5.4 short array syntax. For further details,
 see the documentation for the create method above, as well as the notes
 on PHP 5.6 creation.
 
-##### append(mixed $value)
+##### "set a array value"
+
+```php
+$arrayy = a(['fòô' => 'bàř']);
+$arrayy['foo'] = 'bar';
+var_dump($arrayy); // Arrayy['fòô' => 'bàř', 'foo' => 'bar']
+```
+
+##### "get a array value"
+
+```php
+$arrayy = a(['fòô' => 'bàř']);
+var_dump($arrayy['fòô']); // 'bàř'
+```
+
+##### "delete a array value"
+
+```php
+$arrayy = A::create(['fòô' => 'bàř', 'lall']);
+unset($arrayy['fòô']);
+var_dump($arrayy); // Arrayy[0 => 'lall']
+```
+
+##### "check if a array value is-set"
+
+```php
+$arrayy = a(['fòô' => 'bàř']);
+isset($arrayy['fòô']); // true
+```
+
+##### "simple loop with a arrayy-object"
+ 
+```php
+foreach (a(['fòô' => 'bàř']) as $key => $value) {
+  echo $key . ' | ' . $value; // fòô | bàř
+}
+```
+
+##### append(mixed $value) : Arrayy
 
 Returns a new arrayy object with $value appended.
 
 ```php
-a(['fòô' => 'bàř'])->append('foo'); // a(['fòô' => 'bàř', 0 => 'foo'])
+a(['fòô' => 'bàř'])->append('foo'); // Arrayy['fòô' => 'bàř', 0 => 'foo']
+```
+
+##### searchValue(mixed $index) : Arrayy
+
+Search for the value of the current array via $index.
+
+```php
+a(['fòô' => 'bàř'])->searchValue('fòô'); // Arrayy[0 => 'bàř']
+```
+
+##### searchIndex(mixed $value) : Arrayy
+
+Search for the first index of the current array via $value.
+
+```php
+a(['fòô' => 'bàř', 'lall' => 'bàř'])->searchIndex('bàř'); // Arrayy[0 => 'fòô']
+```
+
+##### matches(Closure $closure) : boolean
+
+Check if all items in an array match a truth test.
+
+```php
+$closure = function ($value, $key) {
+  return ($value % 2 === 0);
+};
+a([2, 4, 8])->matches($closure); // true
+```
+
+##### matchesAny(Closure $closure) : boolean
+
+Check if any item in an array matches a truth test.
+
+```php
+$closure = function ($value, $key) {
+  return ($value % 2 === 0);
+};
+a([1, 4, 7])->matches($closure); // true
+```
+
+##### contains(mixed $value) : boolean
+
+Check if an item is in an array.
+
+```php
+a([1, true])->contains(true); // true
+```
+
+##### average(int $decimals) : int|double
+
+Returns the average value of an array
+
+```php
+a([-9, -8, -7, 1.32])->average(2); // -5.67
+```
+
+##### length() : int
+
+Count the values from the current array.
+
+alias: count() || size()
+
+```php
+a([-9, -8, -7, 1.32])->length(); // 4
+```
+
+##### max() : mixed
+
+Get the max value from an array.
+
+```php
+a([-9, -8, -7, 1.32])->max(); // 1.32
+```
+
+##### min() : mixed
+
+Get the min value from an array.
+
+```php
+a([-9, -8, -7, 1.32])->min(); // -9
+```
+
+##### find(Closure $closure) : mixed
+
+Find the first item in an array that passes the truth test, otherwise return false.
+
+```php
+$search = 'foo';
+$closure = function ($value, $key) use ($search) {
+  return $value === $search;
+};
+a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
+```
+
+##### clean() : Arrayy
+
+Clean all falsy values from an array.
+
+```php
+a([-8 => -9, 1, 2 => false])->clean(); // Arrayy[-8 => -9, 1]
+```
+
+##### random(int|null $take) : Arrayy
+
+Get a random string from an array.
+
+```php
+a([1, 2, 3, 4])->random(2); // e.g.: Arrayy[1, 4]
 ```
 
 ##### prepend(mixed $value)
@@ -142,7 +288,7 @@ a(['fòô' => 'bàř'])->append('foo'); // a(['fòô' => 'bàř', 0 => 'foo'])
 Returns a new arrayy object with $value prepended.
 
 ```php
-a(['fòô' => 'bàř'])->prepend('foo'); // a([0 => 'foo', 'fòô' => 'bàř'])
+a(['fòô' => 'bàř'])->prepend('foo'); // Arrayy[0 => 'foo', 'fòô' => 'bàř']
 ```
 
 TODO ... add more examples ... v2
