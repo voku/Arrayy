@@ -494,7 +494,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   ////////////////////////////////////////////////////////////////////
 
   /**
-   * Get the first value from an array.
+   * Get the first value(s) from the current array.
    *
    * @param int|null $take how many values you will take?
    *
@@ -512,7 +512,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Get the last value from an array.
+   * Get the last value(s) from the current array.
    *
    * @param int|null $take
    *

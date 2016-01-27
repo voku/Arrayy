@@ -679,6 +679,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(-8 => -9, 1, 2 => false), array(), 0),
         array(array(1.18, false), array(1.18), 1),
         array(array('foo' => false, 'foo', 'lall'), array('foo', 'foo' => false), 2),
+        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'foo', 1 => 'bar'), 2),
     );
   }
 
@@ -712,6 +713,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(-8 => -9, 1, 2 => false), array(-9, 1, false), 0),
         array(array(1.18, false), array(false), 1),
         array(array('foo' => false, 'foo', 'lall'), array('foo', 'lall'), 2),
+        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'bar', 1 => 'lall'), 2),
     );
   }
 
@@ -745,6 +747,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(-8 => -9, 1, 2 => false), array(0 => -9, 1 => 1, 2 => false), 0),
         array(array(1.18, false), array(1.18), 1),
         array(array('foo' => false, 'foo', 'lall'), array('foo' => false), 2),
+        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'foo'), 2),
+        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'foo', 1 => 'bar'), 1),
     );
   }
 
@@ -778,6 +782,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(-8 => -9, 1, 2 => false), array(0 => -9, 1 => 1, 2 => false), 0),
         array(array(1.18, false), array(false), 1),
         array(array('foo' => false, 'foo', 'lall'), array('lall'), 2),
+        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'lall'), 2),
+        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'bar', 1 => 'lall'), 1),
     );
   }
 

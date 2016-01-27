@@ -299,6 +299,54 @@ Get a random string from an array.
 a([1, 2, 3, 4])->random(2); // e.g.: Arrayy[1, 4]
 ```
 
+##### intersection(array $search) : Arrayy
+
+Return an array with all elements found in input array.
+
+```php
+a(['foo', 'bar'])->intersection(['bar', 'baz']); // Arrayy['bar']
+```
+
+##### intersects(array $search) : boolean
+
+Return a boolean flag which indicates whether the two input arrays have any common elements.
+
+```php
+a(['foo', 'bar'])->intersects(['föö', 'bär']); // false
+```
+
+##### first(null|int $take) : Arrayy
+
+Get the first value(s) from the current array.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(2); // Arrayy[0 => 'foo', 1 => 'bar']
+```
+
+##### last(null|int $take) : Arrayy
+
+Get the last value(s) from the current array.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(2); // Arrayy[0 => 'bar', 1 => 'lall']
+```
+
+##### initial(int $to) : Arrayy
+
+Get everything but the last..$to items.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->initial(2); // Arrayy[0 => 'foo']
+```
+
+##### rest(int $from) : Arrayy
+
+Get the last elements from index $from until the end of this array.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->rest(2); // Arrayy[0 => 'lall']
+```
+
 ##### prepend(mixed $value)
 
 Returns a new arrayy object with $value prepended.
