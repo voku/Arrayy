@@ -59,7 +59,7 @@ The library offers OO method chaining, as seen below:
 
 ```php
 use Arrayy\Arrayy as A;
-echo A::create(array('fòô', 'bàř', 'bàř'))->unique()->reverse()->implode(); // 'bàř,fòô'
+echo a(array('fòô', 'bàř', 'bàř'))->unique()->reverse()->implode(); // 'bàř,fòô'
 ```
 
 ## Implemented Interfaces
@@ -68,7 +68,7 @@ echo A::create(array('fòô', 'bàř', 'bàř'))->unique()->reverse()->implode()
 `foreach` can be used with an instance of the class:
 
 ``` php
-$arrayy = A::create(array('fòôbàř', 'foo'));
+$arrayy = a(array('fòôbàř', 'foo'));
 foreach ($arrayy as $value) {
     echo $value;
 }
@@ -80,7 +80,7 @@ It implements the `Countable` interface, enabling the use of `count()` to
 retrieve the number of characters in the string:
 
 ``` php
-$arrayy = A::create(array('fòô', 'foo'));
+$arrayy = a(array('fòô', 'foo'));
 count($arrayy);  // 2
 ```
 
@@ -147,7 +147,7 @@ var_dump($arrayy['fòô']); // 'bàř'
 ##### "delete a array value"
 
 ```php
-$arrayy = A::create(['fòô' => 'bàř', 'lall']);
+$arrayy = a(['fòô' => 'bàř', 'lall']);
 unset($arrayy['fòô']);
 var_dump($arrayy); // Arrayy[0 => 'lall']
 ```
