@@ -374,6 +374,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A($array);
 
     self::assertEquals($expected, $arrayy->count());
+    self::assertEquals($expected, $arrayy->size());
+    self::assertEquals($expected, $arrayy->lenth());
   }
 
   /**
@@ -579,6 +581,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function isAssocProvider()
   {
     return array(
+        array(array(), false),
         array(array(0 => true), false),
         array(array(0 => -9, 0), false),
         array(array(-8 => -9, 1, 2 => false), false),
@@ -913,8 +916,10 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
           return $value % 2 !== 0;
         }
     );
-
     self::assertEquals(array(0 => 1, 2 => 3), $under->getArray());
+
+    $under = A::create(array(1, 2, 3, 4))->filter();
+    self::assertEquals(array(1, 2, 3, 4), $under->getArray());
   }
 
   public function testInvoke()
