@@ -1382,6 +1382,20 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * remove html-break [br | \r\n | \r | \n | ...]
+   *
+   * @param string $replacement
+   *
+   * @return Stringy
+   */
+  public function removeHtmlBreak($replacement = '')
+  {
+    $str = preg_replace('#/\r\n|\r|\n|<br.*/?>#isU', $replacement, $this->str);
+
+    return static::create($str, $this->encoding);
+  }
+
+  /**
    * remove html
    *
    * @param $allowableTags

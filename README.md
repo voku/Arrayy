@@ -80,6 +80,7 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
     * [removeLeft](#removeleftstring-substring)
     * [removeRight](#removerightstring-substring)
     * [removeHtml](#removehtmlstring-allowabletags)
+    * [removeHtmlBreak](#removehtmlbreakstring-replacement)
     * [removeXss](#removexss)
     * [repeat](#repeatmultiplier)
     * [replace](#replacestring-search-string-replacement)
@@ -731,6 +732,14 @@ Returns a new string with the suffix $substring removed, if present.
 
 ```php
 s('fòôbàř')->removeRight('bàř'); // 'fòô'
+```
+
+##### removeHtmlBreak(string $replacement)
+
+Returns a new string without "breaks" (<br .*>, \n, \r\n, ...).
+
+```php
+s('řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>')->removeHtml(' '); // 'řàb <ô>òf\', ô< foo <a href="#">lall</a>'
 ```
 
 ##### removeHtml(string $allowableTags)

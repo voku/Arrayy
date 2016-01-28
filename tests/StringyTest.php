@@ -1443,6 +1443,38 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @dataProvider removeHtmlBreakProvider()
+   *
+   * @param        $expected
+   * @param        $str
+   * @param string $replacement
+   * @param null   $encoding
+   */
+  public function testRemoveHtmlBreak($expected, $str, $replacement = '', $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->removeHtmlBreak($replacement);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
+  }
+
+  /**
+   * @return array
+   */
+  public function removeHtmlBreakProvider()
+  {
+    return array(
+        array('', ''),
+        array('raboof <3', 'raboof <3', '<ä>'),
+        array('řàbôòf <foo<lall>>>', 'řàbôòf<br/><foo<lall>>>', ' '),
+        array('řàb <ô>òf\', ô<br><br/>foo <a href="#">lall</a>', 'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>', '<br><br/>'),
+        array('<∂∆ onerror="alert(xss)">˚åß', '<∂∆ onerror="alert(xss)">' . "\n" . '˚åß'),
+        array('\'œ … \'’)', '\'œ … \'’)'),
+    );
+  }
+
+  /**
    * @dataProvider removeHtmlProvider()
    *
    * @param        $expected
