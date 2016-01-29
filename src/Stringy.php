@@ -1225,14 +1225,41 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Replaces all occurrences of $search in $str by $replacement.
    *
-   * @param  string $search      The needle to search for
-   * @param  string $replacement The string to replace with
+   * @param string $search        The needle to search for
+   * @param string $replacement   The string to replace with
+   * @param bool   $caseSensitive Whether or not to enforce case-sensitivity
    *
    * @return Stringy Object with the resulting $str after the replacements
    */
-  public function replace($search, $replacement)
+  public function replace($search, $replacement, $caseSensitive = true)
   {
-    return $this->regexReplace(preg_quote($search, '/'), UTF8::str_replace('\\', '\\\\', $replacement));
+    if ($caseSensitive) {
+      $return = UTF8::str_replace($search, $replacement, $this->str);
+    } else {
+      $return = UTF8::str_ireplace($search, $replacement, $this->str);
+    }
+
+    return self::create($return);
+  }
+
+  /**
+   * Replaces all occurrences of $search in $str by $replacement.
+   *
+   * @param array        $search        The elements to search for
+   * @param string|array $replacement   The string to replace with
+   * @param bool         $caseSensitive Whether or not to enforce case-sensitivity
+   *
+   * @return Stringy Object with the resulting $str after the replacements
+   */
+  public function replaceAll(array $search, $replacement, $caseSensitive = true)
+  {
+    if ($caseSensitive) {
+      $return = UTF8::str_replace($search, $replacement, $this->str);
+    } else {
+      $return = UTF8::str_ireplace($search, $replacement, $this->str);
+    }
+
+    return self::create($return);
   }
 
   /**
@@ -1872,7 +1899,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         array(
             '_',
             '',
-            '_'
+            '_',
         ),
         $str
     );

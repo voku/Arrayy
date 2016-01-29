@@ -766,12 +766,20 @@ Returns a repeated string given a multiplier. An alias for str_repeat.
 s('α')->repeat(3); // 'ααα'
 ```
 
-##### replace(string $search, string $replacement)
+##### replace(string $search, string $replacement, bool(true) $caseSensitive)
 
 Replaces all occurrences of $search in $str by $replacement.
 
 ```php
 s('fòô bàř fòô bàř')->replace('fòô ', ''); // 'bàř bàř'
+```
+
+##### replaceAll(array $search, string|array $replacement, bool(true) $caseSensitive)
+
+Replaces all occurrences of elements from $search in $str by $replacement.
+
+```php
+s('fòô bàř lall bàř')->replace(['fòÔ ', 'lall'], '', false); // 'bàř bàř'
 ```
 
 ##### replaceBeginning(string $search, string $replacement)

@@ -3070,16 +3070,17 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider replaceProvider()
    *
-   * @param      $expected
-   * @param      $str
-   * @param      $search
-   * @param      $replacement
-   * @param null $encoding
+   * @param string $expected
+   * @param string $str
+   * @param string $search
+   * @param string $replacement
+   * @param null   $encoding
+   * @param bool   $caseSensitive
    */
-  public function testReplace($expected, $str, $search, $replacement, $encoding = null)
+  public function testReplace($expected, $str, $search, $replacement, $encoding = null, $caseSensitive = true)
   {
     $stringy = S::create($str, $encoding);
-    $result = $stringy->replace($search, $replacement);
+    $result = $stringy->replace($search, $replacement, $caseSensitive);
     self::assertStringy($result);
     self::assertEquals($expected, $result);
     self::assertEquals($str, $stringy);
@@ -3092,7 +3093,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     return array(
         array('', '', '', ''),
-        array('foo', '', '', 'foo'),
+        array('foo', ' ', ' ', 'foo'),
         array('foo', '\s', '\s', 'foo'),
         array('foo bar', 'foo bar', '', ''),
         array('foo bar', 'foo bar', 'f(o)o', '\1'),
@@ -3101,7 +3102,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('far bar', 'foo bar', 'foo', 'far'),
         array('bar bar', 'foo bar foo bar', 'foo ', ''),
         array('', '', '', '', 'UTF-8'),
-        array('fòô', '', '', 'fòô', 'UTF-8'),
+        array('fòô', ' ', ' ', 'fòô', 'UTF-8'),
         array('fòô', '\s', '\s', 'fòô', 'UTF-8'),
         array('fòô bàř', 'fòô bàř', '', '', 'UTF-8'),
         array('bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'),
@@ -3109,7 +3110,74 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('bàř bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'),
         array('bàř bàř', 'fòô bàř fòô bàř', 'fòô ', '',),
         array('bàř bàř', 'fòô bàř fòô bàř', 'fòô ', ''),
+        array('fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'Fòô ', ''),
+        array('fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'fòÔ ', ''),
         array('fòô bàř bàř', 'fòô bàř [[fòô]] bàř', '[[fòô]] ', ''),
+        array('', '', '', '', 'UTF-8', false),
+        array('òô', ' ', ' ', 'òô', 'UTF-8', false),
+        array('fòô', '\s', '\s', 'fòô', 'UTF-8', false),
+        array('fòô bàř', 'fòô bàř', '', '', 'UTF-8', false),
+        array('bàř', 'fòô bàř', 'Fòô ', '', 'UTF-8', false),
+        array('far bàř', 'fòô bàř', 'fòÔ', 'far', 'UTF-8', false),
+        array('bàř bàř', 'fòô bàř fòô bàř', 'Fòô ', '', 'UTF-8', false),
+    );
+  }
+
+  /**
+   * @dataProvider replaceAllProvider()
+   *
+   * @param string $expected
+   * @param string $str
+   * @param array  $search
+   * @param string $replacement
+   * @param null   $encoding
+   * @param bool   $caseSensitive
+   */
+  public function testReplaceAll($expected, $str, $search, $replacement, $encoding = null, $caseSensitive = true)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->replaceAll($search, $replacement, $caseSensitive);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
+  }
+
+  /**
+   * @return array
+   */
+  public function replaceAllProvider()
+  {
+    return array(
+        array('', '', array(), ''),
+        array('', '', array(''), ''),
+        array('foo', ' ', array(' ', ''), 'foo'),
+        array('foo', '\s', array('\s', '\t'), 'foo'),
+        array('foo bar', 'foo bar', array(''), ''),
+        array('\1 bar', 'foo bar', array('f(o)o', 'foo'), '\1'),
+        array('\1 \1', 'foo bar', array('foo', 'föö', 'bar'), '\1'),
+        array('bar', 'foo bar', array('foo '), ''),
+        array('far bar', 'foo bar', array('foo'), 'far'),
+        array('bar bar', 'foo bar foo bar', array('foo ', ' foo'), ''),
+        array('bar bar bar bar', 'foo bar foo bar', array('foo ', ' foo'), array('bar ', ' bar')),
+        array('', '', array(''), '', 'UTF-8'),
+        array('fòô', ' ', array(' ', '', '  '), 'fòô', 'UTF-8'),
+        array('fòôòô', '\s', array('\s', 'f'), 'fòô', 'UTF-8'),
+        array('fòô bàř', 'fòô bàř', array(''), '', 'UTF-8'),
+        array('bàř', 'fòô bàř', array('fòô '), '', 'UTF-8'),
+        array('far bàř', 'fòô bàř', array('fòô'), 'far', 'UTF-8'),
+        array('bàř bàř', 'fòô bàř fòô bàř', array('fòô ', 'fòô'), '', 'UTF-8'),
+        array('bàř bàř', 'fòô bàř fòô bàř', array('fòô '), ''),
+        array('bàř bàř', 'fòô bàř fòô bàř', array('fòô '), ''),
+        array('fòô bàř fòô bàř', 'fòô bàř fòô bàř', array('Fòô '), ''),
+        array('fòô bàř fòô bàř', 'fòô bàř fòô bàř', array('fòÔ '), ''),
+        array('fòô bàř bàř', 'fòô bàř [[fòô]] bàř', array('[[fòô]] ', '[]'), ''),
+        array('', '', array(''), '', 'UTF-8', false),
+        array('fòô', ' ', array(' ', '', '  '), 'fòô', 'UTF-8', false),
+        array('fòôòô', '\s', array('\s', 'f'), 'fòô', 'UTF-8', false),
+        array('fòô bàř', 'fòô bàř', array(''), '', 'UTF-8', false),
+        array('bàř', 'fòô bàř', array('fòÔ '), '', 'UTF-8', false),
+        array('bàř', 'fòô bàř', array('fòÔ '), array(''), 'UTF-8', false),
+        array('far bàř', 'fòô bàř', array('Fòô'), 'far', 'UTF-8', false),
     );
   }
 
