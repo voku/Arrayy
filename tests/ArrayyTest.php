@@ -375,7 +375,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     self::assertEquals($expected, $arrayy->count());
     self::assertEquals($expected, $arrayy->size());
-    self::assertEquals($expected, $arrayy->lenth());
+    self::assertEquals($expected, $arrayy->length());
   }
 
   /**

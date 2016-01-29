@@ -194,7 +194,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param array $array
    *
-   * @return self
+   * @return Arrayy
    */
   public static function create($array = array())
   {
@@ -210,7 +210,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param mixed $index
    *
-   * @return self
+   * @return Arrayy
    */
   public function searchValue($index)
   {
@@ -225,7 +225,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       }
     }
 
-    return self::create((array)$return);
+    return static::create((array)$return);
   }
 
   /**
@@ -233,7 +233,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param mixed $value
    *
-   * @return self
+   * @return Arrayy
    */
   public function searchIndex($value)
   {
@@ -245,7 +245,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       $return = array($key);
     }
 
-    return self::create((array)$return);
+    return static::create((array)$return);
   }
 
   /**
@@ -436,7 +436,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Clean all falsy values from an array.
    *
-   * @return self
+   * @return Arrayy
    */
   public function clean()
   {
@@ -452,12 +452,12 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param null|int $take how many values you will take?
    *
-   * @return self
+   * @return Arrayy
    */
   public function random($take = null)
   {
     if ($take === null) {
-      return Arrayy::create((array)$this->array[array_rand($this->array)]);
+      return static::create((array)$this->array[array_rand($this->array)]);
     }
 
     shuffle($this->array);
@@ -470,11 +470,11 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param array $search
    *
-   * @return self
+   * @return Arrayy
    */
   public function intersection(array $search)
   {
-    return self::create(array_values(array_intersect($this->array, $search)));
+    return static::create(array_values(array_intersect($this->array, $search)));
   }
 
   /**
@@ -498,7 +498,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param int|null $take how many values you will take?
    *
-   * @return self
+   * @return Arrayy
    */
   public function first($take = null)
   {
@@ -508,7 +508,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       $array = array_splice($this->array, 0, $take, true);
     }
 
-    return self::create((array)$array);
+    return static::create((array)$array);
   }
 
   /**
@@ -516,12 +516,12 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param int|null $take
    *
-   * @return self
+   * @return Arrayy
    */
   public function last($take = null)
   {
     if ($take === null) {
-      $array = self::create((array)array_pop($this->array));
+      $array = static::create((array)array_pop($this->array));
     } else {
       $array = $this->rest(-$take);
     }
@@ -534,7 +534,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param int $to
    *
-   * @return self
+   * @return Arrayy
    */
   public function initial($to = 1)
   {
@@ -548,11 +548,11 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param int $from
    *
-   * @return self
+   * @return Arrayy
    */
   public function rest($from = 1)
   {
-    return self::create(array_splice($this->array, $from));
+    return static::create(array_splice($this->array, $from));
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -574,7 +574,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       $closure($value, $key);
     }
 
-    return self::create($array);
+    return static::create($array);
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -589,11 +589,11 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param array $array
    *
-   * @return self
+   * @return Arrayy
    */
   public function mergeAppendNewIndex(array $array = array())
   {
-    return self::create(array_merge($this->array, $array));
+    return static::create(array_merge($this->array, $array));
   }
 
   /**
@@ -604,11 +604,11 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param array $array
    *
-   * @return self
+   * @return Arrayy
    */
   public function mergePrependNewIndex(array $array = array())
   {
-    return self::create(array_merge($array, $this->array));
+    return static::create(array_merge($array, $this->array));
   }
 
   /**
@@ -618,11 +618,11 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param array $array
    *
-   * @return self
+   * @return Arrayy
    */
   public function mergeAppendKeepIndex(array $array = array())
   {
-    return self::create(array_replace($array, $this->array));
+    return static::create(array_replace($array, $this->array));
   }
 
   /**
@@ -632,11 +632,11 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param array $array
    *
-   * @return self
+   * @return Arrayy
    */
   public function mergePrependKeepIndex(array $array = array())
   {
-    return self::create(array_replace($this->array, $array));
+    return static::create(array_replace($this->array, $array));
   }
 
   /**
@@ -644,11 +644,11 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param array $array
    *
-   * @return self
+   * @return Arrayy
    */
   public function diff(array $array = array())
   {
-    return self::create(array_diff($this->array, $array));
+    return static::create(array_diff($this->array, $array));
   }
 
   /**
@@ -656,11 +656,11 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param array $array
    *
-   * @return self
+   * @return Arrayy
    */
   public function diffReverse(array $array = array())
   {
-    return self::create(array_diff($array, $this->array));
+    return static::create(array_diff($array, $this->array));
   }
 
   /**
@@ -669,7 +669,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    * @param string $search The string to replace
    * @param string $replacement    What to replace it with
    *
-   * @return self
+   * @return Arrayy
    */
   public function replaceOneValue($search, $replacement = '')
   {
@@ -680,7 +680,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       $array[$key] = $replacement;
     }
 
-    return self::create((array)$array);
+    return static::create((array)$array);
   }
 
   /**
@@ -689,7 +689,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    * @param string $search The string to replace
    * @param string $replacement    What to replace it with
    *
-   * @return self
+   * @return Arrayy
    */
   public function replaceValues($search, $replacement = '')
   {
@@ -699,7 +699,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
         }
     );
 
-    return self::create((array)$array);
+    return static::create((array)$array);
   }
 
   /**
@@ -707,13 +707,13 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param array $keys An array of keys matching the array's size
    *
-   * @return self
+   * @return Arrayy
    */
   public function replaceKeys(array $keys)
   {
     $values = array_values($this->array);
 
-    return self::create(array_combine($keys, $values));
+    return static::create(array_combine($keys, $values));
   }
 
   /**
@@ -737,7 +737,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Shuffle an array.
    *
-   * @return self
+   * @return Arrayy
    */
   public function shuffle()
   {
@@ -745,7 +745,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
 
     shuffle($array);
 
-    return self::create($array);
+    return static::create($array);
   }
 
   /**
@@ -753,7 +753,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param string $direction
    *
-   * @return self
+   * @return Arrayy
    */
   public function sortKeys($direction = 'ASC')
   {
@@ -772,7 +772,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       krsort($array);
     }
 
-    return self::create($array);
+    return static::create($array);
   }
 
   /**
@@ -792,7 +792,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param \Closure $closure
    *
-   * @return self
+   * @return Arrayy
    */
   public function filter($closure = null)
   {
@@ -802,7 +802,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
 
     $array = array_filter($this->array, $closure);
 
-    return self::create($array);
+    return static::create($array);
   }
 
   /**
@@ -811,7 +811,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    * @param mixed $callable
    * @param array $arguments
    *
-   * @return self
+   * @return Arrayy
    */
   public function invoke($callable, $arguments = array())
   {
@@ -827,7 +827,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       $array = array_map($callable, $this->array);
     }
 
-    return self::create($array);
+    return static::create($array);
   }
 
   /**
@@ -835,7 +835,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param \Closure $closure
    *
-   * @return self
+   * @return Arrayy
    */
   public function reject(\Closure $closure)
   {
@@ -847,31 +847,31 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       }
     }
 
-    return self::create($filtered);
+    return static::create($filtered);
   }
 
   /**
    * Remove the first value from an array.
    *
-   * @return self
+   * @return Arrayy
    */
   public function removeFirst()
   {
     array_shift($this->array);
 
-    return self::create($this->array);
+    return static::create($this->array);
   }
 
   /**
    * Remove the last value from an array.
    *
-   * @return self
+   * @return Arrayy
    */
   public function removeLast()
   {
     array_pop($this->array);
 
-    return self::create($this->array);
+    return static::create($this->array);
   }
 
   /**
@@ -879,7 +879,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param mixed $value
    *
-   * @return self
+   * @return Arrayy
    */
   public function removeValue($value)
   {
@@ -897,7 +897,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       $this->array = array_values($this->array);
     }
 
-    return self::create($this->array);
+    return static::create($this->array);
   }
 
   /**
@@ -905,13 +905,13 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param mixed $value
    *
-   * @return self
+   * @return Arrayy
    */
   public function prepend($value)
   {
     array_unshift($this->array, $value);
 
-    return self::create($this->array);
+    return static::create($this->array);
   }
 
   /**
@@ -919,31 +919,31 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param mixed $value
    *
-   * @return self
+   * @return Arrayy
    */
   public function append($value)
   {
     $this->array[] = $value;
 
-    return self::create($this->array);
+    return static::create($this->array);
   }
 
   /**
    * Return the array in the reverse order.
    *
-   * @return self
+   * @return Arrayy
    */
   public function reverse()
   {
     $this->array = array_reverse($this->array);
 
-    return self::create($this->array);
+    return static::create($this->array);
   }
 
   /**
    * duplicate free copy of an array
    *
-   * @return self
+   * @return Arrayy
    */
   public function unique()
   {
@@ -959,6 +959,6 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
         array()
     );
 
-    return self::create($this->array);
+    return static::create($this->array);
   }
 }
