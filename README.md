@@ -766,6 +766,14 @@ Returns a repeated string given a multiplier. An alias for str_repeat.
 s('α')->repeat(3); // 'ααα'
 ```
 
+##### shortenAfterWord(int $length, string $strAddOn)
+
+shorten the string after $length, but also after the next word
+
+```php
+s('this is a test')->shorten(5, '...'); // 'this...'
+```
+
 ##### replace(string $search, string $replacement, bool(true) $caseSensitive)
 
 Replaces all occurrences of $search in $str by $replacement.

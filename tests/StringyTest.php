@@ -3364,4 +3364,35 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('>', '&gt;'),
     );
   }
+
+  /**
+   * @dataProvider shortenAfterWordProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param int  $length
+   * @param string  $strAddOn
+   * @param null $encoding
+   */
+  public function testShortenAfterWord($expected, $str, $length, $strAddOn = '...', $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->shortenAfterWord($length, $strAddOn);
+    self::assertStringy($result);
+    self::assertEquals($expected, $result);
+    self::assertEquals($str, $stringy);
+  }
+
+  /**
+   * @return array
+   */
+  public function shortenAfterWordProvider()
+  {
+    return array(
+        array('this...', 'this is a test', 5, '...'),
+        array('this is...', 'this is öäü-foo test', 8, '...'),
+        array('fòô', 'fòô bàř fòô', 6, ''),
+        array('fòô bàř', 'fòô bàř fòô', 8, ''),
+    );
+  }
 }

@@ -1239,7 +1239,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       $return = UTF8::str_ireplace($search, $replacement, $this->str);
     }
 
-    return self::create($return);
+    return static::create($return);
   }
 
   /**
@@ -1259,7 +1259,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       $return = UTF8::str_ireplace($search, $replacement, $this->str);
     }
 
-    return self::create($return);
+    return static::create($return);
   }
 
   /**
@@ -1926,5 +1926,38 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     $str = UTF8::strtolower($first, $this->encoding) . $rest;
 
     return static::create($str, $this->encoding);
+  }
+
+  /**
+   * shorten the string after $length, but also after the next word
+   *
+   * @param int    $length
+   * @param string $strAddOn
+   *
+   * @return Stringy
+   */
+  public function shortenAfterWord($length, $strAddOn = '...')
+  {
+    $string = $this->str;
+
+    if (UTF8::strlen($string) > $length) {
+      if (UTF8::substr($string, $length - 1, 1) != ' ') {
+        $string = UTF8::substr($string, '0', $length);
+        $array = explode(' ', $string);
+        array_pop($array);
+        $new_string = implode(' ', $array);
+
+        if ($new_string == '') {
+          $string = UTF8::substr($string, '0', $length - 1) . $strAddOn;
+        } else {
+          $string = $new_string . $strAddOn;
+        }
+
+      } else {
+        $string = UTF8::substr($string, '0', $length - 1) . $strAddOn;
+      }
+    }
+
+    return static::create($string);
   }
 }
