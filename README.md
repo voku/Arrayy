@@ -299,6 +299,22 @@ Get a random string from an array.
 a([1, 2, 3, 4])->random(2); // e.g.: Arrayy[1, 4]
 ```
 
+##### randomWeighted(array $array, int|null $take) : Arrayy
+
+Get a random value from an array, with the ability to skew the results.
+   
+```php
+a([0 => 3, 1 => 4])->randomWeighted([1 => 4]); // e.g.: Arrayy[4] (has a 66% chance of returning 4)
+```
+
+##### split(int(2) $numberOfPieces, bool(false) $preserveKeys) : Arrayy
+
+Split an array in the given amount of pieces.
+   
+```php
+a(['a' => 1, 'b' => 2])->split(2, true); // Arrayy[['a' => 1], ['b' => 2]]
+```
+
 ##### intersection(array $search) : Arrayy
 
 Return an array with all elements found in input array.

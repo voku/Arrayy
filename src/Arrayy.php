@@ -210,7 +210,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param mixed $index
    *
-   * @return Arrayy
+   * @return Arrayy will return a empty Arrayy if the value wasn't found
    */
   public function searchValue($index)
   {
@@ -233,7 +233,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * @param mixed $value
    *
-   * @return Arrayy
+   * @return Arrayy will return a empty Arrayy if the index wasn't found
    */
   public function searchIndex($value)
   {
@@ -456,6 +456,10 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    */
   public function random($take = null)
   {
+    if ($this->count() === 0) {
+      return self::create(array());
+    }
+
     if ($take === null) {
       return static::create((array)$this->array[array_rand($this->array)]);
     }
@@ -463,6 +467,30 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
     shuffle($this->array);
 
     return $this->first($take);
+  }
+
+  /**
+   * Get a random value from an array, with the ability to skew the results.
+   *
+   * Example: randomWeighted(['foo' => 1, 'bar' => 2]) has a 66% chance of returning bar.
+   *
+   * @param array $array
+   * @param null|int $take how many values you will take?
+   *
+   * @return Arrayy
+   */
+  public function randomWeighted(array $array, $take = null)
+  {
+    $options = array();
+    foreach ($array as $option => $weight) {
+      if ($this->searchIndex($option)->count() > 0) {
+        for ($i = 0; $i < $weight; ++$i) {
+          $options[] = $option;
+        }
+      }
+    }
+
+    return $this->mergeAppendKeepIndex($options)->random($take);
   }
 
   /**
@@ -746,6 +774,26 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
     shuffle($array);
 
     return static::create($array);
+  }
+
+
+  /**
+   * Split an array in the given amount of pieces.
+   *
+   * @param int   $numberOfPieces
+   * @param bool  $preserveKeys
+   *
+   * @return array
+   */
+  public function split($numberOfPieces = 2, $preserveKeys = false)
+  {
+    if (count($this->array) === 0) {
+      return self::create(array());
+    }
+
+    $splitSize = ceil(count($this->array) / $numberOfPieces);
+
+    return self::create(array_chunk($this->array, $splitSize, $preserveKeys));
   }
 
   /**

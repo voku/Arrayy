@@ -525,10 +525,53 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
   }
 
+  public function testSimpleRandomWeighted()
+  {
+    $result = A::create(array('foo', 'bar'))->randomWeighted(array('bar' => 2));
+    self::assertEquals(1, count($result));
+
+    $result = A::create(array('foo', 'bar', 'foobar'))->randomWeighted(array('foobar' => 3), 2);
+    self::assertEquals(2, count($result));
+  }
+
+  /**
+   * @dataProvider randomWeightedProvider()
+   *
+   * @param array $array
+   * @param bool  $take
+   */
+  public function testRandomWeighted($array, $take = null)
+  {
+    $arrayy = A::create($array);
+    $result = $arrayy->randomWeighted(array(0), $take)->getArray();
+
+    self::assertEquals(true, in_array($result[0], $array, true));
+  }
+
+  /**
+   * @return array
+   */
+  public function randomWeightedProvider()
+  {
+    return array(
+        array(array(0 => true)),
+        array(array(0 => -9, 0)),
+        array(array(-8 => -9, 1, 2 => false)),
+        array(array(-8 => -9, 1, 2 => false), 2),
+        array(array(1.18, false)),
+        array(array('foo' => false, 'foo', 'lall')),
+        array(array('foo' => false, 'foo', 'lall'), 1),
+        array(array('foo' => false, 'foo', 'lall'), 3),
+    );
+  }
+
   public function testSimpleRandom()
   {
     $result = A::create(array(-8 => -9, 1, 2 => false))->random(3);
     self::assertEquals(3, count($result));
+
+    $result = A::create(array(-8 => -9, 1, 2 => false))->random();
+    self::assertEquals(1, count($result));
   }
 
   /**
@@ -628,6 +671,42 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array('foo' => false, 'foo', 'lall'), false),
         array(array('foo' => array('foo', 'lall')), true),
         array(array('foo' => array('foo', 'lall'), 'bar' => array('foo', 'lall')), true),
+    );
+  }
+
+  public function testSplit()
+  {
+    $this->assertArrayy(A::create(array())->split());
+
+    self::assertEquals(
+        A::create(array(array('a'), array('b'))),
+        A::create(array('a', 'b'))->split()
+    );
+
+    self::assertEquals(
+        A::create(array(array('a' => 1), array('b' => 2))),
+        A::create(array('a' => 1, 'b' => 2))->split(2, true)
+    );
+
+    self::assertEquals(
+        A::create(
+            array(
+                0 => array(
+                    0 => 1,
+                    1 => 2,
+                ),
+                1 => array(
+                    0 => 3,
+                ),
+            )
+        ),
+        A::create(
+            array(
+                'a' => 1,
+                'b' => 2,
+                'c' => 3,
+            )
+        )->split(2, false)
     );
   }
 
