@@ -836,6 +836,23 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
+   * Returns the values from a single column of the input array, identified by
+   * the $columnKey, can be used to extract data-columns from multi-arrays.
+   *
+   * Info: Optionally, you may provide an $indexKey to index the values in the returned
+   * array by the values from the $indexKey column in the input array.
+   *
+   * @param mixed $columnKey
+   * @param mixed $indexKey
+   *
+   * @return Arrayy
+   */
+  public function getColumn($columnKey = null, $indexKey = null)
+  {
+    return self::create(array_column($this->array, $columnKey, $indexKey));
+  }
+
+  /**
    * Find all items in an array that pass the truth test.
    *
    * @param \Closure $closure

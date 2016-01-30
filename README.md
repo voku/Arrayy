@@ -363,7 +363,16 @@ Get the last elements from index $from until the end of this array.
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->rest(2); // Arrayy[0 => 'lall']
 ```
 
-##### prepend(mixed $value)
+##### getColumn(mixed $columnKey, mixed $indexKey) : Arrayy
+
+Returns the values from a single column of the input array, identified by
+the $columnKey, can be used to extract data-columns from multi-arrays.
+
+```php
+a([['foo' => 'bar', 'id' => 1], ['foo => 'lall', 'id' => 2]])->getColumn('foo', 'id'); // Arrayy[1 => 'bar', 2 => 'lall']
+```
+
+##### prepend(mixed $value) : Arrayy
 
 Returns a new arrayy object with $value prepended.
 

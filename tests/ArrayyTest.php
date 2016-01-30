@@ -676,7 +676,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
   public function testSplit()
   {
-    $this->assertArrayy(A::create(array())->split());
+    self::assertArrayy(A::create(array())->split());
 
     self::assertEquals(
         A::create(array(array('a'), array('b'))),
@@ -708,6 +708,57 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
             )
         )->split(2, false)
     );
+  }
+
+  public function testColumn()
+  {
+    $rows = array(0 => array('id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'));
+
+    self::assertEquals(A::create($rows), A::create($rows)->getColumn(null, 0));
+    self::assertEquals(A::create($rows), A::create($rows)->getColumn(null));
+    self::assertEquals(A::create($rows), A::create($rows)->getColumn());
+
+    $expected = array(
+        0 => '3'
+    );
+    self::assertEquals(A::create($expected), A::create($rows)->getColumn('id'));
+
+    // ---
+
+    $rows = array(
+        456 => array('id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'),
+        457 => array('id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'),
+    );
+
+    $expected = array(
+        3 => 'Foo',
+        5 => 'Bar'
+    );
+    self::assertEquals(A::create($expected), A::create($rows)->getColumn('title', 'id'));
+
+    $expected = array(
+        0 => 'Foo',
+        1 => 'Bar'
+    );
+    self::assertEquals(A::create($expected), A::create($rows)->getColumn('title', null));
+
+
+    // pass null as second parameter to get back all columns indexed by third parameter
+    $expected1 = array(
+        3 => array('id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'),
+        5 => array('id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'),
+    );
+    self::assertEquals(A::create($expected1), A::create($rows)->getColumn(null, 'id'));
+    
+    // pass null as second parameter and bogus third param to get back zero-indexed array of all columns
+    $expected2 = array(
+        array('id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'),
+        array('id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'),
+    );
+    self::assertEquals(A::create($expected2), A::create($rows)->getColumn(null, 'foo'));
+
+    // pass null as second parameter and no third param to get back array_values(input) (same as $expected2)
+    self::assertEquals(A::create($expected2), A::create($rows)->getColumn(null));
   }
 
   public function testCanGetIntersectionOfTwoArrays()
