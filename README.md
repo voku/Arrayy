@@ -430,7 +430,7 @@ Merge the new $array into the current array.
 ```php
 $array1 = [1 => 'one', 'foo' => 'bar1'];
 $array2 = ['foo' => 'bar2', 3 => 'three'];
-a($array1)->mergeAppendKeepIndex($array2); // Arrayy['foo' => 'bar1', 3 => 'three', 1 => 'one']
+a($array1)->mergeAppendKeepIndex($array2); // Arrayy[1 => 'one', 'foo' => 'bar2', 3 => 'three']
 ```
 
 ##### mergePrependKeepIndex(array $array) : Arrayy
@@ -442,7 +442,7 @@ Merge the the current array into the $array.
 ```php
 $array1 = [1 => 'one', 'foo' => 'bar1'];
 $array2 = ['foo' => 'bar2', 3 => 'three'];
-a($array1)->mergePrependKeepIndex($array2); // Arrayy[1 => 'one', 'foo' => 'bar2', 3 => 'three']
+a($array1)->mergePrependKeepIndex($array2); // Arrayy['foo' => 'bar1', 3 => 'three', 1 => 'one']
 ```
 
 ##### mergeAppendNewIndex(array $array) : Arrayy
