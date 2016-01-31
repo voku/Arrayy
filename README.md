@@ -123,7 +123,7 @@ foreach ($arrayy as $value) {
 ```
 
 It implements the `Countable` interface, enabling the use of `count()` to
-retrieve the number of characters in the string:
+retrieve the number of elements in the array:
 
 ``` php
 $arrayy = a(['fòô', 'foo']);
