@@ -650,7 +650,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    */
   public function mergeAppendKeepIndex(array $array = array())
   {
-    return static::create(array_replace($array, $this->array));
+    return static::create(array_replace($this->array, $array));
   }
 
   /**
@@ -664,7 +664,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    */
   public function mergePrependKeepIndex(array $array = array())
   {
-    return static::create(array_replace($this->array, $array));
+    return static::create(array_replace($array, $this->array));
   }
 
   /**

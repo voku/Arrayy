@@ -1586,7 +1586,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  public function mergeAppendKeepIndexProvider()
+  public function mergePrependKeepIndexProvider()
   {
     return array(
         array(array(), array(), array()),
@@ -1692,7 +1692,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  public function mergePrependKeepIndexProvider()
+  public function mergeAppendKeepIndexProvider()
   {
     return array(
         array(array(), array(), array()),
