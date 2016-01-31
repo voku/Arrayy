@@ -14,7 +14,7 @@ A PHP array manipulation library. Compatible with PHP
 5.3+, PHP 7, and HHVM.
 
 ``` php
-a::create('Array', 'Array')->unique()->append('y')->implode() // Arrayy
+Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 ```
 
 * [Instance methods](#instance-methods)
