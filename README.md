@@ -105,8 +105,7 @@ use Arrayy\Arrayy as A;
 The library offers OO method chaining, as seen below:
 
 ```php
-use Arrayy\Arrayy as A;
-echo a(array('fòô', 'bàř', 'bàř'))->unique()->reverse()->implode(); // 'bàř,fòô'
+echo a(['fòô', 'bàř', 'bàř'])->unique()->reverse()->implode(); // 'bàř,fòô'
 ```
 
 ## Implemented Interfaces
@@ -115,7 +114,7 @@ echo a(array('fòô', 'bàř', 'bàř'))->unique()->reverse()->implode(); // 'b�
 `foreach` can be used with an instance of the class:
 
 ``` php
-$arrayy = a(array('fòôbàř', 'foo'));
+$arrayy = a(['fòôbàř', 'foo']);
 foreach ($arrayy as $value) {
     echo $value;
 }
@@ -127,7 +126,7 @@ It implements the `Countable` interface, enabling the use of `count()` to
 retrieve the number of characters in the string:
 
 ``` php
-$arrayy = a(array('fòô', 'foo'));
+$arrayy = a(['fòô', 'foo']);
 count($arrayy);  // 2
 ```
 
@@ -154,9 +153,9 @@ wrapper.
 ```php
 use Arrayy\StaticArrayy as A;
 
-// Translates to Arrayy::create(array('fòô', 'bàř'))->reverse();
+// Translates to Arrayy::create(['fòô', 'bàř'])->reverse();
 // Returns a Arrayy object with the array
-A::reverse(array('fòô', 'bàř'));
+A::reverse(['fòô', 'bàř']);
 ```
 
 ## Class methods
