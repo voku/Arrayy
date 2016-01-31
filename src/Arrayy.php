@@ -612,7 +612,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Merge the new $array into the current array.
    *
-   * - replace duplicate keys from the current array with the key,values from the new $array
+   * - replace duplicate assoc-keys from the current array with the key,values from the new $array
    * - create new indexes
    *
    * @param array $array
@@ -627,7 +627,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Merge the current array into the new $array.
    *
-   * - replace duplicate keys from new $array with the key,values from the current array
+   * - replace duplicate assoc-keys from new $array with the key,values from the current array
    * - create new indexes
    *
    * @param array $array
@@ -694,8 +694,8 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Replace the first matched value in an array.
    *
-   * @param string $search The string to replace
-   * @param string $replacement    What to replace it with
+   * @param mixed $search
+   * @param mixed $replacement
    *
    * @return Arrayy
    */
@@ -708,14 +708,14 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
       $array[$key] = $replacement;
     }
 
-    return static::create((array)$array);
+    return static::create($array);
   }
 
   /**
-   * Replace values in an array.
+   * Replace values in the current array.
    *
-   * @param string $search The string to replace
-   * @param string $replacement    What to replace it with
+   * @param string $search The string to replace.
+   * @param string $replacement What to replace it with.
    *
    * @return Arrayy
    */
@@ -745,7 +745,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Iterate over an array and modify the array's value.
+   * Iterate over the current array and modify the array's value.
    *
    * @param \Closure $closure
    *
@@ -763,7 +763,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Shuffle an array.
+   * Shuffle the current array.
    *
    * @return Arrayy
    */
@@ -797,7 +797,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Sort an array by key.
+   * Sort the current array by key.
    *
    * @param string $direction
    *
@@ -916,7 +916,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Remove the first value from an array.
+   * Remove the first value from the current array.
    *
    * @return Arrayy
    */
@@ -928,7 +928,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Remove the last value from an array.
+   * Remove the last value from the current array.
    *
    * @return Arrayy
    */
@@ -1006,7 +1006,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * duplicate free copy of an array
+   * Return a duplicate free copy of the current array.
    *
    * @return Arrayy
    */

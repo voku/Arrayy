@@ -933,6 +933,17 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $this->expectOutputString($result);
   }
 
+  public function testSimpleAt()
+  {
+    $result = A::create();
+    $closure = function ($value, $key) use ($result) {
+      $result[$key] = ':' . $value . ':';
+    };
+
+    A::create(array('foo', 'bar' => 'bis'))->at($closure);
+    self::assertEquals(A::create(array(':foo:', 'bar' => ':bis:')), $result);
+  }
+
   public function testReplaceOneValue()
   {
     $testArray = array('bar', 'foo' => 'foo', 'foobar' => 'foobar');
@@ -951,7 +962,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
   public function testReplaceKeys()
   {
-    $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->replaceKeys(array(0 => 1, 'foo' => 'replaced'));
+    $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->replaceKeys(array(1 => 2, 'foo' => 'replaced'));
+    self::assertEquals('bar', $arrayy[2]);
+    self::assertEquals('foo', $arrayy['replaced']);
+
+    $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->replaceKeys(array(1, 'foo' => 'replaced'));
     self::assertEquals('bar', $arrayy[1]);
     self::assertEquals('foo', $arrayy['replaced']);
   }
@@ -967,6 +982,16 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $under = $arrayy->each($closure);
     $result = array('foo' => 'foo:foo', 1 => '1:bar');
     self::assertEquals($result, $under);
+  }
+
+  public function testSimpleEach()
+  {
+    $closure = function ($value) {
+      return ':' . $value . ':';
+    };
+
+    $result = A::create(array('foo', 'bar' => 'bis'))->each($closure);
+    self::assertEquals(array(':foo:', 'bar' => ':bis:'), $result);
   }
 
   public function testShuffle()
@@ -1003,6 +1028,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(0 => true), array(true)),
         array(array(0 => -9), array(-9), 'ASC'),
         array(array(0 => -9, 1, 2), array(-9, 1, 2), 'asc'),
+        array(array(1 => 2, 0 => 1), array(1, 2), 'asc'),
         array(array(1.18), array(1.18), 'ASC'),
         array(array(3 => 'string', 'foo', 'lall'), array(5 => 'lall', 4 => 'foo', 3 => 'string'), 'desc'),
     );
@@ -1361,8 +1387,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(
             array(
                 0 => -9,
-                1,
-                2,
+                1 => 1,
+                2 => 2,
             ),
             array(
                 0 => 2,
@@ -1457,7 +1483,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(
             array(
                 0 => -9,
-                -9,
+                1 => -9,
             ),
             array(
                 0 => -9,
@@ -1781,7 +1807,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(
             array(
                 0 => -9,
-                -9,
+                1 => -9,
             ),
             array(
                 0 => -9,

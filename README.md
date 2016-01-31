@@ -20,7 +20,7 @@ a::create('Array', 'Array')->unique()->append('y')->implode() // Arrayy
 * [Instance methods](#instance-methods)
     * [append](#appendmixed-value)
     * [prepend](#prependmixed-value)
-    * TODO ... add more examples ... v1
+    * TODO ... add more links
 * [Tests](#tests)
 * [License](#license)
 
@@ -159,7 +159,7 @@ $arrayy = a(['fòô' => 'bàř']);
 isset($arrayy['fòô']); // true
 ```
 
-##### "simple loop with a arrayy-object"
+##### "simple loop with a Arrayy-object"
  
 ```php
 foreach (a(['fòô' => 'bàř']) as $key => $value) {
@@ -175,20 +175,182 @@ Returns a new arrayy object with $value appended.
 a(['fòô' => 'bàř'])->append('foo'); // Arrayy['fòô' => 'bàř', 0 => 'foo']
 ```
 
-##### searchValue(mixed $index) : Arrayy
+##### at(Closure $closure) : Arrayy
 
-Search for the value of the current array via $index.
+Iterate over an array and execute a callback for each loop.
 
 ```php
-a(['fòô' => 'bàř'])->searchValue('fòô'); // Arrayy[0 => 'bàř']
+$result = A::create();
+$closure = function ($value, $key) use ($result) {
+  $result[$key] = ':' . $value . ':';
+};
+a(['foo', 'bar' => 'bis'])->at($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 ```
 
-##### searchIndex(mixed $value) : Arrayy
+##### average(int $decimals) : int|double
 
-Search for the first index of the current array via $value.
+Returns the average value of an array
 
 ```php
-a(['fòô' => 'bàř', 'lall' => 'bàř'])->searchIndex('bàř'); // Arrayy[0 => 'fòô']
+a([-9, -8, -7, 1.32])->average(2); // -5.67
+```
+
+##### clean() : Arrayy
+
+Clean all falsy values from an array.
+
+```php
+a([-8 => -9, 1, 2 => false])->clean(); // Arrayy[-8 => -9, 1]
+```
+
+##### contains(mixed $value) : boolean
+
+Check if an item is in an array.
+
+```php
+a([1, true])->contains(true); // true
+```
+
+##### diff(array $array) : Arrayy
+
+Return values that are only in the current array.
+
+```php
+a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
+```
+
+##### diffReverse(array $array) : Arrayy
+
+Return values that are only in the new $array.
+
+```php
+a([1 => 1])->diffReverse([1 => 1, 2 => 2]); // Arrayy[2 => 2]
+```
+
+##### each(Closure $closure) : array
+
+Iterate over the current array and modify the array's value.
+
+```php
+$result = A::create();
+$closure = function ($value) {
+  return ':' . $value . ':';
+};
+a(['foo', 'bar' => 'bis'])->each($closure); // [':foo:', 'bar' => ':bis:']
+```
+
+##### filter(Closure|null $closure) : Arrayy
+
+Find all items in an array that pass the truth test.
+
+```php
+$closure = function ($value) {
+  return $value % 2 !== 0;
+}
+a([1, 2, 3, 4])->filter($closure); // Arrayy[0 => 1, 2 => 3]
+```
+
+##### find(Closure $closure) : mixed
+
+Find the first item in an array that passes the truth test, otherwise return false.
+
+```php
+$search = 'foo';
+$closure = function ($value, $key) use ($search) {
+  return $value === $search;
+};
+a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
+```
+
+##### first(null|int $take) : Arrayy
+
+Get the first value(s) from the current array.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(2); // Arrayy[0 => 'foo', 1 => 'bar']
+```
+
+##### getColumn(mixed $columnKey, mixed $indexKey) : Arrayy
+
+Returns the values from a single column of the input array, identified by
+the $columnKey, can be used to extract data-columns from multi-arrays.
+
+```php
+a([['foo' => 'bar', 'id' => 1], ['foo => 'lall', 'id' => 2]])->getColumn('foo', 'id'); // Arrayy[1 => 'bar', 2 => 'lall']
+```
+
+##### implode(string $with) : string
+
+Implodes an array.
+
+```php
+a([0 => -9, 1, 2])->implode('|'); // '-9|1|2'
+```
+
+##### initial(int $to) : Arrayy
+
+Get everything but the last..$to items.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->initial(2); // Arrayy[0 => 'foo']
+```
+
+##### intersection(array $search) : Arrayy
+
+Return an array with all elements found in input array.
+
+```php
+a(['foo', 'bar'])->intersection(['bar', 'baz']); // Arrayy['bar']
+```
+
+##### intersects(array $search) : boolean
+
+Return a boolean flag which indicates whether the two input arrays have any common elements.
+
+```php
+a(['foo', 'bar'])->intersects(['föö', 'bär']); // false
+```
+
+##### isAssoc() : boolean
+
+Check if we have named keys in the current array.
+
+```php
+a(['foo' => 'bar', 2, 3])->isAssoc(); // true
+```
+
+##### isMultiArray() : boolean
+
+Check if the current array is a multi-array.
+
+```php
+a(['foo' => [1, 2 , 3]])->isMultiArray(); // true
+```
+
+##### last(null|int $take) : Arrayy
+
+Get the last value(s) from the current array.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(2); // Arrayy[0 => 'bar', 1 => 'lall']
+```
+
+##### length() : int
+
+Count the values from the current array.
+
+alias: count() || size()
+
+```php
+a([-9, -8, -7, 1.32])->length(); // 4
+```
+
+##### max() : mixed
+
+Get the max value from an array.
+
+```php
+a([-9, -8, -7, 1.32])->max(); // 1.32
 ```
 
 ##### matches(Closure $closure) : boolean
@@ -213,54 +375,54 @@ $closure = function ($value, $key) {
 a([1, 4, 7])->matches($closure); // true
 ```
 
-##### isAssoc() : boolean
+##### mergeAppendKeepIndex(array $array) : Arrayy
 
-Check if we have named keys in the current array.
+Merge the new $array into the current array.
+
+- keep key,value from the current array, also if the index is in the new $array
 
 ```php
-a(['foo' => 'bar', 2, 3])->isAssoc(); // true
+$array1 = [1 => 'one', 'foo' => 'bar1'];
+$array2 = ['foo' => 'bar2', 3 => 'three'];
+a($array1)->mergeAppendKeepIndex($array2); // Arrayy['foo' => 'bar1', 3 => 'three', 1 => 'one']
 ```
 
-##### isMultiArray() : boolean
+##### mergePrependKeepIndex(array $array) : Arrayy
 
-Check if the current array is a multi-array.
+Merge the the current array into the $array.
 
+- use key,value from the new $array, also if the index is in the current array
+   
 ```php
-a(['foo' => [1, 2 , 3]])->isMultiArray(); // true
+$array1 = [1 => 'one', 'foo' => 'bar1'];
+$array2 = ['foo' => 'bar2', 3 => 'three'];
+a($array1)->mergePrependKeepIndex($array2); // Arrayy[1 => 'one', 'foo' => 'bar2', 3 => 'three']
 ```
 
-##### contains(mixed $value) : boolean
+##### mergeAppendNewIndex(array $array) : Arrayy
 
-Check if an item is in an array.
+Merge the new $array into the current array.
+
+- replace duplicate assoc-keys from the current array with the key,values from the new $array
+- create new indexes
 
 ```php
-a([1, true])->contains(true); // true
+$array1 = [1 => 'one', 'foo' => 'bar1'];
+$array2 = ['foo' => 'bar2', 3 => 'three'];
+a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 'foo' => 'bar2', 1 => three']
 ```
 
-##### average(int $decimals) : int|double
+##### mergePrependNewIndex(array $array) : Arrayy
 
-Returns the average value of an array
+Merge the current array into the new $array.
 
-```php
-a([-9, -8, -7, 1.32])->average(2); // -5.67
-```
-
-##### length() : int
-
-Count the values from the current array.
-
-alias: count() || size()
+- replace duplicate assoc-keys from new $array with the key,values from the current array
+- create new indexes
 
 ```php
-a([-9, -8, -7, 1.32])->length(); // 4
-```
-
-##### max() : mixed
-
-Get the max value from an array.
-
-```php
-a([-9, -8, -7, 1.32])->max(); // 1.32
+$array1 = [1 => 'one', 'foo' => 'bar1'];
+$array2 = ['foo' => 'bar2', 3 => 'three'];
+a($array1)->mergePrependNewIndex($array2); // Arrayy['foo' => 'bar1', 0 => 'three', 1 => 'one']
 ```
 
 ##### min() : mixed
@@ -271,24 +433,12 @@ Get the min value from an array.
 a([-9, -8, -7, 1.32])->min(); // -9
 ```
 
-##### find(Closure $closure) : mixed
+##### prepend(mixed $value) : Arrayy
 
-Find the first item in an array that passes the truth test, otherwise return false.
-
-```php
-$search = 'foo';
-$closure = function ($value, $key) use ($search) {
-  return $value === $search;
-};
-a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
-```
-
-##### clean() : Arrayy
-
-Clean all falsy values from an array.
+Returns a new arrayy object with $value prepended.
 
 ```php
-a([-8 => -9, 1, 2 => false])->clean(); // Arrayy[-8 => -9, 1]
+a(['fòô' => 'bàř'])->prepend('foo'); // Arrayy[0 => 'foo', 'fòô' => 'bàř']
 ```
 
 ##### random(int|null $take) : Arrayy
@@ -307,52 +457,67 @@ Get a random value from an array, with the ability to skew the results.
 a([0 => 3, 1 => 4])->randomWeighted([1 => 4]); // e.g.: Arrayy[4] (has a 66% chance of returning 4)
 ```
 
-##### split(int(2) $numberOfPieces, bool(false) $preserveKeys) : Arrayy
+##### reject(Closure $closure) : Arrayy
 
-Split an array in the given amount of pieces.
-   
+Return all items that fail the truth test.
+
 ```php
-a(['a' => 1, 'b' => 2])->split(2, true); // Arrayy[['a' => 1], ['b' => 2]]
+$closure = function ($value) {
+  return $value % 2 !== 0;
+}
+a([(1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
 ```
 
-##### intersection(array $search) : Arrayy
+##### removeFirst() : Arrayy
 
-Return an array with all elements found in input array.
+Remove the first value from the current array.
 
 ```php
-a(['foo', 'bar'])->intersection(['bar', 'baz']); // Arrayy['bar']
+a([1 => 'bar', 'foo' => 'foo'])->removeFirst(); // Arrayy['foo' => 'foo']
 ```
 
-##### intersects(array $search) : boolean
+##### removeLast() : Arrayy
 
-Return a boolean flag which indicates whether the two input arrays have any common elements.
+Remove the last value from the current array.
 
 ```php
-a(['foo', 'bar'])->intersects(['föö', 'bär']); // false
+a([1 => 'bar', 'foo' => 'foo'])->removeLast(); // Arrayy[1 => 'bar']
 ```
 
-##### first(null|int $take) : Arrayy
+##### removeValue(mixed $value) : Arrayy
 
-Get the first value(s) from the current array.
+Removes a particular value from an array (numeric or associative).
 
 ```php
-a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(2); // Arrayy[0 => 'foo', 1 => 'bar']
+a([1 => 'bar', 'foo' => 'foo'])->removeValue('foo'); // Arrayy[1 => 'bar']
 ```
 
-##### last(null|int $take) : Arrayy
+##### replaceKeys(array $keys) : Arrayy
 
-Get the last value(s) from the current array.
+Replace the keys in an array with another set.
+
+WARNING: An array of keys must matching the array's size and order!
 
 ```php
-a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(2); // Arrayy[0 => 'bar', 1 => 'lall']
+a([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']); // Arrayy[2 => 'bar', 'replaced' => 'foo']
 ```
 
-##### initial(int $to) : Arrayy
+##### replaceOneValue(mixed $search, mixed $replacement) : Arrayy
 
-Get everything but the last..$to items.
+Replace the first matched value in an array.
 
 ```php
-a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->initial(2); // Arrayy[0 => 'foo']
+$testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
+a($testArray)->replaceOneValue('foo', 'replaced'); // Arrayy['bar', 'foo' => 'replaced', 'foobar' => 'foobar']
+```
+
+##### replaceValues(string $search, string $replacement) : Arrayy
+
+Replace values in the current array.
+
+```php
+$testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
+a($testArray)->replaceValues('foo', 'replaced'); // Arrayy['bar', 'foo' => 'replaced', 'foobar' => 'replacedbar']
 ```
 
 ##### rest(int $from) : Arrayy
@@ -363,24 +528,61 @@ Get the last elements from index $from until the end of this array.
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->rest(2); // Arrayy[0 => 'lall']
 ```
 
-##### getColumn(mixed $columnKey, mixed $indexKey) : Arrayy
+##### reverse() : Arrayy
 
-Returns the values from a single column of the input array, identified by
-the $columnKey, can be used to extract data-columns from multi-arrays.
-
-```php
-a([['foo' => 'bar', 'id' => 1], ['foo => 'lall', 'id' => 2]])->getColumn('foo', 'id'); // Arrayy[1 => 'bar', 2 => 'lall']
-```
-
-##### prepend(mixed $value) : Arrayy
-
-Returns a new arrayy object with $value prepended.
+Return the array in the reverse order.
 
 ```php
-a(['fòô' => 'bàř'])->prepend('foo'); // Arrayy[0 => 'foo', 'fòô' => 'bàř']
+a([1, 2, 3])->reverse(); // Arrayy[3, 2, 1]
 ```
 
-TODO ... add more examples ... v2
+##### searchIndex(mixed $value) : Arrayy
+
+Search for the first index of the current array via $value.
+
+```php
+a(['fòô' => 'bàř', 'lall' => 'bàř'])->searchIndex('bàř'); // Arrayy[0 => 'fòô']
+```
+
+##### searchValue(mixed $index) : Arrayy
+
+Search for the value of the current array via $index.
+
+```php
+a(['fòô' => 'bàř'])->searchValue('fòô'); // Arrayy[0 => 'bàř']
+```
+
+##### sortKeys(string $direction) : Arrayy
+
+Sort the current array by key by $direction = 'asc' or $direction = 'desc'.
+
+```php
+a([1 => 2, 0 => 1])->sortKeys('asc'); // Arrayy[1, 2]
+```
+
+##### split(int(2) $numberOfPieces, bool(false) $preserveKeys) : Arrayy
+
+Split an array in the given amount of pieces.
+   
+```php
+a(['a' => 1, 'b' => 2])->split(2, true); // Arrayy[['a' => 1], ['b' => 2]]
+```
+
+##### shuffle() : Arrayy
+
+Shuffle the current array.
+
+```php
+a([1 => 'bar', 'foo' => 'foo'])->shuffle(); // e.g.: Arrayy[['foo' => 'foo', 1 => 'bar']]
+```
+
+##### unique() : Arrayy
+
+Return a duplicate free copy of the current array.
+
+```php
+a([1, 2, 2])->unique(); // Arrayy[1, 2]
+```
 
 ## Tests
 
