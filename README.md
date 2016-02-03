@@ -5,7 +5,9 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/Arrayy/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/Arrayy/?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/b8c4c88a063545d787e2a4f1f5dfdf23)](https://www.codacy.com/app/voku/Arrayy)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/1c9c7bda-18ab-46da-a9f4-f9a4db1dc45c/mini.png)](https://insight.sensiolabs.com/projects/1c9c7bda-18ab-46da-a9f4-f9a4db1dc45c)
-[![Latest Stable Version](https://poser.pugx.org/voku/arrayy/v/stable)](https://packagist.org/packages/voku/arrayy) [![Total Downloads](https://poser.pugx.org/voku/arrayy/downloads)](https://packagist.org/packages/voku/arrayy) [![Latest Unstable Version](https://poser.pugx.org/voku/arrayy/v/unstable)](https://packagist.org/packages/voku/arrayy)
+[![Latest Stable Version](https://poser.pugx.org/voku/arrayy/v/stable)](https://packagist.org/packages/voku/arrayy) 
+[![Total Downloads](https://poser.pugx.org/voku/arrayy/downloads)](https://packagist.org/packages/voku/arrayy) 
+[![Latest Unstable Version](https://poser.pugx.org/voku/arrayy/v/unstable)](https://packagist.org/packages/voku/arrayy)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/voku/Arrayy/badge.svg)](https://travis-ci.org/voku/Arrayy)
 [![License](https://poser.pugx.org/voku/arrayy/license)](https://packagist.org/packages/voku/arrayy)
 
@@ -18,11 +20,11 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 ```
 
 * [Instance methods](#instance-methods)
-    * ["set a array value"](#set-a-array-value)
-    * ["get a array value"](#get-a-array-value)
-    * ["delete a array value"](#delete-a-array-value)
-    * ["check if a array value is-set"](#check-if-a-array-value-is-set)
-    * ["simple loop with a Arrayy-object"](#simple-loop-with-a-arrayy-object)
+    * ["set an array value"](#set-an-array-value)
+    * ["get an array value"](#get-an-array-value)
+    * ["delete an array value"](#delete-an-array-value)
+    * ["check if an array value is-set"](#check-if-an-array-value-is-set)
+    * ["simple loop with an Arrayy-object"](#simple-loop-with-an-arrayy-object)
     * [append](#appendmixed-value--arrayy)
     * [at](#atclosure-closure--arrayy)
     * [average](#averageint-decimals--intdouble)
@@ -154,7 +156,7 @@ wrapper.
 use Arrayy\StaticArrayy as A;
 
 // Translates to Arrayy::create(['fòô', 'bàř'])->reverse();
-// Returns a Arrayy object with the array
+// Returns an Arrayy object with the array
 A::reverse(['fòô', 'bàř']);
 ```
 
@@ -162,7 +164,7 @@ A::reverse(['fòô', 'bàř']);
 
 ##### create(array $array)
 
-Creates a Arrayy object ...
+Creates an Arrayy object ...
 
 ```php
 $arrayy = A::create(array('fòô', 'bàř'));
@@ -175,7 +177,7 @@ function importing, and PHP 5.4 short array syntax. For further details,
 see the documentation for the create method above, as well as the notes
 on PHP 5.6 creation.
 
-##### "set a array value"
+##### "set an array value"
 
 ```php
 $arrayy = a(['fòô' => 'bàř']);
@@ -183,14 +185,14 @@ $arrayy['foo'] = 'bar';
 var_dump($arrayy); // Arrayy['fòô' => 'bàř', 'foo' => 'bar']
 ```
 
-##### "get a array value"
+##### "get an array value"
 
 ```php
 $arrayy = a(['fòô' => 'bàř']);
 var_dump($arrayy['fòô']); // 'bàř'
 ```
 
-##### "delete a array value"
+##### "delete an array value"
 
 ```php
 $arrayy = a(['fòô' => 'bàř', 'lall']);
@@ -198,14 +200,14 @@ unset($arrayy['fòô']);
 var_dump($arrayy); // Arrayy[0 => 'lall']
 ```
 
-##### "check if a array value is-set"
+##### "check if an array value is-set"
 
 ```php
 $arrayy = a(['fòô' => 'bàř']);
 isset($arrayy['fòô']); // true
 ```
 
-##### "simple loop with a Arrayy-object"
+##### "simple loop with an Arrayy-object"
  
 ```php
 foreach (a(['fòô' => 'bàř']) as $key => $value) {
