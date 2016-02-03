@@ -1008,12 +1008,12 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Reduce the current array via callable e.g. anonymous-function.
    *
-   * @param callable $predicate
-   * @param array    $init
+   * @param mixed $predicate
+   * @param array $init
    *
    * @return Arrayy
    */
-  public function reduce(callable $predicate, array $init = array())
+  public function reduce($predicate, array $init = array())
   {
     $this->array = array_reduce($this->array, $predicate, $init);
 
