@@ -505,6 +505,20 @@ Get a random value from an array, with the ability to skew the results.
 a([0 => 3, 1 => 4])->randomWeighted([1 => 4]); // e.g.: Arrayy[4] (has a 66% chance of returning 4)
 ```
 
+##### reduce(callable $predicate, array $init) : Arrayy
+
+Reduce the current array via callable e.g. anonymous-function.
+
+```php
+function myReducer($resultArray, $value) {
+  if ($value == 'foo') {
+    $resultArray[] = $value;
+  }
+  return $resultArray;
+};
+a(['foo', 'bar'])->reduce('myReducer'); // Arrayy['foo']
+```
+
 ##### reject(Closure $closure) : Arrayy
 
 Return all items that fail the truth test.

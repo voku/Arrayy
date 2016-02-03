@@ -1957,4 +1957,46 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         ),
     );
   }
+
+  public function testReduce()
+  {
+    $testArray = array('foo', 2 => 'bar', 4 => 'lall');
+
+    $myReducer = function ($resultArray, $value) {
+      if ($value == 'foo') {
+        $resultArray[] = $value;
+      }
+
+      return $resultArray;
+    };
+
+    $arrayy = A::create($testArray)->reduce($myReducer);
+
+    $expected = array('foo');
+    self::assertEquals($expected, $arrayy->getArray());
+  }
+
+  public function testReduceViaFunction()
+  {
+    $testArray = array('foo', 2 => 'bar', 4 => 'lall');
+
+    /**
+     * @param $resultArray
+     * @param $value
+     *
+     * @return array
+     */
+    function myReducer($resultArray, $value) {
+      if ($value == 'foo') {
+        $resultArray[] = $value;
+      }
+
+      return $resultArray;
+    };
+
+    $arrayy = A::create($testArray)->reduce('myReducer');
+
+    $expected = array('foo');
+    self::assertEquals($expected, $arrayy->getArray());
+  }
 }

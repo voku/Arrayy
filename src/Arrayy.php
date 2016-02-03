@@ -855,7 +855,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Find all items in an array that pass the truth test.
    *
-   * @param \Closure $closure
+   * @param \Closure|null $closure
    *
    * @return Arrayy
    */
@@ -1001,6 +1001,21 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   public function reverse()
   {
     $this->array = array_reverse($this->array);
+
+    return static::create($this->array);
+  }
+
+  /**
+   * Reduce the current array via callable e.g. anonymous-function.
+   *
+   * @param callable $predicate
+   * @param array    $init
+   *
+   * @return Arrayy
+   */
+  public function reduce(callable $predicate, array $init = array())
+  {
+    $this->array = array_reduce($this->array, $predicate, $init);
 
     return static::create($this->array);
   }
