@@ -55,6 +55,7 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [prepend](#prependmixed-value--arrayy)
     * [random](#randomintnull-take--arrayy)
     * [randomWeighted](#randomweightedarray-array-intnull-take--arrayy)
+    * [reduce](#reducecallable-predicate-array-init--arrayy)
     * [reject](#rejectclosure-closure--arrayy)
     * [removeFirst](#removefirst--arrayy)
     * [removeLast](#removelast--arrayy)
