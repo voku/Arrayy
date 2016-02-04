@@ -110,7 +110,7 @@ use Arrayy\Arrayy as A;
 The library offers OO method chaining, as seen below:
 
 ```php
-echo a(['fòô', 'bàř', 'bàř'])->unique()->reverse()->implode(); // 'bàř,fòô'
+echo a(['fòô', 'bàř', 'bàř'])->unique()->reverse()->implode(','); // 'bàř,fòô'
 ```
 
 ## Implemented Interfaces
@@ -147,7 +147,7 @@ you can take advantage of an even simpler API as seen below:
 use function Arrayy\create as a;
 
 // Instead of: A::create(['fòô', 'bàř'])->reverse()->implode();
-a(['fòô', 'bàř'])->reverse()->implode();
+a(['fòô', 'bàř'])->reverse()->implode(','); // 'bàř,fòô'
 ```
 
 ## StaticArrayy
