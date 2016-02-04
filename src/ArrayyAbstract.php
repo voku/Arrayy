@@ -296,6 +296,7 @@ abstract class ArrayyAbstract
 
       $results = $arrayy->each(
           function ($value) use ($sorter) {
+            // WARNING: $this in Closure work only in php >= 5.4
             return is_callable($sorter) ? $sorter($value) : $this->get($sorter, null, $value);
           }
       );

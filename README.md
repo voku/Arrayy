@@ -71,6 +71,7 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [sortKeys](#sortkeysstring-direction--arrayy)
     * [split](#splitint2-numberofpieces-boolfalse-preservekeys--arrayy)
     * [shuffle](#shuffle--arrayy)
+    * [toJson](#tojson--string)
     * [unique](#unique--arrayy)
 * [Tests](#tests)
 * [License](#license)
@@ -169,7 +170,24 @@ A::reverse(['fòô', 'bàř']);
 Creates an Arrayy object ...
 
 ```php
-$arrayy = A::create(array('fòô', 'bàř'));
+$arrayy = A::create(array('fòô', 'bàř')); // Array['fòô', 'bàř']
+```
+
+##### createFromString(string $str)
+
+Creates an Arrayy object ...
+
+```php
+$arrayy = A::createFromString(' foo, bar '); // Arrayy['foo', 'bar']
+```
+
+##### createFromJson(string $json)
+
+Creates an Arrayy object, again ...
+
+```php
+$str = '{"firstName":"John", "lastName":"Doe"}';
+$arrayy = A::createFromJson($str); // Arrayy['firstName' => 'John', 'lastName' => 'Doe']
 ```
 
 ## Instance Methods
@@ -646,6 +664,14 @@ Shuffle the current array.
 
 ```php
 a([1 => 'bar', 'foo' => 'foo'])->shuffle(); // e.g.: Arrayy[['foo' => 'foo', 1 => 'bar']]
+```
+
+##### toJson() : string
+
+Convert the current array to JSON.
+
+```php
+a(['bar', array('foo')])->toJson(); // '["bar",{"1":"foo"}]'
 ```
 
 ##### unique() : Arrayy

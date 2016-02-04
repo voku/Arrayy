@@ -201,6 +201,55 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
     return new static($array);
   }
 
+  /**
+   * Create a new Arrayy object via string.
+   *
+   * @param string      $str       The input string.
+   * @param string|null $delimiter The boundary string.
+   * @param string|null $regEx     Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be used.
+   *
+   * @return Arrayy
+   */
+  public static function createFromString($str, $delimiter, $regEx = null)
+  {
+    if ($regEx) {
+      preg_match_all($regEx, $str, $array);
+
+      if (count($array) > 0) {
+        $array = $array[0];
+      }
+
+    } else {
+      $array = explode($delimiter, $str);
+    }
+
+    // trim all string in the array
+    array_walk(
+        $array,
+        function (&$val) {
+          if (is_string($val)) {
+            $val = trim($val);
+          }
+        }
+    );
+
+    return self::create($array);
+  }
+
+  /**
+   * create a new Arrayy object via JSON,
+   *
+   * @param string $json
+   *
+   * @return Arrayy
+   */
+  public static function createFromJson($json)
+  {
+    $array = UTF8::json_decode($json, true);
+
+    return self::create($array);
+  }
+
   ////////////////////////////////////////////////////////////////////
   ///////////////////////////// ANALYZE //////////////////////////////
   ////////////////////////////////////////////////////////////////////
@@ -474,7 +523,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    *
    * Example: randomWeighted(['foo' => 1, 'bar' => 2]) has a 66% chance of returning bar.
    *
-   * @param array $array
+   * @param array    $array
    * @param null|int $take how many values you will take?
    *
    * @return Arrayy
@@ -714,7 +763,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Replace values in the current array.
    *
-   * @param string $search The string to replace.
+   * @param string $search      The string to replace.
    * @param string $replacement What to replace it with.
    *
    * @return Arrayy
@@ -780,8 +829,8 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Split an array in the given amount of pieces.
    *
-   * @param int   $numberOfPieces
-   * @param bool  $preserveKeys
+   * @param int  $numberOfPieces
+   * @param bool $preserveKeys
    *
    * @return array
    */
@@ -1052,5 +1101,17 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
     );
 
     return static::create($this->array);
+  }
+
+  /**
+   * Convert the current array to JSON.
+   *
+   * @param null $options e.g. JSON_PRETTY_PRINT
+   *
+   * @return string
+   */
+  public function toJson($options = null)
+  {
+    return UTF8::json_encode($this->array, $options);
   }
 }

@@ -719,7 +719,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals(A::create($rows), A::create($rows)->getColumn());
 
     $expected = array(
-        0 => '3'
+        0 => '3',
     );
     self::assertEquals(A::create($expected), A::create($rows)->getColumn('id'));
 
@@ -732,13 +732,13 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $expected = array(
         3 => 'Foo',
-        5 => 'Bar'
+        5 => 'Bar',
     );
     self::assertEquals(A::create($expected), A::create($rows)->getColumn('title', 'id'));
 
     $expected = array(
         0 => 'Foo',
-        1 => 'Bar'
+        1 => 'Bar',
     );
     self::assertEquals(A::create($expected), A::create($rows)->getColumn('title', null));
 
@@ -749,7 +749,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         5 => array('id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'),
     );
     self::assertEquals(A::create($expected1), A::create($rows)->getColumn(null, 'id'));
-    
+
     // pass null as second parameter and bogus third param to get back zero-indexed array of all columns
     $expected2 = array(
         array('id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'),
@@ -1986,13 +1986,16 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    function myReducer($resultArray, $value) {
+    function myReducer($resultArray, $value)
+    {
       if ($value == 'foo') {
         $resultArray[] = $value;
       }
 
       return $resultArray;
-    };
+    }
+
+    ;
 
     $arrayy = A::create($testArray)->reduce('myReducer');
 
@@ -2006,6 +2009,78 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($testArray)->flip();
 
     $expected = array('foo' => 0, 'bar' => 2, 'lall' => 4);
+    self::assertEquals($expected, $arrayy->getArray());
+  }
+
+  public function testCreateFromJson()
+  {
+    $str = '
+    {"employees":[
+      {"firstName":"John", "lastName":"Doe"},
+      {"firstName":"Anna", "lastName":"Smith"},
+      {"firstName":"Peter", "lastName":"Jones"}
+    ]}';
+
+    $arrayy = A::createFromJson($str);
+
+    $expected = array(
+        'employees' => array(
+            0 => array(
+                'firstName' => 'John',
+                'lastName'  => 'Doe',
+            ),
+            1 => array(
+                'firstName' => 'Anna',
+                'lastName'  => 'Smith',
+            ),
+            2 => array(
+                'firstName' => 'Peter',
+                'lastName'  => 'Jones',
+            ),
+        ),
+    );
+
+    // test JSON -> Array
+    self::assertEquals($expected, $arrayy->getArray());
+
+    // test Array -> JSON
+    self::assertEquals(
+        str_replace(array(' ', "\n", "\n\r", "\r"), '', $str),
+        $arrayy->toJson()
+    );
+  }
+
+  public function testCreateFromStringSimple()
+  {
+    $str = 'John, Doe, Anna, Smith';
+
+    $arrayy = A::createFromString($str, ',');
+
+    $expected = array('John', 'Doe', 'Anna', 'Smith');
+
+    // test String -> Array
+    self::assertEquals($expected, $arrayy->getArray());
+  }
+
+  public function testCreateFromStringRegEx()
+  {
+    $str = '
+    [2016-03-02 02:37:39] WARN  main : router: error in file-name: jquery.min.map
+    [2016-03-02 02:39:07] WARN  main : router: error in file-name: jquery.min.map
+    [2016-03-02 02:44:01] WARN  main : router: error in file-name: jquery.min.map
+    [2016-03-02 02:45:21] WARN  main : router: error in file-name: jquery.min.map
+    ';
+
+    $arrayy = A::createFromString($str, null, '/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\].*/');
+
+    $expected = array(
+      '[2016-03-02 02:37:39] WARN  main : router: error in file-name: jquery.min.map',
+      '[2016-03-02 02:39:07] WARN  main : router: error in file-name: jquery.min.map',
+      '[2016-03-02 02:44:01] WARN  main : router: error in file-name: jquery.min.map',
+      '[2016-03-02 02:45:21] WARN  main : router: error in file-name: jquery.min.map',
+    );
+
+    // test String -> Array
     self::assertEquals($expected, $arrayy->getArray());
   }
 }
