@@ -1999,4 +1999,13 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $expected = array('foo');
     self::assertEquals($expected, $arrayy->getArray());
   }
+
+  public function testFlip()
+  {
+    $testArray = array(0 => 'foo', 2 => 'bar', 4 => 'lall');
+    $arrayy = A::create($testArray)->flip();
+
+    $expected = array('foo' => 0, 'bar' => 2, 'lall' => 4);
+    self::assertEquals($expected, $arrayy->getArray());
+  }
 }

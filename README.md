@@ -35,6 +35,7 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [filter](#filterclosurenull-closure--arrayy)
     * [find](#findclosure-closure--mixed)
     * [first](#firstnullint-take--arrayy)
+    * [flip](#flip--arrayy)
     * [getColumn](#getcolumnmixed-columnkey-mixed-indexkey--arrayy)
     * [implode](#implodestring-with--string)
     * [initial](#initialint-to--arrayy)
@@ -317,6 +318,14 @@ Get the first value(s) from the current array.
 
 ```php
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(2); // Arrayy[0 => 'foo', 1 => 'bar']
+```
+
+##### flip() : Arrayy
+
+Exchanges all keys with their associated values in an array.
+
+```php
+a([0 => 'foo', 1 => 'bar'])->flip(); // Arrayy['foo' => 0, 'bar' => 1]
 ```
 
 ##### getColumn(mixed $columnKey, mixed $indexKey) : Arrayy

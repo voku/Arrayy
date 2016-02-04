@@ -1006,6 +1006,18 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
+   * Exchanges all keys with their associated values in an array.
+   *
+   * @return Arrayy
+   */
+  public function flip()
+  {
+    $this->array = array_flip($this->array);
+
+    return static::create($this->array);
+  }
+
+  /**
    * Reduce the current array via callable e.g. anonymous-function.
    *
    * @param mixed $predicate
