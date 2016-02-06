@@ -51,7 +51,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * @return mixed
+   * @return string
    */
   public function serialize()
   {
@@ -196,7 +196,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * get the current array from the "Arrayy"-object
    *
-   * @return array
+   * @return null|callable
    */
   public function getArray()
   {
@@ -846,7 +846,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    * @param int  $numberOfPieces
    * @param bool $keepKeys
    *
-   * @return array
+   * @return Arrayy
    */
   public function split($numberOfPieces = 2, $keepKeys = false)
   {
@@ -1244,8 +1244,8 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   /**
    * Sort the current array and optional you can keep the keys.
    *
-   * @param string|int $direction use SORT_ASC or SORT_DESC
-   * @param int|string $strategy
+   * @param integer $direction use SORT_ASC or SORT_DESC
+   * @param integer $strategy
    * @param bool       $keepKeys
    *
    * @return Arrayy
