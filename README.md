@@ -68,7 +68,11 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [reverse](#reverse--arrayy)
     * [searchIndex](#searchindexmixed-value--arrayy)
     * [searchValue](#searchvaluemixed-index--arrayy)
+    * [sort](#)
+    * [sorter](#)
     * [sortKeys](#sortkeysstring-direction--arrayy)
+    * [sortValueNewIndex](#)
+    * [sortValueKeepIndex](#)
     * [split](#splitint2-numberofpieces-boolfalse-preservekeys--arrayy)
     * [shuffle](#shuffle--arrayy)
     * [toJson](#tojson--string)
@@ -642,15 +646,68 @@ Search for the value of the current array via $index.
 a(['fòô' => 'bàř'])->searchValue('fòô'); // Arrayy[0 => 'bàř']
 ```
 
-##### sortKeys(string $direction) : Arrayy
+##### sort(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy, bool(false) $keepKeys) : Arrayy
+
+Sort the current array and optional you can keep the keys.
+
+- $direction e.g.: [SORT_ASC, SORT_DESC, 'ASC', 'asc', 'DESC', 'desc']
+- $strategy e.g.: [SORT_REGULAR, SORT_NATURAL, ...]
+
+```php
+a(3 => 'd', 2 => 'f', 0 => 'a')->sort(SORT_ASC, SORT_NATURAL, false); // Arrayy[0 => 'a', 1 => 'd', 2 => 'f']
+```
+
+##### sorter(null|callable $sorter, string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy
+
+Sort a array by value, by a closure or by a property.
+
+- If the sorter is null (default), the array is sorted naturally.
+- Associative (string) keys will be maintained, but numeric keys will be re-indexed.
+- $direction e.g.: [SORT_ASC, SORT_DESC, 'ASC', 'asc', 'DESC', 'desc']
+- $strategy e.g.: [SORT_REGULAR, SORT_NATURAL, ...]
+
+```php
+$testArray = range(1, 5);
+$under = a($testArray)->sorter(
+  function ($value) {
+    return $value % 2 === 0;
+  }
+);
+var_dump($under); // Arrayy[1, 3, 5, 2, 4]
+
+##### sortKeys(string|int(SORT_ASC) $direction) : Arrayy
 
 Sort the current array by key by $direction = 'asc' or $direction = 'desc'.
 
+- $direction e.g.: [SORT_ASC, SORT_DESC, 'ASC', 'asc', 'DESC', 'desc']
+
 ```php
-a([1 => 2, 0 => 1])->sortKeys('asc'); // Arrayy[1, 2]
+a([1 => 2, 0 => 1])->sortKeys('asc'); // Arrayy[0 => 1, 1 => 2]
 ```
 
-##### split(int(2) $numberOfPieces, bool(false) $preserveKeys) : Arrayy
+##### sortValueNewIndex(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy
+
+Sort the current array by value.
+
+- $direction e.g.: [SORT_ASC, SORT_DESC, 'ASC', 'asc', 'DESC', 'desc']
+- $strategy e.g.: [SORT_REGULAR, SORT_NATURAL, ...]
+
+```php
+a(3 => 'd', 2 => 'f', 0 => 'a')->sortValueNewIndex(SORT_ASC, SORT_NATURAL); // Arrayy[0 => 'a', 1 => 'd', 2 => 'f']
+```
+
+##### sortValueKeepIndex(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy
+
+Sort the current array by value.
+
+- $direction e.g.: [SORT_ASC, SORT_DESC, 'ASC', 'asc', 'DESC', 'desc']
+- $strategy e.g.: [SORT_REGULAR, SORT_NATURAL, ...]
+
+```php
+a(3 => 'd', 2 => 'f', 0 => 'a')->sortValueNewIndex(SORT_ASC, SORT_REGULAR); // Arrayy[0 => 'a', 3 => 'd', 2 => 'f']
+```
+
+##### split(int(2) $numberOfPieces, bool(false) $keepKeys) : Arrayy
 
 Split an array in the given amount of pieces.
    

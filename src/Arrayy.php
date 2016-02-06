@@ -2,7 +2,6 @@
 
 namespace Arrayy;
 
-use ArrayAccess;
 use voku\helper\UTF8;
 
 /**
@@ -11,7 +10,7 @@ use voku\helper\UTF8;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \ArrayAccess
+class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \ArrayAccess, \Serializable
 {
   /**
    * Initializes
@@ -52,7 +51,23 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Get a data by key
+   * @return mixed
+   */
+  public function serialize()
+  {
+    return serialize($this->array);
+  }
+
+  /**
+   * @param string $array
+   */
+  public function unserialize($array)
+  {
+    $this->array = unserialize($array);
+  }
+
+  /**
+   * Get a value by key.
    *
    * @param $key
    *
@@ -64,7 +79,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Assigns a value to the specified data
+   * Assigns a value to the specified element.
    *
    * @param $key
    * @param $value
@@ -75,7 +90,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Whether or not an data exists by key
+   * Whether or not an element exists by key.
    *
    * @param $key
    *
@@ -87,7 +102,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Unsets an data by key
+   * Unset element by key
    *
    * @param mixed $key
    */
@@ -97,8 +112,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Assigns a value to the specified offset
-   *
+   * Assigns a value to the specified offset.
    *
    * @param mixed $offset
    * @param mixed $value
@@ -113,7 +127,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Whether or not an offset exists
+   * Whether or not an offset exists.
    *
    * @param mixed $offset
    *
@@ -125,7 +139,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Unsets an offset
+   * Unset an offset.
    *
    * @param mixed $offset
    */
@@ -137,7 +151,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   }
 
   /**
-   * Returns the value at specified offset
+   * Returns the value at specified offset.
    *
    * @param mixed $offset
    *
@@ -830,11 +844,11 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
    * Split an array in the given amount of pieces.
    *
    * @param int  $numberOfPieces
-   * @param bool $preserveKeys
+   * @param bool $keepKeys
    *
    * @return array
    */
-  public function split($numberOfPieces = 2, $preserveKeys = false)
+  public function split($numberOfPieces = 2, $keepKeys = false)
   {
     if (count($this->array) === 0) {
       return self::create(array());
@@ -842,34 +856,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
 
     $splitSize = ceil(count($this->array) / $numberOfPieces);
 
-    return self::create(array_chunk($this->array, $splitSize, $preserveKeys));
-  }
-
-  /**
-   * Sort the current array by key.
-   *
-   * @param string $direction
-   *
-   * @return Arrayy
-   */
-  public function sortKeys($direction = 'ASC')
-  {
-    $array = $this->array;
-    $direction = strtolower($direction);
-
-    if ($direction === 'desc') {
-      $directionType = SORT_DESC;
-    } else {
-      $directionType = SORT_ASC;
-    }
-
-    if ($directionType === SORT_ASC) {
-      ksort($array);
-    } else {
-      krsort($array);
-    }
-
-    return static::create($array);
+    return self::create(array_chunk($this->array, $splitSize, $keepKeys));
   }
 
   /**
@@ -1052,6 +1039,222 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
     $this->array = array_reverse($this->array);
 
     return static::create($this->array);
+  }
+
+  /**
+   * Custom sort by value via "usort"
+   *
+   * @link http://php.net/manual/en/function.usort.php
+   *
+   * @param callable $func
+   *
+   * @return Arrayy
+   */
+  public function customSortValues(callable $func)
+  {
+    usort($this->array, $func);
+
+    return static::create($this->array);
+  }
+
+  /**
+   * Custom sort by index via "uksort"
+   *
+   * @link http://php.net/manual/en/function.uksort.php
+   *
+   * @param callable $func
+   *
+   * @return Arrayy
+   */
+  public function customSortKeys(callable $func)
+  {
+    uksort($this->array, $func);
+
+    return static::create($this->array);
+  }
+
+  /**
+   * sorting keys
+   *
+   * @param array $elements
+   * @param int   $direction
+   * @param int   $strategy
+   */
+  protected function sorterKeys(array &$elements, $direction = SORT_ASC, $strategy = SORT_REGULAR)
+  {
+    $direction = $this->getDirection($direction);
+
+    switch ($direction) {
+      case 'desc':
+      case SORT_DESC:
+        krsort($elements, $strategy);
+        break;
+      case 'asc':
+      case SORT_ASC:
+      default:
+        ksort($elements, $strategy);
+    }
+  }
+
+  /**
+   * Sort the current array by key.
+   *
+   * @link http://php.net/manual/en/function.ksort.php
+   * @link http://php.net/manual/en/function.krsort.php
+   *
+   * @param int|string $direction use SORT_ASC or SORT_DESC
+   * @param int        $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
+   *
+   * @return Arrayy
+   */
+  public function sortKeys($direction = SORT_ASC, $strategy = SORT_REGULAR)
+  {
+    $this->sorterKeys($this->array, $direction, $strategy);
+
+    return static::create($this->array);
+  }
+
+  /**
+   * Sort the current array by value.
+   *
+   * @param int $direction use SORT_ASC or SORT_DESC
+   * @param int $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
+   *
+   * @return Arrayy
+   */
+  public function sortValueKeepIndex($direction = SORT_ASC, $strategy = SORT_REGULAR)
+  {
+    return $this->sort($direction, $strategy, true);
+  }
+
+  /**
+   * Sort the current array by value.
+   *
+   * @param int $direction use SORT_ASC or SORT_DESC
+   * @param int $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
+   *
+   * @return Arrayy
+   */
+  public function sortValueNewIndex($direction = SORT_ASC, $strategy = SORT_REGULAR)
+  {
+    return $this->sort($direction, $strategy, false);
+  }
+
+  /**
+   * Get correct PHP constant for direction.
+   *
+   * @param int|string $direction
+   *
+   * @return int
+   */
+  protected function getDirection($direction)
+  {
+    if (is_string($direction)) {
+      $direction = strtolower($direction);
+
+      if ($direction === 'desc') {
+        $direction = SORT_DESC;
+      } else {
+        $direction = SORT_ASC;
+      }
+    }
+
+    if (
+        $direction !== SORT_DESC
+        &&
+        $direction !== SORT_ASC
+    ) {
+      $direction = SORT_ASC;
+    }
+
+    return $direction;
+  }
+
+  /**
+   * Sort a array by value, by a closure or by a property.
+   *
+   * - If the sorter is null, the array is sorted naturally.
+   * - Associative (string) keys will be maintained, but numeric keys will be re-indexed.
+   *
+   * @param null       $sorter
+   * @param string|int $direction
+   * @param int        $strategy
+   *
+   * @return Arrayy
+   */
+  public function sorter($sorter = null, $direction = SORT_ASC, $strategy = SORT_REGULAR)
+  {
+    $array = (array)$this->array;
+    $direction = $this->getDirection($direction);
+
+    // Transform all values into their results.
+    if ($sorter) {
+      $arrayy = new Arrayy($array);
+
+      $that = $this;
+      $results = $arrayy->each(
+          function ($value) use ($sorter, $that) {
+            return is_callable($sorter) ? $sorter($value) : $that->get($sorter, null, $value);
+          }
+      );
+    } else {
+      $results = $array;
+    }
+
+    // Sort by the results and replace by original values
+    array_multisort($results, $direction, $strategy, $array);
+
+    return Arrayy::create($array);
+  }
+
+  /**
+   * @param array      &$elements
+   * @param int|string $direction
+   * @param int        $strategy
+   * @param bool       $keepKeys
+   */
+  protected function sorting(array &$elements, $direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
+  {
+    $direction = $this->getDirection($direction);
+
+    if (!$strategy) {
+      $strategy = SORT_REGULAR;
+    }
+
+    switch ($direction) {
+      case 'desc':
+      case SORT_DESC:
+        if ($keepKeys) {
+          arsort($elements, $strategy);
+        } else {
+          rsort($elements, $strategy);
+        }
+        break;
+      case 'asc':
+      case SORT_ASC:
+      default:
+        if ($keepKeys) {
+          asort($elements, $strategy);
+        } else {
+          sort($elements, $strategy);
+        }
+    }
+  }
+
+  /**
+   * Sort the current array and optional you can keep the keys.
+   *
+   * @param string|int $direction use SORT_ASC or SORT_DESC
+   * @param int|string $strategy
+   * @param bool       $keepKeys
+   *
+   * @return Arrayy
+   */
+  public function sort($direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
+  {
+    $this->sorting($this->array, $direction, $strategy, $keepKeys);
+
+    return Arrayy::create($this->array);
   }
 
   /**

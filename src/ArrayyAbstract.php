@@ -269,48 +269,6 @@ abstract class ArrayyAbstract
   }
 
   /**
-   * Sort a array by value, by a closure or by a property
-   * If the sorter is null, the array is sorted naturally.
-   *
-   * @param null   $sorter
-   * @param string $direction
-   *
-   * @return Arrayy
-   */
-  public function sort($sorter = null, $direction = 'asc')
-  {
-    $array = (array)$this->array;
-
-    // Get correct PHP constant for direction
-    $direction = strtolower($direction);
-
-    if ($direction === 'desc') {
-      $directionType = SORT_DESC;
-    } else {
-      $directionType = SORT_ASC;
-    }
-
-    // Transform all values into their results
-    if ($sorter) {
-      $arrayy = new Arrayy($array);
-
-      $results = $arrayy->each(
-          function ($value) use ($sorter) {
-            // WARNING: $this in Closure work only in php >= 5.4
-            return is_callable($sorter) ? $sorter($value) : $this->get($sorter, null, $value);
-          }
-      );
-    } else {
-      $results = $array;
-    }
-
-    // Sort by the results and replace by original values
-    array_multisort($results, $directionType, SORT_REGULAR, $array);
-
-    return Arrayy::create($array);
-  }
-
-  /**
    * Group values from a array according to the results of a closure.
    *
    * @param string $grouper a callable function name

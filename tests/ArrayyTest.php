@@ -1995,8 +1995,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
       return $resultArray;
     }
 
-    ;
-
     $arrayy = A::create($testArray)->reduce('myReducer');
 
     $expected = array('foo');
@@ -2074,13 +2072,137 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::createFromString($str, null, '/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\].*/');
 
     $expected = array(
-      '[2016-03-02 02:37:39] WARN  main : router: error in file-name: jquery.min.map',
-      '[2016-03-02 02:39:07] WARN  main : router: error in file-name: jquery.min.map',
-      '[2016-03-02 02:44:01] WARN  main : router: error in file-name: jquery.min.map',
-      '[2016-03-02 02:45:21] WARN  main : router: error in file-name: jquery.min.map',
+        '[2016-03-02 02:37:39] WARN  main : router: error in file-name: jquery.min.map',
+        '[2016-03-02 02:39:07] WARN  main : router: error in file-name: jquery.min.map',
+        '[2016-03-02 02:44:01] WARN  main : router: error in file-name: jquery.min.map',
+        '[2016-03-02 02:45:21] WARN  main : router: error in file-name: jquery.min.map',
     );
 
     // test String -> Array
     self::assertEquals($expected, $arrayy->getArray());
+  }
+
+  public function testOrderByKey()
+  {
+    $array = array(
+        99  => 'aaa',
+        100 => 'bcd',
+        101 => 123,
+        1   => 'Bcde',
+        3   => 'bcde',
+        4   => 1.1,
+        0   => 0,
+    );
+
+    // ------
+
+    $arrayy = A::create($array)->sortKeys(SORT_DESC, SORT_REGULAR);
+    $result = $arrayy->getArray();
+
+    $expected = array(
+        101 => 123,
+        100 => 'bcd',
+        99  => 'aaa',
+        4   => 1.1,
+        3   => 'bcde',
+        1   => 'Bcde',
+        0   => 0,
+    );
+
+    //var_dump(array($expected, $result));
+    self::assertTrue($expected == $result);
+
+    // ------
+
+    $arrayy = A::create($array)->sortKeys(SORT_ASC);
+    $result = $arrayy->getArray();
+
+    $expected = array(
+        0   => 0,
+        1   => 'Bcde',
+        3   => 'bcde',
+        4   => 1.1,
+        99  => 'aaa',
+        100 => 'bcd',
+        101 => 123,
+    );
+
+    //var_dump(array($expected, $result));
+    self::assertTrue($expected == $result);
+  }
+
+  public function testOrderByValueKeepIndex()
+  {
+    $array = array(
+        100 => 'abc',
+        99  => 'aaa',
+        2   => 'bcd',
+        1   => 'hcd',
+        3   => 'bce',
+    );
+
+    $arrayy = A::create($array)->sortValueKeepIndex(SORT_DESC);
+    $result = $arrayy->getArray();
+
+    $expected = array(
+        100 => 'abc',
+        99  => 'aaa',
+        2   => 'bcd',
+        1   => 'hcd',
+        3   => 'bce',
+    );
+
+    //var_dump(array($expected, $result));
+    self::assertTrue($expected == $result);
+  }
+
+  public function testOrderByValueNewIndex()
+  {
+    $array = array(
+        1 => 'hcd',
+        3 => 'bce',
+        2   => 'bcd',
+        100 => 'abc',
+        99  => 'aaa',
+    );
+
+    $arrayy = A::create($array)->sortValueNewIndex(SORT_ASC, SORT_REGULAR);
+    $result = $arrayy->getArray();
+
+    $expected = array(
+        0 => 'aaa',
+        1 => 'abc',
+        2 => 'bcd',
+        3 => 'bce',
+        4 => 'hcd',
+    );
+
+    //var_dump(array($expected, $result));
+    self::assertTrue($expected === $result);
+  }
+
+  public function testSort()
+  {
+    $array = array(
+        1 => 'hcd',
+        3 => 'bce',
+        2   => 'bcd',
+        100 => 'abc',
+        99  => 'aaa',
+    );
+
+    $arrayy = A::create($array)->sort(SORT_ASC, SORT_REGULAR, false);
+    $result = $arrayy->getArray();
+
+    $expected = array(
+        0 => 'aaa',
+        1 => 'abc',
+        2 => 'bcd',
+        3 => 'bce',
+        4 => 'hcd',
+    );
+
+    //var_dump(array($expected, $result));
+    self::assertTrue($expected === $result);
   }
 }

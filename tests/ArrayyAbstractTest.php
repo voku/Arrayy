@@ -239,16 +239,20 @@ class ArrayyAbstractTest extends PHPUnit_Framework_TestCase
   public function testSort()
   {
     $testArray = array(5, 3, 1, 2, 4);
-    $under = A::create($testArray)->sort(null, 'desc');
+    $under = A::create($testArray)->sorter(null, 'desc');
     self::assertEquals(array(5, 4, 3, 2, 1), $under->getArray());
 
     $testArray = range(1, 5);
-    $under = A::create($testArray)->sort(
+    $under = A::create($testArray)->sorter(
         function ($value) {
-          return $value % 2 === 0;
+          if ($value % 2 === 0) {
+            return -1;
+          } else {
+            return 1;
+          }
         }
     );
-    self::assertEquals(array(1, 3, 5, 2, 4), $under->getArray());
+    self::assertEquals(array(2, 4, 1, 3, 5), $under->getArray());
   }
 
   public function testCanGroupValues()
