@@ -93,7 +93,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testChaining()
   {
-    $stringy = S::create("Fòô     Bàř", 'UTF-8');
+    $stringy = S::create('Fòô     Bàř', 'UTF-8');
     self::assertStringy($stringy);
     $result = $stringy->collapseWhitespace()->swapCase()->upperCaseFirst();
     self::assertEquals('FÒÔ bÀŘ', $result);
@@ -371,7 +371,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function linesProvider()
   {
     return array(
-        array(array(), ""),
+        array(array(), ''),
         array(array(''), "\r\n"),
         array(array('foo', 'bar'), "foo\nbar"),
         array(array('foo', 'bar'), "foo\rbar"),
@@ -815,7 +815,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     return array(
         array('"I see..."', '“I see…”'),
-        array("'This too'", "‘This too’"),
+        array("'This too'", '‘This too’'),
         array('test-dash', 'test—dash'),
         array('Ο συγγραφέας είπε...', 'Ο συγγραφέας είπε…'),
     );
