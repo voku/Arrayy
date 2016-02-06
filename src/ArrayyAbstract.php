@@ -29,7 +29,7 @@ abstract class ArrayyAbstract
   public function has($key)
   {
     // Generate unique string to use as marker.
-    $unFound = (string)uniqid('arrayy', true);
+    $unFound = (string) uniqid('arrayy', true);
 
     return $this->get($key, $unFound) !== $unFound;
   }
@@ -151,48 +151,48 @@ abstract class ArrayyAbstract
     }
 
     $ops = array(
-        'eq'          => function ($item, $prop, $value) {
+        'eq'          => function($item, $prop, $value) {
           return $item[$prop] === $value;
         },
-        'gt'          => function ($item, $prop, $value) {
+        'gt'          => function($item, $prop, $value) {
           return $item[$prop] > $value;
         },
-        'gte'         => function ($item, $prop, $value) {
+        'gte'         => function($item, $prop, $value) {
           return $item[$prop] >= $value;
         },
-        'lt'          => function ($item, $prop, $value) {
+        'lt'          => function($item, $prop, $value) {
           return $item[$prop] < $value;
         },
-        'lte'         => function ($item, $prop, $value) {
+        'lte'         => function($item, $prop, $value) {
           return $item[$prop] <= $value;
         },
-        'ne'          => function ($item, $prop, $value) {
+        'ne'          => function($item, $prop, $value) {
           return $item[$prop] !== $value;
         },
-        'contains'    => function ($item, $prop, $value) {
-          return in_array($item[$prop], (array)$value, true);
+        'contains'    => function($item, $prop, $value) {
+          return in_array($item[$prop], (array) $value, true);
         },
-        'notContains' => function ($item, $prop, $value) {
-          return !in_array($item[$prop], (array)$value, true);
+        'notContains' => function($item, $prop, $value) {
+          return !in_array($item[$prop], (array) $value, true);
         },
-        'newer'       => function ($item, $prop, $value) {
+        'newer'       => function($item, $prop, $value) {
           return strtotime($item[$prop]) > strtotime($value);
         },
-        'older'       => function ($item, $prop, $value) {
+        'older'       => function($item, $prop, $value) {
           return strtotime($item[$prop]) < strtotime($value);
         },
     );
 
     $result = array_values(
         array_filter(
-            (array)$this->array,
-            function ($item) use (
+            (array) $this->array,
+            function($item) use (
                 $property,
                 $value,
                 $ops,
                 $comparisonOp
             ) {
-              $item = (array)$item;
+              $item = (array) $item;
               $itemArrayy = new Arrayy($item);
               $item[$property] = $itemArrayy->get($property, array());
 
@@ -231,7 +231,7 @@ abstract class ArrayyAbstract
    */
   public function keys()
   {
-    $return = array_keys((array)$this->array);
+    $return = array_keys((array) $this->array);
 
     return Arrayy::create($return);
   }
@@ -243,7 +243,7 @@ abstract class ArrayyAbstract
    */
   public function values()
   {
-    $return = array_values((array)$this->array);
+    $return = array_values((array) $this->array);
 
     return Arrayy::create($return);
   }
@@ -278,7 +278,7 @@ abstract class ArrayyAbstract
    */
   public function group($grouper, $saveKeys = false)
   {
-    $array = (array)$this->array;
+    $array = (array) $this->array;
     $result = array();
 
     // Iterate over values, group by property/results from closure
