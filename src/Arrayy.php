@@ -1189,7 +1189,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
 
     // Transform all values into their results.
     if ($sorter) {
-      $arrayy = new Arrayy($array);
+      $arrayy = new self($array);
 
       $that = $this;
       $results = $arrayy->each(
@@ -1204,7 +1204,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
     // Sort by the results and replace by original values
     array_multisort($results, $direction, $strategy, $array);
 
-    return Arrayy::create($array);
+    return self::create($array);
   }
 
   /**
@@ -1254,7 +1254,7 @@ class Arrayy extends ArrayyAbstract implements \Countable, \IteratorAggregate, \
   {
     $this->sorting($this->array, $direction, $strategy, $keepKeys);
 
-    return Arrayy::create($this->array);
+    return self::create($this->array);
   }
 
   /**

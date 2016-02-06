@@ -151,34 +151,34 @@ abstract class ArrayyAbstract
     }
 
     $ops = array(
-        'eq'          => function($item, $prop, $value) {
+        'eq'          => function ($item, $prop, $value) {
           return $item[$prop] === $value;
         },
-        'gt'          => function($item, $prop, $value) {
+        'gt'          => function ($item, $prop, $value) {
           return $item[$prop] > $value;
         },
-        'gte'         => function($item, $prop, $value) {
+        'gte'         => function ($item, $prop, $value) {
           return $item[$prop] >= $value;
         },
-        'lt'          => function($item, $prop, $value) {
+        'lt'          => function ($item, $prop, $value) {
           return $item[$prop] < $value;
         },
-        'lte'         => function($item, $prop, $value) {
+        'lte'         => function ($item, $prop, $value) {
           return $item[$prop] <= $value;
         },
-        'ne'          => function($item, $prop, $value) {
+        'ne'          => function ($item, $prop, $value) {
           return $item[$prop] !== $value;
         },
-        'contains'    => function($item, $prop, $value) {
+        'contains'    => function ($item, $prop, $value) {
           return in_array($item[$prop], (array) $value, true);
         },
-        'notContains' => function($item, $prop, $value) {
+        'notContains' => function ($item, $prop, $value) {
           return !in_array($item[$prop], (array) $value, true);
         },
-        'newer'       => function($item, $prop, $value) {
+        'newer'       => function ($item, $prop, $value) {
           return strtotime($item[$prop]) > strtotime($value);
         },
-        'older'       => function($item, $prop, $value) {
+        'older'       => function ($item, $prop, $value) {
           return strtotime($item[$prop]) < strtotime($value);
         },
     );
@@ -186,7 +186,7 @@ abstract class ArrayyAbstract
     $result = array_values(
         array_filter(
             (array) $this->array,
-            function($item) use (
+            function ($item) use (
                 $property,
                 $value,
                 $ops,
