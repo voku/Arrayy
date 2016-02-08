@@ -876,7 +876,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array);
 
-    self::assertEquals($result, $arrayy->last($take)->getArray());
+    self::assertEquals($result, $arrayy->lasts($take)->getArray());
   }
 
   /**

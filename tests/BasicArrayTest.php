@@ -461,13 +461,9 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = $this->createArrayy($array);
     $last = end($array);
-    $result = $arrayy->last()->getArray();
+    $result = $arrayy->last();
 
-    if (!isset($result[0])) {
-      $result[0] = false;
-    }
-
-    self::assertSame($last, $result[0]);
+    self::assertSame($last, $result);
   }
 
   /**

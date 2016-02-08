@@ -1215,13 +1215,29 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
+   * Get the last value from the current array.
+   *
+   * @return mixed return null if there wasn't a element.
+   */
+  public function last()
+  {
+    $result = $this->pop();
+
+    if (null === $result) {
+      return false;
+    } else {
+      return $result;
+    }
+  }
+
+  /**
    * Get the last value(s) from the current array.
    *
    * @param int|null $number
    *
    * @return Arrayy
    */
-  public function last($number = null)
+  public function lasts($number = null)
   {
     if ($number === null) {
       $poppedValue = (array)$this->pop();
