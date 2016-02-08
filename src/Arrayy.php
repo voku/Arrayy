@@ -65,6 +65,10 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
       return (array)$array;
     }
 
+    if ($array instanceof ArrayAccess) {
+      return self::createFromObject($array);
+    }
+
     if (is_object($array) && method_exists($array, '__toArray')) {
       return (array)$array->__toArray();
     }
