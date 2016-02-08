@@ -1,4 +1,16 @@
+# php (composer)
 vendor/
 composer.lock
+
+# php (phpunit)
+build/
+
+# gitbook
 _book/
+
+# node
 node_modules/
+npm-debug.log
+
+# ide
+.idea/
