@@ -48,7 +48,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
       return $array;
     }
 
-    if ($array instanceof Arrayy) {
+    if ($array instanceof self) {
       return $array->getArray();
     }
 
@@ -514,7 +514,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   public function __unset($key)
   {
     unset($this->array[$key]);
-  }  
+  }
   
   /**
    * Whether or not an offset exists.
@@ -569,7 +569,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return static::create($return);
-  }  
+  }
   
   /**
    * Unset an offset.
@@ -621,7 +621,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return static::create($array);
-  }  
+  }
   
   /**
    * Returns the value at specified offset.
@@ -663,7 +663,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     $array = array_search(true, $array->toArray(), false);
 
     return is_int($array);
-  }  
+  }
   
   /**
    * Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
@@ -1811,7 +1811,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
 
     // Transform all values into their results.
     if ($sorter) {
-      $arrayy = new Arrayy($array);
+      $arrayy = new self($array);
 
       $that = $this;
       $results = $arrayy->each(
