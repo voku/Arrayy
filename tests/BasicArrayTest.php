@@ -477,10 +477,10 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testNext(array $array)
   {
-    $arrayy = $this->createArrayy($array);
+    $arrayy = $this->createArrayy($array)->getArray();
     $next = next($array);
 
-    self::assertSame($next, next($arrayy->getArray()));
+    self::assertSame($next, next($arrayy));
   }
 
   /**
@@ -520,10 +520,10 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testPrevious(array $array)
   {
-    $arrayy = $this->createArrayy($array);
+    $arrayy = $this->createArrayy($array)->getArray();
     $prev = prev($array);
 
-    self::assertSame($prev, prev($arrayy->getArray()));
+    self::assertSame($prev, prev($arrayy));
   }
 
   /**
