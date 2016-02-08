@@ -9,15 +9,49 @@ use Arrayy\Arrayy as A;
  */
 class BasicArrayTest extends PHPUnit_Framework_TestCase
 {
-  const TYPE_EMPTY   = 'empty';
-  const TYPE_NUMERIC = 'numeric';
   const TYPE_ASSOC   = 'assoc';
+  const TYPE_EMPTY   = 'empty';
   const TYPE_MIXED   = 'mixed';
-
+  const TYPE_NUMERIC = 'numeric';
   /**
    * @var string
    */
   protected $arrayyClassName = 'Arrayy\Arrayy';
+
+  /**
+   * @param A     $arrayy
+   * @param A     $resultArrayy
+   * @param array $array
+   * @param array $resultArray
+   */
+  protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray)
+  {
+    self::assertNotSame($arrayy, $resultArrayy);
+    self::assertSame($array, $arrayy->toArray());
+    self::assertSame($resultArray, $resultArrayy->toArray());
+  }
+
+  /**
+   * @param A     $arrayy
+   * @param A     $resultArrayy
+   * @param array $resultArray
+   */
+  protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray)
+  {
+    self::assertSame($arrayy, $resultArrayy);
+    self::assertSame($resultArray, $arrayy->toArray());
+    self::assertSame($resultArray, $resultArrayy->toArray());
+  }
+
+  /**
+   * @param array $array
+   *
+   * @return A
+   */
+  protected function createArrayy(array $array = array())
+  {
+    return new $this->arrayyClassName($array);
+  }
 
   /**
    * @return array
@@ -77,6 +111,8 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     );
   }
 
+  // The method list order by ASC
+
   /**
    * @dataProvider simpleArrayProvider
    *
@@ -93,16 +129,6 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @param array $array
-   *
-   * @return A
-   */
-  protected function createArrayy(array $array = array())
-  {
-    return new $this->arrayyClassName($array);
-  }
-
-  /**
    * @dataProvider simpleArrayProvider
    *
    * @param array $array
@@ -116,8 +142,6 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
 
     self::assertSame($isContainsKey, $arrayy->containsKey($key));
   }
-
-  // The method list order by ASC
 
   /**
    * @dataProvider simpleArrayProvider
@@ -268,23 +292,6 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    *
    * @param array $array
    */
-  public function testGetRandomKeysShouldReturnArray(array $array)
-  {
-    if (0 === count($array)) {
-      return;
-    }
-
-    $arrayy = $this->createArrayy($array);
-    $keys = $arrayy->getRandomKeys(count($array))->getArray();
-
-    self::assertInternalType('array', $keys);
-  }
-
-  /**
-   * @dataProvider simpleArrayProvider
-   *
-   * @param array $array
-   */
   public function testGetRandomKeys(array $array)
   {
     if (2 > count($array)) {
@@ -303,10 +310,10 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   /**
    * @expectedException \RangeException
    */
-  public function testGetRandomKeysRangeException()
+  public function testGetRandomKeysLogicExceptionGivenNonInteger()
   {
     $arrayy = $this->createArrayy(array('a', 'b', 'c'));
-    $arrayy->getRandomKeys(4);
+    $arrayy->getRandomKeys('something');
   }
 
   /**
@@ -321,10 +328,45 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   /**
    * @expectedException \RangeException
    */
-  public function testGetRandomKeysLogicExceptionGivenNonInteger()
+  public function testGetRandomKeysRangeException()
   {
     $arrayy = $this->createArrayy(array('a', 'b', 'c'));
-    $arrayy->getRandomKeys('something');
+    $arrayy->getRandomKeys(4);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testGetRandomKeysShouldReturnArray(array $array)
+  {
+    if (0 === count($array)) {
+      return;
+    }
+
+    $arrayy = $this->createArrayy($array);
+    $keys = $arrayy->getRandomKeys(count($array))->getArray();
+
+    self::assertInternalType('array', $keys);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testGetRandomValueSingle(array $array)
+  {
+    if (0 === count($array)) {
+      return;
+    }
+
+    $arrayy = $this->createArrayy($array);
+    $value = $arrayy->getRandomValue();
+
+    /** @noinspection TypeUnsafeArraySearchInspection */
+    self::assertTrue(in_array($value, $array));
   }
 
   /**
@@ -353,24 +395,6 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    *
    * @param array $array
    */
-  public function testGetRandomValueSingle(array $array)
-  {
-    if (0 === count($array)) {
-      return;
-    }
-
-    $arrayy = $this->createArrayy($array);
-    $value = $arrayy->getRandomValue();
-
-    /** @noinspection TypeUnsafeArraySearchInspection */
-    self::assertTrue(in_array($value, $array));
-  }
-
-  /**
-   * @dataProvider simpleArrayProvider
-   *
-   * @param array $array
-   */
   public function testGetRandomValuesSingle(array $array)
   {
     if (0 === count($array)) {
@@ -386,19 +410,6 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
       /** @noinspection TypeUnsafeArraySearchInspection */
       self::assertTrue(in_array($value, $array));
     }
-  }
-
-  /**
-   * @dataProvider simpleArrayProvider
-   *
-   * @param array $array
-   */
-  public function testReIndex(array $array)
-  {
-    $arrayy = $this->createArrayy($array);
-    $values = array_values($array);
-
-    self::assertSame($values, $arrayy->reindex()->getArray());
   }
 
   /**
@@ -549,6 +560,36 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    *
    * @param array $array
    */
+  public function testReIndex(array $array)
+  {
+    $arrayy = $this->createArrayy($array);
+    $values = array_values($array);
+
+    self::assertSame($values, $arrayy->reindex()->getArray());
+  }
+
+  /*
+  public function testReduce()
+  {
+    $func = function($carry, $value) {
+      $carry += $value;
+
+      return $carry;
+    };
+    $array = array(1, 2, 3);
+    $arrayy = $this->createArrayy($array);
+    $arrayyReduced = $arrayy->reduce($func);
+    $arrayReduced = array_reduce($array, $func);
+
+    self::assertSame($arrayReduced, $arrayyReduced);
+  }
+  */
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
   public function testToJson(array $array)
   {
     $json = json_encode($array);
@@ -573,47 +614,5 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
 
     self::assertSame($resultString, (string)$arrayy);
     self::assertSame($string, $arrayy->toString($separator));
-  }
-
-  /*
-  public function testReduce()
-  {
-    $func = function($carry, $value) {
-      $carry += $value;
-
-      return $carry;
-    };
-    $array = array(1, 2, 3);
-    $arrayy = $this->createArrayy($array);
-    $arrayyReduced = $arrayy->reduce($func);
-    $arrayReduced = array_reduce($array, $func);
-
-    self::assertSame($arrayReduced, $arrayyReduced);
-  }
-  */
-
-  /**
-   * @param A     $arrayy
-   * @param A     $resultArrayy
-   * @param array $array
-   * @param array $resultArray
-   */
-  protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray)
-  {
-    self::assertNotSame($arrayy, $resultArrayy);
-    self::assertSame($array, $arrayy->toArray());
-    self::assertSame($resultArray, $resultArrayy->toArray());
-  }
-
-  /**
-   * @param A     $arrayy
-   * @param A     $resultArrayy
-   * @param array $resultArray
-   */
-  protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray)
-  {
-    self::assertSame($arrayy, $resultArrayy);
-    self::assertSame($resultArray, $arrayy->toArray());
-    self::assertSame($resultArray, $resultArrayy->toArray());
   }
 }

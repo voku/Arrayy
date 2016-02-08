@@ -32,6 +32,510 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
+   * Get a value by key.
+   *
+   * @param $key
+   *
+   * @return mixed
+   */
+  public function &__get($key)
+  {
+    return $this->array[$key];
+  }
+
+  /**
+   * Call object as function.
+   *
+   * @param mixed $key
+   *
+   * @return mixed
+   */
+  public function __invoke($key = null)
+  {
+    if ($key !== null) {
+      if (isset($this->array[$key])) {
+        return $this->array[$key];
+      } else {
+        return false;
+      }
+    }
+
+    return (array)$this->array;
+  }
+
+  /**
+   * Whether or not an element exists by key.
+   *
+   * @param $key
+   *
+   * @return bool
+   */
+  public function __isset($key)
+  {
+    return isset($this->array[$key]);
+  }
+
+  /**
+   * Assigns a value to the specified element.
+   *
+   * @param $key
+   * @param $value
+   */
+  public function __set($key, $value)
+  {
+    $this->array[$key] = $value;
+  }
+
+  /**
+   * magic to string
+   *
+   * @return string
+   */
+  public function __toString()
+  {
+    return $this->toString();
+  }
+
+  /**
+   * Unset element by key
+   *
+   * @param mixed $key
+   */
+  public function __unset($key)
+  {
+    unset($this->array[$key]);
+  }
+
+  /**
+   * alias: for "Arrayy->append()"
+   *
+   * @param $value
+   *
+   * @return $this Return this Arrayy object.
+   */
+  public function add($value)
+  {
+    $this->array[] = $value;
+
+    return $this;
+  }
+
+  /**
+   * Append a value to an array.
+   *
+   * @param mixed $value
+   *
+   * @return $this Return this Arrayy object, with the appended values.
+   */
+  public function append($value)
+  {
+    $this->array[] = $value;
+
+    return $this;
+  }
+
+  /**
+   * Count the values from the current array.
+   *
+   * INFO: only a alias for "$arrayy->size()"
+   *
+   * @return int
+   */
+  public function count()
+  {
+    return $this->size();
+  }
+
+  /**
+   * Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
+   *
+   * @return \ArrayIterator An iterator for the values in the array.
+   */
+  public function getIterator()
+  {
+    return new \ArrayIterator($this->array);
+  }
+
+  /**
+   * Whether or not an offset exists.
+   *
+   * @param mixed $offset
+   *
+   * @return bool
+   */
+  public function offsetExists($offset)
+  {
+    return isset($this->array[$offset]);
+  }
+
+  /**
+   * Returns the value at specified offset.
+   *
+   * @param mixed $offset
+   *
+   * @return mixed return null if the offset did not exists
+   */
+  public function offsetGet($offset)
+  {
+    return $this->offsetExists($offset) ? $this->array[$offset] : null;
+  }
+
+  /**
+   * Assigns a value to the specified offset.
+   *
+   * @param mixed $offset
+   * @param mixed $value
+   */
+  public function offsetSet($offset, $value)
+  {
+    if (null === $offset) {
+      $this->array[] = $value;
+    } else {
+      $this->array[$offset] = $value;
+    }
+  }
+
+  /**
+   * Unset an offset.
+   *
+   * @param mixed $offset
+   */
+  public function offsetUnset($offset)
+  {
+    if ($this->offsetExists($offset)) {
+      unset($this->array[$offset]);
+    }
+  }
+
+  /**
+   * @return mixed
+   */
+  public function serialize()
+  {
+    return serialize($this->array);
+  }
+
+  /**
+   * @param string $array
+   */
+  public function unserialize($array)
+  {
+    $this->array = unserialize($array);
+  }
+
+  /**
+   * Iterate over an array and execute a callback for each loop.
+   *
+   * @param \Closure $closure
+   *
+   * @return Arrayy
+   */
+  public function at(\Closure $closure)
+  {
+    $array = $this->array;
+
+    foreach ($array as $key => $value) {
+      $closure($value, $key);
+    }
+
+    return static::create($array);
+  }
+
+  /**
+   * Returns the average value of the current array.
+   *
+   * @param int $decimals The number of decimals to return
+   *
+   * @return int|double The average value
+   */
+  public function average($decimals = null)
+  {
+    $count = $this->count();
+
+    if (!$count) {
+      return 0;
+    }
+
+    if (!is_int($decimals)) {
+      $decimals = null;
+    }
+
+    return round(array_sum($this->array) / $count, $decimals);
+  }
+
+  /**
+   * Create a chunked version of this array.
+   *
+   * @param int  $size         Size of each chunk
+   * @param bool $preserveKeys Whether array keys are preserved or no
+   *
+   * @return static A new array of chunks from the original array
+   */
+  public function chunk($size, $preserveKeys = false)
+  {
+    $result = array_chunk($this->array, $size, $preserveKeys);
+
+    return static::create($result);
+  }
+
+  /**
+   * Clean all falsy values from an array.
+   *
+   * @return Arrayy
+   */
+  public function clean()
+  {
+    return $this->filter(
+        function ($value) {
+          return (bool)$value;
+        }
+    );
+  }
+
+  /**
+   * WARNING!!! -> Clear the current array.
+   *
+   * @return $this Return this Arrayy object, with an empty array.
+   */
+  public function clear()
+  {
+    $this->array = array();
+
+    return $this;
+  }
+
+  /**
+   * Check if an item is in the current array.
+   *
+   * @param mixed $value
+   *
+   * @return bool
+   */
+  public function contains($value)
+  {
+    return in_array($value, $this->array, true);
+  }
+
+  /**
+   * Check if the given key/index exists in the array.
+   *
+   * @param mixed $key Key/index to search for
+   *
+   * @return bool Returns true if the given key/index exists in the array, false otherwise
+   */
+  public function containsKey($key)
+  {
+    return array_key_exists($key, $this->array);
+  }
+
+  /**
+   * Creates a Arrayy object.
+   *
+   * @param array $array
+   *
+   * @return Arrayy Returns an new instance of the Arrayy object.
+   */
+  public static function create($array = array())
+  {
+    return new static($array);
+  }
+
+  /**
+   * WARNING: Creates a Arrayy object by reference.
+   *
+   * @param array $array
+   *
+   * @return $this Return this Arrayy object.
+   */
+  public function createByReference(&$array = array())
+  {
+    $array = $this->fallbackForArray($array);
+
+    $this->array = &$array;
+
+    return $this;
+  }
+
+  /**
+   * Create a new Arrayy object via JSON.
+   *
+   * @param string $json
+   *
+   * @return Arrayy Returns an new instance of the Arrayy object.
+   */
+  public static function createFromJson($json)
+  {
+    $array = UTF8::json_decode($json, true);
+
+    return static::create($array);
+  }
+
+  /**
+   * Create a new instance filled with values from an object that have implemented ArrayAccess.
+   *
+   * @param ArrayAccess $elements Object that implements ArrayAccess
+   *
+   * @return Arrayy Returns an new instance of the Arrayy object.
+   */
+  public static function createFromObject(ArrayAccess $elements)
+  {
+    $array = new static();
+    foreach ($elements as $key => $value) {
+      /** @noinspection OffsetOperationsInspection */
+      $array[$key] = $value;
+    }
+
+    return $array;
+  }
+
+  /**
+   * Create a new Arrayy object via string.
+   *
+   * @param string      $str       The input string.
+   * @param string|null $delimiter The boundary string.
+   * @param string|null $regEx     Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be used.
+   *
+   * @return Arrayy Returns an new instance of the Arrayy object.
+   */
+  public static function createFromString($str, $delimiter, $regEx = null)
+  {
+    if ($regEx) {
+      preg_match_all($regEx, $str, $array);
+
+      if (count($array) > 0) {
+        $array = $array[0];
+      }
+
+    } else {
+      $array = explode($delimiter, $str);
+    }
+
+    // trim all string in the array
+    array_walk(
+        $array,
+        function (&$val) {
+          if (is_string($val)) {
+            $val = trim($val);
+          }
+        }
+    );
+
+    return static::create($array);
+  }
+
+  /**
+   * Create a new instance containing a range of elements.
+   *
+   * @param mixed $low  First value of the sequence
+   * @param mixed $high The sequence is ended upon reaching the end value
+   * @param int   $step Used as the increment between elements in the sequence
+   *
+   * @return Arrayy Returns an new instance of the Arrayy object.
+   */
+  public static function createWithRange($low, $high, $step = 1)
+  {
+    return static::create(range($low, $high, $step));
+  }
+
+  /**
+   * Custom sort by index via "uksort"
+   *
+   * @link http://php.net/manual/en/function.uksort.php
+   *
+   * @param callable $func
+   *
+   * @return $this Return this Arrayy object.
+   */
+  public function customSortKeys($func)
+  {
+    uksort($this->array, $func);
+
+    return $this;
+  }
+
+  /**
+   * Custom sort by value via "usort"
+   *
+   * @link http://php.net/manual/en/function.usort.php
+   *
+   * @param callable $func
+   *
+   * @return $this Return this Arrayy object.
+   */
+  public function customSortValues($func)
+  {
+    usort($this->array, $func);
+
+    return $this;
+  }
+
+  /**
+   * Return values that are only in the current array.
+   *
+   * @param array $array
+   *
+   * @return Arrayy
+   */
+  public function diff(array $array = array())
+  {
+    $result = array_diff($this->array, $array);
+
+    return static::create($result);
+  }
+
+  /**
+   * Return values that are only in the new $array.
+   *
+   * @param array $array
+   *
+   * @return Arrayy
+   */
+  public function diffReverse(array $array = array())
+  {
+    $result = array_diff($array, $this->array);
+
+    return static::create($result);
+  }
+
+  /**
+   * Iterate over the current array and modify the array's value.
+   *
+   * @param \Closure $closure
+   *
+   * @return Arrayy
+   */
+  public function each(\Closure $closure)
+  {
+    $array = $this->array;
+
+    foreach ($array as $key => &$value) {
+      $value = $closure($value, $key);
+    }
+
+    return static::create($array);
+  }
+
+  /**
+   * Check if a value is in the current array using a closure.
+   *
+   * @param \Closure $closure
+   *
+   * @return bool Returns true if the given value is found, false otherwise
+   */
+  public function exists(\Closure $closure)
+  {
+    $isExists = false;
+    foreach ($this->array as $key => $value) {
+      if ($closure($value, $key)) {
+        $isExists = true;
+        break;
+      }
+    }
+
+    return $isExists;
+  }
+
+  /**
    * create a fallback for array
    *
    * 1. fallback to empty array, if there is nothing
@@ -79,378 +583,19 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Get the current array from the "Arrayy"-object
+   * Find all items in an array that pass the truth test.
    *
-   * @return array
-   */
-  public function getArray()
-  {
-    return $this->array;
-  }
-
-  /**
-   * Create a new Arrayy object via string.
-   *
-   * @param string      $str       The input string.
-   * @param string|null $delimiter The boundary string.
-   * @param string|null $regEx     Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be used.
-   *
-   * @return Arrayy Returns an new instance of the Arrayy object.
-   */
-  public static function createFromString($str, $delimiter, $regEx = null)
-  {
-    if ($regEx) {
-      preg_match_all($regEx, $str, $array);
-
-      if (count($array) > 0) {
-        $array = $array[0];
-      }
-
-    } else {
-      $array = explode($delimiter, $str);
-    }
-
-    // trim all string in the array
-    array_walk(
-        $array,
-        function (&$val) {
-          if (is_string($val)) {
-            $val = trim($val);
-          }
-        }
-    );
-
-    return static::create($array);
-  }
-
-  /**
-   * Creates a Arrayy object.
-   *
-   * @param array $array
-   *
-   * @return Arrayy Returns an new instance of the Arrayy object.
-   */
-  public static function create($array = array())
-  {
-    return new static($array);
-  }
-
-  /**
-   * create a new Arrayy object via JSON,
-   *
-   * @param string $json
-   *
-   * @return Arrayy Returns an new instance of the Arrayy object.
-   */
-  public static function createFromJson($json)
-  {
-    $array = UTF8::json_decode($json, true);
-
-    return static::create($array);
-  }
-
-  /**
-   * Create a new instance filled with values from an object implementing ArrayAccess.
-   *
-   * @param ArrayAccess $elements Object that implements ArrayAccess
-   *
-   * @return Arrayy Returns an new instance of the Arrayy object.
-   */
-  public static function createFromObject(ArrayAccess $elements)
-  {
-    $array = new static();
-    foreach ($elements as $key => $value) {
-      /** @noinspection OffsetOperationsInspection */
-      $array[$key] = $value;
-    }
-
-    return $array;
-  }
-
-  /**
-   * Create a new instance containing a range of elements.
-   *
-   * @param mixed $low  First value of the sequence
-   * @param mixed $high The sequence is ended upon reaching the end value
-   * @param int   $step Used as the increment between elements in the sequence
-   *
-   * @return Arrayy Returns an new instance of the Arrayy object.
-   */
-  public static function createWithRange($low, $high, $step = 1)
-  {
-    return static::create(range($low, $high, $step));
-  }
-
-  /**
-   * alias: for "Arrayy->random()"
+   * @param \Closure|null $closure
    *
    * @return Arrayy
    */
-  public function getRandom()
+  public function filter($closure = null)
   {
-    return $this->random();
-  }
-
-  /**
-   * Get a random value from the current array.
-   *
-   * @param null|int $number how many values you will take?
-   *
-   * @return Arrayy
-   */
-  public function random($number = null)
-  {
-    if ($this->count() === 0) {
-      return static::create();
+    if (!$closure) {
+      return $this->clean();
     }
 
-    if ($number === null) {
-      $arrayRandValue = (array)$this->array[array_rand($this->array)];
-
-      return static::create($arrayRandValue);
-    }
-
-    shuffle($this->array);
-
-    return $this->firsts($number);
-  }
-
-  /**
-   * Count the values from the current array.
-   *
-   * INFO: only a alias for "$arrayy->size()"
-   *
-   * @return int
-   */
-  public function count()
-  {
-    return $this->size();
-  }
-
-  /**
-   * Get the size of an array.
-   *
-   * @return int
-   */
-  public function size()
-  {
-    return count($this->array);
-  }
-
-  /**
-   * Get the first value from the current array.
-   *
-   * @return mixed Return null if there wasn't a element.
-   */
-  public function first()
-  {
-    $result = array_shift($this->array);
-
-    if (null === $result) {
-      return null;
-    } else {
-      return $result;
-    }
-  }
-
-  /**
-   * Get the first value(s) from the current array.
-   *
-   * @param int|null $number how many values you will take?
-   *
-   * @return Arrayy
-   */
-  public function firsts($number = null)
-  {
-    if ($number === null) {
-      $array = (array)array_shift($this->array);
-    } else {
-      $number = (int)$number;
-      $array = array_splice($this->array, 0, $number, true);
-    }
-
-    return static::create($array);
-  }
-
-  /**
-   * Append a value to an array.
-   *
-   * @param mixed $value
-   *
-   * @return $this Return this Arrayy object, with the appended values.
-   */
-  public function append($value)
-  {
-    $this->array[] = $value;
-
-    return $this;
-  }
-
-  /**
-   * @return mixed
-   */
-  public function serialize()
-  {
-    return serialize($this->array);
-  }
-
-  /**
-   * @param string $array
-   */
-  public function unserialize($array)
-  {
-    $this->array = unserialize($array);
-  }
-
-  /**
-   * Assigns a value to the specified offset.
-   *
-   * @param mixed $offset
-   * @param mixed $value
-   */
-  public function offsetSet($offset, $value)
-  {
-    if (null === $offset) {
-      $this->array[] = $value;
-    } else {
-      $this->array[$offset] = $value;
-    }
-  }
-
-  /**
-   * alias: for "Arrayy->randomValue()"
-   *
-   * @return mixed get a random value or null if there wasn't a value
-   */
-  public function getRandomValue()
-  {
-    return $this->randomValue();
-  }
-
-  /**
-   * Pick a random value from the values of this array.
-   *
-   * @return mixed get a random value or null if there wasn't a value
-   */
-  public function randomValue()
-  {
-    $result = $this->random(1);
-
-    if (!isset($result[0])) {
-      $result[0] = null;
-    }
-
-    return $result[0];
-  }
-
-  /**
-   * alias: for "Arrayy->randomValues()"
-   *
-   * @param int $number
-   *
-   * @return Arrayy
-   */
-  public function getRandomValues($number)
-  {
-    return $this->randomValues($number);
-  }
-
-  /**
-   * Pick a given number of random values out of this array.
-   *
-   * @param int $number
-   *
-   * @return Arrayy
-   */
-  public function randomValues($number)
-  {
-    $number = (int)$number;
-
-    return $this->random($number);
-  }
-
-  /**
-   * alias: for "Arrayy->randomKey()"
-   *
-   * @return mixed get a key/index or null if there wasn't a key/index
-   */
-  public function getRandomKey()
-  {
-    return $this->randomKey();
-  }
-
-  /**
-   * Pick a random key/index from the keys of this array.
-   *
-   *
-   * @return mixed get a key/index or null if there wasn't a key/index
-   *
-   * @throws \RangeException If array is empty
-   */
-  public function randomKey()
-  {
-    $result = $this->randomKeys(1);
-
-    if (!isset($result[0])) {
-      $result[0] = null;
-    }
-
-    return $result[0];
-  }
-
-  /**
-   * Pick a given number of random keys/indexes out of this array.
-   *
-   * @param int $number The number of keys/indexes (should be <= $this->count())
-   *
-   * @return Arrayy
-   *
-   * @throws \RangeException If array is empty
-   */
-  public function randomKeys($number)
-  {
-    $number = (int)$number;
-    $count = $this->count();
-
-    if ($number === 0 || $number > $count) {
-      throw new \RangeException(
-          sprintf(
-              'Number of requested keys (%s) must be equal or lower than number of elements in this array (%s)',
-              $number,
-              $count
-          )
-      );
-    }
-
-    $result = (array)array_rand($this->array, $number);
-
-    return static::create($result);
-  }
-
-  /**
-   * alias: for "Arrayy->randomKeys()"
-   *
-   * @param int $number
-   *
-   * @return Arrayy
-   */
-  public function getRandomKeys($number)
-  {
-    return $this->randomKeys($number);
-  }
-
-  /**
-   * find by ...
-   *
-   * @param        $property
-   * @param        $value
-   * @param string $comparisonOp
-   *
-   * @return Arrayy
-   */
-  public function findBy($property, $value, $comparisonOp = 'eq')
-  {
-    $array = $this->filterBy($property, $value, $comparisonOp);
+    $array = array_filter($this->array, $closure);
 
     return static::create($array);
   }
@@ -526,6 +671,88 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
+   * Find the first item in an array that passes the truth test,
+   *  otherwise return false
+   *
+   * @param \Closure $closure
+   *
+   * @return mixed|false false if we did not find the value
+   */
+  public function find(\Closure $closure)
+  {
+    foreach ($this->array as $key => $value) {
+      if ($closure($value, $key)) {
+        return $value;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * find by ...
+   *
+   * @param        $property
+   * @param        $value
+   * @param string $comparisonOp
+   *
+   * @return Arrayy
+   */
+  public function findBy($property, $value, $comparisonOp = 'eq')
+  {
+    $array = $this->filterBy($property, $value, $comparisonOp);
+
+    return static::create($array);
+  }
+
+  /**
+   * Get the first value from the current array.
+   *
+   * @return mixed Return null if there wasn't a element.
+   */
+  public function first()
+  {
+    $result = array_shift($this->array);
+
+    if (null === $result) {
+      return null;
+    } else {
+      return $result;
+    }
+  }
+
+  /**
+   * Get the first value(s) from the current array.
+   *
+   * @param int|null $number how many values you will take?
+   *
+   * @return Arrayy
+   */
+  public function firsts($number = null)
+  {
+    if ($number === null) {
+      $array = (array)array_shift($this->array);
+    } else {
+      $number = (int)$number;
+      $array = array_splice($this->array, 0, $number, true);
+    }
+
+    return static::create($array);
+  }
+
+  /**
+   * Exchanges all keys with their associated values in an array.
+   *
+   * @return Arrayy
+   */
+  public function flip()
+  {
+    $this->array = array_flip($this->array);
+
+    return static::create($this->array);
+  }
+
+  /**
    * Get a value from an array (optional using dot-notation).
    *
    * @param string $key     The key to look for
@@ -564,31 +791,126 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * WARNING: Creates a Arrayy object by reference.
+   * Get the current array from the "Arrayy"-object
    *
-   * @param array $array
-   *
-   * @return $this Return this Arrayy object.
+   * @return array
    */
-  public function createByReference(&$array = array())
+  public function getArray()
   {
-    $array = $this->fallbackForArray($array);
-
-    $this->array = &$array;
-
-    return $this;
+    return $this->array;
   }
 
   /**
-   * Get all values from a array.
+   * Returns the values from a single column of the input array, identified by
+   * the $columnKey, can be used to extract data-columns from multi-arrays.
+   *
+   * Info: Optionally, you may provide an $indexKey to index the values in the returned
+   * array by the values from the $indexKey column in the input array.
+   *
+   * @param mixed $columnKey
+   * @param mixed $indexKey
    *
    * @return Arrayy
    */
-  public function values()
+  public function getColumn($columnKey = null, $indexKey = null)
   {
-    $array = array_values((array)$this->array);
+    $result = array_column($this->array, $columnKey, $indexKey);
 
-    return static::create($array);
+    return static::create($result);
+  }
+
+  /**
+   * Get correct PHP constant for direction.
+   *
+   * @param int|string $direction
+   *
+   * @return int
+   */
+  protected function getDirection($direction)
+  {
+    if (is_string($direction)) {
+      $direction = strtolower($direction);
+
+      if ($direction === 'desc') {
+        $direction = SORT_DESC;
+      } else {
+        $direction = SORT_ASC;
+      }
+    }
+
+    if (
+        $direction !== SORT_DESC
+        &&
+        $direction !== SORT_ASC
+    ) {
+      $direction = SORT_ASC;
+    }
+
+    return $direction;
+  }
+
+  /**
+   * alias: for "Arrayy->keys()"
+   *
+   * @return Arrayy
+   */
+  public function getKeys()
+  {
+    return $this->keys();
+  }
+
+  /**
+   * alias: for "Arrayy->random()"
+   *
+   * @return Arrayy
+   */
+  public function getRandom()
+  {
+    return $this->random();
+  }
+
+  /**
+   * alias: for "Arrayy->randomKey()"
+   *
+   * @return mixed get a key/index or null if there wasn't a key/index
+   */
+  public function getRandomKey()
+  {
+    return $this->randomKey();
+  }
+
+  /**
+   * alias: for "Arrayy->randomKeys()"
+   *
+   * @param int $number
+   *
+   * @return Arrayy
+   */
+  public function getRandomKeys($number)
+  {
+    return $this->randomKeys($number);
+  }
+
+  /**
+   * alias: for "Arrayy->randomValue()"
+   *
+   * @return mixed get a random value or null if there wasn't a value
+   */
+  public function getRandomValue()
+  {
+    return $this->randomValue();
+  }
+
+  /**
+   * alias: for "Arrayy->randomValues()"
+   *
+   * @param int $number
+   *
+   * @return Arrayy
+   */
+  public function getRandomValues($number)
+  {
+    return $this->randomValues($number);
   }
 
   /**
@@ -626,6 +948,33 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
+   * Check if an array has a given key.
+   *
+   * @param mixed $key
+   *
+   * @return bool
+   */
+  public function has($key)
+  {
+    // Generate unique string to use as marker.
+    $unFound = (string)uniqid('arrayy', true);
+
+    return $this->get($key, $unFound) !== $unFound;
+  }
+
+  /**
+   * Implodes an array.
+   *
+   * @param string $with What to implode it with
+   *
+   * @return string
+   */
+  public function implode($with = '')
+  {
+    return implode($with, $this->array);
+  }
+
+  /**
    * Given a list and an iterate-function that returns
    * a key for each element in the list (or a property name),
    * returns an object with an index of each item.
@@ -650,244 +999,143 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * magic to string
+   * alias: for "Arrayy->searchIndex()"
    *
-   * @return string
-   */
-  public function __toString()
-  {
-    return $this->toString();
-  }
-
-  /**
-   * Implodes array to a string with specified separator.
-   *
-   * @param string $separator The element's separator
-   *
-   * @return string The string representation of array, separated by ","
-   */
-  public function toString($separator = ',')
-  {
-    return $this->implode($separator);
-  }
-
-  /**
-   * Implodes an array.
-   *
-   * @param string $with What to implode it with
-   *
-   * @return string
-   */
-  public function implode($with = '')
-  {
-    return implode($with, $this->array);
-  }
-
-  /**
-   * Push one or more values onto the end of array at once.
-   *
-   * @return $this Return this Arrayy object, with pushed elements to the end of array.
-   */
-  public function push(/* variadic arguments allowed */)
-  {
-    if (func_num_args()) {
-      $args = array_merge(array(&$this->array), func_get_args());
-      call_user_func_array('array_push', $args);
-    }
-
-    return $this;
-  }
-
-  /**
-   * Shifts a specified value off the beginning of array.
-   *
-   * @return mixed A shifted element from the current array.
-   */
-  public function shift()
-  {
-    return array_shift($this->array);
-  }
-
-  /**
-   * Prepends one or more values to the beginning of array at once.
-   *
-   * @return $this Return this Arrayy object, with prepended elements to the beginning of array.
-   */
-  public function unshift(/* variadic arguments allowed */)
-  {
-    if (func_num_args()) {
-      $args = array_merge(array(&$this->array), func_get_args());
-      call_user_func_array('array_unshift', $args);
-    }
-
-    return $this;
-  }
-
-  /**
-   * Get a value by key.
-   *
-   * @param $key
+   * @param mixed $value Value to search for
    *
    * @return mixed
    */
-  public function &__get($key)
+  public function indexOf($value)
   {
-    return $this->array[$key];
+    return $this->searchIndex($value);
   }
 
   /**
-   * Assigns a value to the specified element.
+   * Get everything but the last..$to items.
    *
-   * @param $key
-   * @param $value
-   */
-  public function __set($key, $value)
-  {
-    $this->array[$key] = $value;
-  }
-
-  /**
-   * Whether or not an element exists by key.
-   *
-   * @param $key
-   *
-   * @return bool
-   */
-  public function __isset($key)
-  {
-    return isset($this->array[$key]);
-  }
-
-  /**
-   * Unset element by key
-   *
-   * @param mixed $key
-   */
-  public function __unset($key)
-  {
-    unset($this->array[$key]);
-  }
-  /**
-   * Call object as function.
-   *
-   * @param mixed $key
-   *
-   * @return mixed
-   */
-  public function __invoke($key = null)
-  {
-    if ($key !== null) {
-      if (isset($this->array[$key])) {
-        return $this->array[$key];
-      } else {
-        return false;
-      }
-    }
-
-    return (array)$this->array;
-  }/**
-   * Whether or not an offset exists.
-   *
-   * @param mixed $offset
-   *
-   * @return bool
-   */
-  public function offsetExists($offset)
-  {
-    return isset($this->array[$offset]);
-  }
-
-  /**
-   * Search for the value of the current array via $index.
-   *
-   * @param mixed $index
-   *
-   * @return Arrayy will return a empty Arrayy if the value wasn't found
-   */
-  public function searchValue($index)
-  {
-    // init
-    $return = array();
-
-    if (null !== $index) {
-      $keyExists = isset($this->array[$index]);
-
-      if ($keyExists !== false) {
-        $return = array($this->array[$index]);
-      }
-    }
-
-    return static::create($return);
-  }
-
-  /**
-   * Check if all items in current array match a truth test.
-   *
-   * @param \Closure $closure
-   *
-   * @return bool
-   */
-  public function matches(\Closure $closure)
-  {
-    // Reduce the array to only booleans
-    $array = $this->each($closure);
-
-    // Check the results
-    if (count($array) === 0) {
-      return true;
-    }
-
-    $array = array_search(false, $array->toArray(), false);
-
-    return is_bool($array);
-  }
-
-  /**
-   * Iterate over the current array and modify the array's value.
-   *
-   * @param \Closure $closure
+   * @param int $to
    *
    * @return Arrayy
    */
-  public function each(\Closure $closure)
+  public function initial($to = 1)
   {
-    $array = $this->array;
+    $slice = count($this->array) - $to;
 
-    foreach ($array as $key => &$value) {
-      $value = $closure($value, $key);
+    return $this->firsts($slice);
+  }
+
+  /**
+   * Internal mechanics of remove method.
+   *
+   * @param $key
+   *
+   * @return boolean
+   */
+  protected function internalRemove($key)
+  {
+    // Explode keys
+    $keys = explode('.', $key);
+
+    // Crawl though the keys
+    while (count($keys) > 1) {
+      $key = array_shift($keys);
+
+      if (!$this->has($key)) {
+        return false;
+      }
+
+      $this->array = &$this->array[$key];
     }
 
-    return static::create($array);
+    $key = array_shift($keys);
+
+    unset($this->array[$key]);
+
+    return true;
   }
 
   /**
-   * alias: for "Arrayy->getArray()"
-   */
-  public function toArray()
-  {
-    return $this->getArray();
-  }
-
-  /**
-   * Check if any item in the current array matches a truth test.
+   * Internal mechanic of set method.
    *
-   * @param \Closure $closure
+   * @param mixed $key
+   * @param mixed $value
    *
    * @return bool
    */
-  public function matchesAny(\Closure $closure)
+  protected function internalSet($key, $value)
   {
-    // Reduce the array to only booleans
-    $array = $this->each($closure);
-
-    // Check the results
-    if (count($array) === 0) {
-      return true;
+    if (null === $key) {
+      return false;
     }
 
-    $array = array_search(true, $array->toArray(), false);
+    // Explode the keys
+    $keys = explode('.', $key);
 
-    return is_int($array);
+    // Crawl through the keys
+    while (count($keys) > 1) {
+      $key = array_shift($keys);
+
+      $this->array[$key] = $this->get(array(), null, $key);
+      $this->array = &$this->array[$key];
+    }
+
+    // Bind final tree on the array
+    $key = array_shift($keys);
+
+    $this->array[$key] = $value;
+
+    return true;
+  }
+
+  /**
+   * Return an array with all elements found in input array.
+   *
+   * @param array $search
+   *
+   * @return Arrayy
+   */
+  public function intersection(array $search)
+  {
+    $result = array_values(array_intersect($this->array, $search));
+
+    return static::create($result);
+  }
+
+  /**
+   * Return a boolean flag which indicates whether the two input arrays have any common elements.
+   *
+   * @param array $search
+   *
+   * @return bool
+   */
+  public function intersects(array $search)
+  {
+    return count($this->intersection($search)->array) > 0;
+  }
+
+  /**
+   * Invoke a function on all of an array's values.
+   *
+   * @param mixed $callable
+   * @param array $arguments
+   *
+   * @return Arrayy
+   */
+  public function invoke($callable, $arguments = array())
+  {
+    // If one argument given for each iteration, create an array for it.
+    if (!is_array($arguments)) {
+      $arguments = StaticArrayy::repeat($arguments, count($this->array))->getArray();
+    }
+
+    // If the callable has arguments, pass them.
+    if ($arguments) {
+      $array = array_map($callable, $this->array, $arguments);
+    } else {
+      $array = array_map($callable, $this->array);
+    }
+
+    return static::create($array);
   }
 
   /**
@@ -920,27 +1168,16 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return !$this->array;
   }
 
-/**
-   * alias: for "Arrayy->keys()"
+  /**
+   * Check if the current array is a multi-array.
    *
-   * @return Arrayy
+   * @return bool
    */
-  public function getKeys()
+  public function isMultiArray()
   {
-    return $this->keys();
+    return !(count($this->array) === count($this->array, COUNT_RECURSIVE));
   }
 
-    /**
-   * Get all keys from the current array.
-   *
-   * @return Arrayy
-   */
-  public function keys()
-  {
-    $array = array_keys((array)$this->array);
-
-    return static::create($array);
-  }
   /**
    * Check whether array is numeric or not.
    *
@@ -959,279 +1196,18 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return true;
-  }/**
-   * Unset an offset.
-   *
-   * @param mixed $offset
-   */
-  public function offsetUnset($offset)
-  {
-    if ($this->offsetExists($offset)) {
-      unset($this->array[$offset]);
-    }
   }
 
   /**
-   * Check if the current array is a multi-array.
-   *
-   * @return bool
-   */
-  public function isMultiArray()
-  {
-    return !(count($this->array) === count($this->array, COUNT_RECURSIVE));
-  }
-
-  /**
-   * Check if an item is in the current array.
-   *
-   * @param mixed $value
-   *
-   * @return bool
-   */
-  public function contains($value)
-  {
-    return in_array($value, $this->array, true);
-  }
-
-  /**
-   * Check if the given key/index exists in the array.
-   *
-   * @param mixed $key Key/index to search for
-   *
-   * @return bool Returns true if the given key/index exists in the array, false otherwise
-   */
-  public function containsKey($key)
-  {
-    return array_key_exists($key, $this->array);
-  }
-
-  /**
-   * Returns the average value of the current array.
-   *
-   * @param int $decimals The number of decimals to return
-   *
-   * @return int|double The average value
-   */
-  public function average($decimals = null)
-  {
-    $count = $this->count();
-
-    if (!$count) {
-      return 0;
-    }
-
-    if (!is_int($decimals)) {
-      $decimals = null;
-    }
-
-    return round(array_sum($this->array) / $count, $decimals);
-  }
-
-  /**
-   * Count the values from the current array.
-   *
-   * INFO: only a alias for "$arrayy->size()"
-   *
-   * @return int
-   */
-  public function length()
-  {
-    return $this->size();
-  }
-
-  /**
-   * Get the max value from an array.
-   *
-   * @return mixed
-   */
-  public function max()
-  {
-    if ($this->count() === 0) {
-      return false;
-    }
-
-    return max($this->array);
-  }
-
-/**
-   * Get the min value from an array.
-   *
-   * @return mixed
-   */
-  public function min()
-  {
-    if ($this->count() === 0) {
-      return false;
-    }
-
-    return min($this->array);
-  }
-
-  /**
-   * Find the first item in an array that passes the truth test,
-   *  otherwise return false
-   *
-   * @param \Closure $closure
-   *
-   * @return mixed|false false if we did not find the value
-   */
-  public function find(\Closure $closure)
-  {
-    foreach ($this->array as $key => $value) {
-      if ($closure($value, $key)) {
-        return $value;
-      }
-    }
-
-    return false;
-  }
-
-    /**
-   * WARNING!!! -> Clear the current array.
-   *
-   * @return $this Return this Arrayy object, with an empty array.
-   */
-  public function clear()
-  {
-    $this->array = array();
-
-    return $this;
-  }
-  /**
-   * Clean all falsy values from an array.
+   * Get all keys from the current array.
    *
    * @return Arrayy
    */
-  public function clean()
+  public function keys()
   {
-    return $this->filter(
-        function ($value) {
-          return (bool)$value;
-        }
-    );
-  }/**
-   * Returns the value at specified offset.
-   *
-   * @param mixed $offset
-   *
-   * @return mixed return null if the offset did not exists
-   */
-  public function offsetGet($offset)
-  {
-    return $this->offsetExists($offset) ? $this->array[$offset] : null;
-  }
-
-  /**
-   * Find all items in an array that pass the truth test.
-   *
-   * @param \Closure|null $closure
-   *
-   * @return Arrayy
-   */
-  public function filter($closure = null)
-  {
-    if (!$closure) {
-      return $this->clean();
-    }
-
-    $array = array_filter($this->array, $closure);
+    $array = array_keys((array)$this->array);
 
     return static::create($array);
-  }
-
-  /**
-   * Get a random value from an array, with the ability to skew the results.
-   *
-   * Example: randomWeighted(['foo' => 1, 'bar' => 2]) has a 66% chance of returning bar.
-   *
-   * @param array    $array
-   * @param null|int $number how many values you will take?
-   *
-   * @return Arrayy
-   */
-  public function randomWeighted(array $array, $number = null)
-  {
-    $options = array();
-    foreach ($array as $option => $weight) {
-      if ($this->searchIndex($option) !== false) {
-        for ($i = 0; $i < $weight; ++$i) {
-          $options[] = $option;
-        }
-      }
-    }
-
-    return $this->mergeAppendKeepIndex($options)->random($number);
-  }
-
-  /**
-   * Search for the first index of the current array via $value.
-   *
-   * @param mixed $value
-   *
-   * @return mixed
-   */
-  public function searchIndex($value)
-  {
-    return array_search($value, $this->array, true);
-  }
-
-  /**
-   * Merge the new $array into the current array.
-   *
-   * - keep key,value from the current array, also if the index is in the new $array
-   *
-   * @param array $array
-   * @param bool  $recursive
-   *
-   * @return Arrayy
-   */
-  public function mergeAppendKeepIndex(array $array = array(), $recursive = false)
-  {
-    if (true === $recursive) {
-      $result = array_replace_recursive($this->array, $array);
-    } else {
-      $result = array_replace($this->array, $array);
-    }
-
-    return static::create($result);
-  }
-
-  /**
-   * alias: for "Arrayy->searchIndex()"
-   *
-   * @param mixed $value Value to search for
-   *
-   * @return mixed
-   */
-  public function indexOf($value)
-  {
-    return $this->searchIndex($value);
-  }
-
-/**
-   * Return a boolean flag which indicates whether the two input arrays have any common elements.
-   *
-   * @param array $search
-   *
-   * @return bool
-   */
-  public function intersects(array $search)
-  {
-    return count($this->intersection($search)->array) > 0;
-  }
-
-  /**
-   * Return an array with all elements found in input array.
-   *
-   * @param array $search
-   *
-   * @return Arrayy
-   */
-  public function intersection(array $search)
-  {
-    $result = array_values(array_intersect($this->array, $search));
-
-    return static::create($result);
   }
 
   /**
@@ -1270,83 +1246,110 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return $arrayy;
   }
 
-    /**
-   * Pop a specified value off the end of the current array.
-   *
-   * @return mixed The popped element from the current array.
-   */
-  public function pop()
-  {
-    return array_pop($this->array);
-  }
   /**
-   * Get the last elements from index $from until the end of this array.
+   * Count the values from the current array.
    *
-   * @param int $from
+   * INFO: only a alias for "$arrayy->size()"
    *
-   * @return Arrayy
+   * @return int
    */
-  public function rest($from = 1)
+  public function length()
   {
-    $result = array_splice($this->array, $from);
-
-    return static::create($result);
-  }/**
-   * Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
-   *
-   * @return \ArrayIterator An iterator for the values in the array.
-   */
-  public function getIterator()
-  {
-    return new \ArrayIterator($this->array);
+    return $this->size();
   }
 
   /**
-   * Get everything but the last..$to items.
+   * Apply the given function to the every element of the array,
+   * collecting the results.
    *
-   * @param int $to
+   * @param callable $callable
    *
-   * @return Arrayy
+   * @return Arrayy Arrayy object with modified elements
    */
-  public function initial($to = 1)
+  public function map($callable)
   {
-    $slice = count($this->array) - $to;
-
-    return $this->firsts($slice);
-  }
-
-  /**
-   * Extract a slice of the array.
-   *
-   * @param int      $offset       Slice begin index
-   * @param int|null $length       Length of the slice
-   * @param bool     $preserveKeys Whether array keys are preserved or no
-   *
-   * @return static A slice of the original array with length $length
-   */
-  public function slice($offset, $length = null, $preserveKeys = false)
-  {
-    $result = array_slice($this->array, $offset, $length, $preserveKeys);
+    $result = array_map($callable, $this->array);
 
     return static::create($result);
   }
 
   /**
-   * Iterate over an array and execute a callback for each loop.
+   * Check if all items in current array match a truth test.
    *
    * @param \Closure $closure
    *
-   * @return Arrayy
+   * @return bool
    */
-  public function at(\Closure $closure)
+  public function matches(\Closure $closure)
   {
-    $array = $this->array;
+    // Reduce the array to only booleans
+    $array = $this->each($closure);
 
-    foreach ($array as $key => $value) {
-      $closure($value, $key);
+    // Check the results
+    if (count($array) === 0) {
+      return true;
     }
 
-    return static::create($array);
+    $array = array_search(false, $array->toArray(), false);
+
+    return is_bool($array);
+  }
+
+  /**
+   * Check if any item in the current array matches a truth test.
+   *
+   * @param \Closure $closure
+   *
+   * @return bool
+   */
+  public function matchesAny(\Closure $closure)
+  {
+    // Reduce the array to only booleans
+    $array = $this->each($closure);
+
+    // Check the results
+    if (count($array) === 0) {
+      return true;
+    }
+
+    $array = array_search(true, $array->toArray(), false);
+
+    return is_int($array);
+  }
+
+  /**
+   * Get the max value from an array.
+   *
+   * @return mixed
+   */
+  public function max()
+  {
+    if ($this->count() === 0) {
+      return false;
+    }
+
+    return max($this->array);
+  }
+
+  /**
+   * Merge the new $array into the current array.
+   *
+   * - keep key,value from the current array, also if the index is in the new $array
+   *
+   * @param array $array
+   * @param bool  $recursive
+   *
+   * @return Arrayy
+   */
+  public function mergeAppendKeepIndex(array $array = array(), $recursive = false)
+  {
+    if (true === $recursive) {
+      $result = array_replace_recursive($this->array, $array);
+    } else {
+      $result = array_replace($this->array, $array);
+    }
+
+    return static::create($result);
   }
 
   /**
@@ -1366,6 +1369,27 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
       $result = array_merge_recursive($this->array, $array);
     } else {
       $result = array_merge($this->array, $array);
+    }
+
+    return static::create($result);
+  }
+
+  /**
+   * Merge the the current array into the $array.
+   *
+   * - use key,value from the new $array, also if the index is in the current array
+   *
+   * @param array $array
+   * @param bool  $recursive
+   *
+   * @return Arrayy
+   */
+  public function mergePrependKeepIndex(array $array = array(), $recursive = false)
+  {
+    if (true === $recursive) {
+      $result = array_replace_recursive($array, $this->array);
+    } else {
+      $result = array_replace($array, $this->array);
     }
 
     return static::create($result);
@@ -1394,263 +1418,224 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Merge the the current array into the $array.
+   * Get the min value from an array.
    *
-   * - use key,value from the new $array, also if the index is in the current array
-   *
-   * @param array $array
-   * @param bool  $recursive
-   *
-   * @return Arrayy
+   * @return mixed
    */
-  public function mergePrependKeepIndex(array $array = array(), $recursive = false)
+  public function min()
   {
-    if (true === $recursive) {
-      $result = array_replace_recursive($array, $this->array);
-    } else {
-      $result = array_replace($array, $this->array);
+    if ($this->count() === 0) {
+      return false;
     }
 
-    return static::create($result);
+    return min($this->array);
   }
 
   /**
-   * Return values that are only in the current array.
+   * Pad array to the specified size with a given value.
    *
-   * @param array $array
+   * @param int   $size  Size of the result array
+   * @param mixed $value Empty value by default
    *
-   * @return Arrayy
+   * @return Arrayy Arrayy object padded to $size with $value
    */
-  public function diff(array $array = array())
+  public function pad($size, $value)
   {
-    $result = array_diff($this->array, $array);
-
-    return static::create($result);
-  }
-
-  /**
-   * Return values that are only in the new $array.
-   *
-   * @param array $array
-   *
-   * @return Arrayy
-   */
-  public function diffReverse(array $array = array())
-  {
-    $result = array_diff($array, $this->array);
+    $result = array_pad($this->array, $size, $value);
 
     return static::create($result);
   }
 
   /**
-   * Replace the first matched value in an array.
+   * Pop a specified value off the end of the current array.
    *
-   * @param mixed $search
-   * @param mixed $replacement
-   *
-   * @return Arrayy
+   * @return mixed The popped element from the current array.
    */
-  public function replaceOneValue($search, $replacement = '')
+  public function pop()
   {
-    $array = $this->array;
-    $key = array_search($search, $array, true);
+    return array_pop($this->array);
+  }
 
-    if ($key !== false) {
-      $array[$key] = $replacement;
+  /**
+   * Prepend a value to an array.
+   *
+   * @param mixed $value
+   *
+   * @return $this Return this Arrayy object, with the prepended value.
+   */
+  public function prepend($value)
+  {
+    array_unshift($this->array, $value);
+
+    return $this;
+  }
+
+  /**
+   * Push one or more values onto the end of array at once.
+   *
+   * @return $this Return this Arrayy object, with pushed elements to the end of array.
+   */
+  public function push(/* variadic arguments allowed */)
+  {
+    if (func_num_args()) {
+      $args = array_merge(array(&$this->array), func_get_args());
+      call_user_func_array('array_push', $args);
     }
 
-    return static::create($array);
+    return $this;
   }
 
   /**
-   * Replace values in the current array.
+   * Get a random value from the current array.
    *
-   * @param string $search      The string to replace.
-   * @param string $replacement What to replace it with.
+   * @param null|int $number how many values you will take?
    *
    * @return Arrayy
    */
-  public function replaceValues($search, $replacement = '')
+  public function random($number = null)
   {
-    $array = $this->each(
-        function ($value) use ($search, $replacement) {
-          return UTF8::str_replace($search, $replacement, $value);
+    if ($this->count() === 0) {
+      return static::create();
+    }
+
+    if ($number === null) {
+      $arrayRandValue = (array)$this->array[array_rand($this->array)];
+
+      return static::create($arrayRandValue);
+    }
+
+    shuffle($this->array);
+
+    return $this->firsts($number);
+  }
+
+  /**
+   * Pick a random key/index from the keys of this array.
+   *
+   *
+   * @return mixed get a key/index or null if there wasn't a key/index
+   *
+   * @throws \RangeException If array is empty
+   */
+  public function randomKey()
+  {
+    $result = $this->randomKeys(1);
+
+    if (!isset($result[0])) {
+      $result[0] = null;
+    }
+
+    return $result[0];
+  }
+
+  /**
+   * Pick a given number of random keys/indexes out of this array.
+   *
+   * @param int $number The number of keys/indexes (should be <= $this->count())
+   *
+   * @return Arrayy
+   *
+   * @throws \RangeException If array is empty
+   */
+  public function randomKeys($number)
+  {
+    $number = (int)$number;
+    $count = $this->count();
+
+    if ($number === 0 || $number > $count) {
+      throw new \RangeException(
+          sprintf(
+              'Number of requested keys (%s) must be equal or lower than number of elements in this array (%s)',
+              $number,
+              $count
+          )
+      );
+    }
+
+    $result = (array)array_rand($this->array, $number);
+
+    return static::create($result);
+  }
+
+  /**
+   * Pick a random value from the values of this array.
+   *
+   * @return mixed get a random value or null if there wasn't a value
+   */
+  public function randomValue()
+  {
+    $result = $this->random(1);
+
+    if (!isset($result[0])) {
+      $result[0] = null;
+    }
+
+    return $result[0];
+  }
+
+  /**
+   * Pick a given number of random values out of this array.
+   *
+   * @param int $number
+   *
+   * @return Arrayy
+   */
+  public function randomValues($number)
+  {
+    $number = (int)$number;
+
+    return $this->random($number);
+  }
+
+  /**
+   * Get a random value from an array, with the ability to skew the results.
+   *
+   * Example: randomWeighted(['foo' => 1, 'bar' => 2]) has a 66% chance of returning bar.
+   *
+   * @param array    $array
+   * @param null|int $number how many values you will take?
+   *
+   * @return Arrayy
+   */
+  public function randomWeighted(array $array, $number = null)
+  {
+    $options = array();
+    foreach ($array as $option => $weight) {
+      if ($this->searchIndex($option) !== false) {
+        for ($i = 0; $i < $weight; ++$i) {
+          $options[] = $option;
         }
-    );
-
-    return static::create($array);
-  }
-
-  /**
-   * Replace the keys in an array with another set.
-   *
-   * @param array $keys An array of keys matching the array's size
-   *
-   * @return Arrayy
-   */
-  public function replaceKeys(array $keys)
-  {
-    $values = array_values($this->array);
-    $result = array_combine($keys, $values);
-
-    return static::create($result);
-  }
-
-  /**
-   * Create an array using the current array as keys and the other array as values.
-   *
-   * @param array $array Values array
-   *
-   * @return Arrayy Arrayy object with values from the other array.
-   */
-  public function replaceAllValues(array $array)
-  {
-    $result = array_combine($this->array, $array);
-
-    return static::create($result);
-  }
-
-  /**
-   * Create an array using the current array as values and the other array as keys.
-   *
-   * @param array $keys Keys array
-   *
-   * @return Arrayy Arrayy object with keys from the other array.
-   */
-  public function replaceAllKeys(array $keys)
-  {
-    $result = array_combine($keys, $this->array);
-
-    return static::create($result);
-  }
-
-  /**
-   * Shuffle the current array.
-   *
-   * @return Arrayy
-   */
-  public function shuffle()
-  {
-    $array = $this->array;
-
-    shuffle($array);
-
-    return static::create($array);
-  }
-
-  /**
-   * Split an array in the given amount of pieces.
-   *
-   * @param int  $numberOfPieces
-   * @param bool $keepKeys
-   *
-   * @return array
-   */
-  public function split($numberOfPieces = 2, $keepKeys = false)
-  {
-    if (count($this->array) === 0) {
-      $result = array();
-    } else {
-      $numberOfPieces = (int)$numberOfPieces;
-      $splitSize = ceil(count($this->array) / $numberOfPieces);
-      $result = array_chunk($this->array, $splitSize, $keepKeys);
-    }
-
-    return static::create($result);
-  }
-
-  /**
-   * Create a chunked version of this array.
-   *
-   * @param int  $size         Size of each chunk
-   * @param bool $preserveKeys Whether array keys are preserved or no
-   *
-   * @return static A new array of chunks from the original array
-   */
-  public function chunk($size, $preserveKeys = false)
-  {
-    $result = array_chunk($this->array, $size, $preserveKeys);
-
-    return static::create($result);
-  }
-
-  /**
-   * Returns the values from a single column of the input array, identified by
-   * the $columnKey, can be used to extract data-columns from multi-arrays.
-   *
-   * Info: Optionally, you may provide an $indexKey to index the values in the returned
-   * array by the values from the $indexKey column in the input array.
-   *
-   * @param mixed $columnKey
-   * @param mixed $indexKey
-   *
-   * @return Arrayy
-   */
-  public function getColumn($columnKey = null, $indexKey = null)
-  {
-    $result = array_column($this->array, $columnKey, $indexKey);
-
-    return static::create($result);
-  }
-
-  /**
-   * Invoke a function on all of an array's values.
-   *
-   * @param mixed $callable
-   * @param array $arguments
-   *
-   * @return Arrayy
-   */
-  public function invoke($callable, $arguments = array())
-  {
-    // If one argument given for each iteration, create an array for it.
-    if (!is_array($arguments)) {
-      $arguments = StaticArrayy::repeat($arguments, count($this->array))->getArray();
-    }
-
-    // If the callable has arguments, pass them.
-    if ($arguments) {
-      $array = array_map($callable, $this->array, $arguments);
-    } else {
-      $array = array_map($callable, $this->array);
-    }
-
-    return static::create($array);
-  }
-
-  /**
-   * Apply the given function to the every element of the array,
-   * collecting the results.
-   *
-   * @param callable $callable
-   *
-   * @return Arrayy Arrayy object with modified elements
-   */
-  public function map($callable)
-  {
-    $result = array_map($callable, $this->array);
-
-    return static::create($result);
-  }
-
-  /**
-   * Check if a value is in the current array using a closure.
-   *
-   * @param \Closure $closure
-   *
-   * @return bool Returns true if the given value is found, false otherwise
-   */
-  public function exists(\Closure $closure)
-  {
-    $isExists = false;
-    foreach ($this->array as $key => $value) {
-      if ($closure($value, $key)) {
-        $isExists = true;
-        break;
       }
     }
 
-    return $isExists;
+    return $this->mergeAppendKeepIndex($options)->random($number);
+  }
+
+  /**
+   * Reduce the current array via callable e.g. anonymous-function.
+   *
+   * @param mixed $callable
+   * @param array $init
+   *
+   * @return Arrayy
+   */
+  public function reduce($callable, array $init = array())
+  {
+    $this->array = array_reduce($this->array, $callable, $init);
+
+    return static::create($this->array);
+  }
+
+  /**
+   * Create a numerically re-indexed Arrayy object.
+   *
+   * @return $this Return this Arrayy object, with re-indexed array-elements.
+   */
+  public function reindex()
+  {
+    $this->array = array_values($this->array);
+
+    return $this;
   }
 
   /**
@@ -1674,22 +1659,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Replace a key with a new key/value pair.
-   *
-   * @param $replace
-   * @param $key
-   * @param $value
-   *
-   * @return Arrayy
-   */
-  public function replace($replace, $key, $value)
-  {
-    $this->remove($replace);
-
-    return $this->set($key, $value);
-  }
-
-  /**
    * Remove a value from the current array (optional using dot-notation).
    *
    * @param mixed $key
@@ -1710,119 +1679,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     $this->internalRemove($key);
 
     return static::create($this->array);
-  }
-
-  /**
-   * Internal mechanics of remove method.
-   *
-   * @param $key
-   *
-   * @return boolean
-   */
-  protected function internalRemove($key)
-  {
-    // Explode keys
-    $keys = explode('.', $key);
-
-    // Crawl though the keys
-    while (count($keys) > 1) {
-      $key = array_shift($keys);
-
-      if (!$this->has($key)) {
-        return false;
-      }
-
-      $this->array = &$this->array[$key];
-    }
-
-    $key = array_shift($keys);
-
-    unset($this->array[$key]);
-
-    return true;
-  }
-
-  /**
-   * Check if an array has a given key.
-   *
-   * @param mixed $key
-   *
-   * @return bool
-   */
-  public function has($key)
-  {
-    // Generate unique string to use as marker.
-    $unFound = (string)uniqid('arrayy', true);
-
-    return $this->get($key, $unFound) !== $unFound;
-  }
-
-  /**
-   * Set a value for the current array (optional using dot-notation).
-   *
-   * @param string $key   The key to set
-   * @param mixed  $value Its value
-   *
-   * @return Arrayy
-   */
-  public function set($key, $value)
-  {
-    $this->internalSet($key, $value);
-
-    return static::create($this->array);
-  }
-
-  /**
-   * Internal mechanic of set method.
-   *
-   * @param mixed $key
-   * @param mixed $value
-   *
-   * @return bool
-   */
-  protected function internalSet($key, $value)
-  {
-    if (null === $key) {
-      return false;
-    }
-
-    // Explode the keys
-    $keys = explode('.', $key);
-
-    // Crawl through the keys
-    while (count($keys) > 1) {
-      $key = array_shift($keys);
-
-      $this->array[$key] = $this->get(array(), null, $key);
-      $this->array = &$this->array[$key];
-    }
-
-    // Bind final tree on the array
-    $key = array_shift($keys);
-
-    $this->array[$key] = $value;
-
-    return true;
-  }
-
-  /**
-   * Get a value from a array and set it if it was not.
-   *
-   * WARNING: this method only set the value, if the $key is not already set
-   *
-   * @param string $key     The key
-   * @param mixed  $default The default value to set if it isn't
-   *
-   * @return mixed
-   */
-  public function setAndGet($key, $default = null)
-  {
-    // If the key doesn't exist, set it
-    if (!$this->has($key)) {
-      $this->array = $this->set($key, $default)->getArray();
-    }
-
-    return $this->get($key);
   }
 
   /**
@@ -1876,58 +1732,115 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Pad array to the specified size with a given value.
+   * Replace a key with a new key/value pair.
    *
-   * @param int   $size  Size of the result array
-   * @param mixed $value Empty value by default
+   * @param $replace
+   * @param $key
+   * @param $value
    *
-   * @return Arrayy Arrayy object padded to $size with $value
+   * @return Arrayy
    */
-  public function pad($size, $value)
+  public function replace($replace, $key, $value)
   {
-    $result = array_pad($this->array, $size, $value);
+    $this->remove($replace);
+
+    return $this->set($key, $value);
+  }
+
+  /**
+   * Create an array using the current array as values and the other array as keys.
+   *
+   * @param array $keys Keys array
+   *
+   * @return Arrayy Arrayy object with keys from the other array.
+   */
+  public function replaceAllKeys(array $keys)
+  {
+    $result = array_combine($keys, $this->array);
 
     return static::create($result);
   }
 
   /**
-   * Prepend a value to an array.
+   * Create an array using the current array as keys and the other array as values.
    *
-   * @param mixed $value
+   * @param array $array Values array
    *
-   * @return $this Return this Arrayy object, with the prepended value.
+   * @return Arrayy Arrayy object with values from the other array.
    */
-  public function prepend($value)
+  public function replaceAllValues(array $array)
   {
-    array_unshift($this->array, $value);
+    $result = array_combine($this->array, $array);
 
-    return $this;
+    return static::create($result);
   }
 
   /**
-   * alias: for "Arrayy->append()"
+   * Replace the keys in an array with another set.
    *
-   * @param $value
+   * @param array $keys An array of keys matching the array's size
    *
-   * @return $this Return this Arrayy object.
+   * @return Arrayy
    */
-  public function add($value)
+  public function replaceKeys(array $keys)
   {
-    $this->array[] = $value;
+    $values = array_values($this->array);
+    $result = array_combine($keys, $values);
 
-    return $this;
+    return static::create($result);
   }
 
   /**
-   * Create a numerically re-indexed Arrayy object.
+   * Replace the first matched value in an array.
    *
-   * @return $this Return this Arrayy object, with re-indexed array-elements.
+   * @param mixed $search
+   * @param mixed $replacement
+   *
+   * @return Arrayy
    */
-  public function reindex()
+  public function replaceOneValue($search, $replacement = '')
   {
-    $this->array = array_values($this->array);
+    $array = $this->array;
+    $key = array_search($search, $array, true);
 
-    return $this;
+    if ($key !== false) {
+      $array[$key] = $replacement;
+    }
+
+    return static::create($array);
+  }
+
+  /**
+   * Replace values in the current array.
+   *
+   * @param string $search      The string to replace.
+   * @param string $replacement What to replace it with.
+   *
+   * @return Arrayy
+   */
+  public function replaceValues($search, $replacement = '')
+  {
+    $array = $this->each(
+        function ($value) use ($search, $replacement) {
+          return UTF8::str_replace($search, $replacement, $value);
+        }
+    );
+
+    return static::create($array);
+  }
+
+  /**
+   * Get the last elements from index $from until the end of this array.
+   *
+   * @param int $from
+   *
+   * @return Arrayy
+   */
+  public function rest($from = 1)
+  {
+    $result = array_splice($this->array, $from);
+
+    return static::create($result);
   }
 
   /**
@@ -1943,33 +1856,137 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Custom sort by value via "usort"
+   * Search for the first index of the current array via $value.
    *
-   * @link http://php.net/manual/en/function.usort.php
+   * @param mixed $value
    *
-   * @param callable $func
-   *
-   * @return $this Return this Arrayy object.
+   * @return mixed
    */
-  public function customSortValues($func)
+  public function searchIndex($value)
   {
-    usort($this->array, $func);
-
-    return $this;
+    return array_search($value, $this->array, true);
   }
 
   /**
-   * Custom sort by index via "uksort"
+   * Search for the value of the current array via $index.
    *
-   * @link http://php.net/manual/en/function.uksort.php
+   * @param mixed $index
    *
-   * @param callable $func
+   * @return Arrayy will return a empty Arrayy if the value wasn't found
+   */
+  public function searchValue($index)
+  {
+    // init
+    $return = array();
+
+    if (null !== $index) {
+      $keyExists = isset($this->array[$index]);
+
+      if ($keyExists !== false) {
+        $return = array($this->array[$index]);
+      }
+    }
+
+    return static::create($return);
+  }
+
+  /**
+   * Set a value for the current array (optional using dot-notation).
+   *
+   * @param string $key   The key to set
+   * @param mixed  $value Its value
+   *
+   * @return Arrayy
+   */
+  public function set($key, $value)
+  {
+    $this->internalSet($key, $value);
+
+    return static::create($this->array);
+  }
+
+  /**
+   * Get a value from a array and set it if it was not.
+   *
+   * WARNING: this method only set the value, if the $key is not already set
+   *
+   * @param string $key     The key
+   * @param mixed  $default The default value to set if it isn't
+   *
+   * @return mixed
+   */
+  public function setAndGet($key, $default = null)
+  {
+    // If the key doesn't exist, set it
+    if (!$this->has($key)) {
+      $this->array = $this->set($key, $default)->getArray();
+    }
+
+    return $this->get($key);
+  }
+
+  /**
+   * Shifts a specified value off the beginning of array.
+   *
+   * @return mixed A shifted element from the current array.
+   */
+  public function shift()
+  {
+    return array_shift($this->array);
+  }
+
+  /**
+   * Shuffle the current array.
+   *
+   * @return Arrayy
+   */
+  public function shuffle()
+  {
+    $array = $this->array;
+
+    shuffle($array);
+
+    return static::create($array);
+  }
+
+  /**
+   * Get the size of an array.
+   *
+   * @return int
+   */
+  public function size()
+  {
+    return count($this->array);
+  }
+
+  /**
+   * Extract a slice of the array.
+   *
+   * @param int      $offset       Slice begin index
+   * @param int|null $length       Length of the slice
+   * @param bool     $preserveKeys Whether array keys are preserved or no
+   *
+   * @return static A slice of the original array with length $length
+   */
+  public function slice($offset, $length = null, $preserveKeys = false)
+  {
+    $result = array_slice($this->array, $offset, $length, $preserveKeys);
+
+    return static::create($result);
+  }
+
+  /**
+   * Sort the current array and optional you can keep the keys.
+   *
+   * @param string|int $direction use SORT_ASC or SORT_DESC
+   * @param int|string $strategy
+   * @param bool       $keepKeys
    *
    * @return $this Return this Arrayy object.
    */
-  public function customSortKeys($func)
+  public function sort($direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
   {
-    uksort($this->array, $func);
+    $this->sorting($this->array, $direction, $strategy, $keepKeys);
 
     return $this;
   }
@@ -1993,59 +2010,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * sorting keys
-   *
-   * @param array $elements
-   * @param int   $direction
-   * @param int   $strategy
-   */
-  protected function sorterKeys(array &$elements, $direction = SORT_ASC, $strategy = SORT_REGULAR)
-  {
-    $direction = $this->getDirection($direction);
-
-    switch ($direction) {
-      case 'desc':
-      case SORT_DESC:
-        krsort($elements, $strategy);
-        break;
-      case 'asc':
-      case SORT_ASC:
-      default:
-        ksort($elements, $strategy);
-    }
-  }
-
-  /**
-   * Get correct PHP constant for direction.
-   *
-   * @param int|string $direction
-   *
-   * @return int
-   */
-  protected function getDirection($direction)
-  {
-    if (is_string($direction)) {
-      $direction = strtolower($direction);
-
-      if ($direction === 'desc') {
-        $direction = SORT_DESC;
-      } else {
-        $direction = SORT_ASC;
-      }
-    }
-
-    if (
-        $direction !== SORT_DESC
-        &&
-        $direction !== SORT_ASC
-    ) {
-      $direction = SORT_ASC;
-    }
-
-    return $direction;
-  }
-
-  /**
    * Sort the current array by value.
    *
    * @param int $direction use SORT_ASC or SORT_DESC
@@ -2056,56 +2020,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   public function sortValueKeepIndex($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
     return $this->sort($direction, $strategy, true);
-  }
-
-  /**
-   * Sort the current array and optional you can keep the keys.
-   *
-   * @param string|int $direction use SORT_ASC or SORT_DESC
-   * @param int|string $strategy
-   * @param bool       $keepKeys
-   *
-   * @return $this Return this Arrayy object.
-   */
-  public function sort($direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
-  {
-    $this->sorting($this->array, $direction, $strategy, $keepKeys);
-
-    return $this;
-  }
-
-  /**
-   * @param array      &$elements
-   * @param int|string $direction
-   * @param int        $strategy
-   * @param bool       $keepKeys
-   */
-  protected function sorting(array &$elements, $direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
-  {
-    $direction = $this->getDirection($direction);
-
-    if (!$strategy) {
-      $strategy = SORT_REGULAR;
-    }
-
-    switch ($direction) {
-      case 'desc':
-      case SORT_DESC:
-        if ($keepKeys) {
-          arsort($elements, $strategy);
-        } else {
-          rsort($elements, $strategy);
-        }
-        break;
-      case 'asc':
-      case SORT_ASC:
-      default:
-        if ($keepKeys) {
-          asort($elements, $strategy);
-        } else {
-          sort($elements, $strategy);
-        }
-    }
   }
 
   /**
@@ -2161,50 +2075,113 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Exchanges all keys with their associated values in an array.
+   * sorting keys
    *
-   * @return Arrayy
+   * @param array $elements
+   * @param int   $direction
+   * @param int   $strategy
    */
-  public function flip()
+  protected function sorterKeys(array &$elements, $direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
-    $this->array = array_flip($this->array);
+    $direction = $this->getDirection($direction);
 
-    return static::create($this->array);
+    switch ($direction) {
+      case 'desc':
+      case SORT_DESC:
+        krsort($elements, $strategy);
+        break;
+      case 'asc':
+      case SORT_ASC:
+      default:
+        ksort($elements, $strategy);
+    }
   }
 
   /**
-   * Apply the given function to every element in the array,
-   * discarding the results.
-   *
-   * @param callable $callable
-   * @param bool     $recursive Whether array will be walked recursively or no
-   *
-   * @return $this Return this Arrayy object, with modified elements
+   * @param array      &$elements
+   * @param int|string $direction
+   * @param int        $strategy
+   * @param bool       $keepKeys
    */
-  public function walk($callable, $recursive = false)
+  protected function sorting(array &$elements, $direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
   {
-    if (true === $recursive) {
-      array_walk_recursive($this->array, $callable);
-    } else {
-      array_walk($this->array, $callable);
+    $direction = $this->getDirection($direction);
+
+    if (!$strategy) {
+      $strategy = SORT_REGULAR;
     }
 
-    return $this;
+    switch ($direction) {
+      case 'desc':
+      case SORT_DESC:
+        if ($keepKeys) {
+          arsort($elements, $strategy);
+        } else {
+          rsort($elements, $strategy);
+        }
+        break;
+      case 'asc':
+      case SORT_ASC:
+      default:
+        if ($keepKeys) {
+          asort($elements, $strategy);
+        } else {
+          sort($elements, $strategy);
+        }
+    }
   }
 
   /**
-   * Reduce the current array via callable e.g. anonymous-function.
+   * Split an array in the given amount of pieces.
    *
-   * @param mixed $callable
-   * @param array $init
+   * @param int  $numberOfPieces
+   * @param bool $keepKeys
    *
-   * @return Arrayy
+   * @return array
    */
-  public function reduce($callable, array $init = array())
+  public function split($numberOfPieces = 2, $keepKeys = false)
   {
-    $this->array = array_reduce($this->array, $callable, $init);
+    if (count($this->array) === 0) {
+      $result = array();
+    } else {
+      $numberOfPieces = (int)$numberOfPieces;
+      $splitSize = ceil(count($this->array) / $numberOfPieces);
+      $result = array_chunk($this->array, $splitSize, $keepKeys);
+    }
 
-    return static::create($this->array);
+    return static::create($result);
+  }
+
+  /**
+   * alias: for "Arrayy->getArray()"
+   */
+  public function toArray()
+  {
+    return $this->getArray();
+  }
+
+  /**
+   * Convert the current array to JSON.
+   *
+   * @param null $options e.g. JSON_PRETTY_PRINT
+   *
+   * @return string
+   */
+  public function toJson($options = null)
+  {
+    return UTF8::json_encode($this->array, $options);
+  }
+
+  /**
+   * Implodes array to a string with specified separator.
+   *
+   * @param string $separator The element's separator
+   *
+   * @return string The string representation of array, separated by ","
+   */
+  public function toString($separator = ',')
+  {
+    return $this->implode($separator);
   }
 
   /**
@@ -2230,32 +2207,51 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Convert the current array to JSON.
+   * Prepends one or more values to the beginning of array at once.
    *
-   * @param null $options e.g. JSON_PRETTY_PRINT
-   *
-   * @return string
+   * @return $this Return this Arrayy object, with prepended elements to the beginning of array.
    */
-  public function toJson($options = null)
+  public function unshift(/* variadic arguments allowed */)
   {
-    return UTF8::json_encode($this->array, $options);
+    if (func_num_args()) {
+      $args = array_merge(array(&$this->array), func_get_args());
+      call_user_func_array('array_unshift', $args);
+    }
+
+    return $this;
   }
 
+  /**
+   * Get all values from a array.
+   *
+   * @return Arrayy
+   */
+  public function values()
+  {
+    $array = array_values((array)$this->array);
 
+    return static::create($array);
+  }
 
+  /**
+   * Apply the given function to every element in the array,
+   * discarding the results.
+   *
+   * @param callable $callable
+   * @param bool     $recursive Whether array will be walked recursively or no
+   *
+   * @return $this Return this Arrayy object, with modified elements
+   */
+  public function walk($callable, $recursive = false)
+  {
+    if (true === $recursive) {
+      array_walk_recursive($this->array, $callable);
+    } else {
+      array_walk($this->array, $callable);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    return $this;
+  }
 
 
 }
