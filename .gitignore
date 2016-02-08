@@ -1,3 +1,4 @@
 vendor/
 composer.lock
-
+_book/
+node_modules/
