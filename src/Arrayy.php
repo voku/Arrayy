@@ -408,7 +408,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   public function push(/* variadic arguments allowed */)
   {
     if (func_num_args()) {
-      $args = array_merge([&$this->array], func_get_args());
+      $args = array_merge(array(&$this->array), func_get_args());
       call_user_func_array('array_push', $args);
     }
 
