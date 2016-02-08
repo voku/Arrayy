@@ -9,10 +9,10 @@ use Arrayy\Arrayy as A;
  */
 class BasicArrayTest extends PHPUnit_Framework_TestCase
 {
-  const TYPE_EMPTY = 'empty';
+  const TYPE_EMPTY   = 'empty';
   const TYPE_NUMERIC = 'numeric';
-  const TYPE_ASSOC = 'assoc';
-  const TYPE_MIXED = 'mixed';
+  const TYPE_ASSOC   = 'assoc';
+  const TYPE_MIXED   = 'mixed';
 
   /**
    * @var string
@@ -20,47 +20,12 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   protected $arrayyClassName = 'Arrayy\Arrayy';
 
   /**
-   * @param array $array
-   *
-   * @return A
-   */
-  protected function createArrayy(array $array = array())
-  {
-    return new $this->arrayyClassName($array);
-  }
-
-  /**
-   * @param A $arrayy
-   * @param A $resultArrayy
-   * @param array $array
-   * @param array $resultArray
-   */
-  protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray)
-  {
-    self::assertNotSame($arrayy, $resultArrayy);
-    self::assertSame($array, $arrayy->toArray());
-    self::assertSame($resultArray, $resultArrayy->toArray());
-  }
-
-  /**
-   * @param A $arrayy
-   * @param A $resultArrayy
-   * @param array $resultArray
-   */
-  protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray)
-  {
-    self::assertSame($arrayy, $resultArrayy);
-    self::assertSame($resultArray, $arrayy->toArray());
-    self::assertSame($resultArray, $resultArrayy->toArray());
-  }
-
-  /**
    * @return array
    */
   public function simpleArrayProvider()
   {
     return array(
-        'empty_array' => array(
+        'empty_array'   => array(
             array(),
             self::TYPE_EMPTY,
         ),
@@ -72,19 +37,19 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
             ),
             self::TYPE_NUMERIC,
         ),
-        'assoc_array' => array(
+        'assoc_array'   => array(
             array(
-                'one' => 1,
-                'two' => 2,
+                'one'   => 1,
+                'two'   => 2,
                 'three' => 3,
             ),
             self::TYPE_ASSOC,
         ),
-        'mixed_array' => array(
+        'mixed_array'   => array(
             array(
-                1 => 'one',
+                1     => 'one',
                 'two' => 2,
-                3 => 'three',
+                3     => 'three',
             ),
             self::TYPE_MIXED,
         ),
@@ -99,20 +64,18 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     return array(
         array(
             's,t,r,i,n,g',
-            ','
+            ',',
         ),
         array(
             'He|ll|o',
-            '|'
+            '|',
         ),
         array(
             'Wo;rld',
-            ';'
+            ';',
         ),
     );
   }
-
-  // The method list order by ASC
 
   /**
    * @dataProvider simpleArrayProvider
@@ -130,6 +93,16 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @param array $array
+   *
+   * @return A
+   */
+  protected function createArrayy(array $array = array())
+  {
+    return new $this->arrayyClassName($array);
+  }
+
+  /**
    * @dataProvider simpleArrayProvider
    *
    * @param array $array
@@ -143,6 +116,8 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
 
     self::assertSame($isContainsKey, $arrayy->containsKey($key));
   }
+
+  // The method list order by ASC
 
   /**
    * @dataProvider simpleArrayProvider
@@ -190,7 +165,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testExists(array $array)
   {
-    $callable = function($value, $key) {
+    $callable = function ($value, $key) {
       return 2 === $key and 'two' === $value;
     };
 
@@ -202,7 +177,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
 
   public function testFind()
   {
-    $callable = function($value, $key) {
+    $callable = function ($value, $key) {
       return 'a' === $value and 2 < $key;
     };
 
@@ -426,7 +401,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider simpleArrayProvider
    *
-   * @param array $array
+   * @param array  $array
    * @param string $type
    */
   public function testIsAssoc(array $array, $type = null)
@@ -444,7 +419,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testIsEmpty(array $array)
   {
-    $isEmpty = ! $array;
+    $isEmpty = !$array;
     $arrayy = $this->createArrayy($array);
 
     self::assertSame($isEmpty, $arrayy->isEmpty());
@@ -453,7 +428,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider simpleArrayProvider
    *
-   * @param array $array
+   * @param array  $array
    * @param string $type
    */
   public function testIsNumeric(array $array, $type = null)
@@ -486,7 +461,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = $this->createArrayy($array);
     $last = end($array);
-    $result =  $arrayy->last()->getArray();
+    $result = $arrayy->last()->getArray();
 
     if (!isset($result[0])) {
       $result[0] = false;
@@ -551,23 +526,6 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     self::assertSame($prev, prev($arrayy->getArray()));
   }
 
-  /*
-  public function testReduce()
-  {
-    $func = function($carry, $value) {
-      $carry += $value;
-
-      return $carry;
-    };
-    $array = array(1, 2, 3);
-    $arrayy = $this->createArrayy($array);
-    $arrayyReduced = $arrayy->reduce($func);
-    $arrayReduced = array_reduce($array, $func);
-
-    self::assertSame($arrayReduced, $arrayyReduced);
-  }
-  */
-
   /**
    * @dataProvider simpleArrayProvider
    *
@@ -597,5 +555,47 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
 
     self::assertSame($resultString, (string)$arrayy);
     self::assertSame($string, $arrayy->toString($separator));
+  }
+
+  /*
+  public function testReduce()
+  {
+    $func = function($carry, $value) {
+      $carry += $value;
+
+      return $carry;
+    };
+    $array = array(1, 2, 3);
+    $arrayy = $this->createArrayy($array);
+    $arrayyReduced = $arrayy->reduce($func);
+    $arrayReduced = array_reduce($array, $func);
+
+    self::assertSame($arrayReduced, $arrayyReduced);
+  }
+  */
+
+  /**
+   * @param A     $arrayy
+   * @param A     $resultArrayy
+   * @param array $array
+   * @param array $resultArray
+   */
+  protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray)
+  {
+    self::assertNotSame($arrayy, $resultArrayy);
+    self::assertSame($array, $arrayy->toArray());
+    self::assertSame($resultArray, $resultArrayy->toArray());
+  }
+
+  /**
+   * @param A     $arrayy
+   * @param A     $resultArrayy
+   * @param array $resultArray
+   */
+  protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray)
+  {
+    self::assertSame($arrayy, $resultArrayy);
+    self::assertSame($resultArray, $arrayy->toArray());
+    self::assertSame($resultArray, $resultArrayy->toArray());
   }
 }

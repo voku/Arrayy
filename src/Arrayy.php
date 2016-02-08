@@ -736,16 +736,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   public function __isset($key)
   {
     return isset($this->array[$key]);
-  }  /**
-   * Whether or not an offset exists.
-   *
-   * @param mixed $offset
-   *
-   * @return bool
-   */
-  public function offsetExists($offset)
-  {
-    return isset($this->array[$offset]);
   }
 
   /**
@@ -757,7 +747,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   {
     unset($this->array[$key]);
   }
-
   /**
    * Call object as function.
    *
@@ -776,6 +765,16 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return (array)$this->array;
+  }/**
+   * Whether or not an offset exists.
+   *
+   * @param mixed $offset
+   *
+   * @return bool
+   */
+  public function offsetExists($offset)
+  {
+    return isset($this->array[$offset]);
   }
 
   /**
@@ -892,18 +891,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Unset an offset.
-   *
-   * @param mixed $offset
-   */
-  public function offsetUnset($offset)
-  {
-    if ($this->offsetExists($offset)) {
-      unset($this->array[$offset]);
-    }
-  }
-
-  /**
    * Check whether the array is empty or not.
    *
    * @return bool Returns true if empty, false otherwise
@@ -913,7 +900,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return !$this->array;
   }
 
-  /**
+/**
    * alias: for "Arrayy->keys()"
    *
    * @return Arrayy
@@ -923,7 +910,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return $this->keys();
   }
 
-  /**
+    /**
    * Get all keys from the current array.
    *
    * @return Arrayy
@@ -934,7 +921,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
 
     return static::create($array);
   }
-
   /**
    * Check whether array is numeric or not.
    *
@@ -953,6 +939,16 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return true;
+  }/**
+   * Unset an offset.
+   *
+   * @param mixed $offset
+   */
+  public function offsetUnset($offset)
+  {
+    if ($this->offsetExists($offset)) {
+      unset($this->array[$offset]);
+    }
   }
 
   /**
@@ -1009,16 +1005,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return round(array_sum($this->array) / $count, $decimals);
-  }  /**
-   * Returns the value at specified offset.
-   *
-   * @param mixed $offset
-   *
-   * @return mixed return null if the offset did not exists
-   */
-  public function offsetGet($offset)
-  {
-    return $this->offsetExists($offset) ? $this->array[$offset] : null;
   }
 
   /**
@@ -1047,7 +1033,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return max($this->array);
   }
 
-  /**
+/**
    * Get the min value from an array.
    *
    * @return mixed
@@ -1080,7 +1066,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return false;
   }
 
-  /**
+    /**
    * WARNING!!! -> Clear the current array.
    *
    * @return $this will always return an empty Arrayy object
@@ -1091,7 +1077,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
 
     return $this;
   }
-
   /**
    * Clean all falsy values from an array.
    *
@@ -1104,6 +1089,16 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
           return (bool)$value;
         }
     );
+  }/**
+   * Returns the value at specified offset.
+   *
+   * @param mixed $offset
+   *
+   * @return mixed return null if the offset did not exists
+   */
+  public function offsetGet($offset)
+  {
+    return $this->offsetExists($offset) ? $this->array[$offset] : null;
   }
 
   /**
@@ -1146,14 +1141,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return $this->mergeAppendKeepIndex($options)->random($number);
-  }  /**
-   * Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
-   *
-   * @return \ArrayIterator An iterator for the values in the array.
-   */
-  public function getIterator()
-  {
-    return new \ArrayIterator($this->array);
   }
 
   /**
@@ -1201,7 +1188,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return $this->searchIndex($value);
   }
 
-  /**
+/**
    * Return a boolean flag which indicates whether the two input arrays have any common elements.
    *
    * @param array $search
@@ -1247,7 +1234,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return $arrayy;
   }
 
-  /**
+    /**
    * Pop a specified value off the end of the current array.
    *
    * @return mixed The popped element from the current array.
@@ -1256,7 +1243,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   {
     return array_pop($this->array);
   }
-
   /**
    * Get the last elements from index $from until the end of this array.
    *
@@ -1269,6 +1255,14 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     $result = array_splice($this->array, $from);
 
     return static::create($result);
+  }/**
+   * Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
+   *
+   * @return \ArrayIterator An iterator for the values in the array.
+   */
+  public function getIterator()
+  {
+    return new \ArrayIterator($this->array);
   }
 
   /**
@@ -2210,6 +2204,14 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   {
     return UTF8::json_encode($this->array, $options);
   }
+
+
+
+
+
+
+
+
 
 
 

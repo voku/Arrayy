@@ -13,30 +13,37 @@ class StaticArrayyTest extends PHPUnit_Framework_TestCase
   public function testBadMethodCall()
   {
     /** @noinspection PhpUndefinedMethodInspection */
+    /** @noinspection PhpUnusedLocalVariableInspection */
     $result = A::invalidMethod('foo');
   }
 
   public function testEmptyArgsInvocation()
   {
+    /** @noinspection PhpUndefinedMethodInspection */
     $result = A::first();
     self::assertEquals('', $result);
   }
 
   public function testInvocation()
   {
+    /** @noinspection PhpUndefinedMethodInspection */
     $result = A::first(array('lall', 'FOOBAR'), 1);
     self::assertEquals('lall', $result);
   }
 
   public function testPartialArgsInvocation()
   {
+    /** @noinspection PhpUndefinedMethodInspection */
     $result = A::replaceOneValue(array('foo', 'bar'), 'foo');
+    /** @noinspection PhpUndefinedMethodInspection */
     self::assertEquals(array('', 'bar'), $result->getArray());
   }
 
   public function testFullArgsInvocation()
   {
+    /** @noinspection PhpUndefinedMethodInspection */
     $result = A::replaceOneValue(array('foo', 'bar'), 'foo', 'test');
+    /** @noinspection PhpUndefinedMethodInspection */
     self::assertEquals(array('test', 'bar'), $result->getArray());
   }
 

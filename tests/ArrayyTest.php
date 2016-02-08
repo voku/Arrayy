@@ -7,10 +7,10 @@ use Arrayy\Arrayy as A;
  */
 class ArrayyTest extends PHPUnit_Framework_TestCase
 {
-  const TYPE_EMPTY = 'empty';
+  const TYPE_EMPTY   = 'empty';
   const TYPE_NUMERIC = 'numeric';
-  const TYPE_ASSOC = 'assoc';
-  const TYPE_MIXED = 'mixed';
+  const TYPE_ASSOC   = 'assoc';
+  const TYPE_MIXED   = 'mixed';
 
   public function testConstruct()
   {
@@ -541,7 +541,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function simpleArrayProvider()
   {
     return array(
-        'empty_array' => array(
+        'empty_array'   => array(
             array(),
             self::TYPE_EMPTY,
         ),
@@ -553,19 +553,19 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
             ),
             self::TYPE_NUMERIC,
         ),
-        'assoc_array' => array(
+        'assoc_array'   => array(
             array(
-                'one' => 1,
-                'two' => 2,
+                'one'   => 1,
+                'two'   => 2,
                 'three' => 3,
             ),
             self::TYPE_ASSOC,
         ),
-        'mixed_array' => array(
+        'mixed_array'   => array(
             array(
-                1 => 'one',
+                1     => 'one',
                 'two' => 2,
-                3 => 'three',
+                3     => 'three',
             ),
             self::TYPE_MIXED,
         ),
@@ -684,7 +684,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(0 => 1, 1 => 2, 2 => 3, 3 => 4), false),
         array(array(1, 2, 3, 4), false),
         array(array(0, 1, 2, 3), false),
-        array(array('foo' => false, 'foo1' =>  'lall'), true),
+        array(array('foo' => false, 'foo1' => 'lall'), true),
     );
   }
 
@@ -2612,15 +2612,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     return array(
         array(
             's,t,r,i,n,g',
-            ','
+            ',',
         ),
         array(
             'He|ll|o',
-            '|'
+            '|',
         ),
         array(
             'Wo;rld',
-            ';'
+            ';',
         ),
     );
   }
