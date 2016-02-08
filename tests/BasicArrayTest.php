@@ -3,11 +3,11 @@
 use Arrayy\Arrayy as A;
 
 /**
- * The base class for testing
+ * Copy of a test class from "https://github.com/bocharsky-bw/Arrayzy/"
  *
  * @author Victor Bocharsky <bocharsky.bw@gmail.com>
  */
-abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
+class BasicArrayTest extends PHPUnit_Framework_TestCase
 {
   const TYPE_EMPTY = 'empty';
   const TYPE_NUMERIC = 'numeric';
@@ -17,7 +17,7 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
   /**
    * @var string
    */
-  protected $arrayyClassName;
+  protected $arrayyClassName = 'Arrayy\Arrayy';
 
   /**
    * @param array $array
@@ -190,7 +190,7 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testExists(array $array)
   {
-    $callable = function($key, $value) {
+    $callable = function($value, $key) {
       return 2 === $key and 'two' === $value;
     };
 
@@ -222,7 +222,13 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
     $arrayy = $this->createArrayy($array);
     $first = reset($array);
 
-    self::assertSame($first, $arrayy->first());
+    if ($first === false) {
+      $first = array();
+    } else {
+      $first = (array)$first;
+    }
+
+    self::assertSame($first, $arrayy->first()->getArray());
   }
 
   public function testGetIterator()
@@ -242,7 +248,7 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
     $arrayy = $this->createArrayy($array);
     $keys = array_keys($array);
 
-    self::assertSame($keys, $arrayy->keys());
+    self::assertSame($keys, $arrayy->keys()->getArray());
   }
 
   /**
@@ -257,11 +263,11 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
     }
 
     $arrayy = $this->createArrayy($array);
-    $value = $arrayy->getRandom();
+    $value = $arrayy->getRandom()->getArray();
 
-    self::assertNotSame(null, $value);
+    self::assertNotSame(null, $value[0]);
     /** @noinspection TypeUnsafeArraySearchInspection */
-    self::assertTrue(in_array($value, $arrayy->toArray()));
+    self::assertTrue(in_array($value[0], $arrayy->toArray()));
   }
 
   /**
@@ -294,7 +300,7 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
     }
 
     $arrayy = $this->createArrayy($array);
-    $keys = $arrayy->getRandomKeys(count($array));
+    $keys = $arrayy->getRandomKeys(count($array))->getArray();
 
     self::assertInternalType('array', $keys);
   }
@@ -379,7 +385,7 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
     }
 
     $arrayy = $this->createArrayy($array);
-    $values = $arrayy->getRandomValues(1);
+    $values = $arrayy->getRandomValues(1)->getArray();
 
     self::assertCount(1, $values);
     self::assertInternalType('array', $values);
@@ -399,7 +405,7 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
     $arrayy = $this->createArrayy($array);
     $values = array_values($array);
 
-    self::assertSame($values, $arrayy->reindex());
+    self::assertSame($values, $arrayy->reindex()->getArray());
   }
 
   /**
@@ -480,8 +486,13 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = $this->createArrayy($array);
     $last = end($array);
+    $result =  $arrayy->last()->getArray();
 
-    self::assertSame($last, $arrayy->last());
+    if (!isset($result[0])) {
+      $result[0] = false;
+    }
+
+    self::assertSame($last, $result[0]);
   }
 
   /**
@@ -540,6 +551,7 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
     self::assertSame($prev, prev($arrayy->getArray()));
   }
 
+  /*
   public function testReduce()
   {
     $func = function($carry, $value) {
@@ -554,6 +566,7 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
 
     self::assertSame($arrayReduced, $arrayyReduced);
   }
+  */
 
   /**
    * @dataProvider simpleArrayProvider
@@ -580,7 +593,7 @@ abstract class AbstractArrayTest extends PHPUnit_Framework_TestCase
     $array = explode($separator, $string);
 
     $arrayy = $this->createArrayy($array);
-    $resultString = implode(', ', $array);
+    $resultString = implode(',', $array);
 
     self::assertSame($resultString, (string)$arrayy);
     self::assertSame($string, $arrayy->toString($separator));

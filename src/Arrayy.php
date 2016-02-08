@@ -300,7 +300,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * alias: for "Arrayy->randomValue()"
    *
-   * @return Arrayy
+   * @return mixed get a random value or null if there wasn't a value
    */
   public function getRandomValue()
   {
@@ -310,11 +310,17 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Pick a random value from the values of this array.
    *
-   * @return Arrayy
+   * @return mixed get a random value or null if there wasn't a value
    */
   public function randomValue()
   {
-    return $this->random(1);
+    $result = $this->random(1);
+
+    if (!isset($result[0])) {
+      $result[0] = null;
+    }
+
+    return $result[0];
   }
 
   /**
@@ -346,7 +352,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * alias: for "Arrayy->randomKey()"
    *
-   * @return Arrayy
+   * @return mixed get a key/index or null if there wasn't a key/index
    */
   public function getRandomKey()
   {
@@ -356,13 +362,20 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Pick a random key/index from the keys of this array.
    *
-   * @return Arrayy
+   *
+   * @return mixed get a key/index or null if there wasn't a key/index
    *
    * @throws \RangeException If array is empty
    */
   public function randomKey()
   {
-    return $this->randomKeys(1);
+    $result = $this->randomKeys(1);
+
+    if (!isset($result[0])) {
+      $result[0] = null;
+    }
+
+    return $result[0];
   }
 
   /**
@@ -703,18 +716,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Whether or not an offset exists.
-   *
-   * @param mixed $offset
-   *
-   * @return bool
-   */
-  public function offsetExists($offset)
-  {
-    return isset($this->array[$offset]);
-  }
-
-  /**
    * Assigns a value to the specified element.
    *
    * @param $key
@@ -735,6 +736,16 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   public function __isset($key)
   {
     return isset($this->array[$key]);
+  }  /**
+   * Whether or not an offset exists.
+   *
+   * @param mixed $offset
+   *
+   * @return bool
+   */
+  public function offsetExists($offset)
+  {
+    return isset($this->array[$offset]);
   }
 
   /**
@@ -813,18 +824,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Unset an offset.
-   *
-   * @param mixed $offset
-   */
-  public function offsetUnset($offset)
-  {
-    if ($this->offsetExists($offset)) {
-      unset($this->array[$offset]);
-    }
-  }
-
-  /**
    * Iterate over the current array and modify the array's value.
    *
    * @param \Closure $closure
@@ -873,40 +872,35 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Check if we have named keys in the current array.
+   * Check whether array is associative or not.
    *
-   * @return bool
+   * @return bool Returns true if associative, false otherwise
    */
   public function isAssoc()
   {
-    if (count($this->array) === 0) {
+    if ($this->isEmpty()) {
       return false;
     }
 
-    return (bool)count(array_filter(array_keys($this->array), 'is_string'));
-  }
-
-  /**
-   * Check whether array is numeric or not.
-   *
-   * @return bool Returns true if numeric, false otherwise
-   */
-  public function isNumeric()
-  {
-    $isNumeric = true;
-
-    if ($this->isEmpty()) {
-      $isNumeric = false;
-    } else {
-      foreach ($this->getKeys() as $key) {
-        if (!is_int($key)) {
-          $isNumeric = false;
-          break;
-        }
+    foreach ($this->getKeys()->getArray() as $key) {
+      if (!is_string($key)) {
+        return false;
       }
     }
 
-    return $isNumeric;
+    return true;
+  }
+
+  /**
+   * Unset an offset.
+   *
+   * @param mixed $offset
+   */
+  public function offsetUnset($offset)
+  {
+    if ($this->offsetExists($offset)) {
+      unset($this->array[$offset]);
+    }
   }
 
   /**
@@ -917,18 +911,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   public function isEmpty()
   {
     return !$this->array;
-  }
-
-  /**
-   * Returns the value at specified offset.
-   *
-   * @param mixed $offset
-   *
-   * @return mixed return null if the offset did not exists
-   */
-  public function offsetGet($offset)
-  {
-    return $this->offsetExists($offset) ? $this->array[$offset] : null;
   }
 
   /**
@@ -951,6 +933,26 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     $array = array_keys((array)$this->array);
 
     return static::create($array);
+  }
+
+  /**
+   * Check whether array is numeric or not.
+   *
+   * @return bool Returns true if numeric, false otherwise
+   */
+  public function isNumeric()
+  {
+    if ($this->isEmpty()) {
+      return false;
+    }
+
+    foreach ($this->getKeys() as $key) {
+      if (!is_int($key)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**
@@ -1007,16 +1009,16 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return round(array_sum($this->array) / $count, $decimals);
-  }
-
-  /**
-   * Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
+  }  /**
+   * Returns the value at specified offset.
    *
-   * @return \ArrayIterator An iterator for the values in the array.
+   * @param mixed $offset
+   *
+   * @return mixed return null if the offset did not exists
    */
-  public function getIterator()
+  public function offsetGet($offset)
   {
-    return new \ArrayIterator($this->array);
+    return $this->offsetExists($offset) ? $this->array[$offset] : null;
   }
 
   /**
@@ -1136,7 +1138,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   {
     $options = array();
     foreach ($array as $option => $weight) {
-      if ($this->searchIndex($option)->count() > 0) {
+      if ($this->searchIndex($option) !== false) {
         for ($i = 0; $i < $weight; ++$i) {
           $options[] = $option;
         }
@@ -1144,6 +1146,14 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return $this->mergeAppendKeepIndex($options)->random($number);
+  }  /**
+   * Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
+   *
+   * @return \ArrayIterator An iterator for the values in the array.
+   */
+  public function getIterator()
+  {
+    return new \ArrayIterator($this->array);
   }
 
   /**
@@ -1151,19 +1161,11 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $value
    *
-   * @return Arrayy will return a empty Arrayy if the index was not found
+   * @return mixed
    */
   public function searchIndex($value)
   {
-    $key = array_search($value, $this->array, true);
-
-    if ($key === false) {
-      $return = array();
-    } else {
-      $return = array($key);
-    }
-
-    return static::create($return);
+    return array_search($value, $this->array, true);
   }
 
   /**
@@ -1192,7 +1194,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $value Value to search for
    *
-   * @return Arrayy will return a empty Arrayy if the index was not found
+   * @return mixed
    */
   public function indexOf($value)
   {
@@ -2163,14 +2165,14 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Reduce the current array via callable e.g. anonymous-function.
    *
-   * @param mixed $predicate
+   * @param mixed $callable
    * @param array $init
    *
    * @return Arrayy
    */
-  public function reduce($predicate, array $init = array())
+  public function reduce($callable, array $init = array())
   {
-    $this->array = array_reduce($this->array, $predicate, $init);
+    $this->array = array_reduce($this->array, $callable, $init);
 
     return static::create($this->array);
   }
@@ -2208,4 +2210,14 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   {
     return UTF8::json_encode($this->array, $options);
   }
+
+
+
+
+
+
+
+
+
+
 }

@@ -141,7 +141,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->searchIndex($value)->getArray());
+    self::assertEquals($expected, $arrayy->searchIndex($value));
   }
 
   /**
@@ -150,13 +150,13 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function searchIndexProvider()
   {
     return array(
-        array(array(), array(null), ''),
-        array(array(), array(false), true),
-        array(array(0), array(false), false),
-        array(array(0), array(true), true),
-        array(array(2), array(-9, 1, 0, false), -0),
-        array(array(0), array(1.18), 1.18),
-        array(array(1), array('string', 'foo'), 'foo'),
+        array(false, array(null), ''),
+        array(false, array(false), true),
+        array(0, array(false), false),
+        array(0, array(true), true),
+        array(2, array(-9, 1, 0, false), -0),
+        array(0, array(1.18), 1.18),
+        array(1, array('string', 'foo'), 'foo'),
     );
   }
 
@@ -684,9 +684,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(0 => 1, 1 => 2, 2 => 3, 3 => 4), false),
         array(array(1, 2, 3, 4), false),
         array(array(0, 1, 2, 3), false),
-        array(array('foo' => false, 'foo', 'lall'), true),
-        array(array('foo' => false, 'foo', 'lall'), true),
-        array(array('foo' => false, 'foo', 'lall'), true),
+        array(array('foo' => false, 'foo1' =>  'lall'), true),
     );
   }
 
