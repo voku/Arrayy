@@ -832,23 +832,23 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @dataProvider firstProvider()
+   * @dataProvider firstsProvider()
    *
    * @param array $array
    * @param array $result
    * @param null  $take
    */
-  public function testFirst($array, $result, $take = null)
+  public function testFirsts($array, $result, $take = null)
   {
     $arrayy = A::create($array);
 
-    self::assertEquals($result, $arrayy->first($take)->getArray());
+    self::assertEquals($result, $arrayy->firsts($take)->getArray());
   }
 
   /**
    * @return array
    */
-  public function firstProvider()
+  public function firstsProvider()
   {
     return array(
         array(array(), array()),
@@ -862,6 +862,40 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(1.18, false), array(1.18), 1),
         array(array('foo' => false, 'foo', 'lall'), array('foo', 'foo' => false), 2),
         array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'foo', 1 => 'bar'), 2),
+    );
+  }
+
+
+  /**
+   * @dataProvider firstProvider()
+   *
+   * @param array $array
+   * @param array $result
+   */
+  public function testFirst($array, $result)
+  {
+    $arrayy = A::create($array);
+
+    self::assertEquals($result, $arrayy->first());
+  }
+
+  /**
+   * @return array
+   */
+  public function firstProvider()
+  {
+    return array(
+        array(array(), null),
+        array(array(null, false), null),
+        array(array(0 => true), true),
+        array(array(0 => -9, 0), -9),
+        array(array(-8 => -9, 1, 2 => false), -9),
+        array(array(1.18, false), 1.18),
+        array(array('foo' => false, 'foo', 'lall'), false),
+        array(array(-8 => -9, 1, 2 => false), -9),
+        array(array(1.18, false), 1.18),
+        array(array('foo' => false, 'foo', 'lall'), false),
+        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), 'foo'),
     );
   }
 
@@ -896,6 +930,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(1.18, false), array(false), 1),
         array(array('foo' => false, 'foo', 'lall'), array('foo', 'lall'), 2),
         array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'bar', 1 => 'lall'), 2),
+        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'lall')),
     );
   }
 
@@ -3102,6 +3137,17 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArray = array_values($array);
 
     self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+  }
+
+  public function testReindexSimple()
+  {
+    $testArray = array(2 => 1, 3 => 2);
+    $arrayy = new A($testArray);
+    $arrayy->reindex();
+
+    $result = array(0 => 1, 1 => 2);
+
+    self::assertEquals($result, $arrayy->getArray());
   }
 
   /**

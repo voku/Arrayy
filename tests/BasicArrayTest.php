@@ -203,7 +203,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
       $first = (array)$first;
     }
 
-    self::assertSame($first, $arrayy->first()->getArray());
+    self::assertSame($first, $arrayy->firsts()->getArray());
   }
 
   public function testGetIterator()
@@ -480,6 +480,10 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     $arrayy = $this->createArrayy($array);
     $last = end($array);
     $result = $arrayy->last();
+
+    if (empty($array)) {
+      $last = null;
+    }
 
     self::assertSame($last, $result);
   }

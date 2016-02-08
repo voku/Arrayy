@@ -74,7 +74,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     throw new \InvalidArgumentException(
-        'Passed value must be a array'
+        'Passed value should be a array'
     );
   }
 
@@ -95,7 +95,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param string|null $delimiter The boundary string.
    * @param string|null $regEx     Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be used.
    *
-   * @return Arrayy Returns created instance
+   * @return Arrayy Returns an new instance of the Arrayy object.
    */
   public static function createFromString($str, $delimiter, $regEx = null)
   {
@@ -128,7 +128,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $array
    *
-   * @return Arrayy Returns created instance
+   * @return Arrayy Returns an new instance of the Arrayy object.
    */
   public static function create($array = array())
   {
@@ -140,7 +140,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param string $json
    *
-   * @return Arrayy Returns created instance
+   * @return Arrayy Returns an new instance of the Arrayy object.
    */
   public static function createFromJson($json)
   {
@@ -154,7 +154,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param ArrayAccess $elements Object that implements ArrayAccess
    *
-   * @return Arrayy Returns created instance
+   * @return Arrayy Returns an new instance of the Arrayy object.
    */
   public static function createFromObject(ArrayAccess $elements)
   {
@@ -174,7 +174,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param mixed $high The sequence is ended upon reaching the end value
    * @param int   $step Used as the increment between elements in the sequence
    *
-   * @return Arrayy The created array
+   * @return Arrayy Returns an new instance of the Arrayy object.
    */
   public static function createWithRange($low, $high, $step = 1)
   {
@@ -212,7 +212,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
 
     shuffle($this->array);
 
-    return $this->first($number);
+    return $this->firsts($number);
   }
 
   /**
@@ -238,13 +238,29 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
+   * Get the first value from the current array.
+   *
+   * @return mixed Return null if there wasn't a element.
+   */
+  public function first()
+  {
+    $result = array_shift($this->array);
+
+    if (null === $result) {
+      return null;
+    } else {
+      return $result;
+    }
+  }
+
+  /**
    * Get the first value(s) from the current array.
    *
    * @param int|null $number how many values you will take?
    *
    * @return Arrayy
    */
-  public function first($number = null)
+  public function firsts($number = null)
   {
     if ($number === null) {
       $array = (array)array_shift($this->array);
@@ -261,7 +277,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $value
    *
-   * @return $this This Arrayy object with the appended values.
+   * @return $this Return this Arrayy object, with the appended values.
    */
   public function append($value)
   {
@@ -552,7 +568,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $array
    *
-   * @return $this
+   * @return $this Return this Arrayy object.
    */
   public function createByReference(&$array = array())
   {
@@ -670,7 +686,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Push one or more values onto the end of array at once.
    *
-   * @return $this This Arrayy object with pushed elements to the end of array.
+   * @return $this Return this Arrayy object, with pushed elements to the end of array.
    */
   public function push(/* variadic arguments allowed */)
   {
@@ -695,7 +711,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Prepends one or more values to the beginning of array at once.
    *
-   * @return $this This Arrayy object with prepended elements to the beginning of array.
+   * @return $this Return this Arrayy object, with prepended elements to the beginning of array.
    */
   public function unshift(/* variadic arguments allowed */)
   {
@@ -1073,7 +1089,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     /**
    * WARNING!!! -> Clear the current array.
    *
-   * @return $this This will always return an empty Arrayy object.
+   * @return $this Return this Arrayy object, with an empty array.
    */
   public function clear()
   {
@@ -1221,14 +1237,14 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Get the last value from the current array.
    *
-   * @return mixed return null if there wasn't a element.
+   * @return mixed Return null if there wasn't a element.
    */
   public function last()
   {
     $result = $this->pop();
 
     if (null === $result) {
-      return false;
+      return null;
     } else {
       return $result;
     }
@@ -1296,7 +1312,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   {
     $slice = count($this->array) - $to;
 
-    return $this->first($slice);
+    return $this->firsts($slice);
   }
 
   /**
@@ -1879,7 +1895,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $value
    *
-   * @return $this This Arrayy object with the prepended value.
+   * @return $this Return this Arrayy object, with the prepended value.
    */
   public function prepend($value)
   {
@@ -1893,7 +1909,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param $value
    *
-   * @return $this
+   * @return $this Return this Arrayy object.
    */
   public function add($value)
   {
@@ -1905,25 +1921,25 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Create a numerically re-indexed Arrayy object.
    *
-   * @return Arrayy The new instance with re-indexed array-elements
+   * @return $this Return this Arrayy object, with re-indexed array-elements.
    */
   public function reindex()
   {
     $this->array = array_values($this->array);
 
-    return static::create($this->array);
+    return $this;
   }
 
   /**
    * Return the array in the reverse order.
    *
-   * @return Arrayy
+   * @return $this Return this Arrayy object.
    */
   public function reverse()
   {
     $this->array = array_reverse($this->array);
 
-    return static::create($this->array);
+    return $this;
   }
 
   /**
@@ -1933,7 +1949,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param callable $func
    *
-   * @return $this
+   * @return $this Return this Arrayy object.
    */
   public function customSortValues($func)
   {
@@ -1949,7 +1965,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param callable $func
    *
-   * @return $this
+   * @return $this Return this Arrayy object.
    */
   public function customSortKeys($func)
   {
@@ -1967,7 +1983,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int|string $direction use SORT_ASC or SORT_DESC
    * @param int        $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
    *
-   * @return $this
+   * @return $this Return this Arrayy object.
    */
   public function sortKeys($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2049,7 +2065,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int|string $strategy
    * @param bool       $keepKeys
    *
-   * @return $this
+   * @return $this Return this Arrayy object.
    */
   public function sort($direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
   {
@@ -2163,7 +2179,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param callable $callable
    * @param bool     $recursive Whether array will be walked recursively or no
    *
-   * @return $this This Arrayy object with modified elements
+   * @return $this Return this Arrayy object, with modified elements
    */
   public function walk($callable, $recursive = false)
   {

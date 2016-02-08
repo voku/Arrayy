@@ -170,6 +170,14 @@ A::reverse(['fòô', 'bàř']);
 
 ## Class methods
 
+##### use a "default object" 
+
+Creates an Arrayy object ...
+
+```php
+$arrayy = new Arrayy(array('fòô', 'bàř')); // Array['fòô', 'bàř']
+```
+
 ##### create(array $array)
 
 Creates an Arrayy object ...
@@ -217,6 +225,13 @@ $arrayy = a(['fòô' => 'bàř']);
 var_dump($arrayy['fòô']); // 'bàř'
 ```
 
+##### "get the array"
+
+```php
+$arrayy = a(['fòô' => 'bàř']);
+var_dump($arrayy->getArray()); // ['fòô' => 'bàř']
+```
+
 ##### "delete an array value"
 
 ```php
@@ -235,7 +250,8 @@ isset($arrayy['fòô']); // true
 ##### "simple loop with an Arrayy-object"
  
 ```php
-foreach (a(['fòô' => 'bàř']) as $key => $value) {
+$arrayy = a(['fòô' => 'bàř'];
+foreach ($arrayy) as $key => $value) {
   echo $key . ' | ' . $value; // fòô | bàř
 }
 ```
@@ -243,6 +259,8 @@ foreach (a(['fòô' => 'bàř']) as $key => $value) {
 ##### append(mixed $value) : Arrayy
 
 Returns a new arrayy object with $value appended.
+
+alias: "Arrayy->add()"
 
 ```php
 a(['fòô' => 'bàř'])->append('foo'); // Arrayy['fòô' => 'bàř', 0 => 'foo']
@@ -343,12 +361,20 @@ $closure = function ($value, $key) use ($search) {
 a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
 ```
 
-##### first(null|int $take) : Arrayy
+##### first() : mixed
+
+Get the first value from the current array.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
+```
+
+##### firsts(null|int $take) : Arrayy
 
 Get the first value(s) from the current array.
 
 ```php
-a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(2); // Arrayy[0 => 'foo', 1 => 'bar']
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->firsts(2); // Arrayy[0 => 'foo', 1 => 'bar']
 ```
 
 ##### flip() : Arrayy
@@ -436,7 +462,7 @@ a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->lasts(2); // Arrayy[0 => 'bar', 1 => '
 
 Count the values from the current array.
 
-alias: count() || size()
+alias: "Arrayy->count()" || "Arrayy->size()"
 
 ```php
 a([-9, -8, -7, 1.32])->length(); // 4
@@ -560,6 +586,14 @@ function myReducer($resultArray, $value) {
 a(['foo', 'bar'])->reduce('myReducer'); // Arrayy['foo']
 ```
 
+##### reindex() : Arrayy
+
+Create a numerically re-indexed Arrayy object.
+
+```php
+a([2 => 1, 3 => 2])->reindex(); // Arrayy[0 => 1, 1 => 2]
+```
+
 ##### reject(Closure $closure) : Arrayy
 
 Return all items that fail the truth test.
@@ -568,7 +602,7 @@ Return all items that fail the truth test.
 $closure = function ($value) {
   return $value % 2 !== 0;
 }
-a([(1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
+a([1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
 ```
 
 ##### removeFirst() : Arrayy
