@@ -7,6 +7,11 @@ use Arrayy\Arrayy as A;
  */
 class ArrayyTest extends PHPUnit_Framework_TestCase
 {
+  const TYPE_EMPTY = 'empty';
+  const TYPE_NUMERIC = 'numeric';
+  const TYPE_ASSOC = 'assoc';
+  const TYPE_MIXED = 'mixed';
+
   public function testConstruct()
   {
     $testArray = array('foo bar', 'UTF-8');
@@ -527,6 +532,43 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(-8 => -9, 1, 2 => false), array(0 => 1, -8 => -9)),
         array(array(1.18, false), array(true)),
         array(array('foo' => false, 'foo', 'lall'), array('foo', 'lall')),
+    );
+  }
+
+  /**
+   * @return array
+   */
+  public function simpleArrayProvider()
+  {
+    return array(
+        'empty_array' => array(
+            array(),
+            self::TYPE_EMPTY,
+        ),
+        'indexed_array' => array(
+            array(
+                1 => 'one',
+                2 => 'two',
+                3 => 'three',
+            ),
+            self::TYPE_NUMERIC,
+        ),
+        'assoc_array' => array(
+            array(
+                'one' => 1,
+                'two' => 2,
+                'three' => 3,
+            ),
+            self::TYPE_ASSOC,
+        ),
+        'mixed_array' => array(
+            array(
+                1 => 'one',
+                'two' => 2,
+                3 => 'three',
+            ),
+            self::TYPE_MIXED,
+        ),
     );
   }
 
@@ -2562,5 +2604,761 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     //var_dump(array($expected, $result));
     self::assertTrue($expected === $result);
+  }
+
+  /**
+   * @return array
+   */
+  public function stringWithSeparatorProvider()
+  {
+    return array(
+        array(
+            's,t,r,i,n,g',
+            ','
+        ),
+        array(
+            'He|ll|o',
+            '|'
+        ),
+        array(
+            'Wo;rld',
+            ';'
+        ),
+    );
+  }
+
+
+  /**
+   * @dataProvider stringWithSeparatorProvider
+   *
+   * @param string $string
+   * @param string $separator
+   */
+  public function testCreateFromString($string, $separator)
+  {
+    $array = explode($separator, $string);
+    $arrayy = new A($array);
+
+    $resultArrayy = A::createFromString($string, $separator);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+  }
+
+  /**
+   * @param A     $arrayzy
+   * @param A     $resultArrayzy
+   * @param array $array
+   * @param array $resultArray
+   */
+  protected function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray)
+  {
+    self::assertNotSame($arrayzy, $resultArrayzy);
+    self::assertSame($array, $arrayzy->toArray());
+    self::assertSame($resultArray, $resultArrayzy->toArray());
+  }
+
+  public function testCreateWithRange()
+  {
+    $arrayy1 = A::createWithRange(2, 7);
+    $array1 = range(2, 7);
+    $arrayy2 = A::createWithRange('d', 'h');
+    $array2 = range('d', 'h');
+    $arrayy3 = A::createWithRange(22, 11, 2);
+    $array3 = range(22, 11, 2);
+    $arrayy4 = A::createWithRange('y', 'k', 2);
+    $array4 = range('y', 'k', 2);
+
+    self::assertSame($array1, $arrayy1->toArray());
+    self::assertSame($array2, $arrayy2->toArray());
+    self::assertSame($array3, $arrayy3->toArray());
+    self::assertSame($array4, $arrayy4->toArray());
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testStaticCreate(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = A::create($array);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testStaticCreateFromJson(array $array)
+  {
+    $json = json_encode($array);
+
+    $arrayy = A::create($array);
+    $resultArrayy = A::createFromJson($json);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testStaticCreateFromObject(array $array)
+  {
+    $arrayy = A::create($array);
+    $resultArrayy = A::createFromObject($arrayy);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+  }
+
+  /**
+   * @dataProvider stringWithSeparatorProvider
+   *
+   * @param string $string
+   * @param string $separator
+   */
+  public function testStaticCreateFromString($string, $separator)
+  {
+    $array = explode($separator, $string);
+
+    $arrayy = A::create($array);
+    $resultArrayy = A::createFromString($string, $separator);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+  }
+
+  public function testAdd()
+  {
+    $array = array(1, 2);
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->add(3);
+    $array[] = 3;
+
+    self::assertMutable($arrayy, $resultArrayy, $array);
+  }
+
+  // The public method list order by ASC
+
+  /**
+   * @param A     $arrayzy
+   * @param A     $resultArrayzy
+   * @param array $resultArray
+   */
+  protected function assertMutable(A $arrayzy, A $resultArrayzy, array $resultArray)
+  {
+    self::assertSame($arrayzy, $resultArrayzy);
+    self::assertSame($resultArray, $arrayzy->toArray());
+    self::assertSame($resultArray, $resultArrayzy->toArray());
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testChunk(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->chunk(2);
+    $resultArray = array_chunk($array, 2);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testClear(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->clear();
+
+    self::assertMutable($arrayy, $resultArrayy, array());
+  }
+
+  public function testCombineTo()
+  {
+    $firstArray = array(
+        1 => 'one',
+        2 => 'two',
+        3 => 'three',
+    );
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($firstArray);
+    $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
+    $resultArray = array_combine($secondArray, $firstArray);
+
+    self::assertEquals($resultArray, $resultArrayy);
+  }
+
+  public function testCombineWith()
+  {
+    $firstArray = array(
+        1 => 'one',
+        2 => 'two',
+        3 => 'three',
+    );
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($firstArray);
+    $resultArrayy = $arrayy->replaceAllValues($secondArray);
+    $resultArray = array_combine($firstArray, $secondArray);
+
+    self::assertImmutable($arrayy, $resultArrayy, $firstArray, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testCustomSort(array $array)
+  {
+    $callable = function ($a, $b) {
+      if ($a == $b) {
+        return 0;
+      }
+
+      return ($a < $b) ? -1 : 1;
+    };
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->customSortValues($callable);
+    $resultArray = $array;
+    usort($resultArray, $callable);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testCustomSortKeys(array $array)
+  {
+    $callable = function ($a, $b) {
+      if ($a == $b) {
+        return 0;
+      }
+
+      return ($a > $b) ? -1 : 1;
+    };
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->customSortKeys($callable);
+    $resultArray = $array;
+    uksort($resultArray, $callable);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testDiffWith(array $array)
+  {
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->diff($secondArray);
+    $resultArray = array_diff($array, $secondArray);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testMap(array $array)
+  {
+    $callable = function ($value) {
+      return str_repeat($value, 2);
+    };
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->map($callable);
+    $resultArray = array_map($callable, $array);
+    self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testMergePrependNewIndexV2(array $array)
+  {
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->mergePrependNewIndex($secondArray);
+    $resultArray = array_merge($secondArray, $array);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testMergeToRecursively(array $array)
+  {
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->mergePrependNewIndex($secondArray, true);
+    $resultArray = array_merge_recursive($secondArray, $array);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testMergeWith(array $array)
+  {
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray);
+    $resultArray = array_merge($array, $secondArray);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testMergeWithRecursively(array $array)
+  {
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray, true);
+    $resultArray = array_merge_recursive($array, $secondArray);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testOffsetNullSet(array $array)
+  {
+    $offset = null;
+    $value = 'new';
+
+    $arrayy = new A($array);
+    $arrayy->offsetSet($offset, $value);
+    if (isset($offset)) {
+      $array[$offset] = $value;
+    } else {
+      $array[] = $value;
+    }
+
+    self::assertSame($array, $arrayy->toArray());
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testOffsetSet(array $array)
+  {
+    $offset = 1;
+    $value = 'new';
+
+    $arrayy = new A($array);
+    $arrayy->offsetSet($offset, $value);
+    if (isset($offset)) {
+      $array[$offset] = $value;
+    } else {
+      $array[] = $value;
+    }
+
+    self::assertSame($array, $arrayy->toArray());
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testOffsetUnset(array $array)
+  {
+    $arrayy = new A($array);
+    $offset = 1;
+
+    $arrayy->offsetUnset($offset);
+    unset($array[$offset]);
+
+    self::assertSame($array, $arrayy->toArray());
+    self::assertFalse(isset($array[$offset]));
+    self::assertFalse($arrayy->offsetExists($offset));
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testPad(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->pad(10, 5);
+    $resultArray = array_pad($array, 10, 5);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testPop(array $array)
+  {
+    $arrayy = new A($array);
+    $poppedValue = $arrayy->pop();
+    $resultArray = $array;
+    $poppedArrayValue = array_pop($resultArray);
+
+    self::assertSame($poppedArrayValue, $poppedValue);
+    self::assertSame($resultArray, $arrayy->toArray());
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testPush(array $array)
+  {
+    $newElement1 = 5;
+    $newElement2 = 10;
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->push($newElement1, $newElement2);
+    $resultArray = $array;
+    array_push($resultArray, $newElement1, $newElement2);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testReindex(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->reindex()->getArray();
+    $resultArray = array_values($array);
+
+    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testReplaceIn(array $array)
+  {
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->mergePrependKeepIndex($secondArray)->getArray();
+    $resultArray = array_replace($secondArray, $array);
+
+    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testReplaceInRecursively(array $array)
+  {
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->mergePrependKeepIndex($secondArray, true)->getArray();
+    $resultArray = array_replace_recursive($secondArray, $array);
+
+    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testReplaceWith(array $array)
+  {
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->mergeAppendKeepIndex($secondArray)->getArray();
+    $resultArray = array_replace($array, $secondArray);
+
+    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testReplaceWithRecursively(array $array)
+  {
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->mergeAppendKeepIndex($secondArray, true)->getArray();
+    $resultArray = array_replace_recursive($array, $secondArray);
+
+    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testShift(array $array)
+  {
+    $arrayy = new A($array);
+    $shiftedValue = $arrayy->shift();
+    $resultArray = $array;
+    $shiftedArrayValue = array_shift($resultArray);
+
+    self::assertSame($shiftedArrayValue, $shiftedValue);
+    self::assertSame($resultArray, $arrayy->toArray());
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testSlice(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->slice(1, 1);
+    $resultArray = array_slice($array, 1, 1);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testSortAscWithoutPreserveKeys(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->sort(SORT_ASC, SORT_REGULAR, false);
+    $resultArray = $array;
+    sort($resultArray, SORT_REGULAR);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testSortAscWithPreserveKeys(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->sort(SORT_ASC, SORT_REGULAR, true);
+    $resultArray = $array;
+    asort($resultArray, SORT_REGULAR);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testSortDescWithoutPreserveKeys(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->sort(SORT_DESC, SORT_REGULAR, false);
+    $resultArray = $array;
+    rsort($resultArray, SORT_REGULAR);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testSortDescWithPreserveKeys(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->sort(SORT_DESC, SORT_REGULAR, true);
+    $resultArray = $array;
+    arsort($resultArray, SORT_REGULAR);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testSortKeysAsc(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->sortKeys(SORT_ASC, SORT_REGULAR);
+    $resultArray = $array;
+    ksort($resultArray, SORT_REGULAR);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testSortKeysDesc(array $array)
+  {
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->sortKeys(SORT_DESC, SORT_REGULAR);
+    $resultArray = $array;
+    krsort($resultArray, SORT_REGULAR);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testUnshift(array $array)
+  {
+    $newElement1 = 5;
+    $newElement2 = 10;
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->unshift($newElement1, $newElement2);
+    $resultArray = $array;
+    array_unshift($resultArray, $newElement1, $newElement2);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testWalk(array $array)
+  {
+    $callable = function (&$value, $key) {
+      $value = $key;
+    };
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->walk($callable);
+    $resultArray = $array;
+    array_walk($resultArray, $callable);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testWalkRecursively(array $array)
+  {
+    $callable = function (&$value, $key) {
+      $value = $key;
+    };
+
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->walk($callable, true);
+    $resultArray = $array;
+    array_walk_recursive($resultArray, $callable);
+
+    self::assertMutable($arrayy, $resultArrayy, $resultArray);
   }
 }
