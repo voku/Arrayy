@@ -353,6 +353,24 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    *
    * @param array $array
    */
+  public function testGetRandomValueSingle(array $array)
+  {
+    if (0 === count($array)) {
+      return;
+    }
+
+    $arrayy = $this->createArrayy($array);
+    $value = $arrayy->getRandomValue();
+
+    /** @noinspection TypeUnsafeArraySearchInspection */
+    self::assertTrue(in_array($value, $array));
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
   public function testGetRandomValuesSingle(array $array)
   {
     if (0 === count($array)) {

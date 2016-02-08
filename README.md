@@ -43,7 +43,8 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [intersects](#intersectsarray-search--boolean)
     * [isAssoc](#isassoc--boolean)
     * [isMultiArray](#ismultiarray--boolean)
-    * [last](#lastnullint-take--arrayy)
+    * [last](#)
+    * [lasts](#lastnullint-take--arrayy)
     * [length](#length--int)
     * [max](#max--mixed)
     * [matches](#matchesclosure-closure--boolean)
@@ -415,12 +416,20 @@ Check if the current array is a multi-array.
 a(['foo' => [1, 2 , 3]])->isMultiArray(); // true
 ```
 
-##### last(null|int $take) : Arrayy
+##### last() : mixed
+
+Get the last value from the current array.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(); // 'lall'
+```
+
+##### lasts(null|int $take) : Arrayy
 
 Get the last value(s) from the current array.
 
 ```php
-a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(2); // Arrayy[0 => 'bar', 1 => 'lall']
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->lasts(2); // Arrayy[0 => 'bar', 1 => 'lall']
 ```
 
 ##### length() : int
