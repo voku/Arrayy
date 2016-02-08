@@ -1919,7 +1919,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @return $this
    */
-  public function customSortValues(callable $func)
+  public function customSortValues($func)
   {
     usort($this->array, $func);
 
@@ -1935,7 +1935,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @return $this
    */
-  public function customSortKeys(callable $func)
+  public function customSortKeys($func)
   {
     uksort($this->array, $func);
 
