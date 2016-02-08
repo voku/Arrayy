@@ -257,13 +257,13 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $value
    *
-   * @return Arrayy
+   * @return $this This Arrayy object with the appended values.
    */
   public function append($value)
   {
     $this->array[] = $value;
 
-    return static::create($this->array);
+    return $this;
   }
 
   /**
@@ -666,7 +666,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Push one or more values onto the end of array at once.
    *
-   * @return $this An Arrayy object with pushed elements to the end of array
+   * @return $this This Arrayy object with pushed elements to the end of array.
    */
   public function push(/* variadic arguments allowed */)
   {
@@ -691,7 +691,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Prepends one or more values to the beginning of array at once.
    *
-   * @return Arrayy Array object with prepended elements to the beginning of array
+   * @return $this This Arrayy object with prepended elements to the beginning of array.
    */
   public function unshift(/* variadic arguments allowed */)
   {
@@ -1069,7 +1069,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     /**
    * WARNING!!! -> Clear the current array.
    *
-   * @return $this will always return an empty Arrayy object
+   * @return $this This will always return an empty Arrayy object.
    */
   public function clear()
   {
@@ -1875,13 +1875,13 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $value
    *
-   * @return Arrayy
+   * @return $this This Arrayy object with the prepended value.
    */
   public function prepend($value)
   {
     array_unshift($this->array, $value);
 
-    return static::create($this->array);
+    return $this;
   }
 
   /**
@@ -2045,7 +2045,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int|string $strategy
    * @param bool       $keepKeys
    *
-   * @return Arrayy
+   * @return $this
    */
   public function sort($direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
   {
@@ -2159,7 +2159,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param callable $callable
    * @param bool     $recursive Whether array will be walked recursively or no
    *
-   * @return Arrayy An Arrayy object with modified elements
+   * @return $this This Arrayy object with modified elements
    */
   public function walk($callable, $recursive = false)
   {
