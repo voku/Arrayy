@@ -247,6 +247,14 @@ Returns a new arrayy object with $value appended.
 a(['fòô' => 'bàř'])->append('foo'); // Arrayy['fòô' => 'bàř', 0 => 'foo']
 ```
 
+##### prepend(mixed $value) : Arrayy
+
+Returns a new arrayy object with $value prepended.
+
+```php
+a(['fòô' => 'bàř'])->prepend('foo'); // Arrayy[0 => 'foo', 'fòô' => 'bàř']
+```
+
 ##### at(Closure $closure) : Arrayy
 
 Iterate over an array and execute a callback for each loop.
@@ -511,14 +519,6 @@ Get the min value from an array.
 
 ```php
 a([-9, -8, -7, 1.32])->min(); // -9
-```
-
-##### prepend(mixed $value) : Arrayy
-
-Returns a new arrayy object with $value prepended.
-
-```php
-a(['fòô' => 'bàř'])->prepend('foo'); // Arrayy[0 => 'foo', 'fòô' => 'bàř']
 ```
 
 ##### random(int|null $take) : Arrayy

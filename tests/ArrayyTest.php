@@ -63,7 +63,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     foreach ($arrayy as $key => $value) {
       if ($key === 1) {
         self::assertEquals('foo bar', $arrayy[$key]);
-      } else if ($key === 2) {
+      } elseif ($key === 2) {
         self::assertEquals('öäü', $arrayy[$key]);
       }
     }

@@ -18,7 +18,7 @@ class CreateTestCase extends PHPUnit_Framework_TestCase
     foreach ($arrayy as $key => $value) {
       if ($key == 0) {
         static::assertEquals('foo bar', $arrayy[$key]);
-      } else if ($key == 1) {
+      } elseif ($key == 1) {
         static::assertEquals('UTF-8', $arrayy[$key]);
       }
     }
