@@ -36,7 +36,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param $key
    *
-   * @return mixed
+   * @return mixed Get a Value from the current array.
    */
   public function &__get($key)
   {
@@ -66,9 +66,9 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Whether or not an element exists by key.
    *
-   * @param $key
+   * @param mixed $key
    *
-   * @return bool
+   * @return bool True is the key/index exists, otherwise false.
    */
   public function __isset($key)
   {
@@ -78,8 +78,8 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Assigns a value to the specified element.
    *
-   * @param $key
-   * @param $value
+   * @param mixed $key
+   * @param mixed $value
    */
   public function __set($key, $value)
   {
@@ -97,7 +97,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Unset element by key
+   * Unset element by key.
    *
    * @param mixed $key
    */
@@ -109,9 +109,9 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * alias: for "Arrayy->append()"
    *
-   * @param $value
+   * @param mixed $value
    *
-   * @return $this Return this Arrayy object.
+   * @return self (Mutable) Return this Arrayy object.
    */
   public function add($value)
   {
@@ -121,11 +121,11 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Append a value to an array.
+   * Append a value to the current array.
    *
    * @param mixed $value
    *
-   * @return $this Return this Arrayy object, with the appended values.
+   * @return self (Mutable) Return this Arrayy object, with the appended values.
    */
   public function append($value)
   {
@@ -208,7 +208,9 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * @return mixed
+   * Serialize the current array.
+   *
+   * @return string
    */
   public function serialize()
   {
@@ -216,11 +218,17 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * @param string $array
+   * Unserialize an string and return this object.
+   *
+   * @param string $string
+   *
+   * @return self (Mutable)
    */
-  public function unserialize($array)
+  public function unserialize($string)
   {
-    $this->array = unserialize($array);
+    $this->array = unserialize($string);
+
+    return $this;
   }
 
   /**
@@ -228,7 +236,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param \Closure $closure
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function at(\Closure $closure)
   {
@@ -269,7 +277,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int  $size         Size of each chunk
    * @param bool $preserveKeys Whether array keys are preserved or no
    *
-   * @return static A new array of chunks from the original array
+   * @return Arrayy (Immutable) A new array of chunks from the original array.
    */
   public function chunk($size, $preserveKeys = false)
   {
@@ -281,7 +289,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Clean all falsy values from an array.
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function clean()
   {
@@ -295,7 +303,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * WARNING!!! -> Clear the current array.
    *
-   * @return $this Return this Arrayy object, with an empty array.
+   * @return self (Mutable) Return this Arrayy object, with an empty array.
    */
   public function clear()
   {
@@ -333,7 +341,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $array
    *
-   * @return Arrayy Returns an new instance of the Arrayy object.
+   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function create($array = array())
   {
@@ -345,7 +353,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $array
    *
-   * @return $this Return this Arrayy object.
+   * @return self (Mutable) Return this Arrayy object.
    */
   public function createByReference(&$array = array())
   {
@@ -361,7 +369,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param string $json
    *
-   * @return Arrayy Returns an new instance of the Arrayy object.
+   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function createFromJson($json)
   {
@@ -375,7 +383,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param ArrayAccess $elements Object that implements ArrayAccess
    *
-   * @return Arrayy Returns an new instance of the Arrayy object.
+   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function createFromObject(ArrayAccess $elements)
   {
@@ -395,7 +403,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param string|null $delimiter The boundary string.
    * @param string|null $regEx     Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be used.
    *
-   * @return Arrayy Returns an new instance of the Arrayy object.
+   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function createFromString($str, $delimiter, $regEx = null)
   {
@@ -430,7 +438,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param mixed $high The sequence is ended upon reaching the end value
    * @param int   $step Used as the increment between elements in the sequence
    *
-   * @return Arrayy Returns an new instance of the Arrayy object.
+   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function createWithRange($low, $high, $step = 1)
   {
@@ -444,7 +452,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param callable $func
    *
-   * @return $this Return this Arrayy object.
+   * @return self (Mutable) Return this Arrayy object.
    */
   public function customSortKeys($func)
   {
@@ -460,7 +468,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param callable $func
    *
-   * @return $this Return this Arrayy object.
+   * @return self (Mutable) Return this Arrayy object.
    */
   public function customSortValues($func)
   {
@@ -474,7 +482,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $array
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function diff(array $array = array())
   {
@@ -488,7 +496,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $array
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function diffReverse(array $array = array())
   {
@@ -502,7 +510,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param \Closure $closure
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function each(\Closure $closure)
   {
@@ -587,7 +595,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param \Closure|null $closure
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function filter($closure = null)
   {
@@ -608,7 +616,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param        $value
    * @param string $comparisonOp
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function filterBy($property, $value, $comparisonOp = null)
   {
@@ -696,7 +704,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param        $value
    * @param string $comparisonOp
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function findBy($property, $value, $comparisonOp = 'eq')
   {
@@ -726,9 +734,28 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param int|null $number how many values you will take?
    *
-   * @return Arrayy
+   * @return self (Mutable)
    */
-  public function firsts($number = null)
+  public function firstsMutable($number = null)
+  {
+    if ($number === null) {
+      $this->array = (array)array_shift($this->array);
+    } else {
+      $number = (int)$number;
+      $this->array = array_splice($this->array, 0, $number, true);
+    }
+
+    return $this;
+  }
+
+  /**
+   * Get the first value(s) from the current array.
+   *
+   * @param int|null $number how many values you will take?
+   *
+   * @return Arrayy (Immutable)
+   */
+  public function firstsImmutable($number = null)
   {
     if ($number === null) {
       $array = (array)array_shift($this->array);
@@ -743,13 +770,13 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Exchanges all keys with their associated values in an array.
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function flip()
   {
-    $this->array = array_flip($this->array);
+    $result = array_flip($this->array);
 
-    return static::create($this->array);
+    return static::create($result);
   }
 
   /**
@@ -810,7 +837,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param mixed $columnKey
    * @param mixed $indexKey
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function getColumn($columnKey = null, $indexKey = null)
   {
@@ -852,7 +879,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * alias: for "Arrayy->keys()"
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function getKeys()
   {
@@ -862,11 +889,11 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * alias: for "Arrayy->random()"
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function getRandom()
   {
-    return $this->random();
+    return $this->randomImmutable();
   }
 
   /**
@@ -884,7 +911,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param int $number
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function getRandomKeys($number)
   {
@@ -906,7 +933,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param int $number
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function getRandomValues($number)
   {
@@ -919,7 +946,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param string $grouper a callable function name
    * @param bool   $saveKeys
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function group($grouper, $saveKeys = false)
   {
@@ -983,7 +1010,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $key
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function indexBy($key)
   {
@@ -1015,13 +1042,13 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param int $to
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function initial($to = 1)
   {
     $slice = count($this->array) - $to;
 
-    return $this->firsts($slice);
+    return $this->firstsImmutable($slice);
   }
 
   /**
@@ -1092,7 +1119,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $search
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function intersection(array $search)
   {
@@ -1119,7 +1146,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param mixed $callable
    * @param array $arguments
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function invoke($callable, $arguments = array())
   {
@@ -1201,7 +1228,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Get all keys from the current array.
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function keys()
   {
@@ -1231,9 +1258,9 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param int|null $number
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
-  public function lasts($number = null)
+  public function lastsImmutable($number = null)
   {
     if ($number === null) {
       $poppedValue = (array)$this->pop();
@@ -1244,6 +1271,26 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
 
     return $arrayy;
+  }
+
+  /**
+   * Get the last value(s) from the current array.
+   *
+   * @param int|null $number
+   *
+   * @return self (Mutable)
+   */
+  public function lastsMutable($number = null)
+  {
+    if ($number === null) {
+      $poppedValue = (array)$this->pop();
+      $this->array = static::create($poppedValue)->array;
+    } else {
+      $number = (int)$number;
+      $this->array = $this->rest(-$number)->array;
+    }
+
+    return $this;
   }
 
   /**
@@ -1264,7 +1311,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param callable $callable
    *
-   * @return Arrayy Arrayy object with modified elements
+   * @return Arrayy (Immutable) Arrayy object with modified elements
    */
   public function map($callable)
   {
@@ -1339,7 +1386,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param array $array
    * @param bool  $recursive
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function mergeAppendKeepIndex(array $array = array(), $recursive = false)
   {
@@ -1361,7 +1408,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param array $array
    * @param bool  $recursive
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function mergeAppendNewIndex(array $array = array(), $recursive = false)
   {
@@ -1382,7 +1429,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param array $array
    * @param bool  $recursive
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function mergePrependKeepIndex(array $array = array(), $recursive = false)
   {
@@ -1404,7 +1451,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param array $array
    * @param bool  $recursive
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function mergePrependNewIndex(array $array = array(), $recursive = false)
   {
@@ -1437,7 +1484,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int   $size  Size of the result array
    * @param mixed $value Empty value by default
    *
-   * @return Arrayy Arrayy object padded to $size with $value
+   * @return Arrayy (Immutable) Arrayy object padded to $size with $value
    */
   public function pad($size, $value)
   {
@@ -1457,11 +1504,11 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Prepend a value to an array.
+   * Prepend a value to the current array.
    *
    * @param mixed $value
    *
-   * @return $this Return this Arrayy object, with the prepended value.
+   * @return self (Mutable) Return this Arrayy object, with the prepended value.
    */
   public function prepend($value)
   {
@@ -1473,7 +1520,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Push one or more values onto the end of array at once.
    *
-   * @return $this Return this Arrayy object, with pushed elements to the end of array.
+   * @return self (Mutable) Return this Arrayy object, with pushed elements to the end of array.
    */
   public function push(/* variadic arguments allowed */)
   {
@@ -1490,9 +1537,34 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param null|int $number how many values you will take?
    *
-   * @return Arrayy
+   * @return self (Mutable)
    */
-  public function random($number = null)
+  public function randomMutable($number = null)
+  {
+    if ($this->count() === 0) {
+      return static::create();
+    }
+
+    if ($number === null) {
+      $arrayRandValue = (array)$this->array[array_rand($this->array)];
+      $this->array = $arrayRandValue;
+
+      return $this;
+    }
+
+    shuffle($this->array);
+
+    return $this->firstsMutable($number);
+  }
+
+  /**
+   * Get a random value from the current array.
+   *
+   * @param null|int $number how many values you will take?
+   *
+   * @return Arrayy (Immutable)
+   */
+  public function randomImmutable($number = null)
   {
     if ($this->count() === 0) {
       return static::create();
@@ -1504,9 +1576,10 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
       return static::create($arrayRandValue);
     }
 
-    shuffle($this->array);
+    $arrayTmp = $this->array;
+    shuffle($arrayTmp);
 
-    return $this->firsts($number);
+    return self::create($arrayTmp)->firstsImmutable($number);
   }
 
   /**
@@ -1533,7 +1606,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param int $number The number of keys/indexes (should be <= $this->count())
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    *
    * @throws \RangeException If array is empty
    */
@@ -1564,7 +1637,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    */
   public function randomValue()
   {
-    $result = $this->random(1);
+    $result = $this->randomImmutable();
 
     if (!isset($result[0])) {
       $result[0] = null;
@@ -1578,13 +1651,13 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param int $number
    *
-   * @return Arrayy
+   * @return self (Mutable)
    */
   public function randomValues($number)
   {
     $number = (int)$number;
 
-    return $this->random($number);
+    return $this->randomMutable($number);
   }
 
   /**
@@ -1595,7 +1668,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param array    $array
    * @param null|int $number how many values you will take?
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function randomWeighted(array $array, $number = null)
   {
@@ -1608,7 +1681,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
       }
     }
 
-    return $this->mergeAppendKeepIndex($options)->random($number);
+    return $this->mergeAppendKeepIndex($options)->randomImmutable($number);
   }
 
   /**
@@ -1617,7 +1690,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param mixed $callable
    * @param array $init
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function reduce($callable, array $init = array())
   {
@@ -1635,7 +1708,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Create a numerically re-indexed Arrayy object.
    *
-   * @return $this Return this Arrayy object, with re-indexed array-elements.
+   * @return self (Mutable) Return this Arrayy object, with re-indexed array-elements.
    */
   public function reindex()
   {
@@ -1649,7 +1722,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param \Closure $closure
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function reject(\Closure $closure)
   {
@@ -1669,7 +1742,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $key
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function remove($key)
   {
@@ -1690,7 +1763,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Remove the first value from the current array.
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function removeFirst()
   {
@@ -1702,7 +1775,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Remove the last value from the current array.
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function removeLast()
   {
@@ -1716,7 +1789,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $value
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function removeValue($value)
   {
@@ -1744,7 +1817,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param $key
    * @param $value
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function replace($replace, $key, $value)
   {
@@ -1758,7 +1831,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $keys Keys array
    *
-   * @return Arrayy Arrayy object with keys from the other array.
+   * @return Arrayy (Immutable) Arrayy object with keys from the other array.
    */
   public function replaceAllKeys(array $keys)
   {
@@ -1772,7 +1845,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $array Values array
    *
-   * @return Arrayy Arrayy object with values from the other array.
+   * @return Arrayy (Immutable) Arrayy object with values from the other array.
    */
   public function replaceAllValues(array $array)
   {
@@ -1786,7 +1859,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param array $keys An array of keys matching the array's size
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function replaceKeys(array $keys)
   {
@@ -1802,7 +1875,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param mixed $search
    * @param mixed $replacement
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function replaceOneValue($search, $replacement = '')
   {
@@ -1822,7 +1895,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param string $search      The string to replace.
    * @param string $replacement What to replace it with.
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function replaceValues($search, $replacement = '')
   {
@@ -1840,7 +1913,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param int $from
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function rest($from = 1)
   {
@@ -1852,7 +1925,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Return the array in the reverse order.
    *
-   * @return $this Return this Arrayy object.
+   * @return self (Mutable) Return this Arrayy object.
    */
   public function reverse()
   {
@@ -1878,7 +1951,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $index
    *
-   * @return Arrayy will return a empty Arrayy if the value wasn't found
+   * @return Arrayy (Immutable) will return a empty Arrayy if the value wasn't found
    */
   public function searchValue($index)
   {
@@ -1902,7 +1975,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param string $key   The key to set
    * @param mixed  $value Its value
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function set($key, $value)
   {
@@ -1944,7 +2017,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Shuffle the current array.
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function shuffle()
   {
@@ -1988,7 +2061,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int|string $strategy
    * @param bool       $keepKeys
    *
-   * @return $this Return this Arrayy object.
+   * @return self (Mutable) Return this Arrayy object.
    */
   public function sort($direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
   {
@@ -2006,7 +2079,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int|string $direction use SORT_ASC or SORT_DESC
    * @param int        $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
    *
-   * @return $this Return this Arrayy object.
+   * @return self (Mutable) Return this Arrayy object.
    */
   public function sortKeys($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2021,7 +2094,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int $direction use SORT_ASC or SORT_DESC
    * @param int $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function sortValueKeepIndex($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2034,7 +2107,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int $direction use SORT_ASC or SORT_DESC
    * @param int $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function sortValueNewIndex($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2051,7 +2124,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param string|int $direction
    * @param int        $strategy
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function sorter($sorter = null, $direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2193,7 +2266,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Return a duplicate free copy of the current array.
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function unique()
   {
@@ -2215,7 +2288,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Prepends one or more values to the beginning of array at once.
    *
-   * @return $this Return this Arrayy object, with prepended elements to the beginning of array.
+   * @return self (Mutable) Return this Arrayy object, with prepended elements to the beginning of array.
    */
   public function unshift(/* variadic arguments allowed */)
   {
@@ -2230,7 +2303,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Get all values from a array.
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function values()
   {
@@ -2246,7 +2319,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param callable $callable
    * @param bool     $recursive Whether array will be walked recursively or no
    *
-   * @return $this Return this Arrayy object, with modified elements
+   * @return self (Mutable) Return this Arrayy object, with modified elements
    */
   public function walk($callable, $recursive = false)
   {

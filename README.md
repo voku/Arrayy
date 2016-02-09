@@ -256,9 +256,9 @@ foreach ($arrayy) as $key => $value) {
 }
 ```
 
-##### append(mixed $value) : Arrayy
+##### append(mixed $value) : Arrayy (Mutable)
 
-Returns a new arrayy object with $value appended.
+Append a value to the current array.
 
 alias: "Arrayy->add()"
 
@@ -266,15 +266,15 @@ alias: "Arrayy->add()"
 a(['fòô' => 'bàř'])->append('foo'); // Arrayy['fòô' => 'bàř', 0 => 'foo']
 ```
 
-##### prepend(mixed $value) : Arrayy
+##### prepend(mixed $value) : Arrayy (Mutable)
 
-Returns a new arrayy object with $value prepended.
+Prepend a value to the current array.
 
 ```php
 a(['fòô' => 'bàř'])->prepend('foo'); // Arrayy[0 => 'foo', 'fòô' => 'bàř']
 ```
 
-##### at(Closure $closure) : Arrayy
+##### at(Closure $closure) : Arrayy (Immutable)
 
 Iterate over an array and execute a callback for each loop.
 

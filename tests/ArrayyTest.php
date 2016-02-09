@@ -1852,8 +1852,14 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function testFirsts($array, $result, $take = null)
   {
     $arrayy = A::create($array);
+    $resultNew = $arrayy->firstsImmutable($take);
+    self::assertEquals($result, $resultNew->getArray());
+    self::assertNotSame($arrayy, $resultNew);
 
-    self::assertEquals($result, $arrayy->firsts($take)->getArray());
+    $arrayy = A::create($array);
+    $resultNew = $arrayy->firstsMutable($take);
+    self::assertEquals($result, $resultNew->getArray());
+    self::assertSame($arrayy, $resultNew);
   }
 
   public function testFlip()
@@ -2031,8 +2037,12 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function testLast($array, $result, $take = null)
   {
     $arrayy = A::create($array);
+    $resultNew = $arrayy->lastsImmutable($take);
+    self::assertEquals($result, $resultNew->getArray());
 
-    self::assertEquals($result, $arrayy->lasts($take)->getArray());
+    $arrayy = A::create($array);
+    $resultNew = $arrayy->lastsMutable($take);
+    self::assertEquals($result, $resultNew->getArray());
   }
 
   /**
@@ -2540,7 +2550,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function testRandom($array, $take = null)
   {
     $arrayy = A::create($array);
-    $result = $arrayy->random($take)->getArray();
+    $result = $arrayy->randomMutable($take)->getArray();
 
     self::assertEquals(true, in_array($result[0], $array, true));
   }
@@ -2967,11 +2977,31 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function testSimpleRandom()
   {
     $testArray = array(-8 => -9, 1, 2 => false);
-    $result = A::create($testArray)->random(3);
+    $arrayy = A::create($testArray);
+    $result = $arrayy->randomMutable(3);
+    self::assertEquals($arrayy, $result);
+    self::assertSame($arrayy, $result);
     self::assertEquals(3, count($result));
 
     $testArray = array(-8 => -9, 1, 2 => false);
-    $result = A::create($testArray)->random();
+    $arrayy = A::create($testArray);
+    $result = $arrayy->randomMutable();
+    self::assertEquals($arrayy, $result);
+    self::assertSame($arrayy, $result);
+    self::assertEquals(1, count($result));
+
+    $testArray = array(-8 => -9, 1, 2 => false);
+    $arrayy = A::create($testArray);
+    $result = $arrayy->randomImmutable(3);
+    self::assertEquals($arrayy, $result);
+    self::assertNotSame($arrayy, $result);
+    self::assertEquals(3, count($result));
+
+    $testArray = array(-8 => -9, 1, 2 => false);
+    $arrayy = A::create($testArray);
+    $result = $arrayy->randomImmutable();
+    self::assertEquals($arrayy, $result);
+    self::assertNotSame($arrayy, $result);
     self::assertEquals(1, count($result));
   }
 

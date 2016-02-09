@@ -227,7 +227,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
       $first = (array)$first;
     }
 
-    self::assertSame($first, $arrayy->firsts()->getArray());
+    self::assertSame($first, $arrayy->firstsMutable()->getArray());
   }
 
   public function testGetIterator()
