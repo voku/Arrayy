@@ -568,22 +568,22 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     self::assertSame($values, $arrayy->reindex()->getArray());
   }
 
-  /*
   public function testReduce()
   {
-    $func = function($carry, $value) {
-      $carry += $value;
+    $func = function($resultArray, $value) {
+      if ($value % 2 === 0) {
+        $resultArray[] = $value;
+      }
 
-      return $carry;
+      return $resultArray;
     };
-    $array = array(1, 2, 3);
+    $array = array(1, 2, 3, 4);
     $arrayy = $this->createArrayy($array);
-    $arrayyReduced = $arrayy->reduce($func);
-    $arrayReduced = array_reduce($array, $func);
+    $arrayyReduced = $arrayy->reduce($func)->getArray();
+    $arrayReduced = (array)array_reduce($array, $func);
 
     self::assertSame($arrayReduced, $arrayyReduced);
   }
-  */
 
   /**
    * @dataProvider simpleArrayProvider

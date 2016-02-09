@@ -1621,9 +1621,15 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    */
   public function reduce($callable, array $init = array())
   {
-    $this->array = array_reduce($this->array, $callable, $init);
+    $result = array_reduce($this->array, $callable, $init);
 
-    return static::create($this->array);
+    if ($result === null) {
+      $this->array = array();
+    } else {
+      $this->array = $result;
+    }
+
+    return static::create((array)$this->array);
   }
 
   /**
