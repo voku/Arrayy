@@ -1084,7 +1084,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Internal mechanic of set method.
    *
-   * @param mixed $key
+   * @param string $key
    * @param mixed $value
    *
    * @return bool
@@ -2057,8 +2057,8 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Sort the current array and optional you can keep the keys.
    *
-   * @param string|int $direction use SORT_ASC or SORT_DESC
-   * @param int|string $strategy
+   * @param integer $direction use SORT_ASC or SORT_DESC
+   * @param integer $strategy
    * @param bool       $keepKeys
    *
    * @return self (Mutable) Return this Arrayy object.
@@ -2216,7 +2216,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int  $numberOfPieces
    * @param bool $keepKeys
    *
-   * @return array
+   * @return Arrayy
    */
   public function split($numberOfPieces = 2, $keepKeys = false)
   {
