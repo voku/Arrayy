@@ -111,13 +111,11 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param mixed $value
    *
-   * @return self (Mutable) Return this Arrayy object.
+   * @return self (Mutable) Return this Arrayy object, with the appended values.
    */
   public function add($value)
   {
-    $this->array[] = $value;
-
-    return $this;
+    return $this->append($value);
   }
 
   /**
@@ -232,7 +230,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Iterate over an array and execute a callback for each loop.
+   * Iterate over the current array and execute a callback for each loop.
    *
    * @param \Closure $closure
    *
@@ -272,7 +270,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Create a chunked version of this array.
+   * Create a chunked version of the current array.
    *
    * @param int  $size         Size of each chunk
    * @param bool $preserveKeys Whether array keys are preserved or no
@@ -287,7 +285,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Clean all falsy values from an array.
+   * Clean all falsy values from the current array.
    *
    * @return Arrayy (Immutable)
    */
@@ -337,7 +335,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Creates a Arrayy object.
+   * Creates an Arrayy object.
    *
    * @param array $array
    *
@@ -349,7 +347,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * WARNING: Creates a Arrayy object by reference.
+   * WARNING: Creates an Arrayy object by reference.
    *
    * @param array $array
    *
@@ -365,7 +363,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Create a new Arrayy object via JSON.
+   * Create an new Arrayy object via JSON.
    *
    * @param string $json
    *
@@ -379,16 +377,16 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Create a new instance filled with values from an object that have implemented ArrayAccess.
+   * Create an new instance filled with values from an object that have implemented ArrayAccess.
    *
-   * @param ArrayAccess $elements Object that implements ArrayAccess
+   * @param ArrayAccess $object Object that implements ArrayAccess
    *
    * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
    */
-  public static function createFromObject(ArrayAccess $elements)
+  public static function createFromObject(ArrayAccess $object)
   {
     $array = new static();
-    foreach ($elements as $key => $value) {
+    foreach ($object as $key => $value) {
       /** @noinspection OffsetOperationsInspection */
       $array[$key] = $value;
     }
@@ -397,7 +395,21 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Create a new Arrayy object via string.
+   * Create an new instance containing a range of elements.
+   *
+   * @param mixed $low  First value of the sequence
+   * @param mixed $high The sequence is ended upon reaching the end value
+   * @param int   $step Used as the increment between elements in the sequence
+   *
+   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
+   */
+  public static function createWithRange($low, $high, $step = 1)
+  {
+    return static::create(range($low, $high, $step));
+  }
+
+  /**
+   * Create an new Arrayy object via string.
    *
    * @param string      $str       The input string.
    * @param string|null $delimiter The boundary string.
@@ -432,47 +444,33 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Create a new instance containing a range of elements.
-   *
-   * @param mixed $low  First value of the sequence
-   * @param mixed $high The sequence is ended upon reaching the end value
-   * @param int   $step Used as the increment between elements in the sequence
-   *
-   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
-   */
-  public static function createWithRange($low, $high, $step = 1)
-  {
-    return static::create(range($low, $high, $step));
-  }
-
-  /**
-   * Custom sort by index via "uksort"
+   * Custom sort by index via "uksort".
    *
    * @link http://php.net/manual/en/function.uksort.php
    *
-   * @param callable $func
+   * @param callable $function
    *
    * @return self (Mutable) Return this Arrayy object.
    */
-  public function customSortKeys($func)
+  public function customSortKeys($function)
   {
-    uksort($this->array, $func);
+    uksort($this->array, $function);
 
     return $this;
   }
 
   /**
-   * Custom sort by value via "usort"
+   * Custom sort by value via "usort".
    *
    * @link http://php.net/manual/en/function.usort.php
    *
-   * @param callable $func
+   * @param callable $function
    *
    * @return self (Mutable) Return this Arrayy object.
    */
-  public function customSortValues($func)
+  public function customSortValues($function)
   {
-    usort($this->array, $func);
+    usort($this->array, $function);
 
     return $this;
   }
@@ -615,6 +613,16 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param        $property
    * @param        $value
    * @param string $comparisonOp
+   *                            'eq' (equals),<br />
+   *                            'gt' (greater),<br />
+   *                            'gte' || 'ge' (greater or equals),<br />
+   *                            'lt' (less),<br />
+   *                            'lte' || 'le' (less or equals),<br />
+   *                            'ne' (not equals),<br />
+   *                            'contains',<br />
+   *                            'notContains',<br />
+   *                            'newer' (via strtotime),<br />
+   *                            'older' (via strtotime),<br />
    *
    * @return Arrayy (Immutable)
    */
@@ -631,11 +639,17 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
         'gt'          => function ($item, $prop, $value) {
           return $item[$prop] > $value;
         },
+        'ge'         => function ($item, $prop, $value) {
+          return $item[$prop] >= $value;
+        },
         'gte'         => function ($item, $prop, $value) {
           return $item[$prop] >= $value;
         },
         'lt'          => function ($item, $prop, $value) {
           return $item[$prop] < $value;
+        },
+        'le'         => function ($item, $prop, $value) {
+          return $item[$prop] <= $value;
         },
         'lte'         => function ($item, $prop, $value) {
           return $item[$prop] <= $value;
@@ -782,10 +796,9 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Get a value from an array (optional using dot-notation).
    *
-   * @param string $key     The key to look for
-   * @param mixed  $default Default value to fallback to
-   * @param array  $array   The array to get from,
-   *                        if it's set to "null" we use the current array from the class
+   * @param string $key     The key to look for.
+   * @param mixed  $default Default value to fallback to.
+   * @param array  $array   The array to get from, if it's set to "null" we use the current array from the class.
    *
    * @return mixed
    */
@@ -818,7 +831,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Get the current array from the "Arrayy"-object
+   * Get the current array from the "Arrayy"-object.
    *
    * @return array
    */
@@ -1095,21 +1108,25 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
       return false;
     }
 
+    // init
+    $array = &$this->array;
+
     // Explode the keys
     $keys = explode('.', $key);
 
     // Crawl through the keys
     while (count($keys) > 1) {
       $key = array_shift($keys);
-
-      $this->array[$key] = $this->get(array(), null, $key);
-      $this->array = &$this->array[$key];
+      // If the key doesn't exist at this depth, we will just create an empty array
+      // to hold the next value, allowing us to create the arrays to hold final
+      // values at the correct depth. Then we'll keep digging into the array.
+      if (! isset($array[$key]) || ! is_array($array[$key])) {
+        $array[$key] = [];
+      }
+      $array = &$array[$key];
     }
 
-    // Bind final tree on the array
-    $key = array_shift($keys);
-
-    $this->array[$key] = $value;
+    $array[array_shift($keys)] = $value;
 
     return true;
   }
@@ -1176,7 +1193,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
       return false;
     }
 
-    foreach ($this->getKeys()->getArray() as $key) {
+    foreach ($this->keys()->getArray() as $key) {
       if (!is_string($key)) {
         return false;
       }
@@ -1216,7 +1233,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
       return false;
     }
 
-    foreach ($this->getKeys() as $key) {
+    foreach ($this->keys() as $key) {
       if (!is_int($key)) {
         return false;
       }
@@ -1989,16 +2006,16 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * WARNING: this method only set the value, if the $key is not already set
    *
-   * @param string $key     The key
-   * @param mixed  $default The default value to set if it isn't
+   * @param string $key      The key
+   * @param mixed  $fallback The default value to set if it isn't
    *
-   * @return mixed
+   * @return mixed (Mutable)
    */
-  public function setAndGet($key, $default = null)
+  public function setAndGet($key, $fallback = null)
   {
     // If the key doesn't exist, set it
     if (!$this->has($key)) {
-      $this->array = $this->set($key, $default)->getArray();
+      $this->array = $this->set($key, $fallback)->getArray();
     }
 
     return $this->get($key);
@@ -2216,7 +2233,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * @param int  $numberOfPieces
    * @param bool $keepKeys
    *
-   * @return Arrayy
+   * @return Arrayy (Immutable)
    */
   public function split($numberOfPieces = 2, $keepKeys = false)
   {
@@ -2266,7 +2283,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * Return a duplicate free copy of the current array.
    *
-   * @return Arrayy (Immutable)
+   * @return Arrayy (Mutable)
    */
   public function unique()
   {
@@ -2282,7 +2299,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
         array()
     );
 
-    return static::create($this->array);
+    return $this;
   }
 
   /**
@@ -2313,8 +2330,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   }
 
   /**
-   * Apply the given function to every element in the array,
-   * discarding the results.
+   * Apply the given function to every element in the array, discarding the results.
    *
    * @param callable $callable
    * @param bool     $recursive Whether array will be walked recursively or no

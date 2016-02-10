@@ -232,9 +232,13 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
 
   public function testGetIterator()
   {
-    $arrayy = $this->createArrayy();
+    $arrayy = $this->createArrayy(array('foo', 'bar', 1, null));
 
-    self::assertInstanceOf('ArrayIterator', $arrayy->getIterator());
+    $result = $arrayy->getIterator();
+    self::assertInstanceOf('ArrayIterator', $result);
+
+    $result->next();
+    self::assertEquals('bar', $result->current());
   }
 
   /**

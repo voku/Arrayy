@@ -172,35 +172,61 @@ A::reverse(['fòô', 'bàř']);
 
 ##### use a "default object" 
 
-Creates an Arrayy object ...
+Creates an Arrayy object.
 
 ```php
 $arrayy = new Arrayy(array('fòô', 'bàř')); // Array['fòô', 'bàř']
 ```
 
-##### create(array $array)
+##### create(array $array) : Arrayy (Immutable)
 
-Creates an Arrayy object ...
+Creates an Arrayy object, via static "create()"-method
 
 ```php
 $arrayy = A::create(array('fòô', 'bàř')); // Array['fòô', 'bàř']
 ```
 
-##### createFromString(string $str)
+##### createByReference(array &$array) : Arrayy (Mutable)
 
-Creates an Arrayy object ...
+WARNING: Creates an Arrayy object by reference.
 
 ```php
-$arrayy = A::createFromString(' foo, bar '); // Arrayy['foo', 'bar']
+$array = array('fòô', 'bàř');
+$arrayy = A::createByReference($array); // Array['fòô', 'bàř']
 ```
 
-##### createFromJson(string $json)
+##### createFromJson(string $json) : Arrayy (Immutable)
 
-Creates an Arrayy object, again ...
+Create an new Arrayy object via JSON.
 
 ```php
 $str = '{"firstName":"John", "lastName":"Doe"}';
 $arrayy = A::createFromJson($str); // Arrayy['firstName' => 'John', 'lastName' => 'Doe']
+```
+
+##### createFromObject(ArrayAccess $object) : Arrayy (Immutable)
+
+Create an new instance filled with values from an object that have implemented ArrayAccess.
+
+```php
+$object = A::create(1, 'foo');
+$arrayy = A::createFromObject($object); // Arrayy[1, 'foo']
+```
+
+##### createWithRange() : Arrayy (Immutable)
+
+Create an new instance containing a range of elements.
+
+```php
+$arrayy = A::createWithRange(2, 4); // Arrayy[2, 3, 4]
+```
+
+##### createFromString(string $str) : Arrayy (Immutable)
+
+Create an new Arrayy object via string.
+
+```php
+$arrayy = A::createFromString(' foo, bar '); // Arrayy['foo', 'bar']
 ```
 
 ## Instance Methods
@@ -276,7 +302,7 @@ a(['fòô' => 'bàř'])->prepend('foo'); // Arrayy[0 => 'foo', 'fòô' => 'bàř
 
 ##### at(Closure $closure) : Arrayy (Immutable)
 
-Iterate over an array and execute a callback for each loop.
+Iterate over the current array and execute a callback for each loop.
 
 ```php
 $result = A::create();
@@ -288,29 +314,83 @@ a(['foo', 'bar' => 'bis'])->at($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 
 ##### average(int $decimals) : int|double
 
-Returns the average value of an array
+Returns the average value of the current array.
 
 ```php
 a([-9, -8, -7, 1.32])->average(2); // -5.67
 ```
 
-##### clean() : Arrayy
+##### chunk(int $size, bool $preserveKeys) : Arrayy (Immutable)
 
-Clean all falsy values from an array.
+Create a chunked version of the current array.
+
+```php
+a([-9, -8, -7, 1.32])->chunk(2); // Arrayy[[-9, -8], [-7, 1.32]]
+```
+
+##### clean() : Arrayy (Immutable)
+
+Clean all falsy values from the current array.
 
 ```php
 a([-8 => -9, 1, 2 => false])->clean(); // Arrayy[-8 => -9, 1]
 ```
 
+##### clear() : Arrayy (Mutable)
+
+WARNING!!! -> Clear the current array.
+
+```php
+a([-8 => -9, 1, 2 => false])->clear(); // Arrayy[]
+```
+
+##### customSortKeys($function) : Arrayy (Mutable) 
+
+Custom sort by index via "uksort".
+
+```php
+$callable = function ($a, $b) {
+  if ($a == $b) {
+    return 0;
+  }
+  return ($a > $b) ? 1 : -1;
+};
+$arrayy = a(['three' => 3, 'one' => 1, 'two' => 2]);
+$resultArrayy = $arrayy->customSortKeys($callable); // Arrayy['one' => 1, 'three' => 3, 'two' => 2]
+```
+
+##### customSortValues($function) : Arrayy (Mutable) 
+
+Custom sort by value via "usort".
+
+```php
+$callable = function ($a, $b) {
+  if ($a == $b) {
+    return 0;
+  }
+  return ($a > $b) ? 1 : -1;
+};
+$arrayy = a(['three' => 3, 'one' => 1, 'two' => 2]);
+$resultArrayy = $arrayy->customSortValues($callable); // Arrayy['one' => 1, 'two' => 2, 'three' => 3]
+```
+
 ##### contains(mixed $value) : boolean
 
-Check if an item is in an array.
+Check if an item is in the current array.
 
 ```php
 a([1, true])->contains(true); // true
 ```
 
-##### diff(array $array) : Arrayy
+##### containsKey(mixed $key) : boolean
+
+Check if the given key/index exists in the array.
+
+```php
+a([1 => true])->containsKey(1); // true
+```
+
+##### diff(array $array) : Arrayy (Immutable)
 
 Return values that are only in the current array.
 
@@ -318,7 +398,7 @@ Return values that are only in the current array.
 a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
 ```
 
-##### diffReverse(array $array) : Arrayy
+##### diffReverse(array $array) : Arrayy (Immutable)
 
 Return values that are only in the new $array.
 
@@ -326,7 +406,7 @@ Return values that are only in the new $array.
 a([1 => 1])->diffReverse([1 => 1, 2 => 2]); // Arrayy[2 => 2]
 ```
 
-##### each(Closure $closure) : array
+##### each(Closure $closure) : Arrayy (Immutable)
 
 Iterate over the current array and modify the array's value.
 
@@ -335,10 +415,19 @@ $result = A::create();
 $closure = function ($value) {
   return ':' . $value . ':';
 };
-a(['foo', 'bar' => 'bis'])->each($closure); // [':foo:', 'bar' => ':bis:']
+a(['foo', 'bar' => 'bis'])->each($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 ```
 
-##### filter(Closure|null $closure) : Arrayy
+##### exists(Closure $closure) : boolean
+
+```php
+$callable = function ($value, $key) {
+  return 2 === $key and 'two' === $value;
+};
+a(['foo', 2 => 'two'])->exists($callable); // true
+```
+
+##### filter(Closure|null $closure) : Arrayy (Immutable)
 
 Find all items in an array that pass the truth test.
 
@@ -347,6 +436,19 @@ $closure = function ($value) {
   return $value % 2 !== 0;
 }
 a([1, 2, 3, 4])->filter($closure); // Arrayy[0 => 1, 2 => 3]
+```
+
+##### filterBy() : Arrayy (Immutable)
+
+Filters an array of objects (or a numeric array of associative arrays)
+based on the value of a particular property within that.
+
+```php
+$array = [
+  0 => ['id' => 123, 'name' => 'foo', 'group' => 'primary', 'value' => 123456, 'when' => '2014-01-01'],
+  1 => ['id' => 456, 'name' => 'bar', 'group' => 'primary', 'value' => 1468, 'when' => '2014-07-15'],
+};        
+a($array)->filterBy('name', 'baz'); // Arrayy[0 => ['id' => 123, 'name' => 'foo', 'group' => 'primary', 'value' => 123456, 'when' => '2014-01-01']]
 ```
 
 ##### find(Closure $closure) : mixed
@@ -363,13 +465,13 @@ a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
 
 ##### first() : mixed
 
-Get the first value from the current array.
+Get the first value from the current array and return null if there wasn't a element.
 
 ```php
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
 ```
 
-##### firsts(null|int $take) : Arrayy
+##### firstsMutable(null|int $take) : Arrayy (Mutable)
 
 Get the first value(s) from the current array.
 
@@ -377,12 +479,38 @@ Get the first value(s) from the current array.
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->firsts(2); // Arrayy[0 => 'foo', 1 => 'bar']
 ```
 
-##### flip() : Arrayy
+##### firstsImmutable(null|int $take) : Arrayy (Immutable)
+
+Get the first value(s) from the current array.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->firsts(2); // Arrayy[0 => 'foo', 1 => 'bar']
+```
+
+##### flip() : Arrayy (Immutable)
 
 Exchanges all keys with their associated values in an array.
 
 ```php
 a([0 => 'foo', 1 => 'bar'])->flip(); // Arrayy['foo' => 0, 'bar' => 1]
+```
+
+##### get(string $key, [null $default], [null $array]) : mixed
+
+Get a value from an array (optional using dot-notation).
+
+```php
+$arrayy = a(['Lars' => ['lastname' => 'Moelleken']]);
+$arrayy->get('Lars.lastname'); // 'Moelleken'
+```
+
+##### getArray() : array
+
+Get the current array from the "Arrayy"-object.
+
+```php
+$arrayy = a([1, 2]);
+$arrayy->getArray(); // [1, 2]
 ```
 
 ##### getColumn(mixed $columnKey, mixed $indexKey) : Arrayy
@@ -392,6 +520,14 @@ the $columnKey, can be used to extract data-columns from multi-arrays.
 
 ```php
 a([['foo' => 'bar', 'id' => 1], ['foo => 'lall', 'id' => 2]])->getColumn('foo', 'id'); // Arrayy[1 => 'bar', 2 => 'lall']
+```
+
+##### getIterator()
+
+Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
+
+```php
+a(['foo', 'bar'])->getIterator(); // ArrayIterator['foo', 'bar']
 ```
 
 ##### implode(string $with) : string
@@ -440,6 +576,17 @@ Check if the current array is a multi-array.
 
 ```php
 a(['foo' => [1, 2 , 3]])->isMultiArray(); // true
+```
+
+##### keys() : Arrayy (Immutable)
+
+Get all keys from the current array.
+
+alias: "Arrayy->getKeys()"
+
+```php
+$arrayy = a([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
+$arrayy->keys(); // Arrayy[1, 2, 3]
 ```
 
 ##### last() : mixed
@@ -556,9 +703,55 @@ Get the min value from an array.
 a([-9, -8, -7, 1.32])->min(); // -9
 ```
 
-##### random(int|null $take) : Arrayy
+##### randomKey() : mixed
+
+Pick a random key/index from the keys of this array.
+
+alias: "Arrayy->getRandomKey()"
+
+```php
+$arrayy = A::create([1 => 'one', 2 => 'two']);
+$arrayy->randomKey(); // e.g. 2
+```
+
+##### randomKeys() : Arrayy (Immutable)
+
+Pick a given number of random keys/indexes out of this array.
+
+alias: "Arrayy->getRandomKeys()"
+
+```php
+$arrayy = A::create([1 => 'one', 2 => 'two']);
+$arrayy->randomKeys(); // e.g. Arrayy[1, 2]
+```
+
+##### randomValue() : mixed
+
+Pick a random value from the values of this array.
+
+alias: "Arrayy->getRandomValue()"
+
+```php
+$arrayy = A::create([1 => 'one', 2 => 'two']);
+$arrayy->randomValue(); // e.g. 'one'
+```
+
+##### randomValues() : Arrayy (Immutable)
+
+Pick a given number of random values out of this array.
+
+alias: "Arrayy->getRandomValues()"
+
+```php
+$arrayy = A::create([1 => 'one', 2 => 'two']);
+$arrayy->randomValues(); // e.g. Arrayy['one', 'two']
+```
+
+##### randomImmutable(int|null $take) : Arrayy (Immutable)
 
 Get a random string from an array.
+
+alias: "Arrayy->getRandom()"
 
 ```php
 a([1, 2, 3, 4])->random(2); // e.g.: Arrayy[1, 4]
@@ -572,7 +765,7 @@ Get a random value from an array, with the ability to skew the results.
 a([0 => 3, 1 => 4])->randomWeighted([1 => 4]); // e.g.: Arrayy[4] (has a 66% chance of returning 4)
 ```
 
-##### reduce(callable $predicate, array $init) : Arrayy
+##### reduce(callable $predicate, array $init) : Arrayy (Immutable)
 
 Reduce the current array via callable e.g. anonymous-function.
 
@@ -586,7 +779,7 @@ function myReducer($resultArray, $value) {
 a(['foo', 'bar'])->reduce('myReducer'); // Arrayy['foo']
 ```
 
-##### reindex() : Arrayy
+##### reindex() : Arrayy (Mutable)
 
 Create a numerically re-indexed Arrayy object.
 
@@ -594,7 +787,7 @@ Create a numerically re-indexed Arrayy object.
 a([2 => 1, 3 => 2])->reindex(); // Arrayy[0 => 1, 1 => 2]
 ```
 
-##### reject(Closure $closure) : Arrayy
+##### reject(Closure $closure) : Arrayy (Immutable)
 
 Return all items that fail the truth test.
 
@@ -605,7 +798,15 @@ $closure = function ($value) {
 a([1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
 ```
 
-##### removeFirst() : Arrayy
+##### remove(mixed $key) : (Immutable)
+
+Remove a value from the current array (optional using dot-notation).
+
+```php
+a([1 => 'bar', 'foo' => 'foo'])->remove(1); // Arrayy['foo' => 'foo']
+```
+
+##### removeFirst() : Arrayy (Immutable)
 
 Remove the first value from the current array.
 
@@ -613,7 +814,7 @@ Remove the first value from the current array.
 a([1 => 'bar', 'foo' => 'foo'])->removeFirst(); // Arrayy['foo' => 'foo']
 ```
 
-##### removeLast() : Arrayy
+##### removeLast() : Arrayy (Immutable)
 
 Remove the last value from the current array.
 
@@ -621,7 +822,7 @@ Remove the last value from the current array.
 a([1 => 'bar', 'foo' => 'foo'])->removeLast(); // Arrayy[1 => 'bar']
 ```
 
-##### removeValue(mixed $value) : Arrayy
+##### removeValue(mixed $value) : Arrayy (Immutable)
 
 Removes a particular value from an array (numeric or associative).
 
@@ -629,7 +830,54 @@ Removes a particular value from an array (numeric or associative).
 a([1 => 'bar', 'foo' => 'foo'])->removeValue('foo'); // Arrayy[1 => 'bar']
 ```
 
-##### replaceKeys(array $keys) : Arrayy
+##### replace(array $keys) : Arrayy (Immutable)
+
+Replace a key with a new key/value pair.
+
+```php
+$arrayy = a([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
+$arrayy->replace(2, 'notfoo', 'notbar'); // Arrayy[1 => 'foo', 'notfoo' => 'notbar', 3 => 'bar']
+```
+
+##### replaceAllKeys(array $keys) : Arrayy (Immutable)
+
+Create an array using the current array as values and the other array as keys.
+
+```php
+$firstArray = array(
+    1 => 'one',
+    2 => 'two',
+    3 => 'three',
+);
+$secondArray = array(
+    'one' => 1,
+    1     => 'one',
+    2     => 2,
+);
+$arrayy = a($firstArray);
+$arrayy->replaceAllKeys($secondArray); // Arrayy[1 => "one", 'one' => "two", 2 => "three"]
+```
+
+##### replaceAllValues(array $array) : Arrayy (Immutable)
+
+Create an array using the current array as keys and the other array as values.
+
+```php
+$firstArray = array(
+    1 => 'one',
+    2 => 'two',
+    3 => 'three',
+);
+$secondArray = array(
+    'one' => 1,
+    1     => 'one',
+    2     => 2,
+);
+$arrayy = a($firstArray);
+$arrayy->replaceAllValues($secondArray); // Arrayy['one' => 1, 'two' => 'one', 'three' => 2]
+```
+
+##### replaceKeys(array $keys) : Arrayy (Immutable)
 
 Replace the keys in an array with another set.
 
@@ -639,7 +887,7 @@ WARNING: An array of keys must matching the array's size and order!
 a([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']); // Arrayy[2 => 'bar', 'replaced' => 'foo']
 ```
 
-##### replaceOneValue(mixed $search, mixed $replacement) : Arrayy
+##### replaceOneValue(mixed $search, mixed $replacement) : Arrayy (Immutable)
 
 Replace the first matched value in an array.
 
@@ -648,7 +896,7 @@ $testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
 a($testArray)->replaceOneValue('foo', 'replaced'); // Arrayy['bar', 'foo' => 'replaced', 'foobar' => 'foobar']
 ```
 
-##### replaceValues(string $search, string $replacement) : Arrayy
+##### replaceValues(string $search, string $replacement) : Arrayy (Immutable)
 
 Replace values in the current array.
 
@@ -657,7 +905,7 @@ $testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
 a($testArray)->replaceValues('foo', 'replaced'); // Arrayy['bar', 'foo' => 'replaced', 'foobar' => 'replacedbar']
 ```
 
-##### rest(int $from) : Arrayy
+##### rest(int $from) : Arrayy (Immutable)
 
 Get the last elements from index $from until the end of this array.
 
@@ -665,15 +913,15 @@ Get the last elements from index $from until the end of this array.
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->rest(2); // Arrayy[0 => 'lall']
 ```
 
-##### reverse() : Arrayy
+##### reverse() : Arrayy (Mutable)
 
 Return the array in the reverse order.
 
 ```php
-a([1, 2, 3])->reverse(); // Arrayy[3, 2, 1]
+a([1, 2, 3])->reverse(); // self[3, 2, 1]
 ```
 
-##### searchIndex(mixed $value) : Arrayy
+##### searchIndex(mixed $value) : mixed
 
 Search for the first index of the current array via $value.
 
@@ -681,7 +929,7 @@ Search for the first index of the current array via $value.
 a(['fòô' => 'bàř', 'lall' => 'bàř'])->searchIndex('bàř'); // Arrayy[0 => 'fòô']
 ```
 
-##### searchValue(mixed $index) : Arrayy
+##### searchValue(mixed $index) : Arrayy (Immutable)
 
 Search for the value of the current array via $index.
 
@@ -689,7 +937,44 @@ Search for the value of the current array via $index.
 a(['fòô' => 'bàř'])->searchValue('fòô'); // Arrayy[0 => 'bàř']
 ```
 
-##### sort(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy, bool(false) $keepKeys) : Arrayy
+##### set(mixed $key, mixed $value) : Arrayy (Immutable)
+
+Set a value for the current array (optional using dot-notation).
+
+```php
+$arrayy = a(['Lars' => ['lastname' => 'Moelleken']]);
+$arrayy->set('Lars.lastname', 'Müller'); // Arrayy['Lars', ['lastname' => 'Müller']]]
+```
+
+##### setAndGet()
+
+Get a value from a array and set it if it was not.
+
+WARNING: this method only set the value, if the $key is not already set
+
+```php
+$arrayy = a([1 => 1, 2 => 2, 3 => 3]);
+$arrayy->setAndGet(1, 4); // 1
+$arrayy->setAndGet(0, 4); // 4
+```
+
+##### serialize() : string
+
+Serialize the current array.
+
+```php
+a([1, 4, 7])->serialize(); // 'a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}'
+```
+
+##### unserialize(string $string) : Arrayy (Mutable)
+ 
+Unserialize an string and return this object.
+
+```php
+a()->unserialize('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}'); // Arrayy[1, 4, 7]
+```
+
+##### sort(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy, bool(false) $keepKeys) : Arrayy (Mutable)
 
 Sort the current array and optional you can keep the keys.
 
@@ -700,7 +985,7 @@ Sort the current array and optional you can keep the keys.
 a(3 => 'd', 2 => 'f', 0 => 'a')->sort(SORT_ASC, SORT_NATURAL, false); // Arrayy[0 => 'a', 1 => 'd', 2 => 'f']
 ```
 
-##### sorter(null|callable $sorter, string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy
+##### sorter(null|callable $sorter, string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy (Immutable)
 
 Sort a array by value, by a closure or by a property.
 
@@ -718,7 +1003,7 @@ $under = a($testArray)->sorter(
 );
 var_dump($under); // Arrayy[1, 3, 5, 2, 4]
 
-##### sortKeys(string|int(SORT_ASC) $direction) : Arrayy
+##### sortKeys(string|int(SORT_ASC) $direction) : Arrayy (Mutable)
 
 Sort the current array by key by $direction = 'asc' or $direction = 'desc'.
 
@@ -728,7 +1013,7 @@ Sort the current array by key by $direction = 'asc' or $direction = 'desc'.
 a([1 => 2, 0 => 1])->sortKeys('asc'); // Arrayy[0 => 1, 1 => 2]
 ```
 
-##### sortValueNewIndex(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy
+##### sortValueNewIndex(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy (Immutable)
 
 Sort the current array by value.
 
@@ -739,7 +1024,7 @@ Sort the current array by value.
 a(3 => 'd', 2 => 'f', 0 => 'a')->sortValueNewIndex(SORT_ASC, SORT_NATURAL); // Arrayy[0 => 'a', 1 => 'd', 2 => 'f']
 ```
 
-##### sortValueKeepIndex(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy
+##### sortValueKeepIndex(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy (Immutable)
 
 Sort the current array by value.
 
@@ -750,7 +1035,7 @@ Sort the current array by value.
 a(3 => 'd', 2 => 'f', 0 => 'a')->sortValueNewIndex(SORT_ASC, SORT_REGULAR); // Arrayy[0 => 'a', 3 => 'd', 2 => 'f']
 ```
 
-##### split(int(2) $numberOfPieces, bool(false) $keepKeys) : Arrayy
+##### split(int(2) $numberOfPieces, bool(false) $keepKeys) : Arrayy (Immutable)
 
 Split an array in the given amount of pieces.
    
@@ -758,7 +1043,7 @@ Split an array in the given amount of pieces.
 a(['a' => 1, 'b' => 2])->split(2, true); // Arrayy[['a' => 1], ['b' => 2]]
 ```
 
-##### shuffle() : Arrayy
+##### shuffle() : Arrayy (Immutable)
 
 Shuffle the current array.
 
@@ -774,12 +1059,33 @@ Convert the current array to JSON.
 a(['bar', array('foo')])->toJson(); // '["bar",{"1":"foo"}]'
 ```
 
-##### unique() : Arrayy
+##### unique() : Arrayy (Mutable)
 
 Return a duplicate free copy of the current array.
 
 ```php
 a([1, 2, 2])->unique(); // Arrayy[1, 2]
+```
+
+##### values() : Arrayy (Immutable)
+
+Get all values from a array.
+
+```php
+$arrayy = a([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
+$arrayyTmp->values(); // Arrayy[0 => 'foo', 1 => 'foo2', 2 => 'bar']
+```
+
+##### walk() : Arrayy (Mutable)
+
+Apply the given function to every element in the array, discarding the results.
+
+```php
+$callable = function (&$value, $key) {
+  $value = $key;
+};
+$arrayy = a([1, 2, 3]);
+$arrayy->walk($callable); // Arrayy[0, 1, 2]
 ```
 
 ## Tests

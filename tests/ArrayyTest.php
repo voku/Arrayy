@@ -1387,6 +1387,13 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArray = array_chunk($array, 2);
 
     self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+
+    // ---
+
+    $arrayy = new A(array(-9, -8, -7, 1.32));
+    $result = $arrayy->chunk(2);
+
+    self::assertEquals(array(array(-9, -8), array(-7, 1.32)), $result->getArray());
   }
 
   /**
@@ -1466,7 +1473,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals(A::create($expected2), A::create($rows)->getColumn(null));
   }
 
-  public function testCombineTo()
+  public function testReplaceAllKeys()
   {
     $firstArray = array(
         1 => 'one',
@@ -1486,7 +1493,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals($resultArray, $resultArrayy);
   }
 
-  public function testCombineWith()
+  public function testReplaceAllKeysV2()
   {
     $firstArray = array(
         1 => 'one',
@@ -1500,10 +1507,14 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
 
     $arrayy = new A($firstArray);
-    $resultArrayy = $arrayy->replaceAllValues($secondArray);
-    $resultArray = array_combine($firstArray, $secondArray);
+    $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
 
-    self::assertImmutable($arrayy, $resultArrayy, $firstArray, $resultArray);
+    $result = array(
+        1     => "one",
+        'one' => "two",
+        2     => "three",
+    );
+    self::assertSame($result, $resultArrayy);
   }
 
   public function testConstruct()
@@ -1701,6 +1712,31 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     uksort($resultArray, $callable);
 
     self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  public function testCustomSortKeysSimple()
+  {
+    $callable = function ($a, $b) {
+      if ($a == $b) {
+        return 0;
+      }
+
+      return ($a > $b) ? 1 : -1;
+    };
+
+    $input = array(
+        'three' => 3,
+        'one'   => 1,
+        'two'   => 2,
+    );
+    $arrayy = new A($input);
+    $resultArrayy = $arrayy->customSortKeys($callable);
+    $expected = array(
+        'one'   => 1,
+        'three' => 3,
+        'two'   => 2,
+    );
+    self::assertSame($expected, $resultArrayy->getArray());
   }
 
   /**
@@ -1903,6 +1939,22 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
     self::assertEquals($expected, $arrayy->get($key));
+  }
+
+  public function testGetViaDotNotation()
+  {
+    $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken')));
+    $result = $arrayy->get('Lars.lastname');
+    self::assertEquals('Moelleken', $result);
+  }
+
+  public function testSetViaDotNotation()
+  {
+    $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken')));
+    $result = $arrayy->set('Lars.lastname', 'Müller');
+
+    $result = $result->get('Lars.lastname');
+    self::assertEquals('Müller', $result);
   }
 
   /**
@@ -2555,6 +2607,44 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals(true, in_array($result[0], $array, true));
   }
 
+  public function testRandomKey()
+  {
+    $array = array(1 => 'one', 2 => 'two');
+    $arrayy = A::create($array);
+    $result = $arrayy->randomKey();
+
+    self::assertEquals(true, array_key_exists($result, $array));
+  }
+
+  public function testRandomKeys()
+  {
+    $array = array(1 => 'one', 2 => 'two');
+    $arrayy = A::create($array);
+    $result = $arrayy->randomKeys(2);
+
+    self::assertEquals(true, array_key_exists($result[0], $array));
+    self::assertEquals(true, array_key_exists($result[1], $array));
+  }
+
+  public function testRandomValue()
+  {
+    $array = array(1 => 'one', 2 => 'two');
+    $arrayy = A::create($array);
+    $result = $arrayy->randomValue();
+
+    self::assertEquals(true, in_array($result, $array, true));
+  }
+
+  public function testRandomValues()
+  {
+    $array = array(1 => 'one', 2 => 'two');
+    $arrayy = A::create($array);
+    $result = $arrayy->randomValues(2);
+
+    self::assertEquals(true, in_array($result[0], $array, true));
+    self::assertEquals(true, in_array($result[1], $array, true));
+  }
+
   /**
    * @dataProvider randomWeightedProvider()
    *
@@ -2719,14 +2809,58 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function testReplace()
   {
     $arrayyTmp = A::create(array(1 => 'foo', 2 => 'foo2', 3 => 'bar'));
-    $arrayy = $arrayyTmp->replace(1, 'notfoo', 'notbar');
 
+    $arrayy = $arrayyTmp->replace(1, 'notfoo', 'notbar');
     $matcher = array(
         'notfoo' => 'notbar',
         2        => 'foo2',
         3        => 'bar',
     );
     self::assertEquals($matcher, $arrayy->getArray());
+  }
+
+  public function testReplaceAllValues()
+  {
+    $firstArray = array(
+        1 => 'one',
+        2 => 'two',
+        3 => 'three',
+    );
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($firstArray);
+    $resultArrayy = $arrayy->replaceAllValues($secondArray);
+    $resultArray = array_combine($firstArray, $secondArray);
+
+    self::assertImmutable($arrayy, $resultArrayy, $firstArray, $resultArray);
+  }
+
+  public function testReplaceAllValuesV2()
+  {
+    $firstArray = array(
+        1 => 'one',
+        2 => 'two',
+        3 => 'three',
+    );
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($firstArray);
+    $resultArrayy = $arrayy->replaceAllValues($secondArray);
+
+    $result = array(
+        'one'   => 1,
+        'two'   => 'one',
+        'three' => 2,
+    );
+    self::assertSame($result, $resultArrayy->getArray());
   }
 
   /**
@@ -2786,6 +2920,19 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($testArray)->replaceOneValue('foo', 'replaced');
     self::assertEquals('replaced', $arrayy['foo']);
     self::assertEquals('foobar', $arrayy['foobar']);
+  }
+
+  public function testReplaceV2()
+  {
+    $arrayyTmp = A::create(array(1 => 'foo', 2 => 'foo2', 3 => 'bar'));
+
+    $arrayy = $arrayyTmp->replace(2, 'notfoo', 'notbar');
+    $matcher = array(
+        1        => 'foo',
+        'notfoo' => 'notbar',
+        3        => 'bar',
+    );
+    self::assertEquals($matcher, $arrayy->getArray());
   }
 
   public function testReplaceValues()
@@ -2877,8 +3024,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals($expected, $arrayy->searchIndex($value));
   }
 
-  // The public method list order by ASC
-
   /**
    * @dataProvider searchValueProvider()
    *
@@ -2892,6 +3037,18 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     self::assertEquals($expected, $arrayy->searchValue($value)->getArray());
   }
+
+  public function testSerialize()
+  {
+    $testArray = array(1, 4, 7);
+    $arrayy = A::create($testArray);
+    $result = $arrayy->serialize();
+
+    self::assertEquals('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
+    self::assertEquals('C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}', serialize($arrayy));
+  }
+
+  // The public method list order by ASC
 
   /**
    * @dataProvider setProvider()
@@ -2919,6 +3076,23 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A($array);
     $result = $arrayy->setAndGet($key, $value);
     self::assertEquals($value, $result);
+  }
+
+  public function testSetAndGetSimple()
+  {
+    $arrayy = new A(array(1, 2, 3));
+    $result = $arrayy->setAndGet(0, 4);
+
+    $expected = 1;
+    self::assertSame($expected, $result);
+
+    // ---
+
+    $arrayy = new A(array(1 => 1, 2 => 2, 3 => 3));
+    $result = $arrayy->setAndGet(0, 4);
+
+    $expected = 4;
+    self::assertSame($expected, $result);
   }
 
   public function testSetV2()
@@ -3295,6 +3469,18 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals($result, $arrayy->getArray());
   }
 
+  public function testUnserialize()
+  {
+    $string1 = 'C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}';
+    $string2 = 'a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}';
+
+    $testArray = unserialize($string1);
+    $arrayy = A::create()->unserialize($string2);
+
+    self::assertEquals($string1, serialize($testArray));
+    self::assertEquals($string2, $arrayy->serialize());
+  }
+
   public function testUnset()
   {
     $arrayy = new A(array('foo bar', 'öäü'));
@@ -3348,6 +3534,20 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     array_walk($resultArray, $callable);
 
     self::assertMutable($arrayy, $resultArrayy, $resultArray);
+  }
+
+  public function testWalkSimple()
+  {
+    $callable = function (&$value, $key) {
+      $value = $key;
+    };
+
+    $array = array(1, 2, 3);
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->walk($callable);
+
+    $expected = array(0, 1, 2);
+    self::assertEquals($expected, $resultArrayy->getArray());
   }
 
   /**
