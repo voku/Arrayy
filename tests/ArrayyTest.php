@@ -1510,9 +1510,9 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
 
     $result = array(
-        1     => "one",
-        'one' => "two",
-        2     => "three",
+        1     => 'one',
+        'one' => 'two',
+        2     => 'three',
     );
     self::assertSame($result, $resultArrayy);
   }

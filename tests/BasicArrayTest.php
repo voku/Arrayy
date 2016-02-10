@@ -574,7 +574,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
 
   public function testReduce()
   {
-    $func = function($resultArray, $value) {
+    $func = function ($resultArray, $value) {
       if ($value % 2 === 0) {
         $resultArray[] = $value;
       }
