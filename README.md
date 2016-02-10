@@ -504,15 +504,6 @@ $arrayy = a(['Lars' => ['lastname' => 'Moelleken']]);
 $arrayy->get('Lars.lastname'); // 'Moelleken'
 ```
 
-##### getArray() : array
-
-Get the current array from the "Arrayy"-object.
-
-```php
-$arrayy = a([1, 2]);
-$arrayy->getArray(); // [1, 2]
-```
-
 ##### getColumn(mixed $columnKey, mixed $indexKey) : Arrayy
 
 Returns the values from a single column of the input array, identified by
