@@ -52,24 +52,28 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [getColumn](#getcolumnmixed-columnkey-mixed-indexkey--arrayy)
     * [getIterator](#getiterator)
     * [implode](#implodestring-with--string)
-    * [initial](#initialint-to--arrayy)
-    * [intersection](#intersectionarray-search--arrayy)
+    * [initial](#initialint-to--arrayy-immutable)
+    * [intersection](#intersectionarray-search--arrayy-immutable)
     * [intersects](#intersectsarray-search--boolean)
     * [isAssoc](#isassoc--boolean)
     * [isMultiArray](#ismultiarray--boolean)
-    * [last](#)
-    * [lasts](#lastnullint-take--arrayy)
+    * [keys](#keys--arrayy-immutable)
+    * [last](#last--mixed)
+    * [lastsImmutable](#lastsimmutablenullint-take--arrayy-immutable)
+    * [lastsMutable](#lastsmutablenullint-take--arrayy-mutable)
     * [length](#length--int)
     * [max](#max--mixed)
     * [matches](#matchesclosure-closure--boolean)
     * [matchesAny](#matchesanyclosure-closure--boolean)
-    * [mergeAppendKeepIndex](#mergeappendkeepindexarray-array--arrayy)
-    * [mergePrependKeepIndex](#mergeprependkeepindexarray-array--arrayy)
-    * [mergeAppendNewIndex](#mergeappendnewindexarray-array--arrayy)
-    * [mergePrependNewIndex](#mergeprependnewindexarray-array--arrayy)
+    * [mergeAppendKeepIndex](#mergeappendkeepindexarray-array--arrayy-immutable)
+    * [mergePrependKeepIndex](#mergeprependkeepindexarray-array--arrayy-immutable)
+    * [mergeAppendNewIndex](#mergeappendnewindexarray-array--arrayy-immutable)
+    * [mergePrependNewIndex](#mergeprependnewindexarray-array--arrayy-immutable)
     * [min](#min--mixed)
-    * [prepend](#prependmixed-value--arrayy)
-    * [random](#randomintnull-take--arrayy)
+    * [randomKey](#randomkey--mixed)
+    * [randomKeys](#randomkeys--arrayy-immutable)
+    * [randomValue](#randomvalue--mixed)
+    * [randomValues](#randomvalues--arrayy-immutable)
     * [randomWeighted](#randomweightedarray-array-intnull-take--arrayy)
     * [reduce](#reducecallable-predicate-array-init--arrayy)
     * [reject](#rejectclosure-closure--arrayy)
@@ -767,7 +771,15 @@ Get a random string from an array.
 alias: "Arrayy->getRandom()"
 
 ```php
-a([1, 2, 3, 4])->random(2); // e.g.: Arrayy[1, 4]
+a([1, 2, 3, 4])->randomImmutable(2); // e.g.: Arrayy[1, 4]
+```
+
+##### randomMutable(int|null $take) : Arrayy (Mutable)
+
+Get a random string from an array.
+
+```php
+a([1, 2, 3, 4])->randomMutable(2); // e.g.: Arrayy[1, 4]
 ```
 
 ##### randomWeighted(array $array, int|null $take) : Arrayy
