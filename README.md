@@ -74,6 +74,8 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [randomKeys](#randomkeys--arrayy-immutable)
     * [randomValue](#randomvalue--mixed)
     * [randomValues](#randomvalues--arrayy-immutable)
+    * [randomImmutable](#randomimmutableintnull-take--arrayy-immutable)
+    * [randomMutable](#randommutableintnull-take--arrayy-mutable)
     * [randomWeighted](#randomweightedarray-array-intnull-take--arrayy)
     * [reduce](#reducecallable-predicate-array-init--arrayy)
     * [reject](#rejectclosure-closure--arrayy)
@@ -782,7 +784,7 @@ Get a random string from an array.
 a([1, 2, 3, 4])->randomMutable(2); // e.g.: Arrayy[1, 4]
 ```
 
-##### randomWeighted(array $array, int|null $take) : Arrayy
+##### randomWeighted(array $array, int|null $take) : Arrayy (Immutable)
 
 Get a random value from an array, with the ability to skew the results.
    
