@@ -22,21 +22,35 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 * [Instance methods](#instance-methods)
     * ["set an array value"](#set-an-array-value)
     * ["get an array value"](#get-an-array-value)
+    * ["get the array"](#get-the-array)
     * ["delete an array value"](#delete-an-array-value)
     * ["check if an array value is-set"](#check-if-an-array-value-is-set)
     * ["simple loop with an Arrayy-object"](#simple-loop-with-an-arrayy-object)
-    * [append](#appendmixed-value--arrayy)
-    * [at](#atclosure-closure--arrayy)
+    * [append](#appendmixed-value--arrayy-mutable)
+    * [prepend](#prependmixed-value--arrayy-mutable)
+    * [at](#atclosure-closure--arrayy-immutable)
     * [average](#averageint-decimals--intdouble)
-    * [clean](#clean--arrayy)
+    * [chunk](#chunkint-size-bool-preservekeys--arrayy-immutable)
+    * [clean](#clean--arrayy-immutable)
+    * [clear](#clear--arrayy-mutable)
+    * [customSortKeys](#customsortkeysfunction--arrayy-mutable)
+    * [customSortValues](#customsortvaluesfunction--arrayy-mutable)
     * [contains](#containsmixed-value--boolean)
-    * [diff](#diffarray-array--arrayy)
-    * [each](#eachclosure-closure--array)
-    * [filter](#filterclosurenull-closure--arrayy)
+    * [containsKey](#containskeymixed-key--boolean)
+    * [diff](#diffarray-array--arrayy-immutable)
+    * [diffReverse](#diffreversearray-array--arrayy-immutable)
+    * [each](#eachclosure-closure--arrayy-immutable)
+    * [exists](#existsclosure-closure--boolean)
+    * [filter](#filterclosurenull-closure--arrayy-immutable)
+    * [filterBy](#filterby--arrayy-immutable)
     * [find](#findclosure-closure--mixed)
-    * [first](#firstnullint-take--arrayy)
-    * [flip](#flip--arrayy)
+    * [first](#first--mixed)
+    * [firstsMutable](#firstsmutablenullint-take--arrayy-mutable)
+    * [firstsImmutable](#firstsimmutablenullint-take--arrayy-immutable)
+    * [flip](#flip--arrayy-immutable)
+    * [get](#getstring-key-null-default-null-array--mixed)
     * [getColumn](#getcolumnmixed-columnkey-mixed-indexkey--arrayy)
+    * [getIterator](#getiterator)
     * [implode](#implodestring-with--string)
     * [initial](#initialint-to--arrayy)
     * [intersection](#intersectionarray-search--arrayy)
@@ -529,7 +543,7 @@ Implodes an array.
 a([0 => -9, 1, 2])->implode('|'); // '-9|1|2'
 ```
 
-##### initial(int $to) : Arrayy
+##### initial(int $to) : Arrayy (Immutable)
 
 Get everything but the last..$to items.
 
@@ -537,7 +551,7 @@ Get everything but the last..$to items.
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->initial(2); // Arrayy[0 => 'foo']
 ```
 
-##### intersection(array $search) : Arrayy
+##### intersection(array $search) : Arrayy (Immutable)
 
 Return an array with all elements found in input array.
 
@@ -588,7 +602,15 @@ Get the last value from the current array.
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(); // 'lall'
 ```
 
-##### lasts(null|int $take) : Arrayy
+##### lastsImmutable(null|int $take) : Arrayy (Immutable)
+
+Get the last value(s) from the current array.
+
+```php
+a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->lasts(2); // Arrayy[0 => 'bar', 1 => 'lall']
+```
+
+##### lastsMutable(null|int $take) : Arrayy (Mutable)
 
 Get the last value(s) from the current array.
 
@@ -636,7 +658,7 @@ $closure = function ($value, $key) {
 a([1, 4, 7])->matches($closure); // true
 ```
 
-##### mergeAppendKeepIndex(array $array) : Arrayy
+##### mergeAppendKeepIndex(array $array) : Arrayy (Immutable)
 
 Merge the new $array into the current array.
 
@@ -648,7 +670,7 @@ $array2 = ['foo' => 'bar2', 3 => 'three'];
 a($array1)->mergeAppendKeepIndex($array2); // Arrayy[1 => 'one', 'foo' => 'bar2', 3 => 'three']
 ```
 
-##### mergePrependKeepIndex(array $array) : Arrayy
+##### mergePrependKeepIndex(array $array) : Arrayy (Immutable)
 
 Merge the the current array into the $array.
 
@@ -660,7 +682,7 @@ $array2 = ['foo' => 'bar2', 3 => 'three'];
 a($array1)->mergePrependKeepIndex($array2); // Arrayy['foo' => 'bar1', 3 => 'three', 1 => 'one']
 ```
 
-##### mergeAppendNewIndex(array $array) : Arrayy
+##### mergeAppendNewIndex(array $array) : Arrayy (Immutable)
 
 Merge the new $array into the current array.
 
@@ -673,7 +695,7 @@ $array2 = ['foo' => 'bar2', 3 => 'three'];
 a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 'foo' => 'bar2', 1 => three']
 ```
 
-##### mergePrependNewIndex(array $array) : Arrayy
+##### mergePrependNewIndex(array $array) : Arrayy (Immutable)
 
 Merge the current array into the new $array.
 
