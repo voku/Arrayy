@@ -11,6 +11,8 @@
     "utils"
   ],
   "license": "MIT",
+  "docs": "http://voku.github.io/Arrayy/index.html",
+  "issues": "https://github.com/voku/Arrayy/issues",
   "authors": [
     {
       "name": "Lars Moelleken",
