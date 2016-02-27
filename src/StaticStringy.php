@@ -82,6 +82,7 @@ namespace Stringy;
  * @method static string titleize(string $stringInput, string $encoding = null)
  * @method static string toAscii(string $stringInput)
  * @method static string toBoolean(string $stringInput, string $encoding = null)
+ * @method static string toString(string $stringInput)
  * @method static string toLowerCase(string $stringInput, string $encoding = null)
  * @method static string toSpaces(string $stringInput, int $tabLength = 4, string $encoding = null)
  * @method static string toTabs(string $stringInput, int $tabLength = 4, string $encoding = null)

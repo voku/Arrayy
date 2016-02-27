@@ -1676,7 +1676,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Return Stringy as string.
+   * Return Stringy object as string, but you can also use (string) for automatically casting the object into a string.
    *
    * @return string
    */

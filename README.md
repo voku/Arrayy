@@ -957,6 +957,14 @@ boolean cast.
 s('OFF')->toBoolean(); // false
 ```
 
+##### toString()
+
+Return Stringy object as string, but you can also use (string) for automatically casting the object into a string.
+
+```php
+s('fòôbàř')->toString(); // 'fòôbàř'
+```
+
 ##### toLowerCase()
 
 Converts all characters in the string to lowercase.
