@@ -1676,6 +1676,16 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Return Stringy as string.
+   *
+   * @return string
+   */
+  public function toString()
+  {
+    return (string)$this->str;
+  }
+
+  /**
    * Converts each tab in the string to some number of spaces, as defined by
    * $tabLength. By default, each tab is converted to 4 consecutive spaces.
    *

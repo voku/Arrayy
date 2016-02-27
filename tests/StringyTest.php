@@ -57,6 +57,15 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     );
   }
 
+  public function testToStringMethod()
+  {
+    $stringy = S::create('öäü - foo');
+    $result = $stringy->toString();
+    self::assertTrue(is_string($result));
+    self::assertEquals((string)$stringy, $result);
+    self::assertEquals('öäü - foo', $result);
+  }
+
   /**
    * @dataProvider toStringProvider()
    *
@@ -65,7 +74,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
    */
   public function testToString($expected, $str)
   {
-    self::assertEquals($expected, (string)new S($str));
+    $stringy = new S($str);
+    self::assertEquals($expected, (string)$stringy);
+    self::assertEquals($expected, $stringy->toString());
   }
 
   /**
@@ -1468,7 +1479,11 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('', ''),
         array('raboof <3', 'raboof <3', '<ä>'),
         array('řàbôòf <foo<lall>>>', 'řàbôòf<br/><foo<lall>>>', ' '),
-        array('řàb <ô>òf\', ô<br><br/>foo <a href="#">lall</a>', 'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>', '<br><br/>'),
+        array(
+            'řàb <ô>òf\', ô<br><br/>foo <a href="#">lall</a>',
+            'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>',
+            '<br><br/>',
+        ),
         array('<∂∆ onerror="alert(xss)">˚åß', '<∂∆ onerror="alert(xss)">' . "\n" . '˚åß'),
         array('\'œ … \'’)', '\'œ … \'’)'),
     );
@@ -3368,11 +3383,11 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @dataProvider shortenAfterWordProvider()
    *
-   * @param      $expected
-   * @param      $str
-   * @param int  $length
-   * @param string  $strAddOn
-   * @param null $encoding
+   * @param        $expected
+   * @param        $str
+   * @param int    $length
+   * @param string $strAddOn
+   * @param null   $encoding
    */
   public function testShortenAfterWord($expected, $str, $length, $strAddOn = '...', $encoding = null)
   {
