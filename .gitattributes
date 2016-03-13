@@ -9,4 +9,4 @@
 /.travis.yml export-ignore
 /appveyor.yml export-ignore
 /circle.yml export-ignore
-/phpunit.xml export-ignore
+/phpunit.xml.dist export-ignore
