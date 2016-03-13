@@ -544,14 +544,19 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
   /**
    * create a fallback for array
    *
-   * 1. fallback to empty array, if there is nothing
-   * 2. cast a String or Object with "__toString" into an array
-   * 3. call "__toArray" on Object, if the method exists
-   * 4. throw a "InvalidArgumentException"-Exception
+   * 1. use the current array, if it's a array
+   * 2. call "getArray()" on object, if there is a "Arrayy"-object
+   * 3. fallback to empty array, if there is nothing
+   * 4. call "createFromObject()" on object, if there is a "ArrayAccess"-object
+   * 5. call "__toArray()" on object, if the method exists
+   * 6. cast a string or object with "__toString()" into an array
+   * 7. throw a "InvalidArgumentException"-Exception
    *
    * @param $array
    *
    * @return array
+   *
+   * @throws \InvalidArgumentException
    */
   protected function fallbackForArray(&$array)
   {
@@ -566,6 +571,14 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     if (!$array) {
       return array();
     }
+    
+    if ($array instanceof ArrayAccess) {
+      return self::createFromObject($array);
+    }
+
+    if (is_object($array) && method_exists($array, '__toArray')) {
+      return (array)$array->__toArray();
+    }
 
     if (
         is_string($array)
@@ -573,14 +586,6 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
         (is_object($array) && method_exists($array, '__toString'))
     ) {
       return (array)$array;
-    }
-
-    if ($array instanceof ArrayAccess) {
-      return self::createFromObject($array);
-    }
-
-    if (is_object($array) && method_exists($array, '__toArray')) {
-      return (array)$array->__toArray();
     }
 
     throw new \InvalidArgumentException(
