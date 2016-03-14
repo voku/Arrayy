@@ -1532,21 +1532,8 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function swapCase()
   {
     $stringy = static::create($this->str, $this->encoding);
-    $encoding = $stringy->encoding;
 
-    $stringy->str = preg_replace_callback(
-        '/[\S]/u',
-        function ($match) use ($encoding) {
-          $marchToUpper = UTF8::strtoupper($match[0], $encoding);
-
-          if ($match[0] == $marchToUpper) {
-            return UTF8::strtolower($match[0], $encoding);
-          } else {
-            return $marchToUpper;
-          }
-        },
-        $stringy->str
-    );
+    $stringy->str = UTF8::swapCase($stringy->str, $stringy->encoding);
 
     return $stringy;
   }
@@ -1616,15 +1603,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function isBase64()
   {
-    if (
-        $this->str !== ''
-        &&
-        base64_encode(base64_decode($this->str, true)) === $this->str
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    return UTF8::is_base64($this->str);
   }
 
   /**
@@ -1948,25 +1927,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function shortenAfterWord($length, $strAddOn = '...')
   {
-    $string = $this->str;
-
-    if (UTF8::strlen($string) > $length) {
-      if (UTF8::substr($string, $length - 1, 1) != ' ') {
-        $string = UTF8::substr($string, '0', $length);
-        $array = explode(' ', $string);
-        array_pop($array);
-        $new_string = implode(' ', $array);
-
-        if ($new_string == '') {
-          $string = UTF8::substr($string, '0', $length - 1) . $strAddOn;
-        } else {
-          $string = $new_string . $strAddOn;
-        }
-
-      } else {
-        $string = UTF8::substr($string, '0', $length - 1) . $strAddOn;
-      }
-    }
+    $string = UTF8::str_limit_after_word($this->str, $length, $strAddOn);
 
     return static::create($string);
   }
