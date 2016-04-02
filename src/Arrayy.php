@@ -727,9 +727,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    */
   public function findBy($property, $value, $comparisonOp = 'eq')
   {
-    $array = $this->filterBy($property, $value, $comparisonOp);
-
-    return static::create($array);
+    return $this->filterBy($property, $value, $comparisonOp);
   }
 
   /**
@@ -1166,7 +1164,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    * Invoke a function on all of an array's values.
    *
    * @param mixed $callable
-   * @param array $arguments
+   * @param mixed $arguments
    *
    * @return Arrayy (Immutable)
    */
@@ -1721,10 +1719,10 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     if ($result === null) {
       $this->array = array();
     } else {
-      $this->array = $result;
+      $this->array = (array)$result;
     }
 
-    return static::create((array)$this->array);
+    return static::create($this->array);
   }
 
   /**
@@ -1927,7 +1925,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
         }
     );
 
-    return static::create($array);
+    return $array;
   }
 
   /**
@@ -2303,6 +2301,12 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
         },
         array()
     );
+
+    if ($this->array === null) {
+      $this->array = array();
+    } else {
+      $this->array = (array)$this->array;
+    }
 
     return $this;
   }
