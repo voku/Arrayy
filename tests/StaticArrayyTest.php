@@ -14,6 +14,7 @@ class StaticArrayyTest extends PHPUnit_Framework_TestCase
   {
     /** @noinspection PhpUndefinedMethodInspection */
     /** @noinspection PhpUnusedLocalVariableInspection */
+    /** @noinspection OnlyWritesOnParameterInspection */
     $result = A::invalidMethod('foo');
   }
 
