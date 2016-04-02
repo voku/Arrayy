@@ -11,6 +11,7 @@
 [![PHP 7 ready](http://php7ready.timesplinter.ch/voku/Arrayy/badge.svg)](https://travis-ci.org/voku/Arrayy)
 [![License](https://poser.pugx.org/voku/arrayy/license)](https://packagist.org/packages/voku/arrayy)
 
+[documentation via gitbooks.io](https://voku.gitbooks.io/arrayy/content/)
 
 A PHP array manipulation library. Compatible with PHP
 5.3+, PHP 7, and HHVM.
