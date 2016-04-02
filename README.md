@@ -121,7 +121,7 @@ in your composer.json file:
 
 ```json
 "require": {
-    "voku/arrayy": "~1.0"
+    "voku/arrayy": "~2.0"
 }
 ```
 
