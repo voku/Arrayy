@@ -12,13 +12,14 @@ use voku\helper\UTF8;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \ArrayAccess, \Serializable
+class Arrayy extends \ArrayObject
 {
   /**
    * @var array
    */
   protected $array = array();
 
+  /** @noinspection MagicMethodsValidityInspection */
   /**
    * Initializes
    *
@@ -334,6 +335,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return array_key_exists($key, $this->array);
   }
 
+  /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
   /**
    * Creates an Arrayy object.
    *
@@ -346,6 +348,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return new static($array);
   }
 
+  /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
   /**
    * WARNING: Creates an Arrayy object by reference.
    *
@@ -434,6 +437,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     array_walk(
         $array,
         function (&$val) {
+          /** @noinspection ReferenceMismatchInspection */
           if (is_string($val)) {
             $val = trim($val);
           }
@@ -573,6 +577,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     }
     
     if ($array instanceof ArrayAccess) {
+      /** @noinspection ReferenceMismatchInspection */
       return self::createFromObject($array);
     }
 
@@ -580,6 +585,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
       return (array)$array->__toArray();
     }
 
+    /** @noinspection ReferenceMismatchInspection */
     if (
         is_string($array)
         ||
@@ -1160,6 +1166,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
     return count($this->intersection($search)->array) > 0;
   }
 
+  /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
   /**
    * Invoke a function on all of an array's values.
    *
@@ -1557,7 +1564,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param null|int $number how many values you will take?
    *
-   * @return self (Mutable)
+   * @return Arrayy (Mutable)
    */
   public function randomMutable($number = null)
   {
@@ -1671,7 +1678,7 @@ class Arrayy extends \ArrayObject implements \Countable, \IteratorAggregate, \Ar
    *
    * @param int $number
    *
-   * @return self (Mutable)
+   * @return Arrayy (Mutable)
    */
   public function randomValues($number)
   {
