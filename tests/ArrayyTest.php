@@ -3596,6 +3596,32 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals($result, $resultTmp);
   }
 
+  public function testIsArrayMultidim()
+  {
+
+    $array0 = array(1 => array(1,),);
+    $array1 = array(
+        1 => 1,
+        2 => 2,
+    );
+    $array2 = array(
+        1 => array(1,),
+        2 => array(2,),
+    );
+    $array3 = false;
+    $array4 = '';
+    $array5 = ' ';
+    $array6 = array();
+
+    self::assertEquals(true, A::create($array0)->isMultiArray());
+    self::assertEquals(false, A::create($array1)->isMultiArray());
+    self::assertEquals(true, A::create($array2)->isMultiArray());
+    self::assertEquals(false, A::create($array3)->isMultiArray());
+    self::assertEquals(false, A::create($array4)->isMultiArray());
+    self::assertEquals(false, A::create($array5)->isMultiArray());
+    self::assertEquals(false, A::create($array6)->isMultiArray());
+  }
+
   /**
    * @return array
    */
