@@ -42,7 +42,7 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [containsKey](#containskeymixed-key--boolean)
     * [diff](#diffarray-array--arrayy-immutable)
     * [diffReverse](#diffreversearray-array--arrayy-immutable)
-    * [diffRecursive](#diffrecursivearray-array--arrayy-immutable)
+    * [diffRecursive](##diffrecursivearray-array-nullarray-helpervariableforrecursion--arrayy-immutable)
     * [each](#eachclosure-closure--arrayy-immutable)
     * [exists](#existsclosure-closure--boolean)
     * [filter](#filterclosurenull-closure--arrayy-immutable)
