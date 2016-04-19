@@ -3648,6 +3648,62 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals($result, $arrayy->getArray());
   }
 
+  public function testDiffRecursive()
+  {
+    $testArray1 = array(
+        'test1' => array('lall',),
+        'test2' => array('lall',),
+    );
+
+    $testArray2 = array(
+        'test1' => array('lall',),
+        'test2' => array('lall',),
+    );
+
+    self::assertEquals(
+        new A(array()),
+        A::create($testArray1)->diffRecursive($testArray2)
+    );
+
+    $testArray1 = array(
+        'test1' => array('lall',),
+        'test3' => array('lall',),
+    );
+
+    $testArray2 = array(
+        'test1' => array('lall',),
+        'test2' => array('lall',),
+    );
+
+    self::assertEquals(
+        new A(array('test3' => array('lall',),)),
+        A::create($testArray1)->diffRecursive($testArray2)
+    );
+
+    $testArray1 = array(
+        'test1' => array('lall',),
+        'test2' => array('lall',),
+    );
+
+    $testArray2 = array(
+        'test1' => array('lall',),
+        'test2' => array('foo',),
+    );
+
+    self::assertEquals(
+        new A(array('test2' => array('lall',),)),
+        A::create($testArray1)->diffRecursive($testArray2)
+    );
+
+    $testArray1 = array(1 => array(1 => 1), 2 => array(2 => 2));
+    $testArray2 = array(1 => array(1 => 1));
+
+    self::assertEquals(
+        new A(array(2 => array(2 => 2))),
+        A::create($testArray1)->diffRecursive($testArray2)
+    );
+  }
+
   /**
    * @dataProvider isMultiArrayProvider()
    *

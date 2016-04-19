@@ -508,6 +508,44 @@ class Arrayy extends \ArrayObject
   }
 
   /**
+   * Return values that are only in the current multi-dimensional array.
+   *
+   * @param array      $array
+   * @param null|array $helperVariableForRecursion (only for internal usage)
+   *
+   * @return Arrayy (Immutable)
+   */
+  public function diffRecursive(array $array = array(), $helperVariableForRecursion = null)
+  {
+    $result = array();
+
+    if ($helperVariableForRecursion !== null && is_array($helperVariableForRecursion) === true) {
+      $arrayForTheLoop = $helperVariableForRecursion;
+    } else {
+      $arrayForTheLoop = $this->array;
+    }
+
+    foreach ($arrayForTheLoop as $key => $value) {
+      if (array_key_exists($key, $array)) {
+        if (is_array($value)) {
+          $recursiveDiff = $this->diffRecursive($array[$key], $value);
+          if (count($recursiveDiff)) {
+            $result[$key] = $recursiveDiff;
+          }
+        } else {
+          if ($value != $array[$key]) {
+            $result[$key] = $value;
+          }
+        }
+      } else {
+        $result[$key] = $value;
+      }
+    }
+
+    return static::create($result);
+  }
+
+  /**
    * Iterate over the current array and modify the array's value.
    *
    * @param \Closure $closure

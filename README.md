@@ -42,6 +42,7 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [containsKey](#containskeymixed-key--boolean)
     * [diff](#diffarray-array--arrayy-immutable)
     * [diffReverse](#diffreversearray-array--arrayy-immutable)
+    * [diffRecursive](#diffrecursivearray-array--arrayy-immutable)
     * [each](#eachclosure-closure--arrayy-immutable)
     * [exists](#existsclosure-closure--boolean)
     * [filter](#filterclosurenull-closure--arrayy-immutable)
@@ -433,6 +434,14 @@ Return values that are only in the new $array.
 
 ```php
 a([1 => 1])->diffReverse([1 => 1, 2 => 2]); // Arrayy[2 => 2]
+```
+
+##### diffRecursive(array $array, null|array $helperVariableForRecursion) : Arrayy (Immutable)
+
+Return values that are only in the current multi-dimensional array.
+
+```php
+a([1 => [1 => 1], 2 => [2 => 2]])->diffRecursive([1 => [1 => 1]]); // Arrayy[2 => [2 => 2]]
 ```
 
 ##### each(Closure $closure) : Arrayy (Immutable)
