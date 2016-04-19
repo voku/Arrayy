@@ -2063,6 +2063,71 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals($result, $resultTmp);
   }
 
+  public function testIsArrayAssoc()
+  {
+
+    $array0 = array(1 => array(1,),);
+    $array1 = array(
+        1 => 1,
+        2 => 2,
+    );
+    $array2 = array(
+        1 => array(1,),
+        2 => array(2,),
+    );
+    $array3 = false;
+    $array4 = '';
+    $array5 = ' ';
+    $array6 = array();
+    $array7 = array(
+        'test',
+        "lall",
+    );
+    $array8 = array(
+        0 => 'test',
+        1 => 'lall',
+    );
+    $array9 = array(
+        'lall' => 'test',
+        'test' => 'lall',
+    );
+    $array10 = array('lall' => array('test',),);
+
+    self::assertEquals(false, A::create($array0)->isAssoc());
+    self::assertEquals(false, A::create($array1)->isAssoc());
+    self::assertEquals(false, A::create($array2)->isAssoc());
+    self::assertEquals(false, A::create($array3)->isAssoc());
+    self::assertEquals(false, A::create($array4)->isAssoc());
+    self::assertEquals(false, A::create($array5)->isAssoc());
+    self::assertEquals(false, A::create($array6)->isAssoc());
+    self::assertEquals(false, A::create($array7)->isAssoc());
+    self::assertEquals(false, A::create($array8)->isAssoc());
+    self::assertEquals(true, A::create($array9)->isAssoc());
+    self::assertEquals(true, A::create($array10)->isAssoc());
+
+    // ---
+
+    self::assertTrue(
+        A::create(
+            array(
+                'foo' => 'wibble',
+                'bar' => 'wubble',
+                'baz' => 'wobble',
+            )
+        )->isAssoc()
+    );
+
+    self::assertFalse(
+        A::create(
+            array(
+                'wibble',
+                'wubble',
+                'wobble',
+            )
+        )->isAssoc()
+    );
+  }
+
   public function testIsSet()
   {
     $arrayy = new A(array('foo bar', 'öäü'));
