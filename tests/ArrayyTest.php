@@ -2081,7 +2081,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $array6 = array();
     $array7 = array(
         'test',
-        "lall",
+        'lall',
     );
     $array8 = array(
         0 => 'test',
