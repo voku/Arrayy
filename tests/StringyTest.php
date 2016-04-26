@@ -905,7 +905,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array(' ', ' '), // narrow no-break space (U+202F)
         array(' ', ' '), // medium mathematical space (U+205F)
         array(' ', '　'), // ideographic space (U+3000)
-        array('', '𐍉'), // some uncommon, unsupported character (U+10349)
+        array('?', '𐍉'), // some uncommon, unsupported character (U+10349)
     );
   }
 
