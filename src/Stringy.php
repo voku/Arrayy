@@ -1431,7 +1431,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function removeHtml($allowableTags = null)
   {
-    $str = UTF8::strip_tags($this->str, $allowableTags);
+    $str = strip_tags($this->str, $allowableTags);
 
     return static::create($str, $this->encoding);
   }
