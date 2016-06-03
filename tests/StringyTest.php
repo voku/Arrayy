@@ -3545,4 +3545,24 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
       $counter++;
     }
   }
+
+  public function testStripeEmptyTags()
+  {
+    $testArray = array(
+        '<h1>test</h1>'            => '<h1>test</h1>',
+        'foo<h1></h1>bar'          => 'foobar',
+        '<h1></h1> '               => ' ',
+        '</b></b>'                 => '</b></b>',
+        'öäü<strong>lall</strong>' => 'öäü<strong>lall</strong>',
+        ' b<b></b>'                => ' b',
+        '<b><b>lall</b>'           => '<b><b>lall</b>',
+        '</b>lall</b>'             => '</b>lall</b>',
+        '[b][/b]'                  => '[b][/b]',
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertEquals($testResult, $stringy->stripeEmptyHtmlTags());
+    }
+  }
 }

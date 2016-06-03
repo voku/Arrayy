@@ -1961,4 +1961,18 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     return static::create($string);
   }
+
+  /**
+   * Remove empty html-tag.
+   *
+   * e.g.: <tag></tag>
+   *
+   * @return Stringy
+   */
+  public function stripeEmptyHtmlTags()
+  {
+    $pattern = "/<[^\/>]*>(([\s]?)*|)<\/[^>]*>/i";
+
+    return static::create(preg_replace($pattern, '', $this->str));
+  }
 }
