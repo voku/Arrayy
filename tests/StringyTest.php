@@ -893,8 +893,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('foo bar', 'fòô bàř'),
         array(' TEST ', ' ŤÉŚŢ '),
         array('ph = z = 3', 'φ = ź = 3'),
-        array('pierievirka', 'перевірка'),
-        array('lysaia ghora', 'лысая гора'),
+        array('perevirka', 'перевірка'),
+        array('lysaia gora', 'лысая гора'),
         array('shchuka', 'щука'),
         array('Han Zi ', '漢字'),
         array('xin chao the gioi', 'xin chào thế giới'),
@@ -3053,9 +3053,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->countSubstr($substring, $caseSensitive);
-    self::assertInternalType('int', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertInternalType('int', $result, 'tested:' . $str);
+    self::assertEquals($expected, $result, 'tested:' . $str);
+    self::assertEquals($str, $stringy, 'tested:' . $str);
   }
 
   /**
@@ -3410,5 +3410,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('fòô', 'fòô bàř fòô', 6, ''),
         array('fòô bàř', 'fòô bàř fòô', 8, ''),
     );
+  }
+
+  public function testLinewrap()
+  {
+    $testArray = array(
+        ''                                                                                                      => "\n",
+        ' '                                                                                                     => ' ' . "\n",
+        'http:// moelleken.org'                                                                                 => 'http://' . "\n" . 'moelleken.org' . "\n",
+        'http://test.de'                                                                                        => 'http://test.de' . "\n",
+        'http://öäü.de'                                                                                         => 'http://öäü.de' . "\n",
+        'http://menadwork.com'                                                                                  => 'http://menadwork.com' . "\n",
+        'test.de'                                                                                               => 'test.de' . "\n",
+        'test'                                                                                                  => 'test' . "\n",
+        '0123456 789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789' => '0123456' . "\n" . '789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789' . "\n",
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertEquals($testResult, $stringy->lineWrapAfterWord(10));
+    }
   }
 }

@@ -342,13 +342,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function countSubstr($substring, $caseSensitive = true)
   {
     if ($caseSensitive) {
-      return UTF8::substr_count($this->str, $substring, $this->encoding);
+      return UTF8::substr_count($this->str, $substring);
     }
 
     $str = UTF8::strtoupper($this->str, $this->encoding);
     $substring = UTF8::strtoupper($substring, $this->encoding);
 
-    return UTF8::substr_count($str, $substring, $this->encoding);
+    return UTF8::substr_count($str, $substring);
   }
 
   /**
@@ -1918,7 +1918,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * shorten the string after $length, but also after the next word
+   * Shorten the string after $length, but also after the next word.
    *
    * @param int    $length
    * @param string $strAddOn
@@ -1928,6 +1928,26 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function shortenAfterWord($length, $strAddOn = '...')
   {
     $string = UTF8::str_limit_after_word($this->str, $length, $strAddOn);
+
+    return static::create($string);
+  }
+
+  /**
+   * Line-Wrap the string after $limit, but also after the next word.
+   *
+   * @param int $limit
+   *
+   * @return string
+   */
+  public function lineWrapAfterWord($limit)
+  {
+    $strings = preg_split("/\\r\\n|\\r|\\n/", $this->str);
+
+    $string = '';
+    foreach ($strings as $value) {
+      $string .= wordwrap($value, $limit);
+      $string .= "\n";
+    }
 
     return static::create($string);
   }
