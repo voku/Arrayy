@@ -1951,7 +1951,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function lineWrapAfterWord($limit)
   {
-    $strings = preg_split("/\\r\\n|\\r|\\n/", $this->str);
+    $strings = preg_split('/\\r\\n|\\r|\\n/', $this->str);
 
     $string = '';
     foreach ($strings as $value) {
