@@ -71,6 +71,7 @@ namespace Stringy;
  * @method static string safeTruncate(string $stringInput, int $length, string $substring = '', string $encoding = null)
  * @method static string shuffle(string $stringInput, string $encoding = null)
  * @method static string slugify(string $stringInput, string $replacement = '-', string $language = 'de', boolean $strToLower = true)
+ * @method static string utf8ify(string $stringInput)
  * @method static string snakeize(string $stringInput, string $encoding = null)
  * @method static bool   startsWith(string $stringInput, string $substring, bool $caseSensitive = true, string $encoding = null)
  * @method static string slice(string $stringInput, int $start, int $end = null, string $encoding = null)

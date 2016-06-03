@@ -1078,6 +1078,14 @@ Converts the first character of the supplied string to upper case.
 s('σ foo')->upperCaseFirst(); // 'Σ foo'
 ```
 
+##### utf8ify()
+
+Converts the string into an valid UTF-8 string.
+
+```php
+s('DÃ¼sseldorf')->utf8ify(); // 'Düsseldorf'
+```
+
 ## Extensions
 
 The following is a list of libraries that extend Stringy:

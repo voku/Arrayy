@@ -1375,6 +1375,16 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Converts the string into an valid UTF-8 string.
+   *
+   * @return Stringy
+   */
+  public function utf8ify()
+  {
+    return static::create(UTF8::cleanup($this->str));
+  }
+
+  /**
    * escape html
    *
    * @return Stringy
@@ -1937,7 +1947,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @param int $limit
    *
-   * @return string
+   * @return Stringy
    */
   public function lineWrapAfterWord($limit)
   {
