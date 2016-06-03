@@ -1975,4 +1975,15 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     return static::create(preg_replace($pattern, '', $this->str));
   }
+
+  /**
+   * Remove css media-queries.
+   *
+   * @return Stringy
+   */
+  public function stripeCssMediaQueries()
+  {
+    $pattern = '#@media\\s+(?:only\\s)?(?:[\\s{\\(]|screen|all)\\s?[^{]+{.*}\\s*}\\s*#misU';
+    return static::create(preg_replace($pattern, '', $this->str));
+  }
 }

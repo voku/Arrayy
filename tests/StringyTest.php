@@ -3565,4 +3565,20 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
       self::assertEquals($testResult, $stringy->stripeEmptyHtmlTags());
     }
   }
+
+  public function testStripeMediaQueries()
+  {
+    $testArray = array(
+        'test lall '                                                                         => 'test lall ',
+        ''                                                                                   => '',
+        ' '                                                                                  => ' ',
+        'test @media (min-width:660px){ .des-cla #mv-tiles{width:480px} } test '             => 'test  test ',
+        'test @media only screen and (max-width: 950px) { .des-cla #mv-tiles{width:480px} }' => 'test ',
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertEquals($testResult, $stringy->stripeCssMediaQueries());
+    }
+  }
 }
