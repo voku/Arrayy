@@ -801,6 +801,16 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Returns true if the string contains HTML-Tags, false otherwise.
+   *
+   * @return bool Whether or not $str contains HTML-Tags
+   */
+  public function isHtml()
+  {
+    return UTF8::isHtml($this->str);
+  }
+
+  /**
    * Returns true if the string is JSON, false otherwise. Unlike json_decode
    * in PHP 5.x, this method is consistent with PHP 7 and other JSON parsers,
    * in that an empty string is not considered valid JSON.

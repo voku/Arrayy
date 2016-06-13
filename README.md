@@ -607,6 +607,14 @@ Returns true if the string contains only hexadecimal chars, false otherwise.
 s('A102F')->isHexadecimal(); // true
 ```
 
+##### isHtml()
+
+Returns true if the string contains HTML-Tags, false otherwise.
+
+```php
+s('<h1>foo</h1>')->isHtml(); // true
+```
+
 ##### isJson()
 
 Returns true if the string is JSON, false otherwise. Unlike json_decode

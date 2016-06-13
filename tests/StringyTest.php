@@ -2767,7 +2767,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->isJson();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
+    self::assertEquals($expected, $result, 'tested:' . $str);
     self::assertEquals($str, $stringy);
   }
 
@@ -3655,6 +3655,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
       self::assertEquals($testResult, $stringy->stripeCssMediaQueries());
+    }
+  }
+
+  public function testIsHtml()
+  {
+    $testArray = array(
+        '<h1>test</h1>'            => true,
+        'test'                     => false,
+        '<b>lall</b>'              => true,
+        'öäü<strong>lall</strong>' => true,
+        ' <b>lall</b>'             => true,
+        '<b><b>lall</b>'           => true,
+        '</b>lall</b>'             => true,
+        '[b]lall[b]'               => false,
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertEquals($testResult, $stringy->isHtml(), 'tested: ' . $testString);
     }
   }
 }

@@ -42,6 +42,7 @@ namespace Stringy;
  * @method static bool isBase64(string $stringInput, string $encoding = null)
  * @method static bool isBlank(string $stringInput, string $encoding = null)
  * @method static bool isHexadecimal(string $stringInput, string $encoding = null)
+ * @method static bool isHtml(string $stringInput, string $encoding = null)
  * @method static bool isJson(string $stringInput, string $encoding = null)
  * @method static bool isLowerCase(string $stringInput, string $encoding = null)
  * @method static bool isSerialized(string $stringInput, string $encoding = null)
