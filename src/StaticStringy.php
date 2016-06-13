@@ -10,8 +10,8 @@ namespace Stringy;
  *
  * @method static Stringy append(string $stringInput, string $stringAppend, string $encoding = null)
  * @method static Stringy appendPassword(string $stringInput, int $length)
- * @method static Stringy appendUniqueIdentifier(string $stringInput, string $extraPrefix)
- * @method static Stringy appendRandomString(string $stringInput, int $length, string $possibleChars)
+ * @method static Stringy appendUniqueIdentifier(string $stringInput, string $extraPrefix = '')
+ * @method static Stringy appendRandomString(string $stringInput, int $length, string $possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
  * @method static Stringy at(string $stringInput, int $index, string $encoding = null)
  * @method static Stringy between(string $stringInput, string $start, string $end, int $offset = 0, string $encoding = null)
  * @method static Stringy camelize(string $stringInput, string $encoding = null)
