@@ -47,6 +47,7 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
     * [endsWith](#endswithstring-substring--boolean-casesensitive--true-)
     * [ensureLeft](#ensureleftstring-substring)
     * [ensureRight](#ensurerightstring-substring)
+    * [extractText](#extracttextint-length--200-string-search---string-ellipsis--)
     * [first](#firstint-n)
     * [escape](#escape)
     * [getEncoding](#getencoding)
