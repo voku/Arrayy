@@ -3685,6 +3685,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         ''                         => '',
         '<h1>test</h1>'            => '<h1>test</h1>',
         'test'                     => 'test',
+        'A PHP string manipulation library with multibyte support. Compatible with PHP 5.3+, PHP 7, and HHVM.' => 'A PHP string manipulation library...',
         'A PHP string manipulation library with multibyte support. κόσμε-öäü κόσμε-öäü κόσμε-öäü foobar Compatible with PHP 5.3+, PHP 7, and HHVM.' => '...κόσμε-öäü κόσμε-öäü foobar Compatible...',
         'A PHP string manipulation library with multibyte support. foobar Compatible with PHP 5.3+, PHP 7, and HHVM.' => '...multibyte support. foobar Compatible...',
     );
@@ -3693,5 +3694,11 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
       $stringy = S::create($testString);
       self::assertEquals($testResult, (string)$stringy->extractText(30, 'foobar', '...'), 'tested: ' . $testString);
     }
+
+    // ----------------
+
+    $testString = 'this is only a Fork of Stringy';
+    $stringy = S::create($testString);
+    self::assertEquals('...a Fork of Stringy', (string)$stringy->extractText(5, 'Fork'), 'tested: ' . $testString);
   }
 }

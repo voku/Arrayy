@@ -1499,7 +1499,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Create an extract from a text and if the "search"-string was found, we will center it in the output.
+   * Create an extract from a text, so if the search-string was found, it will be centered in the output.
    *
    * @param int    $length
    * @param string $search

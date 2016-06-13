@@ -28,6 +28,7 @@ namespace Stringy;
  * @method static Stringy ensureLeft(string $stringInput, string $substring, string $encoding = null)
  * @method static Stringy ensureRight(string $stringInput, string $substring, string $encoding = null)
  * @method static Stringy escape(string $stringInput, string $encoding = null)
+ * @method static Stringy extractText(string $stringInput, int $length = 200, string $search = '', string $ellipsis = '...')
  * @method static Stringy first(string $stringInput, int $n, string $encoding = null)
  * @method static bool   hasLowerCase(string $stringInput, string $encoding = null)
  * @method static bool   hasUpperCase(string $stringInput, string $encoding = null)
