@@ -294,6 +294,30 @@ Returns a new string with $string appended.
 s('fòô')->append('bàř'); // 'fòôbàř'
 ```
 
+##### appendPassword(int $length)
+
+Append an password (limited to chars that are good readable).
+
+```php
+s('')->appendPassword(8); // e.g.: '89bcdfgh'
+```
+
+##### appendUniqueIdentifier(string $extraPrefix)
+
+Append an unique identifier.
+
+```php
+s('')->appendUniqueIdentifier(); // e.g.: '1f3870be274f6c49b3e31a0c6728957f'
+```
+
+##### appendRandomString(int $length, string $possibleChars)
+
+Append an random string.
+
+```php
+s('')->appendUniqueIdentifier(5, 'ABCDEFGHI'); // e.g.: 'CDEHI'
+```
+
 ##### at(int $index)
 
 Returns the character at $index, with indexes starting at 0.
@@ -846,6 +870,22 @@ is also converted to lowercase.
 
 ```php
 s('Using strings like fòô bàř')->slugify(); // 'using-strings-like-foo-bar'
+```
+
+##### stripeCssMediaQueries()
+
+Remove css media-queries.
+
+```php
+s('test @media (min-width:660px){ .des-cla #mv-tiles{width:480px} } test ')->stripeCssMediaQueries(); // 'test  test '
+```
+
+##### stripeEmptyHtmlTags()
+
+Remove empty html-tag. e.g.: <tag></tag>
+
+```php
+s('foo<h1></h1>bar')->stripeEmptyHtmlTags(); // 'foobar'
 ```
 
 ##### startsWith(string $substring [, boolean $caseSensitive = true ])

@@ -1355,6 +1355,67 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Append an password (limited to chars that are good readable).
+   *
+   * @param int    $length        length of the random string
+   *
+   * @return $this
+   */
+  public function appendPassword($length)
+  {
+    $possibleChars = '2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ';
+
+    return $this->appendRandomString($length, $possibleChars);
+  }
+
+  /**
+   * Append an unique identifier.
+   *
+   * @param string|int $extraPrefix
+   *
+   * @return string md5-hash
+   */
+  public function appendUniqueIdentifier($extraPrefix = '')
+  {
+    $prefix = mt_rand() .
+              session_id() .
+              (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '') .
+              (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '') .
+              $extraPrefix;
+
+    return $this->str .= md5(uniqid($prefix, true) . $prefix);
+  }
+
+  /**
+   * Append an random string.
+   *
+   * @param int    $length        length of the random string
+   * @param string $possibleChars characters string for the random selection
+   *
+   * @return $this
+   */
+  public function appendRandomString($length, $possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+  {
+    // init
+    $i = 0;
+    $length = (int)$length;
+    $maxlength = UTF8::strlen($possibleChars);
+
+    if ($maxlength === 0) {
+      return $this;
+    }
+
+    // add random chars
+    while ($i < $length) {
+      $char = UTF8::substr($possibleChars, mt_rand(0, $maxlength - 1), 1);
+      $this->str .= $char;
+      $i++;
+    }
+
+    return $this;
+  }
+
+  /**
    * Converts the string into an URL slug. This includes replacing non-ASCII
    * characters with their closest ASCII equivalents, removing remaining
    * non-ASCII and non-alphanumeric characters, and replacing whitespace with
@@ -1372,6 +1433,31 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     $slug = URLify::slug($this->str, $language, $replacement, $strToLower);
 
     return static::create($slug, $this->encoding);
+  }
+
+  /**
+   * Remove css media-queries.
+   *
+   * @return Stringy
+   */
+  public function stripeCssMediaQueries()
+  {
+    $pattern = '#@media\\s+(?:only\\s)?(?:[\\s{\\(]|screen|all)\\s?[^{]+{.*}\\s*}\\s*#misU';
+    return static::create(preg_replace($pattern, '', $this->str));
+  }
+
+  /**
+   * Remove empty html-tag.
+   *
+   * e.g.: <tag></tag>
+   *
+   * @return Stringy
+   */
+  public function stripeEmptyHtmlTags()
+  {
+    $pattern = "/<[^\/>]*>(([\s]?)*|)<\/[^>]*>/i";
+
+    return static::create(preg_replace($pattern, '', $this->str));
   }
 
   /**
@@ -1960,30 +2046,5 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     return static::create($string);
-  }
-
-  /**
-   * Remove empty html-tag.
-   *
-   * e.g.: <tag></tag>
-   *
-   * @return Stringy
-   */
-  public function stripeEmptyHtmlTags()
-  {
-    $pattern = "/<[^\/>]*>(([\s]?)*|)<\/[^>]*>/i";
-
-    return static::create(preg_replace($pattern, '', $this->str));
-  }
-
-  /**
-   * Remove css media-queries.
-   *
-   * @return Stringy
-   */
-  public function stripeCssMediaQueries()
-  {
-    $pattern = '#@media\\s+(?:only\\s)?(?:[\\s{\\(]|screen|all)\\s?[^{]+{.*}\\s*}\\s*#misU';
-    return static::create(preg_replace($pattern, '', $this->str));
   }
 }

@@ -3,6 +3,7 @@
 require __DIR__ . '/../src/Stringy.php';
 
 use Stringy\Stringy as S;
+use voku\helper\UTF8;
 
 /**
  * Class StringyTestCase
@@ -3563,6 +3564,81 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
       self::assertEquals($testResult, $stringy->stripeEmptyHtmlTags());
+    }
+  }
+
+  public function testAddRandomString()
+  {
+    $testArray = array(
+        'öäü'        => array(10, 10),
+        ''           => array(10, 0),
+        "κόσμε-öäü" => array(10, 10),
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create('');
+      $stringy = $stringy->appendRandomString($testResult[0], $testString);
+
+      self::assertEquals($testResult[1], $stringy->length(), 'tested: ' . $testString . ' | ' . $stringy->toString());
+    }
+  }
+
+  public function testAddPassword()
+  {
+    // init
+    $disallowedChars = "ф0Oo1l";
+    $allowedChars = '2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ';
+
+    $passwords = array();
+    for ($i = 0; $i <= 100; $i++) {
+      $stringy = S::create('');
+      $passwords[] = $stringy->appendPassword(16);
+    }
+
+    // check for allowed chars
+    $errors = array();
+    foreach ($passwords as $password) {
+      foreach (str_split($password) as $char) {
+        if (strpos($allowedChars, $char) === false) {
+          $errors[] = $char;
+        }
+      }
+    }
+    self::assertEquals(0, count($errors));
+
+    // check for disallowed chars
+    $errors = array();
+    foreach ($passwords as $password) {
+      foreach (UTF8::str_split($password) as $char) {
+        if (strpos($disallowedChars, $char) !== false) {
+          $errors[] = $char;
+        }
+      }
+    }
+    self::assertEquals(0, count($errors));
+
+    // check the string length
+    foreach ($passwords as $password) {
+      self::assertEquals(16, strlen($password));
+    }
+  }
+
+  public function testAddUniqueIdentifier()
+  {
+    $uniquIDs = array();
+    for ($i = 0; $i <= 100; $i++) {
+      $stringy = S::create('');
+      $uniquIDs[] = $stringy->appendUniqueIdentifier();
+    }
+
+    // detect duplicate values in the array
+    foreach (array_count_values($uniquIDs) as $uniquID => $count) {
+      self::assertEquals(1, $count);
+    }
+
+    // check the string length
+    foreach ($uniquIDs as $uniquID) {
+      self::assertEquals(32, strlen($uniquID));
     }
   }
 
