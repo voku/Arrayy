@@ -99,6 +99,68 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Append an password (limited to chars that are good readable).
+   *
+   * @param int    $length        length of the random string
+   *
+   * @return Stringy Object with appended password
+   */
+  public function appendPassword($length)
+  {
+    $possibleChars = '2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ';
+
+    return $this->appendRandomString($length, $possibleChars);
+  }
+
+  /**
+   * Append an unique identifier.
+   *
+   * @param string|int $extraPrefix
+   *
+   * @return Stringy Object with appended unique identifier as md5-hash
+   */
+  public function appendUniqueIdentifier($extraPrefix = '')
+  {
+    $prefix = mt_rand() .
+              session_id() .
+              (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '') .
+              (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '') .
+              $extraPrefix;
+
+    return $this->append(md5(uniqid($prefix, true) . $prefix));
+  }
+
+  /**
+   * Append an random string.
+   *
+   * @param int    $length        length of the random string
+   * @param string $possibleChars characters string for the random selection
+   *
+   * @return Stringy Object with appended random string
+   */
+  public function appendRandomString($length, $possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+  {
+    // init
+    $i = 0;
+    $length = (int)$length;
+    $str = $this->str;
+    $maxlength = UTF8::strlen($possibleChars);
+
+    if ($maxlength === 0) {
+      return $this;
+    }
+
+    // add random chars
+    while ($i < $length) {
+      $char = UTF8::substr($possibleChars, mt_rand(0, $maxlength - 1), 1);
+      $str .= $char;
+      $i++;
+    }
+
+    return $this->append($str);
+  }
+
+  /**
    * Creates a Stringy object and assigns both str and encoding properties
    * the supplied values. $str is cast to a string prior to assignment, and if
    * $encoding is not specified, it defaults to mb_internal_encoding(). It
@@ -1352,67 +1414,6 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     $shuffledStr = UTF8::str_shuffle($this->str);
 
     return static::create($shuffledStr, $this->encoding);
-  }
-
-  /**
-   * Append an password (limited to chars that are good readable).
-   *
-   * @param int    $length        length of the random string
-   *
-   * @return $this
-   */
-  public function appendPassword($length)
-  {
-    $possibleChars = '2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ';
-
-    return $this->appendRandomString($length, $possibleChars);
-  }
-
-  /**
-   * Append an unique identifier.
-   *
-   * @param string|int $extraPrefix
-   *
-   * @return string md5-hash
-   */
-  public function appendUniqueIdentifier($extraPrefix = '')
-  {
-    $prefix = mt_rand() .
-              session_id() .
-              (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '') .
-              (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '') .
-              $extraPrefix;
-
-    return $this->str .= md5(uniqid($prefix, true) . $prefix);
-  }
-
-  /**
-   * Append an random string.
-   *
-   * @param int    $length        length of the random string
-   * @param string $possibleChars characters string for the random selection
-   *
-   * @return $this
-   */
-  public function appendRandomString($length, $possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
-  {
-    // init
-    $i = 0;
-    $length = (int)$length;
-    $maxlength = UTF8::strlen($possibleChars);
-
-    if ($maxlength === 0) {
-      return $this;
-    }
-
-    // add random chars
-    while ($i < $length) {
-      $char = UTF8::substr($possibleChars, mt_rand(0, $maxlength - 1), 1);
-      $this->str .= $char;
-      $i++;
-    }
-
-    return $this;
   }
 
   /**

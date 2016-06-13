@@ -3628,7 +3628,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $uniquIDs = array();
     for ($i = 0; $i <= 100; $i++) {
       $stringy = S::create('');
-      $uniquIDs[] = $stringy->appendUniqueIdentifier();
+      $uniquIDs[] = (string)$stringy->appendUniqueIdentifier();
     }
 
     // detect duplicate values in the array
