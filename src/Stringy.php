@@ -1501,13 +1501,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Create an extract from a text, so if the search-string was found, it will be centered in the output.
    *
-   * @param int    $length
-   * @param string $search
-   * @param string $ellipsis
+   * @param string   $search
+   * @param int|null $length
+   * @param string   $ellipsis
    *
    * @return Stringy
    */
-  public function extractText($length = 200, $search = '', $ellipsis = '...')
+  public function extractText($search = '', $length = null, $ellipsis = '...')
   {
     // init
     $text = $this->str;
@@ -1517,6 +1517,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     $trimChars = "\t\r\n -_()!~?=+/*\\,.:;\"'[]{}`&";
+
+    if ($length === null) {
+      $length = $this->length() / 2;
+    }
 
     if (empty($search)) {
 
