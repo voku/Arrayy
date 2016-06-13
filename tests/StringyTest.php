@@ -3679,7 +3679,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testLall()
+  public function testExtractText()
   {
     $testArray = array(
         ''                         => '',

@@ -475,15 +475,13 @@ Escape html via UTF8::htmlspecialchars(), so we can use this data in our templat
 s('<∂∆ onerror="alert(xss)">')->escape(); // '&lt;∂∆ onerror=&quot;alert(xss)&quot;&gt;'
 ```
 
-##### extractText()
+##### extractText(int $length = 200, string $search = '', string $ellipsis = '...')
 
 Create an extract from a text, so if the search-string was found, it will be centered in the output.
 
 ```php
 s('this is only a Fork of Stringy')->extractText(5, 'Fork', '...'); // '...a Fork of Stringy'
 ```
-
-extractText
 
 ##### first(int $n)
 
