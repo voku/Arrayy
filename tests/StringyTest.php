@@ -3572,7 +3572,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $testArray = array(
         'öäü'        => array(10, 10),
         ''           => array(10, 0),
-        "κόσμε-öäü" => array(10, 10),
+        'κόσμε-öäü' => array(10, 10),
     );
 
     foreach ($testArray as $testString => $testResult) {
@@ -3586,7 +3586,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testAddPassword()
   {
     // init
-    $disallowedChars = "ф0Oo1l";
+    $disallowedChars = 'ф0Oo1l';
     $allowedChars = '2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ';
 
     $passwords = array();
