@@ -101,7 +101,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Append an password (limited to chars that are good readable).
    *
-   * @param int    $length        length of the random string
+   * @param int $length length of the random string
    *
    * @return Stringy Object with appended password
    */
@@ -1454,6 +1454,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function stripeCssMediaQueries()
   {
     $pattern = '#@media\\s+(?:only\\s)?(?:[\\s{\\(]|screen|all)\\s?[^{]+{.*}\\s*}\\s*#misU';
+
     return static::create(preg_replace($pattern, '', $this->str));
   }
 
@@ -1496,6 +1497,94 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     return static::create($str, $this->encoding);
   }
+
+  /**
+   * Create an extract from a text and if the "search"-string was found, we will center it in the output.
+   *
+   * @param int    $length
+   * @param string $search
+   * @param string $ellipsis
+   *
+   * @return Stringy
+   */
+  public function extractText($length = 200, $search = '', $ellipsis = '...')
+  {
+    // init
+    $text = $this->str;
+
+    if (empty($text)) {
+      return static::create('', $this->encoding);
+    }
+
+    $trimChars = "\t\r\n -_()!~?=+/*\\,.:;\"'[]{}`&";
+
+    if (empty($search)) {
+
+      $stringLength = UTF8::strlen($text);
+      $end = ($length - 1) > $stringLength ? $stringLength : ($length - 1);
+      $pos = min(UTF8::strpos($text, ' ', $end), UTF8::strpos($text, '.', $end));
+
+      if ($pos) {
+        return static::create(rtrim(UTF8::substr($text, 0, $pos), $trimChars) . $ellipsis, $this->encoding);
+      } else {
+        return static::create($text, $this->encoding);
+      }
+
+    }
+
+    $wordPos = UTF8::strpos(UTF8::strtolower($text), UTF8::strtolower($search), null);
+    $halfSide = (int)($wordPos - $length / 2 + UTF8::strlen($search) / 2);
+
+    if ($halfSide > 0) {
+
+      $halfText = UTF8::substr($text, 0, $halfSide);
+      $pos_start = max(UTF8::strrpos($halfText, ' ', 0), UTF8::strrpos($halfText, '.', 0));
+
+      if (!$pos_start) {
+        $pos_start = 0;
+      }
+
+    } else {
+      $pos_start = 0;
+    }
+
+    if ($wordPos && $halfSide > 0) {
+      $l = $pos_start + $length - 1;
+      $realLength = UTF8::strlen($text);
+
+      if ($l > $realLength) {
+        $l = $realLength;
+      }
+
+      $pos_end = min(UTF8::strpos($text, ' ', $l), UTF8::strpos($text, '.', $l)) - $pos_start;
+
+      if (!$pos_end || $pos_end <= 0) {
+        $extract = $ellipsis . ltrim(UTF8::substr($text, $pos_start, UTF8::strlen($text)), $trimChars);
+      } else {
+        $extract = $ellipsis . trim(UTF8::substr($text, $pos_start, $pos_end), $trimChars) . $ellipsis;
+      }
+
+    } else {
+
+      $l = $length - 1;
+      $trueLength = UTF8::strlen($text);
+
+      if ($l > $trueLength) {
+        $l = $trueLength;
+      }
+
+      $pos_end = min(UTF8::strpos($text, ' ', $l), UTF8::strpos($text, '.', $l));
+
+      if ($pos_end) {
+        $extract = rtrim(UTF8::substr($text, 0, $pos_end), $trimChars) . $ellipsis;
+      } else {
+        $extract = $text;
+      }
+    }
+
+    return static::create($extract, $this->encoding);
+  }
+
 
   /**
    * remove xss from html

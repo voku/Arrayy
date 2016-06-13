@@ -3661,6 +3661,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testIsHtml()
   {
     $testArray = array(
+        ''                         => false,
         '<h1>test</h1>'            => true,
         'test'                     => false,
         '<b>lall</b>'              => true,
@@ -3669,11 +3670,28 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '<b><b>lall</b>'           => true,
         '</b>lall</b>'             => true,
         '[b]lall[b]'               => false,
+        ' <test>κόσμε</test> '     => true,
     );
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
       self::assertEquals($testResult, $stringy->isHtml(), 'tested: ' . $testString);
+    }
+  }
+
+  public function testLall()
+  {
+    $testArray = array(
+        ''                         => '',
+        '<h1>test</h1>'            => '<h1>test</h1>',
+        'test'                     => 'test',
+        'A PHP string manipulation library with multibyte support. κόσμε-öäü κόσμε-öäü κόσμε-öäü foobar Compatible with PHP 5.3+, PHP 7, and HHVM.' => '...κόσμε-öäü κόσμε-öäü foobar Compatible...',
+        'A PHP string manipulation library with multibyte support. foobar Compatible with PHP 5.3+, PHP 7, and HHVM.' => '...multibyte support. foobar Compatible...',
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertEquals($testResult, (string)$stringy->extractText(30, 'foobar', '...'), 'tested: ' . $testString);
     }
   }
 }
