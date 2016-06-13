@@ -298,6 +298,8 @@ Returns a new string with $string appended.
 
 ```php
 s('fòô')->append('bàř'); // 'fòôbàř'
+// [OR]
+StaticStringy::append('fòô', 'bàř'); // e.g.: 'fòôbàř'
 ```
 
 ##### appendPassword(int $length)
@@ -306,6 +308,8 @@ Append an password (limited to chars that are good readable).
 
 ```php
 s('')->appendPassword(8); // e.g.: '89bcdfgh'
+// [OR]
+StaticStringy::appendPassword(8); // e.g.: '89bcdfgh'
 ```
 
 ##### appendUniqueIdentifier(string $extraPrefix)
@@ -314,6 +318,8 @@ Append an unique identifier.
 
 ```php
 s('')->appendUniqueIdentifier(); // e.g.: '1f3870be274f6c49b3e31a0c6728957f'
+// [OR]
+StaticStringy::appendUniqueIdentifier(''); // e.g.: '1f3870be274f6c49b3e31a0c6728957f'
 ```
 
 ##### appendRandomString(int $length, string $possibleChars)
@@ -322,6 +328,8 @@ Append an random string.
 
 ```php
 s('')->appendUniqueIdentifier(5, 'ABCDEFGHI'); // e.g.: 'CDEHI'
+// [OR]
+StaticStringy::appendUniqueIdentifier('', 5, 'ABCDEFGHI'); // e.g.: 'CDEHI'
 ```
 
 ##### at(int $index)
@@ -330,6 +338,8 @@ Returns the character at $index, with indexes starting at 0.
 
 ```php
 s('fòôbàř')->at(3); // 'b'
+// [OR]
+StaticStringy::at('fòôbàř', 3); // e.g.: 'b'
 ```
 
 ##### between(string $start, string $end [, int $offset])
