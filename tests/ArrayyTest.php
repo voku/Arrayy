@@ -3763,6 +3763,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
    */
   public function uniqueProvider()
   {
+    $a = new stdClass();
+    $a->x = 42;
+
+    $b = new stdClass();
+    $b->y = 42;
+
+    $c = new stdClass();
+    $c->x = 43;
+
     return array(
         array(array(), array()),
         array(array(0 => false), array(false)),
@@ -3771,11 +3780,31 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(0 => -9, 1, 2), array(-9, 1, 2)),
         array(array(1.18, 1.5), array(1.18, 1.5)),
         array(
-            array(3 => 'string', 'foo', 'lall', 'foo'),
+            array(
+                3 => 'string',
+                'foo',
+                'lall',
+                'foo'
+            ),
             array(
                 0 => 'string',
                 1 => 'foo',
                 2 => 'lall',
+            ),
+        ),
+        array(
+            array(
+                $a,
+                $a,
+                $b,
+                $b,
+                $c,
+                $c,
+            ),
+            array(
+                $a,
+                $b,
+                $c,
             ),
         ),
     );
