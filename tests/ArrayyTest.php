@@ -43,7 +43,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
    *
    * @param mixed $actual
    */
-  public function assertArrayy($actual)
+  public static function assertArrayy($actual)
   {
     self::assertInstanceOf('Arrayy\Arrayy', $actual);
   }
@@ -54,7 +54,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
    * @param array $array
    * @param array $resultArray
    */
-  protected function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray)
+  protected static function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray)
   {
     self::assertNotSame($arrayzy, $resultArrayzy);
     self::assertSame($array, $arrayzy->toArray());
@@ -66,7 +66,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
    * @param A     $resultArrayzy
    * @param array $resultArray
    */
-  protected function assertMutable(A $arrayzy, A $resultArrayzy, array $resultArray)
+  protected static function assertMutable(A $arrayzy, A $resultArrayzy, array $resultArray)
   {
     self::assertSame($arrayzy, $resultArrayzy);
     self::assertSame($resultArray, $arrayzy->toArray());
@@ -2524,8 +2524,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         0   => 0,
     );
 
-    //var_dump(array($expected, $result));
-    self::assertTrue($expected == $result);
+    self::assertEquals($expected, $result);
 
     // ------
 
@@ -2542,8 +2541,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         101 => 123,
     );
 
-    //var_dump(array($expected, $result));
-    self::assertTrue($expected == $result);
+    self::assertEquals($expected, $result);
   }
 
   public function testOrderByValueKeepIndex()
@@ -2567,8 +2565,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         3   => 'bce',
     );
 
-    //var_dump(array($expected, $result));
-    self::assertTrue($expected == $result);
+    self::assertEquals($expected, $result);
   }
 
   public function testOrderByValueNewIndex()
@@ -2592,8 +2589,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         4 => 'hcd',
     );
 
-    //var_dump(array($expected, $result));
-    self::assertTrue($expected === $result);
+    self::assertEquals($expected, $result);
   }
 
   /**
@@ -2729,7 +2725,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $testArray = array('foo', 2 => 'bar', 4 => 'lall');
 
     $myReducer = function ($resultArray, $value) {
-      if ($value == 'foo') {
+      if ($value === 'foo') {
         $resultArray[] = $value;
       }
 
@@ -2754,7 +2750,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
      */
     function myReducer($resultArray, $value)
     {
-      if ($value == 'foo') {
+      if ($value === 'foo') {
         $resultArray[] = $value;
       }
 
@@ -3113,8 +3109,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals('C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}', serialize($arrayy));
   }
 
-  // The public method list order by ASC
-
   /**
    * @dataProvider setProvider()
    *
@@ -3413,8 +3407,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         4 => 'hcd',
     );
 
-    //var_dump(array($expected, $result));
-    self::assertTrue($expected === $result);
+    self::assertEquals($expected, $result);
   }
 
   public function testSplit()
@@ -3719,28 +3712,142 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
   public function testIsArrayMultidim()
   {
-
-    $array0 = array(1 => array(1,),);
-    $array1 = array(
-        1 => 1,
-        2 => 2,
+    $testArrays = array(
+        array(1 => array(1,),),
+        array(0, 1, 2, 3, 4),
+        array(
+            1 => 1,
+            2 => 2,
+        ),
+        array(
+            1 => array(1,),
+            2 => array(2,),
+        ),
+        false,
+        '',
+        ' ',
+        array(),
     );
-    $array2 = array(
-        1 => array(1,),
-        2 => array(2,),
-    );
-    $array3 = false;
-    $array4 = '';
-    $array5 = ' ';
-    $array6 = array();
 
-    self::assertEquals(true, A::create($array0)->isMultiArray());
-    self::assertEquals(false, A::create($array1)->isMultiArray());
-    self::assertEquals(true, A::create($array2)->isMultiArray());
-    self::assertEquals(false, A::create($array3)->isMultiArray());
-    self::assertEquals(false, A::create($array4)->isMultiArray());
-    self::assertEquals(false, A::create($array5)->isMultiArray());
-    self::assertEquals(false, A::create($array6)->isMultiArray());
+    $expectedArrays = array(
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+    );
+
+    foreach ($testArrays as $key => $testArray) {
+      self::assertEquals($expectedArrays[$key], A::create($testArray)->isMultiArray(), 'tested:' . print_r($testArray, true));
+    }
+  }
+
+  public function testIsSequential()
+  {
+    $testArrays = array(
+        array(1 => array(1,),),
+        array(0, 1, 2, 3, 4),
+        array(
+            1 => 1,
+            2 => 2,
+        ),
+        array(
+            1 => array(1,),
+            2 => array(2,),
+        ),
+        false,
+        '',
+        ' ',
+        array(),
+    );
+
+    $expectedArrays = array(
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+    );
+
+    foreach ($testArrays as $key => $testArray) {
+      self::assertEquals($expectedArrays[$key], A::create($testArray)->isSequential(), 'tested:' . print_r($testArray, true));
+    }
+  }
+
+  public function testIsNumeric()
+  {
+    $testArrays = array(
+        array(1 => array(1,),),
+        array(0, 1, 2, 3, 4),
+        array(
+            1 => 1,
+            2 => 2,
+        ),
+        array(
+            1 => array(1,),
+            2 => array(2,),
+        ),
+        false,
+        '',
+        ' ',
+        array(),
+    );
+
+    $expectedArrays = array(
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+    );
+
+    foreach ($testArrays as $key => $testArray) {
+      self::assertEquals($expectedArrays[$key], A::create($testArray)->isNumeric(), 'tested:' . print_r($testArray, true));
+    }
+  }
+
+  public function testIsEmpty()
+  {
+    $testArrays = array(
+        array(1 => array(1,),),
+        array(0, 1, 2, 3, 4),
+        array(
+            1 => 1,
+            2 => 2,
+        ),
+        array(
+            1 => array(1,),
+            2 => array(2,),
+        ),
+        false,
+        '',
+        ' ',
+        array(),
+    );
+
+    $expectedArrays = array(
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        true,
+    );
+
+    foreach ($testArrays as $key => $testArray) {
+      self::assertEquals($expectedArrays[$key], A::create($testArray)->isEmpty(), 'tested:' . print_r($testArray, true));
+    }
   }
 
   /**
@@ -3784,7 +3891,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
                 3 => 'string',
                 'foo',
                 'lall',
-                'foo'
+                'foo',
             ),
             array(
                 0 => 'string',

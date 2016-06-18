@@ -1271,6 +1271,28 @@ class Arrayy extends \ArrayObject
   }
 
   /**
+   * Check if the current array is sequential [0, 1, 2, 3, 4, 5 ...] or not.
+   *
+   * @return bool
+   */
+  public function isSequential()
+  {
+    return array_keys($this->array) === range(0, count($this->array) - 1);
+  }
+
+  /**
+   * Check if the current array is equal to the given "$array" or not.
+   *
+   * @param array $array
+   *
+   * @return bool
+   */
+  public function isEqual(array $array)
+  {
+    return ($this->array === $array);
+  }
+
+  /**
    * Check whether array is numeric or not.
    *
    * @return bool Returns true if numeric, false otherwise
