@@ -420,6 +420,14 @@ Check if the given key/index exists in the array.
 a([1 => true])->containsKey(1); // true
 ```
 
+##### containsCaseInsensitive(string $value) : boolean
+
+Check if an (case-insensitive) string is in the current array.
+
+```php
+a(['E', 'é'])->containsCaseInsensitive('É'); // true
+```
+
 ##### diff(array $array) : Arrayy (Immutable)
 
 Return values that are only in the current array.
@@ -599,12 +607,28 @@ Check if we have named keys in the current array.
 a(['foo' => 'bar', 2, 3])->isAssoc(); // true
 ```
 
+##### isEqual() : boolean
+
+Check if we have named keys in the current array.
+
+```php
+a(['💩'])->isEqual(['💩']); // true
+```
+
 ##### isMultiArray() : boolean
 
 Check if the current array is a multi-array.
 
 ```php
 a(['foo' => [1, 2 , 3]])->isMultiArray(); // true
+```
+
+##### isSequential() : boolean
+
+Check if the current array is sequential [0, 1, 2, 3, 4, 5 ...] or not.
+
+```php
+a([0 => 'foo', 1 => 'lall', 2 => 'foobar'])->isSequential(); // true
 ```
 
 ##### keys() : Arrayy (Immutable)
