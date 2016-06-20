@@ -111,6 +111,28 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
+  public function containsCaseInsensitiveProvider()
+  {
+    return array(
+        array(array(), null, false),
+        array(array(), false, false),
+        array(array(0 => false), false, true),
+        array(array(0 => true), true, true),
+        array(array(0 => -9), -9, true),
+        array(array(1.18), 1.18, true),
+        array(array(1.18), 1.17, false),
+        array(array('string', '💩'), '💩', true),
+        array(array(' ', 'É'), 'é', true),
+        array(array('string', 'foo'), 'foo', true),
+        array(array('string', 'Foo'), 'foo', true),
+        array(array('string', 'foo123'), 'foo', false),
+        array(array('String', 'foo123'), 'foo', false),
+    );
+  }
+
+  /**
+   * @return array
+   */
   public function containsProvider()
   {
     return array(
@@ -1532,6 +1554,20 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     new A(5);
     static::fail('Expecting exception when the constructor is passed an array');
+  }
+
+  /**
+   * @dataProvider containsCaseInsensitiveProvider()
+   *
+   * @param array $array
+   * @param mixed $value
+   * @param       $expected
+   */
+  public function testContainsCaseInsensitive($array, $value, $expected)
+  {
+    $arrayy = new A($array);
+
+    self::assertEquals($expected, $arrayy->containsCaseInsensitive($value));
   }
 
   /**

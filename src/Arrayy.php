@@ -324,6 +324,28 @@ class Arrayy extends \ArrayObject
   }
 
   /**
+   * Check if an (case-insensitive) string is in the current array.
+   *
+   * @param string $value
+   *
+   * @return bool
+   */
+  public function containsCaseInsensitive($value)
+  {
+    return in_array(
+        UTF8::strtolower($value),
+        array_map(
+            array(
+                new UTF8(),
+                'strtolower',
+            ),
+            $this->array
+        ),
+        true
+    );
+  }
+
+  /**
    * Check if the given key/index exists in the array.
    *
    * @param mixed $key Key/index to search for
