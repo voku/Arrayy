@@ -3143,6 +3143,20 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     self::assertEquals('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
     self::assertEquals('C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}', serialize($arrayy));
+    self::assertEquals($arrayy, unserialize('C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}'));
+
+    // create a object with an "arrayy"-property
+
+    $object = new stdClass();
+    $object->arrayy = $arrayy;
+
+    self::assertEquals($object->arrayy, $arrayy);
+
+    // serialize + tests
+
+    self::assertEquals('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}}', serialize($object));
+    self::assertEquals($object, unserialize('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}}'));
+
   }
 
   /**
