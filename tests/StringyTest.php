@@ -24,15 +24,15 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = new S('foo bar', 'UTF-8');
     self::assertStringy($stringy);
-    self::assertEquals('foo bar', (string)$stringy);
-    self::assertEquals('UTF-8', $stringy->getEncoding());
+    self::assertSame('foo bar', (string)$stringy);
+    self::assertSame('UTF-8', $stringy->getEncoding());
   }
 
   public function testEmptyConstruct()
   {
     $stringy = new S();
     self::assertStringy($stringy);
-    self::assertEquals('', (string)$stringy);
+    self::assertSame('', (string)$stringy);
   }
 
   /**
@@ -63,8 +63,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create('öäü - foo');
     $result = $stringy->toString();
     self::assertTrue(is_string($result));
-    self::assertEquals((string)$stringy, $result);
-    self::assertEquals('öäü - foo', $result);
+    self::assertSame((string)$stringy, $result);
+    self::assertSame('öäü - foo', $result);
   }
 
   /**
@@ -76,8 +76,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testToString($expected, $str)
   {
     $stringy = new S($str);
-    self::assertEquals($expected, (string)$stringy);
-    self::assertEquals($expected, $stringy->toString());
+    self::assertSame($expected, (string)$stringy);
+    self::assertSame($expected, $stringy->toString());
   }
 
   /**
@@ -99,8 +99,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create('foo bar', 'UTF-8');
     self::assertStringy($stringy);
-    self::assertEquals('foo bar', (string)$stringy);
-    self::assertEquals('UTF-8', $stringy->getEncoding());
+    self::assertSame('foo bar', (string)$stringy);
+    self::assertSame('UTF-8', $stringy->getEncoding());
   }
 
   public function testChaining()
@@ -108,14 +108,14 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create('Fòô     Bàř', 'UTF-8');
     self::assertStringy($stringy);
     $result = $stringy->collapseWhitespace()->swapCase()->upperCaseFirst();
-    self::assertEquals('FÒÔ bÀŘ', $result);
+    self::assertSame('FÒÔ bÀŘ', $result->toString());
   }
 
   public function testCount()
   {
     $stringy = S::create('Fòô', 'UTF-8');
-    self::assertEquals(3, $stringy->count());
-    self::assertEquals(3, count($stringy));
+    self::assertSame(3, $stringy->count());
+    self::assertSame(3, count($stringy));
   }
 
   public function testGetIterator()
@@ -132,8 +132,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
       $keyValResult[$pos] = $char;
     }
 
-    self::assertEquals(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $valResult);
-    self::assertEquals(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $keyValResult);
+    self::assertSame(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $valResult);
+    self::assertSame(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $keyValResult);
   }
 
   /**
@@ -145,8 +145,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testOffsetExists($expected, $offset)
   {
     $stringy = S::create('fòô', 'UTF-8');
-    self::assertEquals($expected, $stringy->offsetExists($offset));
-    self::assertEquals($expected, isset($stringy[$offset]));
+    self::assertSame($expected, $stringy->offsetExists($offset));
+    self::assertSame($expected, isset($stringy[$offset]));
   }
 
   /**
@@ -168,10 +168,10 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create('fòô', 'UTF-8');
 
-    self::assertEquals('f', $stringy->offsetGet(0));
-    self::assertEquals('ô', $stringy->offsetGet(2));
+    self::assertSame('f', $stringy->offsetGet(0));
+    self::assertSame('ô', $stringy->offsetGet(2));
 
-    self::assertEquals('ô', $stringy[2]);
+    self::assertSame('ô', $stringy[2]);
   }
 
   /**
@@ -217,7 +217,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testIndexOf($expected, $str, $subStr, $offset = 0, $encoding = null)
   {
     $result = S::create($str, $encoding)->indexOf($subStr, $offset);
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result);
   }
 
   /**
@@ -251,7 +251,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testIndexOfLast($expected, $str, $subStr, $offset = 0, $encoding = null)
   {
     $result = S::create($str, $encoding)->indexOfLast($subStr, $offset);
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result);
   }
 
   /**
@@ -285,7 +285,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $result = S::create($str, $encoding)->append($string);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result->toString());
   }
 
   /**
@@ -311,7 +311,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $result = S::create($str, $encoding)->prepend($string);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result->toString());
   }
 
   /**
@@ -339,7 +339,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     foreach ($result as $char) {
       self::assertInternalType('string', $char);
     }
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result);
   }
 
   /**
@@ -373,7 +373,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $counter = count($expected);
     /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $counter; $i++) {
-      self::assertEquals($expected[$i], $result[$i]);
+      self::assertSame($expected[$i], $result[$i]->toString());
     }
   }
 
@@ -412,7 +412,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $result = S::create($str, $encoding)->upperCaseFirst();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result->toString());
   }
 
   /**
@@ -441,8 +441,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->lowerCaseFirst();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -471,8 +471,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->snakeize();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -516,8 +516,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->camelize();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -560,8 +560,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->upperCamelize();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -598,8 +598,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->dasherize();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -642,8 +642,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->underscored();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -684,8 +684,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->delimit($delimiter);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -723,8 +723,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->swapCase();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -753,8 +753,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->titleize($ignore);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -789,8 +789,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->humanize();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -816,8 +816,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str);
     $result = $stringy->tidy();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -845,8 +845,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->collapseWhitespace();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -881,8 +881,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str);
     $result = $stringy->toAscii();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -925,8 +925,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->pad($length, $padStr, $padType);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -980,8 +980,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->padLeft($length, $padStr);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1014,8 +1014,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->padRight($length, $padStr);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1048,8 +1048,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->padBoth($length, $padStr);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1086,8 +1086,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->startsWith($substring, $caseSensitive);
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1124,8 +1124,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->endsWith($substring, $caseSensitive);
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1160,8 +1160,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->toBoolean();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1200,8 +1200,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str);
     $result = $stringy->toSpaces($tabLength);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1231,8 +1231,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str);
     $result = $stringy->toTabs($tabLength);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1261,8 +1261,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->toLowerCase();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1291,8 +1291,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->toTitleCase();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1321,8 +1321,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->toUpperCase();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1351,8 +1351,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str);
     $result = $stringy->slugify($replacement);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1394,8 +1394,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->between($start, $end, $offset);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1435,8 +1435,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->escape();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1467,8 +1467,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeHtmlBreak($replacement);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1503,8 +1503,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeHtml($allowableTags);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1534,8 +1534,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeXss();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1573,8 +1573,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->contains($needle, $caseSensitive);
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($haystack, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($haystack, $stringy->toString());
   }
 
   /**
@@ -1621,8 +1621,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->containsAny($needles, $caseSensitive);
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($haystack, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($haystack, $stringy->toString());
   }
 
   /**
@@ -1683,8 +1683,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->containsAll($needles, $caseSensitive);
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($haystack, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($haystack, $stringy->toString());
   }
 
   /**
@@ -1743,8 +1743,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str);
     $result = $stringy->surround($substring);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1775,8 +1775,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->insert($substring, $index);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1810,8 +1810,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->truncate($length, $substring);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1859,8 +1859,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->safeTruncate($length, $substring);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1906,8 +1906,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->reverse();
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1937,8 +1937,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->repeat($multiplier);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -1970,8 +1970,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $result = $stringy->shuffle();
 
     self::assertStringy($result);
-    self::assertEquals($str, $stringy);
-    self::assertEquals(
+    self::assertSame($str, $stringy->toString());
+    self::assertSame(
         mb_strlen($str, $encoding),
         mb_strlen($result, $encoding)
     );
@@ -1982,7 +1982,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
       $char = mb_substr($str, $i, 1, $encoding);
       $countBefore = mb_substr_count($str, $char, $encoding);
       $countAfter = mb_substr_count($result, $char, $encoding);
-      self::assertEquals($countBefore, $countAfter);
+      self::assertSame($countBefore, $countAfter);
     }
   }
 
@@ -2011,8 +2011,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->trim($chars);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2049,8 +2049,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->trimLeft($chars);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2088,8 +2088,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->trimRight($chars);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2127,8 +2127,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonPrefix($otherStr);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2163,8 +2163,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonSuffix($otherStr);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2199,8 +2199,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonSubstring($otherStr);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2234,8 +2234,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->length();
     self::assertInternalType('int', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2265,8 +2265,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->slice($start, $end);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2316,7 +2316,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $counter = count($expected);
     /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $counter; $i++) {
-      self::assertEquals($expected[$i], $result[$i]);
+      self::assertSame($expected[$i], $result[$i]->toString());
     }
   }
 
@@ -2362,8 +2362,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->substr($start, $length);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2397,8 +2397,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->at($index);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2431,8 +2431,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->first($n);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2469,8 +2469,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->last($n);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2507,8 +2507,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->ensureLeft($substring);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2543,8 +2543,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->ensureRight($substring);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2579,8 +2579,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeLeft($substring);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2617,8 +2617,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeRight($substring);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2654,8 +2654,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->isAlpha();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2689,8 +2689,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->isAlphanumeric();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2727,8 +2727,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->isBlank();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2767,8 +2767,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->isJson();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result, 'tested:' . $str);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result, 'tested:' . $str);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2812,8 +2812,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->isLowerCase();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2845,8 +2845,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->hasLowerCase();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2882,8 +2882,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->isSerialized();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2913,8 +2913,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str);
     $result = $stringy->isBase64();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2945,8 +2945,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->isUpperCase();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -2978,8 +2978,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->hasUpperCase();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3015,8 +3015,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->isHexadecimal();
     self::assertInternalType('boolean', $result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3055,8 +3055,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->countSubstr($substring, $caseSensitive);
     self::assertInternalType('int', $result, 'tested:' . $str);
-    self::assertEquals($expected, $result, 'tested:' . $str);
-    self::assertEquals($str, $stringy, 'tested:' . $str);
+    self::assertSame($expected, $result, 'tested:' . $str);
+    self::assertSame($str, $stringy->toString(), 'tested:' . $str);
   }
 
   /**
@@ -3098,8 +3098,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->replace($search, $replacement, $caseSensitive);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3154,8 +3154,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->replaceAll($search, $replacement, $caseSensitive);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3211,8 +3211,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->replaceBeginning($search, $replacement);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3254,8 +3254,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->replaceEnding($search, $replacement);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3298,8 +3298,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->regexReplace($pattern, $replacement, $options);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3333,8 +3333,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->htmlEncode($flags);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3364,8 +3364,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->htmlDecode($flags);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3396,8 +3396,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->shortenAfterWord($length, $strAddOn);
     self::assertStringy($result);
-    self::assertEquals($expected, $result);
-    self::assertEquals($str, $stringy);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -3429,7 +3429,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
-      self::assertEquals($testResult, $stringy->lineWrapAfterWord(10));
+      self::assertSame($testResult, $stringy->lineWrapAfterWord(10)->toString());
     }
   }
 
@@ -3494,7 +3494,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     foreach ($examples as $testString => $testResults) {
       $stringy = S::create($testString);
       foreach ($testResults as $before => $after) {
-        self::assertEquals($after, $stringy->utf8ify());
+        self::assertSame($after, $stringy->utf8ify()->toString());
       }
     }
 
@@ -3541,7 +3541,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     foreach ($examples as $testString => $testResults) {
       $stringy = S::create($testString);
       foreach ($testResults as $before => $after) {
-        self::assertEquals($after, $stringy->utf8ify(), $counter);
+        self::assertSame($after, $stringy->utf8ify()->toString(), $counter);
       }
       $counter++;
     }
@@ -3563,7 +3563,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
-      self::assertEquals($testResult, $stringy->stripeEmptyHtmlTags());
+      self::assertSame($testResult, $stringy->stripeEmptyHtmlTags()->toString());
     }
   }
 
@@ -3579,7 +3579,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
       $stringy = S::create('');
       $stringy = $stringy->appendRandomString($testResult[0], $testString);
 
-      self::assertEquals($testResult[1], $stringy->length(), 'tested: ' . $testString . ' | ' . $stringy->toString());
+      self::assertSame($testResult[1], $stringy->length(), 'tested: ' . $testString . ' | ' . $stringy->toString());
     }
   }
 
@@ -3604,7 +3604,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         }
       }
     }
-    self::assertEquals(0, count($errors));
+    self::assertSame(0, count($errors));
 
     // check for disallowed chars
     $errors = array();
@@ -3615,11 +3615,11 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         }
       }
     }
-    self::assertEquals(0, count($errors));
+    self::assertSame(0, count($errors));
 
     // check the string length
     foreach ($passwords as $password) {
-      self::assertEquals(16, strlen($password));
+      self::assertSame(16, strlen($password));
     }
   }
 
@@ -3633,12 +3633,12 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
     // detect duplicate values in the array
     foreach (array_count_values($uniquIDs) as $uniquID => $count) {
-      self::assertEquals(1, $count);
+      self::assertSame(1, $count);
     }
 
     // check the string length
     foreach ($uniquIDs as $uniquID) {
-      self::assertEquals(32, strlen($uniquID));
+      self::assertSame(32, strlen($uniquID));
     }
   }
 
@@ -3654,7 +3654,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
-      self::assertEquals($testResult, $stringy->stripeCssMediaQueries());
+      self::assertSame($testResult, $stringy->stripeCssMediaQueries()->toString());
     }
   }
 
@@ -3675,7 +3675,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
-      self::assertEquals($testResult, $stringy->isHtml(), 'tested: ' . $testString);
+      self::assertSame($testResult, $stringy->isHtml(), 'tested: ' . $testString);
     }
   }
 
@@ -3692,13 +3692,13 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
-      self::assertEquals($testResult, (string)$stringy->extractText('foobar'), 'tested: ' . $testString);
+      self::assertSame($testResult, (string)$stringy->extractText('foobar'), 'tested: ' . $testString);
     }
 
     // ----------------
 
     $testString = 'this is only a Fork of Stringy';
     $stringy = S::create($testString);
-    self::assertEquals('...a Fork of Stringy', (string)$stringy->extractText('Fork', 5), 'tested: ' . $testString);
+    self::assertSame('...a Fork of Stringy', (string)$stringy->extractText('Fork', 5), 'tested: ' . $testString);
   }
 }

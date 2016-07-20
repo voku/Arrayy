@@ -14,7 +14,7 @@ class CreateTestCase extends PHPUnit_Framework_TestCase
     $stringyObject = new Stringy();
     $stringy = $stringyObject::create('foo bar', 'UTF-8');
     static::assertInstanceOf('Stringy\Stringy', $stringy);
-    static::assertEquals('foo bar', (string)$stringy);
-    static::assertEquals('UTF-8', $stringy->getEncoding());
+    static::assertSame('foo bar', (string)$stringy);
+    static::assertSame('UTF-8', $stringy->getEncoding());
   }
 }
