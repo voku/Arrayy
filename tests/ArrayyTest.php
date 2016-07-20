@@ -80,15 +80,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     return array(
         array(array(), null, 0),
-        array(array(), 0, 0),
-        array(array(0 => false), false, 0),
-        array(array(0 => true), true, 1),
-        array(array(0 => -9, -8, -7), 1, -8),
+        array(array(), 0.0, 0),
+        array(array(0 => false), false, 0.0),
+        array(array(0 => true), true, 1.0),
+        array(array(0 => -9, -8, -7), 1, -8.0),
         array(array(0 => -9, -8, -7, 1.32), 2, -5.67),
         array(array(1.18), 1, 1.2),
         array(array(1.18, 1.89), 1, 1.5),
-        array(array('string', 'foo'), 1, 0),
-        array(array('string', 'foo123'), 'foo', 0),
+        array(array('string', 'foo'), 1, 0.0),
+        array(array('string', 'foo123'), 'foo', 0.0),
     );
   }
 
@@ -101,9 +101,9 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(), array()),
         array(array(null, false), array()),
         array(array(0 => true), array(0 => true)),
-        array(array(0 => -9, 0), array(true)),
-        array(array(-8 => -9, 1, 2 => false), array(0 => 1, -8 => -9)),
-        array(array(1.18, false), array(true)),
+        array(array(0 => -9, 0), array(0 => -9)),
+        array(array(-8 => -9, 1, 2 => false), array(-8 => -9, 0 => 1)),
+        array(array(1.18, false), array(0 => 1.18)),
         array(array('foo' => false, 'foo', 'lall'), array('foo', 'lall')),
     );
   }
@@ -219,8 +219,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 1     => 'one',
-                'foo' => 'bar1',
                 2     => 'two',
+                'foo' => 'bar1',
             ),
         ),
         array(
@@ -286,10 +286,10 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
                 'foo' => 'bar1',
             ),
             array(
+                'foo' => 'bar2',
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
-                'foo' => 'bar2',
             ),
             array(
                 'foo' => 'bar2',
@@ -325,9 +325,9 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(), array(null), false),
         array(array(), array(false), false),
         array(array(0 => true), true, true),
-        array(array(0 => -9), -9, true),
+        array(array(0 => -9), -9, -9),
         array(array(0 => -9, 1, 2), false, false),
-        array(array(1.18), 1.18, true),
+        array(array(1.18), 1.18, 1.18),
         array(array('string', 'foo', 'lall'), 'foo', 'foo'),
     );
   }
@@ -367,7 +367,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array('foo' => false, 'foo', 'lall'), array(false)),
         array(array(-8 => -9, 1, 2 => false), array(), 0),
         array(array(1.18, false), array(1.18), 1),
-        array(array('foo' => false, 'foo', 'lall'), array('foo', 'foo' => false), 2),
+        array(array('foo' => false, 'foo', 'lall'), array('foo' => false, 'foo'), 2),
         array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'foo', 1 => 'bar'), 2),
     );
   }
@@ -385,7 +385,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(true, array(true), 0),
         array(1, array(-9, 1, 0, false), 1),
         array(1.18, array(1.18), 0),
-        array(false, array(' string  ', 'foo'), 'foo'),
+        array(null, array(' string  ', 'foo'), 'foo'),
         array('foo', array(' string  ', 'foo' => 'foo'), 'foo'),
     );
   }
@@ -548,10 +548,10 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function maxProvider()
   {
     return array(
-        array(array(), 0),
+        array(array(), false),
         array(array(null), null),
         array(array(0 => false), false),
-        array(array(0 => true), 1),
+        array(array(0 => true), true),
         array(array(0 => -9, -8, -7), -7),
         array(array(0 => -9, -8, -7, 1.32), 1.32),
         array(array(1.18), 1.18),
@@ -620,8 +620,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 1     => 'one',
-                'foo' => 'bar2',
                 2     => 'two',
+                'foo' => 'bar2',
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
@@ -641,13 +641,13 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
                 3 => 'string',
             ),
             array(
-                0 => 'foo',
-                1 => 'lall',
-                2 => 'foo',
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
                 6 => 'foo',
+                0 => 'foo',
+                1 => 'lall',
+                2 => 'foo',
             ),
         ),
     );
@@ -809,12 +809,12 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
                 'foo' => 'bar2',
             ),
             array(
-                1     => 'one',
-                'foo' => 'bar1',
-                2     => 'two',
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
+                'foo' => 'bar1',
+                1     => 'one',
+                2     => 'two',
             ),
         ),
         array(
@@ -906,12 +906,12 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
                 'foo' => 'bar2',
             ),
             array(
+                0     => 'three',
                 1     => 'four',
-                'foo' => 'bar1',
                 2     => 'six',
+                'foo' => 'bar1',
                 3     => 'one',
                 4     => 'two',
-                0     => 'three',
             ),
         ),
         array(
@@ -947,10 +947,10 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function minProvider()
   {
     return array(
-        array(array(), 0),
+        array(array(), false),
         array(array(null), null),
         array(array(0 => false), false),
-        array(array(0 => true), 1),
+        array(array(0 => true), true),
         array(array(0 => -9, -8, -7), -9),
         array(array(0 => -9, -8, -7, 1.32), -9),
         array(array(1.18), 1.18),
@@ -1108,8 +1108,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     return array(
         array(array(), array()),
-        array(array(null, false), array(null)),
-        array(array(0 => true), array()),
+        array(array(null, false), array(false)),
         array(array(0 => -9, 0), array(0)),
         array(array(-8 => -9, 1, 2 => false), array(0 => 1, 1 => false)),
         array(array(1.18, false), array(false)),
@@ -1311,7 +1310,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->append($value);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   /**
@@ -1325,7 +1324,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->average($value));
+    self::assertSame($expected, $arrayy->average($value), 'tested: ' . $value);
   }
 
   public function testCanDoSomethingAtEachValue()
@@ -1346,7 +1345,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $a = array('foo', 'bar');
     $b = array('bar', 'baz');
     $array = A::create($a)->intersection($b);
-    self::assertEquals(array('bar'), $array->getArray());
+    self::assertSame(array('bar'), $array->getArray());
   }
 
   public function testCanGroupValues()
@@ -1360,13 +1359,13 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(1, 3, 5),
         array(2, 4),
     );
-    self::assertEquals($matcher, $under->getArray());
+    self::assertSame($matcher, $under->getArray());
   }
 
   public function testCanGroupValuesWithNonExistingKey()
   {
-    self::assertEquals(array(), A::create(range(1, 5))->group('unknown', true)->getArray());
-    self::assertEquals(array(), A::create(range(1, 5))->group('unknown', false)->getArray());
+    self::assertSame(array(), A::create(range(1, 5))->group('unknown', true)->getArray());
+    self::assertSame(array(), A::create(range(1, 5))->group('unknown', false)->getArray());
   }
 
   public function testCanGroupValuesWithSavingKeys()
@@ -1379,7 +1378,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(0 => 1, 2 => 3, 4 => 5),
         array(1 => 2, 3 => 4),
     );
-    self::assertEquals($matcher, $under->getArray());
+    self::assertSame($matcher, $under->getArray());
   }
 
   public function testCanIndexBy()
@@ -1394,7 +1393,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         50 => array('name' => 'larry', 'age' => 50),
         60 => array('name' => 'curly', 'age' => 60),
     );
-    self::assertEquals($expected, A::create($array)->indexBy('age')->getArray());
+    self::assertSame($expected, A::create($array)->indexBy('age')->getArray());
   }
 
   /**
@@ -1415,7 +1414,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A(array(-9, -8, -7, 1.32));
     $result = $arrayy->chunk(2);
 
-    self::assertEquals(array(array(-9, -8), array(-7, 1.32)), $result->getArray());
+    self::assertSame(array(array(-9, -8), array(-7, 1.32)), $result->getArray());
   }
 
   /**
@@ -1428,7 +1427,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array);
 
-    self::assertEquals($result, $arrayy->clean()->getArray());
+    self::assertSame($result, $arrayy->clean()->getArray(), 'tested: ' . print_r($array, true));
   }
 
   /**
@@ -1512,7 +1511,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
     $resultArray = array_combine($secondArray, $firstArray);
 
-    self::assertEquals($resultArray, $resultArrayy);
+    self::assertSame($resultArray, $resultArrayy);
   }
 
   public function testReplaceAllKeysV2()
@@ -1544,7 +1543,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $testArray = array('foo bar', 'UTF-8');
     $arrayy = new A($testArray);
     self::assertArrayy($arrayy);
-    self::assertEquals('foo bar,UTF-8', (string)$arrayy);
+    self::assertSame('foo bar,UTF-8', (string)$arrayy);
   }
 
   /**
@@ -1567,7 +1566,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->containsCaseInsensitive($value));
+    self::assertSame($expected, $arrayy->containsCaseInsensitive($value));
   }
 
   /**
@@ -1581,7 +1580,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->contains($value));
+    self::assertSame($expected, $arrayy->contains($value));
   }
 
   /**
@@ -1594,9 +1593,9 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->count());
-    self::assertEquals($expected, $arrayy->size());
-    self::assertEquals($expected, $arrayy->length());
+    self::assertSame($expected, $arrayy->count());
+    self::assertSame($expected, $arrayy->size());
+    self::assertSame($expected, $arrayy->length());
   }
 
   public function testCreateFromJson()
@@ -1628,10 +1627,10 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
 
     // test JSON -> Array
-    self::assertEquals($expected, $arrayy->getArray());
+    self::assertSame($expected, $arrayy->getArray());
 
     // test Array -> JSON
-    self::assertEquals(
+    self::assertSame(
         str_replace(array(' ', "\n", "\n\r", "\r"), '', $str),
         $arrayy->toJson()
     );
@@ -1672,7 +1671,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
 
     // test String -> Array
-    self::assertEquals($expected, $arrayy->getArray());
+    self::assertSame($expected, $arrayy->getArray());
   }
 
   public function testCreateFromStringSimple()
@@ -1684,7 +1683,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $expected = array('John', 'Doe', 'Anna', 'Smith');
 
     // test String -> Array
-    self::assertEquals($expected, $arrayy->getArray());
+    self::assertSame($expected, $arrayy->getArray());
   }
 
   public function testCreateWithRange()
@@ -1786,7 +1785,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->diff($arrayNew);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray(), 'tested: ' . print_r($array, true));
   }
 
   /**
@@ -1811,22 +1810,23 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
   public function testEach()
   {
-    $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'));
+    $array = array(1 => 'bar', 'foo' => 'foo');
+    $arrayy = A::create($array);
 
     $closure = function ($value, $key) {
       return $key . ':' . $value;
     };
 
     $under = $arrayy->each($closure);
-    $result = array('foo' => 'foo:foo', 1 => '1:bar');
-    self::assertEquals($result, $under->getArray());
+    $result = array(1 => '1:bar', 'foo' => 'foo:foo');
+    self::assertSame($result, $under->getArray(), 'tested: ' . print_r($array, true));
   }
 
   public function testEmptyConstruct()
   {
     $arrayy = new A();
     self::assertArrayy($arrayy);
-    self::assertEquals('', (string)$arrayy);
+    self::assertSame('', (string)$arrayy);
   }
 
   public function testFilter()
@@ -1836,10 +1836,10 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
           return $value % 2 !== 0;
         }
     );
-    self::assertEquals(array(0 => 1, 2 => 3), $under->getArray());
+    self::assertSame(array(0 => 1, 2 => 3), $under->getArray());
 
     $under = A::create(array(1, 2, 3, 4))->filter();
-    self::assertEquals(array(1, 2, 3, 4), $under->getArray());
+    self::assertSame(array(1, 2, 3, 4), $under->getArray());
   }
 
   public function testFilterBy()
@@ -1858,17 +1858,17 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $b = $arrayy->filterBy('name', 'baz');
     self::assertCount(1, $b);
     /** @noinspection OffsetOperationsInspection */
-    self::assertEquals(2365, $b[0]['value']);
+    self::assertSame(2365, $b[0]['value']);
 
     $b = $arrayy->filterBy('name', array('baz'));
     self::assertCount(1, $b);
     /** @noinspection OffsetOperationsInspection */
-    self::assertEquals(2365, $b[0]['value']);
+    self::assertSame(2365, $b[0]['value']);
 
     $c = $arrayy->filterBy('value', 2468);
     self::assertCount(1, $c);
     /** @noinspection OffsetOperationsInspection */
-    self::assertEquals('primary', $c[0]['group']);
+    self::assertSame('primary', $c[0]['group']);
 
     $d = $arrayy->filterBy('group', 'primary');
     self::assertCount(3, $d);
@@ -1876,7 +1876,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $e = $arrayy->filterBy('value', 2000, 'lt');
     self::assertCount(1, $e);
     /** @noinspection OffsetOperationsInspection */
-    self::assertEquals(1468, $e[0]['value']);
+    self::assertSame(1468, $e[0]['value']);
 
     $e = $arrayy->filterBy('value', array(2468, 2365), 'contains');
     self::assertCount(2, $e);
@@ -1898,7 +1898,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($array);
     $resultMatch = $arrayy->find($closure);
 
-    self::assertEquals($result, $resultMatch);
+    self::assertSame($result, $resultMatch, 'tested:' . print_r($array, true));
   }
 
   /**
@@ -1911,7 +1911,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array);
 
-    self::assertEquals($result, $arrayy->first());
+    self::assertSame($result, $arrayy->first());
   }
 
   /**
@@ -1925,12 +1925,12 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array);
     $resultNew = $arrayy->firstsImmutable($take);
-    self::assertEquals($result, $resultNew->getArray());
+    self::assertSame($result, $resultNew->getArray(), 'tested:' . print_r($array, true));
     self::assertNotSame($arrayy, $resultNew);
 
     $arrayy = A::create($array);
     $resultNew = $arrayy->firstsMutable($take);
-    self::assertEquals($result, $resultNew->getArray());
+    self::assertSame($result, $resultNew->getArray());
     self::assertSame($arrayy, $resultNew);
   }
 
@@ -1940,7 +1940,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($testArray)->flip();
 
     $expected = array('foo' => 0, 'bar' => 2, 'lall' => 4);
-    self::assertEquals($expected, $arrayy->getArray());
+    self::assertSame($expected, $arrayy->getArray());
   }
 
   public function testForEach()
@@ -1949,9 +1949,9 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     foreach ($arrayy as $key => $value) {
       if ($key === 1) {
-        self::assertEquals('foo bar', $arrayy[$key]);
+        self::assertSame('foo bar', $arrayy[$key]);
       } elseif ($key === 2) {
-        self::assertEquals('öäü', $arrayy[$key]);
+        self::assertSame('öäü', $arrayy[$key]);
       }
     }
 
@@ -1961,7 +1961,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A(array('foo bar', 'öäü'));
     self::assertArrayy($arrayy);
-    self::assertEquals('öäü', $arrayy[1]);
+    self::assertSame('öäü', $arrayy[1]);
   }
 
   /**
@@ -1974,14 +1974,14 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function testGetV2($expected, $array, $key)
   {
     $arrayy = new A($array);
-    self::assertEquals($expected, $arrayy->get($key));
+    self::assertSame($expected, $arrayy->get($key), 'tested:' . print_r($array, true));
   }
 
   public function testGetViaDotNotation()
   {
     $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken')));
     $result = $arrayy->get('Lars.lastname');
-    self::assertEquals('Moelleken', $result);
+    self::assertSame('Moelleken', $result);
   }
 
   public function testSetViaDotNotation()
@@ -1990,7 +1990,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $result = $arrayy->set('Lars.lastname', 'Müller');
 
     $result = $result->get('Lars.lastname');
-    self::assertEquals('Müller', $result);
+    self::assertSame('Müller', $result);
   }
 
   /**
@@ -2003,7 +2003,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function testHas($expected, $array, $key)
   {
     $arrayy = new A($array);
-    self::assertEquals($expected, $arrayy->has($key));
+    self::assertSame($expected, $arrayy->has($key));
   }
 
   /**
@@ -2017,7 +2017,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $string = A::create($array)->implode($with);
 
-    self::assertEquals($result, $string);
+    self::assertSame($result, $string);
   }
 
   public function testIndexByReturnEmpty()
@@ -2027,7 +2027,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array('name' => 'larry', 'age' => 50),
         array('name' => 'curly'),
     );
-    self::assertEquals(array(), A::create($array)->indexBy('vaaaa')->getArray());
+    self::assertSame(array(), A::create($array)->indexBy('vaaaa')->getArray());
   }
 
   public function testIndexByReturnSome()
@@ -2041,7 +2041,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         40 => array('name' => 'moe', 'age' => 40),
         50 => array('name' => 'larry', 'age' => 50),
     );
-    self::assertEquals($expected, A::create($array)->indexBy('age')->getArray());
+    self::assertSame($expected, A::create($array)->indexBy('age')->getArray());
   }
 
   /**
@@ -2055,7 +2055,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array);
 
-    self::assertEquals($result, $arrayy->initial($to)->getArray());
+    self::assertSame($result, $arrayy->initial($to)->getArray());
   }
 
   public function testIntersectsBooleanFlag()
@@ -2075,15 +2075,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $array = array('   foo  ', '   bar   ');
     $arrayy = A::create($array)->invoke('trim');
-    self::assertEquals(array('foo', 'bar'), $arrayy->getArray());
+    self::assertSame(array('foo', 'bar'), $arrayy->getArray());
 
     $array = array('_____foo', '____bar   ');
     $arrayy = A::create($array)->invoke('trim', ' _');
-    self::assertEquals(array('foo', 'bar'), $arrayy->getArray());
+    self::assertSame(array('foo', 'bar'), $arrayy->getArray());
 
     $array = array('_____foo  ', '__bar   ');
     $arrayy = A::create($array)->invoke('trim', array('_', ' '));
-    self::assertEquals(array('foo  ', '__bar'), $arrayy->getArray());
+    self::assertSame(array('foo  ', '__bar'), $arrayy->getArray());
   }
 
   /**
@@ -2096,7 +2096,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $resultTmp = A::create($array)->isAssoc();
 
-    self::assertEquals($result, $resultTmp);
+    self::assertSame($result, $resultTmp);
   }
 
   public function testIsArrayAssoc()
@@ -2129,17 +2129,17 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
     $array10 = array('lall' => array('test',),);
 
-    self::assertEquals(false, A::create($array0)->isAssoc());
-    self::assertEquals(false, A::create($array1)->isAssoc());
-    self::assertEquals(false, A::create($array2)->isAssoc());
-    self::assertEquals(false, A::create($array3)->isAssoc());
-    self::assertEquals(false, A::create($array4)->isAssoc());
-    self::assertEquals(false, A::create($array5)->isAssoc());
-    self::assertEquals(false, A::create($array6)->isAssoc());
-    self::assertEquals(false, A::create($array7)->isAssoc());
-    self::assertEquals(false, A::create($array8)->isAssoc());
-    self::assertEquals(true, A::create($array9)->isAssoc());
-    self::assertEquals(true, A::create($array10)->isAssoc());
+    self::assertSame(false, A::create($array0)->isAssoc());
+    self::assertSame(false, A::create($array1)->isAssoc());
+    self::assertSame(false, A::create($array2)->isAssoc());
+    self::assertSame(false, A::create($array3)->isAssoc());
+    self::assertSame(false, A::create($array4)->isAssoc());
+    self::assertSame(false, A::create($array5)->isAssoc());
+    self::assertSame(false, A::create($array6)->isAssoc());
+    self::assertSame(false, A::create($array7)->isAssoc());
+    self::assertSame(false, A::create($array8)->isAssoc());
+    self::assertSame(true, A::create($array9)->isAssoc());
+    self::assertSame(true, A::create($array10)->isAssoc());
 
     // ---
 
@@ -2168,7 +2168,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A(array('foo bar', 'öäü'));
     self::assertArrayy($arrayy);
-    self::assertEquals(true, isset($arrayy[0]));
+    self::assertSame(true, isset($arrayy[0]));
   }
 
   public function testKeys()
@@ -2177,7 +2177,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $keys = $arrayyTmp->keys();
 
     $matcher = array(1, 2, 3,);
-    self::assertEquals($matcher, $keys->getArray());
+    self::assertSame($matcher, $keys->getArray());
   }
 
   /**
@@ -2191,11 +2191,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array);
     $resultNew = $arrayy->lastsImmutable($take);
-    self::assertEquals($result, $resultNew->getArray());
+    self::assertSame($result, $resultNew->getArray());
 
     $arrayy = A::create($array);
     $resultNew = $arrayy->lastsMutable($take);
-    self::assertEquals($result, $resultNew->getArray());
+    self::assertSame($result, $resultNew->getArray());
   }
 
   /**
@@ -2231,7 +2231,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $resultMatch = $arrayy->matches($closure);
 
-    self::assertEquals($result, $resultMatch);
+    self::assertSame($result, $resultMatch);
   }
 
   /**
@@ -2251,7 +2251,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $resultMatch = $arrayy->matchesAny($closure);
 
-    self::assertEquals($result, $resultMatch);
+    self::assertSame($result, $resultMatch);
   }
 
   public function testMatchesAnySimple()
@@ -2269,11 +2269,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $testArray = array(1, 4, 7);
     $result = A::create($testArray)->matchesAny($closure);
-    self::assertEquals(true, $result);
+    self::assertSame(true, $result);
 
     $testArray = array(1, 3, 7);
     $result = A::create($testArray)->matchesAny($closure);
-    self::assertEquals(false, $result);
+    self::assertSame(false, $result);
   }
 
   public function testMatchesSimple()
@@ -2291,11 +2291,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $testArray = array(2, 4, 8);
     $result = A::create($testArray)->matches($closure);
-    self::assertEquals(true, $result);
+    self::assertSame(true, $result);
 
     $testArray = array(2, 3, 8);
     $result = A::create($testArray)->matches($closure);
-    self::assertEquals(false, $result);
+    self::assertSame(false, $result);
   }
 
   /**
@@ -2308,7 +2308,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->max());
+    self::assertSame($expected, $arrayy->max(), 'tested: ' . print_r($array, true));
   }
 
   /**
@@ -2322,7 +2322,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->mergeAppendKeepIndex($arrayNew);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray(), 'tested: ' . print_r($array, true));
   }
 
   /**
@@ -2336,7 +2336,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->mergeAppendNewIndex($arrayNew);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   /**
@@ -2350,7 +2350,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->mergePrependKeepIndex($arrayNew);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   /**
@@ -2364,7 +2364,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->mergePrependNewIndex($arrayNew);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray(), 'tested: ' . print_r($array, true));
   }
 
   /**
@@ -2457,7 +2457,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->min());
+    self::assertSame($expected, $arrayy->min(), 'tested:' . print_r($array, true));
   }
 
   /**
@@ -2560,7 +2560,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         0   => 0,
     );
 
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result);
 
     // ------
 
@@ -2577,7 +2577,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         101 => 123,
     );
 
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result);
   }
 
   public function testOrderByValueKeepIndex()
@@ -2594,14 +2594,14 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $result = $arrayy->getArray();
 
     $expected = array(
-        100 => 'abc',
-        99  => 'aaa',
-        2   => 'bcd',
         1   => 'hcd',
         3   => 'bce',
+        2   => 'bcd',
+        100 => 'abc',
+        99  => 'aaa',
     );
 
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result);
   }
 
   public function testOrderByValueNewIndex()
@@ -2625,7 +2625,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         4 => 'hcd',
     );
 
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result);
   }
 
   /**
@@ -2669,7 +2669,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->prepend($value);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   /**
@@ -2701,7 +2701,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomMutable($take)->getArray();
 
-    self::assertEquals(true, in_array($result[0], $array, true));
+    self::assertSame(true, in_array($result[0], $array, true));
   }
 
   public function testRandomKey()
@@ -2710,7 +2710,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomKey();
 
-    self::assertEquals(true, array_key_exists($result, $array));
+    self::assertSame(true, array_key_exists($result, $array));
   }
 
   public function testRandomKeys()
@@ -2719,8 +2719,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomKeys(2);
 
-    self::assertEquals(true, array_key_exists($result[0], $array));
-    self::assertEquals(true, array_key_exists($result[1], $array));
+    self::assertSame(true, array_key_exists($result[0], $array));
+    self::assertSame(true, array_key_exists($result[1], $array));
   }
 
   public function testRandomValue()
@@ -2729,7 +2729,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomValue();
 
-    self::assertEquals(true, in_array($result, $array, true));
+    self::assertSame(true, in_array($result, $array, true));
   }
 
   public function testRandomValues()
@@ -2738,8 +2738,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomValues(2);
 
-    self::assertEquals(true, in_array($result[0], $array, true));
-    self::assertEquals(true, in_array($result[1], $array, true));
+    self::assertSame(true, in_array($result[0], $array, true));
+    self::assertSame(true, in_array($result[1], $array, true));
   }
 
   /**
@@ -2753,7 +2753,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomWeighted(array(0), $take)->getArray();
 
-    self::assertEquals(true, in_array($result[0], $array, true));
+    self::assertSame(true, in_array($result[0], $array, true));
   }
 
   public function testReduce()
@@ -2771,7 +2771,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($testArray)->reduce($myReducer);
 
     $expected = array('foo');
-    self::assertEquals($expected, $arrayy->getArray());
+    self::assertSame($expected, $arrayy->getArray());
   }
 
   public function testReduceViaFunction()
@@ -2796,7 +2796,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($testArray)->reduce('myReducer');
 
     $expected = array('foo');
-    self::assertEquals($expected, $arrayy->getArray());
+    self::assertSame($expected, $arrayy->getArray());
   }
 
   /**
@@ -2810,7 +2810,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArrayy = $arrayy->reindex()->getArray();
     $resultArray = array_values($array);
 
-    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
   }
 
   public function testReindexSimple()
@@ -2821,7 +2821,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $result = array(0 => 1, 1 => 2);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   public function testReject()
@@ -2832,7 +2832,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
           return $value % 2 !== 0;
         }
     );
-    self::assertEquals(array(1 => 2, 3 => 4), $arrayy->getArray());
+    self::assertSame(array(1 => 2, 3 => 4), $arrayy->getArray());
   }
 
   /**
@@ -2846,7 +2846,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
     $resultTmp = $arrayy->remove($key)->getArray();
-    self::assertEquals($result, $resultTmp);
+    self::assertSame($result, $resultTmp);
   }
 
   /**
@@ -2859,7 +2859,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->removeFirst();
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   /**
@@ -2872,7 +2872,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->removeLast();
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   /**
@@ -2886,7 +2886,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->remove($key);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   /**
@@ -2900,7 +2900,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->removeValue($value);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   public function testReplace()
@@ -2909,11 +2909,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $arrayy = $arrayyTmp->replace(1, 'notfoo', 'notbar');
     $matcher = array(
-        'notfoo' => 'notbar',
         2        => 'foo2',
         3        => 'bar',
+        'notfoo' => 'notbar',
     );
-    self::assertEquals($matcher, $arrayy->getArray());
+    self::assertSame($matcher, $arrayy->getArray());
   }
 
   public function testReplaceAllValues()
@@ -2977,7 +2977,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArrayy = $arrayy->mergePrependKeepIndex($secondArray)->getArray();
     $resultArray = array_replace($secondArray, $array);
 
-    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
   }
 
   /**
@@ -2997,26 +2997,26 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArrayy = $arrayy->mergePrependKeepIndex($secondArray, true)->getArray();
     $resultArray = array_replace_recursive($secondArray, $array);
 
-    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
   }
 
   public function testReplaceKeys()
   {
     $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->replaceKeys(array(1 => 2, 'foo' => 'replaced'));
-    self::assertEquals('bar', $arrayy[2]);
-    self::assertEquals('foo', $arrayy['replaced']);
+    self::assertSame('bar', $arrayy[2]);
+    self::assertSame('foo', $arrayy['replaced']);
 
     $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->replaceKeys(array(1, 'foo' => 'replaced'));
-    self::assertEquals('bar', $arrayy[1]);
-    self::assertEquals('foo', $arrayy['replaced']);
+    self::assertSame('bar', $arrayy[1]);
+    self::assertSame('foo', $arrayy['replaced']);
   }
 
   public function testReplaceOneValue()
   {
     $testArray = array('bar', 'foo' => 'foo', 'foobar' => 'foobar');
     $arrayy = A::create($testArray)->replaceOneValue('foo', 'replaced');
-    self::assertEquals('replaced', $arrayy['foo']);
-    self::assertEquals('foobar', $arrayy['foobar']);
+    self::assertSame('replaced', $arrayy['foo']);
+    self::assertSame('foobar', $arrayy['foobar']);
   }
 
   public function testReplaceV2()
@@ -3026,18 +3026,18 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = $arrayyTmp->replace(2, 'notfoo', 'notbar');
     $matcher = array(
         1        => 'foo',
-        'notfoo' => 'notbar',
         3        => 'bar',
+        'notfoo' => 'notbar',
     );
-    self::assertEquals($matcher, $arrayy->getArray());
+    self::assertSame($matcher, $arrayy->getArray());
   }
 
   public function testReplaceValues()
   {
     $testArray = array('bar', 'foo' => 'foo', 'foobar' => 'foobar');
     $arrayy = A::create($testArray)->replaceValues('foo', 'replaced');
-    self::assertEquals('replaced', $arrayy['foo']);
-    self::assertEquals('replacedbar', $arrayy['foobar']);
+    self::assertSame('replaced', $arrayy['foo']);
+    self::assertSame('replacedbar', $arrayy['foobar']);
   }
 
   /**
@@ -3057,7 +3057,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArrayy = $arrayy->mergeAppendKeepIndex($secondArray)->getArray();
     $resultArray = array_replace($array, $secondArray);
 
-    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
   }
 
   /**
@@ -3077,7 +3077,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArrayy = $arrayy->mergeAppendKeepIndex($secondArray, true)->getArray();
     $resultArray = array_replace_recursive($array, $secondArray);
 
-    self::assertEquals(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
   }
 
   /**
@@ -3091,7 +3091,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array);
 
-    self::assertEquals($result, $arrayy->rest($from)->getArray());
+    self::assertSame($result, $arrayy->rest($from)->getArray(), 'tested:' . print_r($array, true));
   }
 
   /**
@@ -3104,7 +3104,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->reverse();
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   /**
@@ -3118,7 +3118,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->searchIndex($value));
+    self::assertSame($expected, $arrayy->searchIndex($value));
   }
 
   /**
@@ -3132,7 +3132,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
 
-    self::assertEquals($expected, $arrayy->searchValue($value)->getArray());
+    self::assertSame($expected, $arrayy->searchValue($value)->getArray());
   }
 
   public function testSerialize()
@@ -3141,8 +3141,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($testArray);
     $result = $arrayy->serialize();
 
-    self::assertEquals('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
-    self::assertEquals('C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}', serialize($arrayy));
+    self::assertSame('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
+    self::assertSame('C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}', serialize($arrayy));
     self::assertEquals($arrayy, unserialize('C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}'));
 
     // create a object with an "arrayy"-property
@@ -3150,11 +3150,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $object = new stdClass();
     $object->arrayy = $arrayy;
 
-    self::assertEquals($object->arrayy, $arrayy);
+    self::assertSame($object->arrayy, $arrayy);
 
     // serialize + tests
 
-    self::assertEquals('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}}', serialize($object));
+    self::assertSame('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}}', serialize($object));
     self::assertEquals($object, unserialize('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}}'));
 
   }
@@ -3170,7 +3170,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
     $arrayy = $arrayy->set($key, $value)->getArray();
-    self::assertEquals($value, $arrayy[$key]);
+    self::assertSame($value, $arrayy[$key]);
   }
 
   /**
@@ -3184,7 +3184,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = new A($array);
     $result = $arrayy->setAndGet($key, $value);
-    self::assertEquals($value, $result);
+    self::assertSame($value, $result);
   }
 
   public function testSetAndGetSimple()
@@ -3209,7 +3209,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A(array('foo bar', 'UTF-8'));
     $arrayy[1] = 'öäü';
     self::assertArrayy($arrayy);
-    self::assertEquals('foo bar,öäü', (string)$arrayy);
+    self::assertSame('foo bar,öäü', (string)$arrayy);
   }
 
   /**
@@ -3232,8 +3232,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->shuffle();
 
-    self::assertEquals(true, in_array('bar', $arrayy->getArray(), true));
-    self::assertEquals(true, in_array('foo', $arrayy->getArray(), true));
+    self::assertSame(true, in_array('bar', $arrayy->getArray(), true));
+    self::assertSame(true, in_array('foo', $arrayy->getArray(), true));
   }
 
   public function testSimpleAt()
@@ -3254,7 +3254,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     };
 
     $result = A::create(array('foo', 'bar' => 'bis'))->each($closure);
-    self::assertEquals(array(':foo:', 'bar' => ':bis:'), $result->getArray());
+    self::assertSame(array(':foo:', 'bar' => ':bis:'), $result->getArray());
   }
 
   public function testSimpleRandom()
@@ -3262,41 +3262,41 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $testArray = array(-8 => -9, 1, 2 => false);
     $arrayy = A::create($testArray);
     $result = $arrayy->randomMutable(3);
-    self::assertEquals($arrayy, $result);
     self::assertSame($arrayy, $result);
-    self::assertEquals(3, count($result));
+    self::assertSame($arrayy, $result);
+    self::assertSame(3, count($result));
 
     $testArray = array(-8 => -9, 1, 2 => false);
     $arrayy = A::create($testArray);
     $result = $arrayy->randomMutable();
-    self::assertEquals($arrayy, $result);
     self::assertSame($arrayy, $result);
-    self::assertEquals(1, count($result));
+    self::assertSame($arrayy, $result);
+    self::assertSame(1, count($result));
 
     $testArray = array(-8 => -9, 1, 2 => false);
     $arrayy = A::create($testArray);
     $result = $arrayy->randomImmutable(3);
     self::assertEquals($arrayy, $result);
     self::assertNotSame($arrayy, $result);
-    self::assertEquals(3, count($result));
+    self::assertSame(3, count($result));
 
     $testArray = array(-8 => -9, 1, 2 => false);
     $arrayy = A::create($testArray);
     $result = $arrayy->randomImmutable();
     self::assertEquals($arrayy, $result);
     self::assertNotSame($arrayy, $result);
-    self::assertEquals(1, count($result));
+    self::assertSame(1, count($result));
   }
 
   public function testSimpleRandomWeighted()
   {
     $testArray = array('foo', 'bar');
     $result = A::create($testArray)->randomWeighted(array('bar' => 2));
-    self::assertEquals(1, count($result));
+    self::assertSame(1, count($result));
 
     $testArray = array('foo', 'bar', 'foobar');
     $result = A::create($testArray)->randomWeighted(array('foobar' => 3), 2);
-    self::assertEquals(2, count($result));
+    self::assertSame(2, count($result));
   }
 
   /**
@@ -3317,7 +3317,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $testArray = array(5, 3, 1, 2, 4);
     $under = A::create($testArray)->sorter(null, 'desc');
-    self::assertEquals(array(5, 4, 3, 2, 1), $under->getArray());
+    self::assertSame(array(5, 4, 3, 2, 1), $under->getArray());
 
     $testArray = range(1, 5);
     $under = A::create($testArray)->sorter(
@@ -3329,7 +3329,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
           }
         }
     );
-    self::assertEquals(array(2, 4, 1, 3, 5), $under->getArray());
+    self::assertSame(array(2, 4, 1, 3, 5), $under->getArray());
   }
 
   /**
@@ -3403,7 +3403,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->sortKeys($direction);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   /**
@@ -3457,7 +3457,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         4 => 'hcd',
     );
 
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result);
   }
 
   public function testSplit()
@@ -3561,7 +3561,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
    */
   public function testToString($expected, $array)
   {
-    self::assertEquals($expected, (string)new A($array));
+    self::assertSame($expected, (string)new A($array));
   }
 
   /**
@@ -3574,7 +3574,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->unique();
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray());
   }
 
   public function testUnserialize()
@@ -3585,8 +3585,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $testArray = unserialize($string1);
     $arrayy = A::create()->unserialize($string2);
 
-    self::assertEquals($string1, serialize($testArray));
-    self::assertEquals($string2, $arrayy->serialize());
+    self::assertSame($string1, serialize($testArray));
+    self::assertSame($string2, $arrayy->serialize());
   }
 
   public function testUnset()
@@ -3594,8 +3594,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A(array('foo bar', 'öäü'));
     unset($arrayy[1]);
     self::assertArrayy($arrayy);
-    self::assertEquals('foo bar', $arrayy[0]);
-    self::assertEquals(null, $arrayy[1]);
+    self::assertSame('foo bar', $arrayy[0]);
+    self::assertSame(null, $arrayy[1]);
   }
 
   /**
@@ -3622,7 +3622,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $values = $arrayyTmp->values();
 
     $matcher = array(0 => 'foo', 1 => 'foo2', 2 => 'bar');
-    self::assertEquals($matcher, $values->getArray());
+    self::assertSame($matcher, $values->getArray());
   }
 
   /**
@@ -3655,7 +3655,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArrayy = $arrayy->walk($callable);
 
     $expected = array(0, 1, 2);
-    self::assertEquals($expected, $resultArrayy->getArray());
+    self::assertSame($expected, $resultArrayy->getArray());
   }
 
   /**
@@ -3688,7 +3688,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array)->diffReverse($arrayNew);
 
-    self::assertEquals($result, $arrayy->getArray());
+    self::assertSame($result, $arrayy->getArray(), 'tested:' . print_r($array, true));
   }
 
   public function testDiffRecursive()
@@ -3757,7 +3757,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $resultTmp = A::create($array)->isMultiArray();
 
-    self::assertEquals($result, $resultTmp);
+    self::assertSame($result, $resultTmp);
   }
 
   public function testIsArrayMultidim()
@@ -3791,7 +3791,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArrays as $key => $testArray) {
-      self::assertEquals($expectedArrays[$key], A::create($testArray)->isMultiArray(), 'tested:' . print_r($testArray, true));
+      self::assertSame($expectedArrays[$key], A::create($testArray)->isMultiArray(), 'tested:' . print_r($testArray, true));
     }
   }
 
@@ -3826,7 +3826,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArrays as $key => $testArray) {
-      self::assertEquals($expectedArrays[$key], A::create($testArray)->isSequential(), 'tested:' . print_r($testArray, true));
+      self::assertSame($expectedArrays[$key], A::create($testArray)->isSequential(), 'tested:' . print_r($testArray, true));
     }
   }
 
@@ -3861,7 +3861,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArrays as $key => $testArray) {
-      self::assertEquals($expectedArrays[$key], A::create($testArray)->isNumeric(), 'tested:' . print_r($testArray, true));
+      self::assertSame($expectedArrays[$key], A::create($testArray)->isNumeric(), 'tested:' . print_r($testArray, true));
     }
   }
 
@@ -3896,7 +3896,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArrays as $key => $testArray) {
-      self::assertEquals($expectedArrays[$key], A::create($testArray)->isEmpty(), 'tested:' . print_r($testArray, true));
+      self::assertSame($expectedArrays[$key], A::create($testArray)->isEmpty(), 'tested:' . print_r($testArray, true));
     }
   }
 

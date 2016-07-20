@@ -22,14 +22,14 @@ class StaticArrayyTest extends PHPUnit_Framework_TestCase
   {
     /** @noinspection PhpUndefinedMethodInspection */
     $result = A::first();
-    self::assertEquals('', $result);
+    self::assertSame(null, $result);
   }
 
   public function testInvocation()
   {
     /** @noinspection PhpUndefinedMethodInspection */
     $result = A::first(array('lall', 'FOOBAR'), 1);
-    self::assertEquals('lall', $result);
+    self::assertSame('lall', $result);
   }
 
   public function testPartialArgsInvocation()
@@ -37,7 +37,7 @@ class StaticArrayyTest extends PHPUnit_Framework_TestCase
     /** @noinspection PhpUndefinedMethodInspection */
     $result = A::replaceOneValue(array('foo', 'bar'), 'foo');
     /** @noinspection PhpUndefinedMethodInspection */
-    self::assertEquals(array('', 'bar'), $result->getArray());
+    self::assertSame(array('', 'bar'), $result->getArray());
   }
 
   public function testFullArgsInvocation()
@@ -45,35 +45,35 @@ class StaticArrayyTest extends PHPUnit_Framework_TestCase
     /** @noinspection PhpUndefinedMethodInspection */
     $result = A::replaceOneValue(array('foo', 'bar'), 'foo', 'test');
     /** @noinspection PhpUndefinedMethodInspection */
-    self::assertEquals(array('test', 'bar'), $result->getArray());
+    self::assertSame(array('test', 'bar'), $result->getArray());
   }
 
   public function testArrayyRange()
   {
     $result = A::range(1, null);
 
-    self::assertEquals(array(1), $result->getArray());
+    self::assertSame(array(1), $result->getArray());
   }
 
   public function testArrayyRange1()
   {
     $result = A::range(1, null, 10);
 
-    self::assertEquals(array(1), $result->getArray());
+    self::assertSame(array(1), $result->getArray());
   }
 
   public function testArrayyRange10()
   {
     $result = A::range(1, 10);
 
-    self::assertEquals(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), $result->getArray());
+    self::assertSame(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), $result->getArray());
   }
 
   public function testArrayyRange100()
   {
     $result = A::range(0, 100, 10);
 
-    self::assertEquals(array(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), $result->getArray());
+    self::assertSame(array(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), $result->getArray());
   }
 
   public function testArrayyRepeat()
@@ -106,7 +106,7 @@ class StaticArrayyTest extends PHPUnit_Framework_TestCase
     foreach ($properties['methodArgs'] as $method => $expected) {
       $num = $arrayyClass->getMethod($method)->getNumberOfParameters() + 2;
 
-      self::assertEquals($expected, $num, 'Invalid num args for ' . $method);
+      self::assertSame($expected, $num, 'Invalid num args for ' . $method);
     }
   }
 }

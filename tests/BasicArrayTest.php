@@ -238,7 +238,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     self::assertInstanceOf('ArrayIterator', $result);
 
     $result->next();
-    self::assertEquals('bar', $result->current());
+    self::assertSame('bar', $result->current());
   }
 
   /**
