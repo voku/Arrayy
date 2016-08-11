@@ -1,4 +1,4 @@
-WARNING: this is only a Fork of "https://github.com/danielstjules/Stringy"
+WARNING: this is only a extened Fork of "https://github.com/danielstjules/Stringy"
 
 [![Stories in Ready](https://badge.waffle.io/voku/Stringy.png?label=ready&title=Ready)](https://waffle.io/voku/Stringy)
 [![Build Status](https://api.travis-ci.org/voku/Stringy.svg?branch=master)](https://travis-ci.org/voku/Stringy)
