@@ -1811,11 +1811,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * replaced with their closest ASCII counterparts, and the rest are removed
    * unless instructed otherwise.
    *
+   * @param $strict [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad performance</p>
+   *
    * @return Stringy Object whose $str contains only ASCII characters
    */
-  public function toAscii()
+  public function toAscii($strict = false)
   {
-    $str = UTF8::toAscii($this->str);
+    $str = UTF8::to_ascii($this->str, '?', $strict);
 
     return static::create($str, $this->encoding);
   }

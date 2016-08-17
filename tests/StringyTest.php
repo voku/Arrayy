@@ -881,13 +881,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str);
     $result = $stringy->toAscii();
 
-    if (version_compare(PHP_VERSION, '5.4.0', '<')) {
-      // TODO: for php 5.3
-    } else {
-      self::assertStringy($result);
-      self::assertSame($expected, $result->toString());
-      self::assertSame($str, $stringy->toString());
-    }
+    self::assertStringy($result);
+    self::assertSame($expected, $result->toString(), 'tested:' . $str);
+    self::assertSame($str, $stringy->toString());
   }
 
   /**
@@ -900,9 +896,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array(' TEST ', ' ŤÉŚŢ '),
         array('ph = z = 3', 'φ = ź = 3'),
         array('perevirka', 'перевірка'),
-        array('lysaa gora', 'лысая гора'),
-        array('suka', 'щука'),
-        array('han zi', '漢字'),
+        array('lysaia gora', 'лысая гора'),
+        array('shchuka', 'щука'),
+        array('Han Zi ', '漢字'),
         array('xin chao the gioi', 'xin chào thế giới'),
         array('XIN CHAO THE GIOI', 'XIN CHÀO THẾ GIỚI'),
         array('dam phat chet luon', 'đấm phát chết luôn'),
