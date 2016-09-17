@@ -479,15 +479,14 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function startsWith($substring, $caseSensitive = true)
   {
-    $substringLength = UTF8::strlen($substring, $this->encoding);
-    $startOfStr = UTF8::substr($this->str, 0, $substringLength, $this->encoding);
+    $str = $this->str;
 
     if (!$caseSensitive) {
       $substring = UTF8::strtolower($substring, $this->encoding);
-      $startOfStr = UTF8::strtolower($startOfStr, $this->encoding);
+      $str = UTF8::strtolower($this->str, $this->encoding);
     }
 
-    return (string)$substring === $startOfStr;
+    return UTF8::strpos($str, $substring, $this->encoding) === 0;
   }
 
   /**
