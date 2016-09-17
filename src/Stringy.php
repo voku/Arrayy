@@ -60,6 +60,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     // init
     UTF8::checkForSupport();
+
     $this->str = (string)$str;
 
     if ($encoding) {
@@ -83,7 +84,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function __toString()
   {
-    return $this->str;
+    return (string)$this->str;
   }
 
   /**
@@ -2231,7 +2232,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     $offset = $this->indexOfLast($separator);
     if ($offset === false) {
-      return static::create('');
+      return static::create('', $this->encoding);
     }
 
     return static::create(
@@ -2257,7 +2258,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     $offset = $this->indexOf($separator);
     if ($offset === false) {
-      return static::create('');
+      return static::create('', $this->encoding);
     }
 
     return static::create(
@@ -2283,7 +2284,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     $offset = $this->indexOfLast($separator);
     if ($offset === false) {
-      return static::create('');
+      return static::create('', $this->encoding);
     }
 
     return static::create(
@@ -2298,7 +2299,6 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   *
    * Returns the string with the first letter of each word capitalized,
    * except for when the word is a name which shouldn't be capitalized.
    *
@@ -2309,31 +2309,42 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     $stringy = $this->collapseWhitespace();
     $stringy->str = $this->capitalizePersonalNameByDelimiter($stringy->str, ' ');
     $stringy->str = $this->capitalizePersonalNameByDelimiter($stringy->str, '-');
-    return $stringy;
+
+    return static::create($stringy, $this->encoding);
   }
+
   /**
    * @param string $word
+   *
    * @return string
    */
   private function capitalizeWord($word)
   {
-    $encoding = $this->getEncoding();
-    $firstCharacter = mb_substr($word, 0, 1, $encoding);
-    $restOfWord = mb_substr($word, 1, null, $encoding);
-    $firstCharacterUppercased = mb_strtoupper($firstCharacter, $encoding);
-    return $firstCharacterUppercased . $restOfWord;
+    $encoding = $this->encoding;
+
+    $firstCharacter = UTF8::substr($word, 0, 1, $encoding);
+    $restOfWord = UTF8::substr($word, 1, null, $encoding);
+    $firstCharacterUppercased = UTF8::strtoupper($firstCharacter, $encoding);
+
+    return new static($firstCharacterUppercased . $restOfWord, $encoding);
   }
+
   /**
+   * Personal names such as "Marcus Aurelius" are sometimes typed incorrectly using lowercase ("marcus aurelius").
+   *
    * @param string $names
    * @param string $delimiter
+   *
    * @return string
    */
   private function capitalizePersonalNameByDelimiter($names, $delimiter)
   {
+    // init
     $names = explode($delimiter, $names);
-    $encoding = $this->getEncoding();
+    $encoding = $this->encoding;
+
     $specialCases = array(
-        'names' => array(
+        'names'    => array(
             'ab',
             'af',
             'al',
@@ -2359,7 +2370,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
             'van',
             'von',
             'y',
-            'zu'
+            'zu',
         ),
         'prefixes' => array(
             'al-',
@@ -2368,32 +2379,38 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
             "l'",
             'mac',
             'mc',
-            'nic'
-        )
+            'nic',
+        ),
     );
-    foreach ($names as $key => $name) {
-      if (in_array($name, $specialCases['names'])) {
+
+    foreach ($names as &$name) {
+      if (in_array($name, $specialCases['names'], true)) {
         continue;
       }
+
       $continue = false;
+
       if ($delimiter == '-') {
         foreach ($specialCases['names'] as $beginning) {
-          if (mb_strpos($name, $beginning, null, $encoding) === 0) {
+          if (UTF8::strpos($name, $beginning, null, $encoding) === 0) {
             $continue = true;
           }
         }
       }
+
       foreach ($specialCases['prefixes'] as $beginning) {
-        if (mb_strpos($name, $beginning, null, $encoding) === 0) {
+        if (UTF8::strpos($name, $beginning, null, $encoding) === 0) {
           $continue = true;
         }
       }
+
       if ($continue) {
         continue;
       }
-      $names[$key] = $this->capitalizeWord($name);
+
+      $name = $this->capitalizeWord($name);
     }
-    $names = implode($delimiter, $names);
-    return $names;
+
+    return new static(implode($delimiter, $names), $encoding);
   }
 }
