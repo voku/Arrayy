@@ -144,7 +144,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     $i = 0;
     $length = (int)$length;
     $str = $this->str;
-    $maxlength = UTF8::strlen($possibleChars);
+    $maxlength = UTF8::strlen($possibleChars, $this->encoding);
 
     if ($maxlength === 0) {
       return $this;
@@ -152,7 +152,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     // add random chars
     while ($i < $length) {
-      $char = UTF8::substr($possibleChars, mt_rand(0, $maxlength - 1), 1);
+      $char = UTF8::substr($possibleChars, mt_rand(0, $maxlength - 1), 1, $this->encoding);
       $str .= $char;
       $i++;
     }
@@ -404,13 +404,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function countSubstr($substring, $caseSensitive = true)
   {
     if ($caseSensitive) {
-      return UTF8::substr_count($this->str, $substring);
+      return UTF8::substr_count($this->str, $substring, 0, null, $this->encoding);
     }
 
     $str = UTF8::strtoupper($this->str, $this->encoding);
     $substring = UTF8::strtoupper($substring, $this->encoding);
 
-    return UTF8::substr_count($str, $substring);
+    return UTF8::substr_count($str, $substring, 0, null, $this->encoding);
   }
 
   /**
@@ -480,10 +480,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function startsWith($substring, $caseSensitive = true)
   {
     $substringLength = UTF8::strlen($substring, $this->encoding);
-    $startOfStr = UTF8::substr(
-        $this->str, 0, $substringLength,
-        $this->encoding
-    );
+    $startOfStr = UTF8::substr($this->str, 0, $substringLength, $this->encoding);
 
     if (!$caseSensitive) {
       $substring = UTF8::strtolower($substring, $this->encoding);
@@ -746,10 +743,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     $start = UTF8::substr($stringy->str, 0, $index, $stringy->encoding);
-    $end = UTF8::substr(
-        $stringy->str, $index, $stringy->length(),
-        $stringy->encoding
-    );
+    $end = UTF8::substr($stringy->str, $index, $stringy->length(), $stringy->encoding);
 
     $stringy->str = $start . $substring . $end;
 
@@ -765,6 +759,19 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function isAlpha()
   {
     return $this->matchesPattern('^[[:alpha:]]*$');
+  }
+
+  /**
+   * Determine whether the string is considered to be empty.
+   *
+   * A variable is considered empty if it does not exist or if its value equals FALSE.
+   * empty() does not generate a warning if the variable does not exist.
+   *
+   * @return bool
+   */
+  public function isEmpty()
+  {
+    return empty($this->str);
   }
 
   /**
@@ -1524,24 +1531,35 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     if (empty($search)) {
 
-      $stringLength = UTF8::strlen($text);
+      $stringLength = UTF8::strlen($text, $this->encoding);
       $end = ($length - 1) > $stringLength ? $stringLength : ($length - 1);
-      $pos = min(UTF8::strpos($text, ' ', $end), UTF8::strpos($text, '.', $end));
+      $pos = min(UTF8::strpos($text, ' ', $end, 0, $this->encoding), UTF8::strpos($text, '.', $end));
 
       if ($pos) {
-        return static::create(rtrim(UTF8::substr($text, 0, $pos), $trimChars) . $ellipsis, $this->encoding);
+        return static::create(
+            rtrim(
+                UTF8::substr($text, 0, $pos, $this->encoding),
+                $trimChars
+            ) . $ellipsis,
+            $this->encoding
+        );
       } else {
         return static::create($text, $this->encoding);
       }
 
     }
 
-    $wordPos = UTF8::strpos(UTF8::strtolower($text), UTF8::strtolower($search), null);
-    $halfSide = (int)($wordPos - $length / 2 + UTF8::strlen($search) / 2);
+    $wordPos = UTF8::strpos(
+        UTF8::strtolower($text),
+        UTF8::strtolower($search, $this->encoding),
+        null,
+        $this->encoding
+    );
+    $halfSide = (int)($wordPos - $length / 2 + UTF8::strlen($search, $this->encoding) / 2);
 
     if ($halfSide > 0) {
 
-      $halfText = UTF8::substr($text, 0, $halfSide);
+      $halfText = UTF8::substr($text, 0, $halfSide, $this->encoding);
       $pos_start = max(UTF8::strrpos($halfText, ' ', 0), UTF8::strrpos($halfText, '.', 0));
 
       if (!$pos_start) {
@@ -1554,33 +1572,58 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     if ($wordPos && $halfSide > 0) {
       $l = $pos_start + $length - 1;
-      $realLength = UTF8::strlen($text);
+      $realLength = UTF8::strlen($text, $this->encoding);
 
       if ($l > $realLength) {
         $l = $realLength;
       }
 
-      $pos_end = min(UTF8::strpos($text, ' ', $l), UTF8::strpos($text, '.', $l)) - $pos_start;
+      $pos_end = min(
+                     UTF8::strpos($text, ' ', $l, $this->encoding),
+                     UTF8::strpos($text, '.', $l, $this->encoding)
+                 ) - $pos_start;
 
       if (!$pos_end || $pos_end <= 0) {
-        $extract = $ellipsis . ltrim(UTF8::substr($text, $pos_start, UTF8::strlen($text)), $trimChars);
+        $extract = $ellipsis . ltrim(
+                UTF8::substr(
+                    $text,
+                    $pos_start,
+                    UTF8::strlen($text),
+                    $this->encoding
+                ),
+                $trimChars
+            );
       } else {
-        $extract = $ellipsis . trim(UTF8::substr($text, $pos_start, $pos_end), $trimChars) . $ellipsis;
+        $extract = $ellipsis . trim(
+                UTF8::substr(
+                    $text,
+                    $pos_start,
+                    $pos_end,
+                    $this->encoding
+                ),
+                $trimChars
+            ) . $ellipsis;
       }
 
     } else {
 
       $l = $length - 1;
-      $trueLength = UTF8::strlen($text);
+      $trueLength = UTF8::strlen($text, $this->encoding);
 
       if ($l > $trueLength) {
         $l = $trueLength;
       }
 
-      $pos_end = min(UTF8::strpos($text, ' ', $l), UTF8::strpos($text, '.', $l));
+      $pos_end = min(
+          UTF8::strpos($text, ' ', $l, $this->encoding),
+          UTF8::strpos($text, '.', $l, $this->encoding)
+      );
 
       if ($pos_end) {
-        $extract = rtrim(UTF8::substr($text, 0, $pos_end), $trimChars) . $ellipsis;
+        $extract = rtrim(
+                       UTF8::substr($text, 0, $pos_end, $this->encoding),
+                       $trimChars
+                   ) . $ellipsis;
       } else {
         $extract = $text;
       }
@@ -2062,19 +2105,20 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     $str = $this->str;
 
+    $encoding = $this->encoding;
     $str = UTF8::normalize_whitespace($str);
     $str = str_replace('-', '_', $str);
 
     $str = preg_replace_callback(
         '/([\d|A-Z])/u',
-        function ($matches) {
+        function ($matches) use ($encoding) {
           $match = $matches[1];
           $matchInt = (int)$match;
 
           if ("$matchInt" == $match) {
             return '_' . $match . '_';
           } else {
-            return '_' . UTF8::strtolower($match);
+            return '_' . UTF8::strtolower($match, $encoding);
           }
         },
         $str
@@ -2109,10 +2153,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function lowerCaseFirst()
   {
     $first = UTF8::substr($this->str, 0, 1, $this->encoding);
-    $rest = UTF8::substr(
-        $this->str, 1, $this->length() - 1,
-        $this->encoding
-    );
+    $rest = UTF8::substr($this->str, 1, $this->length() - 1, $this->encoding);
 
     $str = UTF8::strtolower($first, $this->encoding) . $rest;
 
@@ -2152,5 +2193,108 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     return static::create($string);
+  }
+
+  /**
+   * Gets the substring after the first occurrence of a separator.
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $separator
+   *
+   * @return Stringy
+   */
+  public function afterFirst($separator)
+  {
+    if (($offset = $this->indexOf($separator)) === false) {
+      return static::create('');
+    }
+
+    return static::create(
+        UTF8::substr(
+            $this->str,
+            $offset + UTF8::strlen($separator, $this->encoding),
+            null,
+            $this->encoding
+        ),
+        $this->encoding
+    );
+  }
+
+  /**
+   * Gets the substring after the last occurrence of a separator.
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $separator
+   *
+   * @return Stringy
+   */
+  public function afterLast($separator)
+  {
+    $offset = $this->indexOfLast($separator);
+    if ($offset === false) {
+      return static::create('');
+    }
+
+    return static::create(
+        UTF8::substr(
+            $this->str,
+            $offset + UTF8::strlen($separator, $this->encoding),
+            null,
+            $this->encoding
+        ),
+        $this->encoding
+    );
+  }
+
+  /**
+   * Gets the substring before the first occurrence of a separator.
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $separator
+   *
+   * @return Stringy
+   */
+  public function beforeFirst($separator)
+  {
+    $offset = $this->indexOf($separator);
+    if ($offset === false) {
+      return static::create('');
+    }
+
+    return static::create(
+        UTF8::substr(
+            $this->str,
+            0,
+            $offset,
+            $this->encoding
+        ),
+        $this->encoding
+    );
+  }
+
+  /**
+   * Gets the substring before the last occurrence of a separator.
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $separator
+   *
+   * @return Stringy
+   */
+  public function beforeLast($separator)
+  {
+    $offset = $this->indexOfLast($separator);
+    if ($offset === false) {
+      return static::create('');
+    }
+
+    return static::create(
+        UTF8::substr(
+            $this->str,
+            0,
+            $offset,
+            $this->encoding
+        ),
+        $this->encoding
+    );
   }
 }

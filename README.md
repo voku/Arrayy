@@ -293,6 +293,22 @@ encoding returned by mb_internal_encoding() is UTF-8. For further details,
 see the documentation for the create method above, as well as the notes
 on PHP 5.6 creation.
 
+##### afterFirst(string $separator): Stringy
+
+Gets the substring after the first occurrence of a separator.
+
+```php
+s('</b></b>')->afterFirst('b'); // '></b>'
+```
+
+##### afterLast(string $separator): Stringy
+
+Gets the substring after the last occurrence of a separator.
+
+```php
+s('</b></b>')->afterLast('b'); // '>'
+```
+
 ##### append(string $string)
 
 Returns a new string with $string appended.
@@ -341,6 +357,22 @@ Returns the character at $index, with indexes starting at 0.
 s('fòôbàř')->at(3); // 'b'
 // [OR]
 StaticStringy::at('fòôbàř', 3); // e.g.: 'b'
+```
+
+##### beforeFirst(string $separator): Stringy
+
+Gets the substring before the first occurrence of a separator.
+
+```php
+s('</b></b>')->beforeFirst('b'); // '</'
+```
+
+##### beforeLast(string $separator): Stringy
+
+Gets the substring before the last occurrence of a separator.
+
+```php
+s('</b></b>')->beforeLast('b'); // '</b></'
 ```
 
 ##### between(string $start, string $end [, int $offset])

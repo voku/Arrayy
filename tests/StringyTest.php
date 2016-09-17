@@ -3567,11 +3567,95 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testAfterFirst()
+  {
+    $testArray = array(
+        '<h1>test</h1>'            => '',
+        'foo<h1></h1>bar'          => 'ar',
+        '<h1></h1> '               => '',
+        '</b></b>'                 => '></b>',
+        'öäü<strong>lall</strong>' => '',
+        ' b<b></b>'                => '<b></b>',
+        '<b><b>lall</b>'           => '><b>lall</b>',
+        '</b>lall</b>'             => '>lall</b>',
+        '[b][/b]'                  => '][/b]',
+        'κόσμbε ¡-öäü'             => 'ε ¡-öäü',
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertSame($testResult, $stringy->afterFirst('b')->toString());
+    }
+  }
+
+  public function testAfterLast()
+  {
+    $testArray = array(
+        '<h1>test</h1>'            => '',
+        'foo<h1></h1>bar'          => 'ar',
+        '<h1></h1> '               => '',
+        '</b></b>'                 => '>',
+        'öäü<strong>lall</strong>' => '',
+        ' b<b></b>'                => '>',
+        '<b><b>lall</b>'           => '>',
+        '</b>lall</b>'             => '>',
+        '[b][/b]'                  => ']',
+        'κόσμbε ¡-öäü'             => 'ε ¡-öäü',
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertSame($testResult, $stringy->afterLast('b')->toString());
+    }
+  }
+
+  public function testBeforeFirst()
+  {
+    $testArray = array(
+        '<h1>test</h1>'            => '',
+        'foo<h1></h1>bar'          => 'foo<h1></h1>',
+        '<h1></h1> '               => '',
+        '</b></b>'                 => '</',
+        'öäü<strong>lall</strong>' => '',
+        ' b<b></b>'                => ' ',
+        '<b><b>lall</b>'           => '<',
+        '</b>lall</b>'             => '</',
+        '[b][/b]'                  => '[',
+        'κόσμbε ¡-öäü'             => 'κόσμ',
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertSame($testResult, $stringy->beforeFirst('b')->toString());
+    }
+  }
+
+  public function testBeforeLast()
+  {
+    $testArray = array(
+        '<h1>test</h1>'            => '',
+        'foo<h1></h1>bar'          => 'foo<h1></h1>',
+        '<h1></h1> '               => '',
+        '</b></b>'                 => '</b></',
+        'öäü<strong>lall</strong>' => '',
+        ' b<b></b>'                => ' b<b></',
+        '<b><b>lall</b>'           => '<b><b>lall</',
+        '</b>lall</b>'             => '</b>lall</',
+        '[b][/b]'                  => '[b][/',
+        'κόσμbε ¡-öäü'             => 'κόσμ',
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertSame($testResult, $stringy->beforeLast('b')->toString());
+    }
+  }
+
   public function testAddRandomString()
   {
     $testArray = array(
-        'öäü'        => array(10, 10),
-        ''           => array(10, 0),
+        'öäü'       => array(10, 10),
+        ''          => array(10, 0),
         'κόσμε-öäü' => array(10, 10),
     );
 
@@ -3682,12 +3766,12 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testExtractText()
   {
     $testArray = array(
-        ''                         => '',
-        '<h1>test</h1>'            => '<h1>test</h1>',
-        'test'                     => 'test',
-        'A PHP string manipulation library with multibyte support. Compatible with PHP 5.3+, PHP 7, and HHVM.' => 'A PHP string manipulation library with multibyte support...',
+        ''                                                                                                                                          => '',
+        '<h1>test</h1>'                                                                                                                             => '<h1>test</h1>',
+        'test'                                                                                                                                      => 'test',
+        'A PHP string manipulation library with multibyte support. Compatible with PHP 5.3+, PHP 7, and HHVM.'                                      => 'A PHP string manipulation library with multibyte support...',
         'A PHP string manipulation library with multibyte support. κόσμε-öäü κόσμε-öäü κόσμε-öäü foobar Compatible with PHP 5.3+, PHP 7, and HHVM.' => '...support. κόσμε-öäü κόσμε-öäü κόσμε-öäü foobar Compatible with PHP 5...',
-        'A PHP string manipulation library with multibyte support. foobar Compatible with PHP 5.3+, PHP 7, and HHVM.' => '...with multibyte support. foobar Compatible with PHP 5...',
+        'A PHP string manipulation library with multibyte support. foobar Compatible with PHP 5.3+, PHP 7, and HHVM.'                               => '...with multibyte support. foobar Compatible with PHP 5...',
     );
 
     foreach ($testArray as $testString => $testResult) {
