@@ -3651,6 +3651,41 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testIsEmail()
+  {
+    $testArray = array(
+        'foo@bar'      => false,
+        'foo@bar.foo'  => true,
+        'foo@bar.foo ' => false,
+        ' foo@bar.foo' => false,
+        'lall'         => false,
+        'κόσμbε@¡-öäü' => false,
+        'lall.de'      => false,
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      $stringy = S::create($testString);
+      self::assertSame($testResult, $stringy->isEmail());
+    }
+
+    // --- example domain check
+
+    $stringy = S::create('test@test.com');
+    self::assertSame(true, $stringy->isEmail());
+
+    $stringy = S::create('test@test.com');
+    self::assertSame(false, $stringy->isEmail(true));
+
+    // --- tpyp domain check
+
+    $stringy = S::create('test@aecor.de');
+    self::assertSame(true, $stringy->isEmail());
+
+    $stringy = S::create('test@aecor.de');
+    self::assertSame(false, $stringy->isEmail(false, true));
+
+  }
+
   public function testAddRandomString()
   {
     $testArray = array(

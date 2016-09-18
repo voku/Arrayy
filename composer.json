@@ -32,7 +32,8 @@
     "php": ">=5.3.0",
     "voku/portable-utf8": "~3.0",
     "voku/urlify": "~2.0",
-    "voku/anti-xss": "~2.0"
+    "voku/anti-xss": "~2.0",
+    "voku/email-check": "~1.1"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0"

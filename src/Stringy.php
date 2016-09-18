@@ -3,6 +3,7 @@
 namespace Stringy;
 
 use voku\helper\AntiXSS;
+use voku\helper\EmailCheck;
 use voku\helper\URLify;
 use voku\helper\UTF8;
 
@@ -815,6 +816,21 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function isHtml()
   {
     return UTF8::isHtml($this->str);
+  }
+
+  /**
+   * Returns true if the string contains a valid E-Mail address, false otherwise.
+   *
+   * @param bool $useExampleDomainCheck
+   * @param bool $useTypoInDomainCheck
+   * @param bool $useTemporaryDomainCheck
+   * @param bool $useDnsCheck
+   *
+   * @return bool Whether or not $str contains a valid E-Mail address
+   */
+  public function isEmail($useExampleDomainCheck = false, $useTypoInDomainCheck = false, $useTemporaryDomainCheck = false, $useDnsCheck = false)
+  {
+    return EmailCheck::isValid($this->str, $useExampleDomainCheck, $useTypoInDomainCheck, $useTemporaryDomainCheck, $useDnsCheck);
   }
 
   /**

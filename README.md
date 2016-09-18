@@ -650,6 +650,14 @@ Returns true if the string contains only whitespace chars, false otherwise.
 s("\n\t  \v\f")->isBlank(); // true
 ```
 
+##### isEmail()
+
+Returns true if the string contains a valid E-Mail address, false otherwise.
+
+```php
+s('lars@moelleken.org')->isEmail(); // true
+```
+
 ##### isHexadecimal()
 
 Returns true if the string contains only hexadecimal chars, false otherwise.
