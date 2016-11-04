@@ -1494,50 +1494,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals(A::create($expected2), A::create($rows)->getColumn(null));
   }
 
-  public function testReplaceAllKeys()
-  {
-    $firstArray = array(
-        1 => 'one',
-        2 => 'two',
-        3 => 'three',
-    );
-    $secondArray = array(
-        'one' => 1,
-        1     => 'one',
-        2     => 2,
-    );
-
-    $arrayy = new A($firstArray);
-    $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
-    $resultArray = array_combine($secondArray, $firstArray);
-
-    self::assertSame($resultArray, $resultArrayy);
-  }
-
-  public function testReplaceAllKeysV2()
-  {
-    $firstArray = array(
-        1 => 'one',
-        2 => 'two',
-        3 => 'three',
-    );
-    $secondArray = array(
-        'one' => 1,
-        1     => 'one',
-        2     => 2,
-    );
-
-    $arrayy = new A($firstArray);
-    $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
-
-    $result = array(
-        1     => 'one',
-        'one' => 'two',
-        2     => 'three',
-    );
-    self::assertSame($result, $resultArrayy);
-  }
-
   public function testConstruct()
   {
     $testArray = array('foo bar', 'UTF-8');
@@ -1556,20 +1512,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @dataProvider containsCaseInsensitiveProvider()
-   *
-   * @param array $array
-   * @param mixed $value
-   * @param       $expected
-   */
-  public function testContainsCaseInsensitive($array, $value, $expected)
-  {
-    $arrayy = new A($array);
-
-    self::assertSame($expected, $arrayy->containsCaseInsensitive($value));
-  }
-
-  /**
    * @dataProvider containsProvider()
    *
    * @param array $array
@@ -1581,6 +1523,20 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A($array);
 
     self::assertSame($expected, $arrayy->contains($value));
+  }
+
+  /**
+   * @dataProvider containsCaseInsensitiveProvider()
+   *
+   * @param array $array
+   * @param mixed $value
+   * @param       $expected
+   */
+  public function testContainsCaseInsensitive($array, $value, $expected)
+  {
+    $arrayy = new A($array);
+
+    self::assertSame($expected, $arrayy->containsCaseInsensitive($value));
   }
 
   /**
@@ -1788,6 +1744,62 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($result, $arrayy->getArray(), 'tested: ' . print_r($array, true));
   }
 
+  public function testDiffRecursive()
+  {
+    $testArray1 = array(
+        'test1' => array('lall',),
+        'test2' => array('lall',),
+    );
+
+    $testArray2 = array(
+        'test1' => array('lall',),
+        'test2' => array('lall',),
+    );
+
+    self::assertEquals(
+        new A(array()),
+        A::create($testArray1)->diffRecursive($testArray2)
+    );
+
+    $testArray1 = array(
+        'test1' => array('lall',),
+        'test3' => array('lall',),
+    );
+
+    $testArray2 = array(
+        'test1' => array('lall',),
+        'test2' => array('lall',),
+    );
+
+    self::assertEquals(
+        new A(array('test3' => array('lall',),)),
+        A::create($testArray1)->diffRecursive($testArray2)
+    );
+
+    $testArray1 = array(
+        'test1' => array('lall',),
+        'test2' => array('lall',),
+    );
+
+    $testArray2 = array(
+        'test1' => array('lall',),
+        'test2' => array('foo',),
+    );
+
+    self::assertEquals(
+        new A(array('test2' => array('lall',),)),
+        A::create($testArray1)->diffRecursive($testArray2)
+    );
+
+    $testArray1 = array(1 => array(1 => 1), 2 => array(2 => 2));
+    $testArray2 = array(1 => array(1 => 1));
+
+    self::assertEquals(
+        new A(array(2 => array(2 => 2))),
+        A::create($testArray1)->diffRecursive($testArray2)
+    );
+  }
+
   /**
    * @dataProvider simpleArrayProvider
    *
@@ -1806,6 +1818,14 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArray = array_diff($array, $secondArray);
 
     self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+  }
+
+  public function testDivide()
+  {
+    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
+    $arrayyResult = new A(array('id', 'name', 'group', 'value', 'when', 999, 'flux', '', 6868, '2015-01-01'));
+
+    self::assertSame($arrayyResult->toString(), $arrayy->divide()->toString());
   }
 
   public function testEach()
@@ -1984,15 +2004,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame('Moelleken', $result);
   }
 
-  public function testSetViaDotNotation()
-  {
-    $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken')));
-    $result = $arrayy->set('Lars.lastname', 'Müller');
-
-    $result = $result->get('Lars.lastname');
-    self::assertSame('Müller', $result);
-  }
-
   /**
    * @dataProvider hasProvider()
    *
@@ -2086,19 +2097,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame(array('foo  ', '__bar'), $arrayy->getArray());
   }
 
-  /**
-   * @dataProvider isAssocProvider()
-   *
-   * @param array $array
-   * @param bool  $result
-   */
-  public function testIsAssoc($array, $result)
-  {
-    $resultTmp = A::create($array)->isAssoc();
-
-    self::assertSame($result, $resultTmp);
-  }
-
   public function testIsArrayAssoc()
   {
 
@@ -2162,6 +2160,168 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
             )
         )->isAssoc()
     );
+  }
+
+  public function testIsArrayMultidim()
+  {
+    $testArrays = array(
+        array(1 => array(1,),),
+        array(0, 1, 2, 3, 4),
+        array(
+            1 => 1,
+            2 => 2,
+        ),
+        array(
+            1 => array(1,),
+            2 => array(2,),
+        ),
+        false,
+        '',
+        ' ',
+        array(),
+    );
+
+    $expectedArrays = array(
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+    );
+
+    foreach ($testArrays as $key => $testArray) {
+      self::assertSame(
+          $expectedArrays[$key], A::create($testArray)
+                                  ->isMultiArray(), 'tested:' . print_r($testArray, true)
+      );
+    }
+  }
+
+  /**
+   * @dataProvider isAssocProvider()
+   *
+   * @param array $array
+   * @param bool  $result
+   */
+  public function testIsAssoc($array, $result)
+  {
+    $resultTmp = A::create($array)->isAssoc();
+
+    self::assertSame($result, $resultTmp);
+  }
+
+  public function testIsEmpty()
+  {
+    $testArrays = array(
+        array(1 => array(1,),),
+        array(0, 1, 2, 3, 4),
+        array(
+            1 => 1,
+            2 => 2,
+        ),
+        array(
+            1 => array(1,),
+            2 => array(2,),
+        ),
+        false,
+        '',
+        ' ',
+        array(),
+    );
+
+    $expectedArrays = array(
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        true,
+    );
+
+    foreach ($testArrays as $key => $testArray) {
+      self::assertSame($expectedArrays[$key], A::create($testArray)->isEmpty(), 'tested:' . print_r($testArray, true));
+    }
+  }
+
+  public function testIsNumeric()
+  {
+    $testArrays = array(
+        array(1 => array(1,),),
+        array(0, 1, 2, 3, 4),
+        array(
+            1 => 1,
+            2 => 2,
+        ),
+        array(
+            1 => array(1,),
+            2 => array(2,),
+        ),
+        false,
+        '',
+        ' ',
+        array(),
+    );
+
+    $expectedArrays = array(
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+    );
+
+    foreach ($testArrays as $key => $testArray) {
+      self::assertSame(
+          $expectedArrays[$key], A::create($testArray)
+                                  ->isNumeric(), 'tested:' . print_r($testArray, true)
+      );
+    }
+  }
+
+  public function testIsSequential()
+  {
+    $testArrays = array(
+        array(1 => array(1,),),
+        array(0, 1, 2, 3, 4),
+        array(
+            1 => 1,
+            2 => 2,
+        ),
+        array(
+            1 => array(1,),
+            2 => array(2,),
+        ),
+        false,
+        '',
+        ' ',
+        array(),
+    );
+
+    $expectedArrays = array(
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+    );
+
+    foreach ($testArrays as $key => $testArray) {
+      self::assertSame(
+          $expectedArrays[$key], A::create($testArray)
+                                  ->isSequential(), 'tested:' . print_r($testArray, true)
+      );
+    }
   }
 
   public function testIsSet()
@@ -2672,6 +2832,39 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($result, $arrayy->getArray());
   }
 
+  public function testPrependKey()
+  {
+    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
+    $arrayyResult = new A(
+        array(
+            'foo'   => 'lall',
+            'id'    => 999,
+            'name'  => 'flux',
+            'group' => null,
+            'value' => 6868,
+            'when'  => '2015-01-01',
+        )
+    );
+
+    self::assertSame($arrayyResult->toString(), $arrayy->prepend('lall', 'foo')->toString());
+
+    // ---
+
+    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
+    $arrayyResult = new A(
+        array(
+            0       => 'lall',
+            'id'    => 999,
+            'name'  => 'flux',
+            'group' => null,
+            'value' => 6868,
+            'when'  => '2015-01-01',
+        )
+    );
+
+    self::assertSame($arrayyResult->toString(), $arrayy->prepend('lall')->toString());
+  }
+
   /**
    * @dataProvider simpleArrayProvider
    *
@@ -2914,6 +3107,50 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         'notfoo' => 'notbar',
     );
     self::assertSame($matcher, $arrayy->getArray());
+  }
+
+  public function testReplaceAllKeys()
+  {
+    $firstArray = array(
+        1 => 'one',
+        2 => 'two',
+        3 => 'three',
+    );
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($firstArray);
+    $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
+    $resultArray = array_combine($secondArray, $firstArray);
+
+    self::assertSame($resultArray, $resultArrayy);
+  }
+
+  public function testReplaceAllKeysV2()
+  {
+    $firstArray = array(
+        1 => 'one',
+        2 => 'two',
+        3 => 'three',
+    );
+    $secondArray = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new A($firstArray);
+    $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
+
+    $result = array(
+        1     => 'one',
+        'one' => 'two',
+        2     => 'three',
+    );
+    self::assertSame($result, $resultArrayy);
   }
 
   public function testReplaceAllValues()
@@ -3210,6 +3447,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy[1] = 'öäü';
     self::assertArrayy($arrayy);
     self::assertSame('foo bar,öäü', (string)$arrayy);
+  }
+
+  public function testSetViaDotNotation()
+  {
+    $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken')));
+    $result = $arrayy->set('Lars.lastname', 'Müller');
+
+    $result = $result->get('Lars.lastname');
+    self::assertSame('Müller', $result);
   }
 
   /**
@@ -3553,6 +3799,30 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertImmutable($arrayy, $resultArrayy, $array, $array);
   }
 
+  public function testStripEmpty()
+  {
+    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
+    $arrayyResult = new A(array('id' => 999, 'name' => 'flux', 'value' => 6868, 'when' => '2015-01-01'));
+
+    self::assertSame($arrayyResult->toString(), $arrayy->stripEmpty()->toString());
+  }
+
+  public function testSwap()
+  {
+    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
+    $arrayyResult = new A(
+        array(
+            'id'    => 999,
+            'name'  => 'flux',
+            'group' => null,
+            'value' => '2015-01-01',
+            'when'  => 6868,
+        )
+    );
+
+    self::assertSame($arrayyResult->toString(), $arrayy->swap('value', 'when')->toString());
+  }
+
   /**
    * @dataProvider toStringProvider()
    *
@@ -3644,20 +3914,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertMutable($arrayy, $resultArrayy, $resultArray);
   }
 
-  public function testWalkSimple()
-  {
-    $callable = function (&$value, $key) {
-      $value = $key;
-    };
-
-    $array = array(1, 2, 3);
-    $arrayy = new A($array);
-    $resultArrayy = $arrayy->walk($callable);
-
-    $expected = array(0, 1, 2);
-    self::assertSame($expected, $resultArrayy->getArray());
-  }
-
   /**
    * @dataProvider simpleArrayProvider
    *
@@ -3677,6 +3933,20 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertMutable($arrayy, $resultArrayy, $resultArray);
   }
 
+  public function testWalkSimple()
+  {
+    $callable = function (&$value, $key) {
+      $value = $key;
+    };
+
+    $array = array(1, 2, 3);
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->walk($callable);
+
+    $expected = array(0, 1, 2);
+    self::assertSame($expected, $resultArrayy->getArray());
+  }
+
   /**
    * @dataProvider diffReverseProvider()
    *
@@ -3691,62 +3961,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($result, $arrayy->getArray(), 'tested:' . print_r($array, true));
   }
 
-  public function testDiffRecursive()
-  {
-    $testArray1 = array(
-        'test1' => array('lall',),
-        'test2' => array('lall',),
-    );
-
-    $testArray2 = array(
-        'test1' => array('lall',),
-        'test2' => array('lall',),
-    );
-
-    self::assertEquals(
-        new A(array()),
-        A::create($testArray1)->diffRecursive($testArray2)
-    );
-
-    $testArray1 = array(
-        'test1' => array('lall',),
-        'test3' => array('lall',),
-    );
-
-    $testArray2 = array(
-        'test1' => array('lall',),
-        'test2' => array('lall',),
-    );
-
-    self::assertEquals(
-        new A(array('test3' => array('lall',),)),
-        A::create($testArray1)->diffRecursive($testArray2)
-    );
-
-    $testArray1 = array(
-        'test1' => array('lall',),
-        'test2' => array('lall',),
-    );
-
-    $testArray2 = array(
-        'test1' => array('lall',),
-        'test2' => array('foo',),
-    );
-
-    self::assertEquals(
-        new A(array('test2' => array('lall',),)),
-        A::create($testArray1)->diffRecursive($testArray2)
-    );
-
-    $testArray1 = array(1 => array(1 => 1), 2 => array(2 => 2));
-    $testArray2 = array(1 => array(1 => 1));
-
-    self::assertEquals(
-        new A(array(2 => array(2 => 2))),
-        A::create($testArray1)->diffRecursive($testArray2)
-    );
-  }
-
   /**
    * @dataProvider isMultiArrayProvider()
    *
@@ -3758,146 +3972,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultTmp = A::create($array)->isMultiArray();
 
     self::assertSame($result, $resultTmp);
-  }
-
-  public function testIsArrayMultidim()
-  {
-    $testArrays = array(
-        array(1 => array(1,),),
-        array(0, 1, 2, 3, 4),
-        array(
-            1 => 1,
-            2 => 2,
-        ),
-        array(
-            1 => array(1,),
-            2 => array(2,),
-        ),
-        false,
-        '',
-        ' ',
-        array(),
-    );
-
-    $expectedArrays = array(
-        true,
-        false,
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-    );
-
-    foreach ($testArrays as $key => $testArray) {
-      self::assertSame($expectedArrays[$key], A::create($testArray)->isMultiArray(), 'tested:' . print_r($testArray, true));
-    }
-  }
-
-  public function testIsSequential()
-  {
-    $testArrays = array(
-        array(1 => array(1,),),
-        array(0, 1, 2, 3, 4),
-        array(
-            1 => 1,
-            2 => 2,
-        ),
-        array(
-            1 => array(1,),
-            2 => array(2,),
-        ),
-        false,
-        '',
-        ' ',
-        array(),
-    );
-
-    $expectedArrays = array(
-        false,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-    );
-
-    foreach ($testArrays as $key => $testArray) {
-      self::assertSame($expectedArrays[$key], A::create($testArray)->isSequential(), 'tested:' . print_r($testArray, true));
-    }
-  }
-
-  public function testIsNumeric()
-  {
-    $testArrays = array(
-        array(1 => array(1,),),
-        array(0, 1, 2, 3, 4),
-        array(
-            1 => 1,
-            2 => 2,
-        ),
-        array(
-            1 => array(1,),
-            2 => array(2,),
-        ),
-        false,
-        '',
-        ' ',
-        array(),
-    );
-
-    $expectedArrays = array(
-        true,
-        true,
-        true,
-        true,
-        false,
-        false,
-        true,
-        false,
-    );
-
-    foreach ($testArrays as $key => $testArray) {
-      self::assertSame($expectedArrays[$key], A::create($testArray)->isNumeric(), 'tested:' . print_r($testArray, true));
-    }
-  }
-
-  public function testIsEmpty()
-  {
-    $testArrays = array(
-        array(1 => array(1,),),
-        array(0, 1, 2, 3, 4),
-        array(
-            1 => 1,
-            2 => 2,
-        ),
-        array(
-            1 => array(1,),
-            2 => array(2,),
-        ),
-        false,
-        '',
-        ' ',
-        array(),
-    );
-
-    $expectedArrays = array(
-        false,
-        false,
-        false,
-        false,
-        true,
-        true,
-        false,
-        true,
-    );
-
-    foreach ($testArrays as $key => $testArray) {
-      self::assertSame($expectedArrays[$key], A::create($testArray)->isEmpty(), 'tested:' . print_r($testArray, true));
-    }
   }
 
   /**

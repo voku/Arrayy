@@ -13,6 +13,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   const TYPE_EMPTY   = 'empty';
   const TYPE_MIXED   = 'mixed';
   const TYPE_NUMERIC = 'numeric';
+
   /**
    * @var string
    */

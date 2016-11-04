@@ -354,7 +354,7 @@ class Arrayy extends \ArrayObject
    */
   public function containsKey($key)
   {
-    return array_key_exists($key, $this->array);
+    return $this->offsetExists($key);
   }
 
   /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
@@ -420,20 +420,6 @@ class Arrayy extends \ArrayObject
   }
 
   /**
-   * Create an new instance containing a range of elements.
-   *
-   * @param mixed $low  First value of the sequence
-   * @param mixed $high The sequence is ended upon reaching the end value
-   * @param int   $step Used as the increment between elements in the sequence
-   *
-   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
-   */
-  public static function createWithRange($low, $high, $step = 1)
-  {
-    return static::create(range($low, $high, $step));
-  }
-
-  /**
    * Create an new Arrayy object via string.
    *
    * @param string      $str       The input string.
@@ -467,6 +453,20 @@ class Arrayy extends \ArrayObject
     );
 
     return static::create($array);
+  }
+
+  /**
+   * Create an new instance containing a range of elements.
+   *
+   * @param mixed $low  First value of the sequence
+   * @param mixed $high The sequence is ended upon reaching the end value
+   * @param int   $step Used as the increment between elements in the sequence
+   *
+   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
+   */
+  public static function createWithRange($low, $high, $step = 1)
+  {
+    return static::create(range($low, $high, $step));
   }
 
   /**
@@ -516,20 +516,6 @@ class Arrayy extends \ArrayObject
   }
 
   /**
-   * Return values that are only in the new $array.
-   *
-   * @param array $array
-   *
-   * @return Arrayy (Immutable)
-   */
-  public function diffReverse(array $array = array())
-  {
-    $result = array_diff($array, $this->array);
-
-    return static::create($result);
-  }
-
-  /**
    * Return values that are only in the current multi-dimensional array.
    *
    * @param array      $array
@@ -565,6 +551,35 @@ class Arrayy extends \ArrayObject
     }
 
     return static::create($result);
+  }
+
+  /**
+   * Return values that are only in the new $array.
+   *
+   * @param array $array
+   *
+   * @return Arrayy (Immutable)
+   */
+  public function diffReverse(array $array = array())
+  {
+    $result = array_diff($array, $this->array);
+
+    return static::create($result);
+  }
+
+  /**
+   * Divide an array into two arrays. One with keys and the other with values.
+   *
+   * @return Arrayy (Immutable)
+   */
+  public function divide()
+  {
+    return static::create(
+        array(
+            $this->keys(),
+            $this->values(),
+        )
+    );
   }
 
   /**
@@ -635,7 +650,7 @@ class Arrayy extends \ArrayObject
     if (!$array) {
       return array();
     }
-    
+
     if ($array instanceof ArrayAccess) {
       /** @noinspection ReferenceMismatchInspection */
       return self::createFromObject($array);
@@ -710,7 +725,7 @@ class Arrayy extends \ArrayObject
         'gt'          => function ($item, $prop, $value) {
           return $item[$prop] > $value;
         },
-        'ge'         => function ($item, $prop, $value) {
+        'ge'          => function ($item, $prop, $value) {
           return $item[$prop] >= $value;
         },
         'gte'         => function ($item, $prop, $value) {
@@ -719,7 +734,7 @@ class Arrayy extends \ArrayObject
         'lt'          => function ($item, $prop, $value) {
           return $item[$prop] < $value;
         },
-        'le'         => function ($item, $prop, $value) {
+        'le'          => function ($item, $prop, $value) {
           return $item[$prop] <= $value;
         },
         'lte'         => function ($item, $prop, $value) {
@@ -817,25 +832,6 @@ class Arrayy extends \ArrayObject
    *
    * @param int|null $number how many values you will take?
    *
-   * @return self (Mutable)
-   */
-  public function firstsMutable($number = null)
-  {
-    if ($number === null) {
-      $this->array = (array)array_shift($this->array);
-    } else {
-      $number = (int)$number;
-      $this->array = array_splice($this->array, 0, $number, true);
-    }
-
-    return $this;
-  }
-
-  /**
-   * Get the first value(s) from the current array.
-   *
-   * @param int|null $number how many values you will take?
-   *
    * @return Arrayy (Immutable)
    */
   public function firstsImmutable($number = null)
@@ -848,6 +844,25 @@ class Arrayy extends \ArrayObject
     }
 
     return static::create($array);
+  }
+
+  /**
+   * Get the first value(s) from the current array.
+   *
+   * @param int|null $number how many values you will take?
+   *
+   * @return self (Mutable)
+   */
+  public function firstsMutable($number = null)
+  {
+    if ($number === null) {
+      $this->array = (array)array_shift($this->array);
+    } else {
+      $number = (int)$number;
+      $this->array = array_splice($this->array, 0, $number, true);
+    }
+
+    return $this;
   }
 
   /**
@@ -1167,7 +1182,7 @@ class Arrayy extends \ArrayObject
    * Internal mechanic of set method.
    *
    * @param string $key
-   * @param mixed $value
+   * @param mixed  $value
    *
    * @return bool
    */
@@ -1189,7 +1204,7 @@ class Arrayy extends \ArrayObject
       // If the key doesn't exist at this depth, we will just create an empty array
       // to hold the next value, allowing us to create the arrays to hold final
       // values at the correct depth. Then we'll keep digging into the array.
-      if (! isset($array[$key]) || ! is_array($array[$key])) {
+      if (!isset($array[$key]) || !is_array($array[$key])) {
         $array[$key] = array();
       }
       $array = &$array[$key];
@@ -1209,10 +1224,10 @@ class Arrayy extends \ArrayObject
    */
   public function intersection(array $search)
   {
-    $result = array_values(array_intersect($this->array, $search));
-
-    return static::create($result);
+    return static::create(array_values(array_intersect($this->array, $search)));
   }
+
+  /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
 
   /**
    * Return a boolean flag which indicates whether the two input arrays have any common elements.
@@ -1226,7 +1241,6 @@ class Arrayy extends \ArrayObject
     return count($this->intersection($search)->array) > 0;
   }
 
-  /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
   /**
    * Invoke a function on all of an array's values.
    *
@@ -1283,26 +1297,6 @@ class Arrayy extends \ArrayObject
   }
 
   /**
-   * Check if the current array is a multi-array.
-   *
-   * @return bool
-   */
-  public function isMultiArray()
-  {
-    return !(count($this->array) === count($this->array, COUNT_RECURSIVE));
-  }
-
-  /**
-   * Check if the current array is sequential [0, 1, 2, 3, 4, 5 ...] or not.
-   *
-   * @return bool
-   */
-  public function isSequential()
-  {
-    return array_keys($this->array) === range(0, count($this->array) - 1);
-  }
-
-  /**
    * Check if the current array is equal to the given "$array" or not.
    *
    * @param array $array
@@ -1312,6 +1306,16 @@ class Arrayy extends \ArrayObject
   public function isEqual(array $array)
   {
     return ($this->array === $array);
+  }
+
+  /**
+   * Check if the current array is a multi-array.
+   *
+   * @return bool
+   */
+  public function isMultiArray()
+  {
+    return !(count($this->array) === count($this->array, COUNT_RECURSIVE));
   }
 
   /**
@@ -1335,15 +1339,23 @@ class Arrayy extends \ArrayObject
   }
 
   /**
+   * Check if the current array is sequential [0, 1, 2, 3, 4, 5 ...] or not.
+   *
+   * @return bool
+   */
+  public function isSequential()
+  {
+    return array_keys($this->array) === range(0, count($this->array) - 1);
+  }
+
+  /**
    * Get all keys from the current array.
    *
    * @return Arrayy (Immutable)
    */
   public function keys()
   {
-    $array = array_keys((array)$this->array);
-
-    return static::create($array);
+    return static::create(array_keys((array)$this->array));
   }
 
   /**
@@ -1588,6 +1600,20 @@ class Arrayy extends \ArrayObject
   }
 
   /**
+   * Get a subset of the items from the given array.
+   *
+   * @param mixed[] $keys
+   *
+   * @return Arrayy (Immutable)
+   */
+  public function only(array $keys)
+  {
+    $array = $this->array;
+
+    return static::create(array_intersect_key($array, array_flip($keys)));
+  }
+
+  /**
    * Pad array to the specified size with a given value.
    *
    * @param int   $size  Size of the result array
@@ -1616,12 +1642,18 @@ class Arrayy extends \ArrayObject
    * Prepend a value to the current array.
    *
    * @param mixed $value
+   * @param mixed $key
    *
    * @return self (Mutable) Return this Arrayy object, with the prepended value.
    */
-  public function prepend($value)
+  public function prepend($value, $key = null)
   {
-    array_unshift($this->array, $value);
+    if ($key === null) {
+      array_unshift($this->array, $value);
+    } else {
+      /** @noinspection AdditionOperationOnArraysInspection */
+      $this->array = array($key => $value) + $this->array;
+    }
 
     return $this;
   }
@@ -1639,31 +1671,6 @@ class Arrayy extends \ArrayObject
     }
 
     return $this;
-  }
-
-  /**
-   * Get a random value from the current array.
-   *
-   * @param null|int $number how many values you will take?
-   *
-   * @return Arrayy (Mutable)
-   */
-  public function randomMutable($number = null)
-  {
-    if ($this->count() === 0) {
-      return static::create();
-    }
-
-    if ($number === null) {
-      $arrayRandValue = (array)$this->array[array_rand($this->array)];
-      $this->array = $arrayRandValue;
-
-      return $this;
-    }
-
-    shuffle($this->array);
-
-    return $this->firstsMutable($number);
   }
 
   /**
@@ -1737,6 +1744,31 @@ class Arrayy extends \ArrayObject
     $result = (array)array_rand($this->array, $number);
 
     return static::create($result);
+  }
+
+  /**
+   * Get a random value from the current array.
+   *
+   * @param null|int $number how many values you will take?
+   *
+   * @return Arrayy (Mutable)
+   */
+  public function randomMutable($number = null)
+  {
+    if ($this->count() === 0) {
+      return static::create();
+    }
+
+    if ($number === null) {
+      $arrayRandValue = (array)$this->array[array_rand($this->array)];
+      $this->array = $arrayRandValue;
+
+      return $this;
+    }
+
+    shuffle($this->array);
+
+    return $this->firstsMutable($number);
   }
 
   /**
@@ -2168,7 +2200,7 @@ class Arrayy extends \ArrayObject
    *
    * @param integer $direction use SORT_ASC or SORT_DESC
    * @param integer $strategy
-   * @param bool       $keepKeys
+   * @param bool    $keepKeys
    *
    * @return self (Mutable) Return this Arrayy object.
    */
@@ -2341,6 +2373,41 @@ class Arrayy extends \ArrayObject
   }
 
   /**
+   * Stripe all empty items.
+   *
+   * @return Arrayy (Immutable)
+   */
+  public function stripEmpty()
+  {
+    return $this->filter(
+        function ($item) {
+          if (null === $item) {
+            return false;
+          }
+
+          return (bool)trim($item);
+        }
+    );
+  }
+
+  /**
+   * Swap two values between positions by key.
+   *
+   * @param string|int $swapA an key in the array
+   * @param string|int $swapB an key in the array
+   *
+   * @return Arrayy (Immutable)
+   */
+  public function swap($swapA, $swapB)
+  {
+    $array = $this->array;
+
+    list($array[$swapA], $array[$swapB]) = [$array[$swapB], $array[$swapA]];
+
+    return static::create($array);
+  }
+
+  /**
    * alias: for "Arrayy->getArray()"
    */
   public function toArray()
@@ -2422,9 +2489,7 @@ class Arrayy extends \ArrayObject
    */
   public function values()
   {
-    $array = array_values((array)$this->array);
-
-    return static::create($array);
+    return static::create(array_values((array)$this->array));
   }
 
   /**

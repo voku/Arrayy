@@ -452,6 +452,14 @@ Return values that are only in the current multi-dimensional array.
 a([1 => [1 => 1], 2 => [2 => 2]])->diffRecursive([1 => [1 => 1]]); // Arrayy[2 => [2 => 2]]
 ```
 
+##### divide() : Arrayy (Immutable)
+
+Divide an array into two arrays. One with keys and the other with values.
+
+```php
+a(['a' => 1, 'b' => ''])->divide(); // Arrayy[Arrayy['a', 'b'], Arrayy[1, '']]
+```
+
 ##### each(Closure $closure) : Arrayy (Immutable)
 
 Iterate over the current array and modify the array's value.
@@ -1111,6 +1119,22 @@ Split an array in the given amount of pieces.
    
 ```php
 a(['a' => 1, 'b' => 2])->split(2, true); // Arrayy[['a' => 1], ['b' => 2]]
+```
+
+##### stripEmpty() : Arrayy (Immutable)
+
+Stripe all empty items.
+
+```php
+a(['a' => 1, 'b' => ''])->stripEmpty(); // Arrayy[['a' => 1]]
+```
+
+##### swap(string|int $swapA, string|int $swapB) : Arrayy (Immutable)
+
+Swap two values between positions by key.
+
+```php
+a(['a' => 1, 'b' => ''])->swap('a', 'b'); // Arrayy[['a' => '', 'b' => 1]]
 ```
 
 ##### shuffle() : Arrayy (Immutable)
