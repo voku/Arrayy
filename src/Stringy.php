@@ -492,6 +492,31 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Returns true if the string begins with any $substrings, false otherwise. By
+   * default the comparison is case-sensitive, but can be made insensitive by
+   * setting $caseSensitive to false.
+   *
+   * @param  array $substrings    Substrings to look for
+   * @param  bool  $caseSensitive Whether or not to enforce case-sensitivity
+   *
+   * @return bool   Whether or not $str starts with $substring
+   */
+  public function startsWithAny(array $substrings, $caseSensitive = true)
+  {
+    if (empty($substrings)) {
+      return false;
+    }
+
+    foreach ($substrings as $substring) {
+      if ($this->startsWith($substring, $caseSensitive)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
    * Ensures that the string ends with $substring. If it doesn't, it's
    * appended.
    *
