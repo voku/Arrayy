@@ -1425,10 +1425,14 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     $truncated = UTF8::substr($stringy->str, 0, $length, $encoding);
 
     // If the last word was truncated
-    if (UTF8::strpos($stringy->str, ' ', $length - 1, $encoding) != $length) {
+    $strPosSpace = UTF8::strpos($stringy->str, ' ', $length - 1, $encoding);
+    if ($strPosSpace != $length) {
       // Find pos of the last occurrence of a space, get up to that
       $lastPos = UTF8::strrpos($truncated, ' ', 0, $encoding);
-      $truncated = UTF8::substr($truncated, 0, $lastPos, $encoding);
+
+      if ($lastPos !== false || $strPosSpace !== false) {
+        $truncated = UTF8::substr($truncated, 0, $lastPos, $encoding);
+      }
     }
 
     $stringy->str = $truncated . $substring;

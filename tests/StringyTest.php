@@ -1860,7 +1860,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->safeTruncate($length, $substring);
     self::assertStringy($result);
-    self::assertSame($expected, $result->toString());
+    self::assertSame($expected, $result->toString(), 'tested: ' . $str . ' | ' . $substring . ' ('  . $length . ')');
     self::assertSame($str, $stringy->toString());
   }
 
@@ -1875,6 +1875,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('Test foo', 'Test foo bar', 8),
         array('Test', 'Test foo bar', 7),
         array('Test', 'Test foo bar', 4),
+        array('Test', 'Testfoobar', 4),
         array('Test foo bar', 'Test foo bar', 12, '...'),
         array('Test foo...', 'Test foo bar', 11, '...'),
         array('Test...', 'Test foo bar', 8, '...'),
