@@ -2402,7 +2402,7 @@ class Arrayy extends \ArrayObject
   {
     $array = $this->array;
 
-    list($array[$swapA], $array[$swapB]) = [$array[$swapB], $array[$swapA]];
+    list($array[$swapA], $array[$swapB]) = array($array[$swapB], $array[$swapA]);
 
     return static::create($array);
   }
