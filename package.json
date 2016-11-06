@@ -11,7 +11,7 @@
     "docs:prepare": "gitbook install",
     "docs:watch": "gitbook serve",
     "docs:build": "gitbook build",
-    "docs:do": "gitbook install && rm -rf _book && gitbook build && cd _book && git init && git commit --allow-empty -m 'Update docs' && git checkout -b gh-pages && git add --all && git commit -am 'Update docs' && git push git@github.com:voku/Arrayy gh-pages --force"
+    "docs:do": "gitbook install && rm -rf _book && gitbook build && cd _book && git init && git commit --allow-empty -m 'Update docs' && git checkout -b gh-pages && git add --all && git commit -am 'Update docs' && git push https://github.com/voku/Arrayy.git gh-pages --force"
   },
   "author": "Lars Moelleken <lars@moelleken.org> (https://moelleken.org)",
   "license": "MIT",
