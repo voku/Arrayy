@@ -3748,8 +3748,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
    */
   public function isProvider()
   {
-    return array
-    (
+    return array(
         array(true, 'Gears\\String\\Str', 'Gears\\String\\Str'),
         array(true, 'Gears\\String\\Str', 'Gears\\*\\Str'),
         array(true, 'Gears\\String\\Str', 'Gears\\*\\*'),
