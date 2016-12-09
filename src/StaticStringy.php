@@ -38,6 +38,7 @@ namespace Stringy;
  * @method static int|bool indexOf(string $stringInput, string $needle, int $offset = 0, string $encoding = null)
  * @method static int|bool indexOfLast(string $stringInput, string $needle, int $offset = 0, string $encoding = null)
  * @method static Stringy insert(string $stringInput, string $substring, int $index = 0, string $encoding = null)
+ * @method static bool is(string $stringInput, string $pattern, string $encoding = null)
  * @method static bool isAlpha(string $stringInput, string $encoding = null)
  * @method static bool isAlphanumeric(string $stringInput, string $encoding = null)
  * @method static bool isBase64(string $stringInput, string $encoding = null)

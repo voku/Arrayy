@@ -60,6 +60,7 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
     * [indexOf](#indexofstring-needle--offset--0-)
     * [indexOfLast](#indexoflaststring-needle--offset--0-)
     * [insert](#insertint-index-string-substring)
+    * [is](#is)
     * [isAlpha](#isalpha)
     * [isAlphanumeric](#isalphanumeric)
     * [isBase64](#isbase64)
@@ -616,7 +617,17 @@ Inserts $substring into the string at the $index provided.
 s('fòôbř')->insert('à', 4); // 'fòôbàř'
 ```
 
-##### isAlpha()
+##### is(string $pattern) : bool
+
+Returns true if the string contains the $pattern.
+
+WARNING: Asterisks ("\*") are translated into (".\*") zero-or-more regular expression wildcards.
+
+```php
+s('Foo\\Bar\\Lall')->is('*\\Bar\\*'); // true
+```
+
+##### isAlpha() : bool
 
 Returns true if the string contains only alphabetic chars, false otherwise.
 
@@ -624,7 +635,7 @@ Returns true if the string contains only alphabetic chars, false otherwise.
 s('丹尼爾')->isAlpha(); // true
 ```
 
-##### isAlphanumeric()
+##### isAlphanumeric() : bool
 
 Returns true if the string contains only alphabetic and numeric chars, false
 otherwise.
@@ -633,7 +644,7 @@ otherwise.
 s('دانيال1')->isAlphanumeric(); // true
 ```
 
-##### isBase64()
+##### isBase64() : bool
 
 Returns true if the string is base64 encoded, false
 otherwise.
@@ -642,7 +653,7 @@ otherwise.
 s('Zm9vYmFy')->isBase64(); // true
 ```
 
-##### isBlank()
+##### isBlank() : bool
 
 Returns true if the string contains only whitespace chars, false otherwise.
 
@@ -650,7 +661,7 @@ Returns true if the string contains only whitespace chars, false otherwise.
 s("\n\t  \v\f")->isBlank(); // true
 ```
 
-##### isEmail()
+##### isEmail() : bool
 
 Returns true if the string contains a valid E-Mail address, false otherwise.
 
@@ -658,7 +669,7 @@ Returns true if the string contains a valid E-Mail address, false otherwise.
 s('lars@moelleken.org')->isEmail(); // true
 ```
 
-##### isHexadecimal()
+##### isHexadecimal() : bool
 
 Returns true if the string contains only hexadecimal chars, false otherwise.
 
@@ -666,7 +677,7 @@ Returns true if the string contains only hexadecimal chars, false otherwise.
 s('A102F')->isHexadecimal(); // true
 ```
 
-##### isHtml()
+##### isHtml() : bool
 
 Returns true if the string contains HTML-Tags, false otherwise.
 
@@ -674,7 +685,7 @@ Returns true if the string contains HTML-Tags, false otherwise.
 s('<h1>foo</h1>')->isHtml(); // true
 ```
 
-##### isJson()
+##### isJson() : bool
 
 Returns true if the string is JSON, false otherwise. Unlike json_decode
 in PHP 5.x, this method is consistent with PHP 7 and other JSON parsers,
@@ -684,7 +695,7 @@ in that an empty string is not considered valid JSON.
 s('{"foo":"bar"}')->isJson(); // true
 ```
 
-##### isLowerCase()
+##### isLowerCase() : bool
 
 Returns true if the string contains only lower case chars, false otherwise.
 
@@ -692,7 +703,7 @@ Returns true if the string contains only lower case chars, false otherwise.
 s('fòôbàř')->isLowerCase(); // true
 ```
 
-##### isSerialized()
+##### isSerialized() : bool
 
 Returns true if the string is serialized, false otherwise.
 
@@ -700,7 +711,7 @@ Returns true if the string is serialized, false otherwise.
 s('a:1:{s:3:"foo";s:3:"bar";}')->isSerialized(); // true
 ```
 
-##### isUpperCase()
+##### isUpperCase() : bool
 
 Returns true if the string contains only upper case chars, false otherwise.
 

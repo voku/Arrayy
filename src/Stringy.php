@@ -777,6 +777,30 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Returns true if the string contains the $pattern, otherwise false.
+   *
+   * WARNING: Asterisks ("*") are translated into (".*") zero-or-more regular
+   * expression wildcards.
+   *
+   * @credit Originally from Laravel, thanks Taylor.
+   *
+   * @param string $pattern The string or pattern to match against.
+   *
+   * @return bool Whether or not we match the provided pattern.
+   */
+  public function is($pattern)
+  {
+    if ($this->toString() === $pattern) {
+      return true;
+    }
+
+    $quotedPattern = preg_quote($pattern, '/');
+    $replaceWildCards = str_replace('\*', '.*', $quotedPattern);
+
+    return $this->matchesPattern('^' . $replaceWildCards . '\z');
+  }
+
+  /**
    * Returns true if the string contains only alphabetic chars, false
    * otherwise.
    *

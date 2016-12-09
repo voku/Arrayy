@@ -1899,7 +1899,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->safeTruncate($length, $substring);
     self::assertStringy($result);
-    self::assertSame($expected, $result->toString(), 'tested: ' . $str . ' | ' . $substring . ' ('  . $length . ')');
+    self::assertSame($expected, $result->toString(), 'tested: ' . $str . ' | ' . $substring . ' (' . $length . ')');
     self::assertSame($str, $stringy->toString());
   }
 
@@ -3724,6 +3724,46 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create('test@aecor.de');
     self::assertSame(false, $stringy->isEmail(false, true));
 
+  }
+
+  /**
+   * @dataProvider isProvider()
+   *
+   * @param      $expected
+   * @param      $string
+   * @param      $pattern
+   * @param null $encoding
+   */
+  public function testIs($expected, $string, $pattern, $encoding = null)
+  {
+    $str = S::create($string, $encoding);
+    $result = $str->is($pattern);
+    $this->assertInternalType('boolean', $result);
+    $this->assertEquals($expected, $result, 'tested: ' . $pattern);
+    $this->assertEquals($string, $str);
+  }
+
+  /**
+   * @return array
+   */
+  public function isProvider()
+  {
+    return array
+    (
+        [true, 'Gears\\String\\Str', 'Gears\\String\\Str'],
+        [true, 'Gears\\String\\Str', 'Gears\\*\\Str'],
+        [true, 'Gears\\String\\Str', 'Gears\\*\\*'],
+        [true, 'Gears\\String\\Str', '*\\*\\*'],
+        [true, 'Gears\\String\\Str', '*\\String\\*'],
+        [true, 'Gears\\String\\Str', '*\\*\\Str'],
+        [true, 'Gears\\String\\Str', '*\\Str'],
+        [true, 'Gears\\String\\Str', '*'],
+        [true, 'Gears\\String\\Str', '**'],
+        [true, 'Gears\\String\\Str', '****'],
+        [true, 'Gears\\String\\Str', '*Str'],
+        [false, 'Gears\\String\\Str', '*\\'],
+        [false, 'Gears\\String\\Str', 'Gears-*-*'],
+    );
   }
 
   public function testAddRandomString()
