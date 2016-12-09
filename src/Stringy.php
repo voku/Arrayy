@@ -1595,7 +1595,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     $trimChars = "\t\r\n -_()!~?=+/*\\,.:;\"'[]{}`&";
 
     if ($length === null) {
-      $length = $this->length() / 2;
+      $length = (int)round($this->length() / 2, 0);
     }
 
     if (empty($search)) {
