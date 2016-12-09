@@ -3750,19 +3750,19 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     return array
     (
-        [true, 'Gears\\String\\Str', 'Gears\\String\\Str'],
-        [true, 'Gears\\String\\Str', 'Gears\\*\\Str'],
-        [true, 'Gears\\String\\Str', 'Gears\\*\\*'],
-        [true, 'Gears\\String\\Str', '*\\*\\*'],
-        [true, 'Gears\\String\\Str', '*\\String\\*'],
-        [true, 'Gears\\String\\Str', '*\\*\\Str'],
-        [true, 'Gears\\String\\Str', '*\\Str'],
-        [true, 'Gears\\String\\Str', '*'],
-        [true, 'Gears\\String\\Str', '**'],
-        [true, 'Gears\\String\\Str', '****'],
-        [true, 'Gears\\String\\Str', '*Str'],
-        [false, 'Gears\\String\\Str', '*\\'],
-        [false, 'Gears\\String\\Str', 'Gears-*-*'],
+        array(true, 'Gears\\String\\Str', 'Gears\\String\\Str'),
+        array(true, 'Gears\\String\\Str', 'Gears\\*\\Str'),
+        array(true, 'Gears\\String\\Str', 'Gears\\*\\*'),
+        array(true, 'Gears\\String\\Str', '*\\*\\*'),
+        array(true, 'Gears\\String\\Str', '*\\String\\*'),
+        array(true, 'Gears\\String\\Str', '*\\*\\Str'),
+        array(true, 'Gears\\String\\Str', '*\\Str'),
+        array(true, 'Gears\\String\\Str', '*'),
+        array(true, 'Gears\\String\\Str', '**'),
+        array(true, 'Gears\\String\\Str', '****'),
+        array(true, 'Gears\\String\\Str', '*Str'),
+        array(false, 'Gears\\String\\Str', '*\\'),
+        array(false, 'Gears\\String\\Str', 'Gears-*-*'),
     );
   }
 
