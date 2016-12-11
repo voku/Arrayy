@@ -4040,4 +4040,23 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         ),
     );
   }
+
+  public function testContainsValues()
+  {
+    $this->assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array('a', 'b')));
+    $this->assertFalse(A::create(array('a', 'b', 'd'))->containsValues(array('a', 'b', 'c')));
+    $this->assertTrue(A::create(array())->containsValues(array()));
+    $this->assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array()));
+    $this->assertFalse(A::create(array())->containsValues(array('a', 'b', 'c')));
+  }
+
+  public function testContainsKeys()
+  {
+    $this->assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array('a', 'b')));
+    $this->assertFalse(A::create(array('a' => 0, 'b' => 1, 'd' => 2))->containsKeys(array('a', 'b', 'c')));
+    $this->assertTrue(A::create(array())->containsKeys(array()));
+    $this->assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array()));
+    $this->assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c')));
+  }
+
 }

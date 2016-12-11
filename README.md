@@ -404,20 +404,38 @@ $arrayy = a(['three' => 3, 'one' => 1, 'two' => 2]);
 $resultArrayy = $arrayy->customSortValues($callable); // Arrayy['one' => 1, 'two' => 2, 'three' => 3]
 ```
 
-##### contains(mixed $value) : boolean
+##### contains(string|int|float $value) : boolean
 
 Check if an item is in the current array.
+
+alias: "Arrayy->containsValue()"
 
 ```php
 a([1, true])->contains(true); // true
 ```
 
-##### containsKey(mixed $key) : boolean
+##### containsValues(array $values) : boolean
+
+Check if all given needles are present in the array.
+
+```php
+a([1, true])->containsValues(array(1, true)); // true
+```
+
+##### containsKey(string|int|float $key) : boolean
 
 Check if the given key/index exists in the array.
 
 ```php
 a([1 => true])->containsKey(1); // true
+```
+
+##### containsKeys(array $key) : boolean
+
+Check if all given needles are present in the array as key/index.
+
+```php
+a([1 => true])->containsKeys(array(1 => 0)); // true
 ```
 
 ##### containsCaseInsensitive(string $value) : boolean

@@ -110,6 +110,8 @@ class Arrayy extends \ArrayObject
   /**
    * alias: for "Arrayy->append()"
    *
+   * @see Arrayy::append()
+   *
    * @param mixed $value
    *
    * @return self (Mutable) Return this Arrayy object, with the appended values.
@@ -136,7 +138,9 @@ class Arrayy extends \ArrayObject
   /**
    * Count the values from the current array.
    *
-   * INFO: only a alias for "$arrayy->size()"
+   * alias: for "Arrayy->size()"
+   *
+   * @see Arrayy::size()
    *
    * @return int
    */
@@ -314,7 +318,7 @@ class Arrayy extends \ArrayObject
   /**
    * Check if an item is in the current array.
    *
-   * @param mixed $value
+   * @param string|int|float $value
    *
    * @return bool
    */
@@ -348,13 +352,51 @@ class Arrayy extends \ArrayObject
   /**
    * Check if the given key/index exists in the array.
    *
-   * @param mixed $key Key/index to search for
+   * @param string|int|float $key key/index to search for
    *
    * @return bool Returns true if the given key/index exists in the array, false otherwise
    */
   public function containsKey($key)
   {
     return $this->offsetExists($key);
+  }
+
+  /**
+   * Check if all given needles are present in the array as key/index.
+   *
+   * @param array $needles
+   *
+   * @return bool Returns true if the given keys/indexes exists in the array, false otherwise
+   */
+  public function containsKeys(array $needles)
+  {
+    return count(array_intersect($needles, $this->keys()->getArray())) === count($needles);
+  }
+
+  /**
+   * alias: for "Arrayy->contains()"
+   *
+   * @see Arrayy::contains()
+   *
+   * @param string|int|float $value
+   *
+   * @return bool
+   */
+  public function containsValue($value)
+  {
+    return $this->contains($value);
+  }
+
+  /**
+   * Check if all given needles are present in the array.
+   *
+   * @param array $needles
+   *
+   * @return bool Returns true if the given values exists in the array, false otherwise
+   */
+  public function containsValues(array $needles)
+  {
+    return count(array_intersect($needles, $this->array)) === count($needles);
   }
 
   /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
@@ -653,7 +695,7 @@ class Arrayy extends \ArrayObject
 
     if ($array instanceof ArrayAccess) {
       /** @noinspection ReferenceMismatchInspection */
-      return self::createFromObject($array);
+      return self::createFromObject($array)->getArray();
     }
 
     if (is_object($array) && method_exists($array, '__toArray')) {
@@ -976,6 +1018,8 @@ class Arrayy extends \ArrayObject
   /**
    * alias: for "Arrayy->keys()"
    *
+   * @see Arrayy::keys()
+   *
    * @return Arrayy (Immutable)
    */
   public function getKeys()
@@ -984,7 +1028,9 @@ class Arrayy extends \ArrayObject
   }
 
   /**
-   * alias: for "Arrayy->random()"
+   * alias: for "Arrayy->randomImmutable()"
+   *
+   * @see Arrayy::randomImmutable()
    *
    * @return Arrayy (Immutable)
    */
@@ -996,6 +1042,8 @@ class Arrayy extends \ArrayObject
   /**
    * alias: for "Arrayy->randomKey()"
    *
+   * @see Arrayy::randomKey()
+   *
    * @return mixed get a key/index or null if there wasn't a key/index
    */
   public function getRandomKey()
@@ -1005,6 +1053,8 @@ class Arrayy extends \ArrayObject
 
   /**
    * alias: for "Arrayy->randomKeys()"
+   *
+   * @see Arrayy::randomKeys()
    *
    * @param int $number
    *
@@ -1018,6 +1068,8 @@ class Arrayy extends \ArrayObject
   /**
    * alias: for "Arrayy->randomValue()"
    *
+   * @see Arrayy::randomValue()
+   *
    * @return mixed get a random value or null if there wasn't a value
    */
   public function getRandomValue()
@@ -1027,6 +1079,8 @@ class Arrayy extends \ArrayObject
 
   /**
    * alias: for "Arrayy->randomValues()"
+   *
+   * @see Arrayy::randomValues()
    *
    * @param int $number
    *
@@ -1124,6 +1178,8 @@ class Arrayy extends \ArrayObject
 
   /**
    * alias: for "Arrayy->searchIndex()"
+   *
+   * @see Arrayy::searchIndex()
    *
    * @param mixed $value Value to search for
    *
@@ -1417,7 +1473,9 @@ class Arrayy extends \ArrayObject
   /**
    * Count the values from the current array.
    *
-   * INFO: only a alias for "$arrayy->size()"
+   * alias: for "Arrayy->size()"
+   *
+   * @see Arrayy::size()
    *
    * @return int
    */
@@ -2409,6 +2467,8 @@ class Arrayy extends \ArrayObject
 
   /**
    * alias: for "Arrayy->getArray()"
+   *
+   * @see Arrayy::getArray()
    */
   public function toArray()
   {
