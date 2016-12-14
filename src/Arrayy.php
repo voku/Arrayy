@@ -322,10 +322,10 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
   /**
    * @param mixed      $path
-   * @param callable   $callback
+   * @param callable   $callable
    * @param null|array $currentOffset
    */
-  protected function callAtPath($path, callable $callback, &$currentOffset = null)
+  protected function callAtPath($path, $callable, &$currentOffset = null)
   {
     if ($currentOffset === null) {
       $currentOffset = &$this->array;
@@ -341,11 +341,11 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     if (!empty($explodedPath)) {
       $this->callAtPath(
           implode($this->pathSeparator, $explodedPath),
-          $callback,
+          $callable,
           $currentOffset[$nextPath]
       );
     } else {
-      $callback($currentOffset[$nextPath]);
+      $callable($currentOffset[$nextPath]);
     }
   }
 
