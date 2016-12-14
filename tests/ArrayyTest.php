@@ -2693,6 +2693,22 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertFalse($arrayy->offsetExists($offset));
   }
 
+  public function testOffsetUnsetViaDotNotation()
+  {
+    $array = array('a', 'b' => array(0 => 'c'));
+    $arrayy = new A($array);
+    $offset = 'b.0';
+
+    self::assertTrue($arrayy->offsetExists($offset));
+
+    $arrayy->offsetUnset($offset);
+    unset($array['b'][0]);
+
+    self::assertSame($array, $arrayy->toArray());
+    self::assertFalse(isset($array[$offset]));
+    self::assertFalse($arrayy->offsetExists($offset));
+  }
+
   public function testOrderByKey()
   {
     $array = array(
@@ -3408,6 +3424,16 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A($array);
     $arrayy = $arrayy->set($key, $value)->getArray();
     self::assertSame($value, $arrayy[$key]);
+  }
+
+  public function testMagicSetViaDotNotation()
+  {
+    $arrayy = new A(array());
+    $arrayy['user'] = array('lastname' => 'Moelleken');
+    $arrayy['user.firstname'] = 'Lars';
+
+    self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => 'Lars')), $arrayy->getArray());
+    self::assertSame('Lars', $arrayy['user.firstname']);
   }
 
   /**

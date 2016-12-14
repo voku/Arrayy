@@ -2,9 +2,9 @@
 
 namespace Arrayy;
 
-use ArrayAccess;
-use Closure;
 use voku\helper\UTF8;
+
+/** @noinspection ClassReImplementsParentInterfaceInspection */
 
 /**
  * Methods to manage arrays.
@@ -12,12 +12,17 @@ use voku\helper\UTF8;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-class Arrayy extends \ArrayObject
+class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Countable
 {
   /**
    * @var array
    */
   protected $array = array();
+
+  /**
+   * @var string
+   */
+  protected $pathSeparator = '.';
 
   /** @noinspection MagicMethodsValidityInspection */
   /**
@@ -73,7 +78,7 @@ class Arrayy extends \ArrayObject
    */
   public function __isset($key)
   {
-    return isset($this->array[$key]);
+    return $this->offsetExists($key);
   }
 
   /**
@@ -84,7 +89,7 @@ class Arrayy extends \ArrayObject
    */
   public function __set($key, $value)
   {
-    $this->array[$key] = $value;
+    $this->internalSet($key, $value);
   }
 
   /**
@@ -168,7 +173,36 @@ class Arrayy extends \ArrayObject
    */
   public function offsetExists($offset)
   {
-    return isset($this->array[$offset]);
+    $tmpReturn = isset($this->array[$offset]);
+
+    if (
+        $tmpReturn === true
+        ||
+        (
+            $tmpReturn === false
+            &&
+            strpos($offset, $this->pathSeparator) === false
+        )
+    ) {
+
+      return isset($this->array[$offset]);
+
+    } else {
+
+      $offsetExists = false;
+      $explodedPath = explode($this->pathSeparator, $offset);
+      $lastOffset = array_pop($explodedPath);
+      $containerPath = implode($this->pathSeparator, $explodedPath);
+
+      $this->callAtPath(
+          $containerPath,
+          function ($container) use ($lastOffset, &$offsetExists) {
+            $offsetExists = isset($container[$lastOffset]);
+          }
+      );
+
+      return $offsetExists;
+    }
   }
 
   /**
@@ -180,7 +214,7 @@ class Arrayy extends \ArrayObject
    */
   public function offsetGet($offset)
   {
-    return $this->offsetExists($offset) ? $this->array[$offset] : null;
+    return $this->offsetExists($offset) ? $this->get($offset) : null;
   }
 
   /**
@@ -194,7 +228,7 @@ class Arrayy extends \ArrayObject
     if (null === $offset) {
       $this->array[] = $value;
     } else {
-      $this->array[$offset] = $value;
+      $this->internalSet($offset, $value);
     }
   }
 
@@ -205,9 +239,21 @@ class Arrayy extends \ArrayObject
    */
   public function offsetUnset($offset)
   {
-    if ($this->offsetExists($offset)) {
+    if (isset($this->array[$offset])) {
       unset($this->array[$offset]);
+
+      return;
     }
+
+    $path = explode($this->pathSeparator, $offset);
+    $pathToUnset = array_pop($path);
+
+    $this->callAtPath(
+        implode($this->pathSeparator, $path),
+        function (&$offset) use (&$pathToUnset) {
+          unset($offset[$pathToUnset]);
+        }
+    );
   }
 
   /**
@@ -272,6 +318,51 @@ class Arrayy extends \ArrayObject
     }
 
     return round(array_sum($this->array) / $count, $decimals);
+  }
+
+  /**
+   * @param mixed      $path
+   * @param callable   $callback
+   * @param null|array $currentOffset
+   */
+  protected function callAtPath($path, callable $callback, &$currentOffset = null)
+  {
+    if ($currentOffset === null) {
+      $currentOffset = &$this->array;
+    }
+
+    $explodedPath = explode($this->pathSeparator, $path);
+    $nextPath = array_shift($explodedPath);
+
+    if (!isset($currentOffset[$nextPath])) {
+      return;
+    }
+
+    if (!empty($explodedPath)) {
+      $this->callAtPath(
+          implode($this->pathSeparator, $explodedPath),
+          $callback,
+          $currentOffset[$nextPath]
+      );
+    } else {
+      $callback($currentOffset[$nextPath]);
+    }
+  }
+
+  /**
+   * Change the path separator of the array wrapper.
+   *
+   * By default, the separator is: .
+   *
+   * @param string $separator Separator to set.
+   *
+   * @return Arrayy Current instance.
+   */
+  public function changeSeparator($separator)
+  {
+    $this->pathSeparator = $separator;
+
+    return $this;
   }
 
   /**
@@ -399,7 +490,6 @@ class Arrayy extends \ArrayObject
     return count(array_intersect($needles, $this->array)) === count($needles);
   }
 
-  /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
   /**
    * Creates an Arrayy object.
    *
@@ -412,7 +502,6 @@ class Arrayy extends \ArrayObject
     return new static($array);
   }
 
-  /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
   /**
    * WARNING: Creates an Arrayy object by reference.
    *
@@ -446,11 +535,11 @@ class Arrayy extends \ArrayObject
   /**
    * Create an new instance filled with values from an object that have implemented ArrayAccess.
    *
-   * @param ArrayAccess $object Object that implements ArrayAccess
+   * @param \ArrayAccess $object Object that implements ArrayAccess
    *
    * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
    */
-  public static function createFromObject(ArrayAccess $object)
+  public static function createFromObject(\ArrayAccess $object)
   {
     $array = new static();
     foreach ($object as $key => $value) {
@@ -475,7 +564,7 @@ class Arrayy extends \ArrayObject
     if ($regEx) {
       preg_match_all($regEx, $str, $array);
 
-      if (count($array) > 0) {
+      if (!empty($array)) {
         $array = $array[0];
       }
 
@@ -579,7 +668,7 @@ class Arrayy extends \ArrayObject
       if (array_key_exists($key, $array)) {
         if (is_array($value)) {
           $recursiveDiff = $this->diffRecursive($array[$key], $value);
-          if (count($recursiveDiff)) {
+          if (!empty($recursiveDiff)) {
             $result[$key] = $recursiveDiff;
           }
         } else {
@@ -668,7 +757,7 @@ class Arrayy extends \ArrayObject
    * 1. use the current array, if it's a array
    * 2. call "getArray()" on object, if there is a "Arrayy"-object
    * 3. fallback to empty array, if there is nothing
-   * 4. call "createFromObject()" on object, if there is a "ArrayAccess"-object
+   * 4. call "createFromObject()" on object, if there is a "\ArrayAccess"-object
    * 5. call "__toArray()" on object, if the method exists
    * 6. cast a string or object with "__toString()" into an array
    * 7. throw a "InvalidArgumentException"-Exception
@@ -693,7 +782,7 @@ class Arrayy extends \ArrayObject
       return array();
     }
 
-    if ($array instanceof ArrayAccess) {
+    if ($array instanceof \ArrayAccess) {
       /** @noinspection ReferenceMismatchInspection */
       return self::createFromObject($array)->getArray();
     }
@@ -928,12 +1017,12 @@ class Arrayy extends \ArrayObject
    *
    * @return mixed
    */
-  public function get($key, $default = null, $array = null)
+  public function get($key, $default = null, &$array = null)
   {
     if (is_array($array) === true) {
-      $usedArray = $array;
+      $usedArray = &$array;
     } else {
-      $usedArray = $this->array;
+      $usedArray = &$this->array;
     }
 
     if (null === $key) {
@@ -945,9 +1034,9 @@ class Arrayy extends \ArrayObject
     }
 
     // Crawl through array, get key according to object or not
-    foreach (explode('.', $key) as $segment) {
+    foreach (explode($this->pathSeparator, $key) as $segment) {
       if (!isset($usedArray[$segment])) {
-        return $default instanceof Closure ? $default() : $default;
+        return $default instanceof \Closure ? $default() : $default;
       }
 
       $usedArray = $usedArray[$segment];
@@ -1213,12 +1302,11 @@ class Arrayy extends \ArrayObject
    */
   protected function internalRemove($key)
   {
-    // Explode keys
-    $keys = explode('.', $key);
+    $path = explode($this->pathSeparator, $key);
 
     // Crawl though the keys
-    while (count($keys) > 1) {
-      $key = array_shift($keys);
+    while (count($path) > 1) {
+      $key = array_shift($path);
 
       if (!$this->has($key)) {
         return false;
@@ -1227,7 +1315,7 @@ class Arrayy extends \ArrayObject
       $this->array = &$this->array[$key];
     }
 
-    $key = array_shift($keys);
+    $key = array_shift($path);
 
     unset($this->array[$key]);
 
@@ -1250,13 +1338,11 @@ class Arrayy extends \ArrayObject
 
     // init
     $array = &$this->array;
-
-    // Explode the keys
-    $keys = explode('.', $key);
+    $path = explode($this->pathSeparator, $key);
 
     // Crawl through the keys
-    while (count($keys) > 1) {
-      $key = array_shift($keys);
+    while (count($path) > 1) {
+      $key = array_shift($path);
       // If the key doesn't exist at this depth, we will just create an empty array
       // to hold the next value, allowing us to create the arrays to hold final
       // values at the correct depth. Then we'll keep digging into the array.
@@ -1266,7 +1352,7 @@ class Arrayy extends \ArrayObject
       $array = &$array[$key];
     }
 
-    $array[array_shift($keys)] = $value;
+    $array[array_shift($path)] = $value;
 
     return true;
   }
@@ -1282,8 +1368,6 @@ class Arrayy extends \ArrayObject
   {
     return static::create(array_values(array_intersect($this->array, $search)));
   }
-
-  /** @noinspection ArrayTypeOfParameterByDefaultValueInspection */
 
   /**
    * Return a boolean flag which indicates whether the two input arrays have any common elements.
@@ -1411,7 +1495,7 @@ class Arrayy extends \ArrayObject
    */
   public function keys()
   {
-    return static::create(array_keys((array)$this->array));
+    return static::create(array_keys($this->array));
   }
 
   /**
@@ -2419,11 +2503,13 @@ class Arrayy extends \ArrayObject
    */
   public function split($numberOfPieces = 2, $keepKeys = false)
   {
-    if (count($this->array) === 0) {
+    $arrayCount = $this->count();
+
+    if ($arrayCount === 0) {
       $result = array();
     } else {
       $numberOfPieces = (int)$numberOfPieces;
-      $splitSize = ceil(count($this->array) / $numberOfPieces);
+      $splitSize = ceil($arrayCount / $numberOfPieces);
       $result = array_chunk($this->array, $splitSize, $keepKeys);
     }
 
@@ -2570,6 +2656,5 @@ class Arrayy extends \ArrayObject
 
     return $this;
   }
-
 
 }
