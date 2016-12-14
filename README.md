@@ -572,8 +572,18 @@ a([0 => 'foo', 1 => 'bar'])->flip(); // Arrayy['foo' => 0, 'bar' => 1]
 Get a value from an array (optional using dot-notation).
 
 ```php
-$arrayy = a(['Lars' => ['lastname' => 'Moelleken']]);
-$arrayy->get('Lars.lastname'); // 'Moelleken'
+$arrayy = a(['user' => ['lastname' => 'Moelleken']]);
+$arrayy->get('user.lastname'); // 'Moelleken'
+
+// ---
+
+$arrayy = new A();
+$arrayy['user'] = ['lastname' => 'Moelleken'];
+$arrayy['user.firstname'] = 'Lars';
+
+$arrayy['user']['lastname'] // Moelleken
+$arrayy['user.lastname'] // Moelleken
+$arrayy['user.firstname'] // Lars
 ```
 
 ##### getColumn(mixed $columnKey, mixed $indexKey) : Arrayy

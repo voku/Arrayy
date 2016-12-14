@@ -3428,7 +3428,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
   public function testMagicSetViaDotNotation()
   {
-    $arrayy = new A(array());
+    $arrayy = new A();
     $arrayy['user'] = array('lastname' => 'Moelleken');
     $arrayy['user.firstname'] = 'Lars';
 
