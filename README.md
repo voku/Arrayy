@@ -800,6 +800,15 @@ Get the min value from an array.
 a([-9, -8, -7, 1.32])->min(); // -9
 ```
 
+##### moveElement(int|string $from, int|string $to) : Arrayy
+
+Move an array element to a new index.
+
+```php
+$arr2 = new A(['A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e']);
+$newArr2 = $arr2->moveElement('D', 1); // Arrayy['A' => 'a', 'D' => 'd', 'B' => 'b', 'C' => 'c', 'E' => 'e']
+```
+
 ##### randomKey() : mixed
 
 Pick a random key/index from the keys of this array.

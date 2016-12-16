@@ -949,7 +949,8 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function first()
   {
-    $result = array_shift($this->array);
+    $tmpArray = $this->array;
+    $result = array_shift($tmpArray);
 
     if (null === $result) {
       return null;
@@ -968,10 +969,12 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function firstsImmutable($number = null)
   {
     if ($number === null) {
-      $array = (array)array_shift($this->array);
+      $arrayTmp = $this->array;
+      $array = (array)array_shift($arrayTmp);
     } else {
       $number = (int)$number;
-      $array = array_splice($this->array, 0, $number, true);
+      $arrayTmp = $this->array;
+      $array = array_splice($arrayTmp, 0, $number, true);
     }
 
     return static::create($array);
@@ -1773,7 +1776,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Pop a specified value off the end of the current array.
    *
-   * @return mixed The popped element from the current array.
+   * @return mixed The popped element from the current array. (Mutable)
    */
   public function pop()
   {
@@ -2050,9 +2053,10 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function removeFirst()
   {
-    array_shift($this->array);
+    $tmpArray = $this->array;
+    array_shift($tmpArray);
 
-    return static::create($this->array);
+    return static::create($tmpArray);
   }
 
   /**
@@ -2062,9 +2066,10 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function removeLast()
   {
-    array_pop($this->array);
+    $tmpArray = $this->array;
+    array_pop($tmpArray);
 
-    return static::create($this->array);
+    return static::create($tmpArray);
   }
 
   /**
@@ -2200,9 +2205,47 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function rest($from = 1)
   {
-    $result = array_splice($this->array, $from);
+    $tmpArray = $this->array;
 
-    return static::create($result);
+    return static::create(array_splice($tmpArray, $from));
+  }
+
+  /**
+   * Move an array element to a new index.
+   *
+   * cherry-picked from: http://stackoverflow.com/questions/12624153/move-an-array-element-to-a-new-index-in-php
+   *
+   * @param int|string $from
+   * @param int|string $to
+   *
+   * @return Arrayy (Immutable)
+   */
+  public function moveElement($from, $to)
+  {
+    $array = $this->array;
+
+    if (is_int($from)) {
+      $tmp = array_splice($array, $from, 1);
+      array_splice($array, $to, 0, $tmp);
+      $output = $array;
+    } elseif (is_string($from)) {
+      $indexToMove = array_search($from, array_keys($array), true);
+      $itemToMove = $array[$from];
+      array_splice($array, $indexToMove, 1);
+      $i = 0;
+      $output = Array();
+      foreach($array as $key => $item) {
+        if ($i == $to) {
+          $output[$from] = $itemToMove;
+        }
+        $output[$key] = $item;
+        $i++;
+      }
+    } else {
+      $output = array();
+    }
+
+    return static::create($output);
   }
 
   /**
@@ -2290,7 +2333,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Shifts a specified value off the beginning of array.
    *
-   * @return mixed A shifted element from the current array.
+   * @return mixed A shifted element from the current array. (Mutable)
    */
   public function shift()
   {

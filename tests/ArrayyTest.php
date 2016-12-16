@@ -3500,6 +3500,23 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($resultArray, $arrayy->toArray());
   }
 
+  public function testMoveElement()
+  {
+    $arr1 = new A(array('a', 'b', 'c', 'd', 'e'));
+    $expected = array('a', 'd', 'b', 'c', 'e');
+    $newArr1 = $arr1->moveElement(3, 1);
+
+    self::assertSame($expected, $newArr1->toArray());
+
+    // ---
+
+    $arr2 = new A(array('A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e'));
+    $expected = array('A' => 'a', 'D' => 'd', 'B' => 'b', 'C' => 'c', 'E' => 'e');
+    $newArr2 = $arr2->moveElement('D', 1);
+
+    self::assertSame($expected, $newArr2->toArray());
+  }
+
   public function testShuffle()
   {
     $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->shuffle();
