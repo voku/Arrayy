@@ -2233,7 +2233,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       $itemToMove = $array[$from];
       array_splice($array, $indexToMove, 1);
       $i = 0;
-      $output = Array();
+      $output = array();
       foreach($array as $key => $item) {
         if ($i == $to) {
           $output[$from] = $itemToMove;
