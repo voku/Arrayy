@@ -597,10 +597,10 @@ a([['foo' => 'bar', 'id' => 1], ['foo => 'lall', 'id' => 2]])->getColumn('foo', 
 
 ##### getIterator()
 
-Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
+Returns a new ArrayyIterator, thus implementing the IteratorAggregate interface.
 
 ```php
-a(['foo', 'bar'])->getIterator(); // ArrayIterator['foo', 'bar']
+a(['foo', 'bar'])->getIterator(); // ArrayyIterator['foo', 'bar']
 ```
 
 ##### implode(string $with) : string
