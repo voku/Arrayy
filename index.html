@@ -1,0 +1,928 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Introduction | Arrayy</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Array manipulation library for PHP, called Arrayy">
+        <meta name="generator" content="GitBook 2.5.2">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-highlight/website.css">
+        
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-search/search.css">
+        
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-fontsettings/website.css">
+        
+    
+    
+
+        
+    
+    
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="0" data-chapter-title="Introduction" data-filepath="README.md" data-basepath="." data-revision="Fri Jan 06 2017 11:05:16 GMT+0100 (Mitteleuropäische Zeit)">
+    
+
+<div class="book-summary">
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+            
+
+            
+
+            
+    
+        <li class="chapter active" data-level="0" data-path="index.html">
+            
+                
+                    <a href="./index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="index.html">
+            
+            <span><b>1.</b> API Reference</span>
+            
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="./" >Arrayy</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <p><a href="https://waffle.io/voku/Arrayy" target="_blank"><img src="https://badge.waffle.io/voku/Arrayy.png?label=ready&amp;title=Ready" alt="Stories in Ready"></a>
+<a href="https://travis-ci.org/voku/Arrayy" target="_blank"><img src="https://api.travis-ci.org/voku/Arrayy.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/github/voku/Arrayy?branch=master" target="_blank"><img src="https://coveralls.io/repos/voku/Arrayy/badge.svg?branch=master&amp;service=github" alt="Coverage Status"></a>
+<a href="https://codecov.io/github/voku/Arrayy?branch=master" target="_blank"><img src="https://codecov.io/github/voku/Arrayy/coverage.svg?branch=master" alt="codecov.io"></a>
+<a href="https://scrutinizer-ci.com/g/voku/Arrayy/?branch=master" target="_blank"><img src="https://scrutinizer-ci.com/g/voku/Arrayy/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"></a>
+<a href="https://www.codacy.com/app/voku/Arrayy" target="_blank"><img src="https://api.codacy.com/project/badge/grade/b8c4c88a063545d787e2a4f1f5dfdf23" alt="Codacy Badge"></a>
+<a href="https://insight.sensiolabs.com/projects/1c9c7bda-18ab-46da-a9f4-f9a4db1dc45c" target="_blank"><img src="https://insight.sensiolabs.com/projects/1c9c7bda-18ab-46da-a9f4-f9a4db1dc45c/mini.png" alt="SensioLabsInsight"></a>
+<a href="https://packagist.org/packages/voku/arrayy" target="_blank"><img src="https://poser.pugx.org/voku/arrayy/v/stable" alt="Latest Stable Version"></a> 
+<a href="https://packagist.org/packages/voku/arrayy" target="_blank"><img src="https://poser.pugx.org/voku/arrayy/downloads" alt="Total Downloads"></a> 
+<a href="https://packagist.org/packages/voku/arrayy" target="_blank"><img src="https://poser.pugx.org/voku/arrayy/v/unstable" alt="Latest Unstable Version"></a>
+<a href="https://travis-ci.org/voku/Arrayy" target="_blank"><img src="http://php7ready.timesplinter.ch/voku/Arrayy/badge.svg" alt="PHP 7 ready"></a>
+<a href="https://packagist.org/packages/voku/arrayy" target="_blank"><img src="https://poser.pugx.org/voku/arrayy/license" alt="License"></a></p>
+<p><a href="https://voku.gitbooks.io/arrayy/content/" target="_blank">documentation via gitbooks.io</a></p>
+<p>A PHP array manipulation library. Compatible with PHP
+5.3+, PHP 7, and HHVM.</p>
+<pre><code class="lang-php">Arrayy::create([<span class="hljs-string">&apos;Array&apos;</span>, <span class="hljs-string">&apos;Array&apos;</span>])-&gt;unique()-&gt;append(<span class="hljs-string">&apos;y&apos;</span>)-&gt;implode() <span class="hljs-comment">// Arrayy</span>
+</code></pre>
+<ul>
+<li><a href="#instance-methods">Instance methods</a><ul>
+<li><a href="#set-an-array-value">&quot;set an array value&quot;</a></li>
+<li><a href="#setmixed-key-mixed-value--arrayy-immutable">&quot;set an array value via dot-notation&quot;</a></li>
+<li><a href="#get-an-array-value">&quot;get an array value&quot;</a></li>
+<li><a href="#getstring-key-null-default-null-array--mixed">&quot;get an array value via dot-notation&quot;</a></li>
+<li><a href="#get-the-array">&quot;get the array&quot;</a></li>
+<li><a href="#delete-an-array-value">&quot;delete an array value&quot;</a></li>
+<li><a href="#check-if-an-array-value-is-set">&quot;check if an array value is-set&quot;</a></li>
+<li><a href="#simple-loop-with-an-arrayy-object">&quot;simple loop with an Arrayy-object&quot;</a></li>
+<li><a href="#appendmixed-value--arrayy-mutable">append</a></li>
+<li><a href="#prependmixed-value--arrayy-mutable">prepend</a></li>
+<li><a href="#atclosure-closure--arrayy-immutable">at</a></li>
+<li><a href="#averageint-decimals--intdouble">average</a></li>
+<li><a href="#chunkint-size-bool-preservekeys--arrayy-immutable">chunk</a></li>
+<li><a href="#clean--arrayy-immutable">clean</a></li>
+<li><a href="#clear--arrayy-mutable">clear</a></li>
+<li><a href="#customsortkeysfunction--arrayy-mutable">customSortKeys</a></li>
+<li><a href="#customsortvaluesfunction--arrayy-mutable">customSortValues</a></li>
+<li><a href="#containsmixed-value--boolean">contains</a></li>
+<li><a href="#containskeymixed-key--boolean">containsKey</a></li>
+<li><a href="#diffarray-array--arrayy-immutable">diff</a></li>
+<li><a href="#diffreversearray-array--arrayy-immutable">diffReverse</a></li>
+<li><a href="##diffrecursivearray-array-nullarray-helpervariableforrecursion--arrayy-immutable">diffRecursive</a></li>
+<li><a href="#eachclosure-closure--arrayy-immutable">each</a></li>
+<li><a href="#existsclosure-closure--boolean">exists</a></li>
+<li><a href="#filterclosurenull-closure--arrayy-immutable">filter</a></li>
+<li><a href="#filterby--arrayy-immutable">filterBy</a></li>
+<li><a href="#findclosure-closure--mixed">find</a></li>
+<li><a href="#first--mixed">first</a></li>
+<li><a href="#firstsmutablenullint-take--arrayy-mutable">firstsMutable</a></li>
+<li><a href="#firstsimmutablenullint-take--arrayy-immutable">firstsImmutable</a></li>
+<li><a href="#flip--arrayy-immutable">flip</a></li>
+<li><a href="#getcolumnmixed-columnkey-mixed-indexkey--arrayy">getColumn</a></li>
+<li><a href="#getiterator">getIterator</a></li>
+<li><a href="#implodestring-with--string">implode</a></li>
+<li><a href="#initialint-to--arrayy-immutable">initial</a></li>
+<li><a href="#intersectionarray-search--arrayy-immutable">intersection</a></li>
+<li><a href="#intersectsarray-search--boolean">intersects</a></li>
+<li><a href="#isassoc--boolean">isAssoc</a></li>
+<li><a href="#ismultiarray--boolean">isMultiArray</a></li>
+<li><a href="#keys--arrayy-immutable">keys</a></li>
+<li><a href="#last--mixed">last</a></li>
+<li><a href="#lastsimmutablenullint-take--arrayy-immutable">lastsImmutable</a></li>
+<li><a href="#lastsmutablenullint-take--arrayy-mutable">lastsMutable</a></li>
+<li><a href="#length--int">length</a></li>
+<li><a href="#max--mixed">max</a></li>
+<li><a href="#matchesclosure-closure--boolean">matches</a></li>
+<li><a href="#matchesanyclosure-closure--boolean">matchesAny</a></li>
+<li><a href="#mergeappendkeepindexarray-array--arrayy-immutable">mergeAppendKeepIndex</a></li>
+<li><a href="#mergeprependkeepindexarray-array--arrayy-immutable">mergePrependKeepIndex</a></li>
+<li><a href="#mergeappendnewindexarray-array--arrayy-immutable">mergeAppendNewIndex</a></li>
+<li><a href="#mergeprependnewindexarray-array--arrayy-immutable">mergePrependNewIndex</a></li>
+<li><a href="#min--mixed">min</a></li>
+<li><a href="#randomkey--mixed">randomKey</a></li>
+<li><a href="#randomkeys--arrayy-immutable">randomKeys</a></li>
+<li><a href="#randomvalue--mixed">randomValue</a></li>
+<li><a href="#randomvalues--arrayy-immutable">randomValues</a></li>
+<li><a href="#randomimmutableintnull-take--arrayy-immutable">randomImmutable</a></li>
+<li><a href="#randommutableintnull-take--arrayy-mutable">randomMutable</a></li>
+<li><a href="#randomweightedarray-array-intnull-take--arrayy-immutable">randomWeighted</a></li>
+<li><a href="#reducecallable-predicate-array-init--arrayy-immutable">reduce</a></li>
+<li><a href="#reindex--arrayy-mutable">reindex</a></li>
+<li><a href="#rejectclosure-closure--arrayy-immutable">reject</a></li>
+<li><a href="#removemixed-key--immutable">remove</a></li>
+<li><a href="#removefirst--arrayy-immutable">removeFirst</a></li>
+<li><a href="#removelast--arrayy-immutable">removeLast</a></li>
+<li><a href="#removevaluemixed-value--arrayy-immutable">removeValue</a></li>
+<li><a href="#replacearray-keys--arrayy-immutable">replace</a></li>
+<li><a href="#replaceallkeysarray-keys--arrayy-immutable">replaceAllKeys</a></li>
+<li><a href="#replaceallvaluesarray-array--arrayy-immutable">replaceAllValues</a></li>
+<li><a href="#replacekeysarray-keys--arrayy-immutable">replaceKeys</a></li>
+<li><a href="#replaceonevaluemixed-search-mixed-replacement--arrayy-immutable">replaceOneValue</a></li>
+<li><a href="#replacevaluesstring-search-string-replacement--arrayy-immutable">replaceValues</a></li>
+<li><a href="#restint-from--arrayy-immutable">rest</a></li>
+<li><a href="#reverse--arrayy-mutable">reverse</a></li>
+<li><a href="#searchindexmixed-value--mixed">searchIndex</a></li>
+<li><a href="#searchvaluemixed-index--arrayy-immutable">searchValue</a></li>
+<li><a href="#sortstringintsort_asc-direction-intsort_regular-strategy-boolfalse-keepkeys--arrayy-mutable">sort</a></li>
+<li><a href="#sorternullcallable-sorter-stringintsort_asc-direction-intsort_regular-strategy--arrayy-immutable">sorter</a></li>
+<li><a href="#sortkeysstringintsort_asc-direction--arrayy-mutable">sortKeys</a></li>
+<li><a href="#sortvaluenewindexstringintsort_asc-direction-intsort_regular-strategy--arrayy-immutable">sortValueNewIndex</a></li>
+<li><a href="#sortvaluekeepindexstringintsort_asc-direction-intsort_regular-strategy--arrayy-immutable">sortValueKeepIndex</a></li>
+<li><a href="#splitint2-numberofpieces-boolfalse-keepkeys--arrayy-immutable">split</a></li>
+<li><a href="#shuffle--arrayy-immutable">shuffle</a></li>
+<li><a href="#tojson--string">toJson</a></li>
+<li><a href="#unique--arrayy-mutable">unique</a></li>
+<li><a href="#values--arrayy-immutable">values</a></li>
+<li><a href="#walk--arrayy-mutable">walk</a></li>
+</ul>
+</li>
+<li><a href="#tests">Tests</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<h2 id="installation-via-composer-require">Installation via &quot;composer require&quot;</h2>
+<pre><code class="lang-shell">composer require voku/arrayy
+</code></pre>
+<h2 id="installation-via-composer-manually">Installation via composer (manually)</h2>
+<p>If you&apos;re using Composer to manage dependencies, you can include the following
+in your composer.json file:</p>
+<pre><code class="lang-json"><span class="hljs-string">&quot;require&quot;</span>: {
+    <span class="hljs-string">&quot;voku/arrayy&quot;</span>: <span class="hljs-string">&quot;~2.0&quot;</span>
+}
+</code></pre>
+<p>Then, after running <code>composer update</code> or <code>php composer.phar update</code>, you can
+load the class using Composer&apos;s autoloading:</p>
+<pre><code class="lang-php"><span class="hljs-keyword">require</span> <span class="hljs-string">&apos;vendor/autoload.php&apos;</span>;
+</code></pre>
+<p>And in either case, I&apos;d suggest using an alias.</p>
+<pre><code class="lang-php"><span class="hljs-keyword">use</span> <span class="hljs-title">Arrayy</span>\<span class="hljs-title">Arrayy</span> <span class="hljs-title">as</span> <span class="hljs-title">A</span>;
+</code></pre>
+<h2 id="oo-and-chaining">OO and Chaining</h2>
+<p>The library offers OO method chaining, as seen below:</p>
+<pre><code class="lang-php"><span class="hljs-keyword">echo</span> a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>, <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>, <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>])-&gt;unique()-&gt;reverse()-&gt;implode(<span class="hljs-string">&apos;,&apos;</span>); <span class="hljs-comment">// &apos;b&#xE0;&#x159;,f&#xF2;&#xF4;&apos;</span>
+</code></pre>
+<h2 id="implemented-interfaces">Implemented Interfaces</h2>
+<p><code>Arrayy\Arrayy</code> implements the <code>IteratorAggregate</code> interface, meaning that
+<code>foreach</code> can be used with an instance of the class:</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;f&#xF2;&#xF4;b&#xE0;&#x159;&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span>]);
+<span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$arrayy</span> <span class="hljs-keyword">as</span> <span class="hljs-variable">$value</span>) {
+    <span class="hljs-keyword">echo</span> <span class="hljs-variable">$value</span>;
+}
+<span class="hljs-comment">// &apos;f&#xF2;&#xF4;b&#xE0;&#x159;&apos;</span>
+<span class="hljs-comment">// &apos;foo&apos;</span>
+</code></pre>
+<p>It implements the <code>Countable</code> interface, enabling the use of <code>count()</code> to
+retrieve the number of elements in the array:</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span>]);
+count(<span class="hljs-variable">$arrayy</span>);  <span class="hljs-comment">// 2</span>
+</code></pre>
+<h2 id="php-56-creation">PHP 5.6 Creation</h2>
+<p>As of PHP 5.6, <a href="https://wiki.php.net/rfc/use_function" target="_blank"><code>use function</code></a> is
+available for importing functions. Arrayy exposes a namespaced function,
+<code>Arrayy\create</code>, which emits the same behaviour as <code>Arrayy\Arrayy::create()</code>.
+If running PHP 5.6, or another runtime that supports the <code>use function</code> syntax,
+you can take advantage of an even simpler API as seen below:</p>
+<pre><code class="lang-php"><span class="hljs-keyword">use</span> <span class="hljs-title">function</span> <span class="hljs-title">Arrayy</span>\<span class="hljs-title">create</span> <span class="hljs-title">as</span> <span class="hljs-title">a</span>;
+
+<span class="hljs-comment">// Instead of: A::create([&apos;f&#xF2;&#xF4;&apos;, &apos;b&#xE0;&#x159;&apos;])-&gt;reverse()-&gt;implode();</span>
+a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>, <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>])-&gt;reverse()-&gt;implode(<span class="hljs-string">&apos;,&apos;</span>); <span class="hljs-comment">// &apos;b&#xE0;&#x159;,f&#xF2;&#xF4;&apos;</span>
+</code></pre>
+<h2 id="staticarrayy">StaticArrayy</h2>
+<p>All methods listed under &quot;Instance methods&quot; are available as part of a static
+wrapper.</p>
+<pre><code class="lang-php"><span class="hljs-keyword">use</span> <span class="hljs-title">Arrayy</span>\<span class="hljs-title">StaticArrayy</span> <span class="hljs-title">as</span> <span class="hljs-title">A</span>;
+
+<span class="hljs-comment">// Translates to Arrayy::create([&apos;f&#xF2;&#xF4;&apos;, &apos;b&#xE0;&#x159;&apos;])-&gt;reverse();</span>
+<span class="hljs-comment">// Returns an Arrayy object with the array</span>
+A::reverse([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>, <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>]);
+</code></pre>
+<h2 id="class-methods">Class methods</h2>
+<h5 id="use-a-default-object">use a &quot;default object&quot;</h5>
+<p>Creates an Arrayy object.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = <span class="hljs-keyword">new</span> Arrayy(<span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>, <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>)); <span class="hljs-comment">// Array[&apos;f&#xF2;&#xF4;&apos;, &apos;b&#xE0;&#x159;&apos;]</span>
+</code></pre>
+<h5 id="createarray-array--arrayy-immutable">create(array $array) : Arrayy (Immutable)</h5>
+<p>Creates an Arrayy object, via static &quot;create()&quot;-method</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = A::create(<span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>, <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>)); <span class="hljs-comment">// Array[&apos;f&#xF2;&#xF4;&apos;, &apos;b&#xE0;&#x159;&apos;]</span>
+</code></pre>
+<h5 id="createbyreferencearray-array--arrayy-mutable">createByReference(array &amp;$array) : Arrayy (Mutable)</h5>
+<p>WARNING: Creates an Arrayy object by reference.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$array</span> = <span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>, <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>);
+<span class="hljs-variable">$arrayy</span> = A::createByReference(<span class="hljs-variable">$array</span>); <span class="hljs-comment">// Array[&apos;f&#xF2;&#xF4;&apos;, &apos;b&#xE0;&#x159;&apos;]</span>
+</code></pre>
+<h5 id="createfromjsonstring-json--arrayy-immutable">createFromJson(string $json) : Arrayy (Immutable)</h5>
+<p>Create an new Arrayy object via JSON.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$str</span> = <span class="hljs-string">&apos;{&quot;firstName&quot;:&quot;John&quot;, &quot;lastName&quot;:&quot;Doe&quot;}&apos;</span>;
+<span class="hljs-variable">$arrayy</span> = A::createFromJson(<span class="hljs-variable">$str</span>); <span class="hljs-comment">// Arrayy[&apos;firstName&apos; =&gt; &apos;John&apos;, &apos;lastName&apos; =&gt; &apos;Doe&apos;]</span>
+</code></pre>
+<h5 id="createfromobjectarrayaccess-object--arrayy-immutable">createFromObject(ArrayAccess $object) : Arrayy (Immutable)</h5>
+<p>Create an new instance filled with values from an object that have implemented ArrayAccess.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$object</span> = A::create(<span class="hljs-number">1</span>, <span class="hljs-string">&apos;foo&apos;</span>);
+<span class="hljs-variable">$arrayy</span> = A::createFromObject(<span class="hljs-variable">$object</span>); <span class="hljs-comment">// Arrayy[1, &apos;foo&apos;]</span>
+</code></pre>
+<h5 id="createwithrange--arrayy-immutable">createWithRange() : Arrayy (Immutable)</h5>
+<p>Create an new instance containing a range of elements.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = A::createWithRange(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>); <span class="hljs-comment">// Arrayy[2, 3, 4]</span>
+</code></pre>
+<h5 id="createfromstringstring-str--arrayy-immutable">createFromString(string $str) : Arrayy (Immutable)</h5>
+<p>Create an new Arrayy object via string.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = A::createFromString(<span class="hljs-string">&apos; foo, bar &apos;</span>); <span class="hljs-comment">// Arrayy[&apos;foo&apos;, &apos;bar&apos;]</span>
+</code></pre>
+<h2 id="instance-methods">Instance Methods</h2>
+<p>Arrayy: All examples below make use of PHP 5.6
+function importing, and PHP 5.4 short array syntax. For further details,
+see the documentation for the create method above, as well as the notes
+on PHP 5.6 creation.</p>
+<h5 id="set-an-array-value">&quot;set an array value&quot;</h5>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>]);
+<span class="hljs-variable">$arrayy</span>[<span class="hljs-string">&apos;foo&apos;</span>] = <span class="hljs-string">&apos;bar&apos;</span>;
+var_dump(<span class="hljs-variable">$arrayy</span>); <span class="hljs-comment">// Arrayy[&apos;f&#xF2;&#xF4;&apos; =&gt; &apos;b&#xE0;&#x159;&apos;, &apos;foo&apos; =&gt; &apos;bar&apos;]</span>
+</code></pre>
+<h5 id="get-an-array-value">&quot;get an array value&quot;</h5>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>]);
+var_dump(<span class="hljs-variable">$arrayy</span>[<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>]); <span class="hljs-comment">// &apos;b&#xE0;&#x159;&apos;</span>
+</code></pre>
+<h5 id="get-the-array">&quot;get the array&quot;</h5>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>]);
+var_dump(<span class="hljs-variable">$arrayy</span>-&gt;getArray()); <span class="hljs-comment">// [&apos;f&#xF2;&#xF4;&apos; =&gt; &apos;b&#xE0;&#x159;&apos;]</span>
+</code></pre>
+<h5 id="delete-an-array-value">&quot;delete an array value&quot;</h5>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>, <span class="hljs-string">&apos;lall&apos;</span>]);
+<span class="hljs-keyword">unset</span>(<span class="hljs-variable">$arrayy</span>[<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>]);
+var_dump(<span class="hljs-variable">$arrayy</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;lall&apos;]</span>
+</code></pre>
+<h5 id="check-if-an-array-value-isset">&quot;check if an array value is-set&quot;</h5>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>]);
+<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$arrayy</span>[<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>]); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="simple-loop-with-an-arrayyobject">&quot;simple loop with an Arrayy-object&quot;</h5>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>];
+<span class="hljs-keyword">foreach</span> (<span class="hljs-variable">$arrayy</span>) <span class="hljs-keyword">as</span> <span class="hljs-variable">$key</span> =&gt; <span class="hljs-variable">$value</span>) {
+  <span class="hljs-keyword">echo</span> <span class="hljs-variable">$key</span> . <span class="hljs-string">&apos; | &apos;</span> . <span class="hljs-variable">$value</span>; <span class="hljs-comment">// f&#xF2;&#xF4; | b&#xE0;&#x159;</span>
+}
+</code></pre>
+<h5 id="appendmixed-value--arrayy-mutable">append(mixed $value) : Arrayy (Mutable)</h5>
+<p>Append a value to the current array.</p>
+<p>alias: &quot;Arrayy-&gt;add()&quot;</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>])-&gt;append(<span class="hljs-string">&apos;foo&apos;</span>); <span class="hljs-comment">// Arrayy[&apos;f&#xF2;&#xF4;&apos; =&gt; &apos;b&#xE0;&#x159;&apos;, 0 =&gt; &apos;foo&apos;]</span>
+</code></pre>
+<h5 id="prependmixed-value--arrayy-mutable">prepend(mixed $value) : Arrayy (Mutable)</h5>
+<p>Prepend a value to the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>])-&gt;prepend(<span class="hljs-string">&apos;foo&apos;</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;foo&apos;, &apos;f&#xF2;&#xF4;&apos; =&gt; &apos;b&#xE0;&#x159;&apos;]</span>
+</code></pre>
+<h5 id="atclosure-closure--arrayy-immutable">at(Closure $closure) : Arrayy (Immutable)</h5>
+<p>Iterate over the current array and execute a callback for each loop.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$result</span> = A::create();
+<span class="hljs-variable">$closure</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$value</span>, <span class="hljs-variable">$key</span>)</span> <span class="hljs-title">use</span> <span class="hljs-params">(<span class="hljs-variable">$result</span>)</span> </span>{
+  <span class="hljs-variable">$result</span>[<span class="hljs-variable">$key</span>] = <span class="hljs-string">&apos;:&apos;</span> . <span class="hljs-variable">$value</span> . <span class="hljs-string">&apos;:&apos;</span>;
+};
+a([<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;bar&apos;</span> =&gt; <span class="hljs-string">&apos;bis&apos;</span>])-&gt;at(<span class="hljs-variable">$closure</span>); <span class="hljs-comment">// Arrayy[&apos;:foo:&apos;, &apos;bar&apos; =&gt; &apos;:bis:&apos;]</span>
+</code></pre>
+<h5 id="averageint-decimals--intdouble">average(int $decimals) : int|double</h5>
+<p>Returns the average value of the current array.</p>
+<pre><code class="lang-php">a([-<span class="hljs-number">9</span>, -<span class="hljs-number">8</span>, -<span class="hljs-number">7</span>, <span class="hljs-number">1.32</span>])-&gt;average(<span class="hljs-number">2</span>); <span class="hljs-comment">// -5.67</span>
+</code></pre>
+<h5 id="chunkint-size-bool-preservekeys--arrayy-immutable">chunk(int $size, bool $preserveKeys) : Arrayy (Immutable)</h5>
+<p>Create a chunked version of the current array.</p>
+<pre><code class="lang-php">a([-<span class="hljs-number">9</span>, -<span class="hljs-number">8</span>, -<span class="hljs-number">7</span>, <span class="hljs-number">1.32</span>])-&gt;chunk(<span class="hljs-number">2</span>); <span class="hljs-comment">// Arrayy[[-9, -8], [-7, 1.32]]</span>
+</code></pre>
+<h5 id="clean--arrayy-immutable">clean() : Arrayy (Immutable)</h5>
+<p>Clean all falsy values from the current array.</p>
+<pre><code class="lang-php">a([-<span class="hljs-number">8</span> =&gt; -<span class="hljs-number">9</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-keyword">false</span>])-&gt;clean(); <span class="hljs-comment">// Arrayy[-8 =&gt; -9, 1]</span>
+</code></pre>
+<h5 id="clear--arrayy-mutable">clear() : Arrayy (Mutable)</h5>
+<p>WARNING!!! -&gt; Clear the current array.</p>
+<pre><code class="lang-php">a([-<span class="hljs-number">8</span> =&gt; -<span class="hljs-number">9</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-keyword">false</span>])-&gt;clear(); <span class="hljs-comment">// Arrayy[]</span>
+</code></pre>
+<h5 id="customsortkeysfunction--arrayy-mutable">customSortKeys($function) : Arrayy (Mutable)</h5>
+<p>Custom sort by index via &quot;uksort&quot;.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$callable</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$a</span>, <span class="hljs-variable">$b</span>)</span> </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable">$a</span> == <span class="hljs-variable">$b</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  }
+  <span class="hljs-keyword">return</span> (<span class="hljs-variable">$a</span> &gt; <span class="hljs-variable">$b</span>) ? <span class="hljs-number">1</span> : -<span class="hljs-number">1</span>;
+};
+<span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;three&apos;</span> =&gt; <span class="hljs-number">3</span>, <span class="hljs-string">&apos;one&apos;</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-string">&apos;two&apos;</span> =&gt; <span class="hljs-number">2</span>]);
+<span class="hljs-variable">$resultArrayy</span> = <span class="hljs-variable">$arrayy</span>-&gt;customSortKeys(<span class="hljs-variable">$callable</span>); <span class="hljs-comment">// Arrayy[&apos;one&apos; =&gt; 1, &apos;three&apos; =&gt; 3, &apos;two&apos; =&gt; 2]</span>
+</code></pre>
+<h5 id="customsortvaluesfunction--arrayy-mutable">customSortValues($function) : Arrayy (Mutable)</h5>
+<p>Custom sort by value via &quot;usort&quot;.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$callable</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$a</span>, <span class="hljs-variable">$b</span>)</span> </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable">$a</span> == <span class="hljs-variable">$b</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  }
+  <span class="hljs-keyword">return</span> (<span class="hljs-variable">$a</span> &gt; <span class="hljs-variable">$b</span>) ? <span class="hljs-number">1</span> : -<span class="hljs-number">1</span>;
+};
+<span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;three&apos;</span> =&gt; <span class="hljs-number">3</span>, <span class="hljs-string">&apos;one&apos;</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-string">&apos;two&apos;</span> =&gt; <span class="hljs-number">2</span>]);
+<span class="hljs-variable">$resultArrayy</span> = <span class="hljs-variable">$arrayy</span>-&gt;customSortValues(<span class="hljs-variable">$callable</span>); <span class="hljs-comment">// Arrayy[&apos;one&apos; =&gt; 1, &apos;two&apos; =&gt; 2, &apos;three&apos; =&gt; 3]</span>
+</code></pre>
+<h5 id="containsstringintfloat-value--boolean">contains(string|int|float $value) : boolean</h5>
+<p>Check if an item is in the current array.</p>
+<p>alias: &quot;Arrayy-&gt;containsValue()&quot;</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span>, <span class="hljs-keyword">true</span>])-&gt;contains(<span class="hljs-keyword">true</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="containsvaluesarray-values--boolean">containsValues(array $values) : boolean</h5>
+<p>Check if all given needles are present in the array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span>, <span class="hljs-keyword">true</span>])-&gt;containsValues(<span class="hljs-keyword">array</span>(<span class="hljs-number">1</span>, <span class="hljs-keyword">true</span>)); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="containskeystringintfloat-key--boolean">containsKey(string|int|float $key) : boolean</h5>
+<p>Check if the given key/index exists in the array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-keyword">true</span>])-&gt;containsKey(<span class="hljs-number">1</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="containskeysarray-key--boolean">containsKeys(array $key) : boolean</h5>
+<p>Check if all given needles are present in the array as key/index.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-keyword">true</span>])-&gt;containsKeys(<span class="hljs-keyword">array</span>(<span class="hljs-number">1</span> =&gt; <span class="hljs-number">0</span>)); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="containscaseinsensitivestring-value--boolean">containsCaseInsensitive(string $value) : boolean</h5>
+<p>Check if an (case-insensitive) string is in the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;E&apos;</span>, <span class="hljs-string">&apos;&#xE9;&apos;</span>])-&gt;containsCaseInsensitive(<span class="hljs-string">&apos;&#xC9;&apos;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="diffarray-array--arrayy-immutable">diff(array $array) : Arrayy (Immutable)</h5>
+<p>Return values that are only in the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-number">2</span>])-&gt;diff([<span class="hljs-number">1</span> =&gt; <span class="hljs-number">1</span>]); <span class="hljs-comment">// Arrayy[2 =&gt; 2]</span>
+</code></pre>
+<h5 id="diffreversearray-array--arrayy-immutable">diffReverse(array $array) : Arrayy (Immutable)</h5>
+<p>Return values that are only in the new $array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-number">1</span>])-&gt;diffReverse([<span class="hljs-number">1</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-number">2</span>]); <span class="hljs-comment">// Arrayy[2 =&gt; 2]</span>
+</code></pre>
+<h5 id="diffrecursivearray-array-nullarray-helpervariableforrecursion--arrayy-immutable">diffRecursive(array $array, null|array $helperVariableForRecursion) : Arrayy (Immutable)</h5>
+<p>Return values that are only in the current multi-dimensional array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; [<span class="hljs-number">1</span> =&gt; <span class="hljs-number">1</span>], <span class="hljs-number">2</span> =&gt; [<span class="hljs-number">2</span> =&gt; <span class="hljs-number">2</span>]])-&gt;diffRecursive([<span class="hljs-number">1</span> =&gt; [<span class="hljs-number">1</span> =&gt; <span class="hljs-number">1</span>]]); <span class="hljs-comment">// Arrayy[2 =&gt; [2 =&gt; 2]]</span>
+</code></pre>
+<h5 id="divide--arrayy-immutable">divide() : Arrayy (Immutable)</h5>
+<p>Divide an array into two arrays. One with keys and the other with values.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;a&apos;</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-string">&apos;b&apos;</span> =&gt; <span class="hljs-string">&apos;&apos;</span>])-&gt;divide(); <span class="hljs-comment">// Arrayy[Arrayy[&apos;a&apos;, &apos;b&apos;], Arrayy[1, &apos;&apos;]]</span>
+</code></pre>
+<h5 id="eachclosure-closure--arrayy-immutable">each(Closure $closure) : Arrayy (Immutable)</h5>
+<p>Iterate over the current array and modify the array&apos;s value.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$result</span> = A::create();
+<span class="hljs-variable">$closure</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$value</span>)</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&apos;:&apos;</span> . <span class="hljs-variable">$value</span> . <span class="hljs-string">&apos;:&apos;</span>;
+};
+a([<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;bar&apos;</span> =&gt; <span class="hljs-string">&apos;bis&apos;</span>])-&gt;each(<span class="hljs-variable">$closure</span>); <span class="hljs-comment">// Arrayy[&apos;:foo:&apos;, &apos;bar&apos; =&gt; &apos;:bis:&apos;]</span>
+</code></pre>
+<h5 id="existsclosure-closure--boolean">exists(Closure $closure) : boolean</h5>
+<pre><code class="lang-php"><span class="hljs-variable">$callable</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$value</span>, <span class="hljs-variable">$key</span>)</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> === <span class="hljs-variable">$key</span> <span class="hljs-keyword">and</span> <span class="hljs-string">&apos;two&apos;</span> === <span class="hljs-variable">$value</span>;
+};
+a([<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;two&apos;</span>])-&gt;exists(<span class="hljs-variable">$callable</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="filterclosurenull-closure--arrayy-immutable">filter(Closure|null $closure) : Arrayy (Immutable)</h5>
+<p>Find all items in an array that pass the truth test.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$closure</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$value</span>)</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">$value</span> % <span class="hljs-number">2</span> !== <span class="hljs-number">0</span>;
+}
+a([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>])-&gt;filter(<span class="hljs-variable">$closure</span>); <span class="hljs-comment">// Arrayy[0 =&gt; 1, 2 =&gt; 3]</span>
+</code></pre>
+<h5 id="filterby--arrayy-immutable">filterBy() : Arrayy (Immutable)</h5>
+<p>Filters an array of objects (or a numeric array of associative arrays)
+based on the value of a particular property within that.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$array</span> = [
+  <span class="hljs-number">0</span> =&gt; [<span class="hljs-string">&apos;id&apos;</span> =&gt; <span class="hljs-number">123</span>, <span class="hljs-string">&apos;name&apos;</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;group&apos;</span> =&gt; <span class="hljs-string">&apos;primary&apos;</span>, <span class="hljs-string">&apos;value&apos;</span> =&gt; <span class="hljs-number">123456</span>, <span class="hljs-string">&apos;when&apos;</span> =&gt; <span class="hljs-string">&apos;2014-01-01&apos;</span>],
+  <span class="hljs-number">1</span> =&gt; [<span class="hljs-string">&apos;id&apos;</span> =&gt; <span class="hljs-number">456</span>, <span class="hljs-string">&apos;name&apos;</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;group&apos;</span> =&gt; <span class="hljs-string">&apos;primary&apos;</span>, <span class="hljs-string">&apos;value&apos;</span> =&gt; <span class="hljs-number">1468</span>, <span class="hljs-string">&apos;when&apos;</span> =&gt; <span class="hljs-string">&apos;2014-07-15&apos;</span>],
+};        
+a(<span class="hljs-variable">$array</span>)-&gt;filterBy(<span class="hljs-string">&apos;name&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span>); <span class="hljs-comment">// Arrayy[0 =&gt; [&apos;id&apos; =&gt; 123, &apos;name&apos; =&gt; &apos;foo&apos;, &apos;group&apos; =&gt; &apos;primary&apos;, &apos;value&apos; =&gt; 123456, &apos;when&apos; =&gt; &apos;2014-01-01&apos;]]</span>
+</code></pre>
+<h5 id="findclosure-closure--mixed">find(Closure $closure) : mixed</h5>
+<p>Find the first item in an array that passes the truth test, otherwise return false.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$search</span> = <span class="hljs-string">&apos;foo&apos;</span>;
+<span class="hljs-variable">$closure</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$value</span>, <span class="hljs-variable">$key</span>)</span> <span class="hljs-title">use</span> <span class="hljs-params">(<span class="hljs-variable">$search</span>)</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">$value</span> === <span class="hljs-variable">$search</span>;
+};
+a([<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;lall&apos;</span>])-&gt;find(<span class="hljs-variable">$closure</span>); <span class="hljs-comment">// &apos;foo&apos;</span>
+</code></pre>
+<h5 id="first--mixed">first() : mixed</h5>
+<p>Get the first value from the current array and return null if there wasn&apos;t a element.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-number">4</span> =&gt; <span class="hljs-string">&apos;lall&apos;</span>])-&gt;first(); <span class="hljs-comment">// &apos;foo&apos;</span>
+</code></pre>
+<h5 id="firstsmutablenullint-take--arrayy-mutable">firstsMutable(null|int $take) : Arrayy (Mutable)</h5>
+<p>Get the first value(s) from the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-number">4</span> =&gt; <span class="hljs-string">&apos;lall&apos;</span>])-&gt;firsts(<span class="hljs-number">2</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;foo&apos;, 1 =&gt; &apos;bar&apos;]</span>
+</code></pre>
+<h5 id="firstsimmutablenullint-take--arrayy-immutable">firstsImmutable(null|int $take) : Arrayy (Immutable)</h5>
+<p>Get the first value(s) from the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-number">4</span> =&gt; <span class="hljs-string">&apos;lall&apos;</span>])-&gt;firsts(<span class="hljs-number">2</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;foo&apos;, 1 =&gt; &apos;bar&apos;]</span>
+</code></pre>
+<h5 id="flip--arrayy-immutable">flip() : Arrayy (Immutable)</h5>
+<p>Exchanges all keys with their associated values in an array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">0</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>])-&gt;flip(); <span class="hljs-comment">// Arrayy[&apos;foo&apos; =&gt; 0, &apos;bar&apos; =&gt; 1]</span>
+</code></pre>
+<h5 id="getstring-key-null-default-null-array--mixed">get(string $key, [null $default], [null $array]) : mixed</h5>
+<p>Get a value from an array (optional using dot-notation).</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;user&apos;</span> =&gt; [<span class="hljs-string">&apos;lastname&apos;</span> =&gt; <span class="hljs-string">&apos;Moelleken&apos;</span>]]);
+<span class="hljs-variable">$arrayy</span>-&gt;get(<span class="hljs-string">&apos;user.lastname&apos;</span>); <span class="hljs-comment">// &apos;Moelleken&apos;</span>
+
+<span class="hljs-comment">// ---</span>
+
+<span class="hljs-variable">$arrayy</span> = <span class="hljs-keyword">new</span> A();
+<span class="hljs-variable">$arrayy</span>[<span class="hljs-string">&apos;user&apos;</span>] = [<span class="hljs-string">&apos;lastname&apos;</span> =&gt; <span class="hljs-string">&apos;Moelleken&apos;</span>];
+<span class="hljs-variable">$arrayy</span>[<span class="hljs-string">&apos;user.firstname&apos;</span>] = <span class="hljs-string">&apos;Lars&apos;</span>;
+
+<span class="hljs-variable">$arrayy</span>[<span class="hljs-string">&apos;user&apos;</span>][<span class="hljs-string">&apos;lastname&apos;</span>] <span class="hljs-comment">// Moelleken</span>
+<span class="hljs-variable">$arrayy</span>[<span class="hljs-string">&apos;user.lastname&apos;</span>] <span class="hljs-comment">// Moelleken</span>
+<span class="hljs-variable">$arrayy</span>[<span class="hljs-string">&apos;user.firstname&apos;</span>] <span class="hljs-comment">// Lars</span>
+</code></pre>
+<h5 id="getcolumnmixed-columnkey-mixed-indexkey--arrayy">getColumn(mixed $columnKey, mixed $indexKey) : Arrayy</h5>
+<p>Returns the values from a single column of the input array, identified by
+the $columnKey, can be used to extract data-columns from multi-arrays.</p>
+<pre><code class="lang-php">a([[<span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;id&apos;</span> =&gt; <span class="hljs-number">1</span>], [<span class="hljs-string">&apos;foo =&gt; &apos;</span>lall<span class="hljs-string">&apos;, &apos;</span>id<span class="hljs-string">&apos; =&gt; 2]])-&gt;getColumn(&apos;</span>foo<span class="hljs-string">&apos;, &apos;</span>id<span class="hljs-string">&apos;); // Arrayy[1 =&gt; &apos;</span>bar<span class="hljs-string">&apos;, 2 =&gt; &apos;</span>lall<span class="hljs-string">&apos;]
+</span></code></pre>
+<h5 id="getiterator">getIterator()</h5>
+<p>Returns a new ArrayyIterator, thus implementing the IteratorAggregate interface.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;bar&apos;</span>])-&gt;getIterator(); <span class="hljs-comment">// ArrayyIterator[&apos;foo&apos;, &apos;bar&apos;]</span>
+</code></pre>
+<h5 id="implodestring-with--string">implode(string $with) : string</h5>
+<p>Implodes an array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">0</span> =&gt; -<span class="hljs-number">9</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>])-&gt;implode(<span class="hljs-string">&apos;|&apos;</span>); <span class="hljs-comment">// &apos;-9|1|2&apos;</span>
+</code></pre>
+<h5 id="initialint-to--arrayy-immutable">initial(int $to) : Arrayy (Immutable)</h5>
+<p>Get everything but the last..$to items.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-number">4</span> =&gt; <span class="hljs-string">&apos;lall&apos;</span>])-&gt;initial(<span class="hljs-number">2</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;foo&apos;]</span>
+</code></pre>
+<h5 id="intersectionarray-search--arrayy-immutable">intersection(array $search) : Arrayy (Immutable)</h5>
+<p>Return an array with all elements found in input array.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;bar&apos;</span>])-&gt;intersection([<span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;baz&apos;</span>]); <span class="hljs-comment">// Arrayy[&apos;bar&apos;]</span>
+</code></pre>
+<h5 id="intersectsarray-search--boolean">intersects(array $search) : boolean</h5>
+<p>Return a boolean flag which indicates whether the two input arrays have any common elements.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;bar&apos;</span>])-&gt;intersects([<span class="hljs-string">&apos;f&#xF6;&#xF6;&apos;</span>, <span class="hljs-string">&apos;b&#xE4;r&apos;</span>]); <span class="hljs-comment">// false</span>
+</code></pre>
+<h5 id="isassoc--boolean">isAssoc() : boolean</h5>
+<p>Check if we have named keys in the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])-&gt;isAssoc(); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="isequal--boolean">isEqual() : boolean</h5>
+<p>Check if we have named keys in the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;&#x1F4A9;&apos;</span>])-&gt;isEqual([<span class="hljs-string">&apos;&#x1F4A9;&apos;</span>]); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="ismultiarray--boolean">isMultiArray() : boolean</h5>
+<p>Check if the current array is a multi-array.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;foo&apos;</span> =&gt; [<span class="hljs-number">1</span>, <span class="hljs-number">2</span> , <span class="hljs-number">3</span>]])-&gt;isMultiArray(); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="issequential--boolean">isSequential() : boolean</h5>
+<p>Check if the current array is sequential [0, 1, 2, 3, 4, 5 ...] or not.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">0</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;lall&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foobar&apos;</span>])-&gt;isSequential(); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="keys--arrayy-immutable">keys() : Arrayy (Immutable)</h5>
+<p>Get all keys from the current array.</p>
+<p>alias: &quot;Arrayy-&gt;getKeys()&quot;</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo2&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>]);
+<span class="hljs-variable">$arrayy</span>-&gt;keys(); <span class="hljs-comment">// Arrayy[1, 2, 3]</span>
+</code></pre>
+<h5 id="last--mixed">last() : mixed</h5>
+<p>Get the last value from the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-number">4</span> =&gt; <span class="hljs-string">&apos;lall&apos;</span>])-&gt;last(); <span class="hljs-comment">// &apos;lall&apos;</span>
+</code></pre>
+<h5 id="lastsimmutablenullint-take--arrayy-immutable">lastsImmutable(null|int $take) : Arrayy (Immutable)</h5>
+<p>Get the last value(s) from the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-number">4</span> =&gt; <span class="hljs-string">&apos;lall&apos;</span>])-&gt;lasts(<span class="hljs-number">2</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;bar&apos;, 1 =&gt; &apos;lall&apos;]</span>
+</code></pre>
+<h5 id="lastsmutablenullint-take--arrayy-mutable">lastsMutable(null|int $take) : Arrayy (Mutable)</h5>
+<p>Get the last value(s) from the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-number">4</span> =&gt; <span class="hljs-string">&apos;lall&apos;</span>])-&gt;lasts(<span class="hljs-number">2</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;bar&apos;, 1 =&gt; &apos;lall&apos;]</span>
+</code></pre>
+<h5 id="length--int">length() : int</h5>
+<p>Count the values from the current array.</p>
+<p>alias: &quot;Arrayy-&gt;count()&quot; || &quot;Arrayy-&gt;size()&quot;</p>
+<pre><code class="lang-php">a([-<span class="hljs-number">9</span>, -<span class="hljs-number">8</span>, -<span class="hljs-number">7</span>, <span class="hljs-number">1.32</span>])-&gt;length(); <span class="hljs-comment">// 4</span>
+</code></pre>
+<h5 id="max--mixed">max() : mixed</h5>
+<p>Get the max value from an array.</p>
+<pre><code class="lang-php">a([-<span class="hljs-number">9</span>, -<span class="hljs-number">8</span>, -<span class="hljs-number">7</span>, <span class="hljs-number">1.32</span>])-&gt;max(); <span class="hljs-comment">// 1.32</span>
+</code></pre>
+<h5 id="matchesclosure-closure--boolean">matches(Closure $closure) : boolean</h5>
+<p>Check if all items in an array match a truth test.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$closure</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$value</span>, <span class="hljs-variable">$key</span>)</span> </span>{
+  <span class="hljs-keyword">return</span> (<span class="hljs-variable">$value</span> % <span class="hljs-number">2</span> === <span class="hljs-number">0</span>);
+};
+a([<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">8</span>])-&gt;matches(<span class="hljs-variable">$closure</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="matchesanyclosure-closure--boolean">matchesAny(Closure $closure) : boolean</h5>
+<p>Check if any item in an array matches a truth test.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$closure</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$value</span>, <span class="hljs-variable">$key</span>)</span> </span>{
+  <span class="hljs-keyword">return</span> (<span class="hljs-variable">$value</span> % <span class="hljs-number">2</span> === <span class="hljs-number">0</span>);
+};
+a([<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>])-&gt;matches(<span class="hljs-variable">$closure</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="mergeappendkeepindexarray-array--arrayy-immutable">mergeAppendKeepIndex(array $array) : Arrayy (Immutable)</h5>
+<p>Merge the new $array into the current array.</p>
+<ul>
+<li>keep key,value from the current array, also if the index is in the new $array</li>
+</ul>
+<pre><code class="lang-php"><span class="hljs-variable">$array1</span> = [<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar1&apos;</span>];
+<span class="hljs-variable">$array2</span> = [<span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar2&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;three&apos;</span>];
+a(<span class="hljs-variable">$array1</span>)-&gt;mergeAppendKeepIndex(<span class="hljs-variable">$array2</span>); <span class="hljs-comment">// Arrayy[1 =&gt; &apos;one&apos;, &apos;foo&apos; =&gt; &apos;bar2&apos;, 3 =&gt; &apos;three&apos;]</span>
+</code></pre>
+<h5 id="mergeprependkeepindexarray-array--arrayy-immutable">mergePrependKeepIndex(array $array) : Arrayy (Immutable)</h5>
+<p>Merge the the current array into the $array.</p>
+<ul>
+<li>use key,value from the new $array, also if the index is in the current array</li>
+</ul>
+<pre><code class="lang-php"><span class="hljs-variable">$array1</span> = [<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar1&apos;</span>];
+<span class="hljs-variable">$array2</span> = [<span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar2&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;three&apos;</span>];
+a(<span class="hljs-variable">$array1</span>)-&gt;mergePrependKeepIndex(<span class="hljs-variable">$array2</span>); <span class="hljs-comment">// Arrayy[&apos;foo&apos; =&gt; &apos;bar1&apos;, 3 =&gt; &apos;three&apos;, 1 =&gt; &apos;one&apos;]</span>
+</code></pre>
+<h5 id="mergeappendnewindexarray-array--arrayy-immutable">mergeAppendNewIndex(array $array) : Arrayy (Immutable)</h5>
+<p>Merge the new $array into the current array.</p>
+<ul>
+<li>replace duplicate assoc-keys from the current array with the key,values from the new $array</li>
+<li>create new indexes</li>
+</ul>
+<pre><code class="lang-php"><span class="hljs-variable">$array1</span> = [<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar1&apos;</span>];
+<span class="hljs-variable">$array2</span> = [<span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar2&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;three&apos;</span>];
+a(<span class="hljs-variable">$array1</span>)-&gt;mergeAppendNewIndex(<span class="hljs-variable">$array2</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;one&apos;, &apos;foo&apos; =&gt; &apos;bar2&apos;, 1 =&gt; three&apos;]</span>
+</code></pre>
+<h5 id="mergeprependnewindexarray-array--arrayy-immutable">mergePrependNewIndex(array $array) : Arrayy (Immutable)</h5>
+<p>Merge the current array into the new $array.</p>
+<ul>
+<li>replace duplicate assoc-keys from new $array with the key,values from the current array</li>
+<li>create new indexes</li>
+</ul>
+<pre><code class="lang-php"><span class="hljs-variable">$array1</span> = [<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar1&apos;</span>];
+<span class="hljs-variable">$array2</span> = [<span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;bar2&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;three&apos;</span>];
+a(<span class="hljs-variable">$array1</span>)-&gt;mergePrependNewIndex(<span class="hljs-variable">$array2</span>); <span class="hljs-comment">// Arrayy[&apos;foo&apos; =&gt; &apos;bar1&apos;, 0 =&gt; &apos;three&apos;, 1 =&gt; &apos;one&apos;]</span>
+</code></pre>
+<h5 id="min--mixed">min() : mixed</h5>
+<p>Get the min value from an array.</p>
+<pre><code class="lang-php">a([-<span class="hljs-number">9</span>, -<span class="hljs-number">8</span>, -<span class="hljs-number">7</span>, <span class="hljs-number">1.32</span>])-&gt;min(); <span class="hljs-comment">// -9</span>
+</code></pre>
+<h5 id="moveelementintstring-from-intstring-to--arrayy">moveElement(int|string $from, int|string $to) : Arrayy</h5>
+<p>Move an array element to a new index.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arr2</span> = <span class="hljs-keyword">new</span> A([<span class="hljs-string">&apos;A&apos;</span> =&gt; <span class="hljs-string">&apos;a&apos;</span>, <span class="hljs-string">&apos;B&apos;</span> =&gt; <span class="hljs-string">&apos;b&apos;</span>, <span class="hljs-string">&apos;C&apos;</span> =&gt; <span class="hljs-string">&apos;c&apos;</span>, <span class="hljs-string">&apos;D&apos;</span> =&gt; <span class="hljs-string">&apos;d&apos;</span>, <span class="hljs-string">&apos;E&apos;</span> =&gt; <span class="hljs-string">&apos;e&apos;</span>]);
+<span class="hljs-variable">$newArr2</span> = <span class="hljs-variable">$arr2</span>-&gt;moveElement(<span class="hljs-string">&apos;D&apos;</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// Arrayy[&apos;A&apos; =&gt; &apos;a&apos;, &apos;D&apos; =&gt; &apos;d&apos;, &apos;B&apos; =&gt; &apos;b&apos;, &apos;C&apos; =&gt; &apos;c&apos;, &apos;E&apos; =&gt; &apos;e&apos;]</span>
+</code></pre>
+<h5 id="randomkey--mixed">randomKey() : mixed</h5>
+<p>Pick a random key/index from the keys of this array.</p>
+<p>alias: &quot;Arrayy-&gt;getRandomKey()&quot;</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = A::create([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;two&apos;</span>]);
+<span class="hljs-variable">$arrayy</span>-&gt;randomKey(); <span class="hljs-comment">// e.g. 2</span>
+</code></pre>
+<h5 id="randomkeys--arrayy-immutable">randomKeys() : Arrayy (Immutable)</h5>
+<p>Pick a given number of random keys/indexes out of this array.</p>
+<p>alias: &quot;Arrayy-&gt;getRandomKeys()&quot;</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = A::create([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;two&apos;</span>]);
+<span class="hljs-variable">$arrayy</span>-&gt;randomKeys(); <span class="hljs-comment">// e.g. Arrayy[1, 2]</span>
+</code></pre>
+<h5 id="randomvalue--mixed">randomValue() : mixed</h5>
+<p>Pick a random value from the values of this array.</p>
+<p>alias: &quot;Arrayy-&gt;getRandomValue()&quot;</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = A::create([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;two&apos;</span>]);
+<span class="hljs-variable">$arrayy</span>-&gt;randomValue(); <span class="hljs-comment">// e.g. &apos;one&apos;</span>
+</code></pre>
+<h5 id="randomvalues--arrayy-immutable">randomValues() : Arrayy (Immutable)</h5>
+<p>Pick a given number of random values out of this array.</p>
+<p>alias: &quot;Arrayy-&gt;getRandomValues()&quot;</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = A::create([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;two&apos;</span>]);
+<span class="hljs-variable">$arrayy</span>-&gt;randomValues(); <span class="hljs-comment">// e.g. Arrayy[&apos;one&apos;, &apos;two&apos;]</span>
+</code></pre>
+<h5 id="randomimmutableintnull-take--arrayy-immutable">randomImmutable(int|null $take) : Arrayy (Immutable)</h5>
+<p>Get a random string from an array.</p>
+<p>alias: &quot;Arrayy-&gt;getRandom()&quot;</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>])-&gt;randomImmutable(<span class="hljs-number">2</span>); <span class="hljs-comment">// e.g.: Arrayy[1, 4]</span>
+</code></pre>
+<h5 id="randommutableintnull-take--arrayy-mutable">randomMutable(int|null $take) : Arrayy (Mutable)</h5>
+<p>Get a random string from an array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>])-&gt;randomMutable(<span class="hljs-number">2</span>); <span class="hljs-comment">// e.g.: Arrayy[1, 4]</span>
+</code></pre>
+<h5 id="randomweightedarray-array-intnull-take--arrayy-immutable">randomWeighted(array $array, int|null $take) : Arrayy (Immutable)</h5>
+<p>Get a random value from an array, with the ability to skew the results.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">0</span> =&gt; <span class="hljs-number">3</span>, <span class="hljs-number">1</span> =&gt; <span class="hljs-number">4</span>])-&gt;randomWeighted([<span class="hljs-number">1</span> =&gt; <span class="hljs-number">4</span>]); <span class="hljs-comment">// e.g.: Arrayy[4] (has a 66% chance of returning 4)</span>
+</code></pre>
+<h5 id="reducecallable-predicate-array-init--arrayy-immutable">reduce(callable $predicate, array $init) : Arrayy (Immutable)</h5>
+<p>Reduce the current array via callable e.g. anonymous-function.</p>
+<pre><code class="lang-php"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">myReducer</span><span class="hljs-params">(<span class="hljs-variable">$resultArray</span>, <span class="hljs-variable">$value</span>)</span> </span>{
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable">$value</span> == <span class="hljs-string">&apos;foo&apos;</span>) {
+    <span class="hljs-variable">$resultArray</span>[] = <span class="hljs-variable">$value</span>;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">$resultArray</span>;
+};
+a([<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;bar&apos;</span>])-&gt;reduce(<span class="hljs-string">&apos;myReducer&apos;</span>); <span class="hljs-comment">// Arrayy[&apos;foo&apos;]</span>
+</code></pre>
+<h5 id="reindex--arrayy-mutable">reindex() : Arrayy (Mutable)</h5>
+<p>Create a numerically re-indexed Arrayy object.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">2</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-number">2</span>])-&gt;reindex(); <span class="hljs-comment">// Arrayy[0 =&gt; 1, 1 =&gt; 2]</span>
+</code></pre>
+<h5 id="rejectclosure-closure--arrayy-immutable">reject(Closure $closure) : Arrayy (Immutable)</h5>
+<p>Return all items that fail the truth test.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$closure</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$value</span>)</span> </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-variable">$value</span> % <span class="hljs-number">2</span> !== <span class="hljs-number">0</span>;
+}
+a([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>])-&gt;reject(<span class="hljs-variable">$closure</span>); <span class="hljs-comment">// Arrayy[1 =&gt; 2, 3 =&gt; 4]</span>
+</code></pre>
+<h5 id="removemixed-key--immutable">remove(mixed $key) : (Immutable)</h5>
+<p>Remove a value from the current array (optional using dot-notation).</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>])-&gt;remove(<span class="hljs-number">1</span>); <span class="hljs-comment">// Arrayy[&apos;foo&apos; =&gt; &apos;foo&apos;]</span>
+</code></pre>
+<h5 id="removefirst--arrayy-immutable">removeFirst() : Arrayy (Immutable)</h5>
+<p>Remove the first value from the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>])-&gt;removeFirst(); <span class="hljs-comment">// Arrayy[&apos;foo&apos; =&gt; &apos;foo&apos;]</span>
+</code></pre>
+<h5 id="removelast--arrayy-immutable">removeLast() : Arrayy (Immutable)</h5>
+<p>Remove the last value from the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>])-&gt;removeLast(); <span class="hljs-comment">// Arrayy[1 =&gt; &apos;bar&apos;]</span>
+</code></pre>
+<h5 id="removevaluemixed-value--arrayy-immutable">removeValue(mixed $value) : Arrayy (Immutable)</h5>
+<p>Removes a particular value from an array (numeric or associative).</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>])-&gt;removeValue(<span class="hljs-string">&apos;foo&apos;</span>); <span class="hljs-comment">// Arrayy[1 =&gt; &apos;bar&apos;]</span>
+</code></pre>
+<h5 id="replacearray-keys--arrayy-immutable">replace(array $keys) : Arrayy (Immutable)</h5>
+<p>Replace a key with a new key/value pair.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo2&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>]);
+<span class="hljs-variable">$arrayy</span>-&gt;replace(<span class="hljs-number">2</span>, <span class="hljs-string">&apos;notfoo&apos;</span>, <span class="hljs-string">&apos;notbar&apos;</span>); <span class="hljs-comment">// Arrayy[1 =&gt; &apos;foo&apos;, &apos;notfoo&apos; =&gt; &apos;notbar&apos;, 3 =&gt; &apos;bar&apos;]</span>
+</code></pre>
+<h5 id="replaceallkeysarray-keys--arrayy-immutable">replaceAllKeys(array $keys) : Arrayy (Immutable)</h5>
+<p>Create an array using the current array as values and the other array as keys.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$firstArray</span> = <span class="hljs-keyword">array</span>(
+    <span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>,
+    <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;two&apos;</span>,
+    <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;three&apos;</span>,
+);
+<span class="hljs-variable">$secondArray</span> = <span class="hljs-keyword">array</span>(
+    <span class="hljs-string">&apos;one&apos;</span> =&gt; <span class="hljs-number">1</span>,
+    <span class="hljs-number">1</span>     =&gt; <span class="hljs-string">&apos;one&apos;</span>,
+    <span class="hljs-number">2</span>     =&gt; <span class="hljs-number">2</span>,
+);
+<span class="hljs-variable">$arrayy</span> = a(<span class="hljs-variable">$firstArray</span>);
+<span class="hljs-variable">$arrayy</span>-&gt;replaceAllKeys(<span class="hljs-variable">$secondArray</span>); <span class="hljs-comment">// Arrayy[1 =&gt; &quot;one&quot;, &apos;one&apos; =&gt; &quot;two&quot;, 2 =&gt; &quot;three&quot;]</span>
+</code></pre>
+<h5 id="replaceallvaluesarray-array--arrayy-immutable">replaceAllValues(array $array) : Arrayy (Immutable)</h5>
+<p>Create an array using the current array as keys and the other array as values.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$firstArray</span> = <span class="hljs-keyword">array</span>(
+    <span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;one&apos;</span>,
+    <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;two&apos;</span>,
+    <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;three&apos;</span>,
+);
+<span class="hljs-variable">$secondArray</span> = <span class="hljs-keyword">array</span>(
+    <span class="hljs-string">&apos;one&apos;</span> =&gt; <span class="hljs-number">1</span>,
+    <span class="hljs-number">1</span>     =&gt; <span class="hljs-string">&apos;one&apos;</span>,
+    <span class="hljs-number">2</span>     =&gt; <span class="hljs-number">2</span>,
+);
+<span class="hljs-variable">$arrayy</span> = a(<span class="hljs-variable">$firstArray</span>);
+<span class="hljs-variable">$arrayy</span>-&gt;replaceAllValues(<span class="hljs-variable">$secondArray</span>); <span class="hljs-comment">// Arrayy[&apos;one&apos; =&gt; 1, &apos;two&apos; =&gt; &apos;one&apos;, &apos;three&apos; =&gt; 2]</span>
+</code></pre>
+<h5 id="replacekeysarray-keys--arrayy-immutable">replaceKeys(array $keys) : Arrayy (Immutable)</h5>
+<p>Replace the keys in an array with another set.</p>
+<p>WARNING: An array of keys must matching the array&apos;s size and order!</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>])-&gt;replaceKeys([<span class="hljs-number">1</span> =&gt; <span class="hljs-number">2</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;replaced&apos;</span>]); <span class="hljs-comment">// Arrayy[2 =&gt; &apos;bar&apos;, &apos;replaced&apos; =&gt; &apos;foo&apos;]</span>
+</code></pre>
+<h5 id="replaceonevaluemixed-search-mixed-replacement--arrayy-immutable">replaceOneValue(mixed $search, mixed $replacement) : Arrayy (Immutable)</h5>
+<p>Replace the first matched value in an array.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$testArray</span> = [<span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;foobar&apos;</span> =&gt; <span class="hljs-string">&apos;foobar&apos;</span>];
+a(<span class="hljs-variable">$testArray</span>)-&gt;replaceOneValue(<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;replaced&apos;</span>); <span class="hljs-comment">// Arrayy[&apos;bar&apos;, &apos;foo&apos; =&gt; &apos;replaced&apos;, &apos;foobar&apos; =&gt; &apos;foobar&apos;]</span>
+</code></pre>
+<h5 id="replacevaluesstring-search-string-replacement--arrayy-immutable">replaceValues(string $search, string $replacement) : Arrayy (Immutable)</h5>
+<p>Replace values in the current array.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$testArray</span> = [<span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;foobar&apos;</span> =&gt; <span class="hljs-string">&apos;foobar&apos;</span>];
+a(<span class="hljs-variable">$testArray</span>)-&gt;replaceValues(<span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-string">&apos;replaced&apos;</span>); <span class="hljs-comment">// Arrayy[&apos;bar&apos;, &apos;foo&apos; =&gt; &apos;replaced&apos;, &apos;foobar&apos; =&gt; &apos;replacedbar&apos;]</span>
+</code></pre>
+<h5 id="restint-from--arrayy-immutable">rest(int $from) : Arrayy (Immutable)</h5>
+<p>Get the last elements from index $from until the end of this array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-number">4</span> =&gt; <span class="hljs-string">&apos;lall&apos;</span>])-&gt;rest(<span class="hljs-number">2</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;lall&apos;]</span>
+</code></pre>
+<h5 id="reverse--arrayy-mutable">reverse() : Arrayy (Mutable)</h5>
+<p>Return the array in the reverse order.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])-&gt;reverse(); <span class="hljs-comment">// self[3, 2, 1]</span>
+</code></pre>
+<h5 id="searchindexmixed-value--mixed">searchIndex(mixed $value) : mixed</h5>
+<p>Search for the first index of the current array via $value.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>, <span class="hljs-string">&apos;lall&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>])-&gt;searchIndex(<span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;f&#xF2;&#xF4;&apos;]</span>
+</code></pre>
+<h5 id="searchvaluemixed-index--arrayy-immutable">searchValue(mixed $index) : Arrayy (Immutable)</h5>
+<p>Search for the value of the current array via $index.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span> =&gt; <span class="hljs-string">&apos;b&#xE0;&#x159;&apos;</span>])-&gt;searchValue(<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;b&#xE0;&#x159;&apos;]</span>
+</code></pre>
+<h5 id="setmixed-key-mixed-value--arrayy-immutable">set(mixed $key, mixed $value) : Arrayy (Immutable)</h5>
+<p>Set a value for the current array (optional using dot-notation).</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-string">&apos;Lars&apos;</span> =&gt; [<span class="hljs-string">&apos;lastname&apos;</span> =&gt; <span class="hljs-string">&apos;Moelleken&apos;</span>]]);
+<span class="hljs-variable">$arrayy</span>-&gt;set(<span class="hljs-string">&apos;Lars.lastname&apos;</span>, <span class="hljs-string">&apos;M&#xFC;ller&apos;</span>); <span class="hljs-comment">// Arrayy[&apos;Lars&apos;, [&apos;lastname&apos; =&gt; &apos;M&#xFC;ller&apos;]]]</span>
+</code></pre>
+<h5 id="setandget">setAndGet()</h5>
+<p>Get a value from a array and set it if it was not.</p>
+<p>WARNING: this method only set the value, if the $key is not already set</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-number">1</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-number">2</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-number">3</span>]);
+<span class="hljs-variable">$arrayy</span>-&gt;setAndGet(<span class="hljs-number">1</span>, <span class="hljs-number">4</span>); <span class="hljs-comment">// 1</span>
+<span class="hljs-variable">$arrayy</span>-&gt;setAndGet(<span class="hljs-number">0</span>, <span class="hljs-number">4</span>); <span class="hljs-comment">// 4</span>
+</code></pre>
+<h5 id="serialize--string">serialize() : string</h5>
+<p>Serialize the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>])-&gt;serialize(); <span class="hljs-comment">// &apos;a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}&apos;</span>
+</code></pre>
+<h5 id="unserializestring-string--arrayy-mutable">unserialize(string $string) : Arrayy (Mutable)</h5>
+<p>Unserialize an string and return this object.</p>
+<pre><code class="lang-php">a()-&gt;unserialize(<span class="hljs-string">&apos;a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}&apos;</span>); <span class="hljs-comment">// Arrayy[1, 4, 7]</span>
+</code></pre>
+<h5 id="sortstringintsortasc-direction-intsortregular-strategy-boolfalse-keepkeys--arrayy-mutable">sort(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy, bool(false) $keepKeys) : Arrayy (Mutable)</h5>
+<p>Sort the current array and optional you can keep the keys.</p>
+<ul>
+<li>$direction e.g.: [SORT_ASC, SORT_DESC, &apos;ASC&apos;, &apos;asc&apos;, &apos;DESC&apos;, &apos;desc&apos;]</li>
+<li>$strategy e.g.: [SORT_REGULAR, SORT_NATURAL, ...]</li>
+</ul>
+<pre><code class="lang-php">a(<span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;d&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;f&apos;</span>, <span class="hljs-number">0</span> =&gt; <span class="hljs-string">&apos;a&apos;</span>)-&gt;sort(SORT_ASC, SORT_NATURAL, <span class="hljs-keyword">false</span>); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;a&apos;, 1 =&gt; &apos;d&apos;, 2 =&gt; &apos;f&apos;]</span>
+</code></pre>
+<h5 id="sorternullcallable-sorter-stringintsortasc-direction-intsortregular-strategy--arrayy-immutable">sorter(null|callable $sorter, string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy (Immutable)</h5>
+<p>Sort a array by value, by a closure or by a property.</p>
+<ul>
+<li>If the sorter is null (default), the array is sorted naturally.</li>
+<li>Associative (string) keys will be maintained, but numeric keys will be re-indexed.</li>
+<li>$direction e.g.: [SORT_ASC, SORT_DESC, &apos;ASC&apos;, &apos;asc&apos;, &apos;DESC&apos;, &apos;desc&apos;]</li>
+<li>$strategy e.g.: [SORT_REGULAR, SORT_NATURAL, ...]</li>
+</ul>
+<pre><code class="lang-php"><span class="hljs-variable">$testArray</span> = range(<span class="hljs-number">1</span>, <span class="hljs-number">5</span>);
+<span class="hljs-variable">$under</span> = a(<span class="hljs-variable">$testArray</span>)-&gt;sorter(
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(<span class="hljs-variable">$value</span>)</span> </span>{
+    <span class="hljs-keyword">return</span> <span class="hljs-variable">$value</span> % <span class="hljs-number">2</span> === <span class="hljs-number">0</span>;
+  }
+);
+var_dump(<span class="hljs-variable">$under</span>); <span class="hljs-comment">// Arrayy[1, 3, 5, 2, 4]</span>
+</code></pre>
+<h5 id="sortkeysstringintsortasc-direction--arrayy-mutable">sortKeys(string|int(SORT_ASC) $direction) : Arrayy (Mutable)</h5>
+<p>Sort the current array by key by $direction = &apos;asc&apos; or $direction = &apos;desc&apos;.</p>
+<ul>
+<li>$direction e.g.: [SORT_ASC, SORT_DESC, &apos;ASC&apos;, &apos;asc&apos;, &apos;DESC&apos;, &apos;desc&apos;]</li>
+</ul>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-number">2</span>, <span class="hljs-number">0</span> =&gt; <span class="hljs-number">1</span>])-&gt;sortKeys(<span class="hljs-string">&apos;asc&apos;</span>); <span class="hljs-comment">// Arrayy[0 =&gt; 1, 1 =&gt; 2]</span>
+</code></pre>
+<h5 id="sortvaluenewindexstringintsortasc-direction-intsortregular-strategy--arrayy-immutable">sortValueNewIndex(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy (Immutable)</h5>
+<p>Sort the current array by value.</p>
+<ul>
+<li>$direction e.g.: [SORT_ASC, SORT_DESC, &apos;ASC&apos;, &apos;asc&apos;, &apos;DESC&apos;, &apos;desc&apos;]</li>
+<li>$strategy e.g.: [SORT_REGULAR, SORT_NATURAL, ...]</li>
+</ul>
+<pre><code class="lang-php">a(<span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;d&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;f&apos;</span>, <span class="hljs-number">0</span> =&gt; <span class="hljs-string">&apos;a&apos;</span>)-&gt;sortValueNewIndex(SORT_ASC, SORT_NATURAL); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;a&apos;, 1 =&gt; &apos;d&apos;, 2 =&gt; &apos;f&apos;]</span>
+</code></pre>
+<h5 id="sortvaluekeepindexstringintsortasc-direction-intsortregular-strategy--arrayy-immutable">sortValueKeepIndex(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy) : Arrayy (Immutable)</h5>
+<p>Sort the current array by value.</p>
+<ul>
+<li>$direction e.g.: [SORT_ASC, SORT_DESC, &apos;ASC&apos;, &apos;asc&apos;, &apos;DESC&apos;, &apos;desc&apos;]</li>
+<li>$strategy e.g.: [SORT_REGULAR, SORT_NATURAL, ...]</li>
+</ul>
+<pre><code class="lang-php">a(<span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;d&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;f&apos;</span>, <span class="hljs-number">0</span> =&gt; <span class="hljs-string">&apos;a&apos;</span>)-&gt;sortValueNewIndex(SORT_ASC, SORT_REGULAR); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;a&apos;, 3 =&gt; &apos;d&apos;, 2 =&gt; &apos;f&apos;]</span>
+</code></pre>
+<h5 id="splitint2-numberofpieces-boolfalse-keepkeys--arrayy-immutable">split(int(2) $numberOfPieces, bool(false) $keepKeys) : Arrayy (Immutable)</h5>
+<p>Split an array in the given amount of pieces.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;a&apos;</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-string">&apos;b&apos;</span> =&gt; <span class="hljs-number">2</span>])-&gt;split(<span class="hljs-number">2</span>, <span class="hljs-keyword">true</span>); <span class="hljs-comment">// Arrayy[[&apos;a&apos; =&gt; 1], [&apos;b&apos; =&gt; 2]]</span>
+</code></pre>
+<h5 id="stripempty--arrayy-immutable">stripEmpty() : Arrayy (Immutable)</h5>
+<p>Stripe all empty items.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;a&apos;</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-string">&apos;b&apos;</span> =&gt; <span class="hljs-string">&apos;&apos;</span>])-&gt;stripEmpty(); <span class="hljs-comment">// Arrayy[[&apos;a&apos; =&gt; 1]]</span>
+</code></pre>
+<h5 id="swapstringint-swapa-stringint-swapb--arrayy-immutable">swap(string|int $swapA, string|int $swapB) : Arrayy (Immutable)</h5>
+<p>Swap two values between positions by key.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;a&apos;</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-string">&apos;b&apos;</span> =&gt; <span class="hljs-string">&apos;&apos;</span>])-&gt;swap(<span class="hljs-string">&apos;a&apos;</span>, <span class="hljs-string">&apos;b&apos;</span>); <span class="hljs-comment">// Arrayy[[&apos;a&apos; =&gt; &apos;&apos;, &apos;b&apos; =&gt; 1]]</span>
+</code></pre>
+<h5 id="shuffle--arrayy-immutable">shuffle() : Arrayy (Immutable)</h5>
+<p>Shuffle the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>])-&gt;shuffle(); <span class="hljs-comment">// e.g.: Arrayy[[&apos;foo&apos; =&gt; &apos;foo&apos;, 1 =&gt; &apos;bar&apos;]]</span>
+</code></pre>
+<h5 id="tojson--string">toJson() : string</h5>
+<p>Convert the current array to JSON.</p>
+<pre><code class="lang-php">a([<span class="hljs-string">&apos;bar&apos;</span>, <span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;foo&apos;</span>)])-&gt;toJson(); <span class="hljs-comment">// &apos;[&quot;bar&quot;,{&quot;1&quot;:&quot;foo&quot;}]&apos;</span>
+</code></pre>
+<h5 id="unique--arrayy-mutable">unique() : Arrayy (Mutable)</h5>
+<p>Return a duplicate free copy of the current array.</p>
+<pre><code class="lang-php">a([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>])-&gt;unique(); <span class="hljs-comment">// Arrayy[1, 2]</span>
+</code></pre>
+<h5 id="values--arrayy-immutable">values() : Arrayy (Immutable)</h5>
+<p>Get all values from a array.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arrayy</span> = a([<span class="hljs-number">1</span> =&gt; <span class="hljs-string">&apos;foo&apos;</span>, <span class="hljs-number">2</span> =&gt; <span class="hljs-string">&apos;foo2&apos;</span>, <span class="hljs-number">3</span> =&gt; <span class="hljs-string">&apos;bar&apos;</span>]);
+<span class="hljs-variable">$arrayyTmp</span>-&gt;values(); <span class="hljs-comment">// Arrayy[0 =&gt; &apos;foo&apos;, 1 =&gt; &apos;foo2&apos;, 2 =&gt; &apos;bar&apos;]</span>
+</code></pre>
+<h5 id="walk--arrayy-mutable">walk() : Arrayy (Mutable)</h5>
+<p>Apply the given function to every element in the array, discarding the results.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$callable</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(&amp;<span class="hljs-variable">$value</span>, <span class="hljs-variable">$key</span>)</span> </span>{
+  <span class="hljs-variable">$value</span> = <span class="hljs-variable">$key</span>;
+};
+<span class="hljs-variable">$arrayy</span> = a([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]);
+<span class="hljs-variable">$arrayy</span>-&gt;walk(<span class="hljs-variable">$callable</span>); <span class="hljs-comment">// Arrayy[0, 1, 2]</span>
+</code></pre>
+<h2 id="tests">Tests</h2>
+<p>From the project directory, tests can be ran using <code>phpunit</code></p>
+<h2 id="license">License</h2>
+<p>Released under the MIT License - see <code>LICENSE.txt</code> for details.</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        
+    </div>
+</div>
+
+        
+<script src="gitbook/app.js"></script>
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-search/lunr.min.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-search/search.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-sharing/buttons.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-fontsettings/buttons.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"highlight":{},"search":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
