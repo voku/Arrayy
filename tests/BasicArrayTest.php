@@ -242,6 +242,37 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     self::assertSame('bar', $result->current());
   }
 
+  public function testGetIteratorWithSubArray()
+  {
+    $arrayy = $this->createArrayy(array('foo' => array(3,2,1), 'bar' => array(1,2,3), 1, null));
+
+    $result = $arrayy->getIterator();
+    self::assertInstanceOf('\ArrayIterator', $result);
+    self::assertInstanceOf('Arrayy\ArrayyIterator', $result);
+
+    $result->next();
+    self::assertSame(array(1, 2, 3), $result->current()->getArray());
+    self::assertSame(array(1, 2, 3), $result->current()->getArray());
+  }
+
+  public function testForEachWithInnerArrayy()
+  {
+    $arrayy = $this->createArrayy(array('foo' => array(3 => array(33, 34, 35), 2 => array(22, 23, 24), 1 => array(11, 12, 13))));
+
+    foreach ($arrayy as $arrayyInner) {
+      self::assertInstanceOf('Arrayy\Arrayy', $arrayyInner);
+      self::assertSame(array(3, 2, 1), $arrayyInner->getKeys()->getArray());
+
+      foreach ($arrayyInner as $arrayyInnerInnerKey => $arrayyInnerInner) {
+        self::assertInstanceOf('Arrayy\Arrayy', $arrayyInnerInner);
+
+        if ($arrayyInnerInnerKey == 3) {
+          self::assertSame(array(33, 34, 35), $arrayyInnerInner->getArray());
+        }
+      }
+    }
+  }
+
   /**
    * @dataProvider simpleArrayProvider
    *

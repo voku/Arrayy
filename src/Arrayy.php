@@ -155,13 +155,13 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
-   * Returns a new ArrayIterator, thus implementing the IteratorAggregate interface.
+   * Returns a new ArrayyIterator, thus implementing the IteratorAggregate interface.
    *
-   * @return \ArrayIterator An iterator for the values in the array.
+   * @return ArrayyIterator An iterator for the values in the array.
    */
   public function getIterator()
   {
-    return new \ArrayIterator($this->array);
+    return new ArrayyIterator($this->array);
   }
 
   /**
