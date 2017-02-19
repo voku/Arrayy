@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Stringy;
 
 use voku\helper\AntiXSS;
@@ -2409,7 +2411,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   private function capitalizePersonalNameByDelimiter($names, $delimiter)
   {
     // init
-    $names = explode($delimiter, $names);
+    $names = explode((string)$delimiter, (string)$names);
     $encoding = $this->encoding;
 
     $specialCases = array(
