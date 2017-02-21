@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arrayy;
 
 use voku\helper\UTF8;
@@ -44,9 +46,15 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @return mixed Get a Value from the current array.
    */
-  public function &__get($key)
+  public function __get($key)
   {
-    return $this->array[$key];
+    $return = $this->get($key);
+
+    if (is_array($return) === true) {
+      return new self($return);
+    }
+
+    return $return;
   }
 
   /**
@@ -181,25 +189,30 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
         (
             $tmpReturn === false
             &&
-            strpos($offset, $this->pathSeparator) === false
+            strpos((string)$offset, $this->pathSeparator) === false
         )
     ) {
 
-      return isset($this->array[$offset]);
+      return $tmpReturn;
 
     } else {
 
       $offsetExists = false;
-      $explodedPath = explode($this->pathSeparator, $offset);
-      $lastOffset = array_pop($explodedPath);
-      $containerPath = implode($this->pathSeparator, $explodedPath);
 
-      $this->callAtPath(
-          $containerPath,
-          function ($container) use ($lastOffset, &$offsetExists) {
-            $offsetExists = isset($container[$lastOffset]);
-          }
-      );
+      if (strpos((string)$offset, $this->pathSeparator) !== false) {
+
+        $offsetExists = false;
+        $explodedPath = explode($this->pathSeparator, (string)$offset);
+        $lastOffset = array_pop($explodedPath);
+        $containerPath = implode($this->pathSeparator, $explodedPath);
+
+        $this->callAtPath(
+            $containerPath,
+            function ($container) use ($lastOffset, &$offsetExists) {
+              $offsetExists = isset($container[$lastOffset]);
+            }
+        );
+      }
 
       return $offsetExists;
     }
@@ -245,15 +258,19 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       return;
     }
 
-    $path = explode($this->pathSeparator, $offset);
-    $pathToUnset = array_pop($path);
+    if (strpos((string)$offset, $this->pathSeparator) !== false) {
 
-    $this->callAtPath(
-        implode($this->pathSeparator, $path),
-        function (&$offset) use (&$pathToUnset) {
-          unset($offset[$pathToUnset]);
-        }
-    );
+      $path = explode($this->pathSeparator, (string)$offset);
+      $pathToUnset = array_pop($path);
+
+      $this->callAtPath(
+          implode($this->pathSeparator, $path),
+          function (&$offset) use (&$pathToUnset) {
+            unset($offset[$pathToUnset]);
+          }
+      );
+
+    }
   }
 
   /**
@@ -305,7 +322,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @return int|double The average value
    */
-  public function average($decimals = null)
+  public function average($decimals = 0)
   {
     $count = $this->count();
 
@@ -314,7 +331,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     if (!is_int($decimals)) {
-      $decimals = null;
+      $decimals = 0;
     }
 
     return round(array_sum($this->array) / $count, $decimals);
@@ -1020,12 +1037,12 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @return mixed
    */
-  public function get($key, $default = null, &$array = null)
+  public function get($key, $default = null, $array = null)
   {
     if (is_array($array) === true) {
-      $usedArray = &$array;
+      $usedArray = $array;
     } else {
-      $usedArray = &$this->array;
+      $usedArray = $this->array;
     }
 
     if (null === $key) {
@@ -1037,7 +1054,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     // Crawl through array, get key according to object or not
-    foreach (explode($this->pathSeparator, $key) as $segment) {
+    foreach (explode($this->pathSeparator, (string)$key) as $segment) {
       if (!isset($usedArray[$segment])) {
         return $default instanceof \Closure ? $default() : $default;
       }
@@ -1299,13 +1316,13 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Internal mechanics of remove method.
    *
-   * @param $key
+   * @param string $key
    *
    * @return boolean
    */
   protected function internalRemove($key)
   {
-    $path = explode($this->pathSeparator, $key);
+    $path = explode($this->pathSeparator, (string)$key);
 
     // Crawl though the keys
     while (count($path) > 1) {
@@ -1341,7 +1358,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     // init
     $array = &$this->array;
-    $path = explode($this->pathSeparator, $key);
+    $path = explode($this->pathSeparator, (string)$key);
 
     // Crawl through the keys
     while (count($path) > 1) {
@@ -2552,7 +2569,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       $result = array();
     } else {
       $numberOfPieces = (int)$numberOfPieces;
-      $splitSize = ceil($arrayCount / $numberOfPieces);
+      $splitSize = (int)ceil($arrayCount / $numberOfPieces);
       $result = array_chunk($this->array, $splitSize, $keepKeys);
     }
 
@@ -2572,7 +2589,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
             return false;
           }
 
-          return (bool)trim($item);
+          return (bool)trim((string)$item);
         }
     );
   }

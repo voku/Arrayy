@@ -2329,6 +2329,12 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A(array('foo bar', 'öäü'));
     self::assertArrayy($arrayy);
     self::assertSame(true, isset($arrayy[0]));
+
+    // ---
+
+    $arrayy = new A(array(true => 'foo bar', 'lall' => 'öäü'));
+    self::assertArrayy($arrayy);
+    self::assertSame(true, isset($arrayy[true]));
   }
 
   public function testKeys()
@@ -3478,6 +3484,20 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function testSetViaDotNotation()
   {
     $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken')));
+
+    $result = $arrayy->get('Lars.lastname');
+    self::assertSame('Moelleken', $result);
+
+    self::assertSame(array('lastname' => 'Moelleken'), $arrayy['Lars']);
+
+    self::assertSame('Moelleken', $arrayy->Lars->lastname);
+
+    self::assertSame('Moelleken', $arrayy['Lars']['lastname']);
+
+    $tmp = $arrayy['Lars'];
+    self::assertSame('Moelleken', $tmp['lastname']);
+
+    // set an new value
     $result = $arrayy->set('Lars.lastname', 'Müller');
 
     $result = $result->get('Lars.lastname');
