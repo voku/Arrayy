@@ -22,7 +22,7 @@ class StaticArrayyTest extends PHPUnit_Framework_TestCase
   {
     /** @noinspection PhpUndefinedMethodInspection */
     $result = A::first();
-    self::assertSame(null, $result);
+    self::assertNull($result);
   }
 
   public function testInvocation()

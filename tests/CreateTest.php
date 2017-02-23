@@ -13,7 +13,7 @@ class CreateTestCase extends PHPUnit_Framework_TestCase
     static::assertSame('foo bar,UTF-8', (string)$arrayy);
     static::assertSame('foo bar', $arrayy[0]);
     static::assertSame('UTF-8', $arrayy[1]);
-    static::assertSame(null, $arrayy[3]);
+    static::assertNull($arrayy[3]);
 
     foreach ($arrayy as $key => $value) {
       if ($key == 0) {

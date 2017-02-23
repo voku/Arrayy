@@ -300,7 +300,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     $arrayy = $this->createArrayy($array);
     $value = $arrayy->getRandom()->getArray();
 
-    self::assertNotSame(null, $value[0]);
+    self::assertNotNull($value[0]);
     /** @noinspection TypeUnsafeArraySearchInspection */
     self::assertTrue(in_array($value[0], $arrayy->toArray()));
   }
@@ -319,7 +319,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     $arrayy = $this->createArrayy($array);
     $key = $arrayy->getRandomKey();
 
-    self::assertNotSame(null, $key);
+    self::assertNotNull($key);
     self::assertTrue(array_key_exists($key, $arrayy->toArray()));
   }
 

@@ -50,8 +50,8 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     $return = $this->get($key);
 
-    if (is_array($return) === true) {
-      return new self($return);
+    if (is_array($return)) {
+      return self::create($return);
     }
 
     return $return;
@@ -238,7 +238,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function offsetSet($offset, $value)
   {
-    if (null === $offset) {
+    if ($offset === null) {
       $this->array[] = $value;
     } else {
       $this->internalSet($offset, $value);
@@ -675,7 +675,11 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     $result = array();
 
-    if ($helperVariableForRecursion !== null && is_array($helperVariableForRecursion) === true) {
+    if (
+        $helperVariableForRecursion !== null
+        &&
+        is_array($helperVariableForRecursion)
+    ) {
       $arrayForTheLoop = $helperVariableForRecursion;
     } else {
       $arrayForTheLoop = $this->array;
@@ -969,7 +973,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     $tmpArray = $this->array;
     $result = array_shift($tmpArray);
 
-    if (null === $result) {
+    if ($result === null) {
       return null;
     } else {
       return $result;
@@ -1039,18 +1043,26 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function get($key, $default = null, $array = null)
   {
-    if (is_array($array) === true) {
+    if (
+        $array !== null
+        &&
+        is_array($array)
+    ) {
       $usedArray = $array;
     } else {
       $usedArray = $this->array;
     }
 
-    if (null === $key) {
-      return $usedArray;
+    if ($key === null) {
+      return self::create($usedArray);
     }
 
     if (isset($usedArray[$key])) {
-      return $usedArray[$key];
+      if (is_array($usedArray[$key])) {
+        return self::create($usedArray[$key]);
+      } else {
+        return $usedArray[$key];
+      }
     }
 
     // Crawl through array, get key according to object or not
@@ -1062,7 +1074,11 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       $usedArray = $usedArray[$segment];
     }
 
-    return $usedArray;
+    if (is_array($usedArray)) {
+      return self::create($usedArray);
+    } else {
+      return $usedArray;
+    }
   }
 
   /**
@@ -1072,7 +1088,19 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function getArray()
   {
+    array_map(array('self', 'internalGetArray'), $this->array);
+
     return $this->array;
+  }
+
+  /**
+   * @param mixed $value
+   */
+  protected function internalGetArray(&$value)
+  {
+    if ($value instanceof self) {
+      $value &= $value->getArray();
+    }
   }
 
   /**
@@ -1215,8 +1243,17 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     // Iterate over values, group by property/results from closure
     foreach ($array as $key => $value) {
+
       $groupKey = is_callable($grouper) ? $grouper($value, $key) : $this->get($grouper, null, $value);
       $newValue = $this->get($groupKey, null, $result);
+
+      if ($groupKey instanceof self) {
+        $groupKey = $groupKey->getArray();
+      }
+
+      if ($newValue instanceof self) {
+        $newValue = $newValue->getArray();
+      }
 
       // Add to results
       if ($groupKey !== null) {
@@ -1352,24 +1389,26 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   protected function internalSet($key, $value)
   {
-    if (null === $key) {
+    if ($key === null) {
       return false;
     }
 
     // init
-    $array = &$this->array;
+    $array =& $this->array;
     $path = explode($this->pathSeparator, (string)$key);
 
     // Crawl through the keys
     while (count($path) > 1) {
       $key = array_shift($path);
+
       // If the key doesn't exist at this depth, we will just create an empty array
       // to hold the next value, allowing us to create the arrays to hold final
       // values at the correct depth. Then we'll keep digging into the array.
       if (!isset($array[$key]) || !is_array($array[$key])) {
-        $array[$key] = array();
+        $array[$key] = self::create(array());
       }
-      $array = &$array[$key];
+
+      $array =& $array[$key];
     }
 
     $array[array_shift($path)] = $value;
@@ -1525,13 +1564,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function last()
   {
-    $result = $this->pop();
-
-    if (null === $result) {
-      return null;
-    } else {
-      return $result;
-    }
+    return $this->pop();
   }
 
   /**
@@ -2296,17 +2329,17 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @return Arrayy (Immutable) will return a empty Arrayy if the value wasn't found
    */
-  public function searchValue($index)
+  public function searchValue($index = null)
   {
     // init
     $return = array();
 
-    if (null !== $index) {
-      $keyExists = isset($this->array[$index]);
-
-      if ($keyExists !== false) {
-        $return = array($this->array[$index]);
-      }
+    if (
+        $index !== null
+        &&
+        isset($this->array[$index])
+    ) {
+      $return = array($this->array[$index]);
     }
 
     return static::create($return);
@@ -2476,7 +2509,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     // Transform all values into their results.
     if ($sorter) {
-      $arrayy = new self($array);
+      $arrayy = self::create($array);
 
       $that = $this;
       $results = $arrayy->each(
@@ -2585,7 +2618,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     return $this->filter(
         function ($item) {
-          if (null === $item) {
+          if ($item === null) {
             return false;
           }
 
@@ -2655,7 +2688,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     $this->array = array_reduce(
         $this->array,
         function ($resultArray, $value) {
-          if (in_array($value, $resultArray, true) === false) {
+          if (!in_array($value, $resultArray, true)) {
             $resultArray[] = $value;
           }
 

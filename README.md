@@ -140,6 +140,68 @@ And in either case, I'd suggest using an alias.
 use Arrayy\Arrayy as A;
 ```
 
+## Multidimensional ArrayAccess
+
+You can access / change the array via Object, Array or with "Arrayy"-syntax.
+
+### Access via "Arrayy"-syntax: (dot-notation)
+
+-- **Recommended** --
+
+```php
+$arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
+
+$arrayy->get('Lars'); // ['lastname' => 'Moelleken']
+$arrayy->get('Lars.lastname'); // 'Moelleken'
+```
+
+### Access via "array"-syntax:
+
+```php
+$arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
+
+$arrayy['Lars'];             // ['lastname' => 'Moelleken']
+$arrayy['Lars']['lastname']; // 'Moelleken'
+```
+
+### Access via "object"-syntax:
+
+```php
+$arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
+
+$arrayy->Lars; // Arrayy['lastname' => 'Moelleken']
+$arrayy->Lars->lastname; // 'Moelleken'
+```
+
+### Set values via "Arrayy"-syntax: (dot-notation)
+
+-- **Recommended** --
+
+```php
+$arrayy = new A(['Lars' => ['lastname' => 'Mueller']]);
+
+$arrayy->set('Lars.lastname');
+$arrayy->get('Lars.lastname'); // 'Moelleken'
+```
+
+### Set values via "array"-syntax:
+
+```php
+$arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
+
+$arrayy['Lars'] = array('lastname' => 'Müller');
+$arrayy['Lars']['lastname]; // 'Müller'
+```
+
+### Set values via "object"-syntax:
+
+```php
+$arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
+
+$arrayy->Lars = array('lastname' => 'Müller');
+$arrayy->Lars->lastname; // 'Müller'
+```
+
 ## OO and Chaining
 
 The library offers OO method chaining, as seen below:
@@ -205,7 +267,7 @@ A::reverse(['fòô', 'bàř']);
 Creates an Arrayy object.
 
 ```php
-$arrayy = new Arrayy(array('fòô', 'bàř')); // Array['fòô', 'bàř']
+$arrayy = new Arrayy(array('fòô', 'bàř')); // Arrayy['fòô', 'bàř']
 ```
 
 ##### create(array $array) : Arrayy (Immutable)
@@ -213,7 +275,7 @@ $arrayy = new Arrayy(array('fòô', 'bàř')); // Array['fòô', 'bàř']
 Creates an Arrayy object, via static "create()"-method
 
 ```php
-$arrayy = A::create(array('fòô', 'bàř')); // Array['fòô', 'bàř']
+$arrayy = A::create(array('fòô', 'bàř')); // Arrayy['fòô', 'bàř']
 ```
 
 ##### createByReference(array &$array) : Arrayy (Mutable)
@@ -222,7 +284,7 @@ WARNING: Creates an Arrayy object by reference.
 
 ```php
 $array = array('fòô', 'bàř');
-$arrayy = A::createByReference($array); // Array['fòô', 'bàř']
+$arrayy = A::createByReference($array); // Arrayy['fòô', 'bàř']
 ```
 
 ##### createFromJson(string $json) : Arrayy (Immutable)
