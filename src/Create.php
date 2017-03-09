@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Arrayy;
 
 if (!function_exists('Arrayy\create')) {
