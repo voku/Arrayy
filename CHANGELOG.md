@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.1.0
+
+- [!]: fix some bugs with the magic __set // __get
+- [+]: fix bug from Arrayy->get()
+
 ### 3.0.0
 
 - [!]: "Recursively return new Arrayy objects" | thx @brad-jones
