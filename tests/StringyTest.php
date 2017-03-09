@@ -1189,6 +1189,44 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @dataProvider endsWithAnyProvider()
+   *
+   * @param string $expected
+   * @param string $str
+   * @param array  $substrings
+   * @param bool   $caseSensitive
+   * @param null   $encoding
+   */
+  public function testEndsWithAny($expected, $str, $substrings, $caseSensitive = true, $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->endsWithAny($substrings, $caseSensitive);
+    $this->assertInternalType('boolean', $result);
+    $this->assertEquals($expected, $result);
+    $this->assertEquals($str, $stringy);
+  }
+
+  /**
+   * @return array
+   */
+  public function endsWithAnyProvider()
+  {
+    return array(
+        array(true, 'foo bars', array('foo', 'o bars')),
+        array(true, 'FOO bars', array('foo', 'o bars'), false),
+        array(true, 'FOO bars', array('foo', 'o BARs'), false),
+        array(true, 'FÒÔ bàřs', array('foo', 'ô bàřs'), false, 'UTF-8'),
+        array(true, 'fòô bàřs', array('foo', 'ô BÀŘs'), false, 'UTF-8'),
+        array(false, 'foo bar', array('foo')),
+        array(false, 'foo bar', array('foo', 'foo bars')),
+        array(false, 'FOO bar', array('foo', 'foo bars')),
+        array(false, 'FOO bars', array('foo', 'foo BARS')),
+        array(false, 'FÒÔ bàřs', array('fòô', 'fòô bàřs'), true, 'UTF-8'),
+        array(false, 'fòô bàřs', array('fòô', 'fòô BÀŘS'), true, 'UTF-8'),
+    );
+  }
+
+  /**
    * @dataProvider toBooleanProvider()
    *
    * @param      $expected
@@ -1833,6 +1871,43 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('fòô bàř', 'òô bàř', 'f', 0, 'UTF-8'),
         array('fòô bàř', 'f bàř', 'òô', 1, 'UTF-8'),
         array('fòô bàř', 'fòô bà', 'ř', 6, 'UTF-8'),
+    );
+  }
+
+  /**
+   * @dataProvider stripWhitespaceProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param null $encoding
+   */
+  public function testStripWhitespace($expected, $str, $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->stripWhitespace();
+    $this->assertStringy($result);
+    $this->assertEquals($expected, $result);
+    $this->assertEquals($str, $stringy);
+  }
+
+  /**
+   * @return array
+   */
+  public function stripWhitespaceProvider()
+  {
+    return array(
+        array('foobar', '  foo   bar  '),
+        array('teststring', 'test string'),
+        array('Οσυγγραφέας', '   Ο     συγγραφέας  '),
+        array('123', ' 123 '),
+        array('', ' ', 'UTF-8'), // no-break space (U+00A0)
+        array('', '           ', 'UTF-8'), // spaces U+2000 to U+200A
+        array('', ' ', 'UTF-8'), // narrow no-break space (U+202F)
+        array('', ' ', 'UTF-8'), // medium mathematical space (U+205F)
+        array('', '　', 'UTF-8'), // ideographic space (U+3000)
+        array('123', '  1  2  3　　', 'UTF-8'),
+        array('', ' '),
+        array('', ''),
     );
   }
 

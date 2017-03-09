@@ -46,6 +46,7 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
     * [dasherize](#dasherize)
     * [delimit](#delimitint-delimiter)
     * [endsWith](#endswithstring-substring--boolean-casesensitive--true-)
+    * [endsWithAny](#endsWithAnystring-substrings--boolean-casesensitive--true-)
     * [ensureLeft](#ensureleftstring-substring)
     * [ensureRight](#ensurerightstring-substring)
     * [extractText](#extracttextint-length--200-string-search---string-ellipsis--)
@@ -96,7 +97,9 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
     * [slugify](#slugify-string-replacement----)
     * [stripeCssMediaQueries](#stripecssmediaqueries)
     * [stripeEmptyHtmlTags](#stripeemptyhtmltags)
+    * [stripWhitespace](#stripWhitespace)
     * [startsWith](#startswithstring-substring--boolean-casesensitive--true-)
+    * [startsWithAny](#startswithstring-substrings--boolean-casesensitive--true-)
     * [slice](#sliceint-start--int-end-)
     * [split](#splitstring-pattern--int-limit-)
     * [substr](#substrint-start--int-length-)
@@ -493,6 +496,16 @@ setting $caseSensitive to false.
 
 ```php
 s('fòôbàř')->endsWith('bàř', true); // true
+```
+
+##### endsWithAny(string[] $substrings [, boolean $caseSensitive = true ])
+
+Returns true if the string ends with any of $substrings, false otherwise. By 
+default, the comparison is case-sensitive, but can be made insensitive by 
+setting $caseSensitive to false.
+
+```php
+s('fòôbàř')->endsWith(['bàř', 'baz'], true); // true
 ```
 
 ##### ensureLeft(string $substring)
@@ -982,6 +995,15 @@ Remove empty html-tag. e.g.: <tag></tag>
 s('foo<h1></h1>bar')->stripeEmptyHtmlTags(); // 'foobar'
 ```
 
+##### strip_whitespace()
+
+Strip all whitespace characters. This includes tabs and newline characters, 
+as well as multibyte whitespace such as the thin space and ideographic space.
+
+```php
+s('   Ο     συγγραφέας  ')->stripWhitespace(); // 'Οσυγγραφέας'
+```
+
 ##### startsWith(string $substring [, boolean $caseSensitive = true ])
 
 Returns true if the string begins with $substring, false otherwise.
@@ -990,6 +1012,16 @@ by setting $caseSensitive to false.
 
 ```php
 s('FÒÔbàřbaz')->startsWith('fòôbàř', false); // true
+```
+
+##### startsWithAny(string[] $substrings [, boolean $caseSensitive = true ])
+
+Returns true if the string begins with any of $substrings, false
+otherwise. By default the comparison is case-sensitive, but can be made
+insensitive by setting $caseSensitive to false.
+
+```php
+s('FÒÔbàřbaz')->startsWith(['fòô', 'bàř'], false); // true
 ```
 
 ##### slice(int $start [, int $end ])
