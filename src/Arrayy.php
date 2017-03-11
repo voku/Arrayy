@@ -173,13 +173,22 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Whether or not an offset exists.
    *
-   * @param mixed $offset
+   * @param int|float|string $offset
    *
    * @return bool
    */
   public function offsetExists($offset)
   {
-    $tmpReturn = isset($this->array[$offset]);
+    if ($this->isEmpty()) {
+      return false;
+    }
+
+    // php cast "bool"-index into "int"-index
+    if ((bool)$offset === $offset) {
+      $offset = (int)$offset;
+    }
+
+    $tmpReturn = array_key_exists($offset, $this->array);
 
     if (
         $tmpReturn === true
@@ -207,7 +216,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
         $this->callAtPath(
             $containerPath,
             function ($container) use ($lastOffset, &$offsetExists) {
-              $offsetExists = isset($container[$lastOffset]);
+              $offsetExists = array_key_exists($lastOffset, $container);
             }
         );
       }
@@ -250,7 +259,11 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function offsetUnset($offset)
   {
-    if (isset($this->array[$offset])) {
+    if ($this->isEmpty()) {
+      return;
+    }
+
+    if (array_key_exists($offset, $this->array)) {
       unset($this->array[$offset]);
 
       return;
@@ -816,7 +829,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
         ||
         (is_object($array) && method_exists($array, '__toString'))
     ) {
-      return (array)$array;
+      return array((string)$array);
     }
 
     throw new \InvalidArgumentException(
@@ -1033,13 +1046,13 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Get a value from an array (optional using dot-notation).
    *
-   * @param string $key     The key to look for.
-   * @param mixed  $default Default value to fallback to.
-   * @param array  $array   The array to get from, if it's set to "null" we use the current array from the class.
+   * @param string $key      The key to look for.
+   * @param mixed  $fallback Value to fallback to.
+   * @param array  $array    The array to get from, if it's set to "null" we use the current array from the class.
    *
    * @return mixed
    */
-  public function get($key, $default = null, $array = null)
+  public function get($key, $fallback = null, $array = null)
   {
     if (
         $array !== null
@@ -1055,7 +1068,12 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       return self::create($usedArray);
     }
 
-    if (isset($usedArray[$key])) {
+    // php cast "bool"-index into "int"-index
+    if ((bool)$key === $key) {
+      $key = (int)$key;
+    }
+
+    if (array_key_exists($key, $usedArray) === true) {
       if (is_array($usedArray[$key])) {
         return self::create($usedArray[$key]);
       } else {
@@ -1066,7 +1084,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     // Crawl through array, get key according to object or not
     foreach (explode($this->pathSeparator, (string)$key) as $segment) {
       if (!isset($usedArray[$segment])) {
-        return $default instanceof \Closure ? $default() : $default;
+        return $fallback instanceof \Closure ? $fallback() : $fallback;
       }
 
       $usedArray = $usedArray[$segment];
@@ -1312,7 +1330,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     $results = array();
 
     foreach ($this->array as $a) {
-      if (isset($a[$key])) {
+      if (array_key_exists($key, $a) === true) {
         $results[$a[$key]] = $a;
       }
     }
@@ -1574,8 +1592,19 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function lastsImmutable($number = null)
   {
+    if ($this->isEmpty()) {
+      return static::create();
+    }
+
     if ($number === null) {
-      $poppedValue = (array)$this->pop();
+      $poppedValue = $this->pop();
+
+      if ($poppedValue === null) {
+        $poppedValue = array($poppedValue);
+      } else {
+        $poppedValue = (array)$poppedValue;
+      }
+
       $arrayy = static::create($poppedValue);
     } else {
       $number = (int)$number;
@@ -1594,8 +1623,19 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function lastsMutable($number = null)
   {
+    if ($this->isEmpty()) {
+      return $this;
+    }
+
     if ($number === null) {
-      $poppedValue = (array)$this->pop();
+      $poppedValue = $this->pop();
+
+      if ($poppedValue === null) {
+        $poppedValue = array($poppedValue);
+      } else {
+        $poppedValue = (array)$poppedValue;
+      }
+
       $this->array = static::create($poppedValue)->array;
     } else {
       $number = (int)$number;
@@ -1880,7 +1920,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     if ($number === null) {
-      $arrayRandValue = (array)$this->array[array_rand($this->array)];
+      $arrayRandValue = array($this->array[array_rand($this->array)]);
 
       return static::create($arrayRandValue);
     }
@@ -1893,7 +1933,6 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
   /**
    * Pick a random key/index from the keys of this array.
-   *
    *
    * @return mixed get a key/index or null if there wasn't a key/index
    *
@@ -1953,7 +1992,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     if ($number === null) {
-      $arrayRandValue = (array)$this->array[array_rand($this->array)];
+      $arrayRandValue = array($this->array[array_rand($this->array)]);
       $this->array = $arrayRandValue;
 
       return $this;
@@ -2313,7 +2352,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param mixed $value
    *
-   * @return mixed
+   * @return int|float|string
    */
   public function searchIndex($value)
   {
@@ -2327,18 +2366,24 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @return Arrayy (Immutable) will return a empty Arrayy if the value wasn't found
    */
-  public function searchValue($index = null)
+  public function searchValue($index)
   {
     // init
     $return = array();
 
-    if (
-        $index !== null
-        &&
-        isset($this->array[$index])
-    ) {
+    if ($this->isEmpty()) {
+      return static::create();
+    }
+
+    // php cast "bool"-index into "int"-index
+    if ((bool)$index === $index) {
+      $index = (int)$index;
+    }
+
+    if (array_key_exists($index, $this->array) === true) {
       $return = array($this->array[$index]);
     }
+
 
     return static::create($return);
   }

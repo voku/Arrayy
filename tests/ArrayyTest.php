@@ -21,9 +21,9 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(), array('foo'), 'foo'),
         array(array(0 => false), array(false, true), true),
         array(array(0 => true), array(true, false), false),
-        array(array(0 => -9), array(-9, -6), -6),
-        array(array(0 => -9, 1, 2), array(-9, 1, 2, 3), 3),
-        array(array(1.18, 1.5), array(1.18, 1.5, 1.2), 1.2),
+        array(array(0 => -9), array(0 => -9, 1 => -6), -6),
+        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => -9, 1 => 1, 2 => 2, 3 => 3), 3),
+        array(array(0 => 1.18, 1 => 1.5), array(0 => 1.18, 1 => 1.5, 2 => 1.2), 1.2),
         array(array('fòô' => 'bàř'), array('fòô' => 'bàř', 0 => 'foo'), 'foo'),
         array(
             array(3 => 'string', 'foo', 'lall'),
@@ -103,7 +103,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(0 => true), array(0 => true)),
         array(array(0 => -9, 0), array(0 => -9)),
         array(array(-8 => -9, 1, 2 => false), array(-8 => -9, 0 => 1)),
-        array(array(1.18, false), array(0 => 1.18)),
+        array(array(0 => 1.18, 1 => false), array(0 => 1.18)),
         array(array('foo' => false, 'foo', 'lall'), array('foo', 'lall')),
     );
   }
@@ -326,8 +326,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(), array(false), false),
         array(array(0 => true), true, true),
         array(array(0 => -9), -9, -9),
-        array(array(0 => -9, 1, 2), false, false),
-        array(array(1.18), 1.18, 1.18),
+        array(array(0 => -9, 1 => 1, 2 => 2), false, false),
+        array(array(0 => 1.18), 1.18, 1.18),
         array(array('string', 'foo', 'lall'), 'foo', 'foo'),
     );
   }
@@ -378,15 +378,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function getProvider()
   {
     return array(
-        array(null, array(null), 0),
-        array(false, array(false), 0),
-        array(null, array(true), 1),
-        array(null, array(false), 1),
-        array(true, array(true), 0),
-        array(1, array(-9, 1, 0, false), 1),
-        array(1.18, array(1.18), 0),
-        array(null, array(' string  ', 'foo'), 'foo'),
-        array('foo', array(' string  ', 'foo' => 'foo'), 'foo'),
+        array(null, array(0 => null), 0),
+        array(false, array(0 => false), 0),
+        array(null, array(0 => true), 1),
+        array(null, array(0 => false), 1),
+        array(true, array(0 => true), 0),
+        array(1, array(0 => -9, 1 => 1, 2 => 0, 3 => false), 1),
+        array(1.18, array(0 => 1.18), 0),
+        array(null, array(0 => ' string  ', 1 => 'foo'), 'foo'),
+        array('foo', array(0 => ' string  ', 'foo' => 'foo'), 'foo'),
     );
   }
 
@@ -396,13 +396,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function hasProvider()
   {
     return array(
-        array(false, array(null), 0),
-        array(true, array(false), 0),
-        array(false, array(true), 1),
-        array(false, array(false), 1),
-        array(true, array(true), 0),
-        array(true, array(-9, 1, 0, false), 1),
-        array(true, array(1.18), 0),
+        array(false, array(), 0),
+        array(true, array(0 => null), 0),
+        array(true, array(0 => null), 0),
+        array(true, array(0 => false), 0),
+        array(false, array(0 => true), 1),
+        array(false, array(0 => false), 1),
+        array(true, array(0 => true), 0),
+        array(true, array(0 => -9, 1 => 1, 2 => 0, 3 => false), 1),
+        array(true, array(0 => 1.18), 0),
         array(false, array(' string  ', 'foo'), 'foo'),
         array(true, array(' string  ', 'foo' => 'foo'), 'foo'),
     );
@@ -419,8 +421,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(0 => false), ''),
         array(array(0 => true), '1'),
         array(array(0 => -9), '-9', '|'),
-        array(array(0 => -9, 1, 2), '-9|1|2', '|'),
-        array(array(1.18), '1.18'),
+        array(array(0 => -9, 1 => 1, 2 => 2), '-9|1|2', '|'),
+        array(array(0 => 1.18), '1.18'),
         array(array(3 => 'string', 'foo', 'lall'), 'string,foo,lall', ','),
     );
   }
@@ -494,9 +496,10 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     return array(
         array(array(), array()),
-        array(array(null, false), array(false)),
-        array(array(0 => true), array(true)),
-        array(array(0 => -9, 0), array(0)),
+        array(array(0 => null, 1 => null), array(0 => null)),
+        array(array(0 => null, 1 => false), array(0 => false)),
+        array(array(0 => true), array(0 => true)),
+        array(array(0 => -9, 1 => 0), array(0 => 0)),
         array(array(-8 => -9, 1, 2 => false), array(false)),
         array(array(1.18, false), array(false)),
         array(array('foo' => false, 'foo', 'lall'), array('lall')),
@@ -991,6 +994,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function randomProvider()
   {
     return array(
+        array(array(0 => null)),
         array(array(0 => true)),
         array(array(0 => -9, 0)),
         array(array(-8 => -9, 1, 2 => false)),
@@ -1167,13 +1171,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function searchValueProvider()
   {
     return array(
-        array(array(), array(null), ''),
-        array(array(), array(false), 1),
-        array(array(0 => false), array(false), 0),
-        array(array(true), array(true), 0),
-        array(array(0 => 1), array(-9, 1, 0, false), 1),
-        array(array(1.18), array(1.18), 0),
-        array(array('foo'), array('string', 'foo'), 1),
+        array(array(), array(0 => null), ''),
+        array(array(), array(0 => false), 1),
+        array(array(0 => null), array(0 => null), 0),
+        array(array(0 => false), array(0 => false), false),
+        array(array(0 => false), array(0 => false), 0),
+        array(array(0 => true), array(0 => true), 0),
+        array(array(0 => 1), array(0> -9, 1 => 1, 2 => 0, false), 1),
+        array(array(0 => 1.18), array(0 => 1.18), 0),
+        array(array(0 => 'foo'), array(0 => 'string', 1 => 'foo'), 1),
     );
   }
 
@@ -1183,15 +1189,16 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function setAndGetProvider()
   {
     return array(
-        array(array(null), 0, 'foo'),
-        array(array(false), 0, false),
-        array(array(true), 1, 'foo'),
-        array(array(false), 1, 'foo'),
-        array(array(true), 0, true),
-        array(array(-9, 1, 0, false), 1, 1),
-        array(array(1.18), 0, 1.18),
-        array(array(' string  ', 'foo'), 'foo', 'lall'),
-        array(array(' string  ', 'foo' => 'foo'), 'foo', 'foo'),
+        array(array(0 => null), 0, null),
+        array(array(0 => 'foo'), 0, 'foo'),
+        array(array(0 => false), 0, false),
+        array(array(0 => true), 1, 'foo'),
+        array(array(0 => false), 1, 'foo'),
+        array(array(0 => true), 0, true),
+        array(array(0 => -9, 1 => 1, 2 => 0, 3 => false), 1, 1),
+        array(array(0 => 1.18), 0, 1.18),
+        array(array(0 => ' string  ', 1 => 'foo'), 'foo', 'lall'),
+        array(array(0 => ' string  ', 'foo' => 'foo'), 'foo', 'foo'),
     );
   }
 
@@ -1201,15 +1208,16 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function setProvider()
   {
     return array(
-        array(array(null), 0, 'foo'),
-        array(array(false), 0, true),
-        array(array(true), 1, 'foo'),
-        array(array(false), 1, 'foo'),
-        array(array(true), 0, 'foo'),
-        array(array(-9, 1, 0, false), 1, 'foo'),
-        array(array(1.18), 0, 1),
-        array(array(' string  ', 'foo'), 'foo', 'lall'),
-        array(array(' string  ', 'foo' => 'foo'), 'foo', 'lall'),
+        array(array(0 => null), 0, null),
+        array(array(0 => null), 0, 'foo'),
+        array(array(0 => false), 0, true),
+        array(array(0 => true), 1, 'foo'),
+        array(array(0 => false), 1, 'foo'),
+        array(array(0 => true), 0, 'foo'),
+        array(array(0 => -9, 1 => 1, 2 => 0, 3 => false), 1, 'foo'),
+        array(array(0 => 1.18), 0, 1),
+        array(array(0 => ' string  ', 1 => 'foo'), 'foo', 'lall'),
+        array(array(0 => ' string  ', 'foo' => 'foo'), 'foo', 'lall'),
     );
   }
 
@@ -2002,6 +2010,12 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken')));
     $result = $arrayy->get('Lars.lastname');
     self::assertSame('Moelleken', $result);
+
+    // ---
+
+    $arrayy = new A(array('Lars' => array('lastname' => null)));
+    $result = $arrayy->get('Lars.lastname');
+    self::assertSame(null, $result);
   }
 
   /**
@@ -2701,14 +2715,30 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
   public function testOffsetUnsetViaDotNotation()
   {
-    $array = array('a', 'b' => array(0 => 'c'));
+    $array = array('a', 'b' => array(0 => 'c', 1 => null));
     $arrayy = new A($array);
+
+    // ---
+
     $offset = 'b.0';
 
     self::assertTrue($arrayy->offsetExists($offset));
 
     $arrayy->offsetUnset($offset);
     unset($array['b'][0]);
+
+    self::assertSame($array, $arrayy->toArray());
+    self::assertFalse(isset($array[$offset]));
+    self::assertFalse($arrayy->offsetExists($offset));
+
+    // ---
+
+    $offset = 'b.1';
+
+    self::assertTrue($arrayy->offsetExists($offset));
+
+    $arrayy->offsetUnset($offset);
+    unset($array['b'][1]);
 
     self::assertSame($array, $arrayy->toArray());
     self::assertFalse(isset($array[$offset]));
@@ -3440,6 +3470,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => 'Lars')), $arrayy->getArray());
     self::assertSame('Lars', $arrayy['user.firstname']);
+
+    // ---
+
+    $arrayy = new A();
+    $arrayy['user'] = array('lastname' => 'Moelleken');
+    $arrayy['user.firstname'] = null;
+
+    self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => null)), $arrayy->getArray());
+    self::assertSame(null, $arrayy['user.firstname']);
   }
 
   /**
@@ -3534,6 +3573,14 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals(array('lastname' => 'Mueller2'), $resultTmp->getArray());
     $resultTmp = $arrayy->get('Lars.lastname');
     self::assertEquals('Mueller2', $resultTmp);
+
+    // set an new "null"-value, again - via object-syntax
+    $arrayy->Lars = array('lastname' => null);
+
+    $resultTmp = $arrayy->get('Lars');
+    self::assertEquals(array('lastname' => null), $resultTmp->getArray());
+    $resultTmp = $arrayy->get('Lars.lastname');
+    self::assertSame(null, $resultTmp);
   }
 
   public function testSetValueViaMagicSet()
@@ -3542,6 +3589,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $arrayy->Lars = array('lastname' => 'Moelleken');
     $arrayy->Sven = array('lastname' => 'Moelleken');
+    $arrayy->foo = array('lastname' => null);
 
     $resultTmp = $arrayy->get('Lars');
     self::assertEquals(array('lastname' => 'Moelleken'), $resultTmp->getArray());
@@ -3549,8 +3597,17 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultTmp = $arrayy->get('Sven');
     self::assertEquals(array('lastname' => 'Moelleken'), $resultTmp->getArray());
 
+    $resultTmp = $arrayy->get('foo');
+    self::assertEquals(array('lastname' => null), $resultTmp->getArray());
+
     $resultTmp = $arrayy->get('Lars.lastname');
     self::assertEquals('Moelleken', $resultTmp);
+
+    $resultTmp = $arrayy->get('Sven.lastname');
+    self::assertEquals('Moelleken', $resultTmp);
+
+    $resultTmp = $arrayy->get('foo.lastname');
+    self::assertEquals(null, $resultTmp);
   }
 
   /**
@@ -4092,12 +4149,12 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function toStringProvider()
   {
     return array(
-        array('', array(null)),
-        array('', array(false)),
-        array('1', array(true)),
-        array('-9,1,0,', array(-9, 1, 0, false)),
-        array('1.18', array(1.18)),
-        array(' string  ,foo', array(' string  ', 'foo')),
+        array('', array(0 => null)),
+        array('', array(0 => false)),
+        array('1', array(0 => true)),
+        array('-9,1,0,', array(0 => -9, 1 => 1, 2 => 0, false)),
+        array('1.18', array(0 => 1.18)),
+        array(' string  ,foo', array(0 => ' string  ', 1 => 'foo')),
     );
   }
 
@@ -4119,15 +4176,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(), array()),
         array(array(0 => false), array(false)),
         array(array(0 => true), array(true)),
-        array(array(0 => -9, -9), array(-9)),
-        array(array(0 => -9, 1, 2), array(-9, 1, 2)),
-        array(array(1.18, 1.5), array(1.18, 1.5)),
+        array(array(0 => -9, 1 => -9), array(-9)),
+        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => -9, 1 => 1, 2 => 2)),
+        array(array(0 => 1.18, 1 => 1.5), array(0 => 1.18, 1 => 1.5)),
         array(
             array(
                 3 => 'string',
-                'foo',
-                'lall',
-                'foo',
+                4 => 'foo',
+                5 => 'lall',
+                6 => 'foo',
             ),
             array(
                 0 => 'string',
