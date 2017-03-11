@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.1.1
+
+- [!]: fix usage of "isset() / array_key_exists()" and "array()$value / array($value)"
+
 ### 3.1.0
 
 - [!]: fix some bugs with the magic __set // __get
