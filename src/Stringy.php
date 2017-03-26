@@ -1556,7 +1556,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Remove css media-queries.
    *
-   * @return static 
+   * @return static
    */
   public function stripeCssMediaQueries()
   {
@@ -1581,7 +1581,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * e.g.: <tag></tag>
    *
-   * @return static 
+   * @return static
    */
   public function stripeEmptyHtmlTags()
   {
@@ -1593,7 +1593,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Converts the string into an valid UTF-8 string.
    *
-   * @return static 
+   * @return static
    */
   public function utf8ify()
   {
@@ -1603,7 +1603,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * escape html
    *
-   * @return static 
+   * @return static
    */
   public function escape()
   {
@@ -1623,7 +1623,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * @param int|null $length
    * @param string   $ellipsis
    *
-   * @return static 
+   * @return static
    */
   public function extractText($search = '', $length = null, $ellipsis = '...')
   {
@@ -1746,7 +1746,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * remove xss from html
    *
-   * @return static 
+   * @return static
    */
   public function removeXss()
   {
@@ -1766,7 +1766,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @param string $replacement
    *
-   * @return static 
+   * @return static
    */
   public function removeHtmlBreak($replacement = '')
   {
@@ -1780,7 +1780,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @param $allowableTags
    *
-   * @return static 
+   * @return static
    */
   public function removeHtml($allowableTags = null)
   {
@@ -2278,7 +2278,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * @param int    $length
    * @param string $strAddOn
    *
-   * @return static 
+   * @return static
    */
   public function shortenAfterWord($length, $strAddOn = '...')
   {
@@ -2292,7 +2292,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @param int $limit
    *
-   * @return static 
+   * @return static
    */
   public function lineWrapAfterWord($limit)
   {
@@ -2313,7 +2313,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @param string $separator
    *
-   * @return static 
+   * @return static
    */
   public function afterFirst($separator)
   {
@@ -2338,7 +2338,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @param string $separator
    *
-   * @return static 
+   * @return static
    */
   public function afterLast($separator)
   {
@@ -2364,7 +2364,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @param string $separator
    *
-   * @return static 
+   * @return static
    */
   public function beforeFirst($separator)
   {
@@ -2390,7 +2390,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @param string $separator
    *
-   * @return static 
+   * @return static
    */
   public function beforeLast($separator)
   {
