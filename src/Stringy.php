@@ -48,7 +48,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       throw new \InvalidArgumentException(
           'Passed value cannot be an array'
       );
-    } elseif (is_object($str) && !method_exists($str, '__toString')) {
+    }
+
+    if (
+        is_object($str)
+        &&
+        !method_exists($str, '__toString')
+    ) {
       throw new \InvalidArgumentException(
           'Passed object must have a __toString method'
       );
@@ -352,9 +358,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     if ($caseSensitive) {
       return (UTF8::strpos($this->str, $needle, 0, $encoding) !== false);
-    } else {
-      return (UTF8::stripos($this->str, $needle, 0, $encoding) !== false);
     }
+
+    return (UTF8::stripos($this->str, $needle, 0, $encoding) !== false);
   }
 
   /**
@@ -685,9 +691,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     if (preg_match('/' . $pattern . '/u', $this->str)) {
       return true;
-    } else {
-      return false;
     }
+
+    return false;
   }
 
   /**
@@ -889,7 +895,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function isHtml()
   {
-    return UTF8::isHtml($this->str);
+    return UTF8::is_html($this->str);
   }
 
   /**
@@ -924,9 +930,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     if (json_last_error() === JSON_ERROR_NONE) {
       return true;
-    } else {
-      return false;
     }
+
+    return false;
   }
 
   /**
@@ -939,9 +945,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   {
     if ($this->matchesPattern('^[[:lower:]]*$')) {
       return true;
-    } else {
-      return false;
     }
+
+    return false;
   }
 
   /**
@@ -962,9 +968,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         @unserialize($this->str) !== false
     ) {
       return true;
-    } else {
-      return false;
     }
+
+    return false;
   }
 
   /**
@@ -1648,10 +1654,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
             ) . $ellipsis,
             $this->encoding
         );
-      } else {
-        return static::create($text, $this->encoding);
       }
 
+      return static::create($text, $this->encoding);
     }
 
     $wordPos = UTF8::strpos(
@@ -1828,13 +1833,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       return array();
     }
 
-    // UTF8::split errors when supplied an empty pattern in < PHP 5.4.13
+    // this->split errors when supplied an empty pattern in < PHP 5.4.13
     // and current versions of HHVM (3.8 and below)
     if ($pattern === '') {
       return array(static::create($this->str, $this->encoding));
     }
 
-    // UTF8::split returns the remaining unsplit string in the last index when
+    // this->split returns the remaining unsplit string in the last index when
     // supplying a limit
     if ($limit > 0) {
       $limit += 1;
@@ -1919,11 +1924,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         function ($match) use ($encoding, $ignore) {
           if ($ignore && in_array($match[0], $ignore, true)) {
             return $match[0];
-          } else {
-            $stringy = new Stringy($match[0], $encoding);
-
-            return (string)$stringy->toLowerCase()->upperCaseFirst();
           }
+
+          $stringy = new Stringy($match[0], $encoding);
+
+          return (string)$stringy->toLowerCase()->upperCaseFirst();
         },
         $stringy->str
     );
@@ -1997,11 +2002,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     if (array_key_exists($key, $map)) {
       return $map[$key];
-    } elseif (is_numeric($this->str)) {
-      return ((int)$this->str > 0);
-    } else {
-      return (bool)$this->regexReplace('[[:space:]]', '')->str;
     }
+
+    if (is_numeric($this->str)) {
+      return ((int)$this->str > 0);
+    }
+
+    return (bool)$this->regexReplace('[[:space:]]', '')->str;
   }
 
   /**
@@ -2183,9 +2190,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         function ($match) use ($encoding) {
           if (isset($match[1])) {
             return UTF8::strtoupper($match[1], $encoding);
-          } else {
-            return '';
           }
+
+          return '';
         },
         $stringy->str
     );
@@ -2222,9 +2229,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
           if ("$matchInt" == $match) {
             return '_' . $match . '_';
-          } else {
-            return '_' . UTF8::strtolower($match, $encoding);
           }
+
+          return '_' . UTF8::strtolower($match, $encoding);
         },
         $str
     );
