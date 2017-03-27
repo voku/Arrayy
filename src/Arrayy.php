@@ -67,9 +67,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     if ($key !== null) {
       if (isset($this->array[$key])) {
         return $this->array[$key];
-      } else {
-        return false;
       }
+
+      return false;
     }
 
     return (array)$this->array;
@@ -199,30 +199,27 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
             strpos((string)$offset, $this->pathSeparator) === false
         )
     ) {
-
       return $tmpReturn;
+    }
 
-    } else {
+    $offsetExists = false;
+
+    if (strpos((string)$offset, $this->pathSeparator) !== false) {
 
       $offsetExists = false;
+      $explodedPath = explode($this->pathSeparator, (string)$offset);
+      $lastOffset = array_pop($explodedPath);
+      $containerPath = implode($this->pathSeparator, $explodedPath);
 
-      if (strpos((string)$offset, $this->pathSeparator) !== false) {
-
-        $offsetExists = false;
-        $explodedPath = explode($this->pathSeparator, (string)$offset);
-        $lastOffset = array_pop($explodedPath);
-        $containerPath = implode($this->pathSeparator, $explodedPath);
-
-        $this->callAtPath(
-            $containerPath,
-            function ($container) use ($lastOffset, &$offsetExists) {
-              $offsetExists = array_key_exists($lastOffset, $container);
-            }
-        );
-      }
-
-      return $offsetExists;
+      $this->callAtPath(
+          $containerPath,
+          function ($container) use ($lastOffset, &$offsetExists) {
+            $offsetExists = array_key_exists($lastOffset, $container);
+          }
+      );
     }
+
+    return $offsetExists;
   }
 
   /**
@@ -756,8 +753,8 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     $array = $this->array;
 
-    foreach ($array as $key => &$value) {
-      $value = $closure($value, $key);
+    foreach ($array as $key => $value) {
+      $array[$key] = $closure($value, $key);
     }
 
     return static::create($array);
@@ -986,9 +983,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     if ($result === null) {
       return null;
-    } else {
-      return $result;
     }
+
+    return $result;
   }
 
   /**
@@ -1076,9 +1073,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     if (array_key_exists($key, $usedArray) === true) {
       if (is_array($usedArray[$key])) {
         return self::create($usedArray[$key]);
-      } else {
-        return $usedArray[$key];
       }
+
+      return $usedArray[$key];
     }
 
     // Crawl through array, get key according to object or not
@@ -1092,9 +1089,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     if (is_array($usedArray)) {
       return self::create($usedArray);
-    } else {
-      return $usedArray;
     }
+
+    return $usedArray;
   }
 
   /**
@@ -1683,17 +1680,22 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function matches(\Closure $closure)
   {
-    // Reduce the array to only booleans
-    $array = $this->each($closure);
-
-    // Check the results
-    if (count($array) === 0) {
-      return true;
+    if (count($this->array) === 0) {
+      return false;
     }
 
-    $array = array_search(false, $array->toArray(), false);
+    // init
+    $array = $this->array;
 
-    return is_bool($array);
+    foreach ($array as $key => $value) {
+      $value = $closure($value, $key);
+
+      if ($value === false) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**
@@ -1705,17 +1707,22 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function matchesAny(\Closure $closure)
   {
-    // Reduce the array to only booleans
-    $array = $this->each($closure);
-
-    // Check the results
-    if (count($array) === 0) {
-      return true;
+    if (count($this->array) === 0) {
+      return false;
     }
 
-    $array = array_search(true, $array->toArray(), false);
+    // init
+    $array = $this->array;
 
-    return is_int($array);
+    foreach ($array as $key => $value) {
+      $value = $closure($value, $key);
+
+      if ($value === true) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
