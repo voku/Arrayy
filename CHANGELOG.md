@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.1.2
+
+- [+]: fix "matches()" and "matchesAny()" with empty-arrays
+
 ### 3.1.1
 
 - [!]: fix usage of "isset() / array_key_exists()" and "array()$value / array($value)"
