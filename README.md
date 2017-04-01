@@ -306,12 +306,28 @@ Gets the substring after the first occurrence of a separator.
 s('</b></b>')->afterFirst('b'); // '></b>'
 ```
 
+##### afterFirstIgnoreCase(string $separator): Stringy
+
+Gets the substring after the first occurrence of a separator.
+
+```php
+s('</B></B>')->afterFirstIgnoreCase('b'); // '></B>'
+```
+
 ##### afterLast(string $separator): Stringy
 
 Gets the substring after the last occurrence of a separator.
 
 ```php
 s('</b></b>')->afterLast('b'); // '>'
+```
+
+##### afterLastIgnoreCase(string $separator): Stringy
+
+Gets the substring after the last occurrence of a separator.
+
+```php
+s('</B></B>')->afterLastIgnoreCase('b'); // '>'
 ```
 
 ##### append(string $string)
@@ -372,12 +388,28 @@ Gets the substring before the first occurrence of a separator.
 s('</b></b>')->beforeFirst('b'); // '</'
 ```
 
+##### beforeFirstIgnoreCase(string $separator): Stringy
+
+Gets the substring before the first occurrence of a separator.
+
+```php
+s('</B></B>')->beforeFirstIgnoreCase('b'); // '</'
+```
+
 ##### beforeLast(string $separator): Stringy
 
 Gets the substring before the last occurrence of a separator.
 
 ```php
 s('</b></b>')->beforeLast('b'); // '</b></'
+```
+
+##### beforeLastIgnoreCase(string $separator): Stringy
+
+Gets the substring before the last occurrence of a separator.
+
+```php
+s('</B></B>')->beforeLastIgnoreCase('b'); // '</B></'
 ```
 
 ##### between(string $start, string $end [, int $offset])

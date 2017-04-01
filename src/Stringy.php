@@ -230,6 +230,21 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Returns the index of the first occurrence of $needle in the string,
+   * and false if not found. Accepts an optional offset from which to begin
+   * the search.
+   *
+   * @param  string $needle Substring to look for
+   * @param  int    $offset Offset from which to search
+   *
+   * @return int|bool The occurrence's index if found, otherwise false
+   */
+  public function indexOfIgnoreCase($needle, $offset = 0)
+  {
+    return UTF8::stripos($this->str, (string)$needle, (int)$offset, $this->encoding);
+  }
+
+  /**
    * Returns the substring beginning at $start with the specified $length.
    * It differs from the UTF8::substr() function in that providing a $length of
    * null will return the rest of the string, rather than an empty string.
@@ -579,6 +594,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * @param  string[] $substrings    Substrings to look for
    * @param  bool     $caseSensitive Whether or not to enforce
    *                                 case-sensitivity
+   *
    * @return bool     Whether or not $str ends with $substring
    */
   public function endsWithAny($substrings, $caseSensitive = true)
@@ -782,6 +798,22 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function indexOfLast($needle, $offset = 0)
   {
     return UTF8::strrpos($this->str, (string)$needle, (int)$offset, $this->encoding);
+  }
+
+  /**
+   * Returns the index of the last occurrence of $needle in the string,
+   * and false if not found. Accepts an optional offset from which to begin
+   * the search. Offsets may be negative to count from the last character
+   * in the string.
+   *
+   * @param  string $needle Substring to look for
+   * @param  int    $offset Offset from which to search
+   *
+   * @return int|bool The last occurrence's index if found, otherwise false
+   */
+  public function indexOfLastIgnoreCase($needle, $offset = 0)
+  {
+    return UTF8::strripos($this->str, (string)$needle, (int)$offset, $this->encoding);
   }
 
   /**
@@ -1465,6 +1497,94 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     $str = $this->regexReplace(preg_quote($search, '/') . '$', UTF8::str_replace('\\', '\\\\', $replacement));
 
     return static::create($str, $this->encoding);
+  }
+
+  /**
+   * Gets the substring after (or before via "$beforeNeedle") the first occurrence of the "$needle".
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $needle
+   * @param bool   $beforeNeedle
+   *
+   * @return static
+   */
+  public function substringOf($needle, $beforeNeedle = false)
+  {
+    if ('' === $needle) {
+      return static::create('');
+    }
+
+    if (false === $part = UTF8::strstr($this->str, $needle, $beforeNeedle, $this->encoding)) {
+      return static::create('');
+    }
+
+    return static::create($part);
+  }
+
+  /**
+   * Gets the substring after (or before via "$beforeNeedle") the first occurrence of the "$needle".
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $needle
+   * @param bool   $beforeNeedle
+   *
+   * @return static
+   */
+  public function substringOfIgnoreCase($needle, $beforeNeedle = false)
+  {
+    if ('' === $needle) {
+      return static::create('');
+    }
+
+    if (false === $part = UTF8::stristr($this->str, $needle, $beforeNeedle, $this->encoding)) {
+      return static::create('');
+    }
+
+    return static::create($part);
+  }
+
+  /**
+   * Gets the substring after (or before via "$beforeNeedle") the last occurrence of the "$needle".
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $needle
+   * @param bool   $beforeNeedle
+   *
+   * @return static
+   */
+  public function lastSubstringOf($needle, $beforeNeedle = false)
+  {
+    if ('' === $needle) {
+      return static::create('');
+    }
+
+    if (false === $part = UTF8::strrchr($this->str, $needle, $beforeNeedle, $this->encoding)) {
+      return static::create('');
+    }
+
+    return static::create($part);
+  }
+
+  /**
+   * Gets the substring after (or before via "$beforeNeedle") the last occurrence of the "$needle".
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $needle
+   * @param bool   $beforeNeedle
+   *
+   * @return static
+   */
+  public function lastSubstringOfIgnoreCase($needle, $beforeNeedle = false)
+  {
+    if ('' === $needle) {
+      return static::create('');
+    }
+
+    if (false === $part = UTF8::strrichr($this->str, $needle, $beforeNeedle, $this->encoding)) {
+      return static::create('');
+    }
+
+    return static::create($part);
   }
 
   /**
@@ -2317,8 +2437,83 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function afterFirst($separator)
   {
+    if ($separator === '') {
+      return static::create('');
+    }
+
+    if ($this->str === '') {
+      return static::create('');
+    }
+
     if (($offset = $this->indexOf($separator)) === false) {
       return static::create('');
+    }
+
+    return static::create(
+        UTF8::substr(
+            $this->str,
+            $offset + UTF8::strlen($separator, $this->encoding),
+            null,
+            $this->encoding
+        ),
+        $this->encoding
+    );
+  }
+
+  /**
+   * Gets the substring after the first occurrence of a separator.
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $separator
+   *
+   * @return static
+   */
+  public function afterFirstIgnoreCase($separator)
+  {
+    if ($separator === '') {
+      return static::create('');
+    }
+
+    if ($this->str === '') {
+      return static::create('');
+    }
+
+    if (($offset = $this->indexOfIgnoreCase($separator)) === false) {
+      return static::create('');
+    }
+
+    return static::create(
+        UTF8::substr(
+            $this->str,
+            $offset + UTF8::strlen($separator, $this->encoding),
+            null,
+            $this->encoding
+        ),
+        $this->encoding
+    );
+  }
+
+  /**
+   * Gets the substring after the last occurrence of a separator.
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $separator
+   *
+   * @return static
+   */
+  public function afterLastIgnoreCase($separator)
+  {
+    if ($separator === '') {
+      return static::create('');
+    }
+
+    if ($this->str === '') {
+      return static::create('');
+    }
+
+    $offset = $this->indexOfLastIgnoreCase($separator);
+    if ($offset === false) {
+      return static::create('', $this->encoding);
     }
 
     return static::create(
@@ -2342,6 +2537,14 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function afterLast($separator)
   {
+    if ($separator === '') {
+      return static::create('');
+    }
+
+    if ($this->str === '') {
+      return static::create('');
+    }
+
     $offset = $this->indexOfLast($separator);
     if ($offset === false) {
       return static::create('', $this->encoding);
@@ -2368,7 +2571,49 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function beforeFirst($separator)
   {
+    if ($separator === '') {
+      return static::create('');
+    }
+
+    if ($this->str === '') {
+      return static::create('');
+    }
+
     $offset = $this->indexOf($separator);
+    if ($offset === false) {
+      return static::create('', $this->encoding);
+    }
+
+    return static::create(
+        UTF8::substr(
+            $this->str,
+            0,
+            $offset,
+            $this->encoding
+        ),
+        $this->encoding
+    );
+  }
+
+  /**
+   * Gets the substring before the first occurrence of a separator.
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $separator
+   *
+   * @return static
+   */
+  public function beforeFirstIgnoreCase($separator)
+  {
+    if ($separator === '') {
+      return static::create('');
+    }
+
+    if ($this->str === '') {
+      return static::create('');
+    }
+
+    $offset = $this->indexOfIgnoreCase($separator);
     if ($offset === false) {
       return static::create('', $this->encoding);
     }
@@ -2394,7 +2639,49 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function beforeLast($separator)
   {
+    if ($separator === '') {
+      return static::create('');
+    }
+
+    if ($this->str === '') {
+      return static::create('');
+    }
+
     $offset = $this->indexOfLast($separator);
+    if ($offset === false) {
+      return static::create('', $this->encoding);
+    }
+
+    return static::create(
+        UTF8::substr(
+            $this->str,
+            0,
+            $offset,
+            $this->encoding
+        ),
+        $this->encoding
+    );
+  }
+
+  /**
+   * Gets the substring before the last occurrence of a separator.
+   * If no match is found returns new empty Stringy object.
+   *
+   * @param string $separator
+   *
+   * @return static
+   */
+  public function beforeLastIgnoreCase($separator)
+  {
+    if ($separator === '') {
+      return static::create('');
+    }
+
+    if ($this->str === '') {
+      return static::create('');
+    }
+
+    $offset = $this->indexOfLastIgnoreCase($separator);
     if ($offset === false) {
       return static::create('', $this->encoding);
     }
