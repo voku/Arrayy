@@ -4027,7 +4027,21 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   public function testUnique($array, $result)
   {
     $arrayy = A::create($array)->unique();
+    self::assertSame($result, $arrayy->getArray());
 
+    $arrayy = A::create($array)->uniqueNewIndex();
+    self::assertSame($result, $arrayy->getArray());
+  }
+
+  /**
+   * @dataProvider uniqueProviderKeepIndex()
+   *
+   * @param $array
+   * @param $result
+   */
+  public function testUniqueKeepIndex($array, $result)
+  {
+    $arrayy = A::create($array)->uniqueKeepIndex();
     self::assertSame($result, $arrayy->getArray());
   }
 
@@ -4220,6 +4234,58 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
                 $a,
                 $b,
                 $c,
+            ),
+        ),
+    );
+  }
+
+  /**
+   * @return array
+   */
+  public function uniqueProviderKeepIndex()
+  {
+    $a = new stdClass();
+    $a->x = 42;
+
+    $b = new stdClass();
+    $b->y = 42;
+
+    $c = new stdClass();
+    $c->x = 43;
+
+    return array(
+        array(array(), array()),
+        array(array(0 => false), array(false)),
+        array(array(0 => true), array(true)),
+        array(array(0 => -9, 1 => -9), array(-9)),
+        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => -9, 1 => 1, 2 => 2)),
+        array(array(0 => 1.18, 1 => 1.5), array(0 => 1.18, 1 => 1.5)),
+        array(
+            array(
+                3 => 'string',
+                4 => 'foo',
+                5 => 'lall',
+                6 => 'foo',
+            ),
+            array(
+                3 => 'string',
+                4 => 'foo',
+                5 => 'lall',
+            ),
+        ),
+        array(
+            array(
+                $a,
+                $a,
+                $b,
+                $b,
+                $c,
+                $c,
+            ),
+            array(
+                0 => $a,
+                2 => $b,
+                4 => $c,
             ),
         ),
     );

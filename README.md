@@ -1252,7 +1252,16 @@ Convert the current array to JSON.
 a(['bar', array('foo')])->toJson(); // '["bar",{"1":"foo"}]'
 ```
 
-##### unique() : Arrayy (Mutable)
+##### uniqueNewIndex() : Arrayy (Mutable)
+
+Return a duplicate free copy of the current array.
+
+```php
+a([1, 2, 2])->unique(); // Arrayy[1, 2]
+```
+
+
+##### uniqueKeepIndex() : Arrayy (Mutable)
 
 Return a duplicate free copy of the current array.
 
