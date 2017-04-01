@@ -19,7 +19,7 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - php vendor/bin/phpunit -c phpunit.xml.dist
+  - php vendor/bin/phpunit -c phpunit.xml.dist --debug
 
 after_script:
   - php vendor/bin/coveralls -v
