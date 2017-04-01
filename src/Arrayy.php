@@ -2780,13 +2780,30 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Return a duplicate free copy of the current array. (with the old keys)
    *
-   * @param int $strategy <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or <strong>SORT_NATURAL</strong></p>
-   *
    * @return static <p>(Mutable)</p>
    */
-  public function uniqueKeepIndex($strategy = SORT_REGULAR)
+  public function uniqueKeepIndex()
   {
-    $this->array = array_unique($this->array, $strategy);
+    // init
+    $array = $this->array;
+
+    $this->array = array_reduce(
+        array_keys($array),
+        function ($resultArray, $key) use ($array) {
+          if (!in_array($array[$key], $resultArray, true)) {
+            $resultArray[$key] = $array[$key];
+          }
+
+          return $resultArray;
+        },
+        array()
+    );
+
+    if ($this->array === null) {
+      $this->array = array();
+    } else {
+      $this->array = (array)$this->array;
+    }
 
     return $this;
   }
