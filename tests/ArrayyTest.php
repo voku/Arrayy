@@ -2026,7 +2026,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $arrayy = new A(array('Lars' => array('lastname' => null)));
     $result = $arrayy->get('Lars.lastname');
-    self::assertSame(null, $result);
+    self::assertNull($result);
   }
 
   /**
@@ -3493,7 +3493,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy['user.firstname'] = null;
 
     self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => null)), $arrayy->getArray());
-    self::assertSame(null, $arrayy['user.firstname']);
+    self::assertNull($arrayy['user.firstname']);
   }
 
   /**
@@ -3595,7 +3595,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultTmp = $arrayy->get('Lars');
     self::assertEquals(array('lastname' => null), $resultTmp->getArray());
     $resultTmp = $arrayy->get('Lars.lastname');
-    self::assertSame(null, $resultTmp);
+    self::assertNull($resultTmp);
   }
 
   public function testSetValueViaMagicSet()

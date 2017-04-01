@@ -125,7 +125,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param mixed $value
    *
-   * @return self (Mutable) Return this Arrayy object, with the appended values.
+   * @return static (Mutable) Return this Arrayy object, with the appended values.
    */
   public function add($value)
   {
@@ -137,7 +137,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param mixed $value
    *
-   * @return self (Mutable) Return this Arrayy object, with the appended values.
+   * @return static (Mutable) Return this Arrayy object, with the appended values.
    */
   public function append($value)
   {
@@ -296,7 +296,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param string $string
    *
-   * @return self (Mutable)
+   * @return static (Mutable)
    */
   public function unserialize($string)
   {
@@ -310,7 +310,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param \Closure $closure
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function at(\Closure $closure)
   {
@@ -381,7 +381,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param string $separator Separator to set.
    *
-   * @return Arrayy Current instance.
+   * @return static Current instance.
    */
   public function changeSeparator($separator)
   {
@@ -396,7 +396,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param int  $size         Size of each chunk
    * @param bool $preserveKeys Whether array keys are preserved or no
    *
-   * @return Arrayy (Immutable) A new array of chunks from the original array.
+   * @return static (Immutable) A new array of chunks from the original array.
    */
   public function chunk($size, $preserveKeys = false)
   {
@@ -408,7 +408,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Clean all falsy values from the current array.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function clean()
   {
@@ -422,7 +422,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * WARNING!!! -> Clear the current array.
    *
-   * @return self (Mutable) Return this Arrayy object, with an empty array.
+   * @return static (Mutable) Return this Arrayy object, with an empty array.
    */
   public function clear()
   {
@@ -520,7 +520,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param array $array
    *
-   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
+   * @return static (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function create($array = array())
   {
@@ -532,7 +532,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param array $array
    *
-   * @return self (Mutable) Return this Arrayy object.
+   * @return static (Mutable) Return this Arrayy object.
    */
   public function createByReference(&$array = array())
   {
@@ -548,7 +548,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param string $json
    *
-   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
+   * @return static (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function createFromJson($json)
   {
@@ -562,7 +562,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param \ArrayAccess $object Object that implements ArrayAccess
    *
-   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
+   * @return static (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function createFromObject(\ArrayAccess $object)
   {
@@ -582,7 +582,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param string|null $delimiter The boundary string.
    * @param string|null $regEx     Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be used.
    *
-   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
+   * @return static (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function createFromString($str, $delimiter, $regEx = null)
   {
@@ -618,7 +618,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param mixed $high The sequence is ended upon reaching the end value
    * @param int   $step Used as the increment between elements in the sequence
    *
-   * @return Arrayy (Immutable) Returns an new instance of the Arrayy object.
+   * @return static (Immutable) Returns an new instance of the Arrayy object.
    */
   public static function createWithRange($low, $high, $step = 1)
   {
@@ -632,7 +632,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param callable $function
    *
-   * @return self (Mutable) Return this Arrayy object.
+   * @return static (Mutable) Return this Arrayy object.
    */
   public function customSortKeys($function)
   {
@@ -648,7 +648,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param callable $function
    *
-   * @return self (Mutable) Return this Arrayy object.
+   * @return static (Mutable) Return this Arrayy object.
    */
   public function customSortValues($function)
   {
@@ -662,7 +662,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param array $array
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function diff(array $array = array())
   {
@@ -677,7 +677,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param array      $array
    * @param null|array $helperVariableForRecursion (only for internal usage)
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function diffRecursive(array $array = array(), $helperVariableForRecursion = null)
   {
@@ -718,7 +718,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param array $array
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function diffReverse(array $array = array())
   {
@@ -730,7 +730,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Divide an array into two arrays. One with keys and the other with values.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function divide()
   {
@@ -747,7 +747,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param \Closure $closure
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function each(\Closure $closure)
   {
@@ -839,7 +839,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param \Closure|null $closure
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function filter($closure = null)
   {
@@ -870,7 +870,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *                            'newer' (via strtotime),<br />
    *                            'older' (via strtotime),<br />
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function filterBy($property, $value, $comparisonOp = null)
   {
@@ -964,7 +964,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param        $value
    * @param string $comparisonOp
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function findBy($property, $value, $comparisonOp = 'eq')
   {
@@ -993,7 +993,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int|null $number how many values you will take?
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function firstsImmutable($number = null)
   {
@@ -1014,7 +1014,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int|null $number how many values you will take?
    *
-   * @return self (Mutable)
+   * @return static (Mutable)
    */
   public function firstsMutable($number = null)
   {
@@ -1031,7 +1031,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Exchanges all keys with their associated values in an array.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function flip()
   {
@@ -1126,7 +1126,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param mixed $columnKey
    * @param mixed $indexKey
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function getColumn($columnKey = null, $indexKey = null)
   {
@@ -1170,7 +1170,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @see Arrayy::keys()
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function getKeys()
   {
@@ -1182,7 +1182,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @see Arrayy::randomImmutable()
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function getRandom()
   {
@@ -1208,7 +1208,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int $number
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function getRandomKeys($number)
   {
@@ -1234,7 +1234,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int $number
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function getRandomValues($number)
   {
@@ -1247,7 +1247,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param string $grouper a callable function name
    * @param bool   $saveKeys
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function group($grouper, $saveKeys = false)
   {
@@ -1320,7 +1320,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param mixed $key
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function indexBy($key)
   {
@@ -1354,7 +1354,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int $to
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function initial($to = 1)
   {
@@ -1434,7 +1434,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param array $search
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function intersection(array $search)
   {
@@ -1459,7 +1459,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param mixed $callable
    * @param mixed $arguments
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function invoke($callable, $arguments = array())
   {
@@ -1563,7 +1563,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Get all keys from the current array.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function keys()
   {
@@ -1585,7 +1585,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int|null $number
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function lastsImmutable($number = null)
   {
@@ -1616,7 +1616,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int|null $number
    *
-   * @return self (Mutable)
+   * @return static (Mutable)
    */
   public function lastsMutable($number = null)
   {
@@ -1662,7 +1662,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param callable $callable
    *
-   * @return Arrayy (Immutable) Arrayy object with modified elements
+   * @return static (Immutable) Arrayy object with modified elements
    */
   public function map($callable)
   {
@@ -1747,7 +1747,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param array $array
    * @param bool  $recursive
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function mergeAppendKeepIndex(array $array = array(), $recursive = false)
   {
@@ -1769,7 +1769,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param array $array
    * @param bool  $recursive
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function mergeAppendNewIndex(array $array = array(), $recursive = false)
   {
@@ -1790,7 +1790,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param array $array
    * @param bool  $recursive
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function mergePrependKeepIndex(array $array = array(), $recursive = false)
   {
@@ -1812,7 +1812,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param array $array
    * @param bool  $recursive
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function mergePrependNewIndex(array $array = array(), $recursive = false)
   {
@@ -1844,7 +1844,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param mixed[] $keys
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function only(array $keys)
   {
@@ -1859,7 +1859,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param int   $size  Size of the result array
    * @param mixed $value Empty value by default
    *
-   * @return Arrayy (Immutable) Arrayy object padded to $size with $value
+   * @return static (Immutable) Arrayy object padded to $size with $value
    */
   public function pad($size, $value)
   {
@@ -1884,7 +1884,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param mixed $value
    * @param mixed $key
    *
-   * @return self (Mutable) Return this Arrayy object, with the prepended value.
+   * @return static (Mutable) Return this Arrayy object, with the prepended value.
    */
   public function prepend($value, $key = null)
   {
@@ -1901,7 +1901,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Push one or more values onto the end of array at once.
    *
-   * @return self (Mutable) Return this Arrayy object, with pushed elements to the end of array.
+   * @return static (Mutable) Return this Arrayy object, with pushed elements to the end of array.
    */
   public function push(/* variadic arguments allowed */)
   {
@@ -1918,7 +1918,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param null|int $number how many values you will take?
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function randomImmutable($number = null)
   {
@@ -1961,7 +1961,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int $number The number of keys/indexes (should be <= $this->count())
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    *
    * @throws \RangeException If array is empty
    */
@@ -1990,7 +1990,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param null|int $number how many values you will take?
    *
-   * @return Arrayy (Mutable)
+   * @return static (Mutable)
    */
   public function randomMutable($number = null)
   {
@@ -2031,7 +2031,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int $number
    *
-   * @return Arrayy (Mutable)
+   * @return static (Mutable)
    */
   public function randomValues($number)
   {
@@ -2048,7 +2048,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param array    $array
    * @param null|int $number how many values you will take?
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function randomWeighted(array $array, $number = null)
   {
@@ -2070,7 +2070,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param mixed $callable
    * @param array $init
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function reduce($callable, array $init = array())
   {
@@ -2088,7 +2088,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Create a numerically re-indexed Arrayy object.
    *
-   * @return self (Mutable) Return this Arrayy object, with re-indexed array-elements.
+   * @return static (Mutable) Return this Arrayy object, with re-indexed array-elements.
    */
   public function reindex()
   {
@@ -2102,7 +2102,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param \Closure $closure
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function reject(\Closure $closure)
   {
@@ -2122,7 +2122,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param mixed $key
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function remove($key)
   {
@@ -2143,7 +2143,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Remove the first value from the current array.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function removeFirst()
   {
@@ -2156,7 +2156,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Remove the last value from the current array.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function removeLast()
   {
@@ -2171,7 +2171,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param mixed $value
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function removeValue($value)
   {
@@ -2199,7 +2199,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param $key
    * @param $value
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function replace($replace, $key, $value)
   {
@@ -2213,7 +2213,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param array $keys Keys array
    *
-   * @return Arrayy (Immutable) Arrayy object with keys from the other array.
+   * @return static (Immutable) Arrayy object with keys from the other array.
    */
   public function replaceAllKeys(array $keys)
   {
@@ -2227,7 +2227,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param array $array Values array
    *
-   * @return Arrayy (Immutable) Arrayy object with values from the other array.
+   * @return static (Immutable) Arrayy object with values from the other array.
    */
   public function replaceAllValues(array $array)
   {
@@ -2241,7 +2241,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param array $keys An array of keys matching the array's size
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function replaceKeys(array $keys)
   {
@@ -2257,7 +2257,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param mixed $search
    * @param mixed $replacement
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function replaceOneValue($search, $replacement = '')
   {
@@ -2277,7 +2277,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param string $search      The string to replace.
    * @param string $replacement What to replace it with.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function replaceValues($search, $replacement = '')
   {
@@ -2295,7 +2295,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param int $from
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function rest($from = 1)
   {
@@ -2312,7 +2312,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param int|string $from
    * @param int|string $to
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function moveElement($from, $to)
   {
@@ -2345,7 +2345,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Return the array in the reverse order.
    *
-   * @return self (Mutable) Return this Arrayy object.
+   * @return static (Mutable) Return this Arrayy object.
    */
   public function reverse()
   {
@@ -2371,7 +2371,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @param mixed $index
    *
-   * @return Arrayy (Immutable) will return a empty Arrayy if the value wasn't found
+   * @return static (Immutable) will return a empty Arrayy if the value wasn't found
    */
   public function searchValue($index)
   {
@@ -2401,7 +2401,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param string $key   The key to set
    * @param mixed  $value Its value
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function set($key, $value)
   {
@@ -2443,7 +2443,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Shuffle the current array.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function shuffle()
   {
@@ -2487,7 +2487,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param integer $strategy
    * @param bool    $keepKeys
    *
-   * @return self (Mutable) Return this Arrayy object.
+   * @return static (Mutable) Return this Arrayy object.
    */
   public function sort($direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
   {
@@ -2505,7 +2505,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param int|string $direction use SORT_ASC or SORT_DESC
    * @param int        $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
    *
-   * @return self (Mutable) Return this Arrayy object.
+   * @return static (Mutable) Return this Arrayy object.
    */
   public function sortKeys($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2520,7 +2520,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param int $direction use SORT_ASC or SORT_DESC
    * @param int $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function sortValueKeepIndex($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2533,7 +2533,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param int $direction use SORT_ASC or SORT_DESC
    * @param int $strategy  use e.g.: SORT_REGULAR or SORT_NATURAL
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function sortValueNewIndex($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2550,7 +2550,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param string|int $direction
    * @param int        $strategy
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function sorter($sorter = null, $direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2642,7 +2642,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param int  $numberOfPieces
    * @param bool $keepKeys
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function split($numberOfPieces = 2, $keepKeys = false)
   {
@@ -2662,7 +2662,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Stripe all empty items.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function stripEmpty()
   {
@@ -2683,7 +2683,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param string|int $swapA an key in the array
    * @param string|int $swapB an key in the array
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function swap($swapA, $swapB)
   {
@@ -2729,9 +2729,21 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
+   * alias: for "Arrayy->unique()"
+   *
+   * @see Arrayy::unique()
+   *
+   * @return static (Mutable) Return this Arrayy object, with the appended values.
+   */
+  public function uniqueKeepIndex()
+  {
+    return $this->unique();
+  }
+
+  /**
    * Return a duplicate free copy of the current array.
    *
-   * @return Arrayy (Mutable)
+   * @return static (Mutable)
    */
   public function unique()
   {
@@ -2759,7 +2771,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Prepends one or more values to the beginning of array at once.
    *
-   * @return self (Mutable) Return this Arrayy object, with prepended elements to the beginning of array.
+   * @return static (Mutable) Return this Arrayy object, with prepended elements to the beginning of array.
    */
   public function unshift(/* variadic arguments allowed */)
   {
@@ -2774,7 +2786,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Get all values from a array.
    *
-   * @return Arrayy (Immutable)
+   * @return static (Immutable)
    */
   public function values()
   {
@@ -2787,7 +2799,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    * @param callable $callable
    * @param bool     $recursive Whether array will be walked recursively or no
    *
-   * @return self (Mutable) Return this Arrayy object, with modified elements
+   * @return static (Mutable) Return this Arrayy object, with modified elements
    */
   public function walk($callable, $recursive = false)
   {
