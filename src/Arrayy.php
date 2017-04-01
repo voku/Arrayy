@@ -271,7 +271,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
       $this->callAtPath(
           implode($this->pathSeparator, $path),
-          function (&$offset) use (&$pathToUnset) {
+          function (&$offset) use ($pathToUnset) {
             unset($offset[$pathToUnset]);
           }
       );
