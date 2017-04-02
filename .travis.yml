@@ -1,5 +1,5 @@
 language: php
-sudo: false
+sudo: true
 
 php:
   - 5.3
@@ -11,6 +11,7 @@ php:
   - hhvm
 
 before_script:
+  - sudo apt-get install strace
   - wget https://scrutinizer-ci.com/ocular.phar
   - travis_retry composer self-update
   - travis_retry composer require satooshi/php-coveralls:1.0.0
