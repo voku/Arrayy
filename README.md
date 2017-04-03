@@ -1257,7 +1257,7 @@ a(['bar', array('foo')])->toJson(); // '["bar",{"1":"foo"}]'
 Return a duplicate free copy of the current array.
 
 ```php
-a([1, 2, 2])->unique(); // Arrayy[1, 2]
+a([2 => 1, 3 => 2, 4 => 2])->uniqueNewIndex(); // Arrayy[1, 2]
 ```
 
 
@@ -1266,7 +1266,7 @@ a([1, 2, 2])->unique(); // Arrayy[1, 2]
 Return a duplicate free copy of the current array.
 
 ```php
-a([1, 2, 2])->unique(); // Arrayy[1, 2]
+a([2 => 1, 3 => 2, 4 => 2])->uniqueNewIndex(); // Arrayy[2 => 1, 3 => 2]
 ```
 
 ##### values() : Arrayy (Immutable)
