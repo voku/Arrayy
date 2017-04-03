@@ -4222,6 +4222,10 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
             ),
         ),
         array(
+            array(2 => 1, 3 => 2, 4 => 2),
+            array(0 => 1, 1 => 2)
+        ),
+        array(
             array(
                 $a,
                 $a,
@@ -4272,6 +4276,10 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
                 4 => 'foo',
                 5 => 'lall',
             ),
+        ),
+        array(
+            array(2 => 1, 3 => 2, 4 => 2),
+            array(2 => 1, 3 => 2)
         ),
         array(
             array(
