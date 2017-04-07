@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.2.1 (07.04.2017)
+
+[+]: fix "StaticArrayy"-class -> return value from "repeat()" is always an instance of the "Arrayy"-class
+
 ### 3.2.0 (01.04.2017)
 
 * [~]: fix php-doc (for extended classes)
