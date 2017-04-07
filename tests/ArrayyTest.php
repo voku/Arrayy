@@ -2122,6 +2122,34 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame(array('foo  ', '__bar'), $arrayy->getArray());
   }
 
+  public function testRepeat()
+  {
+    $arrayTmp = array('lall');
+    $arrayExpected = array(array('lall'), array('lall'), array('lall'));
+
+    $arrayyTmp = A::create($arrayTmp);
+    $arrayyResult = $arrayyTmp->repeat(3);
+    self::assertSame($arrayExpected, $arrayyResult->getArray());
+
+    // --
+
+    $arrayTmp = array('lall');
+    $arrayExpected = array();
+
+    $arrayyTmp = A::create($arrayTmp);
+    $arrayyResult = $arrayyTmp->repeat(0);
+    self::assertSame($arrayExpected, $arrayyResult->getArray());
+
+    // --
+
+    $arrayTmp = array('foo', 'bar');
+    $arrayExpected = array(array('foo', 'bar'), array('foo', 'bar'));
+
+    $arrayyTmp = A::create($arrayTmp);
+    $arrayyResult = $arrayyTmp->repeat(2);
+    self::assertSame($arrayExpected, $arrayyResult->getArray());
+  }
+
   public function testIsArrayAssoc()
   {
 

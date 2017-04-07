@@ -47,7 +47,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     $return = $this->get($key);
 
     if (is_array($return)) {
-      return self::create($return);
+      return static::create($return);
     }
 
     return $return;
@@ -186,7 +186,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       $offset = (int)$offset;
     }
 
-    $tmpReturn = array_key_exists($offset, $this->array);
+    $tmpReturn = \array_key_exists($offset, $this->array);
 
     if (
         $tmpReturn === true
@@ -206,13 +206,13 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
       $offsetExists = false;
       $explodedPath = explode($this->pathSeparator, (string)$offset);
-      $lastOffset = array_pop($explodedPath);
+      $lastOffset = \array_pop($explodedPath);
       $containerPath = implode($this->pathSeparator, $explodedPath);
 
       $this->callAtPath(
           $containerPath,
           function ($container) use ($lastOffset, &$offsetExists) {
-            $offsetExists = array_key_exists($lastOffset, $container);
+            $offsetExists = \array_key_exists($lastOffset, $container);
           }
       );
     }
@@ -258,7 +258,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       return;
     }
 
-    if (array_key_exists($offset, $this->array)) {
+    if (\array_key_exists($offset, $this->array)) {
       unset($this->array[$offset]);
 
       return;
@@ -267,7 +267,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     if (strpos((string)$offset, $this->pathSeparator) !== false) {
 
       $path = explode($this->pathSeparator, (string)$offset);
-      $pathToUnset = array_pop($path);
+      $pathToUnset = \array_pop($path);
 
       $this->callAtPath(
           implode($this->pathSeparator, $path),
@@ -340,7 +340,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       $decimals = 0;
     }
 
-    return round(array_sum($this->array) / $count, $decimals);
+    return round(\array_sum($this->array) / $count, $decimals);
   }
 
   /**
@@ -355,7 +355,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     $explodedPath = explode($this->pathSeparator, $path);
-    $nextPath = array_shift($explodedPath);
+    $nextPath = \array_shift($explodedPath);
 
     if (!isset($currentOffset[$nextPath])) {
       return;
@@ -398,7 +398,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function chunk($size, $preserveKeys = false)
   {
-    $result = array_chunk($this->array, $size, $preserveKeys);
+    $result = \array_chunk($this->array, $size, $preserveKeys);
 
     return static::create($result);
   }
@@ -452,7 +452,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     return in_array(
         UTF8::strtolower($value),
-        array_map(
+        \array_map(
             array(
                 new UTF8(),
                 'strtolower',
@@ -484,7 +484,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function containsKeys(array $needles)
   {
-    return count(array_intersect($needles, $this->keys()->getArray())) === count($needles);
+    return count(\array_intersect($needles, $this->keys()->getArray())) === count($needles);
   }
 
   /**
@@ -510,7 +510,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function containsValues(array $needles)
   {
-    return count(array_intersect($needles, $this->array)) === count($needles);
+    return count(\array_intersect($needles, $this->array)) === count($needles);
   }
 
   /**
@@ -524,6 +524,23 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     return new static($array);
   }
+
+  /**
+   * Generate array of repeated arrays.
+   *
+   * @param int $times <p>How many times has to be repeated.</p>
+   *
+   * @return Arrayy
+   */
+  public function repeat($times)
+  {
+    if ($times === 0) {
+      return new static();
+    }
+
+    return static::create(\array_fill(0, (int)$times, $this->array));
+  }
+
 
   /**
    * WARNING: Creates an Arrayy object by reference.
@@ -597,7 +614,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     // trim all string in the array
-    array_walk(
+    \array_walk(
         $array,
         function (&$val) {
           /** @noinspection ReferenceMismatchInspection */
@@ -665,7 +682,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function diff(array $array = array())
   {
-    $result = array_diff($this->array, $array);
+    $result = \array_diff($this->array, $array);
 
     return static::create($result);
   }
@@ -693,7 +710,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     foreach ($arrayForTheLoop as $key => $value) {
-      if (array_key_exists($key, $array)) {
+      if (\array_key_exists($key, $array)) {
         if (is_array($value)) {
           $recursiveDiff = $this->diffRecursive($array[$key], $value);
           if (!empty($recursiveDiff)) {
@@ -721,7 +738,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function diffReverse(array $array = array())
   {
-    $result = array_diff($array, $this->array);
+    $result = \array_diff($array, $this->array);
 
     return static::create($result);
   }
@@ -812,7 +829,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     if ($array instanceof \ArrayAccess) {
       /** @noinspection ReferenceMismatchInspection */
-      return self::createFromObject($array)->getArray();
+      return static::createFromObject($array)->getArray();
     }
 
     if (is_object($array) && method_exists($array, '__toArray')) {
@@ -846,7 +863,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       return $this->clean();
     }
 
-    $array = array_filter($this->array, $closure);
+    $array = \array_filter($this->array, $closure);
 
     return static::create($array);
   }
@@ -918,8 +935,8 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
         },
     );
 
-    $result = array_values(
-        array_filter(
+    $result = \array_values(
+        \array_filter(
             (array)$this->array,
             function ($item) use (
                 $property,
@@ -980,7 +997,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function first()
   {
     $tmpArray = $this->array;
-    $result = array_shift($tmpArray);
+    $result = \array_shift($tmpArray);
 
     if ($result === null) {
       return null;
@@ -1000,11 +1017,11 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     if ($number === null) {
       $arrayTmp = $this->array;
-      $array = (array)array_shift($arrayTmp);
+      $array = (array)\array_shift($arrayTmp);
     } else {
       $number = (int)$number;
       $arrayTmp = $this->array;
-      $array = array_splice($arrayTmp, 0, $number, true);
+      $array = \array_splice($arrayTmp, 0, $number, true);
     }
 
     return static::create($array);
@@ -1020,10 +1037,10 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function firstsMutable($number = null)
   {
     if ($number === null) {
-      $this->array = (array)array_shift($this->array);
+      $this->array = (array)\array_shift($this->array);
     } else {
       $number = (int)$number;
-      $this->array = array_splice($this->array, 0, $number, true);
+      $this->array = \array_splice($this->array, 0, $number, true);
     }
 
     return $this;
@@ -1036,7 +1053,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function flip()
   {
-    $result = array_flip($this->array);
+    $result = \array_flip($this->array);
 
     return static::create($result);
   }
@@ -1064,7 +1081,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     if ($key === null) {
-      return self::create($usedArray);
+      return static::create($usedArray);
     }
 
     // php cast "bool"-index into "int"-index
@@ -1072,9 +1089,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       $key = (int)$key;
     }
 
-    if (array_key_exists($key, $usedArray) === true) {
+    if (\array_key_exists($key, $usedArray) === true) {
       if (is_array($usedArray[$key])) {
-        return self::create($usedArray[$key]);
+        return static::create($usedArray[$key]);
       }
 
       return $usedArray[$key];
@@ -1090,7 +1107,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     if (is_array($usedArray)) {
-      return self::create($usedArray);
+      return static::create($usedArray);
     }
 
     return $usedArray;
@@ -1103,7 +1120,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function getArray()
   {
-    array_map(array('self', 'internalGetArray'), $this->array);
+    \array_map(array('self', 'internalGetArray'), $this->array);
 
     return $this->array;
   }
@@ -1132,7 +1149,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function getColumn($columnKey = null, $indexKey = null)
   {
-    $result = array_column($this->array, $columnKey, $indexKey);
+    $result = \array_column($this->array, $columnKey, $indexKey);
 
     return static::create($result);
   }
@@ -1329,7 +1346,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     $results = array();
 
     foreach ($this->array as $a) {
-      if (array_key_exists($key, $a) === true) {
+      if (\array_key_exists($key, $a) === true) {
         $results[$a[$key]] = $a;
       }
     }
@@ -1378,7 +1395,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     // Crawl though the keys
     while (count($path) > 1) {
-      $key = array_shift($path);
+      $key = \array_shift($path);
 
       if (!$this->has($key)) {
         return false;
@@ -1387,7 +1404,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       $this->array = &$this->array[$key];
     }
 
-    $key = array_shift($path);
+    $key = \array_shift($path);
 
     unset($this->array[$key]);
 
@@ -1414,19 +1431,19 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     // Crawl through the keys
     while (count($path) > 1) {
-      $key = array_shift($path);
+      $key = \array_shift($path);
 
       // If the key doesn't exist at this depth, we will just create an empty array
       // to hold the next value, allowing us to create the arrays to hold final
       // values at the correct depth. Then we'll keep digging into the array.
       if (!isset($array[$key]) || !is_array($array[$key])) {
-        $array[$key] = self::create(array());
+        $array[$key] = static::create(array());
       }
 
       $array =& $array[$key];
     }
 
-    $array[array_shift($path)] = $value;
+    $array[\array_shift($path)] = $value;
 
     return true;
   }
@@ -1440,7 +1457,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function intersection(array $search)
   {
-    return static::create(array_values(array_intersect($this->array, $search)));
+    return static::create(\array_values(\array_intersect($this->array, $search)));
   }
 
   /**
@@ -1472,9 +1489,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     // If the callable has arguments, pass them.
     if ($arguments) {
-      $array = array_map($callable, $this->array, $arguments);
+      $array = \array_map($callable, $this->array, $arguments);
     } else {
-      $array = array_map($callable, $this->array);
+      $array = \array_map($callable, $this->array);
     }
 
     return static::create($array);
@@ -1559,7 +1576,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function isSequential()
   {
-    return array_keys($this->array) === range(0, count($this->array) - 1);
+    return \array_keys($this->array) === range(0, count($this->array) - 1);
   }
 
   /**
@@ -1569,7 +1586,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function keys()
   {
-    return static::create(array_keys($this->array));
+    return static::create(\array_keys($this->array));
   }
 
   /**
@@ -1668,7 +1685,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function map($callable)
   {
-    $result = array_map($callable, $this->array);
+    $result = \array_map($callable, $this->array);
 
     return static::create($result);
   }
@@ -1754,9 +1771,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function mergeAppendKeepIndex(array $array = array(), $recursive = false)
   {
     if (true === $recursive) {
-      $result = array_replace_recursive($this->array, $array);
+      $result = \array_replace_recursive($this->array, $array);
     } else {
-      $result = array_replace($this->array, $array);
+      $result = \array_replace($this->array, $array);
     }
 
     return static::create($result);
@@ -1776,9 +1793,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function mergeAppendNewIndex(array $array = array(), $recursive = false)
   {
     if (true === $recursive) {
-      $result = array_merge_recursive($this->array, $array);
+      $result = \array_merge_recursive($this->array, $array);
     } else {
-      $result = array_merge($this->array, $array);
+      $result = \array_merge($this->array, $array);
     }
 
     return static::create($result);
@@ -1797,9 +1814,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function mergePrependKeepIndex(array $array = array(), $recursive = false)
   {
     if (true === $recursive) {
-      $result = array_replace_recursive($array, $this->array);
+      $result = \array_replace_recursive($array, $this->array);
     } else {
-      $result = array_replace($array, $this->array);
+      $result = \array_replace($array, $this->array);
     }
 
     return static::create($result);
@@ -1819,9 +1836,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function mergePrependNewIndex(array $array = array(), $recursive = false)
   {
     if (true === $recursive) {
-      $result = array_merge_recursive($array, $this->array);
+      $result = \array_merge_recursive($array, $this->array);
     } else {
-      $result = array_merge($array, $this->array);
+      $result = \array_merge($array, $this->array);
     }
 
     return static::create($result);
@@ -1852,7 +1869,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     $array = $this->array;
 
-    return static::create(array_intersect_key($array, array_flip($keys)));
+    return static::create(\array_intersect_key($array, \array_flip($keys)));
   }
 
   /**
@@ -1865,7 +1882,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function pad($size, $value)
   {
-    $result = array_pad($this->array, $size, $value);
+    $result = \array_pad($this->array, $size, $value);
 
     return static::create($result);
   }
@@ -1877,7 +1894,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function pop()
   {
-    return array_pop($this->array);
+    return \array_pop($this->array);
   }
 
   /**
@@ -1891,7 +1908,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function prepend($value, $key = null)
   {
     if ($key === null) {
-      array_unshift($this->array, $value);
+      \array_unshift($this->array, $value);
     } else {
       /** @noinspection AdditionOperationOnArraysInspection */
       $this->array = array($key => $value) + $this->array;
@@ -1908,7 +1925,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function push(/* variadic arguments allowed */)
   {
     if (func_num_args()) {
-      $args = array_merge(array(&$this->array), func_get_args());
+      $args = \array_merge(array(&$this->array), func_get_args());
       call_user_func_array('array_push', $args);
     }
 
@@ -1929,7 +1946,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     if ($number === null) {
-      $arrayRandValue = array($this->array[array_rand($this->array)]);
+      $arrayRandValue = array($this->array[\array_rand($this->array)]);
 
       return static::create($arrayRandValue);
     }
@@ -1937,7 +1954,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     $arrayTmp = $this->array;
     shuffle($arrayTmp);
 
-    return self::create($arrayTmp)->firstsImmutable($number);
+    return static::create($arrayTmp)->firstsImmutable($number);
   }
 
   /**
@@ -1982,7 +1999,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       );
     }
 
-    $result = (array)array_rand($this->array, $number);
+    $result = (array)\array_rand($this->array, $number);
 
     return static::create($result);
   }
@@ -2001,7 +2018,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     if ($number === null) {
-      $arrayRandValue = array($this->array[array_rand($this->array)]);
+      $arrayRandValue = array($this->array[\array_rand($this->array)]);
       $this->array = $arrayRandValue;
 
       return $this;
@@ -2076,7 +2093,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function reduce($callable, array $init = array())
   {
-    $result = array_reduce($this->array, $callable, $init);
+    $result = \array_reduce($this->array, $callable, $init);
 
     if ($result === null) {
       $this->array = array();
@@ -2094,7 +2111,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function reindex()
   {
-    $this->array = array_values($this->array);
+    $this->array = \array_values($this->array);
 
     return $this;
   }
@@ -2150,7 +2167,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function removeFirst()
   {
     $tmpArray = $this->array;
-    array_shift($tmpArray);
+    \array_shift($tmpArray);
 
     return static::create($tmpArray);
   }
@@ -2163,7 +2180,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function removeLast()
   {
     $tmpArray = $this->array;
-    array_pop($tmpArray);
+    \array_pop($tmpArray);
 
     return static::create($tmpArray);
   }
@@ -2188,7 +2205,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     if ($isNumericArray) {
-      $this->array = array_values($this->array);
+      $this->array = \array_values($this->array);
     }
 
     return static::create($this->array);
@@ -2219,7 +2236,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function replaceAllKeys(array $keys)
   {
-    $result = array_combine($keys, $this->array);
+    $result = \array_combine($keys, $this->array);
 
     return static::create($result);
   }
@@ -2233,7 +2250,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function replaceAllValues(array $array)
   {
-    $result = array_combine($this->array, $array);
+    $result = \array_combine($this->array, $array);
 
     return static::create($result);
   }
@@ -2247,8 +2264,8 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function replaceKeys(array $keys)
   {
-    $values = array_values($this->array);
-    $result = array_combine($keys, $values);
+    $values = \array_values($this->array);
+    $result = \array_combine($keys, $values);
 
     return static::create($result);
   }
@@ -2264,7 +2281,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function replaceOneValue($search, $replacement = '')
   {
     $array = $this->array;
-    $key = array_search($search, $array, true);
+    $key = \array_search($search, $array, true);
 
     if ($key !== false) {
       $array[$key] = $replacement;
@@ -2303,7 +2320,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     $tmpArray = $this->array;
 
-    return static::create(array_splice($tmpArray, $from));
+    return static::create(\array_splice($tmpArray, $from));
   }
 
   /**
@@ -2321,13 +2338,13 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     $array = $this->array;
 
     if (is_int($from)) {
-      $tmp = array_splice($array, $from, 1);
-      array_splice($array, $to, 0, $tmp);
+      $tmp = \array_splice($array, $from, 1);
+      \array_splice($array, $to, 0, $tmp);
       $output = $array;
     } elseif (is_string($from)) {
-      $indexToMove = array_search($from, array_keys($array), true);
+      $indexToMove = \array_search($from, \array_keys($array), true);
       $itemToMove = $array[$from];
-      array_splice($array, $indexToMove, 1);
+      \array_splice($array, $indexToMove, 1);
       $i = 0;
       $output = array();
       foreach ($array as $key => $item) {
@@ -2351,7 +2368,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function reverse()
   {
-    $this->array = array_reverse($this->array);
+    $this->array = \array_reverse($this->array);
 
     return $this;
   }
@@ -2365,7 +2382,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function searchIndex($value)
   {
-    return array_search($value, $this->array, true);
+    return \array_search($value, $this->array, true);
   }
 
   /**
@@ -2389,7 +2406,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       $index = (int)$index;
     }
 
-    if (array_key_exists($index, $this->array) === true) {
+    if (\array_key_exists($index, $this->array) === true) {
       $return = array($this->array[$index]);
     }
 
@@ -2439,7 +2456,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function shift()
   {
-    return array_shift($this->array);
+    return \array_shift($this->array);
   }
 
   /**
@@ -2477,7 +2494,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function slice($offset, $length = null, $preserveKeys = false)
   {
-    $result = array_slice($this->array, $offset, $length, $preserveKeys);
+    $result = \array_slice($this->array, $offset, $length, $preserveKeys);
 
     return static::create($result);
   }
@@ -2563,7 +2580,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     // Transform all values into their results.
     if ($sorter) {
-      $arrayy = self::create($array);
+      $arrayy = static::create($array);
 
       $that = $this;
       $results = $arrayy->each(
@@ -2578,7 +2595,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     // Sort by the results and replace by original values
-    array_multisort($results, $direction, $strategy, $array);
+    \array_multisort($results, $direction, $strategy, $array);
 
     return static::create($array);
   }
@@ -2662,7 +2679,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     } else {
       $numberOfPieces = (int)$numberOfPieces;
       $splitSize = (int)ceil($arrayCount / $numberOfPieces);
-      $result = array_chunk($this->array, $splitSize, $keepKeys);
+      $result = \array_chunk($this->array, $splitSize, $keepKeys);
     }
 
     return static::create($result);
@@ -2756,7 +2773,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function unique()
   {
-    $this->array = array_reduce(
+    $this->array = \array_reduce(
         $this->array,
         function ($resultArray, $value) {
           if (!in_array($value, $resultArray, true)) {
@@ -2787,8 +2804,8 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     // init
     $array = $this->array;
 
-    $this->array = array_reduce(
-        array_keys($array),
+    $this->array = \array_reduce(
+        \array_keys($array),
         function ($resultArray, $key) use ($array) {
           if (!in_array($array[$key], $resultArray, true)) {
             $resultArray[$key] = $array[$key];
@@ -2816,7 +2833,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function unshift(/* variadic arguments allowed */)
   {
     if (func_num_args()) {
-      $args = array_merge(array(&$this->array), func_get_args());
+      $args = \array_merge(array(&$this->array), func_get_args());
       call_user_func_array('array_unshift', $args);
     }
 
@@ -2830,7 +2847,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function values()
   {
-    return static::create(array_values((array)$this->array));
+    return static::create(\array_values((array)$this->array));
   }
 
   /**
@@ -2844,9 +2861,9 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function walk($callable, $recursive = false)
   {
     if (true === $recursive) {
-      array_walk_recursive($this->array, $callable);
+      \array_walk_recursive($this->array, $callable);
     } else {
-      array_walk($this->array, $callable);
+      \array_walk($this->array, $callable);
     }
 
     return $this;

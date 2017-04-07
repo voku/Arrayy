@@ -48,9 +48,9 @@ class StaticArrayy
     $array = $numArgs ? $arguments[0] : '';
 
     if ($numArgs === static::$methodArgs[$name]) {
-      $args = array_slice($arguments, 1, -1);
+      $args = \array_slice($arguments, 1, -1);
     } else {
-      $args = array_slice($arguments, 1);
+      $args = \array_slice($arguments, 1);
     }
 
     $arrayy = Arrayy::create($array);
@@ -88,7 +88,7 @@ class StaticArrayy
       $stop = $base;
     }
 
-    return Arrayy::create(range($start, $stop, $step));
+    return Arrayy::create(\range($start, $stop, $step));
   }
 
   /**
@@ -101,11 +101,12 @@ class StaticArrayy
    */
   public static function repeat($data, $times)
   {
-    $times = abs($times);
-    if ($times === 0) {
-      return array();
+    $times = (int)$times;
+
+    if ($times === 0 || empty($data)) {
+      return Arrayy::create();
     }
 
-    return Arrayy::create(array_fill(0, $times, $data));
+    return Arrayy::create(\array_fill(0, $times, $data));
   }
 }

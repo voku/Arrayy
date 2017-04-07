@@ -81,6 +81,12 @@ class StaticArrayyTest extends PHPUnit_Framework_TestCase
     $result = A::repeat('foobar', 3);
 
     self::assertContains('foobar,foobar,foobar', (string)$result);
+
+    //
+
+    $result = A::repeat('', 3);
+
+    self::assertSame('', (string)$result);
   }
 
   public function testArrayyRepeatWithArray()
