@@ -1188,7 +1188,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(0 => false), array(0 => false), false),
         array(array(0 => false), array(0 => false), 0),
         array(array(0 => true), array(0 => true), 0),
-        array(array(0 => 1), array(0> -9, 1 => 1, 2 => 0, false), 1),
+        array(array(0 => 1), array(0 => -9, 1 => 1, 2 => 0, false), 1),
         array(array(0 => 1.18), array(0 => 1.18), 0),
         array(array(0 => 'foo'), array(0 => 'string', 1 => 'foo'), 1),
     );
@@ -2859,6 +2859,59 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($expected, $result);
   }
 
+  public function testChangeKeyCase()
+  {
+    // upper
+
+    $array = array(
+        'foo'   => 'a',
+        1       => 'b',
+        0       => 'c',
+        'Foo'   => 'd',
+        'FOO'   => 'e',
+        'ΣΣΣ'   => 'f',
+        'Κόσμε' => 'g',
+    );
+
+    $arrayy = A::create($array)->changeKeyCase(CASE_UPPER);
+    $result = $arrayy->getArray();
+
+    $expected = array(
+        'FOO'   => 'e',
+        1       => 'b',
+        0       => 'c',
+        'ΣΣΣ'   => 'f',
+        'ΚΌΣΜΕ' => 'g',
+    );
+
+    self::assertSame($expected, $result);
+
+    // lower
+
+    $array = array(
+        'foo'   => 'a',
+        1       => 'b',
+        0       => 'c',
+        'Foo'   => 'd',
+        'FOO'   => 'e',
+        'ΣΣΣ'   => 'f',
+        'Κόσμε' => 'g',
+    );
+
+    $arrayy = A::create($array)->changeKeyCase(CASE_LOWER);
+    $result = $arrayy->getArray();
+
+    $expected = array(
+        'foo'   => 'e',
+        1       => 'b',
+        0       => 'c',
+        'σσσ'   => 'f',
+        'κόσμε' => 'g',
+    );
+
+    self::assertSame($expected, $result);
+  }
+
   public function testOrderByValueNewIndex()
   {
     $array = array(
@@ -4251,7 +4304,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         ),
         array(
             array(2 => 1, 3 => 2, 4 => 2),
-            array(0 => 1, 1 => 2)
+            array(0 => 1, 1 => 2),
         ),
         array(
             array(
@@ -4307,7 +4360,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         ),
         array(
             array(2 => 1, 3 => 2, 4 => 2),
-            array(2 => 1, 3 => 2)
+            array(2 => 1, 3 => 2),
         ),
         array(
             array(

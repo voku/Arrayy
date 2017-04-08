@@ -280,6 +280,19 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
+   * Changes all keys in an array.
+   *
+   * @param int $case [optional] <p> Either <strong>CASE_UPPER</strong><br />
+   *                  or <strong>CASE_LOWER</strong> (default)</p>
+   *
+   * @return static <p>(Immutable)</p>
+   */
+  public function changeKeyCase($case = CASE_LOWER)
+  {
+    return static::create(UTF8::array_change_key_case($this->array, $case));
+  }
+
+  /**
    * Serialize the current array.
    *
    * @return string
