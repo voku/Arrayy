@@ -1,5 +1,6 @@
 <?php
 
+use Arrayy\Arrayy;
 use Arrayy\Arrayy as A;
 
 /**
@@ -1566,17 +1567,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals(A::create($expected2), A::create($rows)->getColumn(null));
   }
 
-  public function testCreateByReference()
-  {
-    $testArray = array('foo bar', 'UTF-8');
-    $arrayy = new A();
-    $arrayy->createByReference($testArray);
-    $arrayy['foo'] = 'bar';
-
-    self::assertSame(array('foo bar', 'UTF-8', 'foo' => 'bar'), $testArray);
-    self::assertSame($testArray, $arrayy->toArray());
-  }
-
   public function testConstruct()
   {
     $testArray = array('foo bar', 'UTF-8');
@@ -1654,6 +1644,17 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($expected, $arrayy->count());
     self::assertSame($expected, $arrayy->size());
     self::assertSame($expected, $arrayy->length());
+  }
+
+  public function testCreateByReference()
+  {
+    $testArray = array('foo bar', 'UTF-8');
+    $arrayy = new A();
+    $arrayy->createByReference($testArray);
+    $arrayy['foo'] = 'bar';
+
+    self::assertSame(array('foo bar', 'UTF-8', 'foo' => 'bar'), $testArray);
+    self::assertSame($testArray, $arrayy->toArray());
   }
 
   public function testCreateFromJson()
@@ -1805,21 +1806,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     uksort($resultArray, $callable);
 
     self::assertMutable($arrayy, $resultArrayy, $resultArray);
-  }
-
-  public function testExchangeArray()
-  {
-    $input = array(
-        'three' => 3,
-        'one'   => 1,
-        'two'   => 2,
-    );
-    $arrayy = new A($input);
-    /** @noinspection PhpParamsInspection */
-    $arrayy->exchangeArray('foo');
-
-    self::assertSame(array('foo'), $arrayy->getArray());
-    self::assertSame(array('foo'), $arrayy->getArrayCopy());
   }
 
   public function testCustomSortKeysSimple()
@@ -1982,6 +1968,21 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A();
     self::assertArrayy($arrayy);
     self::assertSame('', (string)$arrayy);
+  }
+
+  public function testExchangeArray()
+  {
+    $input = array(
+        'three' => 3,
+        'one'   => 1,
+        'two'   => 2,
+    );
+    $arrayy = new A($input);
+    /** @noinspection PhpParamsInspection */
+    $arrayy->exchangeArray('foo');
+
+    self::assertSame(array('foo'), $arrayy->getArray());
+    self::assertSame(array('foo'), $arrayy->getArrayCopy());
   }
 
   public function testFilter()
@@ -2505,6 +2506,60 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $matcher = array(1, 2, 3,);
     self::assertSame($matcher, $keys->getArray());
+  }
+
+  public function testCustomSortValuesByDateTimeObject()
+  {
+    $birthDates = array(
+        array('Lucienne Adkisson', date_create('2017-10-17')),
+        array('Sheryll Nestle', date_create('2017-02-16')),
+        array('Tim Pittman', date_create('2017-07-29')),
+        array('Elmer Letts', date_create('2017-12-01')),
+        array('Gino Massengale', date_create('2017-04-16')),
+        array('Jeremy Wiggs', date_create('2017-09-17')),
+        array('Julian Bulloch', date_create('2017-06 -21')),
+        array('Joella Hinshaw', date_create('2017-06-25')),
+        array('Mamie Burchill', date_create('2017-11-15')),
+        array('Constance Segers', date_create('2017-06-30')),
+        array('Jessy Pinkmann', date_create('2017-09-11')),
+        array('Dudley Currie', date_create('2017-02-10')),
+    );
+
+    $birthDatesAraayy = new Arrayy($birthDates);
+
+    $format = 'Y-m-d H:i:s';
+
+    //
+    // sort by date - helper-function
+    //
+
+    $closure = function ($a, $b) use ($format) {
+      /* @var $aDate \DateTime */
+      /* @var $bDate \DateTime */
+      $aDate = $a[1];
+      $bDate = $b[1];
+
+      if ($aDate->format($format) === $bDate->format($format)) {
+        return 0;
+      }
+
+      return $aDate->format($format) > $bDate->format($format) ? -1 : 1;
+    };
+
+    //
+    // sort the array
+    //
+
+    $resultMatch = $birthDatesAraayy->customSortValues($closure);
+
+    //
+    // check the result
+    //
+
+    self::assertEquals(
+        array('Elmer Letts', date_create('2017-12-01')),
+        $resultMatch->first()
+    );
   }
 
   /**
