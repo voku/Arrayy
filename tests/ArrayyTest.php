@@ -1807,6 +1807,20 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertMutable($arrayy, $resultArrayy, $resultArray);
   }
 
+  public function testExchangeArray()
+  {
+    $input = array(
+        'three' => 3,
+        'one'   => 1,
+        'two'   => 2,
+    );
+    $arrayy = new A($input);
+    /** @noinspection PhpParamsInspection */
+    $arrayy->exchangeArray('foo');
+
+    self::assertSame(array('foo'), $arrayy->getArray());
+  }
+
   public function testCustomSortKeysSimple()
   {
     $callable = function ($a, $b) {

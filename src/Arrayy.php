@@ -180,7 +180,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Exchange the array for another one.
    *
-   * @param  array|Arrayy $data
+   * @param array|Arrayy $data
    *
    * @return array
    */
