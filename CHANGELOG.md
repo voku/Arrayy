@@ -7,7 +7,7 @@
 * [+]: fix serialize() + unserialize() -> we will process the object now, not only the array in the object
 * [+]: add more tests
 
-### 3.3.10 (08.04.2017)
+### 3.3.0 (08.04.2017)
 
 * [+]: add "Arrayy->changeKeyCase()" (with UTF-8 support)
 
