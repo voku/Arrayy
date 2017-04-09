@@ -12,7 +12,7 @@ use voku\helper\UTF8;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-class Arrayy extends \ArrayObject implements \JsonSerializable, \IteratorAggregate, \ArrayAccess, \Serializable, \Countable
+class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \Countable
 {
   /**
    * @var array

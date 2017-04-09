@@ -2450,7 +2450,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy['user'] = array('lastname' => 'Moelleken');
     $arrayy['user.firstname'] = 'Lars';
 
-    $json = json_encode($arrayy);
+    $json = $arrayy->toJson();
     $arrayyFromJson = json_decode($json, true);
 
     self::assertSame(
