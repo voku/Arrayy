@@ -402,7 +402,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       }
     }
 
-    throw new \InvalidArgumentException('The iterator class does not exist');
+    throw new \InvalidArgumentException('The iterator class does not exist: ' . $class);
   }
 
   /**
