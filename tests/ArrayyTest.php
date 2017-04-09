@@ -1819,6 +1819,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy->exchangeArray('foo');
 
     self::assertSame(array('foo'), $arrayy->getArray());
+    self::assertSame(array('foo'), $arrayy->getArrayCopy());
   }
 
   public function testCustomSortKeysSimple()
