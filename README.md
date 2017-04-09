@@ -1136,10 +1136,10 @@ $arrayy->setAndGet(0, 4); // 4
 
 ##### serialize() : string
 
-Serialize the current array.
+Serialize the current arrayy-object.
 
 ```php
-a([1, 4, 7])->serialize(); // 'a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}'
+a([1, 4, 7])->serialize();
 ```
 
 ##### unserialize(string $string) : Arrayy (Mutable)
@@ -1147,7 +1147,8 @@ a([1, 4, 7])->serialize(); // 'a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}'
 Unserialize an string and return this object.
 
 ```php
-a()->unserialize('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}'); // Arrayy[1, 4, 7]
+$serialized = a([1, 4, 7])->serialize();
+a()->unserialize($serialized);
 ```
 
 ##### sort(string|int(SORT_ASC) $direction, int(SORT_REGULAR) $strategy, bool(false) $keepKeys) : Arrayy (Mutable)

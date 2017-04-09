@@ -4,18 +4,25 @@ namespace Arrayy;
 
 use voku\helper\UTF8;
 
+/** @noinspection ClassReImplementsParentInterfaceInspection */
+
 /**
  * Methods to manage arrays.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Countable
+class Arrayy extends \ArrayObject implements \JsonSerializable, \IteratorAggregate, \ArrayAccess, \Serializable, \Countable
 {
   /**
    * @var array
    */
   protected $array = array();
+
+  /**
+   * @var string
+   */
+  protected $iteratorClass;
 
   /**
    * @var string
@@ -26,13 +33,15 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Initializes
    *
-   * @param array $array
+   * @param array  $array
+   * @param string $iteratorClass
    */
-  public function __construct($array = array())
+  public function __construct($array = array(), $iteratorClass = '\\Arrayy\\ArrayyIterator')
   {
     $array = $this->fallbackForArray($array);
-
     $this->array = $array;
+
+    $this->setIteratorClass($iteratorClass);
   }
 
   /**
@@ -42,7 +51,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @return mixed <p>Get a Value from the current array.</p>
    */
-  public function __get($key)
+  public function &__get($key)
   {
     $return = $this->get($key);
 
@@ -113,7 +122,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function __unset($key)
   {
-    unset($this->array[$key]);
+    $this->internalRemove($key);
   }
 
   /**
@@ -145,6 +154,16 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
+   * Sort the entries by value
+   *
+   * @return void
+   */
+  public function asort()
+  {
+    asort($this->array);
+  }
+
+  /**
    * Count the values from the current array.
    *
    * alias: for "Arrayy->size()"
@@ -159,13 +178,79 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
+   * Exchange the array for another one.
+   *
+   * @param  array|Arrayy $data
+   *
+   * @return array
+   */
+  public function exchangeArray($data)
+  {
+    $this->array = $this->fallbackForArray($data);
+
+    return $this->array;
+  }
+
+  /**
+   * Creates a copy of the ArrayyObject.
+   *
+   * @return array
+   */
+  public function getArrayCopy()
+  {
+    return $this->array;
+  }
+
+  /**
    * Returns a new ArrayyIterator, thus implementing the IteratorAggregate interface.
    *
    * @return ArrayyIterator <p>An iterator for the values in the array.</p>
    */
   public function getIterator()
   {
-    return new ArrayyIterator($this->array);
+    $iterator = $this->getIteratorClass();
+
+    return new $iterator($this->array);
+  }
+
+  /**
+   * Gets the iterator classname for the ArrayObject.
+   *
+   * @return string
+   */
+  public function getIteratorClass()
+  {
+    return $this->iteratorClass;
+  }
+
+  /**
+   * Sort the entries by key
+   *
+   * @return void
+   */
+  public function ksort()
+  {
+    ksort($this->array);
+  }
+
+  /**
+   * Sort an array using a case insensitive "natural order" algorithm
+   *
+   * @return void
+   */
+  public function natcasesort()
+  {
+    natcasesort($this->array);
+  }
+
+  /**
+   * Sort entries using a "natural order" algorithm
+   *
+   * @return void
+   */
+  public function natsort()
+  {
+    natsort($this->array);
   }
 
   /**
@@ -227,9 +312,11 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    *
    * @return mixed <p>Will return null if the offset did not exists.</p>
    */
-  public function offsetGet($offset)
+  public function &offsetGet($offset)
   {
-    return $this->offsetExists($offset) ? $this->get($offset) : null;
+    $return = $this->offsetExists($offset) ? $this->get($offset) : null;
+
+    return $return;
   }
 
   /**
@@ -280,26 +367,70 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
-   * Changes all keys in an array.
-   *
-   * @param int $case [optional] <p> Either <strong>CASE_UPPER</strong><br />
-   *                  or <strong>CASE_LOWER</strong> (default)</p>
-   *
-   * @return static <p>(Immutable)</p>
-   */
-  public function changeKeyCase($case = CASE_LOWER)
-  {
-    return static::create(UTF8::array_change_key_case($this->array, $case));
-  }
-
-  /**
-   * Serialize the current array.
+   * Serialize the current "Arrayy"-object.
    *
    * @return string
    */
   public function serialize()
   {
-    return serialize($this->array);
+    return parent::serialize();
+  }
+
+  /**
+   * Sets the iterator classname for the current "Arrayy"-object.
+   *
+   * @param  string $class
+   *
+   * @return void
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function setIteratorClass($class)
+  {
+    if (class_exists($class)) {
+      $this->iteratorClass = $class;
+
+      return;
+    }
+
+    if (strpos($class, '\\') === 0) {
+      $class = '\\' . $class;
+      if (class_exists($class)) {
+        $this->iteratorClass = $class;
+
+        return;
+      }
+    }
+
+    throw new \InvalidArgumentException('The iterator class does not exist');
+  }
+
+  /**
+   * Sort the entries with a user-defined comparison function and maintain key association
+   *
+   * @param  callable $function
+   *
+   * @return void
+   */
+  public function uasort($function)
+  {
+    if (is_callable($function)) {
+      uasort($this->array, $function);
+    }
+  }
+
+  /**
+   * Sort the entries by keys using a user-defined comparison function
+   *
+   * @param  callable $function
+   *
+   * @return void
+   */
+  public function uksort($function)
+  {
+    if (is_callable($function)) {
+      uksort($this->array, $function);
+    }
   }
 
   /**
@@ -311,7 +442,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
    */
   public function unserialize($string)
   {
-    $this->array = unserialize($string);
+    parent::unserialize($string);
 
     return $this;
   }
@@ -383,6 +514,19 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     } else {
       $callable($currentOffset[$nextPath]);
     }
+  }
+
+  /**
+   * Changes all keys in an array.
+   *
+   * @param int $case [optional] <p> Either <strong>CASE_UPPER</strong><br />
+   *                  or <strong>CASE_LOWER</strong> (default)</p>
+   *
+   * @return static <p>(Immutable)</p>
+   */
+  public function changeKeyCase($case = CASE_LOWER)
+  {
+    return static::create(UTF8::array_change_key_case($this->array, $case));
   }
 
   /**
@@ -537,23 +681,6 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   {
     return new static($array);
   }
-
-  /**
-   * Generate array of repeated arrays.
-   *
-   * @param int $times <p>How many times has to be repeated.</p>
-   *
-   * @return Arrayy
-   */
-  public function repeat($times)
-  {
-    if ($times === 0) {
-      return new static();
-    }
-
-    return static::create(\array_fill(0, (int)$times, $this->array));
-  }
-
 
   /**
    * WARNING: Creates an Arrayy object by reference.
@@ -840,12 +967,18 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
       return array();
     }
 
-    if ($array instanceof \ArrayAccess) {
+    $isObject = is_object($array);
+
+    if ($isObject && $array instanceof \ArrayAccess) {
       /** @noinspection ReferenceMismatchInspection */
       return static::createFromObject($array)->getArray();
     }
 
-    if (is_object($array) && method_exists($array, '__toArray')) {
+    if ($isObject && $array instanceof \ArrayObject) {
+      return $array->getArrayCopy();
+    }
+
+    if ($isObject && method_exists($array, '__toArray')) {
       return (array)$array->__toArray();
     }
 
@@ -853,7 +986,7 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     if (
         is_string($array)
         ||
-        (is_object($array) && method_exists($array, '__toString'))
+        ($isObject && method_exists($array, '__toString'))
     ) {
       return array((string)$array);
     }
@@ -1139,16 +1272,6 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
-   * @param mixed $value
-   */
-  protected function internalGetArray(&$value)
-  {
-    if ($value instanceof self) {
-      $value &= $value->getArray();
-    }
-  }
-
-  /**
    * Returns the values from a single column of the input array, identified by
    * the $columnKey, can be used to extract data-columns from multi-arrays.
    *
@@ -1396,6 +1519,18 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
+   * @param mixed $value
+   */
+  protected function internalGetArray(&$value)
+  {
+    if ($value instanceof self) {
+      $value &= $value->getArray();
+    } elseif ($value instanceof \JsonSerializable) {
+      $value &= $value->jsonSerialize();
+    }
+  }
+
+  /**
    * Internal mechanics of remove method.
    *
    * @param string $key
@@ -1590,6 +1725,14 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   public function isSequential()
   {
     return \array_keys($this->array) === range(0, count($this->array) - 1);
+  }
+
+  /**
+   * @return array
+   */
+  public function jsonSerialize()
+  {
+    return $this->getArray();
   }
 
   /**
@@ -1869,6 +2012,44 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     }
 
     return min($this->array);
+  }
+
+  /**
+   * Move an array element to a new index.
+   *
+   * cherry-picked from: http://stackoverflow.com/questions/12624153/move-an-array-element-to-a-new-index-in-php
+   *
+   * @param int|string $from
+   * @param int|string $to
+   *
+   * @return static <p>(Immutable)</p>
+   */
+  public function moveElement($from, $to)
+  {
+    $array = $this->array;
+
+    if (is_int($from)) {
+      $tmp = \array_splice($array, $from, 1);
+      \array_splice($array, $to, 0, $tmp);
+      $output = $array;
+    } elseif (is_string($from)) {
+      $indexToMove = \array_search($from, \array_keys($array), true);
+      $itemToMove = $array[$from];
+      \array_splice($array, $indexToMove, 1);
+      $i = 0;
+      $output = array();
+      foreach ($array as $key => $item) {
+        if ($i == $to) {
+          $output[$from] = $itemToMove;
+        }
+        $output[$key] = $item;
+        $i++;
+      }
+    } else {
+      $output = array();
+    }
+
+    return static::create($output);
   }
 
   /**
@@ -2225,6 +2406,22 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
+   * Generate array of repeated arrays.
+   *
+   * @param int $times <p>How many times has to be repeated.</p>
+   *
+   * @return Arrayy
+   */
+  public function repeat($times)
+  {
+    if ($times === 0) {
+      return new static();
+    }
+
+    return static::create(\array_fill(0, (int)$times, $this->array));
+  }
+
+  /**
    * Replace a key with a new key/value pair.
    *
    * @param $replace
@@ -2334,44 +2531,6 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
     $tmpArray = $this->array;
 
     return static::create(\array_splice($tmpArray, $from));
-  }
-
-  /**
-   * Move an array element to a new index.
-   *
-   * cherry-picked from: http://stackoverflow.com/questions/12624153/move-an-array-element-to-a-new-index-in-php
-   *
-   * @param int|string $from
-   * @param int|string $to
-   *
-   * @return static <p>(Immutable)</p>
-   */
-  public function moveElement($from, $to)
-  {
-    $array = $this->array;
-
-    if (is_int($from)) {
-      $tmp = \array_splice($array, $from, 1);
-      \array_splice($array, $to, 0, $tmp);
-      $output = $array;
-    } elseif (is_string($from)) {
-      $indexToMove = \array_search($from, \array_keys($array), true);
-      $itemToMove = $array[$from];
-      \array_splice($array, $indexToMove, 1);
-      $i = 0;
-      $output = array();
-      foreach ($array as $key => $item) {
-        if ($i == $to) {
-          $output[$from] = $itemToMove;
-        }
-        $output[$key] = $item;
-        $i++;
-      }
-    } else {
-      $output = array();
-    }
-
-    return static::create($output);
   }
 
   /**
@@ -2746,37 +2905,26 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   /**
    * Convert the current array to JSON.
    *
-   * @param null|int $options <p>e.g. JSON_PRETTY_PRINT</p>
+   * @param null|int $options [optional] <p>e.g. JSON_PRETTY_PRINT</p>
+   * @param int      $depth   [optional] <p>Set the maximum depth. Must be greater than zero.</p>
    *
    * @return string
    */
-  public function toJson($options = null)
+  public function toJson($options = null, $depth = 512)
   {
-    return UTF8::json_encode($this->array, $options);
+    return UTF8::json_encode($this->array, $options, $depth);
   }
 
   /**
    * Implodes array to a string with specified separator.
    *
-   * @param string $separator <p>The element's separator.</p>
+   * @param string $separator [optional] <p>The element's separator.</p>
    *
    * @return string <p>The string representation of array, separated by ",".</p>
    */
   public function toString($separator = ',')
   {
     return $this->implode($separator);
-  }
-
-  /**
-   * alias: for "Arrayy->unique()"
-   *
-   * @see Arrayy::unique()
-   *
-   * @return static <p>(Mutable) Return this Arrayy object, with the appended values.</p>
-   */
-  public function uniqueNewIndex()
-  {
-    return $this->unique();
   }
 
   /**
@@ -2839,6 +2987,18 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
   }
 
   /**
+   * alias: for "Arrayy->unique()"
+   *
+   * @see Arrayy::unique()
+   *
+   * @return static <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+   */
+  public function uniqueNewIndex()
+  {
+    return $this->unique();
+  }
+
+  /**
    * Prepends one or more values to the beginning of array at once.
    *
    * @return static <p>(Mutable) Return this Arrayy object, with prepended elements to the beginning of array.</p>
@@ -2881,5 +3041,4 @@ class Arrayy extends \ArrayObject implements \ArrayAccess, \Serializable, \Count
 
     return $this;
   }
-
 }

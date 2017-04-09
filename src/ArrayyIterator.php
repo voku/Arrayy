@@ -39,7 +39,7 @@ class ArrayyIterator extends \ArrayIterator
    *
    * @return Arrayy|mixed will return a "Arrayy"-object instead of an array
    */
-  public function offsetGet($offset)
+  public function &offsetGet($offset)
   {
     $value = parent::offsetGet($offset);
 

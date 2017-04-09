@@ -632,6 +632,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
 
     $arrayy = $this->createArrayy($array);
 
+    self::assertSame($json, json_encode($arrayy));
     self::assertSame($json, $arrayy->toJson());
   }
 

@@ -1415,6 +1415,59 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($expected, A::create($array)->indexBy('age')->getArray());
   }
 
+  public function testChangeKeyCase()
+  {
+    // upper
+
+    $array = array(
+        'foo'   => 'a',
+        1       => 'b',
+        0       => 'c',
+        'Foo'   => 'd',
+        'FOO'   => 'e',
+        'ΣΣΣ'   => 'f',
+        'Κόσμε' => 'g',
+    );
+
+    $arrayy = A::create($array)->changeKeyCase(CASE_UPPER);
+    $result = $arrayy->getArray();
+
+    $expected = array(
+        'FOO'   => 'e',
+        1       => 'b',
+        0       => 'c',
+        'ΣΣΣ'   => 'f',
+        'ΚΌΣΜΕ' => 'g',
+    );
+
+    self::assertSame($expected, $result);
+
+    // lower
+
+    $array = array(
+        'foo'   => 'a',
+        1       => 'b',
+        0       => 'c',
+        'Foo'   => 'd',
+        'FOO'   => 'e',
+        'ΣΣΣ'   => 'f',
+        'Κόσμε' => 'g',
+    );
+
+    $arrayy = A::create($array)->changeKeyCase(CASE_LOWER);
+    $result = $arrayy->getArray();
+
+    $expected = array(
+        'foo'   => 'e',
+        1       => 'b',
+        0       => 'c',
+        'σσσ'   => 'f',
+        'κόσμε' => 'g',
+    );
+
+    self::assertSame($expected, $result);
+  }
+
   /**
    * @dataProvider simpleArrayProvider
    *
@@ -1513,6 +1566,17 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertEquals(A::create($expected2), A::create($rows)->getColumn(null));
   }
 
+  public function testCreateByReference()
+  {
+    $testArray = array('foo bar', 'UTF-8');
+    $arrayy = new A();
+    $arrayy->createByReference($testArray);
+    $arrayy['foo'] = 'bar';
+
+    self::assertSame(array('foo bar', 'UTF-8', 'foo' => 'bar'), $testArray);
+    self::assertSame($testArray, $arrayy->toArray());
+  }
+
   public function testConstruct()
   {
     $testArray = array('foo bar', 'UTF-8');
@@ -1556,6 +1620,24 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A($array);
 
     self::assertSame($expected, $arrayy->containsCaseInsensitive($value));
+  }
+
+  public function testContainsKeys()
+  {
+    $this->assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array('a', 'b')));
+    $this->assertFalse(A::create(array('a' => 0, 'b' => 1, 'd' => 2))->containsKeys(array('a', 'b', 'c')));
+    $this->assertTrue(A::create(array())->containsKeys(array()));
+    $this->assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array()));
+    $this->assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c')));
+  }
+
+  public function testContainsValues()
+  {
+    $this->assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array('a', 'b')));
+    $this->assertFalse(A::create(array('a', 'b', 'd'))->containsValues(array('a', 'b', 'c')));
+    $this->assertTrue(A::create(array())->containsValues(array()));
+    $this->assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array()));
+    $this->assertFalse(A::create(array())->containsValues(array('a', 'b', 'c')));
   }
 
   /**
@@ -2122,34 +2204,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame(array('foo  ', '__bar'), $arrayy->getArray());
   }
 
-  public function testRepeat()
-  {
-    $arrayTmp = array('lall');
-    $arrayExpected = array(array('lall'), array('lall'), array('lall'));
-
-    $arrayyTmp = A::create($arrayTmp);
-    $arrayyResult = $arrayyTmp->repeat(3);
-    self::assertSame($arrayExpected, $arrayyResult->getArray());
-
-    // --
-
-    $arrayTmp = array('lall');
-    $arrayExpected = array();
-
-    $arrayyTmp = A::create($arrayTmp);
-    $arrayyResult = $arrayyTmp->repeat(0);
-    self::assertSame($arrayExpected, $arrayyResult->getArray());
-
-    // --
-
-    $arrayTmp = array('foo', 'bar');
-    $arrayExpected = array(array('foo', 'bar'), array('foo', 'bar'));
-
-    $arrayyTmp = A::create($arrayTmp);
-    $arrayyResult = $arrayyTmp->repeat(2);
-    self::assertSame($arrayExpected, $arrayyResult->getArray());
-  }
-
   public function testIsArrayAssoc()
   {
 
@@ -2390,6 +2444,26 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertTrue(isset($arrayy[true]));
   }
 
+  public function testJsonSerializable()
+  {
+    $arrayy = new A();
+    $arrayy['user'] = array('lastname' => 'Moelleken');
+    $arrayy['user.firstname'] = 'Lars';
+
+    $json = json_encode($arrayy);
+    $arrayyFromJson = json_decode($json, true);
+
+    self::assertSame(
+        array(
+            'user' => array(
+                'lastname'  => 'Moelleken',
+                'firstname' => 'Lars',
+            ),
+        ),
+        $arrayyFromJson
+    );
+  }
+
   public function testKeys()
   {
     $arrayyTmp = A::create(array(1 => 'foo', 2 => 'foo2', 3 => 'bar'));
@@ -2415,6 +2489,25 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($array);
     $resultNew = $arrayy->lastsMutable($take);
     self::assertSame($result, $resultNew->getArray());
+  }
+
+  public function testMagicSetViaDotNotation()
+  {
+    $arrayy = new A();
+    $arrayy['user'] = array('lastname' => 'Moelleken');
+    $arrayy['user.firstname'] = 'Lars';
+
+    self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => 'Lars')), $arrayy->getArray());
+    self::assertSame('Lars', $arrayy['user.firstname']);
+
+    // ---
+
+    $arrayy = new A();
+    $arrayy['user'] = array('lastname' => 'Moelleken');
+    $arrayy['user.firstname'] = null;
+
+    self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => null)), $arrayy->getArray());
+    self::assertNull($arrayy['user.firstname']);
   }
 
   /**
@@ -2696,6 +2789,23 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
   }
 
+  public function testMoveElement()
+  {
+    $arr1 = new A(array('a', 'b', 'c', 'd', 'e'));
+    $expected = array('a', 'd', 'b', 'c', 'e');
+    $newArr1 = $arr1->moveElement(3, 1);
+
+    self::assertSame($expected, $newArr1->toArray());
+
+    // ---
+
+    $arr2 = new A(array('A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e'));
+    $expected = array('A' => 'a', 'D' => 'd', 'B' => 'b', 'C' => 'c', 'E' => 'e');
+    $newArr2 = $arr2->moveElement('D', 1);
+
+    self::assertSame($expected, $newArr2->toArray());
+  }
+
   /**
    * @dataProvider simpleArrayProvider
    *
@@ -2854,59 +2964,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         2   => 'bcd',
         100 => 'abc',
         99  => 'aaa',
-    );
-
-    self::assertSame($expected, $result);
-  }
-
-  public function testChangeKeyCase()
-  {
-    // upper
-
-    $array = array(
-        'foo'   => 'a',
-        1       => 'b',
-        0       => 'c',
-        'Foo'   => 'd',
-        'FOO'   => 'e',
-        'ΣΣΣ'   => 'f',
-        'Κόσμε' => 'g',
-    );
-
-    $arrayy = A::create($array)->changeKeyCase(CASE_UPPER);
-    $result = $arrayy->getArray();
-
-    $expected = array(
-        'FOO'   => 'e',
-        1       => 'b',
-        0       => 'c',
-        'ΣΣΣ'   => 'f',
-        'ΚΌΣΜΕ' => 'g',
-    );
-
-    self::assertSame($expected, $result);
-
-    // lower
-
-    $array = array(
-        'foo'   => 'a',
-        1       => 'b',
-        0       => 'c',
-        'Foo'   => 'd',
-        'FOO'   => 'e',
-        'ΣΣΣ'   => 'f',
-        'Κόσμε' => 'g',
-    );
-
-    $arrayy = A::create($array)->changeKeyCase(CASE_LOWER);
-    $result = $arrayy->getArray();
-
-    $expected = array(
-        'foo'   => 'e',
-        1       => 'b',
-        0       => 'c',
-        'σσσ'   => 'f',
-        'κόσμε' => 'g',
     );
 
     self::assertSame($expected, $result);
@@ -3244,6 +3301,34 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($result, $arrayy->getArray());
   }
 
+  public function testRepeat()
+  {
+    $arrayTmp = array('lall');
+    $arrayExpected = array(array('lall'), array('lall'), array('lall'));
+
+    $arrayyTmp = A::create($arrayTmp);
+    $arrayyResult = $arrayyTmp->repeat(3);
+    self::assertSame($arrayExpected, $arrayyResult->getArray());
+
+    // --
+
+    $arrayTmp = array('lall');
+    $arrayExpected = array();
+
+    $arrayyTmp = A::create($arrayTmp);
+    $arrayyResult = $arrayyTmp->repeat(0);
+    self::assertSame($arrayExpected, $arrayyResult->getArray());
+
+    // --
+
+    $arrayTmp = array('foo', 'bar');
+    $arrayExpected = array(array('foo', 'bar'), array('foo', 'bar'));
+
+    $arrayyTmp = A::create($arrayTmp);
+    $arrayyResult = $arrayyTmp->repeat(2);
+    self::assertSame($arrayExpected, $arrayyResult->getArray());
+  }
+
   public function testReplace()
   {
     $arrayyTmp = A::create(array(1 => 'foo', 2 => 'foo2', 3 => 'bar'));
@@ -3526,9 +3611,9 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($testArray);
     $result = $arrayy->serialize();
 
-    self::assertSame('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
-    self::assertSame('C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}', serialize($arrayy));
-    self::assertEquals($arrayy, unserialize('C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}'));
+    self::assertContains('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
+    self::assertContains($result, serialize($arrayy));
+    self::assertEquals($arrayy, unserialize(serialize($arrayy)));
 
     // create a object with an "arrayy"-property
 
@@ -3539,9 +3624,17 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     // serialize + tests
 
-    self::assertSame('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}}', serialize($object));
-    self::assertEquals($object, unserialize('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}}'));
+    self::assertContains('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', serialize($object));
+    self::assertEquals($object, unserialize(serialize($object)));
 
+    //
+
+    $arrayy = new A(array(1 => 1, 2 => 2, 3 => 3));
+    $serialized = $arrayy->serialize();
+    $arrayy = new A();
+    $result = $arrayy->unserialize($serialized);
+
+    self::assertSame(array(1 => 1, 2 => 2, 3 => 3), $result->getArray());
   }
 
   /**
@@ -3556,25 +3649,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A($array);
     $arrayy = $arrayy->set($key, $value)->getArray();
     self::assertSame($value, $arrayy[$key]);
-  }
-
-  public function testMagicSetViaDotNotation()
-  {
-    $arrayy = new A();
-    $arrayy['user'] = array('lastname' => 'Moelleken');
-    $arrayy['user.firstname'] = 'Lars';
-
-    self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => 'Lars')), $arrayy->getArray());
-    self::assertSame('Lars', $arrayy['user.firstname']);
-
-    // ---
-
-    $arrayy = new A();
-    $arrayy['user'] = array('lastname' => 'Moelleken');
-    $arrayy['user.firstname'] = null;
-
-    self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => null)), $arrayy->getArray());
-    self::assertNull($arrayy['user.firstname']);
   }
 
   /**
@@ -3614,6 +3688,33 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy[1] = 'öäü';
     self::assertArrayy($arrayy);
     self::assertSame('foo bar,öäü', (string)$arrayy);
+  }
+
+  public function testSetValueViaMagicSet()
+  {
+    $arrayy = new A(array('Lars' => array('lastname' => 'Mueller2')));
+
+    $arrayy->Lars = array('lastname' => 'Moelleken');
+    $arrayy->Sven = array('lastname' => 'Moelleken');
+    $arrayy->foo = array('lastname' => null);
+
+    $resultTmp = $arrayy->get('Lars');
+    self::assertEquals(array('lastname' => 'Moelleken'), $resultTmp->getArray());
+
+    $resultTmp = $arrayy->get('Sven');
+    self::assertEquals(array('lastname' => 'Moelleken'), $resultTmp->getArray());
+
+    $resultTmp = $arrayy->get('foo');
+    self::assertEquals(array('lastname' => null), $resultTmp->getArray());
+
+    $resultTmp = $arrayy->get('Lars.lastname');
+    self::assertEquals('Moelleken', $resultTmp);
+
+    $resultTmp = $arrayy->get('Sven.lastname');
+    self::assertEquals('Moelleken', $resultTmp);
+
+    $resultTmp = $arrayy->get('foo.lastname');
+    self::assertEquals(null, $resultTmp);
   }
 
   public function testSetViaDotNotation()
@@ -3679,33 +3780,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertNull($resultTmp);
   }
 
-  public function testSetValueViaMagicSet()
-  {
-    $arrayy = new A(array('Lars' => array('lastname' => 'Mueller2')));
-
-    $arrayy->Lars = array('lastname' => 'Moelleken');
-    $arrayy->Sven = array('lastname' => 'Moelleken');
-    $arrayy->foo = array('lastname' => null);
-
-    $resultTmp = $arrayy->get('Lars');
-    self::assertEquals(array('lastname' => 'Moelleken'), $resultTmp->getArray());
-
-    $resultTmp = $arrayy->get('Sven');
-    self::assertEquals(array('lastname' => 'Moelleken'), $resultTmp->getArray());
-
-    $resultTmp = $arrayy->get('foo');
-    self::assertEquals(array('lastname' => null), $resultTmp->getArray());
-
-    $resultTmp = $arrayy->get('Lars.lastname');
-    self::assertEquals('Moelleken', $resultTmp);
-
-    $resultTmp = $arrayy->get('Sven.lastname');
-    self::assertEquals('Moelleken', $resultTmp);
-
-    $resultTmp = $arrayy->get('foo.lastname');
-    self::assertEquals(null, $resultTmp);
-  }
-
   /**
    * @dataProvider simpleArrayProvider
    *
@@ -3720,23 +3794,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     self::assertSame($shiftedArrayValue, $shiftedValue);
     self::assertSame($resultArray, $arrayy->toArray());
-  }
-
-  public function testMoveElement()
-  {
-    $arr1 = new A(array('a', 'b', 'c', 'd', 'e'));
-    $expected = array('a', 'd', 'b', 'c', 'e');
-    $newArr1 = $arr1->moveElement(3, 1);
-
-    self::assertSame($expected, $newArr1->toArray());
-
-    // ---
-
-    $arr2 = new A(array('A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e'));
-    $expected = array('A' => 'a', 'D' => 'd', 'B' => 'b', 'C' => 'c', 'E' => 'e');
-    $newArr2 = $arr2->moveElement('D', 1);
-
-    self::assertSame($expected, $newArr2->toArray());
   }
 
   public function testShuffle()
@@ -4126,18 +4183,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($result, $arrayy->getArray());
   }
 
-  public function testUnserialize()
-  {
-    $string1 = 'C:13:"Arrayy\Arrayy":30:{a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}}';
-    $string2 = 'a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}';
-
-    $testArray = unserialize($string1);
-    $arrayy = A::create()->unserialize($string2);
-
-    self::assertSame($string1, serialize($testArray));
-    self::assertSame($string2, $arrayy->serialize());
-  }
-
   public function testUnset()
   {
     $arrayy = new A(array('foo bar', 'öäü'));
@@ -4145,6 +4190,19 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertArrayy($arrayy);
     self::assertSame('foo bar', $arrayy[0]);
     self::assertNull($arrayy[1]);
+  }
+
+  public function testUnsetSimple()
+  {
+    $arrayy = new A(array(1 => 1, 2 => 2, 3 => 3));
+    unset($arrayy[2]);
+    self::assertSame(array(1 => 1, 3 => 3), $arrayy->getArray());
+
+    // ---
+
+    $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken', 'status' => 'foo')));
+    unset($arrayy['Lars.status']);
+    self::assertSame(array('Lars' => array('lastname' => 'Moelleken')), $arrayy->getArray());
   }
 
   /**
@@ -4378,24 +4436,6 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
             ),
         ),
     );
-  }
-
-  public function testContainsValues()
-  {
-    $this->assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array('a', 'b')));
-    $this->assertFalse(A::create(array('a', 'b', 'd'))->containsValues(array('a', 'b', 'c')));
-    $this->assertTrue(A::create(array())->containsValues(array()));
-    $this->assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array()));
-    $this->assertFalse(A::create(array())->containsValues(array('a', 'b', 'c')));
-  }
-
-  public function testContainsKeys()
-  {
-    $this->assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array('a', 'b')));
-    $this->assertFalse(A::create(array('a' => 0, 'b' => 1, 'd' => 2))->containsKeys(array('a', 'b', 'c')));
-    $this->assertTrue(A::create(array())->containsKeys(array()));
-    $this->assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array()));
-    $this->assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c')));
   }
 
 }
