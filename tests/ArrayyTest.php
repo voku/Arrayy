@@ -2527,13 +2527,18 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     $birthDatesAraayy = new Arrayy($birthDates);
 
+    $currentDate = new \DateTime('2017-09-11');
     $format = 'Y-m-d H:i:s';
 
-    //
-    // sort by date - helper-function
-    //
-
-    $closure = function ($a, $b) use ($format) {
+    /**
+     * sort by date - helper-function
+     *
+     * @param array $a
+     * @param array $b
+     *
+     * @return int
+     */
+    $closureSort = function ($a, $b) use ($format) {
       /* @var $aDate \DateTime */
       /* @var $bDate \DateTime */
       $aDate = $a[1];
@@ -2546,19 +2551,62 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
       return $aDate->format($format) > $bDate->format($format) ? -1 : 1;
     };
 
+    /**
+     * reduce by date - helper-function
+     *
+     * @param array $resultArray
+     * @param array $value
+     *
+     * @return array
+     */
+    $closureReduce = function ($resultArray, $value) use ($currentDate) {
+      /* @var $valueDate \DateTime */
+      $valueDate = $value[1];
+      $valueDateInterval = $currentDate->diff($valueDate);
+
+      if ($valueDateInterval->format('%R%a') >= 0) {
+        $resultArray['thisYear'][] = $value;
+      } else {
+        $value[1] = $valueDate->modify('+1 year');
+
+        $resultArray['nextYear'][] = $value;
+      }
+
+      return $resultArray;
+    };
+
     //
-    // sort the array
+    // reduce && sort the array
     //
 
-    $resultMatch = $birthDatesAraayy->customSortValues($closure);
+    /* @var $resultMatch Arrayy|Arrayy[] */
+    $resultMatch = $birthDatesAraayy->reduce($closureReduce);
+
+    $thisYear = $resultMatch['thisYear']->customSortValues($closureSort);
+    $nextYear = $resultMatch['nextYear']->customSortValues($closureSort);
+
+    $resultMatch = $nextYear->reverse()->mergePrependNewIndex($thisYear->reverse()->getArray());
 
     //
     // check the result
     //
 
     self::assertEquals(
-        array('Elmer Letts', date_create('2017-12-01')),
-        $resultMatch->first()
+        array(
+            array('Jessy Pinkmann', date_create('2017-09-11')),
+            array('Jeremy Wiggs', date_create('2017-09-17')),
+            array('Lucienne Adkisson', date_create('2017-10-17')),
+            array('Mamie Burchill', date_create('2017-11-15')),
+            array('Elmer Letts', date_create('2017-12-01')),
+            array('Dudley Currie', date_create('2018-02-10')),
+            array('Sheryll Nestle', date_create('2018-02-16')),
+            array('Gino Massengale', date_create('2018-04-16')),
+            array('Julian Bulloch', date_create('2018-06 -21')),
+            array('Joella Hinshaw', date_create('2018-06-25')),
+            array('Constance Segers', date_create('2018-06-30')),
+            array('Tim Pittman', date_create('2018-07-29')),
+        ),
+        $resultMatch->getArray()
     );
   }
 
