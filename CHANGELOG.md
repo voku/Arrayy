@@ -1,5 +1,12 @@
 # Changelog
 
+### 3.4.0 (09.04.2017)
+
+* [+]: overwrite "ArrayObject"-methods
+* [+]: dependency injection for the "Iterator" via __constructor
+* [+]: fix serialize() + unserialize() -> we will process the object now, not only the array in the object
+* [+]: add more tests
+
 ### 3.3.10 (08.04.2017)
 
 * [+]: add "Arrayy->changeKeyCase()" (with UTF-8 support)
