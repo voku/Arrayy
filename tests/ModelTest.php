@@ -14,7 +14,7 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
     static::assertInstanceOf('Arrayy\Arrayy', $model);
     static::assertSame('foo', $model[0]);
-    static::assertSame(true, $model['bar.config.lall']);
+    static::assertSame(true, $model['bar^config^lall']); // the separator was changed in the "ModelA"-class
     static::assertNull($model[3]);
   }
 

@@ -429,7 +429,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function uksort($function)
   {
     if (is_callable($function)) {
-      uksort($this->array, $function);
+      $this->customSortKeys($function);
     }
   }
 

@@ -1606,6 +1606,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A($array);
 
     self::assertSame($expected, $arrayy->contains($value));
+    self::assertSame($expected, $arrayy->containsValue($value)); // alias
   }
 
   /**
@@ -1816,6 +1817,8 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
       return ($a > $b) ? 1 : -1;
     };
 
+    // customSortKeys
+
     $input = array(
         'three' => 3,
         'one'   => 1,
@@ -1829,6 +1832,22 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         'two'   => 2,
     );
     self::assertSame($expected, $resultArrayy->getArray());
+
+    // uksort
+
+    $input = array(
+        'three' => 3,
+        'one'   => 1,
+        'two'   => 2,
+    );
+    $arrayy = new A($input);
+    $arrayy->uksort($callable);
+    $expected = array(
+        'one'   => 1,
+        'three' => 3,
+        'two'   => 2,
+    );
+    self::assertSame($expected, $arrayy->getArray());
   }
 
   /**
