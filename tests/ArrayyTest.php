@@ -2635,6 +2635,35 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($result, $resultNew->getArray());
   }
 
+  public function testMagicGet()
+  {
+    $array = array(
+        'one'  => 1,
+        'test' => 2,
+        1      => 'one',
+        2      => 2,
+    );
+
+    $arrayy = new Arrayy($array);
+
+    self::assertSame(1, $arrayy->one);
+    self::assertSame(2, $arrayy->test);
+  }
+
+  public function testMagicInvoke()
+  {
+    $array = array(
+        'one' => 1,
+        1     => 'one',
+        2     => 2,
+    );
+
+    $arrayy = new Arrayy($array);
+
+    self::assertSame(1, $arrayy('one'));
+    self::assertSame('one', $arrayy(1));
+  }
+
   public function testMagicSetViaDotNotation()
   {
     $arrayy = new A();
