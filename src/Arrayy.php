@@ -154,13 +154,21 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Sort the entries by value
+   * Sort the entries by value.
    *
-   * @return void
+   * @param int $sort_flags [optional] <p>
+   *                        You may modify the behavior of the sort using the optional
+   *                        parameter sort_flags, for details
+   *                        see sort.
+   *                        </p>
+   *
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
    */
-  public function asort()
+  public function asort($sort_flags = null)
   {
-    asort($this->array);
+    asort($this->array, $sort_flags);
+
+    return $this;
   }
 
   /**
@@ -226,31 +234,43 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Sort the entries by key
    *
-   * @return void
+   * @param int $sort_flags [optional] <p>
+   *                        You may modify the behavior of the sort using the optional
+   *                        parameter sort_flags, for details
+   *                        see sort.
+   *                        </p>
+   *
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
    */
-  public function ksort()
+  public function ksort($sort_flags = null)
   {
-    ksort($this->array);
+    ksort($this->array, $sort_flags);
+
+    return $this;
   }
 
   /**
    * Sort an array using a case insensitive "natural order" algorithm
    *
-   * @return void
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
    */
   public function natcasesort()
   {
     natcasesort($this->array);
+
+    return $this;
   }
 
   /**
    * Sort entries using a "natural order" algorithm
    *
-   * @return void
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
    */
   public function natsort()
   {
     natsort($this->array);
+
+    return $this;
   }
 
   /**
@@ -406,31 +426,39 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Sort the entries with a user-defined comparison function and maintain key association
+   * Sort the entries with a user-defined comparison function and maintain key association.
    *
-   * @param  callable $function
+   * @param callable $function
    *
-   * @return void
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
+   *
+   * @throws \InvalidArgumentException
    */
   public function uasort($function)
   {
-    if (is_callable($function)) {
-      uasort($this->array, $function);
+    if (!is_callable($function)) {
+      throw new \InvalidArgumentException(
+          'Passed function must be callable'
+      );
     }
+
+    uasort($this->array, $function);
+
+    return $this;
   }
 
   /**
-   * Sort the entries by keys using a user-defined comparison function
+   * Sort the entries by keys using a user-defined comparison function.
    *
-   * @param  callable $function
+   * @param callable $function
    *
-   * @return void
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
+   *
+   * @throws \InvalidArgumentException
    */
   public function uksort($function)
   {
-    if (is_callable($function)) {
-      $this->customSortKeys($function);
-    }
+    return $this->customSortKeys($function);
   }
 
   /**
@@ -443,6 +471,18 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function unserialize($string)
   {
     parent::unserialize($string);
+
+    return $this;
+  }
+
+  /**
+   * Sort an array in reverse order and maintain index association.
+   *
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
+   */
+  public function arsort()
+  {
+    arsort($this->array);
 
     return $this;
   }
@@ -789,9 +829,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * @param callable $function
    *
    * @return static <p>(Mutable) Return this Arrayy object.</p>
+   *
+   * @throws \InvalidArgumentException
    */
   public function customSortKeys($function)
   {
+    if (!is_callable($function)) {
+      throw new \InvalidArgumentException(
+          'Passed function must be callable'
+      );
+    }
+
     uksort($this->array, $function);
 
     return $this;
@@ -805,9 +853,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * @param callable $function
    *
    * @return static <p>(Mutable) Return this Arrayy object.</p>
+   *
+   * @throws \InvalidArgumentException
    */
   public function customSortValues($function)
   {
+    if (!is_callable($function)) {
+      throw new \InvalidArgumentException(
+          'Passed function must be callable'
+      );
+    }
+
     usort($this->array, $function);
 
     return $this;
@@ -1746,6 +1802,24 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Sort an array by key in reverse order.
+   *
+   * @param int $sort_flags [optional] <p>
+   *                        You may modify the behavior of the sort using the optional
+   *                        parameter sort_flags, for details
+   *                        see sort.
+   *                        </p>
+   *
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
+   */
+  public function krsort($sort_flags = null)
+  {
+    krsort($this->array, $sort_flags);
+
+    return $this;
+  }
+
+  /**
    * Get the last value from the current array.
    *
    * @return mixed <p>Return null if there wasn't a element.</p>
@@ -2546,6 +2620,24 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Sort an array in reverse order.
+   *
+   * @param int $sort_flags [optional] <p>
+   *                        You may modify the behavior of the sort using the optional
+   *                        parameter sort_flags, for details
+   *                        see sort.
+   *                        </p>
+   *
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
+   */
+  public function rsort($sort_flags = null)
+  {
+    rsort($this->array, $sort_flags);
+
+    return $this;
+  }
+
+  /**
    * Search for the first index of the current array via $value.
    *
    * @param mixed $value
@@ -2675,7 +2767,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * Sort the current array and optional you can keep the keys.
    *
    * @param integer $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
-   * @param integer $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or <strong>SORT_NATURAL</strong></p>
+   * @param integer $strategy  <p>sort_flags => use e.g.: <strong>SORT_REGULAR</strong> (default) or
+   *                           <strong>SORT_NATURAL</strong></p>
    * @param bool    $keepKeys
    *
    * @return static <p>(Mutable) Return this Arrayy object.</p>
@@ -2712,7 +2805,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * @param int $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
    * @param int $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or <strong>SORT_NATURAL</strong></p>
    *
-   * @return static <p>(Immutable)</p>
+   * @return static <p>(Mutable)</p>
    */
   public function sortValueKeepIndex($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2725,7 +2818,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * @param int $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
    * @param int $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or <strong>SORT_NATURAL</strong></p>
    *
-   * @return static <p>(Immutable)</p>
+   * @return static <p>(Mutable)</p>
    */
   public function sortValueNewIndex($direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2779,7 +2872,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * @param int   $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
    * @param int   $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or <strong>SORT_NATURAL</strong></p>
    *
-   * @return void <p>Mutable</p>
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
    */
   protected function sorterKeys(array &$elements, $direction = SORT_ASC, $strategy = SORT_REGULAR)
   {
@@ -2795,6 +2888,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       default:
         ksort($elements, $strategy);
     }
+
+    return $this;
   }
 
   /**
@@ -2804,7 +2899,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    *                              <strong>SORT_NATURAL</strong></p>
    * @param bool       $keepKeys
    *
-   * @return void <p>Mutable</p>
+   * @return static <p>(Mutable) Return this Arrayy object.</p>
    */
   protected function sorting(array &$elements, $direction = SORT_ASC, $strategy = SORT_REGULAR, $keepKeys = false)
   {
@@ -2832,6 +2927,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
           sort($elements, $strategy);
         }
     }
+
+    return $this;
   }
 
   /**

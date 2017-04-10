@@ -20,12 +20,17 @@ class ModelTest extends PHPUnit_Framework_TestCase
 
   public function testForEach()
   {
-    $model = new ModelB(array('red', 'yellow', 'green', 'white'));
+    $colors = new ModelB(array('red', 'yellow', 'green', 'white'));
 
-    foreach ($model as $key => $color) {
+    foreach ($colors as $key => $color) {
       if ($key == 0) {
         static::assertSame('red', $color);
+        break;
       }
     }
+
+    $colors->natsort();
+
+
   }
 }
