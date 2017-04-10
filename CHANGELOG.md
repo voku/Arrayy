@@ -1,5 +1,11 @@
 # Changelog
 
+### 3.5.0 (10.04.2017)
+
+* [+]: more information via "InvalidArgumentException"
+* [~]: re-use the "Arrayy->customSortKeys()"-method
+* [+]: add more "sort"-methods + tests
+
 ### 3.4.0 (09.04.2017)
 
 * [+]: overwrite "ArrayObject"-methods
