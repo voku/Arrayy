@@ -332,11 +332,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    *
    * @return mixed <p>Will return null if the offset did not exists.</p>
    */
-  public function &offsetGet($offset)
+  public function offsetGet($offset)
   {
-    $return = $this->offsetExists($offset) ? $this->get($offset) : null;
-
-    return $return;
+    return $this->offsetExists($offset) ? $this->get($offset) : null;
   }
 
   /**
