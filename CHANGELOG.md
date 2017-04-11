@@ -1,5 +1,9 @@
 # Changelog
 
+### 3.5.1 (11.04.2017)
+
+* [!]: fix "offsetGet() must be compatible with that of ArrayAccess::offsetGet()"
+
 ### 3.5.0 (10.04.2017)
 
 * [+]: more information via "InvalidArgumentException"
