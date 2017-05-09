@@ -186,6 +186,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Counts all the values of an array
+   *
+   * @link http://php.net/manual/en/function.array-count-values.php
+   *
+   * @return static <p>
+   *                (Immutable)
+   *                An associative Arrayy-object of values from input as
+   *                keys and their count as value.
+   *                </p>
+   */
+  public function countValues()
+  {
+    return new static(\array_count_values($this->array));
+  }
+
+  /**
    * Exchange the array for another one.
    *
    * @param array|Arrayy $data
@@ -3050,6 +3066,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function unique()
   {
+    // INFO: \array_unique() can't handle e.g. "stdClass"-values in an array
+
     $this->array = \array_reduce(
         $this->array,
         function ($resultArray, $value) {
@@ -3078,6 +3096,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function uniqueKeepIndex()
   {
+    // INFO: \array_unique() can't handle e.g. "stdClass"-values in an array
+
     // init
     $array = $this->array;
 

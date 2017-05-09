@@ -1646,6 +1646,15 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($expected, $arrayy->length());
   }
 
+  public function testCountValues()
+  {
+    $array = array('foo', 'lall', 'bar', 'bar', 'foo', 'bar');
+    $arrayy = new A($array);
+
+    $expected = array('foo' => 2, 'lall' => 1, 'bar' => 3);
+    self::assertSame($expected, $arrayy->countValues()->getArray());
+  }
+
   public function testCreateByReference()
   {
     $testArray = array('foo bar', 'UTF-8');
