@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.6.0 (09.05.2017)
+
+[+]: add flag-parameter for "Arrayy->filter()" + polyfill for old php versions (< 5.6 || HHVM) 
+[+]: add "Arrayy->countValues()"-method
+
 ### 3.5.1 (11.04.2017)
 
 * [!]: fix "offsetGet() must be compatible with that of ArrayAccess::offsetGet()"
