@@ -2,6 +2,7 @@
 
 namespace Arrayy;
 
+use voku\helper\Bootup;
 use voku\helper\UTF8;
 
 /** @noinspection ClassReImplementsParentInterfaceInspection */
@@ -1083,11 +1084,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    *                               Flag determining what arguments are sent to <i>callback</i>:
    *                               </p><ul>
    *                               <li>
-   *                               <b>ARRAY_FILTER_USE_KEY</b> - pass key as the only argument
+   *                               <b>ARRAY_FILTER_USE_KEY</b> [1] - pass key as the only argument
    *                               to <i>callback</i> instead of the value</span>
    *                               </li>
    *                               <li>
-   *                               <b>ARRAY_FILTER_USE_BOTH</b> - pass both value and key as
+   *                               <b>ARRAY_FILTER_USE_BOTH</b> [2] - pass both value and key as
    *                               arguments to <i>callback</i> instead of the value</span>
    *                               </li>
    *                               </ul>
@@ -1100,7 +1101,38 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       return $this->clean();
     }
 
-    $array = \array_filter($this->array, $closure, $flag);
+    if ($flag === 0) {
+
+      // working for all php-versions
+
+      $array = \array_filter($this->array, $closure);
+
+    } elseif ($flag !== 0 && Bootup::is_php('5.6')) {
+
+      // working only with php >= 5.6
+
+      $array = \array_filter($this->array, $closure, $flag);
+
+    } else {
+
+      // fallback for old php-versions
+
+      $array = $this->array;
+
+      if ($flag === 2 /* ARRAY_FILTER_USE_KEY */) {
+        foreach ($array as $key => $value) {
+          if (!call_user_func($closure, $key)) {
+            unset ($array[$key]);
+          }
+        }
+      } else if ($flag === 1 /* ARRAY_FILTER_USE_BOTH */) {
+        foreach ($array as $key => $value) {
+          if (!call_user_func($closure, $key, $value)) {
+            unset($array[$key]);
+          }
+        }
+      }
+    }
 
     return static::create($array);
   }

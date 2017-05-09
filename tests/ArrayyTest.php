@@ -2105,6 +2105,14 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
   public function testFilter()
   {
+    if (!defined('ARRAY_FILTER_USE_BOTH')) {
+      define('ARRAY_FILTER_USE_BOTH', 1);
+    }
+
+    if (!defined('ARRAY_FILTER_USE_KEY')) {
+      define('ARRAY_FILTER_USE_KEY', 2);
+    }
+
     $under = A::create(array(1, 2, 3, 4))->filter(
         function ($value) {
           return $value % 2 !== 0;
