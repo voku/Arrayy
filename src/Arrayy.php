@@ -1107,9 +1107,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
       $array = \array_filter($this->array, $closure);
 
-    } elseif ($flag !== 0 && Bootup::is_php('5.6')) {
+    } elseif ($flag !== 0 && defined('HHVM_VERSION') === false && Bootup::is_php('5.6')) {
 
-      // working only with php >= 5.6
+      // working only with php >= 5.6 and not via HHVM
 
       $array = \array_filter($this->array, $closure, $flag);
 
