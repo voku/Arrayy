@@ -1053,17 +1053,38 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Find all items in an array that pass the truth test.
    *
-   * @param \Closure|null $closure
+   * @param \Closure|null $closure [optional] <p>
+   *                               The callback function to use
+   *                               </p>
+   *                               <p>
+   *                               If no callback is supplied, all entries of
+   *                               input equal to false (see
+   *                               converting to
+   *                               boolean) will be removed.
+   *                               </p>
+   *
+   *  * @param int $flag [optional] <p>
+   *                               Flag determining what arguments are sent to <i>callback</i>:
+   *                               </p><ul>
+   *                               <li>
+   *                               <b>ARRAY_FILTER_USE_KEY</b> - pass key as the only argument
+   *                               to <i>callback</i> instead of the value</span>
+   *                               </li>
+   *                               <li>
+   *                               <b>ARRAY_FILTER_USE_BOTH</b> - pass both value and key as
+   *                               arguments to <i>callback</i> instead of the value</span>
+   *                               </li>
+   *                               </ul>
    *
    * @return static <p>(Immutable)</p>
    */
-  public function filter($closure = null)
+  public function filter($closure = null, $flag = 0)
   {
     if (!$closure) {
       return $this->clean();
     }
 
-    $array = \array_filter($this->array, $closure);
+    $array = \array_filter($this->array, $closure, $flag);
 
     return static::create($array);
   }

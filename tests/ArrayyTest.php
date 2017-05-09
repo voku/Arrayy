@@ -2103,8 +2103,34 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     );
     self::assertSame(array(0 => 1, 2 => 3), $under->getArray());
 
+    // ---
+
     $under = A::create(array(1, 2, 3, 4))->filter();
     self::assertSame(array(1, 2, 3, 4), $under->getArray());
+
+    $under = A::create(array(0 => 1, 1 => false, 2 => 3, 3 => 4))->filter();
+    self::assertSame(array(0 => 1, 2 => 3, 3 => 4), $under->getArray());
+
+    // ---
+
+    $under = A::create(array(0 => 1, 1 => 2, 2 => 3, 3 => 4))->filter(
+        function ($value) {
+          return $value % 2 !== 0;
+        },
+        ARRAY_FILTER_USE_KEY
+    );
+    self::assertSame(array(1 => 2, 3 => 4), $under->getArray());
+
+    // ---
+
+    $under = A::create(array(0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7))->filter(
+        function ($key, $value) {
+          return $value % 2 !== 0 && $key & 2 !== 0;
+        },
+        ARRAY_FILTER_USE_BOTH
+    );
+    self::assertSame(array(7 => 7), $under->getArray());
+
   }
 
   public function testFilterBy()
