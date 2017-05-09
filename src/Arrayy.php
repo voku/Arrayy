@@ -1122,10 +1122,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       if ($flag === 2 /* ARRAY_FILTER_USE_KEY */) {
         foreach ($array as $key => $value) {
           if (!call_user_func($closure, $key)) {
-            unset ($array[$key]);
+            unset($array[$key]);
           }
         }
-      } else if ($flag === 1 /* ARRAY_FILTER_USE_BOTH */) {
+      } elseif ($flag === 1 /* ARRAY_FILTER_USE_BOTH */) {
         foreach ($array as $key => $value) {
           if (!call_user_func($closure, $key, $value)) {
             unset($array[$key]);
