@@ -1179,7 +1179,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
             '<IMG >',
             '<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>',
         ),
-        array('', '<XSS STYLE="behavior: url(xss.htc);">'),
+        array('&lt;XSS &gt;', '<XSS STYLE="behavior: url(xss.htc);">'),
         array('<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'),
         array('\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'),
     );
@@ -3083,7 +3083,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeXss();
     self::assertStringy($result);
-    self::assertSame($expected, $result->toString());
+    self::assertSame($expected, $result->toString(), 'tested: ' . $str);
     self::assertSame($str, $stringy->toString());
   }
 
