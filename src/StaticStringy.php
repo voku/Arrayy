@@ -64,7 +64,7 @@ namespace Stringy;
  * @method static Stringy padLeft(string $stringInput, int $length, string $padStr = ' ', string $encoding = null)
  * @method static Stringy padRight(string $stringInput, int $length, string $padStr = ' ', string $encoding = null)
  * @method static Stringy prepend(string $stringInput, string $string, string $encoding = null)
- * @method static Stringy regexReplace(string $stringInput, string $pattern, string $replacement)
+ * @method static Stringy regexReplace(string $stringInput, string $pattern, string $replacement, string $delimiter = '/')
  * @method static Stringy removeLeft(string $stringInput, string $substring, string $encoding = null)
  * @method static Stringy removeRight(string $stringInput, string $substring, string $encoding = null)
  * @method static Stringy removeHtml(string $stringInput, string $allowableTags = null, string $encoding = null)

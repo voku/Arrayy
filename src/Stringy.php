@@ -36,11 +36,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * an InvalidArgumentException if the first argument is an array or object
    * without a __toString method.
    *
-   * @param  mixed  $str      Value to modify, after being cast to string
-   * @param  string $encoding The character encoding
+   * @param mixed  $str      [optional] <p>Value to modify, after being cast to string. Default: ''</p>
+   * @param string $encoding [optional] <p>The character encoding.</p>
    *
-   * @throws \InvalidArgumentException if an array or object without a
-   *         __toString method is passed as the first argument
+   * @throws \InvalidArgumentException <p>if an array or object without a
+   *         __toString method is passed as the first argument</p>
    */
   public function __construct($str = '', $encoding = null)
   {
@@ -73,21 +73,14 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     if ($encoding) {
       $this->encoding = $encoding;
     } else {
-      UTF8::mbstring_loaded();
-      $this->encoding = mb_internal_encoding();
-    }
-
-    if ($encoding) {
-      $this->encoding = $encoding;
-    } else {
-      $this->encoding = mb_internal_encoding();
+      $this->encoding = \mb_internal_encoding();
     }
   }
 
   /**
    * Returns the value in $str.
    *
-   * @return string The current value of the $str property
+   * @return string <p>The current value of the $str property.</p>
    */
   public function __toString()
   {
@@ -97,9 +90,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns a new string with $string appended.
    *
-   * @param  string $string The string to append
+   * @param string $string <p>The string to append.</p>
    *
-   * @return static  Object with appended $string
+   * @return static <p>Object with appended $string.</p>
    */
   public function append($string)
   {
@@ -109,9 +102,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Append an password (limited to chars that are good readable).
    *
-   * @param int $length length of the random string
+   * @param int $length <p>Length of the random string.</p>
    *
-   * @return static  Object with appended password
+   * @return static <p>Object with appended password.</p>
    */
   public function appendPassword($length)
   {
@@ -123,28 +116,34 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Append an unique identifier.
    *
-   * @param string|int $extraPrefix
+   * @param string|int $entropyExtra [optional] <p>Extra entropy via a string or int value.</p>
+   * @param bool       $md5          [optional] <p>Return the unique identifier as md5-hash? Default: true</p>
    *
-   * @return static  Object with appended unique identifier as md5-hash
+   * @return static <p>Object with appended unique identifier as md5-hash.</p>
    */
-  public function appendUniqueIdentifier($extraPrefix = '')
+  public function appendUniqueIdentifier($entropyExtra = '', $md5 = true)
   {
-    $prefix = mt_rand() .
-              session_id() .
-              (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '') .
-              (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '') .
-              $extraPrefix;
+    $uniqueHelper = mt_rand() .
+                    session_id() .
+                    (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '') .
+                    (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '') .
+                    $entropyExtra;
 
-    return $this->append(md5(uniqid($prefix, true) . $prefix));
+    $uniqueString = uniqid($uniqueHelper, true);
+    if ($md5) {
+      $uniqueString = md5($uniqueString . $uniqueHelper);
+    }
+
+    return $this->append($uniqueString);
   }
 
   /**
    * Append an random string.
    *
-   * @param int    $length        length of the random string
-   * @param string $possibleChars characters string for the random selection
+   * @param int    $length        <p>Length of the random string.</p>
+   * @param string $possibleChars [optional] <p>Characters string for the random selection.</p>
    *
-   * @return static  Object with appended random string
+   * @return static <p>Object with appended random string.</p>
    */
   public function appendRandomString($length, $possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
   {
@@ -175,12 +174,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * then returns the initialized object. Throws an InvalidArgumentException
    * if the first argument is an array or object without a __toString method.
    *
-   * @param  mixed  $str      Value to modify, after being cast to string
-   * @param  string $encoding The character encoding
+   * @param  mixed  $str      [optional] <p>Value to modify, after being cast to string. Default: ''</p>
+   * @param  string $encoding [optional] <p>The character encoding.</p>
    *
-   * @return static  A Stringy object
-   * @throws \InvalidArgumentException if an array or object without a
-   *         __toString method is passed as the first argument
+   * @return static <p>A Stringy object.</p>
+   * @throws \InvalidArgumentException <p>if an array or object without a
+   *         __toString method is passed as the first argument</p>
    */
   public static function create($str = '', $encoding = null)
   {
@@ -192,11 +191,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * string. An optional offset may be supplied from which to begin the
    * search for the start string.
    *
-   * @param  string $start  Delimiter marking the start of the substring
-   * @param  string $end    Delimiter marking the end of the substring
-   * @param  int    $offset Index from which to begin the search
+   * @param  string $start  <p>Delimiter marking the start of the substring.</p>
+   * @param  string $end    <p>Delimiter marking the end of the substring.</p>
+   * @param  int    $offset [optional] <p>Index from which to begin the search. Default: 0</p>
    *
-   * @return static  Object whose $str is a substring between $start and $end
+   * @return static <p>Object whose $str is a substring between $start and $end.</p>
    */
   public function between($start, $end, $offset = 0)
   {
@@ -219,10 +218,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * and false if not found. Accepts an optional offset from which to begin
    * the search.
    *
-   * @param  string $needle Substring to look for
-   * @param  int    $offset Offset from which to search
+   * @param  string $needle <p>Substring to look for.</p>
+   * @param  int    $offset [optional] <p>Offset from which to search. Default: 0</p>
    *
-   * @return int|bool The occurrence's index if found, otherwise false
+   * @return int|false <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
    */
   public function indexOf($needle, $offset = 0)
   {
@@ -234,10 +233,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * and false if not found. Accepts an optional offset from which to begin
    * the search.
    *
-   * @param  string $needle Substring to look for
-   * @param  int    $offset Offset from which to search
+   * @param  string $needle <p>Substring to look for.</p>
+   * @param  int    $offset [optional] <p>Offset from which to search. Default: 0</p>
    *
-   * @return int|bool The occurrence's index if found, otherwise false
+   * @return int|false <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
    */
   public function indexOfIgnoreCase($needle, $offset = 0)
   {
@@ -249,10 +248,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * It differs from the UTF8::substr() function in that providing a $length of
    * null will return the rest of the string, rather than an empty string.
    *
-   * @param  int $start  Position of the first character to use
-   * @param  int $length Maximum number of characters used
+   * @param int $start  <p>Position of the first character to use.</p>
+   * @param int $length [optional] <p>Maximum number of characters used. Default: null</p>
    *
-   * @return static  Object with its $str being the substring
+   * @return static <p>Object with its $str being the substring.</p>
    */
   public function substr($start, $length = null)
   {
@@ -268,7 +267,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns the length of the string.
    *
-   * @return int The number of characters in $str given the encoding
+   * @return int <p>The number of characters in $str given the encoding.</p>
    */
   public function length()
   {
@@ -280,7 +279,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * single space. This includes tabs and newline characters, as well as
    * multibyte whitespace such as the thin space and ideographic space.
    *
-   * @return static  Object with a trimmed $str and condensed whitespace
+   * @return static <p>Object with a trimmed $str and condensed whitespace.</p>
    */
   public function collapseWhitespace()
   {
@@ -292,9 +291,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * string. Supports the removal of unicode whitespace. Accepts an optional
    * string of characters to strip instead of the defaults.
    *
-   * @param  string $chars Optional string of characters to strip
+   * @param string $chars [optional] <p>String of characters to strip. Default: null</p>
    *
-   * @return static  Object with a trimmed $str
+   * @return static <p>Object with a trimmed $str.</p>
    */
   public function trim($chars = null)
   {
@@ -310,20 +309,26 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Replaces all occurrences of $pattern in $str by $replacement.
    *
-   * @param  string $pattern     The regular expression pattern
-   * @param  string $replacement The string to replace with
-   * @param  string $options     Matching conditions to be used
+   * @param  string $pattern     <p>The regular expression pattern.</p>
+   * @param  string $replacement <p>The string to replace with.</p>
+   * @param  string $options     [optional] <p>Matching conditions to be used.</p>
+   * @param  string $delimiter   [optional] <p>Delimiter the the regex. Default: '/'</p>
    *
-   * @return static  Object with the result2ing $str after the replacements
+   * @return static <p>Object with the result2ing $str after the replacements.</p>
    */
-  public function regexReplace($pattern, $replacement, $options = '')
+  public function regexReplace($pattern, $replacement, $options = '', $delimiter = '/')
   {
     if ($options === 'msr') {
       $options = 'ms';
     }
 
+    // fallback
+    if (!$delimiter) {
+      $delimiter = '/';
+    }
+
     $str = preg_replace(
-        '/' . $pattern . '/u' . $options,
+        $delimiter . $pattern . $delimiter . 'u' . $options,
         $replacement,
         $this->str
     );
@@ -336,10 +341,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * default the comparison is case-sensitive, but can be made insensitive by
    * setting $caseSensitive to false.
    *
-   * @param  array $needles       SubStrings to look for
-   * @param  bool  $caseSensitive Whether or not to enforce case-sensitivity
+   * @param  array $needles       <p>SubStrings to look for.</p>
+   * @param  bool  $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return bool   Whether or not $str contains $needle
+   * @return bool  <p>Whether or not $str contains $needle.</p>
    */
   public function containsAll($needles, $caseSensitive = true)
   {
@@ -362,10 +367,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * the comparison is case-sensitive, but can be made insensitive by setting
    * $caseSensitive to false.
    *
-   * @param  string $needle        Substring to look for
-   * @param  bool   $caseSensitive Whether or not to enforce case-sensitivity
+   * @param  string $needle        <p>Substring to look for.</p>
+   * @param  bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return bool   Whether or not $str contains $needle
+   * @return bool   <p>Whether or not $str contains $needle.</p>
    */
   public function contains($needle, $caseSensitive = true)
   {
@@ -383,10 +388,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * default the comparison is case-sensitive, but can be made insensitive by
    * setting $caseSensitive to false.
    *
-   * @param  array $needles       SubStrings to look for
-   * @param  bool  $caseSensitive Whether or not to enforce case-sensitivity
+   * @param  array $needles       <p>SubStrings to look for.</p>
+   * @param  bool  $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return bool   Whether or not $str contains $needle
+   * @return bool <p>Whether or not $str contains $needle.</p>
    */
   public function containsAny($needles, $caseSensitive = true)
   {
@@ -407,7 +412,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns the length of the string, implementing the countable interface.
    *
-   * @return int The number of characters in the string, given the encoding
+   * @return int <p>The number of characters in the string, given the encoding.</p>
    */
   public function count()
   {
@@ -419,10 +424,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * By default, the comparison is case-sensitive, but can be made insensitive
    * by setting $caseSensitive to false.
    *
-   * @param  string $substring     The substring to search for
-   * @param  bool   $caseSensitive Whether or not to enforce case-sensitivity
+   * @param  string $substring     <p>The substring to search for.</p>
+   * @param  bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return int    The number of $substring occurrences
+   * @return int <p>The number of $substring occurrences.</p>
    */
   public function countSubstr($substring, $caseSensitive = true)
   {
@@ -441,7 +446,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * inserted before uppercase characters (with the exception of the first
    * character of the string), and in place of spaces as well as underscores.
    *
-   * @return static  Object with a dasherized $str
+   * @return static <p>Object with a dasherized $str</p>
    */
   public function dasherize()
   {
@@ -454,9 +459,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * of the first character of the string), and in place of spaces, dashes,
    * and underscores. Alpha delimiters are not converted to lowercase.
    *
-   * @param  string $delimiter Sequence used to separate parts of the string
+   * @param string $delimiter <p>Sequence used to separate parts of the string.</p>
    *
-   * @return static  Object with a delimited $str
+   * @return static <p>Object with a delimited $str.</p>
    */
   public function delimit($delimiter)
   {
@@ -475,9 +480,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Ensures that the string begins with $substring. If it doesn't, it's
    * prepended.
    *
-   * @param  string $substring The substring to add if not present
+   * @param string $substring <p>The substring to add if not present.</p>
    *
-   * @return static  Object with its $str prefixed by the $substring
+   * @return static <p>Object with its $str prefixed by the $substring.</p>
    */
   public function ensureLeft($substring)
   {
@@ -495,10 +500,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * default, the comparison is case-sensitive, but can be made insensitive
    * by setting $caseSensitive to false.
    *
-   * @param  string $substring     The substring to look for
-   * @param  bool   $caseSensitive Whether or not to enforce case-sensitivity
+   * @param  string $substring     <p>The substring to look for.</p>
+   * @param  bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return bool   Whether or not $str starts with $substring
+   * @return bool   <p>Whether or not $str starts with $substring.</p>
    */
   public function startsWith($substring, $caseSensitive = true)
   {
@@ -517,10 +522,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * By default the comparison is case-sensitive, but can be made insensitive by
    * setting $caseSensitive to false.
    *
-   * @param  array $substrings    Substrings to look for
-   * @param  bool  $caseSensitive Whether or not to enforce case-sensitivity
+   * @param  array $substrings    <p>Substrings to look for.</p>
+   * @param  bool  $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return bool   Whether or not $str starts with $substring
+   * @return bool  <p>Whether or not $str starts with $substring.</p>
    */
   public function startsWithAny(array $substrings, $caseSensitive = true)
   {
@@ -538,12 +543,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Ensures that the string ends with $substring. If it doesn't, it's
-   * appended.
+   * Ensures that the string ends with $substring. If it doesn't, it's appended.
    *
-   * @param  string $substring The substring to add if not present
+   * @param string $substring <p>The substring to add if not present.</p>
    *
-   * @return static  Object with its $str suffixed by the $substring
+   * @return static <p>Object with its $str suffixed by the $substring.</p>
    */
   public function ensureRight($substring)
   {
@@ -561,10 +565,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * default, the comparison is case-sensitive, but can be made insensitive
    * by setting $caseSensitive to false.
    *
-   * @param  string $substring     The substring to look for
-   * @param  bool   $caseSensitive Whether or not to enforce case-sensitivity
+   * @param  string $substring     <p>The substring to look for.</p>
+   * @param  bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return bool   Whether or not $str ends with $substring
+   * @return bool   <p>Whether or not $str ends with $substring.</p>
    */
   public function endsWith($substring, $caseSensitive = true)
   {
@@ -591,11 +595,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * By default, the comparison is case-sensitive, but can be made insensitive
    * by setting $caseSensitive to false.
    *
-   * @param  string[] $substrings    Substrings to look for
-   * @param  bool     $caseSensitive Whether or not to enforce
-   *                                 case-sensitivity
+   * @param  string[] $substrings    <p>Substrings to look for.</p>
+   * @param  bool     $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return bool     Whether or not $str ends with $substring
+   * @return bool     <p>Whether or not $str ends with $substring.</p>
    */
   public function endsWithAny($substrings, $caseSensitive = true)
   {
@@ -615,9 +618,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns the first $n characters of the string.
    *
-   * @param  int $n Number of characters to retrieve from the start
+   * @param int $n <p>Number of characters to retrieve from the start.</p>
    *
-   * @return static  Object with its $str being the first $n chars
+   * @return static <p>Object with its $str being the first $n chars.</p>
    */
   public function first($n)
   {
@@ -635,7 +638,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns the encoding used by the Stringy object.
    *
-   * @return string The current value of the $encoding property
+   * @return string <p>The current value of the $encoding property.</p>
    */
   public function getEncoding()
   {
@@ -648,7 +651,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * in the multibyte string. This enables the use of foreach with instances
    * of Stringy\Stringy.
    *
-   * @return \ArrayIterator An iterator for the characters in the string
+   * @return \ArrayIterator <p>An iterator for the characters in the string.</p>
    */
   public function getIterator()
   {
@@ -658,7 +661,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns an array consisting of the characters in the string.
    *
-   * @return array An array of string chars
+   * @return array <p>An array of string chars.</p>
    */
   public function chars()
   {
@@ -676,9 +679,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns the character at $index, with indexes starting at 0.
    *
-   * @param  int $index Position of the character
+   * @param int $index <p>Position of the character.</p>
    *
-   * @return static  The character at $index
+   * @return static <p>The character at $index.</p>
    */
   public function at($index)
   {
@@ -686,10 +689,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns true if the string contains a lower case char, false
-   * otherwise.
+   * Returns true if the string contains a lower case char, false otherwise.
    *
-   * @return bool Whether or not the string contains a lower case character.
+   * @return bool <p>Whether or not the string contains a lower case character.</p>
    */
   public function hasLowerCase()
   {
@@ -699,9 +701,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns true if $str matches the supplied pattern, false otherwise.
    *
-   * @param  string $pattern Regex pattern to match against
+   * @param  string $pattern <p>Regex pattern to match against.</p>
    *
-   * @return bool   Whether or not $str matches the pattern
+   * @return bool <p>Whether or not $str matches the pattern.</p>
    */
   protected function matchesPattern($pattern)
   {
@@ -713,10 +715,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns true if the string contains an upper case char, false
-   * otherwise.
+   * Returns true if the string contains an upper case char, false otherwise.
    *
-   * @return bool Whether or not the string contains an upper case character.
+   * @return bool <p>Whether or not the string contains an upper case character.</p>
    */
   public function hasUpperCase()
   {
@@ -726,9 +727,55 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Convert all HTML entities to their applicable characters.
    *
-   * @param  int|null $flags Optional flags
+   * @param int $flags       [optional] <p>
+   *                         A bitmask of one or more of the following flags, which specify how to handle quotes and
+   *                         which document type to use. The default is ENT_COMPAT.
+   *                         <table>
+   *                         Available <i>flags</i> constants
+   *                         <tr valign="top">
+   *                         <td>Constant Name</td>
+   *                         <td>Description</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_COMPAT</b></td>
+   *                         <td>Will convert double-quotes and leave single-quotes alone.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_QUOTES</b></td>
+   *                         <td>Will convert both double and single quotes.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_NOQUOTES</b></td>
+   *                         <td>Will leave both double and single quotes unconverted.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_HTML401</b></td>
+   *                         <td>
+   *                         Handle code as HTML 4.01.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_XML1</b></td>
+   *                         <td>
+   *                         Handle code as XML 1.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_XHTML</b></td>
+   *                         <td>
+   *                         Handle code as XHTML.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_HTML5</b></td>
+   *                         <td>
+   *                         Handle code as HTML 5.
+   *                         </td>
+   *                         </tr>
+   *                         </table>
+   *                         </p>
    *
-   * @return static   Object with the resulting $str after being html decoded.
+   * @return static <p>Object with the resulting $str after being html decoded.</p>
    */
   public function htmlDecode($flags = ENT_COMPAT)
   {
@@ -740,9 +787,55 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Convert all applicable characters to HTML entities.
    *
-   * @param  int|null $flags Optional flags
+   * @param int $flags       [optional] <p>
+   *                         A bitmask of one or more of the following flags, which specify how to handle quotes and
+   *                         which document type to use. The default is ENT_COMPAT.
+   *                         <table>
+   *                         Available <i>flags</i> constants
+   *                         <tr valign="top">
+   *                         <td>Constant Name</td>
+   *                         <td>Description</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_COMPAT</b></td>
+   *                         <td>Will convert double-quotes and leave single-quotes alone.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_QUOTES</b></td>
+   *                         <td>Will convert both double and single quotes.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_NOQUOTES</b></td>
+   *                         <td>Will leave both double and single quotes unconverted.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_HTML401</b></td>
+   *                         <td>
+   *                         Handle code as HTML 4.01.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_XML1</b></td>
+   *                         <td>
+   *                         Handle code as XML 1.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_XHTML</b></td>
+   *                         <td>
+   *                         Handle code as XHTML.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_HTML5</b></td>
+   *                         <td>
+   *                         Handle code as HTML 5.
+   *                         </td>
+   *                         </tr>
+   *                         </table>
+   *                         </p>
    *
-   * @return static   Object with the resulting $str after being html encoded.
+   * @return static <p>Object with the resulting $str after being html encoded.</p>
    */
   public function htmlEncode($flags = ENT_COMPAT)
   {
@@ -755,7 +848,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Capitalizes the first word of the string, replaces underscores with
    * spaces, and strips '_id'.
    *
-   * @return static  Object with a humanized $str
+   * @return static <p>Object with a humanized $str.</p>
    */
   public function humanize()
   {
@@ -767,7 +860,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Converts the first character of the supplied string to upper case.
    *
-   * @return static  Object with the first character of $str being upper case
+   * @return static <p>Object with the first character of $str being upper case.</p>
    */
   public function upperCaseFirst()
   {
@@ -790,10 +883,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * the search. Offsets may be negative to count from the last character
    * in the string.
    *
-   * @param  string $needle Substring to look for
-   * @param  int    $offset Offset from which to search
+   * @param  string $needle <p>Substring to look for.</p>
+   * @param  int    $offset [optional] <p>Offset from which to search. Default: 0</p>
    *
-   * @return int|bool The last occurrence's index if found, otherwise false
+   * @return int|false <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
    */
   public function indexOfLast($needle, $offset = 0)
   {
@@ -806,10 +899,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * the search. Offsets may be negative to count from the last character
    * in the string.
    *
-   * @param  string $needle Substring to look for
-   * @param  int    $offset Offset from which to search
+   * @param  string $needle <p>Substring to look for.</p>
+   * @param  int    $offset [optional] <p>Offset from which to search. Default: 0</p>
    *
-   * @return int|bool The last occurrence's index if found, otherwise false
+   * @return int|false <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
    */
   public function indexOfLastIgnoreCase($needle, $offset = 0)
   {
@@ -819,10 +912,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Inserts $substring into the string at the $index provided.
    *
-   * @param  string $substring String to be inserted
-   * @param  int    $index     The index at which to insert the substring
+   * @param  string $substring <p>String to be inserted.</p>
+   * @param  int    $index     <p>The index at which to insert the substring.</p>
    *
-   * @return static  Object with the resulting $str after the insertion
+   * @return static <p>Object with the resulting $str after the insertion.</p>
    */
   public function insert($substring, $index)
   {
@@ -847,9 +940,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @credit Originally from Laravel, thanks Taylor.
    *
-   * @param string $pattern The string or pattern to match against.
+   * @param string $pattern <p>The string or pattern to match against.</p>
    *
-   * @return bool Whether or not we match the provided pattern.
+   * @return bool <p>Whether or not we match the provided pattern.</p>
    */
   public function is($pattern)
   {
@@ -864,10 +957,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns true if the string contains only alphabetic chars, false
-   * otherwise.
+   * Returns true if the string contains only alphabetic chars, false otherwise.
    *
-   * @return bool Whether or not $str contains only alphabetic chars
+   * @return bool <p>Whether or not $str contains only alphabetic chars.</p>
    */
   public function isAlpha()
   {
@@ -880,7 +972,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * A variable is considered empty if it does not exist or if its value equals FALSE.
    * empty() does not generate a warning if the variable does not exist.
    *
-   * @return bool
+   * @return bool <p>Whether or not $str is empty().</p>
    */
   public function isEmpty()
   {
@@ -888,10 +980,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns true if the string contains only alphabetic and numeric chars,
-   * false otherwise.
+   * Returns true if the string contains only alphabetic and numeric chars, false otherwise.
    *
-   * @return bool Whether or not $str contains only alphanumeric chars
+   * @return bool <p>Whether or not $str contains only alphanumeric chars.</p>
    */
   public function isAlphanumeric()
   {
@@ -899,10 +990,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns true if the string contains only whitespace chars, false
-   * otherwise.
+   * Returns true if the string contains only whitespace chars, false otherwise.
    *
-   * @return bool Whether or not $str contains only whitespace characters
+   * @return bool <p>Whether or not $str contains only whitespace characters.</p>
    */
   public function isBlank()
   {
@@ -910,10 +1000,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns true if the string contains only hexadecimal chars, false
-   * otherwise.
+   * Returns true if the string contains only hexadecimal chars, false otherwise.
    *
-   * @return bool Whether or not $str contains only hexadecimal chars
+   * @return bool <p>Whether or not $str contains only hexadecimal chars.</p>
    */
   public function isHexadecimal()
   {
@@ -923,7 +1012,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns true if the string contains HTML-Tags, false otherwise.
    *
-   * @return bool Whether or not $str contains HTML-Tags
+   * @return bool <p>Whether or not $str contains HTML-Tags.</p>
    */
   public function isHtml()
   {
@@ -933,12 +1022,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns true if the string contains a valid E-Mail address, false otherwise.
    *
-   * @param bool $useExampleDomainCheck
-   * @param bool $useTypoInDomainCheck
-   * @param bool $useTemporaryDomainCheck
-   * @param bool $useDnsCheck
+   * @param bool $useExampleDomainCheck   [optional] <p>Default: false</p>
+   * @param bool $useTypoInDomainCheck    [optional] <p>Default: false</p>
+   * @param bool $useTemporaryDomainCheck [optional] <p>Default: false</p>
+   * @param bool $useDnsCheck             [optional] <p>Default: false</p>
    *
-   * @return bool Whether or not $str contains a valid E-Mail address
+   * @return bool <p>Whether or not $str contains a valid E-Mail address.</p>
    */
   public function isEmail($useExampleDomainCheck = false, $useTypoInDomainCheck = false, $useTemporaryDomainCheck = false, $useDnsCheck = false)
   {
@@ -950,7 +1039,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * in PHP 5.x, this method is consistent with PHP 7 and other JSON parsers,
    * in that an empty string is not considered valid JSON.
    *
-   * @return bool Whether or not $str is JSON
+   * @return bool <p>Whether or not $str is JSON.</p>
    */
   public function isJson()
   {
@@ -968,10 +1057,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Returns true if the string contains only lower case chars, false
-   * otherwise.
+   * Returns true if the string contains only lower case chars, false otherwise.
    *
-   * @return bool Whether or not $str contains only lower case characters
+   * @return bool <p>Whether or not $str contains only lower case characters.</p>
    */
   public function isLowerCase()
   {
@@ -985,7 +1073,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns true if the string is serialized, false otherwise.
    *
-   * @return bool Whether or not $str is serialized
+   * @return bool <p>Whether or not $str is serialized.</p>
    */
   public function isSerialized()
   {
@@ -1009,7 +1097,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Returns true if the string contains only lower case chars, false
    * otherwise.
    *
-   * @return bool Whether or not $str contains only lower case characters
+   * @return bool <p>Whether or not $str contains only lower case characters.</p>
    */
   public function isUpperCase()
   {
@@ -1019,9 +1107,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns the last $n characters of the string.
    *
-   * @param  int $n Number of characters to retrieve from the end
+   * @param int $n <p>Number of characters to retrieve from the end.</p>
    *
-   * @return static  Object with its $str being the last $n chars
+   * @return static <p>Object with its $str being the last $n chars.</p>
    */
   public function last($n)
   {
@@ -1040,7 +1128,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Splits on newlines and carriage returns, returning an array of Stringy
    * objects corresponding to the lines in the string.
    *
-   * @return static [] An array of Stringy objects
+   * @return static[] <p>An array of Stringy objects.</p>
    */
   public function lines()
   {
@@ -1057,9 +1145,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns the longest common prefix between the string and $otherStr.
    *
-   * @param  string $otherStr Second string for comparison
+   * @param string $otherStr <p>Second string for comparison.</p>
    *
-   * @return static  Object with its $str being the longest common prefix
+   * @return static <p>Object with its $str being the longest common prefix.</p>
    */
   public function longestCommonPrefix($otherStr)
   {
@@ -1083,9 +1171,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns the longest common suffix between the string and $otherStr.
    *
-   * @param  string $otherStr Second string for comparison
+   * @param string $otherStr <p>Second string for comparison.</p>
    *
-   * @return static  Object with its $str being the longest common suffix
+   * @return static <p>Object with its $str being the longest common suffix.</p>
    */
   public function longestCommonSuffix($otherStr)
   {
@@ -1110,9 +1198,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Returns the longest common substring between the string and $otherStr.
    * In the case of ties, it returns that which occurs first.
    *
-   * @param  string $otherStr Second string for comparison
+   * @param string $otherStr <p>Second string for comparison.</p>
    *
-   * @return static  Object with its $str being the longest common substring
+   * @return static <p>Object with its $str being the longest common substring.</p>
    */
   public function longestCommonSubstring($otherStr)
   {
@@ -1164,9 +1252,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * negative to count from the last character in the string. Implements
    * part of the ArrayAccess interface.
    *
-   * @param  mixed $offset The index to check
+   * @param mixed $offset <p>The index to check.</p>
    *
-   * @return boolean Whether or not the index exists
+   * @return boolean <p>Whether or not the index exists.</p>
    */
   public function offsetExists($offset)
   {
@@ -1187,11 +1275,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * ArrayAccess interface, and throws an OutOfBoundsException if the index
    * does not exist.
    *
-   * @param  mixed $offset The index from which to retrieve the char
+   * @param mixed $offset <p>The <strong>index</strong> from which to retrieve the char.</p>
    *
-   * @return string                 The character at the specified index
-   * @throws \OutOfBoundsException If the positive or negative offset does
-   *                               not exist
+   * @return string <p>The character at the specified index.</p>
+   *
+   * @throws \OutOfBoundsException <p>If the positive or negative offset does not exist.</p>
    */
   public function offsetGet($offset)
   {
@@ -1214,10 +1302,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Implements part of the ArrayAccess interface, but throws an exception
    * when called. This maintains the immutability of Stringy objects.
    *
-   * @param  mixed $offset The index of the character
-   * @param  mixed $value  Value to set
+   * @param  mixed $offset <p>The index of the character.</p>
+   * @param  mixed $value  <p>Value to set.</p>
    *
-   * @throws \Exception When called
+   * @throws \Exception <p>When called.</p>
    */
   public function offsetSet($offset, $value)
   {
@@ -1229,9 +1317,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Implements part of the ArrayAccess interface, but throws an exception
    * when called. This maintains the immutability of Stringy objects.
    *
-   * @param  mixed $offset The index of the character
+   * @param mixed $offset <p>The index of the character.</p>
    *
-   * @throws \Exception When called
+   * @throws \Exception <p>When called.</p>
    */
   public function offsetUnset($offset)
   {
@@ -1246,12 +1334,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * 'left', 'right', 'both') is 'right'. Throws an InvalidArgumentException
    * if $padType isn't one of those 3 values.
    *
-   * @param  int    $length  Desired string length after padding
-   * @param  string $padStr  String used to pad, defaults to space
-   * @param  string $padType One of 'left', 'right', 'both'
+   * @param  int    $length  <p>Desired string length after padding.</p>
+   * @param  string $padStr  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
+   * @param  string $padType [optional] <p>One of 'left', 'right', 'both'. Default: 'right'</p>
    *
-   * @return static  Object with a padded $str
-   * @throws \InvalidArgumentException If $padType isn't one of 'right', 'left' or 'both'
+   * @return static <p>Object with a padded $str.</p>
+   *
+   * @throws \InvalidArgumentException <p>If $padType isn't one of 'right', 'left' or 'both'.</p>
    */
   public function pad($length, $padStr = ' ', $padType = 'right')
   {
@@ -1275,10 +1364,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Returns a new string of a given length such that the beginning of the
    * string is padded. Alias for pad() with a $padType of 'left'.
    *
-   * @param  int    $length Desired string length after padding
-   * @param  string $padStr String used to pad, defaults to space
+   * @param  int    $length <p>Desired string length after padding.</p>
+   * @param  string $padStr [optional] <p>String used to pad, defaults to space. Default: ' '</p>
    *
-   * @return static  String with left padding
+   * @return static <p>String with left padding.</p>
    */
   public function padLeft($length, $padStr = ' ')
   {
@@ -1289,11 +1378,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Adds the specified amount of left and right padding to the given string.
    * The default character used is a space.
    *
-   * @param  int    $left   Length of left padding
-   * @param  int    $right  Length of right padding
-   * @param  string $padStr String used to pad
+   * @param  int    $left   [optional] <p>Length of left padding. Default: 0</p>
+   * @param  int    $right  [optional] <p>Length of right padding. Default: 0</p>
+   * @param  string $padStr [optional] <p>String used to pad. Default: ' '</p>
    *
-   * @return static  String with padding applied
+   * @return static <p>String with padding applied.</p>
    */
   protected function applyPadding($left = 0, $right = 0, $padStr = ' ')
   {
@@ -1337,10 +1426,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Returns a new string of a given length such that the end of the string
    * is padded. Alias for pad() with a $padType of 'right'.
    *
-   * @param  int    $length Desired string length after padding
-   * @param  string $padStr String used to pad, defaults to space
+   * @param  int    $length <p>Desired string length after padding.</p>
+   * @param  string $padStr [optional] <p>String used to pad, defaults to space. Default: ' '</p>
    *
-   * @return static  String with right padding
+   * @return static <p>String with right padding.</p>
    */
   public function padRight($length, $padStr = ' ')
   {
@@ -1351,10 +1440,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Returns a new string of a given length such that both sides of the
    * string are padded. Alias for pad() with a $padType of 'both'.
    *
-   * @param  int    $length Desired string length after padding
-   * @param  string $padStr String used to pad, defaults to space
+   * @param  int    $length <p>Desired string length after padding.</p>
+   * @param  string $padStr [optional] <p>String used to pad, defaults to space. Default: ' '</p>
    *
-   * @return static  String with padding applied
+   * @return static <p>String with padding applied.</p>
    */
   public function padBoth($length, $padStr = ' ')
   {
@@ -1366,9 +1455,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns a new string starting with $string.
    *
-   * @param  string $string The string to append
+   * @param string $string <p>The string to append.</p>
    *
-   * @return static  Object with appended $string
+   * @return static <p>Object with appended $string.</p>
    */
   public function prepend($string)
   {
@@ -1378,9 +1467,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns a new string with the prefix $substring removed, if present.
    *
-   * @param  string $substring The prefix to remove
+   * @param string $substring <p>The prefix to remove.</p>
    *
-   * @return static  Object having a $str without the prefix $substring
+   * @return static <p>Object having a $str without the prefix $substring.</p>
    */
   public function removeLeft($substring)
   {
@@ -1398,9 +1487,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns a new string with the suffix $substring removed, if present.
    *
-   * @param  string $substring The suffix to remove
+   * @param string $substring <p>The suffix to remove.</p>
    *
-   * @return static  Object having a $str without the suffix $substring
+   * @return static <p>Object having a $str without the suffix $substring.</p>
    */
   public function removeRight($substring)
   {
@@ -1418,9 +1507,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns a repeated string given a multiplier.
    *
-   * @param  int $multiplier The number of times to repeat the string
+   * @param int $multiplier <p>The number of times to repeat the string.</p>
    *
-   * @return static  Object with a repeated str
+   * @return static <p>Object with a repeated str.</p>
    */
   public function repeat($multiplier)
   {
@@ -1432,11 +1521,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Replaces all occurrences of $search in $str by $replacement.
    *
-   * @param string $search        The needle to search for
-   * @param string $replacement   The string to replace with
-   * @param bool   $caseSensitive Whether or not to enforce case-sensitivity
+   * @param string $search        <p>The needle to search for.</p>
+   * @param string $replacement   <p>The string to replace with.</p>
+   * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return static  Object with the resulting $str after the replacements
+   * @return static <p>Object with the resulting $str after the replacements.</p>
    */
   public function replace($search, $replacement, $caseSensitive = true)
   {
@@ -1452,11 +1541,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Replaces all occurrences of $search in $str by $replacement.
    *
-   * @param array        $search        The elements to search for
-   * @param string|array $replacement   The string to replace with
-   * @param bool         $caseSensitive Whether or not to enforce case-sensitivity
+   * @param array        $search        <p>The elements to search for.</p>
+   * @param string|array $replacement   <p>The string to replace with.</p>
+   * @param bool         $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
    *
-   * @return static  Object with the resulting $str after the replacements
+   * @return static <p>Object with the resulting $str after the replacements.</p>
    */
   public function replaceAll(array $search, $replacement, $caseSensitive = true)
   {
@@ -1470,12 +1559,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Replaces all occurrences of $search from the beginning of string with $replacement
+   * Replaces all occurrences of $search from the beginning of string with $replacement.
    *
-   * @param string $search
-   * @param string $replacement
+   * @param string $search      <p>The string to search for.</p>
+   * @param string $replacement <p>The replacement.</p>
    *
-   * @return static  Object with the resulting $str after the replacements
+   * @return static <p>Object with the resulting $str after the replacements.</p>
    */
   public function replaceBeginning($search, $replacement)
   {
@@ -1485,12 +1574,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Replaces all occurrences of $search from the ending of string with $replacement
+   * Replaces all occurrences of $search from the ending of string with $replacement.
    *
-   * @param string $search
-   * @param string $replacement
+   * @param string $search      <p>The string to search for.</p>
+   * @param string $replacement <p>The replacement.</p>
    *
-   * @return static  Object with the resulting $str after the replacements
+   * @return static <p>Object with the resulting $str after the replacements.</p>
    */
   public function replaceEnding($search, $replacement)
   {
@@ -1503,8 +1592,8 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Gets the substring after (or before via "$beforeNeedle") the first occurrence of the "$needle".
    * If no match is found returns new empty Stringy object.
    *
-   * @param string $needle
-   * @param bool   $beforeNeedle
+   * @param string $needle       <p>The string to look for.</p>
+   * @param bool   $beforeNeedle [optional] <p>Default: false</p>
    *
    * @return static
    */
@@ -1525,8 +1614,8 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Gets the substring after (or before via "$beforeNeedle") the first occurrence of the "$needle".
    * If no match is found returns new empty Stringy object.
    *
-   * @param string $needle
-   * @param bool   $beforeNeedle
+   * @param string $needle       <p>The string to look for.</p>
+   * @param bool   $beforeNeedle [optional] <p>Default: false</p>
    *
    * @return static
    */
@@ -1547,8 +1636,8 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Gets the substring after (or before via "$beforeNeedle") the last occurrence of the "$needle".
    * If no match is found returns new empty Stringy object.
    *
-   * @param string $needle
-   * @param bool   $beforeNeedle
+   * @param string $needle       <p>The string to look for.</p>
+   * @param bool   $beforeNeedle [optional] <p>Default: false</p>
    *
    * @return static
    */
@@ -1569,8 +1658,8 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Gets the substring after (or before via "$beforeNeedle") the last occurrence of the "$needle".
    * If no match is found returns new empty Stringy object.
    *
-   * @param string $needle
-   * @param bool   $beforeNeedle
+   * @param string $needle       <p>The string to look for.</p>
+   * @param bool   $beforeNeedle [optional] <p>Default: false</p>
    *
    * @return static
    */
@@ -1590,7 +1679,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns a reversed string. A multibyte version of strrev().
    *
-   * @return static  Object with a reversed $str
+   * @return static <p>Object with a reversed $str.</p>
    */
   public function reverse()
   {
@@ -1605,10 +1694,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * string is further truncated so that the substring may be appended without
    * exceeding the desired length.
    *
-   * @param  int    $length    Desired length of the truncated string
-   * @param  string $substring The substring to append if it can fit
+   * @param  int    $length    <p>Desired length of the truncated string.</p>
+   * @param  string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
    *
-   * @return static  Object with the resulting $str after truncating
+   * @return static <p>Object with the resulting $str after truncating.</p>
    */
   public function safeTruncate($length, $substring = '')
   {
@@ -1617,17 +1706,17 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       return $stringy;
     }
 
-    // Need to further trim the string so we can append the substring
+    // need to further trim the string so we can append the substring
     $encoding = $stringy->encoding;
     $substringLength = UTF8::strlen($substring, $encoding);
     $length -= $substringLength;
 
     $truncated = UTF8::substr($stringy->str, 0, $length, $encoding);
 
-    // If the last word was truncated
+    // if the last word was truncated
     $strPosSpace = UTF8::strpos($stringy->str, ' ', $length - 1, $encoding);
     if ($strPosSpace != $length) {
-      // Find pos of the last occurrence of a space, get up to that
+      // find pos of the last occurrence of a space, get up to that
       $lastPos = UTF8::strrpos($truncated, ' ', 0, $encoding);
 
       if ($lastPos !== false || $strPosSpace !== false) {
@@ -1644,7 +1733,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * A multibyte string shuffle function. It returns a string with its
    * characters in random order.
    *
-   * @return static  Object with a shuffled $str
+   * @return static <p>Object with a shuffled $str.</p>
    */
   public function shuffle()
   {
@@ -1660,11 +1749,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * $replacement. The replacement defaults to a single dash, and the string
    * is also converted to lowercase.
    *
-   * @param string $replacement The string used to replace whitespace
-   * @param string $language    The language for the url
-   * @param bool   $strToLower  string to lower
+   * @param string $replacement [optional] <p>The string used to replace whitespace. Default: '-'</p>
+   * @param string $language    [optional] <p>The language for the url. Default: 'de'</p>
+   * @param bool   $strToLower  [optional] <p>string to lower. Default: true</p>
    *
-   * @return static  Object whose $str has been converted to an URL slug
+   * @return static <p>Object whose $str has been converted to an URL slug.</p>
    */
   public function slugify($replacement = '-', $language = 'de', $strToLower = true)
   {
@@ -1689,7 +1778,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Strip all whitespace characters. This includes tabs and newline characters,
    * as well as multibyte whitespace such as the thin space and ideographic space.
    *
-   * @return Stringy
+   * @return static
    */
   public function stripWhitespace()
   {
@@ -1721,7 +1810,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * escape html
+   * Create a escape html version of the string via "UTF8::htmlspecialchars()".
    *
    * @return static
    */
@@ -1737,15 +1826,15 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Create an extract from a text, so if the search-string was found, it will be centered in the output.
+   * Create an extract from a sentence, so if the search-string was found, it try to centered in the output.
    *
    * @param string   $search
-   * @param int|null $length
-   * @param string   $ellipsis
+   * @param int|null $length                 [optional] <p>Default: null === text->length / 2</p>
+   * @param string   $replacerForSkippedText [optional] <p>Default: ...</p>
    *
    * @return static
    */
-  public function extractText($search = '', $length = null, $ellipsis = '...')
+  public function extractText($search = '', $length = null, $replacerForSkippedText = '...')
   {
     // init
     $text = $this->str;
@@ -1763,7 +1852,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     if (empty($search)) {
 
       $stringLength = UTF8::strlen($text, $this->encoding);
-      $end = ($length - 1) > $stringLength ? $stringLength : ($length - 1);
+
+      if ($length > 0) {
+        $end = ($length - 1) > $stringLength ? $stringLength : ($length - 1);
+      } else {
+        $end = 0;
+      }
+
       $pos = min(UTF8::strpos($text, ' ', $end, 0, $this->encoding), UTF8::strpos($text, '.', $end));
 
       if ($pos) {
@@ -1771,7 +1866,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
             rtrim(
                 UTF8::substr($text, 0, $pos, $this->encoding),
                 $trimChars
-            ) . $ellipsis,
+            ) . $replacerForSkippedText,
             $this->encoding
         );
       }
@@ -1779,10 +1874,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       return static::create($text, $this->encoding);
     }
 
-    $wordPos = UTF8::strpos(
-        UTF8::strtolower($text),
-        UTF8::strtolower($search, $this->encoding),
-        null,
+    $wordPos = UTF8::stripos(
+        $text,
+        $search,
         $this->encoding
     );
     $halfSide = (int)($wordPos - $length / 2 + UTF8::strlen($search, $this->encoding) / 2);
@@ -1814,7 +1908,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
                  ) - $pos_start;
 
       if (!$pos_end || $pos_end <= 0) {
-        $extract = $ellipsis . ltrim(
+        $extract = $replacerForSkippedText . ltrim(
                 UTF8::substr(
                     $text,
                     $pos_start,
@@ -1824,7 +1918,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
                 $trimChars
             );
       } else {
-        $extract = $ellipsis . trim(
+        $extract = $replacerForSkippedText . trim(
                 UTF8::substr(
                     $text,
                     $pos_start,
@@ -1832,7 +1926,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
                     $this->encoding
                 ),
                 $trimChars
-            ) . $ellipsis;
+            ) . $replacerForSkippedText;
       }
 
     } else {
@@ -1853,7 +1947,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         $extract = rtrim(
                        UTF8::substr($text, 0, $pos_end, $this->encoding),
                        $trimChars
-                   ) . $ellipsis;
+                   ) . $replacerForSkippedText;
       } else {
         $extract = $text;
       }
@@ -1864,7 +1958,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
 
   /**
-   * remove xss from html
+   * Try to remove all XSS-attacks from the string.
    *
    * @return static
    */
@@ -1882,9 +1976,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * remove html-break [br | \r\n | \r | \n | ...]
+   * Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
    *
-   * @param string $replacement
+   * @param string $replacement [optional] <p>Default is a empty string.</p>
    *
    * @return static
    */
@@ -1896,9 +1990,11 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * remove html
+   * Remove html via "strip_tags()" from the string.
    *
-   * @param $allowableTags
+   * @param $allowableTags [optional] <p>You can use the optional second parameter to specify tags which should
+   *                       not be stripped. Default: null
+   *                       </p>
    *
    * @return static
    */
@@ -1915,10 +2011,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * the remaining string. If $end is negative, it is computed from the end
    * of the string.
    *
-   * @param  int $start Initial index from which to begin extraction
-   * @param  int $end   Optional index at which to end extraction
+   * @param  int $start <p>Initial index from which to begin extraction.</p>
+   * @param  int $end   [optional] <p>Index at which to end extraction. Default: null</p>
    *
-   * @return static  Object with its $str being the extracted substring
+   * @return static <p>Object with its $str being the extracted substring.</p>
    */
   public function slice($start, $end = null)
   {
@@ -1942,12 +2038,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * array of Stringy objects. An optional integer $limit will truncate the
    * results.
    *
-   * @param  string $pattern The regex with which to split the string
-   * @param  int    $limit   Optional maximum number of results to return
+   * @param  string $pattern <p>The regex with which to split the string.</p>
+   * @param  int    $limit   [optional] <p>Maximum number of results to return. Default: -1 === no limit</p>
    *
-   * @return static [] An array of Stringy objects
+   * @return static[] <p>An array of Stringy objects.</p>
    */
-  public function split($pattern, $limit = null)
+  public function split($pattern, $limit = -1)
   {
     if ($limit === 0) {
       return array();
@@ -1985,10 +2081,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Surrounds $str with the given substring.
    *
-   * @param  string $substring The substring to add to both sides
+   * @param string $substring <p>The substring to add to both sides.</P>
    *
-   * @return static  Object whose $str had the substring both prepended and
-   *                 appended
+   * @return static <p>Object whose $str had the substring both prepended and appended.</p>
    */
   public function surround($substring)
   {
@@ -2000,7 +2095,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns a case swapped version of the string.
    *
-   * @return static  Object whose $str has each character's case swapped
+   * @return static <p>Object whose $str has each character's case swapped.</P>
    */
   public function swapCase()
   {
@@ -2016,7 +2111,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Windows-1252 (commonly used in Word documents) replaced by their ASCII
    * equivalents.
    *
-   * @return static  Object whose $str has those characters removed
+   * @return static <p>Object whose $str has those characters removed.</p>
    */
   public function tidy()
   {
@@ -2030,9 +2125,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Also accepts an array, $ignore, allowing you to list words not to be
    * capitalized.
    *
-   * @param  array $ignore An array of words not to capitalize
+   * @param array|null $ignore [optional] <p>An array of words not to capitalize or null. Default: null</p>
    *
-   * @return static  Object with a titleized $str
+   * @return static <p>Object with a titleized $str.</p>
    */
   public function titleize($ignore = null)
   {
@@ -2057,10 +2152,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
-   * Converts all characters in the string to lowercase. An alias for PHP's
-   * UTF8::strtolower().
+   * Converts all characters in the string to lowercase.
    *
-   * @return static  Object with all characters of $str being lowercase
+   * @return static <p>Object with all characters of $str being lowercase.</p>
    */
   public function toLowerCase()
   {
@@ -2072,7 +2166,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   /**
    * Returns true if the string is base64 encoded, false otherwise.
    *
-   * @return bool Whether or not $str is base64 encoded
+   * @return bool <p>Whether or not $str is base64 encoded.</p>
    */
   public function isBase64()
   {
@@ -2084,9 +2178,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * replaced with their closest ASCII counterparts, and the rest are removed
    * unless instructed otherwise.
    *
-   * @param $strict [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad performance</p>
+   * @param $strict [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad performance |
+   *                Default: false</p>
    *
-   * @return static  Object whose $str contains only ASCII characters
+   * @return static <p>Object whose $str contains only ASCII characters.</p>
    */
   public function toAscii($strict = false)
   {
@@ -2145,9 +2240,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Converts each tab in the string to some number of spaces, as defined by
    * $tabLength. By default, each tab is converted to 4 consecutive spaces.
    *
-   * @param  int $tabLength Number of spaces to replace each tab with
+   * @param int $tabLength [optional] <p>Number of spaces to replace each tab with. Default: 4</p>
    *
-   * @return static  Object whose $str has had tabs switched to spaces
+   * @return static <p>Object whose $str has had tabs switched to spaces.</p>
    */
   public function toSpaces($tabLength = 4)
   {
@@ -2162,9 +2257,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * defined by $tabLength, to a tab. By default, each 4 consecutive spaces
    * are converted to a tab.
    *
-   * @param  int $tabLength Number of spaces to replace with a tab
+   * @param int $tabLength [optional] <p>Number of spaces to replace with a tab. Default: 4</p>
    *
-   * @return static  Object whose $str has had spaces switched to tabs
+   * @return static <p>Object whose $str has had spaces switched to tabs.</p>
    */
   public function toTabs($tabLength = 4)
   {
@@ -2182,14 +2277,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function toTitleCase()
   {
     // "mb_convert_case()" used a polyfill from the "UTF8"-Class
-    $str = mb_convert_case($this->str, MB_CASE_TITLE, $this->encoding);
+    $str = \mb_convert_case($this->str, MB_CASE_TITLE, $this->encoding);
 
     return static::create($str, $this->encoding);
   }
 
   /**
-   * Converts all characters in the string to uppercase. An alias for PHP's
-   * UTF8::strtoupper().
+   * Converts all characters in the string to uppercase.
    *
    * @return static  Object with all characters of $str being uppercase
    */
@@ -2205,9 +2299,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Supports the removal of unicode whitespace. Accepts an optional
    * string of characters to strip instead of the defaults.
    *
-   * @param  string $chars Optional string of characters to strip
+   * @param string $chars [optional] <p>Optional string of characters to strip. Default: null</p>
    *
-   * @return static  Object with a trimmed $str
+   * @return static <p>Object with a trimmed $str.</p>
    */
   public function trimLeft($chars = null)
   {
@@ -2225,9 +2319,9 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Supports the removal of unicode whitespace. Accepts an optional
    * string of characters to strip instead of the defaults.
    *
-   * @param  string $chars Optional string of characters to strip
+   * @param string $chars [optional] <p>Optional string of characters to strip. Default: null</p>
    *
-   * @return static  Object with a trimmed $str
+   * @return static <p>Object with a trimmed $str.</p>
    */
   public function trimRight($chars = null)
   {
@@ -2245,10 +2339,10 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * truncating occurs, the string is further truncated so that the substring
    * may be appended without exceeding the desired length.
    *
-   * @param  int    $length    Desired length of the truncated string
-   * @param  string $substring The substring to append if it can fit
+   * @param int    $length    <p>Desired length of the truncated string.</p>
+   * @param string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
    *
-   * @return static  Object with the resulting $str after truncating
+   * @return static <p>Object with the resulting $str after truncating.</p>
    */
   public function truncate($length, $substring = '')
   {
@@ -2396,7 +2490,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * Shorten the string after $length, but also after the next word.
    *
    * @param int    $length
-   * @param string $strAddOn
+   * @param string $strAddOn [optional] <p>Default: '...'</p>
    *
    * @return static
    */

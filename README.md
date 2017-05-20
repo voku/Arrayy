@@ -566,10 +566,11 @@ s('<∂∆ onerror="alert(xss)">')->escape(); // '&lt;∂∆ onerror=&quot;alert
 
 ##### extractText(string $search = '', int $length = null, string $ellipsis = '...')
 
-Create an extract from a text, so if the search-string was found, it will be centered in the output.
+Create an extract from a sentence, so if the search-string was found, it try to centered in the output.
 
 ```php
-s('this is only a Fork of Stringy')->extractText('Fork'); // '...a Fork of Stringy'
+$sentence = 'This is only a Fork of Stringy, take a look at the new features.';
+s($sentence)->extractText('Stringy'); // '...Fork of Stringy...'
 ```
 
 ##### first(int $n)

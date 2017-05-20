@@ -1077,13 +1077,14 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     return array(
         array('', '', '', ''),
         array('bar', 'foo', 'f[o]+', 'bar'),
+        array('//bar//', '/foo/', '/f[o]+/', '//bar//', 'msr', '#'),
         array('o bar', 'foo bar', 'f(o)o', '\1'),
         array('bar', 'foo bar', 'f[O]+\s', '', 'i'),
         array('foo', 'bar', '[[:alpha:]]{3}', 'foo'),
-        array('', '', '', '', 'msr', 'UTF-8'),
-        array('bàř', 'fòô ', 'f[òô]+\s', 'bàř', 'msr', 'UTF-8'),
-        array('fòô', 'fò', '(ò)', '\\1ô', 'msr', 'UTF-8'),
-        array('fòô', 'bàř', '[[:alpha:]]{3}', 'fòô', 'msr', 'UTF-8'),
+        array('', '', '', '', 'msr', '/', 'UTF-8'),
+        array('bàř', 'fòô ', 'f[òô]+\s', 'bàř', 'msr', '/', 'UTF-8'),
+        array('fòô', 'fò', '(ò)', '\\1ô', 'msr', '/', 'UTF-8'),
+        array('fòô', 'bàř', '[[:alpha:]]{3}', 'fòô', 'msr', '/', 'UTF-8'),
     );
   }
 
@@ -2234,6 +2235,36 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $testString = 'this is only a Fork of Stringy';
     $stringy = S::create($testString);
     self::assertSame('...a Fork of Stringy', (string)$stringy->extractText('Fork', 5), 'tested: ' . $testString);
+
+    // ----------------
+
+    $testString = 'This is only a Fork of Stringy, take a look at the new features.';
+    $stringy = S::create($testString);
+    self::assertSame('...Fork of Stringy...', (string)$stringy->extractText('Stringy', 15), 'tested: ' . $testString);
+
+    // ----------------
+
+    $testString = 'This is only a Fork of Stringy, take a look at the new features.';
+    $stringy = S::create($testString);
+    self::assertSame('...only a Fork of Stringy, take a...', (string)$stringy->extractText('Stringy'), 'tested: ' . $testString);
+
+    // ----------------
+
+    $testString = 'This is only a Fork of Stringy, take a look at the new features.';
+    $stringy = S::create($testString);
+    self::assertSame('This is only a Fork of Stringy...', (string)$stringy->extractText(), 'tested: ' . $testString);
+
+    // ----------------
+
+    $testString = 'This is only a Fork of Stringy, take a look at the new features.';
+    $stringy = S::create($testString);
+    self::assertSame('This...', (string)$stringy->extractText('', 0), 'tested: ' . $testString);
+
+    // ----------------
+
+    $testString = 'This is only a Fork of Stringy, take a look at the new features.';
+    $stringy = S::create($testString);
+    self::assertSame('...Stringy, take a look at the new features.', (string)$stringy->extractText('Stringy', 0), 'tested: ' . $testString);
   }
 
   /**
@@ -3912,12 +3943,13 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
    * @param        $pattern
    * @param        $replacement
    * @param string $options
+   * @param string $delimiter
    * @param null   $encoding
    */
-  public function testregexReplace($expected, $str, $pattern, $replacement, $options = 'msr', $encoding = null)
+  public function testregexReplace($expected, $str, $pattern, $replacement, $options = 'msr', $delimiter = '/', $encoding = null)
   {
     $stringy = S::create($str, $encoding);
-    $result = $stringy->regexReplace($pattern, $replacement, $options);
+    $result = $stringy->regexReplace($pattern, $replacement, $options, $delimiter);
     self::assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
