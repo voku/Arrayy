@@ -2284,6 +2284,25 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
                         ->toString();
       self::assertSame($testExpected, $result, 'tested: ' . $testString);
     }
+
+    // ----------------
+
+    $testArray = array(
+        'Yes. The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...flying in the wind. <strong>The fox is jumping in the garden</strong> when he...',
+        'The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.'      => '...in the wind. <strong>The fox is jumping in the garden</strong> when he is...',
+        'The fox is jumping in the garden when he is happy. But that is not the whole story.'                                      => '<strong>The fox is jumping in the garden</strong> when he is...',
+        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story.'                                 => 'Yes. <strong>The fox is jumping in the garden</strong> when he...',
+        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story of the garden story.'             => 'Yes. <strong>The fox is jumping in the garden</strong> when he is happy...',
+    );
+
+    $searchString = 'The fox is jumping in the garden';
+    foreach ($testArray as $testString => $testExpected) {
+      $stringy = S::create($testString);
+      $result = $stringy->extractText($searchString)
+                        ->replace($searchString, '<strong>' . $searchString . '</strong>')
+                        ->toString();
+      self::assertSame($testExpected, $result, 'tested: ' . $testString);
+    }
   }
 
   /**
