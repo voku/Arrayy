@@ -2269,17 +2269,19 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     // ----------------
 
     $testArray = array(
-      'Yes. The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...The fox is jumping in the <strong>garden</strong> when he is happy. But that...',
-      'The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...The fox is jumping in the <strong>garden</strong> when he is happy. But that...',
-      'The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...is jumping in the <strong>garden</strong> when he is happy...',
-      'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...fox is jumping in the <strong>garden</strong> when he is happy...',
-      'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story of the garden story.' => '...The fox is jumping in the <strong>garden</strong> when he is happy. But...',
+        'Yes. The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...The fox is jumping in the <strong>garden</strong> when he is happy. But that...',
+        'The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.'      => '...The fox is jumping in the <strong>garden</strong> when he is happy. But that...',
+        'The fox is jumping in the garden when he is happy. But that is not the whole story.'                                      => '...is jumping in the <strong>garden</strong> when he is happy...',
+        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story.'                                 => '...fox is jumping in the <strong>garden</strong> when he is happy...',
+        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story of the garden story.'             => '...The fox is jumping in the <strong>garden</strong> when he is happy. But...',
     );
 
     $searchString = 'garden';
     foreach ($testArray as $testString => $testExpected) {
       $stringy = S::create($testString);
-      $result = $stringy->extractText($searchString)->replace($searchString, '<strong>'. $searchString . '</strong>')->toString();
+      $result = $stringy->extractText($searchString)
+                        ->replace($searchString, '<strong>' . $searchString . '</strong>')
+                        ->toString();
       self::assertSame($testExpected, $result, 'tested: ' . $testString);
     }
   }
