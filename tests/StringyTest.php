@@ -2225,9 +2225,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         'A PHP string manipulation library with multibyte support. foobar Compatible with PHP 5.3+, PHP 7, and HHVM.'                               => '...with multibyte support. foobar Compatible with PHP 5...',
     );
 
-    foreach ($testArray as $testString => $testResult) {
+    foreach ($testArray as $testString => $testExpected) {
       $stringy = S::create($testString);
-      self::assertSame($testResult, (string)$stringy->extractText('foobar'), 'tested: ' . $testString);
+      self::assertSame($testExpected, (string)$stringy->extractText('foobar'), 'tested: ' . $testString);
     }
 
     // ----------------
@@ -2265,6 +2265,23 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $testString = 'This is only a Fork of Stringy, take a look at the new features.';
     $stringy = S::create($testString);
     self::assertSame('...Stringy, take a look at the new features.', (string)$stringy->extractText('Stringy', 0), 'tested: ' . $testString);
+
+    // ----------------
+
+    $testArray = array(
+      'Yes. The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...The fox is jumping in the <strong>garden</strong> when he is happy. But that...',
+      'The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...The fox is jumping in the <strong>garden</strong> when he is happy. But that...',
+      'The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...is jumping in the <strong>garden</strong> when he is happy...',
+      'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...fox is jumping in the <strong>garden</strong> when he is happy...',
+      'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story of the garden story.' => '...The fox is jumping in the <strong>garden</strong> when he is happy. But...',
+    );
+
+    $searchString = 'garden';
+    foreach ($testArray as $testString => $testExpected) {
+      $stringy = S::create($testString);
+      $result = $stringy->extractText($searchString)->replace($searchString, '<strong>'. $searchString . '</strong>')->toString();
+      self::assertSame($testExpected, $result, 'tested: ' . $testString);
+    }
   }
 
   /**
