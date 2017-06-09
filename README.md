@@ -180,7 +180,7 @@ $arrayy->Lars->lastname; // 'Moelleken'
 ```php
 $arrayy = new A(['Lars' => ['lastname' => 'Mueller']]);
 
-$arrayy->set('Lars.lastname');
+$arrayy->set('Lars.lastname', 'Moelleken');
 $arrayy->get('Lars.lastname'); // 'Moelleken'
 ```
 
