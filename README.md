@@ -123,7 +123,7 @@ in your composer.json file:
 
 ```json
 "require": {
-    "voku/arrayy": "~3.1"
+    "voku/arrayy": "~3.6"
 }
 ```
 
