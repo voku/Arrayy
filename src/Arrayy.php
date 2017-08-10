@@ -786,6 +786,37 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Create an new instance filled with values from an object.
+   *
+   * @param object $object
+   *
+   * @return static <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+   */
+  public static function createFromObjectVars($object)
+  {
+    return new static(self::objectToArray($object));
+  }
+
+  /**
+   * Convert a object into an array.
+   *
+   * @param object $object
+   *
+   * @return mixed
+   */
+  protected static function objectToArray($object)
+  {
+    if (!is_object($object)) {
+      return $object;
+    }
+
+    if (is_object($object)) {
+      $object = get_object_vars($object);
+    }
+    return array_map(array('self', 'objectToArray'), $object);
+  }
+
+  /**
    * Create an new Arrayy object via string.
    *
    * @param string      $str       <p>The input string.</p>
@@ -1395,6 +1426,42 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Get the current array from the "Arrayy"-object as object.
+   *
+   * @return \stdClass (object)
+   */
+  public function getObject()
+  {
+    return self::arrayToObject($this->getArray());
+  }
+
+  /**
+   * Convert an array into a object.
+   *
+   * @param array $array PHP array
+   *
+   * @return \stdClass (object)
+   */
+  protected static function arrayToObject(array $array = array())
+  {
+    $object = new \stdClass();
+
+    if (!is_array($array) || count($array) < 1) {
+      return $object;
+    }
+
+    foreach ($array as $name => $value) {
+      if (is_array($value)) {
+        $object->$name = self::arrayToObject($value);
+        continue;
+      }
+      $object->{$name} = $value;
+    }
+
+    return $object;
+  }
+
+  /**
    * Returns the values from a single column of the input array, identified by
    * the $columnKey, can be used to extract data-columns from multi-arrays.
    *
@@ -1586,7 +1653,28 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function implode($glue = '')
   {
-    return implode($glue, $this->array);
+    return self::implode_recursive($glue, $this->array);
+  }
+
+  /**
+   * @param string $glue
+   * @param string|array $pieces
+   *
+   * @return string
+   */
+  protected static function implode_recursive($glue = '', $pieces) {
+    if (is_array($pieces)) {
+      return implode(
+          $glue,
+          array_map(
+              array('self', 'implode_recursive'),
+              array_fill(0, count($pieces), $glue),
+              $pieces
+          )
+      );
+    }
+
+    return $pieces;
   }
 
   /**
@@ -1647,7 +1735,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   protected function internalGetArray(&$value)
   {
     if ($value instanceof self) {
-      $value &= $value->getArray();
+
+      $valueTmp = $value->getArray();
+      if (count($valueTmp) === 0) {
+        $value = array();
+      } else {
+        $value &= $valueTmp;
+      }
+
     } elseif ($value instanceof \JsonSerializable) {
       $value &= $value->jsonSerialize();
     }
@@ -2261,7 +2356,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if (func_num_args()) {
       $args = \array_merge(array(&$this->array), func_get_args());
-      call_user_func_array('array_push', $args);
+      if (Bootup::is_php('5.6')) {
+        /** @noinspection PhpLanguageLevelInspection */
+        array_push(...$args);
+      } else {
+        /** @noinspection ArgumentUnpackingCanBeUsedInspection */
+        call_user_func_array('array_push', $args);
+      }
     }
 
     return $this;
@@ -3175,7 +3276,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if (func_num_args()) {
       $args = \array_merge(array(&$this->array), func_get_args());
-      call_user_func_array('array_unshift', $args);
+      if (Bootup::is_php('5.6')) {
+        /** @noinspection PhpLanguageLevelInspection */
+        array_unshift(...$args);
+      } else {
+        /** @noinspection ArgumentUnpackingCanBeUsedInspection */
+        call_user_func_array('array_unshift', $args);
+      }
     }
 
     return $this;

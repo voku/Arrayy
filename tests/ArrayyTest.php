@@ -425,6 +425,12 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(0 => -9, 1 => 1, 2 => 2), '-9|1|2', '|'),
         array(array(0 => 1.18), '1.18'),
         array(array(3 => 'string', 'foo', 'lall'), 'string,foo,lall', ','),
+        array(
+            array(
+                3 => 'string', 'foo', 9 => array('lall', 'foo'),
+            ),
+            'string,foo,lall,foo'
+        ),
     );
   }
 
@@ -4371,6 +4377,20 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = A::create($array);
     $resultArrayy = A::createFromObject($arrayy);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testStaticCreateFromObjectVars(array $array)
+  {
+    $arrayy = A::create($array);
+    $object = (object)$array; // create "stdClass" from array
+    $resultArrayy = A::createFromObjectVars($object);
 
     self::assertImmutable($arrayy, $resultArrayy, $array, $array);
   }

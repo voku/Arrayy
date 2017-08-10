@@ -85,6 +85,7 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
                 1     => 'one',
                 'two' => 2,
                 3     => 'three',
+                4     => array('1', '2')
             ),
             self::TYPE_MIXED,
         ),
@@ -166,8 +167,9 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = $this->createArrayy($array);
     $current = current($array);
+    $array = $arrayy->getArray();
 
-    self::assertSame($current, current($arrayy->getArray()));
+    self::assertSame($current, current($array));
   }
 
   /**
@@ -210,6 +212,19 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     $found = $a->find($callable);
 
     self::assertSame('a', $found);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testGetObject(array $array)
+  {
+    $arrayy = $this->createArrayy($array);
+    $result = \Arrayy\Arrayy::createFromObjectVars($arrayy->getObject())->toArray();
+
+    self::assertEquals($array, $result, print_r($result, true));
   }
 
   /**
@@ -301,8 +316,11 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     $value = $arrayy->getRandom()->getArray();
 
     self::assertNotNull($value[0]);
-    /** @noinspection TypeUnsafeArraySearchInspection */
-    self::assertTrue(in_array($value[0], $arrayy->toArray()));
+
+    if (!$value instanceof \Arrayy\Arrayy) {
+      /** @noinspection TypeUnsafeArraySearchInspection */
+      self::assertTrue(in_array($value[0], $arrayy->toArray()));
+    }
   }
 
   /**
@@ -401,8 +419,10 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     $arrayy = $this->createArrayy($array);
     $value = $arrayy->getRandomValue();
 
-    /** @noinspection TypeUnsafeArraySearchInspection */
-    self::assertTrue(in_array($value, $array));
+    if (!$value instanceof \Arrayy\Arrayy) {
+      /** @noinspection TypeUnsafeArraySearchInspection */
+      self::assertTrue(in_array($value, $array));
+    }
   }
 
   /**
@@ -421,8 +441,10 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
 
     self::assertCount(2, $values);
     foreach ($values as $value) {
-      /** @noinspection TypeUnsafeArraySearchInspection */
-      self::assertTrue(in_array($value, $array));
+      if (!$value instanceof \Arrayy\Arrayy) {
+        /** @noinspection TypeUnsafeArraySearchInspection */
+        self::assertTrue(in_array($value, $array));
+      }
     }
   }
 
@@ -443,8 +465,10 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
     self::assertCount(1, $values);
     self::assertInternalType('array', $values);
     foreach ($values as $value) {
-      /** @noinspection TypeUnsafeArraySearchInspection */
-      self::assertTrue(in_array($value, $array));
+      if (!$value instanceof \Arrayy\Arrayy) {
+        /** @noinspection TypeUnsafeArraySearchInspection */
+        self::assertTrue(in_array($value, $array));
+      }
     }
   }
 
@@ -513,8 +537,9 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   {
     $arrayy = $this->createArrayy($array);
     $key = key($array);
+    $array = $arrayy->getArray();
 
-    self::assertSame($key, key($arrayy->getArray()));
+    self::assertSame($key, key($array));
   }
 
   /**
