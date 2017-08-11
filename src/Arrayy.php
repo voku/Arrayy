@@ -1664,11 +1664,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   protected static function implode_recursive($glue = '', $pieces) {
     if (is_array($pieces)) {
+      $pieces_count = count($pieces);
+
       return implode(
           $glue,
           array_map(
               array('self', 'implode_recursive'),
-              array_fill(0, count($pieces), $glue),
+              array_fill(0,  ($pieces_count > 0 ? $pieces_count : 1), $glue),
               $pieces
           )
       );
