@@ -4391,6 +4391,13 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $resultArrayy = A::createFromObjectVars($a);
 
     self::assertSame((array)$a, $resultArrayy->getArray());
+
+    // ---
+
+    $object = new stdClass();
+    $object->x = 42;
+    $arrayy = A::createFromObjectVars($object);
+    self::assertSame(array('x' => 42), $arrayy->getArray());
   }
 
   /**

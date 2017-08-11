@@ -123,7 +123,7 @@ in your composer.json file:
 
 ```json
 "require": {
-    "voku/arrayy": "~3.6"
+    "voku/arrayy": "3.*"
 }
 ```
 
@@ -303,6 +303,16 @@ Create an new instance filled with values from an object that have implemented A
 ```php
 $object = A::create(1, 'foo');
 $arrayy = A::createFromObject($object); // Arrayy[1, 'foo']
+```
+
+##### createFromObjectVars(\object $object) : Arrayy (Immutable)
+
+Create an new instance filled with values from an object.
+
+```php
+$object = new stdClass();
+$object->x = 42;
+$arrayy = A::createFromObjectVars($object); // Arrayy['x' => 42]
 ```
 
 ##### createWithRange() : Arrayy (Immutable)

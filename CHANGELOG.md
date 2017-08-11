@@ -1,5 +1,10 @@
 # Changelog
 
+### 3.7.0 (11.08.2017)
+* [+]: add "Arrayy::createFromObjectVars()"
+* [+]: fix internal __toString() / Arrayy->implode()
+* [+]: fix in_array() usage for multidimensional array
+
 ### 3.6.0 (09.05.2017)
 
 * [+]: add flag-parameter for "Arrayy->filter()" + polyfill for old php versions (< 5.6 || HHVM) 
