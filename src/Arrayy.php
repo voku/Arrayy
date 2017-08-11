@@ -1670,7 +1670,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
           $glue,
           array_map(
               array('self', 'implode_recursive'),
-              array_fill(0,  ($pieces_count > 0 ? $pieces_count : 1), $glue),
+              array_fill(0, ($pieces_count > 0 ? $pieces_count : 1), $glue),
               $pieces
           )
       );
