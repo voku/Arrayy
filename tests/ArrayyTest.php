@@ -4381,18 +4381,16 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertImmutable($arrayy, $resultArrayy, $array, $array);
   }
 
-  /**
-   * @dataProvider simpleArrayProvider
-   *
-   * @param array $array
-   */
-  public function testStaticCreateFromObjectVars(array $array)
+  public function testStaticCreateFromObjectVars()
   {
-    $arrayy = A::create($array);
-    $object = (object)$array; // create "stdClass" from array
-    $resultArrayy = A::createFromObjectVars($object);
+    $a = new stdClass();
+    $a->x = 42;
+    $a->y = array('lall', 'foo');
+    $a->z = 'bar';
 
-    self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+    $resultArrayy = A::createFromObjectVars($a);
+
+    self::assertSame((array)$a, $resultArrayy->getArray());
   }
 
   /**

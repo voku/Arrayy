@@ -2356,13 +2356,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if (func_num_args()) {
       $args = \array_merge(array(&$this->array), func_get_args());
-      if (Bootup::is_php('5.6')) {
-        /** @noinspection PhpLanguageLevelInspection */
-        array_push(...$args);
-      } else {
-        /** @noinspection ArgumentUnpackingCanBeUsedInspection */
-        call_user_func_array('array_push', $args);
-      }
+      call_user_func_array('array_push', $args);
     }
 
     return $this;
@@ -3276,13 +3270,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if (func_num_args()) {
       $args = \array_merge(array(&$this->array), func_get_args());
-      if (Bootup::is_php('5.6')) {
-        /** @noinspection PhpLanguageLevelInspection */
-        array_unshift(...$args);
-      } else {
-        /** @noinspection ArgumentUnpackingCanBeUsedInspection */
-        call_user_func_array('array_unshift', $args);
-      }
+      call_user_func_array('array_unshift', $args);
     }
 
     return $this;
