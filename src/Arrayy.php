@@ -1742,11 +1742,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       if (count($valueTmp) === 0) {
         $value = array();
       } else {
-        $value &= $valueTmp;
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        $value = &$valueTmp;
       }
 
     } elseif ($value instanceof \JsonSerializable) {
-      $value &= $value->jsonSerialize();
+      /** @noinspection PhpUnusedLocalVariableInspection */
+      $value = &$value->jsonSerialize();
     }
   }
 
