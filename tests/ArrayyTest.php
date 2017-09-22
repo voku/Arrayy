@@ -40,6 +40,144 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @return array
+   */
+  public function appendToEachKeyProvider()
+  {
+    $a = new stdClass();
+    $a->x = 42;
+
+    $b = new stdClass();
+    $b->y = 42;
+
+    $c = new stdClass();
+    $c->x = 43;
+
+    return array(
+        array(array(), array()),
+        array(array(0 => false), array('foo_0' => false)),
+        array(array(0 => true), array('foo_0' => true)),
+        array(array(0 => -9, 1 => -9), array('foo_0' => -9, 'foo_1' => -9)),
+        array(array(0 => -9, 1 => 1, 2 => 2), array('foo_0' => -9, 'foo_1' => 1, 'foo_2' => 2)),
+        array(array(0 => 1.18, 1 => 1.5), array('foo_0' => 1.18, 'foo_1' => 1.5)),
+        array(array('lall' => 'foo'), array('foo_lall' => 'foo')),
+        array(
+            array(
+                3 => 'string',
+                4 => 'foo',
+                5 => 'lall',
+                6 => 'foo',
+            ),
+            array(
+                'foo_3' => 'string',
+                'foo_4' => 'foo',
+                'foo_5' => 'lall',
+                'foo_6' => 'foo',
+            ),
+        ),
+        array(
+            array(
+                2 => 1,
+                3 => 2,
+                4 => 2,
+            ),
+            array(
+                'foo_2' => 1,
+                'foo_3' => 2,
+                'foo_4' => 2,
+            ),
+        ),
+        array(
+            array(
+                $a,
+                $a,
+                $b,
+                $b,
+                $c,
+                $c,
+            ),
+            array(
+                'foo_0' => $a,
+                'foo_1' => $a,
+                'foo_2' => $b,
+                'foo_3' => $b,
+                'foo_4' => $c,
+                'foo_5' => $c,
+            ),
+        ),
+    );
+  }
+
+  /**
+   * @return array
+   */
+  public function appendToEachValueProvider()
+  {
+    $a = new stdClass();
+    $a->x = 42;
+
+    $b = new stdClass();
+    $b->y = 42;
+
+    $c = new stdClass();
+    $c->x = 43;
+
+    return array(
+        array(array(), array()),
+        array(array(0 => false), array(0 => 'foo_')),
+        array(array(0 => true), array(0 => 'foo_1')),
+        array(array(0 => -9, 1 => -9), array(0 => 'foo_-9', 1 => 'foo_-9')),
+        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => 'foo_-9', 1 => 'foo_1', 2 => 'foo_2')),
+        array(array(0 => 1.18, 1 => 1.5), array(0 => 'foo_1.18', 1 => 'foo_1.5')),
+        array(array('lall' => 'foo'), array('lall' => 'foo_foo')),
+        array(
+            array(
+                3 => 'string',
+                4 => 'foo',
+                5 => 'lall',
+                6 => 'foo',
+            ),
+            array(
+                3 => 'foo_string',
+                4 => 'foo_foo',
+                5 => 'foo_lall',
+                6 => 'foo_foo',
+            ),
+        ),
+        array(
+            array(
+                2 => 1,
+                3 => 2,
+                4 => 2,
+            ),
+            array(
+                2 => 'foo_1',
+                3 => 'foo_2',
+                4 => 'foo_2',
+            ),
+        ),
+        array(
+            array(
+                $a,
+                $a,
+                $b,
+                $b,
+                $c,
+                $c,
+            ),
+            array(
+                $a,
+                $a,
+                $b,
+                $b,
+                $c,
+                $c,
+            ),
+        ),
+    );
+  }
+
+  /**
    * Asserts that a variable is of a Arrayy instance.
    *
    * @param mixed $actual
@@ -427,9 +565,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(3 => 'string', 'foo', 'lall'), 'string,foo,lall', ','),
         array(
             array(
-                3 => 'string', 'foo', 9 => array('lall', 'foo'),
+                3 => 'string',
+                'foo',
+                9 => array('lall', 'foo'),
             ),
-            'string,foo,lall,foo'
+            'string,foo,lall,foo',
         ),
     );
   }
@@ -1009,6 +1149,144 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
+  public function prependToEachKeyProvider()
+  {
+    $a = new stdClass();
+    $a->x = 42;
+
+    $b = new stdClass();
+    $b->y = 42;
+
+    $c = new stdClass();
+    $c->x = 43;
+
+    return array(
+        array(array(), array()),
+        array(array(0 => false), array('0_foo' => false)),
+        array(array(0 => true), array('0_foo' => true)),
+        array(array(0 => -9, 1 => -9), array('0_foo' => -9, '1_foo' => -9)),
+        array(array(0 => -9, 1 => 1, 2 => 2), array('0_foo' => -9, '1_foo' => 1, '2_foo' => 2)),
+        array(array(0 => 1.18, 1 => 1.5), array('0_foo' => 1.18, '1_foo' => 1.5)),
+        array(array('lall' => 'foo'), array('lall_foo' => 'foo')),
+        array(
+            array(
+                3 => 'string',
+                4 => 'foo',
+                5 => 'lall',
+                6 => 'foo',
+            ),
+            array(
+                '3_foo' => 'string',
+                '4_foo' => 'foo',
+                '5_foo' => 'lall',
+                '6_foo' => 'foo',
+            ),
+        ),
+        array(
+            array(
+                2 => 1,
+                3 => 2,
+                4 => 2,
+            ),
+            array(
+                '2_foo' => 1,
+                '3_foo' => 2,
+                '4_foo' => 2,
+            ),
+        ),
+        array(
+            array(
+                $a,
+                $a,
+                $b,
+                $b,
+                $c,
+                $c,
+            ),
+            array(
+                '0_foo' => $a,
+                '1_foo' => $a,
+                '2_foo' => $b,
+                '3_foo' => $b,
+                '4_foo' => $c,
+                '5_foo' => $c,
+            ),
+        ),
+    );
+  }
+
+  /**
+   * @return array
+   */
+  public function prependToEachValueProvider()
+  {
+    $a = new stdClass();
+    $a->x = 42;
+
+    $b = new stdClass();
+    $b->y = 42;
+
+    $c = new stdClass();
+    $c->x = 43;
+
+    return array(
+        array(array(), array()),
+        array(array(0 => false), array(0 => '_foo')),
+        array(array(0 => true), array(0 => '1_foo')),
+        array(array(0 => -9, 1 => -9), array(0 => '-9_foo', 1 => '-9_foo')),
+        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => '-9_foo', 1 => '1_foo', 2 => '2_foo')),
+        array(array(0 => 1.18, 1 => 1.5), array(0 => '1.18_foo', 1 => '1.5_foo')),
+        array(array('lall' => 'foo'), array('lall' => 'foo_foo')),
+        array(
+            array(
+                3 => 'string',
+                4 => 'foo',
+                5 => 'lall',
+                6 => 'foo',
+            ),
+            array(
+                3 => 'string_foo',
+                4 => 'foo_foo',
+                5 => 'lall_foo',
+                6 => 'foo_foo',
+            ),
+        ),
+        array(
+            array(
+                2 => 1,
+                3 => 2,
+                4 => 2,
+            ),
+            array(
+                2 => '1_foo',
+                3 => '2_foo',
+                4 => '2_foo',
+            ),
+        ),
+        array(
+            array(
+                $a,
+                $a,
+                $b,
+                $b,
+                $c,
+                $c,
+            ),
+            array(
+                $a,
+                $a,
+                $b,
+                $b,
+                $c,
+                $c,
+            ),
+        ),
+    );
+  }
+
+  /**
+   * @return array
+   */
   public function randomProvider()
   {
     return array(
@@ -1337,6 +1615,32 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = A::create($array)->append($value);
 
     self::assertSame($result, $arrayy->getArray());
+  }
+
+  /**
+   * @dataProvider appendToEachKeyProvider
+   *
+   * @param array $array
+   * @param array $result
+   */
+  public function testAppendToEachKey($array, $result)
+  {
+    $resultTmp = A::create($array)->appendToEachKey('foo_');
+
+    self::assertEquals($result, $resultTmp->toArray());
+  }
+
+  /**
+   * @dataProvider appendToEachValueProvider
+   *
+   * @param array $array
+   * @param array $result
+   */
+  public function testAppendToEachValue($array, $result)
+  {
+    $resultTmp = A::create($array)->appendToEachValue('foo_');
+
+    self::assertEquals($result, $resultTmp->toArray());
   }
 
   /**
@@ -3293,6 +3597,32 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @dataProvider prependToEachKeyProvider
+   *
+   * @param array $array
+   * @param array $result
+   */
+  public function testPrependToEachKey($array, $result)
+  {
+    $resultTmp = A::create($array)->prependToEachKey('_foo');
+
+    self::assertEquals($result, $resultTmp->toArray());
+  }
+
+  /**
+   * @dataProvider prependToEachValueProvider
+   *
+   * @param array $array
+   * @param array $result
+   */
+  public function testPrependToEachValue($array, $result)
+  {
+    $resultTmp = A::create($array)->prependToEachValue('_foo');
+
+    self::assertEquals($result, $resultTmp->toArray());
+  }
+
+  /**
    * @dataProvider simpleArrayProvider
    *
    * @param array $array
@@ -4732,5 +5062,4 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         ),
     );
   }
-
 }

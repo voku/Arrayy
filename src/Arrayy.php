@@ -141,15 +141,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Append a value to the current array.
+   * Append a (key) + value to the current array.
    *
    * @param mixed $value
+   * @param mixed $key
    *
    * @return static <p>(Mutable) Return this Arrayy object, with the appended values.</p>
    */
-  public function append($value)
+  public function append($value, $key = null)
   {
-    $this->array[] = $value;
+    if ($key !== null) {
+      $this->array[$key] = $value;
+    } else {
+      $this->array[] = $value;
+    }
 
     return $this;
   }
@@ -184,22 +189,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function count()
   {
     return $this->size();
-  }
-
-  /**
-   * Counts all the values of an array
-   *
-   * @link http://php.net/manual/en/function.array-count-values.php
-   *
-   * @return static <p>
-   *                (Immutable)
-   *                An associative Arrayy-object of values from input as
-   *                keys and their count as value.
-   *                </p>
-   */
-  public function countValues()
-  {
-    return new static(\array_count_values($this->array));
   }
 
   /**
@@ -491,6 +480,80 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Add a suffix to each key.
+   *
+   * @param string $prefix
+   *
+   * @return static <p>(Immutable) Return an Arrayy object, with the prefixed keys.</p>
+   */
+  public function appendToEachKey($prefix)
+  {
+    $result = array();
+    foreach ($this->array as $key => $item) {
+      if ($item instanceof self) {
+        $result[$prefix . $key] = $item->appendToEachKey($prefix);
+      } else if (is_array($item)) {
+        $result[$prefix . $key] = self::create($item)->appendToEachKey($prefix)->toArray();
+      } else {
+        $result[$prefix . $key] = $item;
+      }
+    }
+
+    return self::create($result);
+  }
+
+  /**
+   * Add a prefix to each value.
+   *
+   * @param mixed $prefix
+   *
+   * @return static <p>(Immutable) Return an Arrayy object, with the prefixed values.</p>
+   */
+  public function appendToEachValue($prefix)
+  {
+    $result = array();
+    foreach ($this->array as $key => $item) {
+      if ($item instanceof self) {
+        $result[$key] = $item->appendToEachValue($prefix);
+      } else if (is_array($item)) {
+        $result[$key] = self::create($item)->appendToEachValue($prefix)->toArray();
+      } else if (is_object($item)) {
+        $result[$key] = $item;
+      } else {
+        $result[$key] = $prefix . $item;
+      }
+    }
+
+    return self::create($result);
+  }
+
+  /**
+   * Convert an array into a object.
+   *
+   * @param array $array PHP array
+   *
+   * @return \stdClass (object)
+   */
+  protected static function arrayToObject(array $array = array())
+  {
+    $object = new \stdClass();
+
+    if (!is_array($array) || count($array) < 1) {
+      return $object;
+    }
+
+    foreach ($array as $name => $value) {
+      if (is_array($value)) {
+        $object->$name = self::arrayToObject($value);
+        continue;
+      }
+      $object->{$name} = $value;
+    }
+
+    return $object;
+  }
+
+  /**
    * Sort an array in reverse order and maintain index association.
    *
    * @return static <p>(Mutable) Return this Arrayy object.</p>
@@ -726,6 +789,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Counts all the values of an array
+   *
+   * @link http://php.net/manual/en/function.array-count-values.php
+   *
+   * @return static <p>
+   *                (Immutable)
+   *                An associative Arrayy-object of values from input as
+   *                keys and their count as value.
+   *                </p>
+   */
+  public function countValues()
+  {
+    return new static(\array_count_values($this->array));
+  }
+
+  /**
    * Creates an Arrayy object.
    *
    * @param array $array
@@ -795,25 +874,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public static function createFromObjectVars($object)
   {
     return new static(self::objectToArray($object));
-  }
-
-  /**
-   * Convert a object into an array.
-   *
-   * @param object $object
-   *
-   * @return mixed
-   */
-  protected static function objectToArray($object)
-  {
-    if (!is_object($object)) {
-      return $object;
-    }
-
-    if (is_object($object)) {
-      $object = get_object_vars($object);
-    }
-    return array_map(array('self', 'objectToArray'), $object);
   }
 
   /**
@@ -1426,42 +1486,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Get the current array from the "Arrayy"-object as object.
-   *
-   * @return \stdClass (object)
-   */
-  public function getObject()
-  {
-    return self::arrayToObject($this->getArray());
-  }
-
-  /**
-   * Convert an array into a object.
-   *
-   * @param array $array PHP array
-   *
-   * @return \stdClass (object)
-   */
-  protected static function arrayToObject(array $array = array())
-  {
-    $object = new \stdClass();
-
-    if (!is_array($array) || count($array) < 1) {
-      return $object;
-    }
-
-    foreach ($array as $name => $value) {
-      if (is_array($value)) {
-        $object->$name = self::arrayToObject($value);
-        continue;
-      }
-      $object->{$name} = $value;
-    }
-
-    return $object;
-  }
-
-  /**
    * Returns the values from a single column of the input array, identified by
    * the $columnKey, can be used to extract data-columns from multi-arrays.
    *
@@ -1520,6 +1544,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function getKeys()
   {
     return $this->keys();
+  }
+
+  /**
+   * Get the current array from the "Arrayy"-object as object.
+   *
+   * @return \stdClass (object)
+   */
+  public function getObject()
+  {
+    return self::arrayToObject($this->getArray());
   }
 
   /**
@@ -1657,12 +1691,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * @param string $glue
+   * @param string       $glue
    * @param string|array $pieces
    *
    * @return string
    */
-  protected static function implode_recursive($glue = '', $pieces) {
+  protected static function implode_recursive($glue = '', $pieces)
+  {
     if (is_array($pieces)) {
       $pieces_count = count($pieces);
 
@@ -2293,6 +2328,26 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Convert a object into an array.
+   *
+   * @param object $object
+   *
+   * @return mixed
+   */
+  protected static function objectToArray($object)
+  {
+    if (!is_object($object)) {
+      return $object;
+    }
+
+    if (is_object($object)) {
+      $object = get_object_vars($object);
+    }
+
+    return array_map(array('self', 'objectToArray'), $object);
+  }
+
+  /**
    * Get a subset of the items from the given array.
    *
    * @param mixed[] $keys
@@ -2332,7 +2387,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Prepend a value to the current array.
+   * Prepend a (key) + value to the current array.
    *
    * @param mixed $value
    * @param mixed $key
@@ -2349,6 +2404,55 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     return $this;
+  }
+
+  /**
+   * Add a suffix to each key.
+   *
+   * @param string $suffix
+   *
+   * @return static <p>(Immutable) Return an Arrayy object, with the prepended keys.</p>
+   */
+  public function prependToEachKey($suffix)
+  {
+    $result = array();
+    foreach ($this->array as $key => $item) {
+      if ($item instanceof self) {
+        $result[$key] = $item->prependToEachKey($suffix);
+      } else if (is_array($item)) {
+        $result[$key] = self::create($item)->prependToEachKey($suffix)->toArray();
+      } else {
+        $result[$key . $suffix] = $item;
+      }
+
+    }
+
+    return self::create($result);
+  }
+
+  /**
+   * Add a suffix to each value.
+   *
+   * @param mixed $suffix
+   *
+   * @return static <p>(Immutable) Return an Arrayy object, with the prepended values.</p>
+   */
+  public function prependToEachValue($suffix)
+  {
+    $result = array();
+    foreach ($this->array as $key => $item) {
+      if ($item instanceof self) {
+        $result[$key] = $item->prependToEachValue($suffix);
+      } else if (is_array($item)) {
+        $result[$key] = self::create($item)->prependToEachValue($suffix)->toArray();
+      } else if (is_object($item)) {
+        $result[$key] = $item;
+      } else {
+        $result[$key] = $item . $suffix;
+      }
+    }
+
+    return self::create($result);
   }
 
   /**
