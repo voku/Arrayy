@@ -1,5 +1,8 @@
 # Changelog
 
+### 3.8.0 (23.09.2017)
+[+]: add some pre- / append methods + tests
+
 ### 3.7.0 (11.08.2017)
 * [+]: add "Arrayy::createFromObjectVars()"
 * [+]: fix internal __toString() / Arrayy->implode()
