@@ -2996,13 +2996,31 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Shuffle the current array.
    *
+   * @param bool $secure <p>using a CSPRNG | @link https://paragonie.com/b/JvICXzh_jhLyt4y3</p>
+   *
    * @return static <p>(Immutable)</p>
    */
-  public function shuffle()
+  public function shuffle($secure = false)
   {
     $array = $this->array;
 
-    shuffle($array);
+    if ($secure !== true) {
+      \shuffle($array);
+    } else {
+      $size = \count($array);
+      $keys = \array_keys($array);
+      for ($i = $size - 1; $i > 0; --$i) {
+        $r = \random_int(0, $i);
+        if ($r !== $i) {
+          $temp = $array[$keys[$r]];
+          $array[$keys[$r]] = $array[$keys[$i]];
+          $array[$keys[$i]] = $temp;
+        }
+      }
+
+      // Reset indices
+      $array = \array_values($array);
+    }
 
     return static::create($array);
   }

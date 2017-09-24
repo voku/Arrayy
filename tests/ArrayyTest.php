@@ -4354,6 +4354,13 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     self::assertTrue(in_array('bar', $arrayy->getArray(), true));
     self::assertTrue(in_array('foo', $arrayy->getArray(), true));
+
+    // ---
+
+    $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->shuffle(true);
+
+    self::assertTrue(in_array('bar', $arrayy->getArray(), true));
+    self::assertTrue(in_array('foo', $arrayy->getArray(), true));
   }
 
   public function testSimpleAt()
