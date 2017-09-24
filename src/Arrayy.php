@@ -492,7 +492,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     foreach ($this->array as $key => $item) {
       if ($item instanceof self) {
         $result[$prefix . $key] = $item->appendToEachKey($prefix);
-      } else if (is_array($item)) {
+      } elseif (is_array($item)) {
         $result[$prefix . $key] = self::create($item)->appendToEachKey($prefix)->toArray();
       } else {
         $result[$prefix . $key] = $item;
@@ -515,9 +515,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     foreach ($this->array as $key => $item) {
       if ($item instanceof self) {
         $result[$key] = $item->appendToEachValue($prefix);
-      } else if (is_array($item)) {
+      } elseif (is_array($item)) {
         $result[$key] = self::create($item)->appendToEachValue($prefix)->toArray();
-      } else if (is_object($item)) {
+      } elseif (is_object($item)) {
         $result[$key] = $item;
       } else {
         $result[$key] = $prefix . $item;
@@ -2419,7 +2419,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     foreach ($this->array as $key => $item) {
       if ($item instanceof self) {
         $result[$key] = $item->prependToEachKey($suffix);
-      } else if (is_array($item)) {
+      } elseif (is_array($item)) {
         $result[$key] = self::create($item)->prependToEachKey($suffix)->toArray();
       } else {
         $result[$key . $suffix] = $item;
@@ -2443,9 +2443,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     foreach ($this->array as $key => $item) {
       if ($item instanceof self) {
         $result[$key] = $item->prependToEachValue($suffix);
-      } else if (is_array($item)) {
+      } elseif (is_array($item)) {
         $result[$key] = self::create($item)->prependToEachValue($suffix)->toArray();
-      } else if (is_object($item)) {
+      } elseif (is_object($item)) {
         $result[$key] = $item;
       } else {
         $result[$key] = $item . $suffix;
