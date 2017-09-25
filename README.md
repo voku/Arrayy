@@ -378,7 +378,7 @@ isset($arrayy['fòô']); // true
 ##### "simple loop with an Arrayy-object"
  
 ```php
-$arrayy = a(['fòô' => 'bàř'];
+$arrayy = a(['fòô' => 'bàř']);
 foreach ($arrayy) as $key => $value) {
   echo $key . ' | ' . $value; // fòô | bàř
 }
@@ -591,7 +591,7 @@ based on the value of a particular property within that.
 $array = [
   0 => ['id' => 123, 'name' => 'foo', 'group' => 'primary', 'value' => 123456, 'when' => '2014-01-01'],
   1 => ['id' => 456, 'name' => 'bar', 'group' => 'primary', 'value' => 1468, 'when' => '2014-07-15'],
-};        
+];        
 a($array)->filterBy('name', 'foo'); // Arrayy[0 => ['id' => 123, 'name' => 'foo', 'group' => 'primary', 'value' => 123456, 'when' => '2014-01-01']]
 ```
 
