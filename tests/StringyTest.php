@@ -1432,7 +1432,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         array('foo-bar', ' foo  bar '),
         array('foo-bar', 'foo -.-"-...bar'),
         array('another-und-foo-bar', 'another..& foo -.-"-...bar'),
-        array('foo-d-bar', " Foo d'Bar "),
+        array('foo-dbar', " Foo d'Bar "),
         array('a-string-with-dashes', 'A string-with-dashes'),
         array('using-strings-like-foo-bar', 'Using strings like fòô bàř'),
         array('numbers-1234', 'numbers 1234'),
