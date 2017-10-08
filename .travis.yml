@@ -1,13 +1,32 @@
+dist: precise
+
 language: php
+
 sudo: false
 
 php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
   - hhvm
+  - nightly
+
+git:
+  depth: 2
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: hhvm
+  include:
+    - php: 5.3
+    - php: 5.4
+    - php: 5.5
+    - php: 5.6
+    - php: 7.0
+    - php: 7.1
+    - php: 7.2
 
 before_script:
   - php --version
