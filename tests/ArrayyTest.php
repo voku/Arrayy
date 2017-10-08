@@ -250,6 +250,28 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
+  public function containsCaseInsensitiveProviderRecursive()
+  {
+    return array(
+        array(array(), null, false),
+        array(array(), false, false),
+        array(array(0 => false), false, true),
+        array(array(0 => true), true, true),
+        array(array(0 => array(-9)), -9, true),
+        array(array(1.18), 1.18, true),
+        array(array(array(1.18)), 1.17, false),
+        array(array('string', array('💩')), '💩', true),
+        array(array(' ', array('É')), 'é', true),
+        array(array('string', 'foo'), 'foo', true),
+        array(array('string', 'Foo', array('lall')), 'foo', true),
+        array(array('string', 'foo123'), 'foo', false),
+        array(array('String', array('foo123')), 'foo', false),
+    );
+  }
+
+  /**
+   * @return array
+   */
   public function containsCaseInsensitiveProvider()
   {
     return array(
@@ -266,6 +288,24 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array('string', 'Foo'), 'foo', true),
         array(array('string', 'foo123'), 'foo', false),
         array(array('String', 'foo123'), 'foo', false),
+    );
+  }
+
+  /**
+   * @return array
+   */
+  public function containsProviderRecursive()
+  {
+    return array(
+        array(array(), null, false),
+        array(array(), false, false),
+        array(array(0 => false), false, true),
+        array(array(0 => true), true, true),
+        array(array(0 => -8, array(0 => -9)), -9, true),
+        array(array(1.18), 1.18, true),
+        array(array(1.18), 1.17, false),
+        array(array('string', array('foo')), 'foo', true),
+        array(array('string', array('foo123')), 'foo', false),
     );
   }
 
@@ -302,6 +342,25 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         array(array(1.18), 1),
         array(array(1.18, 1.89), 2),
         array(array('string', 'foo'), 2),
+        array(array('string', 'foo123'), 2),
+    );
+  }
+
+  /**
+   * @return array
+   */
+  public function countProviderRecursive()
+  {
+    return array(
+        array(array(), 0),
+        array(array(null), 1),
+        array(array(0 => false), 1),
+        array(array(0 => true), 1),
+        array(array(0 => -9, 1 => array(-8, -7)), 4),
+        array(array(0 => -9, -8, -7, 1.32), 4),
+        array(array(array(1.18)), 2),
+        array(array(1.18, 1.89), 2),
+        array(array('string', array('foo', 'lall')), 4),
         array(array('string', 'foo123'), 2),
     );
   }
@@ -552,10 +611,33 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  public function implodeProvider()
+  public function implodeKeysProvider()
   {
     return array(
         array(array(), ''),
+        array(array(0 => false), '0'),
+        array(array(1 => true), '1'),
+        array(array(-9 => -9), '-9', '|'),
+        array(array(-9 => -9, 1 => 1, 2 => 2), '-9|1|2', '|'),
+        array(array(1 => 1.18), '1'),
+        array(array('string' => 'string', 'foo' => 'foo', 0 => 'lall'), 'string,foo,0', ','),
+        array(
+            array(
+                'string1' => 'string2',
+                0 => 'foo',
+                9 => array('9_1' => 'lall', '9_2' => 'foo', 'string1' => 'string3'),
+            ),
+            'string1,0,9,9_1,9_2,string1',
+        ),
+    );
+  }
+
+  /**
+   * @return array
+   */
+  public function implodeProvider()
+  {
+    return array(
         array(array(), ''),
         array(array(0 => false), ''),
         array(array(0 => true), '1'),
@@ -1907,6 +1989,22 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
 
     self::assertSame($expected, $arrayy->contains($value));
     self::assertSame($expected, $arrayy->containsValue($value)); // alias
+    self::assertSame($expected, $arrayy->containsValueRecursive($value)); // alias
+  }
+
+  /**
+   * @dataProvider containsProviderRecursive()
+   *
+   * @param array $array
+   * @param mixed $value
+   * @param       $expected
+   */
+  public function testContainsRecursive($array, $value, $expected)
+  {
+    $arrayy = new A($array);
+
+    self::assertSame($expected, $arrayy->contains($value, true));
+    self::assertSame($expected, $arrayy->containsValueRecursive($value)); // alias
   }
 
   /**
@@ -1921,24 +2019,69 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     $arrayy = new A($array);
 
     self::assertSame($expected, $arrayy->containsCaseInsensitive($value));
+    self::assertSame($expected, $arrayy->containsCaseInsensitive($value, true));
+  }
+
+
+  /**
+   * @dataProvider containsCaseInsensitiveProviderRecursive()
+   *
+   * @param array $array
+   * @param mixed $value
+   * @param       $expected
+   */
+  public function testContainsCaseInsensitiveRecursive($array, $value, $expected)
+  {
+    $arrayy = new A($array);
+
+    self::assertSame($expected, $arrayy->containsCaseInsensitive($value, true), 'tested: ' . print_r($value, true));
   }
 
   public function testContainsKeys()
   {
-    $this->assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array('a', 'b')));
-    $this->assertFalse(A::create(array('a' => 0, 'b' => 1, 'd' => 2))->containsKeys(array('a', 'b', 'c')));
-    $this->assertTrue(A::create(array())->containsKeys(array()));
-    $this->assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array()));
-    $this->assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c')));
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array('a', 'b')));
+    self::assertFalse(A::create(array('a' => 0, 'b' => 1, 'd' => 2))->containsKeys(array('a', 'b', 'c')));
+    self::assertTrue(A::create(array())->containsKeys(array()));
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array()));
+    self::assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c')));
+  }
+
+  public function testContainsKeysRecursive()
+  {
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeysRecursive(array('a', 'b', 'c')));
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeysRecursive(array('a', 'b')));
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => array(2))))->containsKeysRecursive(array('a', 'b', 'c')));
+    self::assertFalse(A::create(array('a' => 0, 'b' => 1, array('d' => 2)))->containsKeysRecursive(array('a', 'b', 'c')));
+    self::assertTrue(A::create(array())->containsKeysRecursive(array()));
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeysRecursive(array()));
+    self::assertFalse(A::create(array())->containsKeysRecursive(array('a', 'b', 'c')));
+
+    // ---
+
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeys(array('a', 'b', 'c'), true));
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeys(array('a', 'b'), true));
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => array(2))))->containsKeys(array('a', 'b', 'c'), true));
+    self::assertFalse(A::create(array('a' => 0, 'b' => 1, array('d' => 2)))->containsKeys(array('a', 'b', 'c'), true));
+    self::assertTrue(A::create(array())->containsKeys(array(), true));
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeys(array(), true));
+    self::assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c'), true));
+
+    // ---
+
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array('a', 'b'), true));
+    self::assertFalse(A::create(array('a' => 0, 'b' => 1, 'd' => 2))->containsKeys(array('a', 'b', 'c'), true));
+    self::assertTrue(A::create(array())->containsKeys(array(), true));
+    self::assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array(), true));
+    self::assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c'), true));
   }
 
   public function testContainsValues()
   {
-    $this->assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array('a', 'b')));
-    $this->assertFalse(A::create(array('a', 'b', 'd'))->containsValues(array('a', 'b', 'c')));
-    $this->assertTrue(A::create(array())->containsValues(array()));
-    $this->assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array()));
-    $this->assertFalse(A::create(array())->containsValues(array('a', 'b', 'c')));
+    self::assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array('a', 'b')));
+    self::assertFalse(A::create(array('a', 'b', 'd'))->containsValues(array('a', 'b', 'c')));
+    self::assertTrue(A::create(array())->containsValues(array()));
+    self::assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array()));
+    self::assertFalse(A::create(array())->containsValues(array('a', 'b', 'c')));
   }
 
   /**
@@ -1954,6 +2097,23 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertSame($expected, $arrayy->count());
     self::assertSame($expected, $arrayy->size());
     self::assertSame($expected, $arrayy->length());
+  }
+
+
+  /**
+   * @dataProvider countProviderRecursive()
+   *
+   * @param array $array
+   * @param       $expected
+   */
+  public function testCountRecursive($array, $expected)
+  {
+    $arrayy = new A($array);
+
+    self::assertSame($expected, $arrayy->count(COUNT_RECURSIVE));
+    self::assertSame($expected, $arrayy->size(COUNT_RECURSIVE));
+    self::assertSame($expected, $arrayy->sizeRecursive());
+    self::assertSame($expected, $arrayy->length(COUNT_RECURSIVE));
   }
 
   public function testCountValues()
@@ -2622,6 +2782,20 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @dataProvider implodeKeysProvider()
+   *
+   * @param $array
+   * @param $result
+   * @param $with
+   */
+  public function testImplodeKeys($array, $result, $with = ',')
+  {
+    $string = A::create($array)->implodeKeys($with);
+
+    self::assertSame($result, $string);
+  }
+
+  /**
    * @dataProvider implodeProvider()
    *
    * @param $array
@@ -2729,7 +2903,7 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
         'lall' => 'test',
         'test' => 'lall',
     );
-    $array10 = array('lall' => array('test',),);
+    $array10 = array('lall' => array(0 => 'test',),);
 
     self::assertFalse(A::create($array0)->isAssoc());
     self::assertFalse(A::create($array1)->isAssoc());
@@ -2741,7 +2915,11 @@ class ArrayyTest extends PHPUnit_Framework_TestCase
     self::assertFalse(A::create($array7)->isAssoc());
     self::assertFalse(A::create($array8)->isAssoc());
     self::assertTrue(A::create($array9)->isAssoc());
+
+    // ---
+
     self::assertTrue(A::create($array10)->isAssoc());
+    self::assertFalse(A::create($array10)->isAssoc(true));
 
     // ---
 
