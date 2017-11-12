@@ -364,15 +364,6 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
   /**
    * @expectedException \RangeException
    */
-  public function testGetRandomKeysLogicExceptionGivenNonInteger()
-  {
-    $arrayy = $this->createArrayy(array('a', 'b', 'c'));
-    $arrayy->getRandomKeys('something');
-  }
-
-  /**
-   * @expectedException \RangeException
-   */
   public function testGetRandomKeysLogicExceptionGivenZero()
   {
     $arrayy = $this->createArrayy(array('a', 'b', 'c'));

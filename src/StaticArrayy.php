@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arrayy;
 
 /**
@@ -18,7 +20,7 @@ class StaticArrayy
    *
    * @var string[]
    */
-  protected static $methodArgs = null;
+  protected static $methodArgs;
 
   /**
    * Creates an instance of Arrayy and invokes the given method
@@ -31,7 +33,7 @@ class StaticArrayy
   public static function __callStatic($name, $arguments)
   {
     if (!static::$methodArgs) {
-      $arrayyClass = new \ReflectionClass('Arrayy\Arrayy');
+      $arrayyClass = new \ReflectionClass(Arrayy::class);
       $methods = $arrayyClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
       foreach ($methods as $method) {
@@ -44,7 +46,7 @@ class StaticArrayy
       throw new \BadMethodCallException($name . ' is not a valid method');
     }
 
-    $numArgs = count($arguments);
+    $numArgs = \count($arguments);
     $array = $numArgs ? $arguments[0] : '';
 
     if ($numArgs === static::$methodArgs[$name]) {
@@ -55,7 +57,7 @@ class StaticArrayy
 
     $arrayy = Arrayy::create($array);
 
-    return call_user_func_array(array($arrayy, $name), $args);
+    return \call_user_func_array(array($arrayy, $name), $args);
   }
 
   ////////////////////////////////////////////////////////////////////
@@ -71,13 +73,13 @@ class StaticArrayy
    *
    * @return Arrayy
    */
-  public static function range($base, $stop = null, $step = 1)
+  public static function range($base, $stop = null, $step = 1): Arrayy
   {
-    if (!is_int($base) || !is_int($step)) {
+    if (!\is_int($base) || !\is_int($step)) {
       throw new \InvalidArgumentException('Passed value must be a int');
     }
 
-    if (!is_int($stop) && null !== $stop) {
+    if (!\is_int($stop) && null !== $stop) {
       throw new \InvalidArgumentException('Passed value must be a int or nul');
     }
 
@@ -99,7 +101,7 @@ class StaticArrayy
    *
    * @return Arrayy
    */
-  public static function repeat($data, $times)
+  public static function repeat($data, $times): Arrayy
   {
     $times = (int)$times;
 
