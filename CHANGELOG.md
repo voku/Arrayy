@@ -2,6 +2,8 @@
 
 ### 4.0.0 (14.11.2017)
 * [!]: "php": ">=7.0" 
+  * drop support for PHP < 7.0
+  * use "strict_types"
 
 ### 3.8.0 (23.09.2017)
 * [+]: add some pre- / append methods + tests
