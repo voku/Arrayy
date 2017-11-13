@@ -3514,7 +3514,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * Convert the current array to JSON.
    *
    * @param int $options [optional] <p>e.g. JSON_PRETTY_PRINT</p>
-   * @param int      $depth   [optional] <p>Set the maximum depth. Must be greater than zero.</p>
+   * @param int $depth   [optional] <p>Set the maximum depth. Must be greater than zero.</p>
    *
    * @return string
    */
