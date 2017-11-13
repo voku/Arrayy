@@ -3458,7 +3458,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     if ($arrayCount === 0) {
       $result = [];
     } else {
-      $numberOfPieces = (int)$numberOfPieces;
       $splitSize = (int)\ceil($arrayCount / $numberOfPieces);
       $result = \array_chunk($this->array, $splitSize, $keepKeys);
     }
@@ -3514,12 +3513,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Convert the current array to JSON.
    *
-   * @param null|int $options [optional] <p>e.g. JSON_PRETTY_PRINT</p>
+   * @param int $options [optional] <p>e.g. JSON_PRETTY_PRINT</p>
    * @param int      $depth   [optional] <p>Set the maximum depth. Must be greater than zero.</p>
    *
    * @return string
    */
-  public function toJson($options = null, int $depth = 512): string
+  public function toJson(int $options = 0, int $depth = 512): string
   {
     return UTF8::json_encode($this->array, $options, $depth);
   }

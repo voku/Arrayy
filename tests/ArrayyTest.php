@@ -6,7 +6,7 @@ use Arrayy\Arrayy as A;
 /**
  * Class ArrayyTestCase
  */
-class ArrayyTest extends PHPUnit_Framework_TestCase
+class ArrayyTest extends \PHPUnit\Framework\TestCase
 {
   const TYPE_ASSOC   = 'assoc';
   const TYPE_EMPTY   = 'empty';

@@ -5,7 +5,7 @@ use Arrayy\StaticArrayy as A;
 /**
  * Class StaticArrayyTest
  */
-class StaticArrayyTest extends PHPUnit_Framework_TestCase
+class StaticArrayyTest extends \PHPUnit\Framework\TestCase
 {
   /**
    * @expectedException BadMethodCallException

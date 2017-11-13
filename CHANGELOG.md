@@ -1,7 +1,10 @@
 # Changelog
 
+### 4.0.0 (14.11.2017)
+* [!]: "php": ">=7.0" 
+
 ### 3.8.0 (23.09.2017)
-[+]: add some pre- / append methods + tests
+* [+]: add some pre- / append methods + tests
 
 ### 3.7.0 (11.08.2017)
 * [+]: add "Arrayy::createFromObjectVars()"

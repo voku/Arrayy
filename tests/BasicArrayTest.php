@@ -7,7 +7,7 @@ use Arrayy\Arrayy as A;
  *
  * @author Victor Bocharsky <bocharsky.bw@gmail.com>
  */
-class BasicArrayTest extends PHPUnit_Framework_TestCase
+class BasicArrayTest extends \PHPUnit\Framework\TestCase
 {
   const TYPE_ASSOC   = 'assoc';
   const TYPE_EMPTY   = 'empty';
@@ -308,18 +308,19 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testGetRandom(array $array)
   {
-    if (0 === count($array)) {
-      return;
-    }
-
     $arrayy = $this->createArrayy($array);
     $value = $arrayy->getRandom()->getArray();
 
-    self::assertNotNull($value[0]);
+    if (count($value) > 0) {
+      self::assertNotNull($value[0]);
 
-    if (!$value instanceof \Arrayy\Arrayy) {
-      /** @noinspection TypeUnsafeArraySearchInspection */
-      self::assertTrue(in_array($value[0], $arrayy->toArray()));
+      if (!$value instanceof \Arrayy\Arrayy) {
+        /** @noinspection TypeUnsafeArraySearchInspection */
+        self::assertTrue(in_array($value[0], $arrayy->toArray()));
+      }
+
+    } else {
+      self::assertTrue(is_array($value));
     }
   }
 
@@ -330,15 +331,17 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testGetRandomKey(array $array)
   {
-    if (0 === count($array)) {
-      return;
-    }
-
     $arrayy = $this->createArrayy($array);
-    $key = $arrayy->getRandomKey();
 
-    self::assertNotNull($key);
-    self::assertTrue(array_key_exists($key, $arrayy->toArray()));
+    if ($arrayy->count() > 0) {
+
+      $key = $arrayy->getRandomKey();
+
+      self::assertNotNull($key);
+      self::assertTrue(array_key_exists($key, $arrayy->toArray()));
+    } else {
+      self::assertTrue(is_array($arrayy->getArray()));
+    }
   }
 
   /**
@@ -348,16 +351,20 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testGetRandomKeys(array $array)
   {
-    if (2 > count($array)) {
-      return;
-    }
-
     $arrayy = $this->createArrayy($array);
-    $keys = $arrayy->getRandomKeys(2);
 
-    self::assertCount(2, $keys);
-    foreach ($keys as $key) {
-      self::assertTrue(array_key_exists($key, $array));
+    if (2 > count($array)) {
+
+      self::assertTrue(is_array($arrayy->getArray()));
+
+    } else {
+
+      $keys = $arrayy->getRandomKeys(2);
+
+      self::assertCount(2, $keys);
+      foreach ($keys as $key) {
+        self::assertTrue(array_key_exists($key, $array));
+      }
     }
   }
 
@@ -386,14 +393,18 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testGetRandomKeysShouldReturnArray(array $array)
   {
-    if (0 === count($array)) {
-      return;
-    }
-
     $arrayy = $this->createArrayy($array);
-    $keys = $arrayy->getRandomKeys(count($array))->getArray();
 
-    self::assertInternalType('array', $keys);
+    if (0 === count($array)) {
+
+      self::assertTrue(is_array($arrayy->getArray()));
+
+    } else {
+
+      $keys = $arrayy->getRandomKeys(count($array))->getArray();
+
+      self::assertInternalType('array', $keys);
+    }
   }
 
   /**
@@ -403,16 +414,20 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testGetRandomValueSingle(array $array)
   {
-    if (0 === count($array)) {
-      return;
-    }
-
     $arrayy = $this->createArrayy($array);
-    $value = $arrayy->getRandomValue();
 
-    if (!$value instanceof \Arrayy\Arrayy) {
-      /** @noinspection TypeUnsafeArraySearchInspection */
-      self::assertTrue(in_array($value, $array));
+    if (0 === count($array)) {
+
+      self::assertTrue(is_array($arrayy->getArray()));
+
+    } else {
+
+      $value = $arrayy->getRandomValue();
+
+      if (!$value instanceof \Arrayy\Arrayy) {
+        /** @noinspection TypeUnsafeArraySearchInspection */
+        self::assertTrue(in_array($value, $array));
+      }
     }
   }
 
@@ -423,11 +438,14 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testGetRandomValues(array $array)
   {
+    $arrayy = $this->createArrayy($array);
+
     if (2 > count($array)) {
+      self::assertTrue(is_array($arrayy->getArray()));
+
       return;
     }
 
-    $arrayy = $this->createArrayy($array);
     $values = $arrayy->getRandomValues(2);
 
     self::assertCount(2, $values);
@@ -446,11 +464,14 @@ class BasicArrayTest extends PHPUnit_Framework_TestCase
    */
   public function testGetRandomValuesSingle(array $array)
   {
+    $arrayy = $this->createArrayy($array);
+
     if (0 === count($array)) {
+      self::assertTrue(is_array($arrayy->getArray()));
+
       return;
     }
 
-    $arrayy = $this->createArrayy($array);
     $values = $arrayy->getRandomValues(1)->getArray();
 
     self::assertCount(1, $values);

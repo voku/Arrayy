@@ -3,7 +3,7 @@
 /**
  * Class CreateTestCase
  */
-class CreateTestCase extends PHPUnit_Framework_TestCase
+class CreateTestCase extends \PHPUnit\Framework\TestCase
 {
   public function testCreate()
   {
