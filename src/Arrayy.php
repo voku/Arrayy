@@ -2910,7 +2910,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    *
    * @return Arrayy
    */
-  public function repeat($times): Arrayy
+  public function repeat($times): self
   {
     if ($times === 0) {
       return new static();
