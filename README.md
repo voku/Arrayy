@@ -13,8 +13,7 @@
 
 [documentation via gitbooks.io](https://voku.gitbooks.io/arrayy/content/)
 
-A PHP array manipulation library. Compatible with PHP
-5.3+, PHP 7, and HHVM.
+A PHP array manipulation library. Compatible with PHP 7+
 
 ``` php
 Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
@@ -123,7 +122,7 @@ in your composer.json file:
 
 ```json
 "require": {
-    "voku/arrayy": "3.*"
+    "voku/arrayy": "4.*"
 }
 ```
 
