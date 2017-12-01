@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Stringy;
 
 /**
@@ -132,10 +134,10 @@ class StaticStringy
    *
    * @return Stringy
    */
-  public static function __callStatic($name, $arguments)
+  public static function __callStatic($name, array $arguments)
   {
     if (!static::$methodArgs) {
-      $stringyClass = new \ReflectionClass('Stringy\Stringy');
+      $stringyClass = new \ReflectionClass(Stringy::class);
       $methods = $stringyClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
       foreach ($methods as $method) {
@@ -148,19 +150,19 @@ class StaticStringy
       throw new \BadMethodCallException($name . ' is not a valid method');
     }
 
-    $numArgs = count($arguments);
+    $numArgs = \count($arguments);
     $str = ($numArgs) ? $arguments[0] : '';
 
     if ($numArgs === static::$methodArgs[$name]) {
-      $args = array_slice($arguments, 1, -1);
+      $args = \array_slice($arguments, 1, -1);
       $encoding = $arguments[$numArgs - 1];
     } else {
-      $args = array_slice($arguments, 1);
+      $args = \array_slice($arguments, 1);
       $encoding = null;
     }
 
     $stringy = Stringy::create($str, $encoding);
 
-    return call_user_func_array(array($stringy, $name), $args);
+    return \call_user_func_array(array($stringy, $name), $args);
   }
 }

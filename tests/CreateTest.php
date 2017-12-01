@@ -2,12 +2,12 @@
 
 use Stringy\Stringy;
 
-require __DIR__ . '/../src/Create.php';
+require_once __DIR__ . '/../src/Create.php';
 
 /**
- * Class CreateTestCase
+ * Class CreateTest
  */
-class CreateTestCase extends PHPUnit_Framework_TestCase
+class CreateTest extends \PHPUnit\Framework\TestCase
 {
   public function testCreate()
   {

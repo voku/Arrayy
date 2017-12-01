@@ -1,24 +1,24 @@
 <?php
 
-require __DIR__ . '/../src/Stringy.php';
+require_once __DIR__ . '/../src/Stringy.php';
 
 use Stringy\Stringy as S;
 use voku\helper\UTF8;
 
 /**
- * Class StringyTestCase
+ * Class StringyTest
  */
-class StringyTestCase extends PHPUnit_Framework_TestCase
+class StringyTest extends \PHPUnit\Framework\TestCase
 {
   /**
    * @return array
    */
-  public function appendProvider()
+  public function appendProvider(): array
   {
-    return array(
-        array('foobar', 'foo', 'bar'),
-        array('fòôbàř', 'fòô', 'bàř', 'UTF-8'),
-    );
+    return [
+        ['foobar', 'foo', 'bar'],
+        ['fòôbàř', 'fòô', 'bàř', 'UTF-8'],
+    ];
   }
 
   /**
@@ -34,198 +34,198 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  public function atProvider()
+  public function atProvider(): array
   {
-    return array(
-        array('f', 'foo bar', 0),
-        array('o', 'foo bar', 1),
-        array('r', 'foo bar', 6),
-        array('', 'foo bar', 7),
-        array('f', 'fòô bàř', 0, 'UTF-8'),
-        array('ò', 'fòô bàř', 1, 'UTF-8'),
-        array('ř', 'fòô bàř', 6, 'UTF-8'),
-        array('', 'fòô bàř', 7, 'UTF-8'),
-    );
+    return [
+        ['f', 'foo bar', 0],
+        ['o', 'foo bar', 1],
+        ['r', 'foo bar', 6],
+        ['', 'foo bar', 7],
+        ['f', 'fòô bàř', 0, 'UTF-8'],
+        ['ò', 'fòô bàř', 1, 'UTF-8'],
+        ['ř', 'fòô bàř', 6, 'UTF-8'],
+        ['', 'fòô bàř', 7, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function betweenProvider()
+  public function betweenProvider(): array
   {
-    return array(
-        array('', 'foo', '{', '}'),
-        array('', '{foo', '{', '}'),
-        array('foo', '{foo}', '{', '}'),
-        array('{foo', '{{foo}', '{', '}'),
-        array('', '{}foo}', '{', '}'),
-        array('foo', '}{foo}', '{', '}'),
-        array('foo', 'A description of {foo} goes here', '{', '}'),
-        array('bar', '{foo} and {bar}', '{', '}', 1),
-        array('', 'fòô', '{', '}', 0, 'UTF-8'),
-        array('', '{fòô', '{', '}', 0, 'UTF-8'),
-        array('fòô', '{fòô}', '{', '}', 0, 'UTF-8'),
-        array('{fòô', '{{fòô}', '{', '}', 0, 'UTF-8'),
-        array('', '{}fòô}', '{', '}', 0, 'UTF-8'),
-        array('fòô', '}{fòô}', '{', '}', 0, 'UTF-8'),
-        array('fòô', 'A description of {fòô} goes here', '{', '}', 0, 'UTF-8'),
-        array('bàř', '{fòô} and {bàř}', '{', '}', 1, 'UTF-8'),
-    );
+    return [
+        ['', 'foo', '{', '}'],
+        ['', '{foo', '{', '}'],
+        ['foo', '{foo}', '{', '}'],
+        ['{foo', '{{foo}', '{', '}'],
+        ['', '{}foo}', '{', '}'],
+        ['foo', '}{foo}', '{', '}'],
+        ['foo', 'A description of {foo} goes here', '{', '}'],
+        ['bar', '{foo} and {bar}', '{', '}', 1],
+        ['', 'fòô', '{', '}', 0, 'UTF-8'],
+        ['', '{fòô', '{', '}', 0, 'UTF-8'],
+        ['fòô', '{fòô}', '{', '}', 0, 'UTF-8'],
+        ['{fòô', '{{fòô}', '{', '}', 0, 'UTF-8'],
+        ['', '{}fòô}', '{', '}', 0, 'UTF-8'],
+        ['fòô', '}{fòô}', '{', '}', 0, 'UTF-8'],
+        ['fòô', 'A description of {fòô} goes here', '{', '}', 0, 'UTF-8'],
+        ['bàř', '{fòô} and {bàř}', '{', '}', 1, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function camelizeProvider()
+  public function camelizeProvider(): array
   {
-    return array(
-        array('camelCase', 'CamelCase'),
-        array('camelCase', 'Camel-Case'),
-        array('camelCase', 'camel case'),
-        array('camelCase', 'camel -case'),
-        array('camelCase', 'camel - case'),
-        array('camelCase', 'camel_case'),
-        array('camelCTest', 'camel c test'),
-        array('stringWith1Number', 'string_with1number'),
-        array('stringWith22Numbers', 'string-with-2-2 numbers'),
-        array('dataRate', 'data_rate'),
-        array('backgroundColor', 'background-color'),
-        array('yesWeCan', 'yes_we_can'),
-        array('mozSomething', '-moz-something'),
-        array('carSpeed', '_car_speed_'),
-        array('serveHTTP', 'ServeHTTP'),
-        array('1Camel2Case', '1camel2case'),
-        array('camelΣase', 'camel σase', 'UTF-8'),
-        array('στανιλCase', 'Στανιλ case', 'UTF-8'),
-        array('σamelCase', 'σamel  Case', 'UTF-8'),
-    );
+    return [
+        ['camelCase', 'CamelCase'],
+        ['camelCase', 'Camel-Case'],
+        ['camelCase', 'camel case'],
+        ['camelCase', 'camel -case'],
+        ['camelCase', 'camel - case'],
+        ['camelCase', 'camel_case'],
+        ['camelCTest', 'camel c test'],
+        ['stringWith1Number', 'string_with1number'],
+        ['stringWith22Numbers', 'string-with-2-2 numbers'],
+        ['dataRate', 'data_rate'],
+        ['backgroundColor', 'background-color'],
+        ['yesWeCan', 'yes_we_can'],
+        ['mozSomething', '-moz-something'],
+        ['carSpeed', '_car_speed_'],
+        ['serveHTTP', 'ServeHTTP'],
+        ['1Camel2Case', '1camel2case'],
+        ['camelΣase', 'camel σase', 'UTF-8'],
+        ['στανιλCase', 'Στανιλ case', 'UTF-8'],
+        ['σamelCase', 'σamel  Case', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function capitalizePersonalNameProvider()
+  public function capitalizePersonalNameProvider(): array
   {
-    return array(
-        array('Marcus Aurelius', 'marcus aurelius'),
-        array('Torbjørn Færøvik', 'torbjørn færøvik'),
-        array('Jaap de Hoop Scheffer', 'jaap de hoop scheffer'),
-        array('K. Anders Ericsson', 'k. anders ericsson'),
-        array('Per-Einar', 'per-einar'),
-        array(
+    return [
+        ['Marcus Aurelius', 'marcus aurelius'],
+        ['Torbjørn Færøvik', 'torbjørn færøvik'],
+        ['Jaap de Hoop Scheffer', 'jaap de hoop scheffer'],
+        ['K. Anders Ericsson', 'k. anders ericsson'],
+        ['Per-Einar', 'per-einar'],
+        [
             'Line Break',
             'line
              break',
-        ),
-        array('ab', 'ab'),
-        array('af', 'af'),
-        array('al', 'al'),
-        array('and', 'and'),
-        array('ap', 'ap'),
-        array('bint', 'bint'),
-        array('binte', 'binte'),
-        array('da', 'da'),
-        array('de', 'de'),
-        array('del', 'del'),
-        array('den', 'den'),
-        array('der', 'der'),
-        array('di', 'di'),
-        array('dit', 'dit'),
-        array('ibn', 'ibn'),
-        array('la', 'la'),
-        array('mac', 'mac'),
-        array('nic', 'nic'),
-        array('of', 'of'),
-        array('ter', 'ter'),
-        array('the', 'the'),
-        array('und', 'und'),
-        array('van', 'van'),
-        array('von', 'von'),
-        array('y', 'y'),
-        array('zu', 'zu'),
-        array('Bashar al-Assad', 'bashar al-assad'),
-        array("d'Name", "d'Name"),
-        array('ffName', 'ffName'),
-        array("l'Name", "l'Name"),
-        array('macDuck', 'macDuck'),
-        array('mcDuck', 'mcDuck'),
-        array('nickMick', 'nickMick'),
-    );
+        ],
+        ['ab', 'ab'],
+        ['af', 'af'],
+        ['al', 'al'],
+        ['and', 'and'],
+        ['ap', 'ap'],
+        ['bint', 'bint'],
+        ['binte', 'binte'],
+        ['da', 'da'],
+        ['de', 'de'],
+        ['del', 'del'],
+        ['den', 'den'],
+        ['der', 'der'],
+        ['di', 'di'],
+        ['dit', 'dit'],
+        ['ibn', 'ibn'],
+        ['la', 'la'],
+        ['mac', 'mac'],
+        ['nic', 'nic'],
+        ['of', 'of'],
+        ['ter', 'ter'],
+        ['the', 'the'],
+        ['und', 'und'],
+        ['van', 'van'],
+        ['von', 'von'],
+        ['y', 'y'],
+        ['zu', 'zu'],
+        ['Bashar al-Assad', 'bashar al-assad'],
+        ["d'Name", "d'Name"],
+        ['ffName', 'ffName'],
+        ["l'Name", "l'Name"],
+        ['macDuck', 'macDuck'],
+        ['mcDuck', 'mcDuck'],
+        ['nickMick', 'nickMick'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function charsProvider()
+  public function charsProvider(): array
   {
-    return array(
-        array(array(), ''),
-        array(array('T', 'e', 's', 't'), 'Test'),
-        array(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), 'Fòô Bàř', 'UTF-8'),
-    );
+    return [
+        [[], ''],
+        [['T', 'e', 's', 't'], 'Test'],
+        [['F', 'ò', 'ô', ' ', 'B', 'à', 'ř'], 'Fòô Bàř', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function collapseWhitespaceProvider()
+  public function collapseWhitespaceProvider(): array
   {
-    return array(
-        array('foo bar', '  foo   bar  '),
-        array('test string', 'test string'),
-        array('Ο συγγραφέας', '   Ο     συγγραφέας  '),
-        array('123', ' 123 '),
-        array('', ' ', 'UTF-8'), // no-break space (U+00A0)
-        array('', '           ', 'UTF-8'), // spaces U+2000 to U+200A
-        array('', ' ', 'UTF-8'), // narrow no-break space (U+202F)
-        array('', ' ', 'UTF-8'), // medium mathematical space (U+205F)
-        array('', '　', 'UTF-8'), // ideographic space (U+3000)
-        array('1 2 3', '  1  2  3　　', 'UTF-8'),
-        array('', ' '),
-        array('', ''),
-    );
+    return [
+        ['foo bar', '  foo   bar  '],
+        ['test string', 'test string'],
+        ['Ο συγγραφέας', '   Ο     συγγραφέας  '],
+        ['123', ' 123 '],
+        ['', ' ', 'UTF-8'], // no-break space (U+00A0)
+        ['', '           ', 'UTF-8'], // spaces U+2000 to U+200A
+        ['', ' ', 'UTF-8'], // narrow no-break space (U+202F)
+        ['', ' ', 'UTF-8'], // medium mathematical space (U+205F)
+        ['', '　', 'UTF-8'], // ideographic space (U+3000)
+        ['1 2 3', '  1  2  3　　', 'UTF-8'],
+        ['', ' '],
+        ['', ''],
+    ];
   }
 
   /**
    * @return array
    */
-  public function containsAllProvider()
+  public function containsAllProvider(): array
   {
     // One needle
     $singleNeedle = array_map(
         function ($array) {
-          $array[2] = array($array[2]);
+          $array[2] = [$array[2]];
 
           return $array;
         }, $this->containsProvider()
     );
 
-    $provider = array(
+    $provider = [
       // One needle
-      array(false, 'Str contains foo bar', array()),
+      [false, 'Str contains foo bar', []],
       // Multiple needles
-      array(true, 'Str contains foo bar', array('foo', 'bar')),
-      array(true, '12398!@(*%!@# @!%#*&^%', array(' @!%#*', '&^%')),
-      array(true, 'Ο συγγραφέας είπε', array('συγγρ', 'αφέας'), 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('å´¥', '©'), true, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('å˚ ', '∆'), true, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('øœ', '¬'), true, 'UTF-8'),
-      array(false, 'Str contains foo bar', array('Foo', 'bar')),
-      array(false, 'Str contains foo bar', array('foobar', 'bar')),
-      array(false, 'Str contains foo bar', array('foo bar ', 'bar')),
-      array(false, 'Ο συγγραφέας είπε', array('  συγγραφέας ', '  συγγραφ '), true, 'UTF-8'),
-      array(false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array(' ßå˚', ' ß '), true, 'UTF-8'),
-      array(true, 'Str contains foo bar', array('Foo bar', 'bar'), false),
-      array(true, '12398!@(*%!@# @!%#*&^%', array(' @!%#*&^%', '*&^%'), false),
-      array(true, 'Ο συγγραφέας είπε', array('ΣΥΓΓΡΑΦΈΑΣ', 'ΑΦΈΑ'), false, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('Å´¥©', '¥©'), false, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('Å˚ ∆', ' ∆'), false, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('ØŒ¬', 'Œ'), false, 'UTF-8'),
-      array(false, 'Str contains foo bar', array('foobar', 'none'), false),
-      array(false, 'Str contains foo bar', array('foo bar ', ' ba'), false),
-      array(false, 'Ο συγγραφέας είπε', array('  συγγραφέας ', ' ραφέ '), false, 'UTF-8'),
-      array(false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array(' ßÅ˚', ' Å˚ '), false, 'UTF-8'),
-    );
+      [true, 'Str contains foo bar', ['foo', 'bar']],
+      [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*', '&^%']],
+      [true, 'Ο συγγραφέας είπε', ['συγγρ', 'αφέας'], 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å´¥', '©'], true, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å˚ ', '∆'], true, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['øœ', '¬'], true, 'UTF-8'],
+      [false, 'Str contains foo bar', ['Foo', 'bar']],
+      [false, 'Str contains foo bar', ['foobar', 'bar']],
+      [false, 'Str contains foo bar', ['foo bar ', 'bar']],
+      [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', '  συγγραφ '], true, 'UTF-8'],
+      [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßå˚', ' ß '], true, 'UTF-8'],
+      [true, 'Str contains foo bar', ['Foo bar', 'bar'], false],
+      [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*&^%', '*&^%'], false],
+      [true, 'Ο συγγραφέας είπε', ['ΣΥΓΓΡΑΦΈΑΣ', 'ΑΦΈΑ'], false, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å´¥©', '¥©'], false, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å˚ ∆', ' ∆'], false, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['ØŒ¬', 'Œ'], false, 'UTF-8'],
+      [false, 'Str contains foo bar', ['foobar', 'none'], false],
+      [false, 'Str contains foo bar', ['foo bar ', ' ba'], false],
+      [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', ' ραφέ '], false, 'UTF-8'],
+      [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßÅ˚', ' Å˚ '], false, 'UTF-8'],
+    ];
 
     return array_merge($singleNeedle, $provider);
   }
@@ -233,43 +233,43 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  public function containsAnyProvider()
+  public function containsAnyProvider(): array
   {
     // One needle
     $singleNeedle = array_map(
         function ($array) {
-          $array[2] = array($array[2]);
+          $array[2] = [$array[2]];
 
           return $array;
         }, $this->containsProvider()
     );
 
-    $provider = array(
+    $provider = [
       // No needles
-      array(false, 'Str contains foo bar', array()),
+      [false, 'Str contains foo bar', []],
       // Multiple needles
-      array(true, 'Str contains foo bar', array('foo', 'bar')),
-      array(true, '12398!@(*%!@# @!%#*&^%', array(' @!%#*', '&^%')),
-      array(true, 'Ο συγγραφέας είπε', array('συγγρ', 'αφέας'), 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('å´¥', '©'), true, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('å˚ ', '∆'), true, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('øœ', '¬'), true, 'UTF-8'),
-      array(false, 'Str contains foo bar', array('Foo', 'Bar')),
-      array(false, 'Str contains foo bar', array('foobar', 'bar ')),
-      array(false, 'Str contains foo bar', array('foo bar ', '  foo')),
-      array(false, 'Ο συγγραφέας είπε', array('  συγγραφέας ', '  συγγραφ '), true, 'UTF-8'),
-      array(false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array(' ßå˚', ' ß '), true, 'UTF-8'),
-      array(true, 'Str contains foo bar', array('Foo bar', 'bar'), false),
-      array(true, '12398!@(*%!@# @!%#*&^%', array(' @!%#*&^%', '*&^%'), false),
-      array(true, 'Ο συγγραφέας είπε', array('ΣΥΓΓΡΑΦΈΑΣ', 'ΑΦΈΑ'), false, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('Å´¥©', '¥©'), false, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('Å˚ ∆', ' ∆'), false, 'UTF-8'),
-      array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array('ØŒ¬', 'Œ'), false, 'UTF-8'),
-      array(false, 'Str contains foo bar', array('foobar', 'none'), false),
-      array(false, 'Str contains foo bar', array('foo bar ', ' ba '), false),
-      array(false, 'Ο συγγραφέας είπε', array('  συγγραφέας ', ' ραφέ '), false, 'UTF-8'),
-      array(false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', array(' ßÅ˚', ' Å˚ '), false, 'UTF-8'),
-    );
+      [true, 'Str contains foo bar', ['foo', 'bar']],
+      [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*', '&^%']],
+      [true, 'Ο συγγραφέας είπε', ['συγγρ', 'αφέας'], 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å´¥', '©'], true, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å˚ ', '∆'], true, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['øœ', '¬'], true, 'UTF-8'],
+      [false, 'Str contains foo bar', ['Foo', 'Bar']],
+      [false, 'Str contains foo bar', ['foobar', 'bar ']],
+      [false, 'Str contains foo bar', ['foo bar ', '  foo']],
+      [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', '  συγγραφ '], true, 'UTF-8'],
+      [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßå˚', ' ß '], true, 'UTF-8'],
+      [true, 'Str contains foo bar', ['Foo bar', 'bar'], false],
+      [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*&^%', '*&^%'], false],
+      [true, 'Ο συγγραφέας είπε', ['ΣΥΓΓΡΑΦΈΑΣ', 'ΑΦΈΑ'], false, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å´¥©', '¥©'], false, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å˚ ∆', ' ∆'], false, 'UTF-8'],
+      [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['ØŒ¬', 'Œ'], false, 'UTF-8'],
+      [false, 'Str contains foo bar', ['foobar', 'none'], false],
+      [false, 'Str contains foo bar', ['foo bar ', ' ba '], false],
+      [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', ' ραφέ '], false, 'UTF-8'],
+      [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßÅ˚', ' Å˚ '], false, 'UTF-8'],
+    ];
 
     return array_merge($singleNeedle, $provider);
   }
@@ -277,1338 +277,1335 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  public function containsProvider()
+  public function containsProvider(): array
   {
-    return array(
-        array(true, 'Str contains foo bar', 'foo bar'),
-        array(true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%'),
-        array(true, 'Ο συγγραφέας είπε', 'συγγραφέας', 'UTF-8'),
-        array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å´¥©', true, 'UTF-8'),
-        array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å˚ ∆', true, 'UTF-8'),
-        array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'øœ¬', true, 'UTF-8'),
-        array(false, 'Str contains foo bar', 'Foo bar'),
-        array(false, 'Str contains foo bar', 'foobar'),
-        array(false, 'Str contains foo bar', 'foo bar '),
-        array(false, 'Ο συγγραφέας είπε', '  συγγραφέας ', true, 'UTF-8'),
-        array(false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßå˚', true, 'UTF-8'),
-        array(true, 'Str contains foo bar', 'Foo bar', false),
-        array(true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%', false),
-        array(true, 'Ο συγγραφέας είπε', 'ΣΥΓΓΡΑΦΈΑΣ', false, 'UTF-8'),
-        array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å´¥©', false, 'UTF-8'),
-        array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å˚ ∆', false, 'UTF-8'),
-        array(true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'ØŒ¬', false, 'UTF-8'),
-        array(false, 'Str contains foo bar', 'foobar', false),
-        array(false, 'Str contains foo bar', 'foo bar ', false),
-        array(false, 'Ο συγγραφέας είπε', '  συγγραφέας ', false, 'UTF-8'),
-        array(false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßÅ˚', false, 'UTF-8'),
-    );
+    return [
+        [true, 'Str contains foo bar', 'foo bar'],
+        [true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%'],
+        [true, 'Ο συγγραφέας είπε', 'συγγραφέας', 'UTF-8'],
+        [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å´¥©', true, 'UTF-8'],
+        [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å˚ ∆', true, 'UTF-8'],
+        [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'øœ¬', true, 'UTF-8'],
+        [false, 'Str contains foo bar', 'Foo bar'],
+        [false, 'Str contains foo bar', 'foobar'],
+        [false, 'Str contains foo bar', 'foo bar '],
+        [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', true, 'UTF-8'],
+        [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßå˚', true, 'UTF-8'],
+        [true, 'Str contains foo bar', 'Foo bar', false],
+        [true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%', false],
+        [true, 'Ο συγγραφέας είπε', 'ΣΥΓΓΡΑΦΈΑΣ', false, 'UTF-8'],
+        [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å´¥©', false, 'UTF-8'],
+        [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å˚ ∆', false, 'UTF-8'],
+        [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'ØŒ¬', false, 'UTF-8'],
+        [false, 'Str contains foo bar', 'foobar', false],
+        [false, 'Str contains foo bar', 'foo bar ', false],
+        [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', false, 'UTF-8'],
+        [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßÅ˚', false, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function countSubstrProvider()
+  public function countSubstrProvider(): array
   {
-    return array(
-        array(false, '', 'foo'),
-        array(0, 'foo', 'bar'),
-        array(1, 'foo bar', 'foo'),
-        array(2, 'foo bar', 'o'),
-        array(false, '', 'fòô', 'UTF-8'),
-        array(0, 'fòô', 'bàř', 'UTF-8'),
-        array(1, 'fòô bàř', 'fòô', 'UTF-8'),
-        array(2, 'fôòô bàř', 'ô', 'UTF-8'),
-        array(0, 'fÔÒÔ bàř', 'ô', 'UTF-8'),
-        array(0, 'foo', 'BAR', false),
-        array(1, 'foo bar', 'FOo', false),
-        array(2, 'foo bar', 'O', false),
-        array(1, 'fòô bàř', 'fÒÔ', false, 'UTF-8'),
-        array(2, 'fôòô bàř', 'Ô', false, 'UTF-8'),
-        array(2, 'συγγραφέας', 'Σ', false, 'UTF-8'),
-    );
+    return [
+        [false, '', 'foo'],
+        [0, 'foo', 'bar'],
+        [1, 'foo bar', 'foo'],
+        [2, 'foo bar', 'o'],
+        [false, '', 'fòô', 'UTF-8'],
+        [0, 'fòô', 'bàř', 'UTF-8'],
+        [1, 'fòô bàř', 'fòô', 'UTF-8'],
+        [2, 'fôòô bàř', 'ô', 'UTF-8'],
+        [0, 'fÔÒÔ bàř', 'ô', 'UTF-8'],
+        [0, 'foo', 'BAR', false],
+        [1, 'foo bar', 'FOo', false],
+        [2, 'foo bar', 'O', false],
+        [1, 'fòô bàř', 'fÒÔ', false, 'UTF-8'],
+        [2, 'fôòô bàř', 'Ô', false, 'UTF-8'],
+        [2, 'συγγραφέας', 'Σ', false, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function dasherizeProvider()
+  public function dasherizeProvider(): array
   {
-    return array(
-        array('test-case', 'testCase'),
-        array('test-case', 'Test-Case'),
-        array('test-case', 'test case'),
-        array('-test-case', '-test -case'),
-        array('test-case', 'test - case'),
-        array('test-case', 'test_case'),
-        array('test-c-test', 'test c test'),
-        array('test-d-case', 'TestDCase'),
-        array('test-c-c-test', 'TestCCTest'),
-        array('string-with1number', 'string_with1number'),
-        array('string-with-2-2-numbers', 'String-with_2_2 numbers'),
-        array('1test2case', '1test2case'),
-        array('data-rate', 'dataRate'),
-        array('car-speed', 'CarSpeed'),
-        array('yes-we-can', 'yesWeCan'),
-        array('background-color', 'backgroundColor'),
-        array('dash-σase', 'dash Σase', 'UTF-8'),
-        array('στανιλ-case', 'Στανιλ case', 'UTF-8'),
-        array('σash-case', 'Σash  Case', 'UTF-8'),
-    );
+    return [
+        ['test-case', 'testCase'],
+        ['test-case', 'Test-Case'],
+        ['test-case', 'test case'],
+        ['-test-case', '-test -case'],
+        ['test-case', 'test - case'],
+        ['test-case', 'test_case'],
+        ['test-c-test', 'test c test'],
+        ['test-d-case', 'TestDCase'],
+        ['test-c-c-test', 'TestCCTest'],
+        ['string-with1number', 'string_with1number'],
+        ['string-with-2-2-numbers', 'String-with_2_2 numbers'],
+        ['1test2case', '1test2case'],
+        ['data-rate', 'dataRate'],
+        ['car-speed', 'CarSpeed'],
+        ['yes-we-can', 'yesWeCan'],
+        ['background-color', 'backgroundColor'],
+        ['dash-σase', 'dash Σase', 'UTF-8'],
+        ['στανιλ-case', 'Στανιλ case', 'UTF-8'],
+        ['σash-case', 'Σash  Case', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function delimitProvider()
+  public function delimitProvider(): array
   {
-    return array(
-        array('test*case', 'testCase', '*'),
-        array('test&case', 'Test-Case', '&'),
-        array('test#case', 'test case', '#'),
-        array('test**case', 'test -case', '**'),
-        array('~!~test~!~case', '-test - case', '~!~'),
-        array('test*case', 'test_case', '*'),
-        array('test%c%test', '  test c test', '%'),
-        array('test+u+case', 'TestUCase', '+'),
-        array('test=c=c=test', 'TestCCTest', '='),
-        array('string#>with1number', 'string_with1number', '#>'),
-        array('1test2case', '1test2case', '*'),
-        array('test ύα σase', 'test Σase', ' ύα ', 'UTF-8',),
-        array('στανιλαcase', 'Στανιλ case', 'α', 'UTF-8',),
-        array('σashΘcase', 'Σash  Case', 'Θ', 'UTF-8'),
-    );
+    return [
+        ['test*case', 'testCase', '*'],
+        ['test&case', 'Test-Case', '&'],
+        ['test#case', 'test case', '#'],
+        ['test**case', 'test -case', '**'],
+        ['~!~test~!~case', '-test - case', '~!~'],
+        ['test*case', 'test_case', '*'],
+        ['test%c%test', '  test c test', '%'],
+        ['test+u+case', 'TestUCase', '+'],
+        ['test=c=c=test', 'TestCCTest', '='],
+        ['string#>with1number', 'string_with1number', '#>'],
+        ['1test2case', '1test2case', '*'],
+        ['test ύα σase', 'test Σase', ' ύα ', 'UTF-8',],
+        ['στανιλαcase', 'Στανιλ case', 'α', 'UTF-8',],
+        ['σashΘcase', 'Σash  Case', 'Θ', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function endsWithAnyProvider()
+  public function endsWithAnyProvider(): array
   {
-    return array(
-        array(true, 'foo bars', array('foo', 'o bars')),
-        array(true, 'FOO bars', array('foo', 'o bars'), false),
-        array(true, 'FOO bars', array('foo', 'o BARs'), false),
-        array(true, 'FÒÔ bàřs', array('foo', 'ô bàřs'), false, 'UTF-8'),
-        array(true, 'fòô bàřs', array('foo', 'ô BÀŘs'), false, 'UTF-8'),
-        array(false, 'foo bar', array('foo')),
-        array(false, 'foo bar', array('foo', 'foo bars')),
-        array(false, 'FOO bar', array('foo', 'foo bars')),
-        array(false, 'FOO bars', array('foo', 'foo BARS')),
-        array(false, 'FÒÔ bàřs', array('fòô', 'fòô bàřs'), true, 'UTF-8'),
-        array(false, 'fòô bàřs', array('fòô', 'fòô BÀŘS'), true, 'UTF-8'),
-    );
+    return [
+        [true, 'foo bars', ['foo', 'o bars']],
+        [true, 'FOO bars', ['foo', 'o bars'], false],
+        [true, 'FOO bars', ['foo', 'o BARs'], false],
+        [true, 'FÒÔ bàřs', ['foo', 'ô bàřs'], false, 'UTF-8'],
+        [true, 'fòô bàřs', ['foo', 'ô BÀŘs'], false, 'UTF-8'],
+        [false, 'foo bar', ['foo']],
+        [false, 'foo bar', ['foo', 'foo bars']],
+        [false, 'FOO bar', ['foo', 'foo bars']],
+        [false, 'FOO bars', ['foo', 'foo BARS']],
+        [false, 'FÒÔ bàřs', ['fòô', 'fòô bàřs'], true, 'UTF-8'],
+        [false, 'fòô bàřs', ['fòô', 'fòô BÀŘS'], true, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function endsWithProvider()
+  public function endsWithProvider(): array
   {
-    return array(
-        array(true, 'foo bars', 'o bars'),
-        array(true, 'FOO bars', 'o bars', false),
-        array(true, 'FOO bars', 'o BARs', false),
-        array(true, 'FÒÔ bàřs', 'ô bàřs', false, 'UTF-8'),
-        array(true, 'fòô bàřs', 'ô BÀŘs', false, 'UTF-8'),
-        array(false, 'foo bar', 'foo'),
-        array(false, 'foo bar', 'foo bars'),
-        array(false, 'FOO bar', 'foo bars'),
-        array(false, 'FOO bars', 'foo BARS'),
-        array(false, 'FÒÔ bàřs', 'fòô bàřs', true, 'UTF-8'),
-        array(false, 'fòô bàřs', 'fòô BÀŘS', true, 'UTF-8'),
-    );
+    return [
+        [true, 'foo bars', 'o bars'],
+        [true, 'FOO bars', 'o bars', false],
+        [true, 'FOO bars', 'o BARs', false],
+        [true, 'FÒÔ bàřs', 'ô bàřs', false, 'UTF-8'],
+        [true, 'fòô bàřs', 'ô BÀŘs', false, 'UTF-8'],
+        [false, 'foo bar', 'foo'],
+        [false, 'foo bar', 'foo bars'],
+        [false, 'FOO bar', 'foo bars'],
+        [false, 'FOO bars', 'foo BARS'],
+        [false, 'FÒÔ bàřs', 'fòô bàřs', true, 'UTF-8'],
+        [false, 'fòô bàřs', 'fòô BÀŘS', true, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function ensureLeftProvider()
+  public function ensureLeftProvider(): array
   {
-    return array(
-        array('foobar', 'foobar', 'f'),
-        array('foobar', 'foobar', 'foo'),
-        array('foo/foobar', 'foobar', 'foo/'),
-        array('http://foobar', 'foobar', 'http://'),
-        array('http://foobar', 'http://foobar', 'http://'),
-        array('fòôbàř', 'fòôbàř', 'f', 'UTF-8'),
-        array('fòôbàř', 'fòôbàř', 'fòô', 'UTF-8'),
-        array('fòô/fòôbàř', 'fòôbàř', 'fòô/', 'UTF-8'),
-        array('http://fòôbàř', 'fòôbàř', 'http://', 'UTF-8'),
-        array('http://fòôbàř', 'http://fòôbàř', 'http://', 'UTF-8'),
-    );
+    return [
+        ['foobar', 'foobar', 'f'],
+        ['foobar', 'foobar', 'foo'],
+        ['foo/foobar', 'foobar', 'foo/'],
+        ['http://foobar', 'foobar', 'http://'],
+        ['http://foobar', 'http://foobar', 'http://'],
+        ['fòôbàř', 'fòôbàř', 'f', 'UTF-8'],
+        ['fòôbàř', 'fòôbàř', 'fòô', 'UTF-8'],
+        ['fòô/fòôbàř', 'fòôbàř', 'fòô/', 'UTF-8'],
+        ['http://fòôbàř', 'fòôbàř', 'http://', 'UTF-8'],
+        ['http://fòôbàř', 'http://fòôbàř', 'http://', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function ensureRightProvider()
+  public function ensureRightProvider(): array
   {
-    return array(
-        array('foobar', 'foobar', 'r'),
-        array('foobar', 'foobar', 'bar'),
-        array('foobar/bar', 'foobar', '/bar'),
-        array('foobar.com/', 'foobar', '.com/'),
-        array('foobar.com/', 'foobar.com/', '.com/'),
-        array('fòôbàř', 'fòôbàř', 'ř', 'UTF-8'),
-        array('fòôbàř', 'fòôbàř', 'bàř', 'UTF-8'),
-        array('fòôbàř/bàř', 'fòôbàř', '/bàř', 'UTF-8'),
-        array('fòôbàř.com/', 'fòôbàř', '.com/', 'UTF-8'),
-        array('fòôbàř.com/', 'fòôbàř.com/', '.com/', 'UTF-8'),
-    );
+    return [
+        ['foobar', 'foobar', 'r'],
+        ['foobar', 'foobar', 'bar'],
+        ['foobar/bar', 'foobar', '/bar'],
+        ['foobar.com/', 'foobar', '.com/'],
+        ['foobar.com/', 'foobar.com/', '.com/'],
+        ['fòôbàř', 'fòôbàř', 'ř', 'UTF-8'],
+        ['fòôbàř', 'fòôbàř', 'bàř', 'UTF-8'],
+        ['fòôbàř/bàř', 'fòôbàř', '/bàř', 'UTF-8'],
+        ['fòôbàř.com/', 'fòôbàř', '.com/', 'UTF-8'],
+        ['fòôbàř.com/', 'fòôbàř.com/', '.com/', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function escapeProvider()
+  public function escapeProvider(): array
   {
-    return array(
-        array('', ''),
-        array('raboof &lt;3', 'raboof <3'),
-        array('řàbôòf&lt;foo&lt;lall&gt;&gt;&gt;', 'řàbôòf<foo<lall>>>'),
-        array('řàb &lt;ô&gt;òf', 'řàb <ô>òf'),
-        array('&lt;∂∆ onerro=&quot;alert(xss)&quot;&gt; ˚åß', '<∂∆ onerro="alert(xss)"> ˚åß'),
-        array('&#039;œ … &#039;’)', '\'œ … \'’)'),
-    );
+    return [
+        ['', ''],
+        ['raboof &lt;3', 'raboof <3'],
+        ['řàbôòf&lt;foo&lt;lall&gt;&gt;&gt;', 'řàbôòf<foo<lall>>>'],
+        ['řàb &lt;ô&gt;òf', 'řàb <ô>òf'],
+        ['&lt;∂∆ onerro=&quot;alert(xss)&quot;&gt; ˚åß', '<∂∆ onerro="alert(xss)"> ˚åß'],
+        ['&#039;œ … &#039;’)', '\'œ … \'’)'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function firstProvider()
+  public function firstProvider(): array
   {
-    return array(
-        array('', 'foo bar', -5),
-        array('', 'foo bar', 0),
-        array('f', 'foo bar', 1),
-        array('foo', 'foo bar', 3),
-        array('foo bar', 'foo bar', 7),
-        array('foo bar', 'foo bar', 8),
-        array('', 'fòô bàř', -5, 'UTF-8'),
-        array('', 'fòô bàř', 0, 'UTF-8'),
-        array('f', 'fòô bàř', 1, 'UTF-8'),
-        array('fòô', 'fòô bàř', 3, 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 7, 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 8, 'UTF-8'),
-    );
+    return [
+        ['', 'foo bar', -5],
+        ['', 'foo bar', 0],
+        ['f', 'foo bar', 1],
+        ['foo', 'foo bar', 3],
+        ['foo bar', 'foo bar', 7],
+        ['foo bar', 'foo bar', 8],
+        ['', 'fòô bàř', -5, 'UTF-8'],
+        ['', 'fòô bàř', 0, 'UTF-8'],
+        ['f', 'fòô bàř', 1, 'UTF-8'],
+        ['fòô', 'fòô bàř', 3, 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 7, 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 8, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function hasLowerCaseProvider()
+  public function hasLowerCaseProvider(): array
   {
-    return array(
-        array(false, ''),
-        array(true, 'foobar'),
-        array(false, 'FOO BAR'),
-        array(true, 'fOO BAR'),
-        array(true, 'foO BAR'),
-        array(true, 'FOO BAr'),
-        array(true, 'Foobar'),
-        array(false, 'FÒÔBÀŘ', 'UTF-8'),
-        array(true, 'fòôbàř', 'UTF-8'),
-        array(true, 'fòôbàř2', 'UTF-8'),
-        array(true, 'Fòô bàř', 'UTF-8'),
-        array(true, 'fòôbÀŘ', 'UTF-8'),
-    );
+    return [
+        [false, ''],
+        [true, 'foobar'],
+        [false, 'FOO BAR'],
+        [true, 'fOO BAR'],
+        [true, 'foO BAR'],
+        [true, 'FOO BAr'],
+        [true, 'Foobar'],
+        [false, 'FÒÔBÀŘ', 'UTF-8'],
+        [true, 'fòôbàř', 'UTF-8'],
+        [true, 'fòôbàř2', 'UTF-8'],
+        [true, 'Fòô bàř', 'UTF-8'],
+        [true, 'fòôbÀŘ', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function hasUpperCaseProvider()
+  public function hasUpperCaseProvider(): array
   {
-    return array(
-        array(false, ''),
-        array(true, 'FOOBAR'),
-        array(false, 'foo bar'),
-        array(true, 'Foo bar'),
-        array(true, 'FOo bar'),
-        array(true, 'foo baR'),
-        array(true, 'fOOBAR'),
-        array(false, 'fòôbàř', 'UTF-8'),
-        array(true, 'FÒÔBÀŘ', 'UTF-8'),
-        array(true, 'FÒÔBÀŘ2', 'UTF-8'),
-        array(true, 'fÒÔ BÀŘ', 'UTF-8'),
-        array(true, 'FÒÔBàř', 'UTF-8'),
-    );
+    return [
+        [false, ''],
+        [true, 'FOOBAR'],
+        [false, 'foo bar'],
+        [true, 'Foo bar'],
+        [true, 'FOo bar'],
+        [true, 'foo baR'],
+        [true, 'fOOBAR'],
+        [false, 'fòôbàř', 'UTF-8'],
+        [true, 'FÒÔBÀŘ', 'UTF-8'],
+        [true, 'FÒÔBÀŘ2', 'UTF-8'],
+        [true, 'fÒÔ BÀŘ', 'UTF-8'],
+        [true, 'FÒÔBàř', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function htmlDecodeProvider()
+  public function htmlDecodeProvider(): array
   {
-    return array(
-        array('&', '&amp;'),
-        array('"', '&quot;'),
-        array("'", '&#039;', ENT_QUOTES),
-        array('<', '&lt;'),
-        array('>', '&gt;'),
-    );
+    return [
+        ['&', '&amp;'],
+        ['"', '&quot;'],
+        ["'", '&#039;', ENT_QUOTES],
+        ['<', '&lt;'],
+        ['>', '&gt;'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function htmlEncodeProvider()
+  public function htmlEncodeProvider(): array
   {
-    return array(
-        array('&amp;', '&'),
-        array('&quot;', '"'),
-        array('&#039;', "'", ENT_QUOTES),
-        array('&lt;', '<'),
-        array('&gt;', '>'),
-    );
+    return [
+        ['&amp;', '&'],
+        ['&quot;', '"'],
+        ['&#039;', "'", ENT_QUOTES],
+        ['&lt;', '<'],
+        ['&gt;', '>'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function humanizeProvider()
+  public function humanizeProvider(): array
   {
-    return array(
-        array('Author', 'author_id'),
-        array('Test user', ' _test_user_'),
-        array('Συγγραφέας', ' συγγραφέας_id ', 'UTF-8'),
-    );
+    return [
+        ['Author', 'author_id'],
+        ['Test user', ' _test_user_'],
+        ['Συγγραφέας', ' συγγραφέας_id ', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function indexOfLastProvider()
+  public function indexOfLastProvider(): array
   {
-    return array(
-        array(6, 'foo & bar', 'bar'),
-        array(6, 'foo & bar', 'bar', 0),
-        array(false, 'foo & bar', 'baz'),
-        array(false, 'foo & bar', 'baz', 0),
-        array(12, 'foo & bar & foo', 'foo', 0),
-        array(0, 'foo & bar & foo', 'foo', -5),
-        array(6, 'fòô & bàř', 'bàř', 0, 'UTF-8'),
-        array(false, 'fòô & bàř', 'baz', 0, 'UTF-8'),
-        array(12, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'),
-        array(0, 'fòô & bàř & fòô', 'fòô', -5, 'UTF-8'),
-    );
+    return [
+        [6, 'foo & bar', 'bar'],
+        [6, 'foo & bar', 'bar', 0],
+        [false, 'foo & bar', 'baz'],
+        [false, 'foo & bar', 'baz', 0],
+        [12, 'foo & bar & foo', 'foo', 0],
+        [0, 'foo & bar & foo', 'foo', -5],
+        [6, 'fòô & bàř', 'bàř', 0, 'UTF-8'],
+        [false, 'fòô & bàř', 'baz', 0, 'UTF-8'],
+        [12, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'],
+        [0, 'fòô & bàř & fòô', 'fòô', -5, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function indexOfProvider()
+  public function indexOfProvider(): array
   {
-    return array(
-        array(6, 'foo & bar', 'bar'),
-        array(6, 'foo & bar', 'bar', 0),
-        array(false, 'foo & bar', 'baz'),
-        array(false, 'foo & bar', 'baz', 0),
-        array(0, 'foo & bar & foo', 'foo', 0),
-        array(12, 'foo & bar & foo', 'foo', 5),
-        array(6, 'fòô & bàř', 'bàř', 0, 'UTF-8'),
-        array(false, 'fòô & bàř', 'baz', 0, 'UTF-8'),
-        array(0, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'),
-        array(12, 'fòô & bàř & fòô', 'fòô', 5, 'UTF-8'),
-    );
+    return [
+        [6, 'foo & bar', 'bar'],
+        [6, 'foo & bar', 'bar', 0],
+        [false, 'foo & bar', 'baz'],
+        [false, 'foo & bar', 'baz', 0],
+        [0, 'foo & bar & foo', 'foo', 0],
+        [12, 'foo & bar & foo', 'foo', 5],
+        [6, 'fòô & bàř', 'bàř', 0, 'UTF-8'],
+        [false, 'fòô & bàř', 'baz', 0, 'UTF-8'],
+        [0, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'],
+        [12, 'fòô & bàř & fòô', 'fòô', 5, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function insertProvider()
+  public function insertProvider(): array
   {
-    return array(
-        array('foo bar', 'oo bar', 'f', 0),
-        array('foo bar', 'f bar', 'oo', 1),
-        array('f bar', 'f bar', 'oo', 20),
-        array('foo bar', 'foo ba', 'r', 6),
-        array('fòôbàř', 'fòôbř', 'à', 4, 'UTF-8'),
-        array('fòô bàř', 'òô bàř', 'f', 0, 'UTF-8'),
-        array('fòô bàř', 'f bàř', 'òô', 1, 'UTF-8'),
-        array('fòô bàř', 'fòô bà', 'ř', 6, 'UTF-8'),
-    );
+    return [
+        ['foo bar', 'oo bar', 'f', 0],
+        ['foo bar', 'f bar', 'oo', 1],
+        ['f bar', 'f bar', 'oo', 20],
+        ['foo bar', 'foo ba', 'r', 6],
+        ['fòôbàř', 'fòôbř', 'à', 4, 'UTF-8'],
+        ['fòô bàř', 'òô bàř', 'f', 0, 'UTF-8'],
+        ['fòô bàř', 'f bàř', 'òô', 1, 'UTF-8'],
+        ['fòô bàř', 'fòô bà', 'ř', 6, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isAlphaProvider()
+  public function isAlphaProvider(): array
   {
-    return array(
-        array(true, ''),
-        array(true, 'foobar'),
-        array(false, 'foo bar'),
-        array(false, 'foobar2'),
-        array(true, 'fòôbàř', 'UTF-8'),
-        array(false, 'fòô bàř', 'UTF-8'),
-        array(false, 'fòôbàř2', 'UTF-8'),
-        array(true, 'ҠѨњфгШ', 'UTF-8'),
-        array(false, 'ҠѨњ¨ˆфгШ', 'UTF-8'),
-        array(true, '丹尼爾', 'UTF-8'),
-    );
+    return [
+        [true, ''],
+        [true, 'foobar'],
+        [false, 'foo bar'],
+        [false, 'foobar2'],
+        [true, 'fòôbàř', 'UTF-8'],
+        [false, 'fòô bàř', 'UTF-8'],
+        [false, 'fòôbàř2', 'UTF-8'],
+        [true, 'ҠѨњфгШ', 'UTF-8'],
+        [false, 'ҠѨњ¨ˆфгШ', 'UTF-8'],
+        [true, '丹尼爾', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isAlphanumericProvider()
+  public function isAlphanumericProvider(): array
   {
-    return array(
-        array(true, ''),
-        array(true, 'foobar1'),
-        array(false, 'foo bar'),
-        array(false, 'foobar2"'),
-        array(false, "\nfoobar\n"),
-        array(true, 'fòôbàř1', 'UTF-8'),
-        array(false, 'fòô bàř', 'UTF-8'),
-        array(false, 'fòôbàř2"', 'UTF-8'),
-        array(true, 'ҠѨњфгШ', 'UTF-8'),
-        array(false, 'ҠѨњ¨ˆфгШ', 'UTF-8'),
-        array(true, '丹尼爾111', 'UTF-8'),
-        array(true, 'دانيال1', 'UTF-8'),
-        array(false, 'دانيال1 ', 'UTF-8'),
-    );
+    return [
+        [true, ''],
+        [true, 'foobar1'],
+        [false, 'foo bar'],
+        [false, 'foobar2"'],
+        [false, "\nfoobar\n"],
+        [true, 'fòôbàř1', 'UTF-8'],
+        [false, 'fòô bàř', 'UTF-8'],
+        [false, 'fòôbàř2"', 'UTF-8'],
+        [true, 'ҠѨњфгШ', 'UTF-8'],
+        [false, 'ҠѨњ¨ˆфгШ', 'UTF-8'],
+        [true, '丹尼爾111', 'UTF-8'],
+        [true, 'دانيال1', 'UTF-8'],
+        [false, 'دانيال1 ', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isBase64Provider()
+  public function isBase64Provider(): array
   {
-    return array(
-        array(false, ' '),
-        array(false, ''),
-        array(true, base64_encode('FooBar')),
-        array(true, base64_encode(' ')),
-        array(true, base64_encode('FÒÔBÀŘ')),
-        array(true, base64_encode('συγγραφέας')),
-        array(false, 'Foobar'),
-    );
+    return [
+        [false, ' '],
+        [false, ''],
+        [true, base64_encode('FooBar')],
+        [true, base64_encode(' ')],
+        [true, base64_encode('FÒÔBÀŘ')],
+        [true, base64_encode('συγγραφέας')],
+        [false, 'Foobar'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isBlankProvider()
+  public function isBlankProvider(): array
   {
-    return array(
-        array(true, ''),
-        array(true, ' '),
-        array(true, "\n\t "),
-        array(true, "\n\t  \v\f"),
-        array(false, "\n\t a \v\f"),
-        array(false, "\n\t ' \v\f"),
-        array(false, "\n\t 2 \v\f"),
-        array(true, '', 'UTF-8'),
-        array(true, ' ', 'UTF-8'), // no-break space (U+00A0)
-        array(true, '           ', 'UTF-8'), // spaces U+2000 to U+200A
-        array(true, ' ', 'UTF-8'), // narrow no-break space (U+202F)
-        array(true, ' ', 'UTF-8'), // medium mathematical space (U+205F)
-        array(true, '　', 'UTF-8'), // ideographic space (U+3000)
-        array(false, '　z', 'UTF-8'),
-        array(false, '　1', 'UTF-8'),
-    );
+    return [
+        [true, ''],
+        [true, ' '],
+        [true, "\n\t "],
+        [true, "\n\t  \v\f"],
+        [false, "\n\t a \v\f"],
+        [false, "\n\t ' \v\f"],
+        [false, "\n\t 2 \v\f"],
+        [true, '', 'UTF-8'],
+        [true, ' ', 'UTF-8'], // no-break space (U+00A0)
+        [true, '           ', 'UTF-8'], // spaces U+2000 to U+200A
+        [true, ' ', 'UTF-8'], // narrow no-break space (U+202F)
+        [true, ' ', 'UTF-8'], // medium mathematical space (U+205F)
+        [true, '　', 'UTF-8'], // ideographic space (U+3000)
+        [false, '　z', 'UTF-8'],
+        [false, '　1', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isHexadecimalProvider()
+  public function isHexadecimalProvider(): array
   {
-    return array(
-        array(true, ''),
-        array(true, 'abcdef'),
-        array(true, 'ABCDEF'),
-        array(true, '0123456789'),
-        array(true, '0123456789AbCdEf'),
-        array(false, '0123456789x'),
-        array(false, 'ABCDEFx'),
-        array(true, 'abcdef', 'UTF-8'),
-        array(true, 'ABCDEF', 'UTF-8'),
-        array(true, '0123456789', 'UTF-8'),
-        array(true, '0123456789AbCdEf', 'UTF-8'),
-        array(false, '0123456789x', 'UTF-8'),
-        array(false, 'ABCDEFx', 'UTF-8'),
-    );
+    return [
+        [true, ''],
+        [true, 'abcdef'],
+        [true, 'ABCDEF'],
+        [true, '0123456789'],
+        [true, '0123456789AbCdEf'],
+        [false, '0123456789x'],
+        [false, 'ABCDEFx'],
+        [true, 'abcdef', 'UTF-8'],
+        [true, 'ABCDEF', 'UTF-8'],
+        [true, '0123456789', 'UTF-8'],
+        [true, '0123456789AbCdEf', 'UTF-8'],
+        [false, '0123456789x', 'UTF-8'],
+        [false, 'ABCDEFx', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isJsonProvider()
+  public function isJsonProvider(): array
   {
-    return array(
-        array(false, ''),
-        array(false, '  '),
-        array(true, 'null'),
-        array(true, 'true'),
-        array(true, 'false'),
-        array(true, '[]'),
-        array(true, '{}'),
-        array(true, '123'),
-        array(true, '{"foo": "bar"}'),
-        array(false, '{"foo":"bar",}'),
-        array(false, '{"foo"}'),
-        array(true, '["foo"]'),
-        array(false, '{"foo": "bar"]'),
-        array(true, '123', 'UTF-8'),
-        array(true, '{"fòô": "bàř"}', 'UTF-8'),
-        array(false, '{"fòô":"bàř",}', 'UTF-8'),
-        array(false, '{"fòô"}', 'UTF-8'),
-        array(false, '["fòô": "bàř"]', 'UTF-8'),
-        array(true, '["fòô"]', 'UTF-8'),
-        array(false, '{"fòô": "bàř"]', 'UTF-8'),
-    );
+    return [
+        [false, ''],
+        [false, '  '],
+        [true, 'null'],
+        [true, 'true'],
+        [true, 'false'],
+        [true, '[]'],
+        [true, '{}'],
+        [true, '123'],
+        [true, '{"foo": "bar"}'],
+        [false, '{"foo":"bar",}'],
+        [false, '{"foo"}'],
+        [true, '["foo"]'],
+        [false, '{"foo": "bar"]'],
+        [true, '123', 'UTF-8'],
+        [true, '{"fòô": "bàř"}', 'UTF-8'],
+        [false, '{"fòô":"bàř",}', 'UTF-8'],
+        [false, '{"fòô"}', 'UTF-8'],
+        [false, '["fòô": "bàř"]', 'UTF-8'],
+        [true, '["fòô"]', 'UTF-8'],
+        [false, '{"fòô": "bàř"]', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isLowerCaseProvider()
+  public function isLowerCaseProvider(): array
   {
-    return array(
-        array(true, ''),
-        array(true, 'foobar'),
-        array(false, 'foo bar'),
-        array(false, 'Foobar'),
-        array(true, 'fòôbàř', 'UTF-8'),
-        array(false, 'fòôbàř2', 'UTF-8'),
-        array(false, 'fòô bàř', 'UTF-8'),
-        array(false, 'fòôbÀŘ', 'UTF-8'),
-    );
+    return [
+        [true, ''],
+        [true, 'foobar'],
+        [false, 'foo bar'],
+        [false, 'Foobar'],
+        [true, 'fòôbàř', 'UTF-8'],
+        [false, 'fòôbàř2', 'UTF-8'],
+        [false, 'fòô bàř', 'UTF-8'],
+        [false, 'fòôbÀŘ', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isProvider()
+  public function isProvider(): array
   {
-    return array(
-        array(true, 'Gears\\String\\Str', 'Gears\\String\\Str'),
-        array(true, 'Gears\\String\\Str', 'Gears\\*\\Str'),
-        array(true, 'Gears\\String\\Str', 'Gears\\*\\*'),
-        array(true, 'Gears\\String\\Str', '*\\*\\*'),
-        array(true, 'Gears\\String\\Str', '*\\String\\*'),
-        array(true, 'Gears\\String\\Str', '*\\*\\Str'),
-        array(true, 'Gears\\String\\Str', '*\\Str'),
-        array(true, 'Gears\\String\\Str', '*'),
-        array(true, 'Gears\\String\\Str', '**'),
-        array(true, 'Gears\\String\\Str', '****'),
-        array(true, 'Gears\\String\\Str', '*Str'),
-        array(false, 'Gears\\String\\Str', '*\\'),
-        array(false, 'Gears\\String\\Str', 'Gears-*-*'),
-    );
+    return [
+        [true, 'Gears\\String\\Str', 'Gears\\String\\Str'],
+        [true, 'Gears\\String\\Str', 'Gears\\*\\Str'],
+        [true, 'Gears\\String\\Str', 'Gears\\*\\*'],
+        [true, 'Gears\\String\\Str', '*\\*\\*'],
+        [true, 'Gears\\String\\Str', '*\\String\\*'],
+        [true, 'Gears\\String\\Str', '*\\*\\Str'],
+        [true, 'Gears\\String\\Str', '*\\Str'],
+        [true, 'Gears\\String\\Str', '*'],
+        [true, 'Gears\\String\\Str', '**'],
+        [true, 'Gears\\String\\Str', '****'],
+        [true, 'Gears\\String\\Str', '*Str'],
+        [false, 'Gears\\String\\Str', '*\\'],
+        [false, 'Gears\\String\\Str', 'Gears-*-*'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isSerializedProvider()
+  public function isSerializedProvider(): array
   {
-    return array(
-        array(false, ''),
-        array(true, 'a:1:{s:3:"foo";s:3:"bar";}'),
-        array(false, 'a:1:{s:3:"foo";s:3:"bar"}'),
-        array(true, serialize(array('foo' => 'bar'))),
-        array(true, 'a:1:{s:5:"fòô";s:5:"bàř";}', 'UTF-8'),
-        array(false, 'a:1:{s:5:"fòô";s:5:"bàř"}', 'UTF-8'),
-        array(true, serialize(array('fòô' => 'bár')), 'UTF-8'),
-    );
+    return [
+        [false, ''],
+        [true, 'a:1:{s:3:"foo";s:3:"bar";}'],
+        [false, 'a:1:{s:3:"foo";s:3:"bar"}'],
+        [true, serialize(['foo' => 'bar'])],
+        [true, 'a:1:{s:5:"fòô";s:5:"bàř";}', 'UTF-8'],
+        [false, 'a:1:{s:5:"fòô";s:5:"bàř"}', 'UTF-8'],
+        [true, serialize(['fòô' => 'bár']), 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isUpperCaseProvider()
+  public function isUpperCaseProvider(): array
   {
-    return array(
-        array(true, ''),
-        array(true, 'FOOBAR'),
-        array(false, 'FOO BAR'),
-        array(false, 'fOOBAR'),
-        array(true, 'FÒÔBÀŘ', 'UTF-8'),
-        array(false, 'FÒÔBÀŘ2', 'UTF-8'),
-        array(false, 'FÒÔ BÀŘ', 'UTF-8'),
-        array(false, 'FÒÔBàř', 'UTF-8'),
-    );
+    return [
+        [true, ''],
+        [true, 'FOOBAR'],
+        [false, 'FOO BAR'],
+        [false, 'fOOBAR'],
+        [true, 'FÒÔBÀŘ', 'UTF-8'],
+        [false, 'FÒÔBÀŘ2', 'UTF-8'],
+        [false, 'FÒÔ BÀŘ', 'UTF-8'],
+        [false, 'FÒÔBàř', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function lastProvider()
+  public function lastProvider(): array
   {
-    return array(
-        array('', 'foo bar', -5),
-        array('', 'foo bar', 0),
-        array('r', 'foo bar', 1),
-        array('bar', 'foo bar', 3),
-        array('foo bar', 'foo bar', 7),
-        array('foo bar', 'foo bar', 8),
-        array('', 'fòô bàř', -5, 'UTF-8'),
-        array('', 'fòô bàř', 0, 'UTF-8'),
-        array('ř', 'fòô bàř', 1, 'UTF-8'),
-        array('bàř', 'fòô bàř', 3, 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 7, 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 8, 'UTF-8'),
-    );
+    return [
+        ['', 'foo bar', -5],
+        ['', 'foo bar', 0],
+        ['r', 'foo bar', 1],
+        ['bar', 'foo bar', 3],
+        ['foo bar', 'foo bar', 7],
+        ['foo bar', 'foo bar', 8],
+        ['', 'fòô bàř', -5, 'UTF-8'],
+        ['', 'fòô bàř', 0, 'UTF-8'],
+        ['ř', 'fòô bàř', 1, 'UTF-8'],
+        ['bàř', 'fòô bàř', 3, 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 7, 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 8, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function lengthProvider()
+  public function lengthProvider(): array
   {
-    return array(
-        array(11, '  foo bar  '),
-        array(1, 'f'),
-        array(0, ''),
-        array(7, 'fòô bàř', 'UTF-8'),
-    );
+    return [
+        [11, '  foo bar  '],
+        [1, 'f'],
+        [0, ''],
+        [7, 'fòô bàř', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function linesProvider()
+  public function linesProvider(): array
   {
-    return array(
-        array(array(), ''),
-        array(array(''), "\r\n"),
-        array(array('foo', 'bar'), "foo\nbar"),
-        array(array('foo', 'bar'), "foo\rbar"),
-        array(array('foo', 'bar'), "foo\r\nbar"),
-        array(array('foo', '', 'bar'), "foo\r\n\r\nbar"),
-        array(array('foo', 'bar', ''), "foo\r\nbar\r\n"),
-        array(array('', 'foo', 'bar'), "\r\nfoo\r\nbar"),
-        array(array('fòô', 'bàř'), "fòô\nbàř", 'UTF-8'),
-        array(array('fòô', 'bàř'), "fòô\rbàř", 'UTF-8'),
-        array(array('fòô', 'bàř'), "fòô\n\rbàř", 'UTF-8'),
-        array(array('fòô', 'bàř'), "fòô\r\nbàř", 'UTF-8'),
-        array(array('fòô', '', 'bàř'), "fòô\r\n\r\nbàř", 'UTF-8'),
-        array(array('fòô', 'bàř', ''), "fòô\r\nbàř\r\n", 'UTF-8'),
-        array(array('', 'fòô', 'bàř'), "\r\nfòô\r\nbàř", 'UTF-8'),
-    );
+    return [
+        [[], ''],
+        [[''], "\r\n"],
+        [['foo', 'bar'], "foo\nbar"],
+        [['foo', 'bar'], "foo\rbar"],
+        [['foo', 'bar'], "foo\r\nbar"],
+        [['foo', '', 'bar'], "foo\r\n\r\nbar"],
+        [['foo', 'bar', ''], "foo\r\nbar\r\n"],
+        [['', 'foo', 'bar'], "\r\nfoo\r\nbar"],
+        [['fòô', 'bàř'], "fòô\nbàř", 'UTF-8'],
+        [['fòô', 'bàř'], "fòô\rbàř", 'UTF-8'],
+        [['fòô', 'bàř'], "fòô\n\rbàř", 'UTF-8'],
+        [['fòô', 'bàř'], "fòô\r\nbàř", 'UTF-8'],
+        [['fòô', '', 'bàř'], "fòô\r\n\r\nbàř", 'UTF-8'],
+        [['fòô', 'bàř', ''], "fòô\r\nbàř\r\n", 'UTF-8'],
+        [['', 'fòô', 'bàř'], "\r\nfòô\r\nbàř", 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function longestCommonPrefixProvider()
+  public function longestCommonPrefixProvider(): array
   {
-    return array(
-        array('foo', 'foobar', 'foo bar'),
-        array('foo bar', 'foo bar', 'foo bar'),
-        array('f', 'foo bar', 'far boo'),
-        array('', 'toy car', 'foo bar'),
-        array('', 'foo bar', ''),
-        array('fòô', 'fòôbar', 'fòô bar', 'UTF-8'),
-        array('fòô bar', 'fòô bar', 'fòô bar', 'UTF-8'),
-        array('fò', 'fòô bar', 'fòr bar', 'UTF-8'),
-        array('', 'toy car', 'fòô bar', 'UTF-8'),
-        array('', 'fòô bar', '', 'UTF-8'),
-    );
+    return [
+        ['foo', 'foobar', 'foo bar'],
+        ['foo bar', 'foo bar', 'foo bar'],
+        ['f', 'foo bar', 'far boo'],
+        ['', 'toy car', 'foo bar'],
+        ['', 'foo bar', ''],
+        ['fòô', 'fòôbar', 'fòô bar', 'UTF-8'],
+        ['fòô bar', 'fòô bar', 'fòô bar', 'UTF-8'],
+        ['fò', 'fòô bar', 'fòr bar', 'UTF-8'],
+        ['', 'toy car', 'fòô bar', 'UTF-8'],
+        ['', 'fòô bar', '', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function longestCommonSubstringProvider()
+  public function longestCommonSubstringProvider(): array
   {
-    return array(
-        array('foo', 'foobar', 'foo bar'),
-        array('foo bar', 'foo bar', 'foo bar'),
-        array('oo ', 'foo bar', 'boo far'),
-        array('foo ba', 'foo bad', 'foo bar'),
-        array('', 'foo bar', ''),
-        array('fòô', 'fòôbàř', 'fòô bàř', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 'fòô bàř', 'UTF-8'),
-        array(' bàř', 'fòô bàř', 'fòr bàř', 'UTF-8'),
-        array(' ', 'toy car', 'fòô bàř', 'UTF-8'),
-        array('', 'fòô bàř', '', 'UTF-8'),
-    );
+    return [
+        ['foo', 'foobar', 'foo bar'],
+        ['foo bar', 'foo bar', 'foo bar'],
+        ['oo ', 'foo bar', 'boo far'],
+        ['foo ba', 'foo bad', 'foo bar'],
+        ['', 'foo bar', ''],
+        ['fòô', 'fòôbàř', 'fòô bàř', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 'fòô bàř', 'UTF-8'],
+        [' bàř', 'fòô bàř', 'fòr bàř', 'UTF-8'],
+        [' ', 'toy car', 'fòô bàř', 'UTF-8'],
+        ['', 'fòô bàř', '', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function longestCommonSuffixProvider()
+  public function longestCommonSuffixProvider(): array
   {
-    return array(
-        array('bar', 'foobar', 'foo bar'),
-        array('foo bar', 'foo bar', 'foo bar'),
-        array('ar', 'foo bar', 'boo far'),
-        array('', 'foo bad', 'foo bar'),
-        array('', 'foo bar', ''),
-        array('bàř', 'fòôbàř', 'fòô bàř', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 'fòô bàř', 'UTF-8'),
-        array(' bàř', 'fòô bàř', 'fòr bàř', 'UTF-8'),
-        array('', 'toy car', 'fòô bàř', 'UTF-8'),
-        array('', 'fòô bàř', '', 'UTF-8'),
-    );
+    return [
+        ['bar', 'foobar', 'foo bar'],
+        ['foo bar', 'foo bar', 'foo bar'],
+        ['ar', 'foo bar', 'boo far'],
+        ['', 'foo bad', 'foo bar'],
+        ['', 'foo bar', ''],
+        ['bàř', 'fòôbàř', 'fòô bàř', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 'fòô bàř', 'UTF-8'],
+        [' bàř', 'fòô bàř', 'fòr bàř', 'UTF-8'],
+        ['', 'toy car', 'fòô bàř', 'UTF-8'],
+        ['', 'fòô bàř', '', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function lowerCaseFirstProvider()
+  public function lowerCaseFirstProvider(): array
   {
-    return array(
-        array('test', 'Test'),
-        array('test', 'test'),
-        array('1a', '1a'),
-        array('σ test', 'Σ test', 'UTF-8'),
-        array(' Σ test', ' Σ test', 'UTF-8'),
-    );
+    return [
+        ['test', 'Test'],
+        ['test', 'test'],
+        ['1a', '1a'],
+        ['σ test', 'Σ test', 'UTF-8'],
+        [' Σ test', ' Σ test', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function offsetExistsProvider()
+  public function offsetExistsProvider(): array
   {
-    return array(
-        array(true, 0),
-        array(true, 2),
-        array(false, 3),
-        array(true, -1),
-        array(true, -3),
-        array(false, -4),
-    );
+    return [
+        [true, 0],
+        [true, 2],
+        [false, 3],
+        [true, -1],
+        [true, -3],
+        [false, -4],
+    ];
   }
 
   /**
    * @return array
    */
-  public function padBothProvider()
+  public function padBothProvider(): array
   {
-    return array(
-        array('foo bar ', 'foo bar', 8),
-        array(' foo bar ', 'foo bar', 9, ' '),
-        array('fòô bàř ', 'fòô bàř', 8, ' ', 'UTF-8'),
-        array(' fòô bàř ', 'fòô bàř', 9, ' ', 'UTF-8'),
-        array('fòô bàř¬', 'fòô bàř', 8, '¬ø', 'UTF-8'),
-        array('¬fòô bàř¬', 'fòô bàř', 9, '¬ø', 'UTF-8'),
-        array('¬fòô bàř¬ø', 'fòô bàř', 10, '¬ø', 'UTF-8'),
-        array('¬øfòô bàř¬ø', 'fòô bàř', 11, '¬ø', 'UTF-8'),
-        array('¬fòô bàř¬ø', 'fòô bàř', 10, '¬øÿ', 'UTF-8'),
-        array('¬øfòô bàř¬ø', 'fòô bàř', 11, '¬øÿ', 'UTF-8'),
-        array('¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'UTF-8'),
-    );
+    return [
+        ['foo bar ', 'foo bar', 8],
+        [' foo bar ', 'foo bar', 9, ' '],
+        ['fòô bàř ', 'fòô bàř', 8, ' ', 'UTF-8'],
+        [' fòô bàř ', 'fòô bàř', 9, ' ', 'UTF-8'],
+        ['fòô bàř¬', 'fòô bàř', 8, '¬ø', 'UTF-8'],
+        ['¬fòô bàř¬', 'fòô bàř', 9, '¬ø', 'UTF-8'],
+        ['¬fòô bàř¬ø', 'fòô bàř', 10, '¬ø', 'UTF-8'],
+        ['¬øfòô bàř¬ø', 'fòô bàř', 11, '¬ø', 'UTF-8'],
+        ['¬fòô bàř¬ø', 'fòô bàř', 10, '¬øÿ', 'UTF-8'],
+        ['¬øfòô bàř¬ø', 'fòô bàř', 11, '¬øÿ', 'UTF-8'],
+        ['¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function padLeftProvider()
+  public function padLeftProvider(): array
   {
-    return array(
-        array('  foo bar', 'foo bar', 9),
-        array('_*foo bar', 'foo bar', 9, '_*'),
-        array('_*_foo bar', 'foo bar', 10, '_*'),
-        array('  fòô bàř', 'fòô bàř', 9, ' ', 'UTF-8'),
-        array('¬øfòô bàř', 'fòô bàř', 9, '¬ø', 'UTF-8'),
-        array('¬ø¬fòô bàř', 'fòô bàř', 10, '¬ø', 'UTF-8'),
-        array('¬ø¬øfòô bàř', 'fòô bàř', 11, '¬ø', 'UTF-8'),
-    );
+    return [
+        ['  foo bar', 'foo bar', 9],
+        ['_*foo bar', 'foo bar', 9, '_*'],
+        ['_*_foo bar', 'foo bar', 10, '_*'],
+        ['  fòô bàř', 'fòô bàř', 9, ' ', 'UTF-8'],
+        ['¬øfòô bàř', 'fòô bàř', 9, '¬ø', 'UTF-8'],
+        ['¬ø¬fòô bàř', 'fòô bàř', 10, '¬ø', 'UTF-8'],
+        ['¬ø¬øfòô bàř', 'fòô bàř', 11, '¬ø', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function padProvider()
+  public function padProvider(): array
   {
-    return array(
+    return [
       // length <= str
-      array('foo bar', 'foo bar', -1),
-      array('foo bar', 'foo bar', 7),
-      array('fòô bàř', 'fòô bàř', 7, ' ', 'right', 'UTF-8'),
+      ['foo bar', 'foo bar', -1],
+      ['foo bar', 'foo bar', 7],
+      ['fòô bàř', 'fòô bàř', 7, ' ', 'right', 'UTF-8'],
 
       // right
-      array('foo bar  ', 'foo bar', 9),
-      array('foo bar_*', 'foo bar', 9, '_*', 'right'),
-      array('fòô bàř¬ø¬', 'fòô bàř', 10, '¬ø', 'right', 'UTF-8'),
+      ['foo bar  ', 'foo bar', 9],
+      ['foo bar_*', 'foo bar', 9, '_*', 'right'],
+      ['fòô bàř¬ø¬', 'fòô bàř', 10, '¬ø', 'right', 'UTF-8'],
 
       // left
-      array('  foo bar', 'foo bar', 9, ' ', 'left'),
-      array('_*foo bar', 'foo bar', 9, '_*', 'left'),
-      array('¬ø¬fòô bàř', 'fòô bàř', 10, '¬ø', 'left', 'UTF-8'),
+      ['  foo bar', 'foo bar', 9, ' ', 'left'],
+      ['_*foo bar', 'foo bar', 9, '_*', 'left'],
+      ['¬ø¬fòô bàř', 'fòô bàř', 10, '¬ø', 'left', 'UTF-8'],
 
       // both
-      array('foo bar ', 'foo bar', 8, ' ', 'both'),
-      array('¬fòô bàř¬ø', 'fòô bàř', 10, '¬ø', 'both', 'UTF-8'),
-      array('¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'both', 'UTF-8'),
-    );
+      ['foo bar ', 'foo bar', 8, ' ', 'both'],
+      ['¬fòô bàř¬ø', 'fòô bàř', 10, '¬ø', 'both', 'UTF-8'],
+      ['¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'both', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function padRightProvider()
+  public function padRightProvider(): array
   {
-    return array(
-        array('foo bar  ', 'foo bar', 9),
-        array('foo bar_*', 'foo bar', 9, '_*'),
-        array('foo bar_*_', 'foo bar', 10, '_*'),
-        array('fòô bàř  ', 'fòô bàř', 9, ' ', 'UTF-8'),
-        array('fòô bàř¬ø', 'fòô bàř', 9, '¬ø', 'UTF-8'),
-        array('fòô bàř¬ø¬', 'fòô bàř', 10, '¬ø', 'UTF-8'),
-        array('fòô bàř¬ø¬ø', 'fòô bàř', 11, '¬ø', 'UTF-8'),
-    );
+    return [
+        ['foo bar  ', 'foo bar', 9],
+        ['foo bar_*', 'foo bar', 9, '_*'],
+        ['foo bar_*_', 'foo bar', 10, '_*'],
+        ['fòô bàř  ', 'fòô bàř', 9, ' ', 'UTF-8'],
+        ['fòô bàř¬ø', 'fòô bàř', 9, '¬ø', 'UTF-8'],
+        ['fòô bàř¬ø¬', 'fòô bàř', 10, '¬ø', 'UTF-8'],
+        ['fòô bàř¬ø¬ø', 'fòô bàř', 11, '¬ø', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function prependProvider()
+  public function prependProvider(): array
   {
-    return array(
-        array('foobar', 'bar', 'foo'),
-        array('fòôbàř', 'bàř', 'fòô', 'UTF-8'),
-    );
+    return [
+        ['foobar', 'bar', 'foo'],
+        ['fòôbàř', 'bàř', 'fòô', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function regexReplaceProvider()
+  public function regexReplaceProvider(): array
   {
-    return array(
-        array('', '', '', ''),
-        array('bar', 'foo', 'f[o]+', 'bar'),
-        array('//bar//', '/foo/', '/f[o]+/', '//bar//', 'msr', '#'),
-        array('o bar', 'foo bar', 'f(o)o', '\1'),
-        array('bar', 'foo bar', 'f[O]+\s', '', 'i'),
-        array('foo', 'bar', '[[:alpha:]]{3}', 'foo'),
-        array('', '', '', '', 'msr', '/', 'UTF-8'),
-        array('bàř', 'fòô ', 'f[òô]+\s', 'bàř', 'msr', '/', 'UTF-8'),
-        array('fòô', 'fò', '(ò)', '\\1ô', 'msr', '/', 'UTF-8'),
-        array('fòô', 'bàř', '[[:alpha:]]{3}', 'fòô', 'msr', '/', 'UTF-8'),
-    );
+    return [
+        ['', '', '', ''],
+        ['bar', 'foo', 'f[o]+', 'bar'],
+        ['//bar//', '/foo/', '/f[o]+/', '//bar//', 'msr', '#'],
+        ['o bar', 'foo bar', 'f(o)o', '\1'],
+        ['bar', 'foo bar', 'f[O]+\s', '', 'i'],
+        ['foo', 'bar', '[[:alpha:]]{3}', 'foo'],
+        ['', '', '', '', 'msr', '/', 'UTF-8'],
+        ['bàř', 'fòô ', 'f[òô]+\s', 'bàř', 'msr', '/', 'UTF-8'],
+        ['fòô', 'fò', '(ò)', '\\1ô', 'msr', '/', 'UTF-8'],
+        ['fòô', 'bàř', '[[:alpha:]]{3}', 'fòô', 'msr', '/', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeHtmlBreakProvider()
+  public function removeHtmlBreakProvider(): array
   {
-    return array(
-        array('', ''),
-        array('raboof <3', 'raboof <3', '<ä>'),
-        array('řàbôòf <foo<lall>>>', 'řàbôòf<br/><foo<lall>>>', ' '),
-        array(
+    return [
+        ['', ''],
+        ['raboof <3', 'raboof <3', '<ä>'],
+        ['řàbôòf <foo<lall>>>', 'řàbôòf<br/><foo<lall>>>', ' '],
+        [
             'řàb <ô>òf\', ô<br><br/>foo <a href="#">lall</a>',
             'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>',
             '<br><br/>',
-        ),
-        array('<∂∆ onerror="alert(xss)">˚åß', '<∂∆ onerror="alert(xss)">' . "\n" . '˚åß'),
-        array('\'œ … \'’)', '\'œ … \'’)'),
-    );
+        ],
+        ['<∂∆ onerror="alert(xss)">˚åß', '<∂∆ onerror="alert(xss)">' . "\n" . '˚åß'],
+        ['\'œ … \'’)', '\'œ … \'’)'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeHtmlProvider()
+  public function removeHtmlProvider(): array
   {
-    return array(
-        array('', ''),
-        array('raboof ', 'raboof <3', '<3>'),
-        array('řàbôòf>', 'řàbôòf<foo<lall>>>', '<lall><lall/>'),
-        array('řàb òf\', ô<br/>foo lall', 'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>', '<br><br/>'),
-        array(' ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'),
-        array('\'œ … \'’)', '\'œ … \'’)'),
-    );
+    return [
+        ['', ''],
+        ['raboof ', 'raboof <3', '<3>'],
+        ['řàbôòf>', 'řàbôòf<foo<lall>>>', '<lall><lall/>'],
+        ['řàb òf\', ô<br/>foo lall', 'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>', '<br><br/>'],
+        [' ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'],
+        ['\'œ … \'’)', '\'œ … \'’)'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeLeftProvider()
+  public function removeLeftProvider(): array
   {
-    return array(
-        array('foo bar', 'foo bar', ''),
-        array('oo bar', 'foo bar', 'f'),
-        array('bar', 'foo bar', 'foo '),
-        array('foo bar', 'foo bar', 'oo'),
-        array('foo bar', 'foo bar', 'oo bar'),
-        array('oo bar', 'foo bar', S::create('foo bar')->first(1), 'UTF-8'),
-        array('oo bar', 'foo bar', S::create('foo bar')->at(0), 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', '', 'UTF-8'),
-        array('òô bàř', 'fòô bàř', 'f', 'UTF-8'),
-        array('bàř', 'fòô bàř', 'fòô ', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 'òô', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 'òô bàř', 'UTF-8'),
-    );
+    return [
+        ['foo bar', 'foo bar', ''],
+        ['oo bar', 'foo bar', 'f'],
+        ['bar', 'foo bar', 'foo '],
+        ['foo bar', 'foo bar', 'oo'],
+        ['foo bar', 'foo bar', 'oo bar'],
+        ['oo bar', 'foo bar', S::create('foo bar')->first(1), 'UTF-8'],
+        ['oo bar', 'foo bar', S::create('foo bar')->at(0), 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', '', 'UTF-8'],
+        ['òô bàř', 'fòô bàř', 'f', 'UTF-8'],
+        ['bàř', 'fòô bàř', 'fòô ', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 'òô', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 'òô bàř', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeRightProvider()
+  public function removeRightProvider(): array
   {
-    return array(
-        array('foo bar', 'foo bar', ''),
-        array('foo ba', 'foo bar', 'r'),
-        array('foo', 'foo bar', ' bar'),
-        array('foo bar', 'foo bar', 'ba'),
-        array('foo bar', 'foo bar', 'foo ba'),
-        array('foo ba', 'foo bar', S::create('foo bar')->last(1), 'UTF-8'),
-        array('foo ba', 'foo bar', S::create('foo bar')->at(6), 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', '', 'UTF-8'),
-        array('fòô bà', 'fòô bàř', 'ř', 'UTF-8'),
-        array('fòô', 'fòô bàř', ' bàř', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 'bà', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', 'fòô bà', 'UTF-8'),
-    );
+    return [
+        ['foo bar', 'foo bar', ''],
+        ['foo ba', 'foo bar', 'r'],
+        ['foo', 'foo bar', ' bar'],
+        ['foo bar', 'foo bar', 'ba'],
+        ['foo bar', 'foo bar', 'foo ba'],
+        ['foo ba', 'foo bar', S::create('foo bar')->last(1), 'UTF-8'],
+        ['foo ba', 'foo bar', S::create('foo bar')->at(6), 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', '', 'UTF-8'],
+        ['fòô bà', 'fòô bàř', 'ř', 'UTF-8'],
+        ['fòô', 'fòô bàř', ' bàř', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 'bà', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', 'fòô bà', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeXssProvider()
+  public function removeXssProvider(): array
   {
-    return array(
-        array('', ''),
-        array(
+    return [
+        ['', ''],
+        [
             'Hello, i try to alert&#40;\'Hack\'&#41;; your site',
             'Hello, i try to <script>alert(\'Hack\');</script> your site',
-        ),
-        array(
+        ],
+        [
             '<IMG >',
             '<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>',
-        ),
-        array('&lt;XSS &gt;', '<XSS STYLE="behavior: url(xss.htc);">'),
-        array('<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'),
-        array('\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'),
-    );
+        ],
+        ['&lt;XSS &gt;', '<XSS STYLE="behavior: url(xss.htc);">'],
+        ['<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'],
+        ['\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function repeatProvider()
+  public function repeatProvider(): array
   {
-    return array(
-        array('', 'foo', 0),
-        array('foo', 'foo', 1),
-        array('foofoo', 'foo', 2),
-        array('foofoofoo', 'foo', 3),
-        array('fòô', 'fòô', 1, 'UTF-8'),
-        array('fòôfòô', 'fòô', 2, 'UTF-8'),
-        array('fòôfòôfòô', 'fòô', 3, 'UTF-8'),
-    );
+    return [
+        ['', 'foo', 0],
+        ['foo', 'foo', 1],
+        ['foofoo', 'foo', 2],
+        ['foofoofoo', 'foo', 3],
+        ['fòô', 'fòô', 1, 'UTF-8'],
+        ['fòôfòô', 'fòô', 2, 'UTF-8'],
+        ['fòôfòôfòô', 'fòô', 3, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function replaceAllProvider()
+  public function replaceAllProvider(): array
   {
-    return array(
-        array('', '', array(), ''),
-        array('', '', array(''), ''),
-        array('foo', ' ', array(' ', ''), 'foo'),
-        array('foo', '\s', array('\s', '\t'), 'foo'),
-        array('foo bar', 'foo bar', array(''), ''),
-        array('\1 bar', 'foo bar', array('f(o)o', 'foo'), '\1'),
-        array('\1 \1', 'foo bar', array('foo', 'föö', 'bar'), '\1'),
-        array('bar', 'foo bar', array('foo '), ''),
-        array('far bar', 'foo bar', array('foo'), 'far'),
-        array('bar bar', 'foo bar foo bar', array('foo ', ' foo'), ''),
-        array('bar bar bar bar', 'foo bar foo bar', array('foo ', ' foo'), array('bar ', ' bar')),
-        array('', '', array(''), '', 'UTF-8'),
-        array('fòô', ' ', array(' ', '', '  '), 'fòô', 'UTF-8'),
-        array('fòôòô', '\s', array('\s', 'f'), 'fòô', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', array(''), '', 'UTF-8'),
-        array('bàř', 'fòô bàř', array('fòô '), '', 'UTF-8'),
-        array('far bàř', 'fòô bàř', array('fòô'), 'far', 'UTF-8'),
-        array('bàř bàř', 'fòô bàř fòô bàř', array('fòô ', 'fòô'), '', 'UTF-8'),
-        array('bàř bàř', 'fòô bàř fòô bàř', array('fòô '), ''),
-        array('bàř bàř', 'fòô bàř fòô bàř', array('fòô '), ''),
-        array('fòô bàř fòô bàř', 'fòô bàř fòô bàř', array('Fòô '), ''),
-        array('fòô bàř fòô bàř', 'fòô bàř fòô bàř', array('fòÔ '), ''),
-        array('fòô bàř bàř', 'fòô bàř [[fòô]] bàř', array('[[fòô]] ', '[]'), ''),
-        array('', '', array(''), '', 'UTF-8', false),
-        array('fòô', ' ', array(' ', '', '  '), 'fòô', 'UTF-8', false),
-        array('fòôòô', '\s', array('\s', 'f'), 'fòô', 'UTF-8', false),
-        array('fòô bàř', 'fòô bàř', array(''), '', 'UTF-8', false),
-        array('bàř', 'fòô bàř', array('fòÔ '), '', 'UTF-8', false),
-        array('bàř', 'fòô bàř', array('fòÔ '), array(''), 'UTF-8', false),
-        array('far bàř', 'fòô bàř', array('Fòô'), 'far', 'UTF-8', false),
-    );
+    return [
+        ['', '', [], ''],
+        ['', '', [''], ''],
+        ['foo', ' ', [' ', ''], 'foo'],
+        ['foo', '\s', ['\s', '\t'], 'foo'],
+        ['foo bar', 'foo bar', [''], ''],
+        ['\1 bar', 'foo bar', ['f(o)o', 'foo'], '\1'],
+        ['\1 \1', 'foo bar', ['foo', 'föö', 'bar'], '\1'],
+        ['bar', 'foo bar', ['foo '], ''],
+        ['far bar', 'foo bar', ['foo'], 'far'],
+        ['bar bar', 'foo bar foo bar', ['foo ', ' foo'], ''],
+        ['bar bar bar bar', 'foo bar foo bar', ['foo ', ' foo'], ['bar ', ' bar']],
+        ['', '', [''], '', 'UTF-8'],
+        ['fòô', ' ', [' ', '', '  '], 'fòô', 'UTF-8'],
+        ['fòôòô', '\s', ['\s', 'f'], 'fòô', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', [''], '', 'UTF-8'],
+        ['bàř', 'fòô bàř', ['fòô '], '', 'UTF-8'],
+        ['far bàř', 'fòô bàř', ['fòô'], 'far', 'UTF-8'],
+        ['bàř bàř', 'fòô bàř fòô bàř', ['fòô ', 'fòô'], '', 'UTF-8'],
+        ['bàř bàř', 'fòô bàř fòô bàř', ['fòô '], ''],
+        ['bàř bàř', 'fòô bàř fòô bàř', ['fòô '], ''],
+        ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', ['Fòô '], ''],
+        ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', ['fòÔ '], ''],
+        ['fòô bàř bàř', 'fòô bàř [[fòô]] bàř', ['[[fòô]] ', '[]'], ''],
+        ['', '', [''], '', 'UTF-8', false],
+        ['fòô', ' ', [' ', '', '  '], 'fòô', 'UTF-8', false],
+        ['fòôòô', '\s', ['\s', 'f'], 'fòô', 'UTF-8', false],
+        ['fòô bàř', 'fòô bàř', [''], '', 'UTF-8', false],
+        ['bàř', 'fòô bàř', ['fòÔ '], '', 'UTF-8', false],
+        ['bàř', 'fòô bàř', ['fòÔ '], [''], 'UTF-8', false],
+        ['far bàř', 'fòô bàř', ['Fòô'], 'far', 'UTF-8', false],
+    ];
   }
 
   /**
    * @return array
    */
-  public function replaceBeginningProvider()
+  public function replaceBeginningProvider(): array
   {
-    return array(
-        array('', '', '', ''),
-        array('foo', '', '', 'foo'),
-        array('foo', '\s', '\s', 'foo'),
-        array('foo bar', 'foo bar', '', ''),
-        array('foo bar', 'foo bar', 'f(o)o', '\1'),
-        array('\1 bar', 'foo bar', 'foo', '\1'),
-        array('bar', 'foo bar', 'foo ', ''),
-        array('far bar', 'foo bar', 'foo', 'far'),
-        array('bar foo bar', 'foo bar foo bar', 'foo ', ''),
-        array('', '', '', '', 'UTF-8'),
-        array('fòô', '', '', 'fòô', 'UTF-8'),
-        array('fòô', '\s', '\s', 'fòô', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', '', '', 'UTF-8'),
-        array('bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'),
-        array('far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'),
-        array('bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'),
-    );
+    return [
+        ['', '', '', ''],
+        ['foo', '', '', 'foo'],
+        ['foo', '\s', '\s', 'foo'],
+        ['foo bar', 'foo bar', '', ''],
+        ['foo bar', 'foo bar', 'f(o)o', '\1'],
+        ['\1 bar', 'foo bar', 'foo', '\1'],
+        ['bar', 'foo bar', 'foo ', ''],
+        ['far bar', 'foo bar', 'foo', 'far'],
+        ['bar foo bar', 'foo bar foo bar', 'foo ', ''],
+        ['', '', '', '', 'UTF-8'],
+        ['fòô', '', '', 'fòô', 'UTF-8'],
+        ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
+        ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'],
+        ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'],
+        ['bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function replaceEndingProvider()
+  public function replaceEndingProvider(): array
   {
-    return array(
-        array('', '', '', ''),
-        array('foo', '', '', 'foo'),
-        array('foo', '\s', '\s', 'foo'),
-        array('foo bar', 'foo bar', '', ''),
-        array('foo bar', 'foo bar', 'f(o)o', '\1'),
-        array('foo bar', 'foo bar', 'foo', '\1'),
-        array('foo bar', 'foo bar', 'foo ', ''),
-        array('foo lall', 'foo bar', 'bar', 'lall'),
-        array('foo bar foo ', 'foo bar foo bar', 'bar', ''),
-        array('', '', '', '', 'UTF-8'),
-        array('fòô', '', '', 'fòô', 'UTF-8'),
-        array('fòô', '\s', '\s', 'fòô', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', '', '', 'UTF-8'),
-        array('fòô', 'fòô bàř', ' bàř', '', 'UTF-8'),
-        array('fòôfar', 'fòô bàř', ' bàř', 'far', 'UTF-8'),
-        array('fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'),
-    );
+    return [
+        ['', '', '', ''],
+        ['foo', '', '', 'foo'],
+        ['foo', '\s', '\s', 'foo'],
+        ['foo bar', 'foo bar', '', ''],
+        ['foo bar', 'foo bar', 'f(o)o', '\1'],
+        ['foo bar', 'foo bar', 'foo', '\1'],
+        ['foo bar', 'foo bar', 'foo ', ''],
+        ['foo lall', 'foo bar', 'bar', 'lall'],
+        ['foo bar foo ', 'foo bar foo bar', 'bar', ''],
+        ['', '', '', '', 'UTF-8'],
+        ['fòô', '', '', 'fòô', 'UTF-8'],
+        ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
+        ['fòô', 'fòô bàř', ' bàř', '', 'UTF-8'],
+        ['fòôfar', 'fòô bàř', ' bàř', 'far', 'UTF-8'],
+        ['fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function replaceProvider()
+  public function replaceProvider(): array
   {
-    return array(
-        array('', '', '', ''),
-        array('foo', ' ', ' ', 'foo'),
-        array('foo', '\s', '\s', 'foo'),
-        array('foo bar', 'foo bar', '', ''),
-        array('foo bar', 'foo bar', 'f(o)o', '\1'),
-        array('\1 bar', 'foo bar', 'foo', '\1'),
-        array('bar', 'foo bar', 'foo ', ''),
-        array('far bar', 'foo bar', 'foo', 'far'),
-        array('bar bar', 'foo bar foo bar', 'foo ', ''),
-        array('', '', '', '', 'UTF-8'),
-        array('fòô', ' ', ' ', 'fòô', 'UTF-8'),
-        array('fòô', '\s', '\s', 'fòô', 'UTF-8'),
-        array('fòô bàř', 'fòô bàř', '', '', 'UTF-8'),
-        array('bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'),
-        array('far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'),
-        array('bàř bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'),
-        array('bàř bàř', 'fòô bàř fòô bàř', 'fòô ', '',),
-        array('bàř bàř', 'fòô bàř fòô bàř', 'fòô ', ''),
-        array('fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'Fòô ', ''),
-        array('fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'fòÔ ', ''),
-        array('fòô bàř bàř', 'fòô bàř [[fòô]] bàř', '[[fòô]] ', ''),
-        array('', '', '', '', 'UTF-8', false),
-        array('òô', ' ', ' ', 'òô', 'UTF-8', false),
-        array('fòô', '\s', '\s', 'fòô', 'UTF-8', false),
-        array('fòô bàř', 'fòô bàř', '', '', 'UTF-8', false),
-        array('bàř', 'fòô bàř', 'Fòô ', '', 'UTF-8', false),
-        array('far bàř', 'fòô bàř', 'fòÔ', 'far', 'UTF-8', false),
-        array('bàř bàř', 'fòô bàř fòô bàř', 'Fòô ', '', 'UTF-8', false),
-    );
+    return [
+        ['', '', '', ''],
+        ['foo', ' ', ' ', 'foo'],
+        ['foo', '\s', '\s', 'foo'],
+        ['foo bar', 'foo bar', '', ''],
+        ['foo bar', 'foo bar', 'f(o)o', '\1'],
+        ['\1 bar', 'foo bar', 'foo', '\1'],
+        ['bar', 'foo bar', 'foo ', ''],
+        ['far bar', 'foo bar', 'foo', 'far'],
+        ['bar bar', 'foo bar foo bar', 'foo ', ''],
+        ['', '', '', '', 'UTF-8'],
+        ['fòô', ' ', ' ', 'fòô', 'UTF-8'],
+        ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
+        ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'],
+        ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'],
+        ['bàř bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'],
+        ['bàř bàř', 'fòô bàř fòô bàř', 'fòô ', '',],
+        ['bàř bàř', 'fòô bàř fòô bàř', 'fòô ', ''],
+        ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'Fòô ', ''],
+        ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'fòÔ ', ''],
+        ['fòô bàř bàř', 'fòô bàř [[fòô]] bàř', '[[fòô]] ', ''],
+        ['', '', '', '', 'UTF-8', false],
+        ['òô', ' ', ' ', 'òô', 'UTF-8', false],
+        ['fòô', '\s', '\s', 'fòô', 'UTF-8', false],
+        ['fòô bàř', 'fòô bàř', '', '', 'UTF-8', false],
+        ['bàř', 'fòô bàř', 'Fòô ', '', 'UTF-8', false],
+        ['far bàř', 'fòô bàř', 'fòÔ', 'far', 'UTF-8', false],
+        ['bàř bàř', 'fòô bàř fòô bàř', 'Fòô ', '', 'UTF-8', false],
+    ];
   }
 
   /**
    * @return array
    */
-  public function reverseProvider()
+  public function reverseProvider(): array
   {
-    return array(
-        array('', ''),
-        array('raboof', 'foobar'),
-        array('řàbôòf', 'fòôbàř', 'UTF-8'),
-        array('řàb ôòf', 'fòô bàř', 'UTF-8'),
-        array('∂∆ ˚åß', 'ßå˚ ∆∂', 'UTF-8'),
-    );
+    return [
+        ['', ''],
+        ['raboof', 'foobar'],
+        ['řàbôòf', 'fòôbàř', 'UTF-8'],
+        ['řàb ôòf', 'fòô bàř', 'UTF-8'],
+        ['∂∆ ˚åß', 'ßå˚ ∆∂', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function safeTruncateProvider()
+  public function safeTruncateProvider(): array
   {
-    return array(
-        array('Test foo bar', 'Test foo bar', 12),
-        array('Test foo', 'Test foo bar', 11),
-        array('Test foo', 'Test foo bar', 8),
-        array('Test', 'Test foo bar', 7),
-        array('Test', 'Test foo bar', 4),
-        array('Test', 'Testfoobar', 4),
-        array('Test foo bar', 'Test foo bar', 12, '...'),
-        array('Test foo...', 'Test foo bar', 11, '...'),
-        array('Test...', 'Test foo bar', 8, '...'),
-        array('Test...', 'Test foo bar', 7, '...'),
-        array('...', 'Test foo bar', 4, '...'),
-        array('Test....', 'Test foo bar', 11, '....'),
-        array('Test fòô bàř', 'Test fòô bàř', 12, '', 'UTF-8'),
-        array('Test fòô', 'Test fòô bàř', 11, '', 'UTF-8'),
-        array('Test fòô', 'Test fòô bàř', 8, '', 'UTF-8'),
-        array('Test', 'Test fòô bàř', 7, '', 'UTF-8'),
-        array('Test', 'Test fòô bàř', 4, '', 'UTF-8'),
-        array('Test fòô bàř', 'Test fòô bàř', 12, 'ϰϰ', 'UTF-8'),
-        array('Test fòôϰϰ', 'Test fòô bàř', 11, 'ϰϰ', 'UTF-8'),
-        array('Testϰϰ', 'Test fòô bàř', 8, 'ϰϰ', 'UTF-8'),
-        array('Testϰϰ', 'Test fòô bàř', 7, 'ϰϰ', 'UTF-8'),
-        array('ϰϰ', 'Test fòô bàř', 4, 'ϰϰ', 'UTF-8'),
-        array('What are your plans...', 'What are your plans today?', 22, '...'),
-    );
+    return [
+        ['Test foo bar', 'Test foo bar', 12],
+        ['Test foo', 'Test foo bar', 11],
+        ['Test foo', 'Test foo bar', 8],
+        ['Test', 'Test foo bar', 7],
+        ['Test', 'Test foo bar', 4],
+        ['Test', 'Testfoobar', 4],
+        ['Test foo bar', 'Test foo bar', 12, '...'],
+        ['Test foo...', 'Test foo bar', 11, '...'],
+        ['Test...', 'Test foo bar', 8, '...'],
+        ['Test...', 'Test foo bar', 7, '...'],
+        ['...', 'Test foo bar', 4, '...'],
+        ['Test....', 'Test foo bar', 11, '....'],
+        ['Test fòô bàř', 'Test fòô bàř', 12, '', 'UTF-8'],
+        ['Test fòô', 'Test fòô bàř', 11, '', 'UTF-8'],
+        ['Test fòô', 'Test fòô bàř', 8, '', 'UTF-8'],
+        ['Test', 'Test fòô bàř', 7, '', 'UTF-8'],
+        ['Test', 'Test fòô bàř', 4, '', 'UTF-8'],
+        ['Test fòô bàř', 'Test fòô bàř', 12, 'ϰϰ', 'UTF-8'],
+        ['Test fòôϰϰ', 'Test fòô bàř', 11, 'ϰϰ', 'UTF-8'],
+        ['Testϰϰ', 'Test fòô bàř', 8, 'ϰϰ', 'UTF-8'],
+        ['Testϰϰ', 'Test fòô bàř', 7, 'ϰϰ', 'UTF-8'],
+        ['ϰϰ', 'Test fòô bàř', 4, 'ϰϰ', 'UTF-8'],
+        ['What are your plans...', 'What are your plans today?', 22, '...'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function shortenAfterWordProvider()
+  public function shortenAfterWordProvider(): array
   {
-    return array(
-        array('this...', 'this is a test', 5, '...'),
-        array('this is...', 'this is öäü-foo test', 8, '...'),
-        array('fòô', 'fòô bàř fòô', 6, ''),
-        array('fòô bàř', 'fòô bàř fòô', 8, ''),
-    );
+    return [
+        ['this...', 'this is a test', 5, '...'],
+        ['this is...', 'this is öäü-foo test', 8, '...'],
+        ['fòô', 'fòô bàř fòô', 6, ''],
+        ['fòô bàř', 'fòô bàř fòô', 8, ''],
+    ];
   }
 
   /**
    * @return array
    */
-  public function shuffleProvider()
+  public function shuffleProvider(): array
   {
-    return array(
-        array('foo bar'),
-        array('∂∆ ˚åß', 'UTF-8'),
-        array('å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'UTF-8'),
-    );
+    return [
+        ['foo bar'],
+        ['∂∆ ˚åß', 'UTF-8'],
+        ['å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function sliceProvider()
+  public function sliceProvider(): array
   {
-    return array(
-        array('foobar', 'foobar', 0),
-        array('foobar', 'foobar', 0, null),
-        array('foobar', 'foobar', 0, 6),
-        array('fooba', 'foobar', 0, 5),
-        array('', 'foobar', 3, 0),
-        array('', 'foobar', 3, 2),
-        array('ba', 'foobar', 3, 5),
-        array('ba', 'foobar', 3, -1),
-        array('fòôbàř', 'fòôbàř', 0, null, 'UTF-8'),
-        array('fòôbàř', 'fòôbàř', 0, null),
-        array('fòôbàř', 'fòôbàř', 0, 6, 'UTF-8'),
-        array('fòôbà', 'fòôbàř', 0, 5, 'UTF-8'),
-        array('', 'fòôbàř', 3, 0, 'UTF-8'),
-        array('', 'fòôbàř', 3, 2, 'UTF-8'),
-        array('bà', 'fòôbàř', 3, 5, 'UTF-8'),
-        array('bà', 'fòôbàř', 3, -1, 'UTF-8'),
-    );
+    return [
+        ['foobar', 'foobar', 0],
+        ['foobar', 'foobar', 0, null],
+        ['foobar', 'foobar', 0, 6],
+        ['fooba', 'foobar', 0, 5],
+        ['', 'foobar', 3, 0],
+        ['', 'foobar', 3, 2],
+        ['ba', 'foobar', 3, 5],
+        ['ba', 'foobar', 3, -1],
+        ['fòôbàř', 'fòôbàř', 0, null, 'UTF-8'],
+        ['fòôbàř', 'fòôbàř', 0, null],
+        ['fòôbàř', 'fòôbàř', 0, 6, 'UTF-8'],
+        ['fòôbà', 'fòôbàř', 0, 5, 'UTF-8'],
+        ['', 'fòôbàř', 3, 0, 'UTF-8'],
+        ['', 'fòôbàř', 3, 2, 'UTF-8'],
+        ['bà', 'fòôbàř', 3, 5, 'UTF-8'],
+        ['bà', 'fòôbàř', 3, -1, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function slugifyProvider()
+  public function slugifyProvider(): array
   {
-    return array(
-        array('foo-bar', ' foo  bar '),
-        array('foo-bar', 'foo -.-"-...bar'),
-        array('another-und-foo-bar', 'another..& foo -.-"-...bar'),
-        array('foo-dbar', " Foo d'Bar "),
-        array('a-string-with-dashes', 'A string-with-dashes'),
-        array('using-strings-like-foo-bar', 'Using strings like fòô bàř'),
-        array('numbers-1234', 'numbers 1234'),
-        array('perevirka-ryadka', 'перевірка рядка'),
-        array('bukvar-s-bukvoj-y', 'букварь с буквой ы'),
-        array('podehal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'),
-        array('foo:bar:baz', 'Foo bar baz', ':'),
-        array('a_string_with_underscores', 'A_string with_underscores', '_'),
-        array('a_string_with_dashes', 'A string-with-dashes', '_'),
-        array('a\string\with\dashes', 'A string-with-dashes', '\\'),
-        array('an_odd_string', '--   An odd__   string-_', '_'),
-    );
+    return [
+        ['foo-bar', ' foo  bar '],
+        ['foo-bar', 'foo -.-"-...bar'],
+        ['another-und-foo-bar', 'another..& foo -.-"-...bar'],
+        ['foo-dbar', " Foo d'Bar "],
+        ['a-string-with-dashes', 'A string-with-dashes'],
+        ['using-strings-like-foo-bar', 'Using strings like fòô bàř'],
+        ['numbers-1234', 'numbers 1234'],
+        ['perevirka-ryadka', 'перевірка рядка'],
+        ['bukvar-s-bukvoj-y', 'букварь с буквой ы'],
+        ['podehal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'],
+        ['foo:bar:baz', 'Foo bar baz', ':'],
+        ['a_string_with_underscores', 'A_string with_underscores', '_'],
+        ['a_string_with_dashes', 'A string-with-dashes', '_'],
+        ['a\string\with\dashes', 'A string-with-dashes', '\\'],
+        ['an_odd_string', '--   An odd__   string-_', '_'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function snakeizeProvider()
+  public function snakeizeProvider(): array
   {
-    return array(
-        array('snake_case', 'SnakeCase'),
-        array('snake_case', 'Snake-Case'),
-        array('snake_case', 'snake case'),
-        array('snake_case', 'snake -case'),
-        array('snake_case', 'snake - case'),
-        array('snake_case', 'snake_case'),
-        array('camel_c_test', 'camel c test'),
-        array('string_with_1_number', 'string_with 1 number'),
-        array('string_with_1_number', 'string_with1number'),
-        array('string_with_2_2_numbers', 'string-with-2-2 numbers'),
-        array('data_rate', 'data_rate'),
-        array('background_color', 'background-color'),
-        array('yes_we_can', 'yes_we_can'),
-        array('moz_something', '-moz-something'),
-        array('car_speed', '_car_speed_'),
-        array('serve_h_t_t_p', 'ServeHTTP'),
-        array('1_camel_2_case', '1camel2case'),
-        array('camel_σase', 'camel σase', 'UTF-8'),
-        array('Στανιλ_case', 'Στανιλ case', 'UTF-8'),
-        array('σamel_case', 'σamel  Case', 'UTF-8'),
-    );
+    return [
+        ['snake_case', 'SnakeCase'],
+        ['snake_case', 'Snake-Case'],
+        ['snake_case', 'snake case'],
+        ['snake_case', 'snake -case'],
+        ['snake_case', 'snake - case'],
+        ['snake_case', 'snake_case'],
+        ['camel_c_test', 'camel c test'],
+        ['string_with_1_number', 'string_with 1 number'],
+        ['string_with_1_number', 'string_with1number'],
+        ['string_with_2_2_numbers', 'string-with-2-2 numbers'],
+        ['data_rate', 'data_rate'],
+        ['background_color', 'background-color'],
+        ['yes_we_can', 'yes_we_can'],
+        ['moz_something', '-moz-something'],
+        ['car_speed', '_car_speed_'],
+        ['serve_h_t_t_p', 'ServeHTTP'],
+        ['1_camel_2_case', '1camel2case'],
+        ['camel_σase', 'camel σase', 'UTF-8'],
+        ['Στανιλ_case', 'Στανιλ case', 'UTF-8'],
+        ['σamel_case', 'σamel  Case', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function splitProvider()
+  public function splitProvider(): array
   {
-    return array(
-        array(array('foo,bar,baz'), 'foo,bar,baz', ''),
-        array(array('foo,bar,baz'), 'foo,bar,baz', '-'),
-        array(array('foo', 'bar', 'baz'), 'foo,bar,baz', ','),
-        array(array('foo', 'bar', 'baz'), 'foo,bar,baz', ',', null),
-        array(array('foo', 'bar', 'baz'), 'foo,bar,baz', ',', -1),
-        array(array(), 'foo,bar,baz', ',', 0),
-        array(array('foo'), 'foo,bar,baz', ',', 1),
-        array(array('foo', 'bar'), 'foo,bar,baz', ',', 2),
-        array(array('foo', 'bar', 'baz'), 'foo,bar,baz', ',', 3),
-        array(array('foo', 'bar', 'baz'), 'foo,bar,baz', ',', 10),
-        array(array('fòô,bàř,baz'), 'fòô,bàř,baz', '-', null, 'UTF-8'),
-        array(array('fòô', 'bàř', 'baz'), 'fòô,bàř,baz', ',', null, 'UTF-8'),
-        array(array('fòô', 'bàř', 'baz'), 'fòô,bàř,baz', ',', null, 'UTF-8'),
-        array(array('fòô', 'bàř', 'baz'), 'fòô,bàř,baz', ',', -1, 'UTF-8'),
-        array(array(), 'fòô,bàř,baz', ',', 0, 'UTF-8'),
-        array(array('fòô'), 'fòô,bàř,baz', ',', 1, 'UTF-8'),
-        array(array('fòô', 'bàř'), 'fòô,bàř,baz', ',', 2, 'UTF-8'),
-        array(array('fòô', 'bàř', 'baz'), 'fòô,bàř,baz', ',', 3, 'UTF-8'),
-        array(array('fòô', 'bàř', 'baz'), 'fòô,bàř,baz', ',', 10, 'UTF-8'),
-    );
+    return [
+        [['foo,bar,baz'], 'foo,bar,baz', ''],
+        [['foo,bar,baz'], 'foo,bar,baz', '-'],
+        [['foo', 'bar', 'baz'], 'foo,bar,baz', ','],
+        [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', -1],
+        [[], 'foo,bar,baz', ',', 0],
+        [['foo'], 'foo,bar,baz', ',', 1],
+        [['foo', 'bar'], 'foo,bar,baz', ',', 2],
+        [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', 3],
+        [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', 10],
+        [['fòô,bàř,baz'], 'fòô,bàř,baz', '-', -1, 'UTF-8'],
+        [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', -1, 'UTF-8'],
+        [[], 'fòô,bàř,baz', ',', 0, 'UTF-8'],
+        [['fòô'], 'fòô,bàř,baz', ',', 1, 'UTF-8'],
+        [['fòô', 'bàř'], 'fòô,bàř,baz', ',', 2, 'UTF-8'],
+        [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', 3, 'UTF-8'],
+        [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', 10, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function startsWithProvider()
+  public function startsWithProvider(): array
   {
-    return array(
-        array(true, 'foo bars', 'foo bar'),
-        array(true, 'FOO bars', 'foo bar', false),
-        array(true, 'FOO bars', 'foo BAR', false),
-        array(true, 'FÒÔ bàřs', 'fòô bàř', false, 'UTF-8'),
-        array(true, 'fòô bàřs', 'fòô BÀŘ', false, 'UTF-8'),
-        array(false, 'foo bar', 'bar'),
-        array(false, 'foo bar', 'foo bars'),
-        array(false, 'FOO bar', 'foo bars'),
-        array(false, 'FOO bars', 'foo BAR'),
-        array(false, 'FÒÔ bàřs', 'fòô bàř', true, 'UTF-8'),
-        array(false, 'fòô bàřs', 'fòô BÀŘ', true, 'UTF-8'),
-    );
+    return [
+        [true, 'foo bars', 'foo bar'],
+        [true, 'FOO bars', 'foo bar', false],
+        [true, 'FOO bars', 'foo BAR', false],
+        [true, 'FÒÔ bàřs', 'fòô bàř', false, 'UTF-8'],
+        [true, 'fòô bàřs', 'fòô BÀŘ', false, 'UTF-8'],
+        [false, 'foo bar', 'bar'],
+        [false, 'foo bar', 'foo bars'],
+        [false, 'FOO bar', 'foo bars'],
+        [false, 'FOO bars', 'foo BAR'],
+        [false, 'FÒÔ bàřs', 'fòô bàř', true, 'UTF-8'],
+        [false, 'fòô bàřs', 'fòô BÀŘ', true, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function startsWithProviderAny()
+  public function startsWithProviderAny(): array
   {
-    return array(
-        array(true, 'foo bars', array('foo bar')),
-        array(true, 'foo bars', array('foo', 'bar')),
-        array(true, 'FOO bars', array('foo', 'bar'), false),
-        array(true, 'FOO bars', array('foo', 'BAR'), false),
-        array(true, 'FÒÔ bàřs', array('fòô', 'bàř'), false, 'UTF-8'),
-        array(true, 'fòô bàřs', array('fòô BÀŘ'), false, 'UTF-8'),
-        array(false, 'foo bar', array('bar')),
-        array(false, 'foo bar', array('foo bars')),
-        array(false, 'FOO bar', array('foo bars')),
-        array(false, 'FOO bars', array('foo BAR')),
-        array(false, 'FÒÔ bàřs', array('fòô bàř'), true, 'UTF-8'),
-        array(false, 'fòô bàřs', array('fòô BÀŘ'), true, 'UTF-8'),
-    );
+    return [
+        [true, 'foo bars', ['foo bar']],
+        [true, 'foo bars', ['foo', 'bar']],
+        [true, 'FOO bars', ['foo', 'bar'], false],
+        [true, 'FOO bars', ['foo', 'BAR'], false],
+        [true, 'FÒÔ bàřs', ['fòô', 'bàř'], false, 'UTF-8'],
+        [true, 'fòô bàřs', ['fòô BÀŘ'], false, 'UTF-8'],
+        [false, 'foo bar', ['bar']],
+        [false, 'foo bar', ['foo bars']],
+        [false, 'FOO bar', ['foo bars']],
+        [false, 'FOO bars', ['foo BAR']],
+        [false, 'FÒÔ bàřs', ['fòô bàř'], true, 'UTF-8'],
+        [false, 'fòô bàřs', ['fòô BÀŘ'], true, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function stripWhitespaceProvider()
+  public function stripWhitespaceProvider(): array
   {
-    return array(
-        array('foobar', '  foo   bar  '),
-        array('teststring', 'test string'),
-        array('Οσυγγραφέας', '   Ο     συγγραφέας  '),
-        array('123', ' 123 '),
-        array('', ' ', 'UTF-8'), // no-break space (U+00A0)
-        array('', '           ', 'UTF-8'), // spaces U+2000 to U+200A
-        array('', ' ', 'UTF-8'), // narrow no-break space (U+202F)
-        array('', ' ', 'UTF-8'), // medium mathematical space (U+205F)
-        array('', '　', 'UTF-8'), // ideographic space (U+3000)
-        array('123', '  1  2  3　　', 'UTF-8'),
-        array('', ' '),
-        array('', ''),
-    );
+    return [
+        ['foobar', '  foo   bar  '],
+        ['teststring', 'test string'],
+        ['Οσυγγραφέας', '   Ο     συγγραφέας  '],
+        ['123', ' 123 '],
+        ['', ' ', 'UTF-8'], // no-break space (U+00A0)
+        ['', '           ', 'UTF-8'], // spaces U+2000 to U+200A
+        ['', ' ', 'UTF-8'], // narrow no-break space (U+202F)
+        ['', ' ', 'UTF-8'], // medium mathematical space (U+205F)
+        ['', '　', 'UTF-8'], // ideographic space (U+3000)
+        ['123', '  1  2  3　　', 'UTF-8'],
+        ['', ' '],
+        ['', ''],
+    ];
   }
 
   /**
    * @return array
    */
-  public function substrProvider()
+  public function substrProvider(): array
   {
-    return array(
-        array('foo bar', 'foo bar', 0),
-        array('bar', 'foo bar', 4),
-        array('bar', 'foo bar', 4, null),
-        array('o b', 'foo bar', 2, 3),
-        array('', 'foo bar', 4, 0),
-        array('fòô bàř', 'fòô bàř', 0, null, 'UTF-8'),
-        array('bàř', 'fòô bàř', 4, null, 'UTF-8'),
-        array('ô b', 'fòô bàř', 2, 3, 'UTF-8'),
-        array('', 'fòô bàř', 4, 0, 'UTF-8'),
-    );
+    return [
+        ['foo bar', 'foo bar', 0],
+        ['bar', 'foo bar', 4],
+        ['bar', 'foo bar', 4, null],
+        ['o b', 'foo bar', 2, 3],
+        ['', 'foo bar', 4, 0],
+        ['fòô bàř', 'fòô bàř', 0, null, 'UTF-8'],
+        ['bàř', 'fòô bàř', 4, null, 'UTF-8'],
+        ['ô b', 'fòô bàř', 2, 3, 'UTF-8'],
+        ['', 'fòô bàř', 4, 0, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function surroundProvider()
+  public function surroundProvider(): array
   {
-    return array(
-        array('__foobar__', 'foobar', '__'),
-        array('test', 'test', ''),
-        array('**', '', '*'),
-        array('¬fòô bàř¬', 'fòô bàř', '¬'),
-        array('ßå∆˚ test ßå∆˚', ' test ', 'ßå∆˚'),
-    );
+    return [
+        ['__foobar__', 'foobar', '__'],
+        ['test', 'test', ''],
+        ['**', '', '*'],
+        ['¬fòô bàř¬', 'fòô bàř', '¬'],
+        ['ßå∆˚ test ßå∆˚', ' test ', 'ßå∆˚'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function swapCaseProvider()
+  public function swapCaseProvider(): array
   {
-    return array(
-        array('TESTcASE', 'testCase'),
-        array('tEST-cASE', 'Test-Case'),
-        array(' - σASH  cASE', ' - Σash  Case', 'UTF-8'),
-        array('νΤΑΝΙΛ', 'Ντανιλ', 'UTF-8'),
-    );
+    return [
+        ['TESTcASE', 'testCase'],
+        ['tEST-cASE', 'Test-Case'],
+        [' - σASH  cASE', ' - Σash  Case', 'UTF-8'],
+        ['νΤΑΝΙΛ', 'Ντανιλ', 'UTF-8'],
+    ];
   }
 
   public function testAddPassword()
@@ -1617,14 +1614,14 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $disallowedChars = 'ф0Oo1l';
     $allowedChars = '2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ';
 
-    $passwords = array();
+    $passwords = [];
     for ($i = 0; $i <= 100; $i++) {
       $stringy = S::create('');
       $passwords[] = $stringy->appendPassword(16);
     }
 
     // check for allowed chars
-    $errors = array();
+    $errors = [];
     foreach ($passwords as $password) {
       foreach (str_split($password) as $char) {
         if (strpos($allowedChars, $char) === false) {
@@ -1635,9 +1632,9 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     self::assertSame(0, count($errors));
 
     // check for disallowed chars
-    $errors = array();
+    $errors = [];
     foreach ($passwords as $password) {
-      foreach (UTF8::str_split($password) as $char) {
+      foreach (UTF8::str_split((string)$password) as $char) {
         if (strpos($disallowedChars, $char) !== false) {
           $errors[] = $char;
         }
@@ -1653,11 +1650,11 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testAddRandomString()
   {
-    $testArray = array(
-        'öäü'       => array(10, 10),
-        ''          => array(10, 0),
-        'κόσμε-öäü' => array(10, 10),
-    );
+    $testArray = [
+        'öäü'       => [10, 10],
+        ''          => [10, 0],
+        'κόσμε-öäü' => [10, 10],
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create('');
@@ -1669,7 +1666,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testAddUniqueIdentifier()
   {
-    $uniquIDs = array();
+    $uniquIDs = [];
     for ($i = 0; $i <= 100; $i++) {
       $stringy = S::create('');
       $uniquIDs[] = (string)$stringy->appendUniqueIdentifier();
@@ -1688,7 +1685,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testAfterFirst()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>bar'          => 'ar',
@@ -1702,7 +1699,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[b][/b]'                  => '][/b]',
         'κόσμbε ¡-öäü'             => 'ε ¡-öäü',
         'bκόσμbε'                  => 'κόσμbε',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -1712,7 +1709,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testAfterFirstIgnoreCase()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>Bar'          => 'ar',
@@ -1726,7 +1723,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[B][/B]'                  => '][/B]',
         'κόσμbε ¡-öäü'             => 'ε ¡-öäü',
         'bκόσμbε'                  => 'κόσμbε',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -1736,7 +1733,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testAfterLasIgnoreCaset()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>bar'          => 'ar',
@@ -1750,7 +1747,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[B][/B]'                  => ']',
         '[b][/b]'                  => ']',
         'κόσμbε ¡-öäü'             => 'ε ¡-öäü',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -1760,7 +1757,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testAfterLast()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>bar'          => 'ar',
@@ -1773,7 +1770,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[b][/b]'                  => ']',
         '[B][/B]'                  => '',
         'κόσμbε ¡-öäü'             => 'ε ¡-öäü',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -1792,7 +1789,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testAppend($expected, $str, $string, $encoding = null)
   {
     $result = S::create($str, $encoding)->append($string);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
   }
 
@@ -1808,14 +1805,14 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->at($index);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
 
   public function testBeforeFirst()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>bar'          => 'foo<h1></h1>',
@@ -1828,7 +1825,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[b][/b]'                  => '[',
         '[B][/B]'                  => '',
         'κόσμbε ¡-öäü'             => 'κόσμ',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -1839,7 +1836,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testBeforeFirstIgnoreCase()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>Bar'          => 'foo<h1></h1>',
@@ -1853,7 +1850,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[B][/B]'                  => '[',
         'κόσμbε ¡-öäü'             => 'κόσμ',
         'Bκόσμbε'                  => '',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -1864,7 +1861,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testBeforeLast()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>bar'          => 'foo<h1></h1>',
@@ -1877,7 +1874,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[b][/b]'                  => '[b][/',
         '[B][/B]'                  => '',
         'κόσμbε ¡-öäü'             => 'κόσμ',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -1888,7 +1885,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testBeforeLastIgnoreCase()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>Bar'          => 'foo<h1></h1>',
@@ -1902,7 +1899,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[B][/B]'                  => '[B][/',
         'κόσμbε ¡-öäü'             => 'κόσμ',
         'bκόσμbε'                  => 'bκόσμ',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -1920,11 +1917,11 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
    * @param null $offset
    * @param null $encoding
    */
-  public function testBetween($expected, $str, $start, $end, $offset = null, $encoding = null)
+  public function testBetween($expected, $str, $start, $end, $offset = 0, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->between($start, $end, $offset);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -1940,7 +1937,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->camelize();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -1964,7 +1961,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testChaining()
   {
     $stringy = S::create('Fòô     Bàř', 'UTF-8');
-    self::assertStringy($stringy);
+    $this->assertStringy($stringy);
     $result = $stringy->collapseWhitespace()->swapCase()->upperCaseFirst();
     self::assertSame('FÒÔ bÀŘ', $result->toString());
   }
@@ -1997,7 +1994,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->collapseWhitespace();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2005,7 +2002,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testConstruct()
   {
     $stringy = new S('foo bar', 'UTF-8');
-    self::assertStringy($stringy);
+    $this->assertStringy($stringy);
     self::assertSame('foo bar', (string)$stringy);
     self::assertSame('UTF-8', $stringy->getEncoding());
   }
@@ -2016,7 +2013,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testConstructWithArray()
   {
     /** @noinspection PhpExpressionResultUnusedInspection */
-    (string)new S(array());
+    (string)new S([]);
     static::fail('Expecting exception when the constructor is passed an array');
   }
 
@@ -2083,7 +2080,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testCreate()
   {
     $stringy = S::create('foo bar', 'UTF-8');
-    self::assertStringy($stringy);
+    $this->assertStringy($stringy);
     self::assertSame('foo bar', (string)$stringy);
     self::assertSame('UTF-8', $stringy->getEncoding());
   }
@@ -2099,7 +2096,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->dasherize();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2116,7 +2113,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->delimit($delimiter);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2124,7 +2121,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testEmptyConstruct()
   {
     $stringy = new S();
-    self::assertStringy($stringy);
+    $this->assertStringy($stringy);
     self::assertSame('', (string)$stringy);
   }
 
@@ -2176,7 +2173,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->ensureLeft($substring);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2193,7 +2190,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->ensureRight($substring);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2209,21 +2206,21 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->escape();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
 
   public function testExtractText()
   {
-    $testArray = array(
+    $testArray = [
         ''                                                                                                                                          => '',
         '<h1>test</h1>'                                                                                                                             => '<h1>test</h1>',
         'test'                                                                                                                                      => 'test',
-        'A PHP string manipulation library with multibyte support. Compatible with PHP 5.3+, PHP 7, and HHVM.'                                      => 'A PHP string manipulation library with multibyte support...',
-        'A PHP string manipulation library with multibyte support. κόσμε-öäü κόσμε-öäü κόσμε-öäü foobar Compatible with PHP 5.3+, PHP 7, and HHVM.' => '...support. κόσμε-öäü κόσμε-öäü κόσμε-öäü foobar Compatible with PHP 5...',
-        'A PHP string manipulation library with multibyte support. foobar Compatible with PHP 5.3+, PHP 7, and HHVM.'                               => '...with multibyte support. foobar Compatible with PHP 5...',
-    );
+        'A PHP string manipulation library with multibyte support. Compatible with PHP 5.3+, PHP 7, and HHVM.'                                      => 'A PHP string manipulation library with multibyte support…',
+        'A PHP string manipulation library with multibyte support. κόσμε-öäü κόσμε-öäü κόσμε-öäü foobar Compatible with PHP 5.3+, PHP 7, and HHVM.' => '…support. κόσμε-öäü κόσμε-öäü κόσμε-öäü foobar Compatible with PHP 5…',
+        'A PHP string manipulation library with multibyte support. foobar Compatible with PHP 5.3+, PHP 7, and HHVM.'                               => '…with multibyte support. foobar Compatible with PHP 5…',
+    ];
 
     foreach ($testArray as $testString => $testExpected) {
       $stringy = S::create($testString);
@@ -2234,47 +2231,47 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
     $testString = 'this is only a Fork of Stringy';
     $stringy = S::create($testString);
-    self::assertSame('...a Fork of Stringy', (string)$stringy->extractText('Fork', 5), 'tested: ' . $testString);
+    self::assertSame('…a Fork of Stringy', (string)$stringy->extractText('Fork', 5), 'tested: ' . $testString);
 
     // ----------------
 
     $testString = 'This is only a Fork of Stringy, take a look at the new features.';
     $stringy = S::create($testString);
-    self::assertSame('...Fork of Stringy...', (string)$stringy->extractText('Stringy', 15), 'tested: ' . $testString);
+    self::assertSame('…Fork of Stringy…', (string)$stringy->extractText('Stringy', 15), 'tested: ' . $testString);
 
     // ----------------
 
     $testString = 'This is only a Fork of Stringy, take a look at the new features.';
     $stringy = S::create($testString);
-    self::assertSame('...only a Fork of Stringy, take a...', (string)$stringy->extractText('Stringy'), 'tested: ' . $testString);
+    self::assertSame('…only a Fork of Stringy, take a…', (string)$stringy->extractText('Stringy'), 'tested: ' . $testString);
 
     // ----------------
 
     $testString = 'This is only a Fork of Stringy, take a look at the new features.';
     $stringy = S::create($testString);
-    self::assertSame('This is only a Fork of Stringy...', (string)$stringy->extractText(), 'tested: ' . $testString);
+    self::assertSame('This is only a Fork of Stringy…', (string)$stringy->extractText(), 'tested: ' . $testString);
 
     // ----------------
 
     $testString = 'This is only a Fork of Stringy, take a look at the new features.';
     $stringy = S::create($testString);
-    self::assertSame('This...', (string)$stringy->extractText('', 0), 'tested: ' . $testString);
+    self::assertSame('This…', (string)$stringy->extractText('', 0), 'tested: ' . $testString);
 
     // ----------------
 
     $testString = 'This is only a Fork of Stringy, take a look at the new features.';
     $stringy = S::create($testString);
-    self::assertSame('...Stringy, take a look at the new features.', (string)$stringy->extractText('Stringy', 0), 'tested: ' . $testString);
+    self::assertSame('…Stringy, take a look at the new features.', (string)$stringy->extractText('Stringy', 0), 'tested: ' . $testString);
 
     // ----------------
 
-    $testArray = array(
-        'Yes. The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...The fox is jumping in the <strong>garden</strong> when he is happy. But that...',
-        'The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.'      => '...The fox is jumping in the <strong>garden</strong> when he is happy. But that...',
-        'The fox is jumping in the garden when he is happy. But that is not the whole story.'                                      => '...is jumping in the <strong>garden</strong> when he is happy...',
-        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story.'                                 => '...fox is jumping in the <strong>garden</strong> when he is happy...',
-        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story of the garden story.'             => '...The fox is jumping in the <strong>garden</strong> when he is happy. But...',
-    );
+    $testArray = [
+        'Yes. The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '…The fox is jumping in the <strong>garden</strong> when he is happy. But that…',
+        'The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.'      => '…The fox is jumping in the <strong>garden</strong> when he is happy. But that…',
+        'The fox is jumping in the garden when he is happy. But that is not the whole story.'                                      => '…is jumping in the <strong>garden</strong> when he is happy…',
+        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story.'                                 => '…fox is jumping in the <strong>garden</strong> when he is happy…',
+        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story of the garden story.'             => '…The fox is jumping in the <strong>garden</strong> when he is happy. But…',
+    ];
 
     $searchString = 'garden';
     foreach ($testArray as $testString => $testExpected) {
@@ -2287,13 +2284,13 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
     // ----------------
 
-    $testArray = array(
-        'Yes. The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '...flying in the wind. <strong>The fox is jumping in the garden</strong> when he...',
-        'The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.'      => '...in the wind. <strong>The fox is jumping in the garden</strong> when he is...',
-        'The fox is jumping in the garden when he is happy. But that is not the whole story.'                                      => '<strong>The fox is jumping in the garden</strong> when he is...',
-        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story.'                                 => 'Yes. <strong>The fox is jumping in the garden</strong> when he...',
-        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story of the garden story.'             => 'Yes. <strong>The fox is jumping in the garden</strong> when he is happy...',
-    );
+    $testArray = [
+        'Yes. The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.' => '…flying in the wind. <strong>The fox is jumping in the garden</strong> when he…',
+        'The bird is flying in the wind. The fox is jumping in the garden when he is happy. But that is not the whole story.'      => '…in the wind. <strong>The fox is jumping in the garden</strong> when he is…',
+        'The fox is jumping in the garden when he is happy. But that is not the whole story.'                                      => '<strong>The fox is jumping in the garden</strong> when he is…',
+        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story.'                                 => 'Yes. <strong>The fox is jumping in the garden</strong> when he…',
+        'Yes. The fox is jumping in the garden when he is happy. But that is not the whole story of the garden story.'             => 'Yes. <strong>The fox is jumping in the garden</strong> when he is happy…',
+    ];
 
     $searchString = 'The fox is jumping in the garden';
     foreach ($testArray as $testString => $testExpected) {
@@ -2317,7 +2314,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->first($n);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2326,18 +2323,18 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create('Fòô Bàř', 'UTF-8');
 
-    $valResult = array();
+    $valResult = [];
     foreach ($stringy as $char) {
       $valResult[] = $char;
     }
 
-    $keyValResult = array();
+    $keyValResult = [];
     foreach ($stringy as $pos => $char) {
       $keyValResult[$pos] = $char;
     }
 
-    self::assertSame(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $valResult);
-    self::assertSame(array('F', 'ò', 'ô', ' ', 'B', 'à', 'ř'), $keyValResult);
+    self::assertSame(['F', 'ò', 'ô', ' ', 'B', 'à', 'ř'], $valResult);
+    self::assertSame(['F', 'ò', 'ô', ' ', 'B', 'à', 'ř'], $keyValResult);
   }
 
   /**
@@ -2384,7 +2381,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->htmlDecode($flags);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2401,7 +2398,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->htmlEncode($flags);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2417,7 +2414,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->humanize();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2465,7 +2462,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->insert($substring, $index);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2552,7 +2549,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testIsEmail()
   {
-    $testArray = array(
+    $testArray = [
         ''             => false,
         'foo@bar'      => false,
         'foo@bar.foo'  => true,
@@ -2561,7 +2558,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         'lall'         => false,
         'κόσμbε@¡-öäü' => false,
         'lall.de'      => false,
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -2604,7 +2601,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testIsHtml()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => false,
         '<h1>test</h1>'            => true,
         'test'                     => false,
@@ -2615,7 +2612,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '</b>lall</b>'             => true,
         '[b]lall[b]'               => false,
         ' <test>κόσμε</test> '     => true,
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -2699,14 +2696,14 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->last($n);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
 
   public function testLastSubstringOf()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>bar'          => 'bar',
@@ -2719,7 +2716,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[b][/b]'                  => 'b]',
         '[B][/B]'                  => '',
         'κόσμbε ¡-öäü'             => 'bε ¡-öäü',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -2729,7 +2726,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testLastSubstringOfIgnoreCase()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>bar'          => 'bar',
@@ -2743,7 +2740,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[B][/B]'                  => 'B]',
         '[b][/b]'                  => 'b]',
         'κόσμbε ¡-öäü'             => 'bε ¡-öäü',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -2780,7 +2777,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
     self::assertInternalType('array', $result);
     foreach ($result as $line) {
-      self::assertStringy($line);
+      $this->assertStringy($line);
     }
 
     $counter = count($expected);
@@ -2792,7 +2789,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testLinewrap()
   {
-    $testArray = array(
+    $testArray = [
         ''                                                                                                      => "\n",
         ' '                                                                                                     => ' ' . "\n",
         'http:// moelleken.org'                                                                                 => 'http://' . "\n" . 'moelleken.org' . "\n",
@@ -2802,7 +2799,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         'test.de'                                                                                               => 'test.de' . "\n",
         'test'                                                                                                  => 'test' . "\n",
         '0123456 789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789' => '0123456' . "\n" . '789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789' . "\n",
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -2822,7 +2819,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonPrefix($otherStr);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2839,7 +2836,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonSubstring($otherStr);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2856,7 +2853,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->longestCommonSuffix($otherStr);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2872,7 +2869,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->lowerCaseFirst();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2958,7 +2955,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->pad($length, $padStr, $padType);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -2976,7 +2973,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->padBoth($length, $padStr);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3003,7 +3000,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->padLeft($length, $padStr);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3021,7 +3018,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->padRight($length, $padStr);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3037,7 +3034,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testPrepend($expected, $str, $string, $encoding = null)
   {
     $result = S::create($str, $encoding)->prepend($string);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
   }
 
@@ -3053,7 +3050,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeHtml($allowableTags);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3070,7 +3067,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeHtmlBreak($replacement);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3087,7 +3084,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeLeft($substring);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3104,7 +3101,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeRight($substring);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3120,7 +3117,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->removeXss();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString(), 'tested: ' . $str);
     self::assertSame($str, $stringy->toString());
   }
@@ -3137,7 +3134,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->repeat($multiplier);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3156,7 +3153,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->replace($search, $replacement, $caseSensitive);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3175,7 +3172,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->replaceAll($search, $replacement, $caseSensitive);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3193,7 +3190,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->replaceBeginning($search, $replacement);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3211,7 +3208,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->replaceEnding($search, $replacement);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3227,7 +3224,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->reverse();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3245,7 +3242,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->safeTruncate($length, $substring);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString(), 'tested: ' . $str . ' | ' . $substring . ' (' . $length . ')');
     self::assertSame($str, $stringy->toString());
   }
@@ -3263,7 +3260,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->shortenAfterWord($length, $strAddOn);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3280,7 +3277,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $encoding = $encoding ?: mb_internal_encoding();
     $result = $stringy->shuffle();
 
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($str, $stringy->toString());
     self::assertSame(
         mb_strlen($str, $encoding),
@@ -3310,7 +3307,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->slice($start, $end);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3326,7 +3323,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str);
     $result = $stringy->slugify($replacement);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3342,7 +3339,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->snakeize();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3353,17 +3350,17 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
    * @param      $expected
    * @param      $str
    * @param      $pattern
-   * @param null $limit
+   * @param int  $limit
    * @param null $encoding
    */
-  public function testSplit($expected, $str, $pattern, $limit = null, $encoding = null)
+  public function testSplit($expected, $str, $pattern, $limit = -1, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->split($pattern, $limit);
 
     self::assertInternalType('array', $result);
     foreach ($result as $string) {
-      self::assertStringy($string);
+      $this->assertStringy($string);
     }
 
     $counter = count($expected);
@@ -3427,7 +3424,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testStripeEmptyTags()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '<h1>test</h1>',
         'foo<h1></h1>bar'          => 'foobar',
@@ -3438,7 +3435,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '<b><b>lall</b>'           => '<b><b>lall</b>',
         '</b>lall</b>'             => '</b>lall</b>',
         '[b][/b]'                  => '[b][/b]',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -3448,13 +3445,13 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testStripeMediaQueries()
   {
-    $testArray = array(
+    $testArray = [
         'test lall '                                                                         => 'test lall ',
         ''                                                                                   => '',
         ' '                                                                                  => ' ',
         'test @media (min-width:660px){ .des-cla #mv-tiles{width:480px} } test '             => 'test  test ',
         'test @media only screen and (max-width: 950px) { .des-cla #mv-tiles{width:480px} }' => 'test ',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -3464,7 +3461,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
 
   public function testSubStringOf()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>bar'          => 'bar',
@@ -3478,7 +3475,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[b][/b]'                  => 'b][/b]',
         'κόσμbε ¡-öäü'             => 'bε ¡-öäü',
         'bκόσμbε'                  => 'bκόσμbε',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -3499,14 +3496,14 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->substr($start, $length);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
 
   public function testSubstringOfIgnoreCase()
   {
-    $testArray = array(
+    $testArray = [
         ''                         => '',
         '<h1>test</h1>'            => '',
         'foo<h1></h1>Bar'          => 'Bar',
@@ -3520,7 +3517,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         '[B][/B]'                  => 'B][/B]',
         'κόσμbε ¡-öäü'             => 'bε ¡-öäü',
         'bκόσμbε'                  => 'bκόσμbε',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       $stringy = S::create($testString);
@@ -3539,7 +3536,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str);
     $result = $stringy->surround($substring);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3555,7 +3552,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->swapCase();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3570,7 +3567,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str);
     $result = $stringy->tidy();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3587,7 +3584,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->titleize($ignore);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3603,7 +3600,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
     $stringy = S::create($str);
     $result = $stringy->toAscii();
 
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString(), 'tested:' . $str);
     self::assertSame($str, $stringy->toString());
   }
@@ -3635,7 +3632,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->toLowerCase();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3651,7 +3648,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str);
     $result = $stringy->toSpaces($tabLength);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3689,7 +3686,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str);
     $result = $stringy->toTabs($tabLength);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3705,7 +3702,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->toTitleCase();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3721,7 +3718,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->toUpperCase();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3738,7 +3735,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->trim($chars);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3755,7 +3752,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->trimLeft($chars);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3772,7 +3769,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->trimRight($chars);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3790,7 +3787,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->truncate($length, $substring);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3806,7 +3803,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->underscored();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3822,7 +3819,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->upperCamelize();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3837,50 +3834,50 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   public function testUpperCaseFirst($expected, $str, $encoding = null)
   {
     $result = S::create($str, $encoding)->upperCaseFirst();
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
   }
 
   public function testUtf8ify()
   {
-    $examples = array(
-        ''                                     => array(''),
+    $examples = [
+        ''                                     => [''],
         // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-        "κόσμε\xc2\xa0"                        => array('κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"),
+        "κόσμε\xc2\xa0"                        => ['κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"],
         // Valid UTF-8
-        '中'                                    => array('中' => '中'),
+        '中'                                    => ['中' => '中'],
         // Valid UTF-8 + ISO-Error
-        'DÃ¼sseldorf'                          => array('Düsseldorf' => 'Düsseldorf'),
+        'DÃ¼sseldorf'                          => ['Düsseldorf' => 'Düsseldorf'],
         // Valid UTF-8 + Invalid Chars
-        "κόσμε\xa0\xa1-öäü"                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
+        "κόσμε\xa0\xa1-öäü"                    => ['κόσμε-öäü' => 'κόσμε-öäü'],
         // Valid ASCII
-        'a'                                    => array('a' => 'a'),
+        'a'                                    => ['a' => 'a'],
         // Valid ASCII + Invalid Chars
-        "a\xa0\xa1-öäü"                        => array('a-öäü' => 'a-öäü'),
+        "a\xa0\xa1-öäü"                        => ['a-öäü' => 'a-öäü'],
         // Valid 2 Octet Sequence
-        "\xc3\xb1"                             => array('ñ' => 'ñ'),
+        "\xc3\xb1"                             => ['ñ' => 'ñ'],
         // Invalid 2 Octet Sequence
-        "\xc3\x28"                             => array('�(' => '('),
+        "\xc3\x28"                             => ['�(' => '('],
         // Invalid Sequence Identifier
-        "\xa0\xa1"                             => array('��' => ''),
+        "\xa0\xa1"                             => ['��' => ''],
         // Valid 3 Octet Sequence
-        "\xe2\x82\xa1"                         => array('₡' => '₡'),
+        "\xe2\x82\xa1"                         => ['₡' => '₡'],
         // Invalid 3 Octet Sequence (in 2nd Octet)
-        "\xe2\x28\xa1"                         => array('�(�' => '('),
+        "\xe2\x28\xa1"                         => ['�(�' => '('],
         // Invalid 3 Octet Sequence (in 3rd Octet)
-        "\xe2\x82\x28"                         => array('�(' => '('),
+        "\xe2\x82\x28"                         => ['�(' => '('],
         // Valid 4 Octet Sequence
-        "\xf0\x90\x8c\xbc"                     => array('𐌼' => '𐌼'),
+        "\xf0\x90\x8c\xbc"                     => ['𐌼' => '𐌼'],
         // Invalid 4 Octet Sequence (in 2nd Octet)
-        "\xf0\x28\x8c\xbc"                     => array('�(��' => '('),
+        "\xf0\x28\x8c\xbc"                     => ['�(��' => '('],
         // Invalid 4 Octet Sequence (in 3rd Octet)
-        "\xf0\x90\x28\xbc"                     => array('�(�' => '('),
+        "\xf0\x90\x28\xbc"                     => ['�(�' => '('],
         // Invalid 4 Octet Sequence (in 4th Octet)
-        " \xf0\x28\x8c\x28"                    => array('�(�(' => ' (('),
+        " \xf0\x28\x8c\x28"                    => ['�(�(' => ' (('],
         // Valid 5 Octet Sequence (but not Unicode!)
-        "\xf8\xa1\xa1\xa1\xa1"                 => array('�' => ''),
+        "\xf8\xa1\xa1\xa1\xa1"                 => ['�' => ''],
         // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
-        "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array('�' => ' '),
+        "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => ['�' => ' '],
         // test for database-insert
         '
         <h1>«DÃ¼sseldorf» &ndash; &lt;Köln&gt;</h1>
@@ -3888,7 +3885,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
         <p>
           &nbsp;�&foo;❤&nbsp;
         </p>
-        '                              => array(
+        '                              => [
             '' => '
         <h1>«Düsseldorf» &ndash; &lt;Köln&gt;</h1>
         <br /><br />
@@ -3896,8 +3893,8 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
           &nbsp;&foo;❤&nbsp;
         </p>
         ',
-        ),
-    );
+        ],
+    ];
 
     foreach ($examples as $testString => $testResults) {
       $stringy = S::create($testString);
@@ -3906,44 +3903,44 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
       }
     }
 
-    $examples = array(
+    $examples = [
       // Valid UTF-8
-      'κόσμε'                    => array('κόσμε' => 'κόσμε'),
-      '中'                        => array('中' => '中'),
-      '«foobar»'                 => array('«foobar»' => '«foobar»'),
+      'κόσμε'                    => ['κόσμε' => 'κόσμε'],
+      '中'                        => ['中' => '中'],
+      '«foobar»'                 => ['«foobar»' => '«foobar»'],
       // Valid UTF-8 + Invalied Chars
-      "κόσμε\xa0\xa1-öäü"        => array('κόσμε-öäü' => 'κόσμε-öäü'),
+      "κόσμε\xa0\xa1-öäü"        => ['κόσμε-öäü' => 'κόσμε-öäü'],
       // Valid ASCII
-      'a'                        => array('a' => 'a'),
+      'a'                        => ['a' => 'a'],
       // Valid emoji (non-UTF-8)
-      '😃'                       => array('😃' => '😃'),
+      '😃'                       => ['😃' => '😃'],
       // Valid ASCII + Invalied Chars
-      "a\xa0\xa1-öäü"            => array('a-öäü' => 'a-öäü'),
+      "a\xa0\xa1-öäü"            => ['a-öäü' => 'a-öäü'],
       // Valid 2 Octet Sequence
-      "\xc3\xb1"                 => array('ñ' => 'ñ'),
+      "\xc3\xb1"                 => ['ñ' => 'ñ'],
       // Invalid 2 Octet Sequence
-      "\xc3\x28"                 => array('�(' => '('),
+      "\xc3\x28"                 => ['�(' => '('],
       // Invalid Sequence Identifier
-      "\xa0\xa1"                 => array('��' => ''),
+      "\xa0\xa1"                 => ['��' => ''],
       // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"             => array('₡' => '₡'),
+      "\xe2\x82\xa1"             => ['₡' => '₡'],
       // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"             => array('�(�' => '('),
+      "\xe2\x28\xa1"             => ['�(�' => '('],
       // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"             => array('�(' => '('),
+      "\xe2\x82\x28"             => ['�(' => '('],
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"         => array('𐌼' => '𐌼'),
+      "\xf0\x90\x8c\xbc"         => ['𐌼' => '𐌼'],
       // Invalid 4 Octet Sequence (in 2nd Octet)
-      "\xf0\x28\x8c\xbc"         => array('�(��' => '('),
+      "\xf0\x28\x8c\xbc"         => ['�(��' => '('],
       // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"         => array('�(�' => '('),
+      "\xf0\x90\x28\xbc"         => ['�(�' => '('],
       // Invalid 4 Octet Sequence (in 4th Octet)
-      "\xf0\x28\x8c\x28"         => array('�(�(' => '(('),
+      "\xf0\x28\x8c\x28"         => ['�(�(' => '(('],
       // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"     => array('�' => ''),
+      "\xf8\xa1\xa1\xa1\xa1"     => ['�' => ''],
       // Valid 6 Octet Sequence (but not Unicode!)
-      "\xfc\xa1\xa1\xa1\xa1\xa1" => array('�' => ''),
-    );
+      "\xfc\xa1\xa1\xa1\xa1\xa1" => ['�' => ''],
+    ];
 
     $counter = 0;
     foreach ($examples as $testString => $testResults) {
@@ -3988,7 +3985,7 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->regexReplace($pattern, $replacement, $options, $delimiter);
-    self::assertStringy($result);
+    $this->assertStringy($result);
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
@@ -3996,325 +3993,325 @@ class StringyTestCase extends PHPUnit_Framework_TestCase
   /**
    * @return array
    */
-  public function tidyProvider()
+  public function tidyProvider(): array
   {
-    return array(
-        array('"I see..."', '“I see…”'),
-        array("'This too'", '‘This too’'),
-        array('test-dash', 'test—dash'),
-        array('Ο συγγραφέας είπε...', 'Ο συγγραφέας είπε…'),
-    );
+    return [
+        ['"I see..."', '“I see…”'],
+        ["'This too'", '‘This too’'],
+        ['test-dash', 'test—dash'],
+        ['Ο συγγραφέας είπε...', 'Ο συγγραφέας είπε…'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function titleizeProvider()
+  public function titleizeProvider(): array
   {
-    $ignore = array('at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the');
+    $ignore = ['at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the'];
 
-    return array(
-        array('Title Case', 'TITLE CASE'),
-        array('Testing The Method', 'testing the method'),
-        array('Testing the Method', 'testing the method', $ignore),
-        array(
+    return [
+        ['Title Case', 'TITLE CASE'],
+        ['Testing The Method', 'testing the method'],
+        ['Testing the Method', 'testing the method', $ignore],
+        [
             'I Like to Watch Dvds at Home',
             'i like to watch DVDs at home',
             $ignore,
-        ),
-        array('Θα Ήθελα Να Φύγει', '  Θα ήθελα να φύγει  ', null, 'UTF-8'),
-    );
+        ],
+        ['Θα Ήθελα Να Φύγει', '  Θα ήθελα να φύγει  ', null, 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function toAsciiProvider()
+  public function toAsciiProvider(): array
   {
-    return array(
-        array('foo bar', 'fòô bàř'),
-        array(' TEST ', ' ŤÉŚŢ '),
-        array('ph = z = 3', 'φ = ź = 3'),
-        array('perevirka', 'перевірка'),
-        array('lysaia gora', 'лысая гора'),
-        array('shchuka', 'щука'),
-        array('Han Zi ', '漢字'),
-        array('xin chao the gioi', 'xin chào thế giới'),
-        array('XIN CHAO THE GIOI', 'XIN CHÀO THẾ GIỚI'),
-        array('dam phat chet luon', 'đấm phát chết luôn'),
-        array(' ', ' '), // no-break space (U+00A0)
-        array('           ', '           '), // spaces U+2000 to U+200A
-        array(' ', ' '), // narrow no-break space (U+202F)
-        array(' ', ' '), // medium mathematical space (U+205F)
-        array(' ', '　'), // ideographic space (U+3000)
-        array('?', '𐍉'), // some uncommon, unsupported character (U+10349)
-    );
+    return [
+        ['foo bar', 'fòô bàř'],
+        [' TEST ', ' ŤÉŚŢ '],
+        ['ph = z = 3', 'φ = ź = 3'],
+        ['perevirka', 'перевірка'],
+        ['lysaia gora', 'лысая гора'],
+        ['shchuka', 'щука'],
+        ['Han Zi ', '漢字'],
+        ['xin chao the gioi', 'xin chào thế giới'],
+        ['XIN CHAO THE GIOI', 'XIN CHÀO THẾ GIỚI'],
+        ['dam phat chet luon', 'đấm phát chết luôn'],
+        [' ', ' '], // no-break space (U+00A0)
+        ['           ', '           '], // spaces U+2000 to U+200A
+        [' ', ' '], // narrow no-break space (U+202F)
+        [' ', ' '], // medium mathematical space (U+205F)
+        [' ', '　'], // ideographic space (U+3000)
+        ['?', '𐍉'], // some uncommon, unsupported character (U+10349)
+    ];
   }
 
   /**
    * @return array
    */
-  public function toBooleanProvider()
+  public function toBooleanProvider(): array
   {
-    return array(
-        array(true, 'true'),
-        array(true, '1'),
-        array(true, 'on'),
-        array(true, 'ON'),
-        array(true, 'yes'),
-        array(true, '999'),
-        array(false, 'false'),
-        array(false, '0'),
-        array(false, 'off'),
-        array(false, 'OFF'),
-        array(false, 'no'),
-        array(false, '-999'),
-        array(false, ''),
-        array(false, ' '),
-        array(false, '  ', 'UTF-8') // narrow no-break space (U+202F)
-    );
+    return [
+        [true, 'true'],
+        [true, '1'],
+        [true, 'on'],
+        [true, 'ON'],
+        [true, 'yes'],
+        [true, '999'],
+        [false, 'false'],
+        [false, '0'],
+        [false, 'off'],
+        [false, 'OFF'],
+        [false, 'no'],
+        [false, '-999'],
+        [false, ''],
+        [false, ' '],
+        [false, '  ', 'UTF-8'] // narrow no-break space (U+202F)
+    ];
   }
 
   /**
    * @return array
    */
-  public function toLowerCaseProvider()
+  public function toLowerCaseProvider(): array
   {
-    return array(
-        array('foo bar', 'FOO BAR'),
-        array(' foo_bar ', ' FOO_bar '),
-        array('fòô bàř', 'FÒÔ BÀŘ', 'UTF-8'),
-        array(' fòô_bàř ', ' FÒÔ_bàř ', 'UTF-8'),
-        array('αυτοκίνητο', 'ΑΥΤΟΚΊΝΗΤΟ', 'UTF-8'),
-    );
+    return [
+        ['foo bar', 'FOO BAR'],
+        [' foo_bar ', ' FOO_bar '],
+        ['fòô bàř', 'FÒÔ BÀŘ', 'UTF-8'],
+        [' fòô_bàř ', ' FÒÔ_bàř ', 'UTF-8'],
+        ['αυτοκίνητο', 'ΑΥΤΟΚΊΝΗΤΟ', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function toSpacesProvider()
+  public function toSpacesProvider(): array
   {
-    return array(
-        array('    foo    bar    ', '	foo	bar	'),
-        array('     foo     bar     ', '	foo	bar	', 5),
-        array('    foo  bar  ', '		foo	bar	', 2),
-        array('foobar', '	foo	bar	', 0),
-        array("    foo\n    bar", "	foo\n	bar"),
-        array("    fòô\n    bàř", "	fòô\n	bàř"),
-    );
+    return [
+        ['    foo    bar    ', '	foo	bar	'],
+        ['     foo     bar     ', '	foo	bar	', 5],
+        ['    foo  bar  ', '		foo	bar	', 2],
+        ['foobar', '	foo	bar	', 0],
+        ["    foo\n    bar", "	foo\n	bar"],
+        ["    fòô\n    bàř", "	fòô\n	bàř"],
+    ];
   }
 
   /**
    * @return array
    */
-  public function toStringProvider()
+  public function toStringProvider(): array
   {
-    return array(
-        array('', null),
-        array('', false),
-        array('1', true),
-        array('-9', -9),
-        array('1.18', 1.18),
-        array(' string  ', ' string  '),
-    );
+    return [
+        ['', null],
+        ['', false],
+        ['1', true],
+        ['-9', -9],
+        ['1.18', 1.18],
+        [' string  ', ' string  '],
+    ];
   }
 
   /**
    * @return array
    */
-  public function toTabsProvider()
+  public function toTabsProvider(): array
   {
-    return array(
-        array('	foo	bar	', '    foo    bar    '),
-        array('	foo	bar	', '     foo     bar     ', 5),
-        array('		foo	bar	', '    foo  bar  ', 2),
-        array("	foo\n	bar", "    foo\n    bar"),
-        array("	fòô\n	bàř", "    fòô\n    bàř"),
-    );
+    return [
+        ['	foo	bar	', '    foo    bar    '],
+        ['	foo	bar	', '     foo     bar     ', 5],
+        ['		foo	bar	', '    foo  bar  ', 2],
+        ["	foo\n	bar", "    foo\n    bar"],
+        ["	fòô\n	bàř", "    fòô\n    bàř"],
+    ];
   }
 
   /**
    * @return array
    */
-  public function toTitleCaseProvider()
+  public function toTitleCaseProvider(): array
   {
-    return array(
-        array('Foo Bar', 'foo bar'),
-        array(' Foo_Bar ', ' foo_bar '),
-        array('Fòô Bàř', 'fòô bàř', 'UTF-8'),
-        array(' Fòô_Bàř ', ' fòô_bàř ', 'UTF-8'),
-        array('Αυτοκίνητο Αυτοκίνητο', 'αυτοκίνητο αυτοκίνητο', 'UTF-8'),
-    );
+    return [
+        ['Foo Bar', 'foo bar'],
+        [' Foo_Bar ', ' foo_bar '],
+        ['Fòô Bàř', 'fòô bàř', 'UTF-8'],
+        [' Fòô_Bàř ', ' fòô_bàř ', 'UTF-8'],
+        ['Αυτοκίνητο Αυτοκίνητο', 'αυτοκίνητο αυτοκίνητο', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function toUpperCaseProvider()
+  public function toUpperCaseProvider(): array
   {
-    return array(
-        array('FOO BAR', 'foo bar'),
-        array(' FOO_BAR ', ' FOO_bar '),
-        array('FÒÔ BÀŘ', 'fòô bàř', 'UTF-8'),
-        array(' FÒÔ_BÀŘ ', ' FÒÔ_bàř ', 'UTF-8'),
-        array('ΑΥΤΟΚΊΝΗΤΟ', 'αυτοκίνητο', 'UTF-8'),
-    );
+    return [
+        ['FOO BAR', 'foo bar'],
+        [' FOO_BAR ', ' FOO_bar '],
+        ['FÒÔ BÀŘ', 'fòô bàř', 'UTF-8'],
+        [' FÒÔ_BÀŘ ', ' FÒÔ_bàř ', 'UTF-8'],
+        ['ΑΥΤΟΚΊΝΗΤΟ', 'αυτοκίνητο', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function trimLeftProvider()
+  public function trimLeftProvider(): array
   {
-    return array(
-        array('foo   bar  ', '  foo   bar  '),
-        array('foo bar', ' foo bar'),
-        array('foo bar ', 'foo bar '),
-        array("foo bar \n\t", "\n\t foo bar \n\t"),
-        array('fòô   bàř  ', '  fòô   bàř  '),
-        array('fòô bàř', ' fòô bàř'),
-        array('fòô bàř ', 'fòô bàř '),
-        array('foo bar', '--foo bar', '-'),
-        array('fòô bàř', 'òòfòô bàř', 'ò', 'UTF-8'),
-        array("fòô bàř \n\t", "\n\t fòô bàř \n\t", null, 'UTF-8'),
-        array('fòô ', ' fòô ', null, 'UTF-8'), // narrow no-break space (U+202F)
-        array('fòô  ', '  fòô  ', null, 'UTF-8'), // medium mathematical space (U+205F)
-        array('fòô', '           fòô', null, 'UTF-8') // spaces U+2000 to U+200A
-    );
+    return [
+        ['foo   bar  ', '  foo   bar  '],
+        ['foo bar', ' foo bar'],
+        ['foo bar ', 'foo bar '],
+        ["foo bar \n\t", "\n\t foo bar \n\t"],
+        ['fòô   bàř  ', '  fòô   bàř  '],
+        ['fòô bàř', ' fòô bàř'],
+        ['fòô bàř ', 'fòô bàř '],
+        ['foo bar', '--foo bar', '-'],
+        ['fòô bàř', 'òòfòô bàř', 'ò', 'UTF-8'],
+        ["fòô bàř \n\t", "\n\t fòô bàř \n\t", null, 'UTF-8'],
+        ['fòô ', ' fòô ', null, 'UTF-8'], // narrow no-break space (U+202F)
+        ['fòô  ', '  fòô  ', null, 'UTF-8'], // medium mathematical space (U+205F)
+        ['fòô', '           fòô', null, 'UTF-8'] // spaces U+2000 to U+200A
+    ];
   }
 
   /**
    * @return array
    */
-  public function trimProvider()
+  public function trimProvider(): array
   {
-    return array(
-        array('foo   bar', '  foo   bar  '),
-        array('foo bar', ' foo bar'),
-        array('foo bar', 'foo bar '),
-        array('foo bar', "\n\t foo bar \n\t"),
-        array('fòô   bàř', '  fòô   bàř  '),
-        array('fòô bàř', ' fòô bàř'),
-        array('fòô bàř', 'fòô bàř '),
-        array(' foo bar ', "\n\t foo bar \n\t", "\n\t"),
-        array('fòô bàř', "\n\t fòô bàř \n\t", null, 'UTF-8'),
-        array('fòô', ' fòô ', null, 'UTF-8'), // narrow no-break space (U+202F)
-        array('fòô', '  fòô  ', null, 'UTF-8'), // medium mathematical space (U+205F)
-        array('fòô', '           fòô', null, 'UTF-8') // spaces U+2000 to U+200A
-    );
+    return [
+        ['foo   bar', '  foo   bar  '],
+        ['foo bar', ' foo bar'],
+        ['foo bar', 'foo bar '],
+        ['foo bar', "\n\t foo bar \n\t"],
+        ['fòô   bàř', '  fòô   bàř  '],
+        ['fòô bàř', ' fòô bàř'],
+        ['fòô bàř', 'fòô bàř '],
+        [' foo bar ', "\n\t foo bar \n\t", "\n\t"],
+        ['fòô bàř', "\n\t fòô bàř \n\t", null, 'UTF-8'],
+        ['fòô', ' fòô ', null, 'UTF-8'], // narrow no-break space (U+202F)
+        ['fòô', '  fòô  ', null, 'UTF-8'], // medium mathematical space (U+205F)
+        ['fòô', '           fòô', null, 'UTF-8'] // spaces U+2000 to U+200A
+    ];
   }
 
   /**
    * @return array
    */
-  public function trimRightProvider()
+  public function trimRightProvider(): array
   {
-    return array(
-        array('  foo   bar', '  foo   bar  '),
-        array('foo bar', 'foo bar '),
-        array(' foo bar', ' foo bar'),
-        array("\n\t foo bar", "\n\t foo bar \n\t"),
-        array('  fòô   bàř', '  fòô   bàř  '),
-        array('fòô bàř', 'fòô bàř '),
-        array(' fòô bàř', ' fòô bàř'),
-        array('foo bar', 'foo bar--', '-'),
-        array('fòô bàř', 'fòô bàřòò', 'ò', 'UTF-8'),
-        array("\n\t fòô bàř", "\n\t fòô bàř \n\t", null, 'UTF-8'),
-        array(' fòô', ' fòô ', null, 'UTF-8'), // narrow no-break space (U+202F)
-        array('  fòô', '  fòô  ', null, 'UTF-8'), // medium mathematical space (U+205F)
-        array('fòô', 'fòô           ', null, 'UTF-8') // spaces U+2000 to U+200A
-    );
+    return [
+        ['  foo   bar', '  foo   bar  '],
+        ['foo bar', 'foo bar '],
+        [' foo bar', ' foo bar'],
+        ["\n\t foo bar", "\n\t foo bar \n\t"],
+        ['  fòô   bàř', '  fòô   bàř  '],
+        ['fòô bàř', 'fòô bàř '],
+        [' fòô bàř', ' fòô bàř'],
+        ['foo bar', 'foo bar--', '-'],
+        ['fòô bàř', 'fòô bàřòò', 'ò', 'UTF-8'],
+        ["\n\t fòô bàř", "\n\t fòô bàř \n\t", null, 'UTF-8'],
+        [' fòô', ' fòô ', null, 'UTF-8'], // narrow no-break space (U+202F)
+        ['  fòô', '  fòô  ', null, 'UTF-8'], // medium mathematical space (U+205F)
+        ['fòô', 'fòô           ', null, 'UTF-8'] // spaces U+2000 to U+200A
+    ];
   }
 
   /**
    * @return array
    */
-  public function truncateProvider()
+  public function truncateProvider(): array
   {
-    return array(
-        array('Test foo bar', 'Test foo bar', 12),
-        array('Test foo ba', 'Test foo bar', 11),
-        array('Test foo', 'Test foo bar', 8),
-        array('Test fo', 'Test foo bar', 7),
-        array('Test', 'Test foo bar', 4),
-        array('Test foo bar', 'Test foo bar', 12, '...'),
-        array('Test foo...', 'Test foo bar', 11, '...'),
-        array('Test ...', 'Test foo bar', 8, '...'),
-        array('Test...', 'Test foo bar', 7, '...'),
-        array('T...', 'Test foo bar', 4, '...'),
-        array('Test fo....', 'Test foo bar', 11, '....'),
-        array('Test fòô bàř', 'Test fòô bàř', 12, '', 'UTF-8'),
-        array('Test fòô bà', 'Test fòô bàř', 11, '', 'UTF-8'),
-        array('Test fòô', 'Test fòô bàř', 8, '', 'UTF-8'),
-        array('Test fò', 'Test fòô bàř', 7, '', 'UTF-8'),
-        array('Test', 'Test fòô bàř', 4, '', 'UTF-8'),
-        array('Test fòô bàř', 'Test fòô bàř', 12, 'ϰϰ', 'UTF-8'),
-        array('Test fòô ϰϰ', 'Test fòô bàř', 11, 'ϰϰ', 'UTF-8'),
-        array('Test fϰϰ', 'Test fòô bàř', 8, 'ϰϰ', 'UTF-8'),
-        array('Test ϰϰ', 'Test fòô bàř', 7, 'ϰϰ', 'UTF-8'),
-        array('Teϰϰ', 'Test fòô bàř', 4, 'ϰϰ', 'UTF-8'),
-        array('What are your pl...', 'What are your plans today?', 19, '...'),
-    );
+    return [
+        ['Test foo bar', 'Test foo bar', 12],
+        ['Test foo ba', 'Test foo bar', 11],
+        ['Test foo', 'Test foo bar', 8],
+        ['Test fo', 'Test foo bar', 7],
+        ['Test', 'Test foo bar', 4],
+        ['Test foo bar', 'Test foo bar', 12, '...'],
+        ['Test foo...', 'Test foo bar', 11, '...'],
+        ['Test ...', 'Test foo bar', 8, '...'],
+        ['Test...', 'Test foo bar', 7, '...'],
+        ['T...', 'Test foo bar', 4, '...'],
+        ['Test fo....', 'Test foo bar', 11, '....'],
+        ['Test fòô bàř', 'Test fòô bàř', 12, '', 'UTF-8'],
+        ['Test fòô bà', 'Test fòô bàř', 11, '', 'UTF-8'],
+        ['Test fòô', 'Test fòô bàř', 8, '', 'UTF-8'],
+        ['Test fò', 'Test fòô bàř', 7, '', 'UTF-8'],
+        ['Test', 'Test fòô bàř', 4, '', 'UTF-8'],
+        ['Test fòô bàř', 'Test fòô bàř', 12, 'ϰϰ', 'UTF-8'],
+        ['Test fòô ϰϰ', 'Test fòô bàř', 11, 'ϰϰ', 'UTF-8'],
+        ['Test fϰϰ', 'Test fòô bàř', 8, 'ϰϰ', 'UTF-8'],
+        ['Test ϰϰ', 'Test fòô bàř', 7, 'ϰϰ', 'UTF-8'],
+        ['Teϰϰ', 'Test fòô bàř', 4, 'ϰϰ', 'UTF-8'],
+        ['What are your pl...', 'What are your plans today?', 19, '...'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function underscoredProvider()
+  public function underscoredProvider(): array
   {
-    return array(
-        array('test_case', 'testCase'),
-        array('test_case', 'Test-Case'),
-        array('test_case', 'test case'),
-        array('test_case', 'test -case'),
-        array('_test_case', '-test - case'),
-        array('test_case', 'test_case'),
-        array('test_c_test', '  test c test'),
-        array('test_u_case', 'TestUCase'),
-        array('test_c_c_test', 'TestCCTest'),
-        array('string_with1number', 'string_with1number'),
-        array('string_with_2_2_numbers', 'String-with_2_2 numbers'),
-        array('1test2case', '1test2case'),
-        array('yes_we_can', 'yesWeCan'),
-        array('test_σase', 'test Σase', 'UTF-8'),
-        array('στανιλ_case', 'Στανιλ case', 'UTF-8'),
-        array('σash_case', 'Σash  Case', 'UTF-8'),
-    );
+    return [
+        ['test_case', 'testCase'],
+        ['test_case', 'Test-Case'],
+        ['test_case', 'test case'],
+        ['test_case', 'test -case'],
+        ['_test_case', '-test - case'],
+        ['test_case', 'test_case'],
+        ['test_c_test', '  test c test'],
+        ['test_u_case', 'TestUCase'],
+        ['test_c_c_test', 'TestCCTest'],
+        ['string_with1number', 'string_with1number'],
+        ['string_with_2_2_numbers', 'String-with_2_2 numbers'],
+        ['1test2case', '1test2case'],
+        ['yes_we_can', 'yesWeCan'],
+        ['test_σase', 'test Σase', 'UTF-8'],
+        ['στανιλ_case', 'Στανιλ case', 'UTF-8'],
+        ['σash_case', 'Σash  Case', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function upperCamelizeProvider()
+  public function upperCamelizeProvider(): array
   {
-    return array(
-        array('CamelCase', 'camelCase'),
-        array('CamelCase', 'Camel-Case'),
-        array('CamelCase', 'camel case'),
-        array('CamelCase', 'camel -case'),
-        array('CamelCase', 'camel - case'),
-        array('CamelCase', 'camel_case'),
-        array('CamelCTest', 'camel c test'),
-        array('StringWith1Number', 'string_with1number'),
-        array('StringWith22Numbers', 'string-with-2-2 numbers'),
-        array('1Camel2Case', '1camel2case'),
-        array('CamelΣase', 'camel σase', 'UTF-8'),
-        array('ΣτανιλCase', 'στανιλ case', 'UTF-8'),
-        array('ΣamelCase', 'Σamel  Case', 'UTF-8'),
-    );
+    return [
+        ['CamelCase', 'camelCase'],
+        ['CamelCase', 'Camel-Case'],
+        ['CamelCase', 'camel case'],
+        ['CamelCase', 'camel -case'],
+        ['CamelCase', 'camel - case'],
+        ['CamelCase', 'camel_case'],
+        ['CamelCTest', 'camel c test'],
+        ['StringWith1Number', 'string_with1number'],
+        ['StringWith22Numbers', 'string-with-2-2 numbers'],
+        ['1Camel2Case', '1camel2case'],
+        ['CamelΣase', 'camel σase', 'UTF-8'],
+        ['ΣτανιλCase', 'στανιλ case', 'UTF-8'],
+        ['ΣamelCase', 'Σamel  Case', 'UTF-8'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function upperCaseFirstProvider()
+  public function upperCaseFirstProvider(): array
   {
-    return array(
-        array('Test', 'Test'),
-        array('Test', 'test'),
-        array('1a', '1a'),
-        array('Σ test', 'σ test', 'UTF-8'),
-        array(' σ test', ' σ test', 'UTF-8'),
-    );
+    return [
+        ['Test', 'Test'],
+        ['Test', 'test'],
+        ['1a', '1a'],
+        ['Σ test', 'σ test', 'UTF-8'],
+        [' σ test', ' σ test', 'UTF-8'],
+    ];
   }
 }

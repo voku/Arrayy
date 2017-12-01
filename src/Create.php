@@ -13,7 +13,7 @@ if (!function_exists('Stringy\create')) {
    * @throws \InvalidArgumentException if an array or object without a
    *         __toString method is passed as the first argument
    */
-  function create($str, $encoding = null)
+  function create($str, string $encoding = null)
   {
     return new Stringy($str, $encoding);
   }

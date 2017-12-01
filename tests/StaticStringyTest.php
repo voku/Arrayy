@@ -1,13 +1,15 @@
 <?php
 
-require __DIR__ . '/../src/StaticStringy.php';
+use Stringy\Stringy;
+
+require_once __DIR__ . '/../src/StaticStringy.php';
 
 use Stringy\StaticStringy as S;
 
 /**
  * Class StaticStringyTest
  */
-class StaticStringyTest extends PHPUnit_Framework_TestCase
+class StaticStringyTest extends \PHPUnit\Framework\TestCase
 {
   /**
    * @expectedException BadMethodCallException
@@ -52,8 +54,8 @@ class StaticStringyTest extends PHPUnit_Framework_TestCase
    */
   public function testArgumentNumbers()
   {
-    $staticStringyClass = new ReflectionClass('Stringy\StaticStringy');
-    $stringyClass = new ReflectionClass('Stringy\Stringy');
+    $staticStringyClass = new ReflectionClass(S::class);
+    $stringyClass = new ReflectionClass(Stringy::class);
 
     // getStaticPropertyValue can't access protected properties
     $properties = $staticStringyClass->getStaticProperties();
