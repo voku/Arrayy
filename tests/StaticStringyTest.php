@@ -1,10 +1,10 @@
 <?php
 
-use Stringy\Stringy;
+use Stringy\StaticStringy as S;
 
 require_once __DIR__ . '/../src/StaticStringy.php';
 
-use Stringy\StaticStringy as S;
+use Stringy\Stringy;
 
 /**
  * Class StaticStringyTest
