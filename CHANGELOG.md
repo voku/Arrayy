@@ -1,7 +1,16 @@
+### 3.0.0 (2017-12-03)
+
+ * drop support for PHP < 7.0
+ * use "strict_types"
+
+### 2.1.0 - 2.2.36 (2016-2017)
+
+ * use Portable UTF-8 functions 
+
 ### 2.1.0 (2015-09-02)
 
-* Added simplified StaticStringy class
-* str in Stringy::create and constructor is now optional
+ * Added simplified StaticStringy class
+ * str in Stringy::create and constructor is now optional
 
 ### 2.0.0 (2015-07-29)
 
