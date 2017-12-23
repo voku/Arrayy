@@ -1,16 +1,28 @@
+### 4.0.0 (2017-12-23)
+
+ * add Stringy->titleizeForHumans() | thx @HipsterJazzbo
+ * update "Portable UTF8" from v4 -> v5
+ 
+ -> this is a breaking change without API-changes - but the requirement from 
+ "Portable UTF8" has been changed (it no longer requires all polyfills from Symfony)
+ 
+
 ### 3.0.0 (2017-12-03)
 
  * drop support for PHP < 7.0
  * use "strict_types"
 
+
 ### 2.1.0 - 2.2.36 (2016-2017)
 
  * use Portable UTF-8 functions 
+
 
 ### 2.1.0 (2015-09-02)
 
  * Added simplified StaticStringy class
  * str in Stringy::create and constructor is now optional
+
 
 ### 2.0.0 (2015-07-29)
 
@@ -18,6 +30,7 @@
  * Added append, prepend, toBoolean, repeat, between, slice, split, and lines
  * camelize/upperCamelize now strip leading dashes and underscores
  * titleize converts to lowercase, thus no longer preserving acronyms
+
 
 ### 1.10.0 (2015-07-22)
 
@@ -27,6 +40,7 @@
  * Added indexOf and indexOfLast
  * Added htmlEncode and htmlDecode
  * Added "Ç" in toAscii()
+
 
 ### 1.9.0 (2015-02-09)
 
@@ -38,6 +52,7 @@
    extended by inheriting classes
  * Chars array is cached for better performance
 
+
 ### 1.8.1 (2015-01-08)
 
  * Optimized chars()
@@ -47,29 +62,35 @@
  * Added missing test cases for safeTruncate() and longestCommonSuffix()
  * Updated Stringy\create() to avoid collision when it already exists
 
+
 ### 1.8.0 (2015-01-03)
 
  * Listed ext-mbstring in composer.json
  * Added Stringy\create function for PHP 5.6
+
 
 ### 1.7.0 (2014-10-14)
 
  * Added containsAll and containsAny
  * Light cleanup
 
+
 ### 1.6.0 (2014-09-14)
 
  * Added toTitleCase
 
+
 ### 1.5.2 (2014-07-09)
 
  * Announced support for HHVM
+
 
 ### 1.5.1 (2014-04-19)
 
   * Fixed toAscii() failing to remove remaining non-ascii characters
   * Updated slugify() to treat dash and underscore as delimiters by default
   * Updated slugify() to remove leading and trailing delimiter, if present
+
 
 ### 1.5.0 (2014-03-19)
 
@@ -81,6 +102,7 @@
   * Fixed handling consecutive invalid chars in slugify()
   * Removed conflicting hard sign transliteration in toAscii()
 
+
 ### 1.4.0 (2014-02-12)
 
   * Implemented the IteratorAggregate interface, added chars()
@@ -88,6 +110,7 @@
   * Updated count() to implement Countable interface
   * Implemented the ArrayAccess interface with positive and negative indices
   * Switched from PSR-0 to PSR-4 autoloading
+
 
 ### 1.3.0 (2013-12-16)
 
@@ -98,15 +121,18 @@
   * Constructor throws an InvalidArgumentException when given an object without
     a __toString method
 
+
 ### 1.2.2 (2013-12-04)
 
   * Updated create function to use late static binding
   * Added optional $replacement param to slugify
 
+
 ### 1.2.1 (2013-10-11)
 
   * Cleaned up tests
   * Added homepage to composer.json
+
 
 ### 1.2.0 (2013-09-15)
 
@@ -118,6 +144,7 @@
   * Added toUpperCase()
   * Added regexReplace()
 
+
 ### 1.1.0 (2013-08-31)
 
   * Fix for collapseWhitespace()
@@ -125,6 +152,7 @@
   * Added constructor to Stringy\Stringy
   * Added isSerialized()
   * Added isJson()
+
 
 ### 1.0.0 (2013-08-1)
 
@@ -134,6 +162,7 @@
   * Fixed StaticStringy::replace(). It was returning a Stringy object instead of string
   * Renamed standardize() to the more appropriate toAscii()
   * Cleaned up comments and README
+
 
 ### 1.0.0-rc.1 (2013-07-28)
 
