@@ -2130,7 +2130,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    *
    * @return static <p>Object with a titleized $str</p>
    */
-  public function titleizeForHumans(array $ignore = []): Stringy
+  public function titleizeForHumans(array $ignore = []): self
   {
     $smallWords = \array_merge(
         [
