@@ -39,7 +39,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * without a __toString method.
    *
    * @param mixed  $str      [optional] <p>Value to modify, after being cast to string. Default: ''</p>
-   * @param string $encoding [optional] <p>The character encoding.</p>
+   * @param string $encoding [optional] <p>The character encoding. Fallback: 'UTF-8'</p>
    *
    * @throws \InvalidArgumentException <p>if an array or object without a
    *         __toString method is passed as the first argument</p>
@@ -62,15 +62,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
       );
     }
 
-    // init
-    UTF8::checkForSupport();
-
     $this->str = (string)$str;
 
     if ($encoding) {
-      $this->encoding = $encoding;
+      $this->encoding = UTF8::normalize_encoding($encoding);
     } else {
-      $this->encoding = \mb_internal_encoding();
+      $this->encoding = 'UTF-8';
     }
   }
 
@@ -156,7 +153,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     // add random chars
     while ($i < $length) {
-      $char = UTF8::substr($possibleChars, random_int(0, $maxlength - 1), 1, $this->encoding);
+      $char = UTF8::substr($possibleChars, \random_int(0, $maxlength - 1), 1, $this->encoding);
       $str .= $char;
       $i++;
     }
@@ -172,7 +169,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    * if the first argument is an array or object without a __toString method.
    *
    * @param  mixed  $str      [optional] <p>Value to modify, after being cast to string. Default: ''</p>
-   * @param  string $encoding [optional] <p>The character encoding.</p>
+   * @param  string $encoding [optional] <p>The character encoding. Fallback: 'UTF-8'</p>
    *
    * @return static <p>A Stringy object.</p>
    *
@@ -181,6 +178,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public static function create($str = '', string $encoding = null): self
   {
+    if ($encoding) {
+      $encoding = UTF8::normalize_encoding($encoding);
+    } else {
+      $encoding = 'UTF-8';
+    }
+
     return new static($str, $encoding);
   }
 
