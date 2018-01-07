@@ -172,7 +172,7 @@ in your composer.json file:
 
 ```json
 "require": {
-    "voku/stringy": "~2.2"
+    "voku/stringy": "~4.0"
 }
 ```
 
