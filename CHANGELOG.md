@@ -1,3 +1,8 @@
+### 4.0.2 (2018-01-07)
+
+- set default encoding to UTF-8 (for static method calls) v2
+
+
 ### 4.0.1 (2018-01-07)
 
 - set default encoding to UTF-8 (for static method calls)
