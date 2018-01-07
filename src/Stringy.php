@@ -64,7 +64,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
 
     $this->str = (string)$str;
 
-    if ($encoding) {
+    if ($encoding && $encoding !== 'UTF-8') {
       $this->encoding = UTF8::normalize_encoding($encoding);
     } else {
       $this->encoding = 'UTF-8';
@@ -178,7 +178,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public static function create($str = '', string $encoding = null): self
   {
-    if ($encoding) {
+    if ($encoding && $encoding !== 'UTF-8') {
       $encoding = UTF8::normalize_encoding($encoding);
     } else {
       $encoding = 'UTF-8';
