@@ -2,3 +2,6 @@ test:
   override:
     - php vendor/bin/phpunit -c phpunit.xml.dist
     
+machine:
+  php:
+    version: 7.0.4
