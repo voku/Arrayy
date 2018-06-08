@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.1.0 (2018-06-08)
+
+- add Arrayy->fillWithDefaults()
+- fix usage of "count()" + COUNT_RECURSIVE if needed
+
+
 ### 5.0.0 (2017-12-23)
 
 - update "Portable UTF8" from v4 -> v5

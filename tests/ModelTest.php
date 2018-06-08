@@ -10,7 +10,7 @@ class ModelTest extends \PHPUnit\Framework\TestCase
 {
   public function testDotNotation()
   {
-    $model = new ModelA(array('foo', 'bar' => array('config' => array('lall' => true))));
+    $model = new ModelA(['foo', 'bar' => ['config' => ['lall' => true]]]);
 
     static::assertInstanceOf('Arrayy\Arrayy', $model);
     static::assertSame('foo', $model[0]);
@@ -20,7 +20,7 @@ class ModelTest extends \PHPUnit\Framework\TestCase
 
   public function testForEach()
   {
-    $colors = new ModelB(array('red', 'yellow', 'green', 'white'));
+    $colors = new ModelB(['red', 'yellow', 'green', 'white']);
 
     foreach ($colors as $key => $color) {
       if ($key == 0) {

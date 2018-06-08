@@ -17,7 +17,7 @@ class ArrayyIterator extends \ArrayIterator
    * @param array $array
    * @param int   $flags
    */
-  public function __construct(array $array = array(), $flags = 0)
+  public function __construct(array $array = [], $flags = 0)
   {
     parent::__construct($array, $flags);
   }
@@ -29,7 +29,7 @@ class ArrayyIterator extends \ArrayIterator
   {
     $value = parent::current();
 
-    if (is_array($value)) {
+    if (\is_array($value)) {
       $value = Arrayy::create($value);
     }
 
@@ -45,10 +45,10 @@ class ArrayyIterator extends \ArrayIterator
   {
     $value = parent::offsetGet($offset);
 
-    if (is_array($value)) {
+    if (\is_array($value)) {
       $value = Arrayy::create($value);
     }
 
     return $value;
   }
-};
+}

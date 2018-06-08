@@ -7,7 +7,7 @@ class CreateTestCase extends \PHPUnit\Framework\TestCase
 {
   public function testCreate()
   {
-    $arrayy = Arrayy\create(array('foo bar', 'UTF-8'));
+    $arrayy = Arrayy\create(['foo bar', 'UTF-8']);
 
     static::assertInstanceOf('Arrayy\Arrayy', $arrayy);
     static::assertSame('foo bar,UTF-8', (string)$arrayy);

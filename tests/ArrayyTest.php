@@ -16,33 +16,33 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   /**
    * @return array
    */
-  public function appendProvider()
+  public function appendProvider(): array
   {
-    return array(
-        array(array(), array('foo'), 'foo'),
-        array(array(0 => false), array(false, true), true),
-        array(array(0 => true), array(true, false), false),
-        array(array(0 => -9), array(0 => -9, 1 => -6), -6),
-        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => -9, 1 => 1, 2 => 2, 3 => 3), 3),
-        array(array(0 => 1.18, 1 => 1.5), array(0 => 1.18, 1 => 1.5, 2 => 1.2), 1.2),
-        array(array('fòô' => 'bàř'), array('fòô' => 'bàř', 0 => 'foo'), 'foo'),
-        array(
-            array(3 => 'string', 'foo', 'lall'),
-            array(
+    return [
+        [[], ['foo'], 'foo'],
+        [[0 => false], [false, true], true],
+        [[0 => true], [true, false], false],
+        [[0 => -9], [0 => -9, 1 => -6], -6],
+        [[0 => -9, 1 => 1, 2 => 2], [0 => -9, 1 => 1, 2 => 2, 3 => 3], 3],
+        [[0 => 1.18, 1 => 1.5], [0 => 1.18, 1 => 1.5, 2 => 1.2], 1.2],
+        [['fòô' => 'bàř'], ['fòô' => 'bàř', 0 => 'foo'], 'foo'],
+        [
+            [3 => 'string', 'foo', 'lall'],
+            [
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
                 6 => 'foobar',
-            ),
+            ],
             'foobar',
-        ),
-    );
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function appendToEachKeyProvider()
+  public function appendToEachKeyProvider(): array
   {
     $a = new stdClass();
     $a->x = 42;
@@ -53,65 +53,65 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $c = new stdClass();
     $c->x = 43;
 
-    return array(
-        array(array(), array()),
-        array(array(0 => false), array('foo_0' => false)),
-        array(array(0 => true), array('foo_0' => true)),
-        array(array(0 => -9, 1 => -9), array('foo_0' => -9, 'foo_1' => -9)),
-        array(array(0 => -9, 1 => 1, 2 => 2), array('foo_0' => -9, 'foo_1' => 1, 'foo_2' => 2)),
-        array(array(0 => 1.18, 1 => 1.5), array('foo_0' => 1.18, 'foo_1' => 1.5)),
-        array(array('lall' => 'foo'), array('foo_lall' => 'foo')),
-        array(
-            array(
+    return [
+        [[], []],
+        [[0 => false], ['foo_0' => false]],
+        [[0 => true], ['foo_0' => true]],
+        [[0 => -9, 1 => -9], ['foo_0' => -9, 'foo_1' => -9]],
+        [[0 => -9, 1 => 1, 2 => 2], ['foo_0' => -9, 'foo_1' => 1, 'foo_2' => 2]],
+        [[0 => 1.18, 1 => 1.5], ['foo_0' => 1.18, 'foo_1' => 1.5]],
+        [['lall' => 'foo'], ['foo_lall' => 'foo']],
+        [
+            [
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
                 6 => 'foo',
-            ),
-            array(
+            ],
+            [
                 'foo_3' => 'string',
                 'foo_4' => 'foo',
                 'foo_5' => 'lall',
                 'foo_6' => 'foo',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 2 => 1,
                 3 => 2,
                 4 => 2,
-            ),
-            array(
+            ],
+            [
                 'foo_2' => 1,
                 'foo_3' => 2,
                 'foo_4' => 2,
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 $a,
                 $a,
                 $b,
                 $b,
                 $c,
                 $c,
-            ),
-            array(
+            ],
+            [
                 'foo_0' => $a,
                 'foo_1' => $a,
                 'foo_2' => $b,
                 'foo_3' => $b,
                 'foo_4' => $c,
                 'foo_5' => $c,
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function appendToEachValueProvider()
+  public function appendToEachValueProvider(): array
   {
     $a = new stdClass();
     $a->x = 42;
@@ -122,59 +122,59 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $c = new stdClass();
     $c->x = 43;
 
-    return array(
-        array(array(), array()),
-        array(array(0 => false), array(0 => 'foo_')),
-        array(array(0 => true), array(0 => 'foo_1')),
-        array(array(0 => -9, 1 => -9), array(0 => 'foo_-9', 1 => 'foo_-9')),
-        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => 'foo_-9', 1 => 'foo_1', 2 => 'foo_2')),
-        array(array(0 => 1.18, 1 => 1.5), array(0 => 'foo_1.18', 1 => 'foo_1.5')),
-        array(array('lall' => 'foo'), array('lall' => 'foo_foo')),
-        array(
-            array(
+    return [
+        [[], []],
+        [[0 => false], [0 => 'foo_']],
+        [[0 => true], [0 => 'foo_1']],
+        [[0 => -9, 1 => -9], [0 => 'foo_-9', 1 => 'foo_-9']],
+        [[0 => -9, 1 => 1, 2 => 2], [0 => 'foo_-9', 1 => 'foo_1', 2 => 'foo_2']],
+        [[0 => 1.18, 1 => 1.5], [0 => 'foo_1.18', 1 => 'foo_1.5']],
+        [['lall' => 'foo'], ['lall' => 'foo_foo']],
+        [
+            [
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
                 6 => 'foo',
-            ),
-            array(
+            ],
+            [
                 3 => 'foo_string',
                 4 => 'foo_foo',
                 5 => 'foo_lall',
                 6 => 'foo_foo',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 2 => 1,
                 3 => 2,
                 4 => 2,
-            ),
-            array(
+            ],
+            [
                 2 => 'foo_1',
                 3 => 'foo_2',
                 4 => 'foo_2',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 $a,
                 $a,
                 $b,
                 $b,
                 $c,
                 $c,
-            ),
-            array(
+            ],
+            [
                 $a,
                 $a,
                 $b,
                 $b,
                 $c,
                 $c,
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
@@ -184,7 +184,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public static function assertArrayy($actual)
   {
-    self::assertInstanceOf('Arrayy\Arrayy', $actual);
+    self::assertInstanceOf(Arrayy::class, $actual);
   }
 
   /**
@@ -215,675 +215,691 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   /**
    * @return array
    */
-  public function averageProvider()
+  public function averageProvider(): array
   {
-    return array(
-        array(array(), null, 0),
-        array(array(), 0.0, 0),
-        array(array(0 => false), false, 0.0),
-        array(array(0 => true), true, 1.0),
-        array(array(0 => -9, -8, -7), 1, -8.0),
-        array(array(0 => -9, -8, -7, 1.32), 2, -5.67),
-        array(array(1.18), 1, 1.2),
-        array(array(1.18, 1.89), 1, 1.5),
-        array(array('string', 'foo'), 1, 0.0),
-        array(array('string', 'foo123'), 'foo', 0.0),
-    );
+    return [
+        [[], null, 0],
+        [[], 0.0, 0],
+        [[0 => false], false, 0.0],
+        [[0 => true], true, 1.0],
+        [[0 => -9, -8, -7], 1, -8.0],
+        [[0 => -9, -8, -7, 1.32], 2, -5.67],
+        [[1.18], 1, 1.2],
+        [[1.18, 1.89], 1, 1.5],
+        [['string', 'foo'], 1, 0.0],
+        [['string', 'foo123'], 'foo', 0.0],
+    ];
   }
 
   /**
    * @return array
    */
-  public function cleanProvider()
+  public function cleanProvider(): array
   {
-    return array(
-        array(array(), array()),
-        array(array(null, false), array()),
-        array(array(0 => true), array(0 => true)),
-        array(array(0 => -9, 0), array(0 => -9)),
-        array(array(-8 => -9, 1, 2 => false), array(-8 => -9, 0 => 1)),
-        array(array(0 => 1.18, 1 => false), array(0 => 1.18)),
-        array(array('foo' => false, 'foo', 'lall'), array('foo', 'lall')),
-    );
+    return [
+        [[], []],
+        [[null, false], []],
+        [[0 => true], [0 => true]],
+        [[0 => -9, 0], [0 => -9]],
+        [[-8 => -9, 1, 2 => false], [-8 => -9, 0 => 1]],
+        [[0 => 1.18, 1 => false], [0 => 1.18]],
+        [['foo' => false, 'foo', 'lall'], ['foo', 'lall']],
+    ];
   }
 
   /**
    * @return array
    */
-  public function containsCaseInsensitiveProviderRecursive()
+  public function containsCaseInsensitiveProvider(): array
   {
-    return array(
-        array(array(), null, false),
-        array(array(), false, false),
-        array(array(0 => false), false, true),
-        array(array(0 => true), true, true),
-        array(array(0 => array(-9)), -9, true),
-        array(array(1.18), 1.18, true),
-        array(array(array(1.18)), 1.17, false),
-        array(array('string', array('💩')), '💩', true),
-        array(array(' ', array('É')), 'é', true),
-        array(array('string', 'foo'), 'foo', true),
-        array(array('string', 'Foo', array('lall')), 'foo', true),
-        array(array('string', 'foo123'), 'foo', false),
-        array(array('String', array('foo123')), 'foo', false),
-    );
+    return [
+        [[], null, false],
+        [[], false, false],
+        [[0 => false], false, true],
+        [[0 => true], true, true],
+        [[0 => -9], -9, true],
+        [[1.18], 1.18, true],
+        [[1.18], 1.17, false],
+        [['string', '💩'], '💩', true],
+        [[' ', 'É'], 'é', true],
+        [['string', 'foo'], 'foo', true],
+        [['string', 'Foo'], 'foo', true],
+        [['string', 'foo123'], 'foo', false],
+        [['String', 'foo123'], 'foo', false],
+    ];
   }
 
   /**
    * @return array
    */
-  public function containsCaseInsensitiveProvider()
+  public function containsCaseInsensitiveProviderRecursive(): array
   {
-    return array(
-        array(array(), null, false),
-        array(array(), false, false),
-        array(array(0 => false), false, true),
-        array(array(0 => true), true, true),
-        array(array(0 => -9), -9, true),
-        array(array(1.18), 1.18, true),
-        array(array(1.18), 1.17, false),
-        array(array('string', '💩'), '💩', true),
-        array(array(' ', 'É'), 'é', true),
-        array(array('string', 'foo'), 'foo', true),
-        array(array('string', 'Foo'), 'foo', true),
-        array(array('string', 'foo123'), 'foo', false),
-        array(array('String', 'foo123'), 'foo', false),
-    );
+    return [
+        [[], null, false],
+        [[], false, false],
+        [[0 => false], false, true],
+        [[0 => true], true, true],
+        [[0 => [-9]], -9, true],
+        [[1.18], 1.18, true],
+        [[[1.18]], 1.17, false],
+        [['string', ['💩']], '💩', true],
+        [[' ', ['É']], 'é', true],
+        [['string', 'foo'], 'foo', true],
+        [['string', 'Foo', ['lall']], 'foo', true],
+        [['string', 'foo123'], 'foo', false],
+        [['String', ['foo123']], 'foo', false],
+    ];
   }
 
   /**
    * @return array
    */
-  public function containsProviderRecursive()
+  public function containsProvider(): array
   {
-    return array(
-        array(array(), null, false),
-        array(array(), false, false),
-        array(array(0 => false), false, true),
-        array(array(0 => true), true, true),
-        array(array(0 => -8, array(0 => -9)), -9, true),
-        array(array(1.18), 1.18, true),
-        array(array(1.18), 1.17, false),
-        array(array('string', array('foo')), 'foo', true),
-        array(array('string', array('foo123')), 'foo', false),
-    );
+    return [
+        [[], null, false],
+        [[], false, false],
+        [[0 => false], false, true],
+        [[0 => true], true, true],
+        [[0 => -9], -9, true],
+        [[1.18], 1.18, true],
+        [[1.18], 1.17, false],
+        [['string', 'foo'], 'foo', true],
+        [['string', 'foo123'], 'foo', false],
+    ];
   }
 
   /**
    * @return array
    */
-  public function containsProvider()
+  public function containsProviderRecursive(): array
   {
-    return array(
-        array(array(), null, false),
-        array(array(), false, false),
-        array(array(0 => false), false, true),
-        array(array(0 => true), true, true),
-        array(array(0 => -9), -9, true),
-        array(array(1.18), 1.18, true),
-        array(array(1.18), 1.17, false),
-        array(array('string', 'foo'), 'foo', true),
-        array(array('string', 'foo123'), 'foo', false),
-    );
+    return [
+        [[], null, false],
+        [[], false, false],
+        [[0 => false], false, true],
+        [[0 => true], true, true],
+        [[0 => -8, [0 => -9]], -9, true],
+        [[1.18], 1.18, true],
+        [[1.18], 1.17, false],
+        [['string', ['foo']], 'foo', true],
+        [['string', ['foo123']], 'foo', false],
+    ];
   }
 
   /**
    * @return array
    */
-  public function countProvider()
+  public function countProvider(): array
   {
-    return array(
-        array(array(), 0),
-        array(array(null), 1),
-        array(array(0 => false), 1),
-        array(array(0 => true), 1),
-        array(array(0 => -9, -8, -7), 3),
-        array(array(0 => -9, -8, -7, 1.32), 4),
-        array(array(1.18), 1),
-        array(array(1.18, 1.89), 2),
-        array(array('string', 'foo'), 2),
-        array(array('string', 'foo123'), 2),
-    );
+    return [
+        [[], 0],
+        [[null], 1],
+        [[0 => false], 1],
+        [[0 => true], 1],
+        [[0 => -9, -8, -7], 3],
+        [[0 => -9, -8, -7, 1.32], 4],
+        [[1.18], 1],
+        [[1.18, 1.89], 2],
+        [['string', 'foo'], 2],
+        [['string', 'foo123'], 2],
+    ];
   }
 
   /**
    * @return array
    */
-  public function countProviderRecursive()
+  public function countProviderRecursive(): array
   {
-    return array(
-        array(array(), 0),
-        array(array(null), 1),
-        array(array(0 => false), 1),
-        array(array(0 => true), 1),
-        array(array(0 => -9, 1 => array(-8, -7)), 4),
-        array(array(0 => -9, -8, -7, 1.32), 4),
-        array(array(array(1.18)), 2),
-        array(array(1.18, 1.89), 2),
-        array(array('string', array('foo', 'lall')), 4),
-        array(array('string', 'foo123'), 2),
-    );
+    return [
+        [[], 0],
+        [[null], 1],
+        [[0 => false], 1],
+        [[0 => true], 1],
+        [[0 => -9, 1 => [-8, -7]], 4],
+        [[0 => -9, -8, -7, 1.32], 4],
+        [[[1.18]], 2],
+        [[1.18, 1.89], 2],
+        [['string', ['foo', 'lall']], 4],
+        [['string', 'foo123'], 2],
+    ];
   }
 
   /**
    * @return array
    */
-  public function diffProvider()
+  public function diffProvider(): array
   {
-    return array(
-        array(array(), array(), array()),
-        array(array(0 => false), array(false), array()),
-        array(array(0 => true), array(true), array()),
-        array(
-            array(
+    return [
+        [[], [], []],
+        [[0 => false], [false], []],
+        [[0 => true], [true], []],
+        [
+            [
                 0 => -9,
                 1 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
-            ),
-            array(),
-        ),
-        array(
-            array(
+            ],
+            [],
+        ],
+        [
+            [
                 0 => -9,
                 1,
                 2,
-            ),
-            array(
+            ],
+            [
                 0 => 2,
                 1 => 1,
                 2 => -9,
-            ),
-            array(),
-        ),
-        array(
-            array(1.18, 1.5),
-            array(1.5, 1.18),
-            array(),
-        ),
-        array(
-            array(
+            ],
+            [],
+        ],
+        [
+            [1.18, 1.5],
+            [1.5, 1.18],
+            [],
+        ],
+        [
+            [
                 1     => 'one',
                 2     => 'two',
                 'foo' => 'bar1',
-            ),
-            array(
+            ],
+            [
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
                 'foo' => 'bar2',
-            ),
-            array(
+            ],
+            [
                 1     => 'one',
                 2     => 'two',
                 'foo' => 'bar1',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 3 => 'string',
                 'foo',
                 'lall',
                 'foo',
-            ),
-            array(
+            ],
+            [
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
                 3 => 'string',
-            ),
-            array(),
-        ),
-    );
+            ],
+            [],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function diffReverseProvider()
+  public function diffReverseProvider(): array
   {
-    return array(
-        array(array(), array(), array()),
-        array(array(0 => false), array(false), array()),
-        array(array(0 => true), array(true), array()),
-        array(
-            array(
+    return [
+        [[], [], []],
+        [[0 => false], [false], []],
+        [[0 => true], [true], []],
+        [
+            [
                 0 => -9,
                 -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
-            ),
-            array(),
-        ),
-        array(
-            array(
+            ],
+            [],
+        ],
+        [
+            [
                 0 => -9,
                 1,
                 2,
-            ),
-            array(
+            ],
+            [
                 0 => 2,
                 1 => 1,
                 2 => -9,
-            ),
-            array(),
-        ),
-        array(
-            array(1.18, 1.5),
-            array(1.5, 1.18),
-            array(),
-        ),
-        array(
-            array(
+            ],
+            [],
+        ],
+        [
+            [1.18, 1.5],
+            [1.5, 1.18],
+            [],
+        ],
+        [
+            [
                 1     => 'one',
                 2     => 'two',
                 'foo' => 'bar1',
-            ),
-            array(
+            ],
+            [
                 'foo' => 'bar2',
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
-            ),
-            array(
+            ],
+            [
                 'foo' => 'bar2',
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 3 => 'string',
                 'foo',
                 'lall',
                 'foo',
-            ),
-            array(
+            ],
+            [
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
                 3 => 'string',
-            ),
-            array(),
-        ),
-    );
+            ],
+            [],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function findProvider()
+  public function fillWithDefaultsProvider(): array
   {
-    return array(
-        array(array(), array(null), false),
-        array(array(), array(false), false),
-        array(array(0 => true), true, true),
-        array(array(0 => -9), -9, -9),
-        array(array(0 => -9, 1 => 1, 2 => 2), false, false),
-        array(array(0 => 1.18), 1.18, 1.18),
-        array(array('string', 'foo', 'lall'), 'foo', 'foo'),
-    );
+    return [
+        [[], 2, 'lall', ['lall', 'lall']],
+        [[], 1, false, [false]],
+        [[], 0, null, []],
+        [[0 => true], 3, 'lall', [0 => true, 1 => 'lall', 2 => 'lall']],
+        [[0 => -9, 1 => 1, 2 => 2], 3, 'lall', [0 => -9, 1 => 1, 2 => 2]],
+        [[0 => 1.18], 3, 'lall', [0 => 1.18, 1 => 'lall', 2 => 'lall']],
+        [['string', 'foo', 'lall'], 3, 'lall', ['string', 'foo', 'lall']],
+    ];
   }
 
   /**
    * @return array
    */
-  public function firstProvider()
+  public function findProvider(): array
   {
-    return array(
-        array(array(), null),
-        array(array(null, false), null),
-        array(array(0 => true), true),
-        array(array(0 => -9, 0), -9),
-        array(array(-8 => -9, 1, 2 => false), -9),
-        array(array(1.18, false), 1.18),
-        array(array('foo' => false, 'foo', 'lall'), false),
-        array(array(-8 => -9, 1, 2 => false), -9),
-        array(array(1.18, false), 1.18),
-        array(array('foo' => false, 'foo', 'lall'), false),
-        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), 'foo'),
-    );
+    return [
+        [[], [null], false],
+        [[], [false], false],
+        [[0 => true], true, true],
+        [[0 => -9], -9, -9],
+        [[0 => -9, 1 => 1, 2 => 2], false, false],
+        [[0 => 1.18], 1.18, 1.18],
+        [['string', 'foo', 'lall'], 'foo', 'foo'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function firstsProvider()
+  public function firstProvider(): array
   {
-    return array(
-        array(array(), array()),
-        array(array(null, false), array()),
-        array(array(0 => true), array(true)),
-        array(array(0 => -9, 0), array(-9)),
-        array(array(-8 => -9, 1, 2 => false), array(-9)),
-        array(array(1.18, false), array(1.18)),
-        array(array('foo' => false, 'foo', 'lall'), array(false)),
-        array(array(-8 => -9, 1, 2 => false), array(), 0),
-        array(array(1.18, false), array(1.18), 1),
-        array(array('foo' => false, 'foo', 'lall'), array('foo' => false, 'foo'), 2),
-        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'foo', 1 => 'bar'), 2),
-    );
+    return [
+        [[], null],
+        [[null, false], null],
+        [[0 => true], true],
+        [[0 => -9, 0], -9],
+        [[-8 => -9, 1, 2 => false], -9],
+        [[1.18, false], 1.18],
+        [['foo' => false, 'foo', 'lall'], false],
+        [[-8 => -9, 1, 2 => false], -9],
+        [[1.18, false], 1.18],
+        [['foo' => false, 'foo', 'lall'], false],
+        [[2 => 'foo', 3 => 'bar', 4 => 'lall'], 'foo'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function getProvider()
+  public function firstsProvider(): array
   {
-    return array(
-        array(null, array(0 => null), 0),
-        array(false, array(0 => false), 0),
-        array(null, array(0 => true), 1),
-        array(null, array(0 => false), 1),
-        array(true, array(0 => true), 0),
-        array(1, array(0 => -9, 1 => 1, 2 => 0, 3 => false), 1),
-        array(1.18, array(0 => 1.18), 0),
-        array(null, array(0 => ' string  ', 1 => 'foo'), 'foo'),
-        array('foo', array(0 => ' string  ', 'foo' => 'foo'), 'foo'),
-    );
+    return [
+        [[], []],
+        [[null, false], []],
+        [[0 => true], [true]],
+        [[0 => -9, 0], [-9]],
+        [[-8 => -9, 1, 2 => false], [-9]],
+        [[1.18, false], [1.18]],
+        [['foo' => false, 'foo', 'lall'], [false]],
+        [[-8 => -9, 1, 2 => false], [], 0],
+        [[1.18, false], [1.18], 1],
+        [['foo' => false, 'foo', 'lall'], ['foo' => false, 'foo'], 2],
+        [[2 => 'foo', 3 => 'bar', 4 => 'lall'], [0 => 'foo', 1 => 'bar'], 2],
+    ];
   }
 
   /**
    * @return array
    */
-  public function hasProvider()
+  public function getProvider(): array
   {
-    return array(
-        array(false, array(), 0),
-        array(true, array(0 => null), 0),
-        array(true, array(0 => null), 0),
-        array(true, array(0 => false), 0),
-        array(false, array(0 => true), 1),
-        array(false, array(0 => false), 1),
-        array(true, array(0 => true), 0),
-        array(true, array(0 => -9, 1 => 1, 2 => 0, 3 => false), 1),
-        array(true, array(0 => 1.18), 0),
-        array(false, array(' string  ', 'foo'), 'foo'),
-        array(true, array(' string  ', 'foo' => 'foo'), 'foo'),
-    );
+    return [
+        [null, [0 => null], 0],
+        [false, [0 => false], 0],
+        [null, [0 => true], 1],
+        [null, [0 => false], 1],
+        [true, [0 => true], 0],
+        [1, [0 => -9, 1 => 1, 2 => 0, 3 => false], 1],
+        [1.18, [0 => 1.18], 0],
+        [null, [0 => ' string  ', 1 => 'foo'], 'foo'],
+        ['foo', [0 => ' string  ', 'foo' => 'foo'], 'foo'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function implodeKeysProvider()
+  public function hasProvider(): array
   {
-    return array(
-        array(array(), ''),
-        array(array(0 => false), '0'),
-        array(array(1 => true), '1'),
-        array(array(-9 => -9), '-9', '|'),
-        array(array(-9 => -9, 1 => 1, 2 => 2), '-9|1|2', '|'),
-        array(array(1 => 1.18), '1'),
-        array(array('string' => 'string', 'foo' => 'foo', 0 => 'lall'), 'string,foo,0', ','),
-        array(
-            array(
+    return [
+        [false, [], 0],
+        [true, [0 => null], 0],
+        [true, [0 => null], 0],
+        [true, [0 => false], 0],
+        [false, [0 => true], 1],
+        [false, [0 => false], 1],
+        [true, [0 => true], 0],
+        [true, [0 => -9, 1 => 1, 2 => 0, 3 => false], 1],
+        [true, [0 => 1.18], 0],
+        [false, [' string  ', 'foo'], 'foo'],
+        [true, [' string  ', 'foo' => 'foo'], 'foo'],
+    ];
+  }
+
+  /**
+   * @return array
+   */
+  public function implodeKeysProvider(): array
+  {
+    return [
+        [[], ''],
+        [[0 => false], '0'],
+        [[1 => true], '1'],
+        [[-9 => -9], '-9', '|'],
+        [[-9 => -9, 1 => 1, 2 => 2], '-9|1|2', '|'],
+        [[1 => 1.18], '1'],
+        [['string' => 'string', 'foo' => 'foo', 0 => 'lall'], 'string,foo,0', ','],
+        [
+            [
                 'string1' => 'string2',
-                0 => 'foo',
-                9 => array('9_1' => 'lall', '9_2' => 'foo', 'string1' => 'string3'),
-            ),
+                0         => 'foo',
+                9         => ['9_1' => 'lall', '9_2' => 'foo', 'string1' => 'string3'],
+            ],
             'string1,0,9,9_1,9_2,string1',
-        ),
-    );
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function implodeProvider()
+  public function implodeProvider(): array
   {
-    return array(
-        array(array(), ''),
-        array(array(0 => false), ''),
-        array(array(0 => true), '1'),
-        array(array(0 => -9), '-9', '|'),
-        array(array(0 => -9, 1 => 1, 2 => 2), '-9|1|2', '|'),
-        array(array(0 => 1.18), '1.18'),
-        array(array(3 => 'string', 'foo', 'lall'), 'string,foo,lall', ','),
-        array(
-            array(
+    return [
+        [[], ''],
+        [[0 => false], ''],
+        [[0 => true], '1'],
+        [[0 => -9], '-9', '|'],
+        [[0 => -9, 1 => 1, 2 => 2], '-9|1|2', '|'],
+        [[0 => 1.18], '1.18'],
+        [[3 => 'string', 'foo', 'lall'], 'string,foo,lall', ','],
+        [
+            [
                 3 => 'string',
                 'foo',
-                9 => array('lall', 'foo'),
-            ),
+                9 => ['lall', 'foo'],
+            ],
             'string,foo,lall,foo',
-        ),
-    );
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function initialProvider()
+  public function initialProvider(): array
   {
-    return array(
-        array(array(), array()),
-        array(array(null, false), array(null)),
-        array(array(0 => true), array()),
-        array(array(0 => -9, 0), array(-9)),
-        array(array(-8 => -9, 1, 2 => false), array(-9, 1)),
-        array(array(1.18, false), array(1.18)),
-        array(array('foo' => false, 'foo', 'lall'), array('foo' => false, 0 => 'foo')),
-        array(array(-8 => -9, 1, 2 => false), array(0 => -9, 1 => 1, 2 => false), 0),
-        array(array(1.18, false), array(1.18), 1),
-        array(array('foo' => false, 'foo', 'lall'), array('foo' => false), 2),
-        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'foo'), 2),
-        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'foo', 1 => 'bar'), 1),
-    );
+    return [
+        [[], []],
+        [[null, false], [null]],
+        [[0 => true], []],
+        [[0 => -9, 0], [-9]],
+        [[-8 => -9, 1, 2 => false], [-9, 1]],
+        [[1.18, false], [1.18]],
+        [['foo' => false, 'foo', 'lall'], ['foo' => false, 0 => 'foo']],
+        [[-8 => -9, 1, 2 => false], [0 => -9, 1 => 1, 2 => false], 0],
+        [[1.18, false], [1.18], 1],
+        [['foo' => false, 'foo', 'lall'], ['foo' => false], 2],
+        [[2 => 'foo', 3 => 'bar', 4 => 'lall'], [0 => 'foo'], 2],
+        [[2 => 'foo', 3 => 'bar', 4 => 'lall'], [0 => 'foo', 1 => 'bar'], 1],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isAssocProvider()
+  public function isAssocProvider(): array
   {
-    return array(
-        array(array(), false),
-        array(array(0 => true), false),
-        array(array(0 => -9, 0), false),
-        array(array(-8 => -9, 1, 2 => false), false),
-        array(array(-8 => -9, 1, 2 => false), false),
-        array(array(1.18, false), false),
-        array(array(0 => 1, 1 => 2, 2 => 3, 3 => 4), false),
-        array(array(1, 2, 3, 4), false),
-        array(array(0, 1, 2, 3), false),
-        array(array('foo' => false, 'foo1' => 'lall'), true),
-    );
+    return [
+        [[], false],
+        [[0 => true], false],
+        [[0 => -9, 0], false],
+        [[-8 => -9, 1, 2 => false], false],
+        [[-8 => -9, 1, 2 => false], false],
+        [[1.18, false], false],
+        [[0 => 1, 1 => 2, 2 => 3, 3 => 4], false],
+        [[1, 2, 3, 4], false],
+        [[0, 1, 2, 3], false],
+        [['foo' => false, 'foo1' => 'lall'], true],
+    ];
   }
 
   /**
    * @return array
    */
-  public function isMultiArrayProvider()
+  public function isMultiArrayProvider(): array
   {
-    return array(
-        array(array(0 => true), false),
-        array(array(0 => -9, 0), false),
-        array(array(-8 => -9, 1, 2 => false), false),
-        array(array(-8 => -9, 1, 2 => false), false),
-        array(array(1.18, false), false),
-        array(array(0 => 1, 1 => 2, 2 => 3, 3 => 4), false),
-        array(array(1, 2, 3, 4), false),
-        array(array(0, 1, 2, 3), false),
-        array(array('foo' => false, 'foo', 'lall'), false),
-        array(array('foo' => false, 'foo', 'lall'), false),
-        array(array('foo' => false, 'foo', 'lall'), false),
-        array(array('foo' => array('foo', 'lall')), true),
-        array(array('foo' => array('foo', 'lall'), 'bar' => array('foo', 'lall')), true),
-    );
+    return [
+        [[0 => true], false],
+        [[0 => -9, 0], false],
+        [[-8 => -9, 1, 2 => false], false],
+        [[-8 => -9, 1, 2 => false], false],
+        [[1.18, false], false],
+        [[0 => 1, 1 => 2, 2 => 3, 3 => 4], false],
+        [[1, 2, 3, 4], false],
+        [[0, 1, 2, 3], false],
+        [['foo' => false, 'foo', 'lall'], false],
+        [['foo' => false, 'foo', 'lall'], false],
+        [['foo' => false, 'foo', 'lall'], false],
+        [['foo' => ['foo', 'lall']], true],
+        [['foo' => ['foo', 'lall'], 'bar' => ['foo', 'lall']], true],
+    ];
   }
 
   /**
    * @return array
    */
-  public function lastProvider()
+  public function lastProvider(): array
   {
-    return array(
-        array(array(), array()),
-        array(array(0 => null, 1 => null), array(0 => null)),
-        array(array(0 => null, 1 => false), array(0 => false)),
-        array(array(0 => true), array(0 => true)),
-        array(array(0 => -9, 1 => 0), array(0 => 0)),
-        array(array(-8 => -9, 1, 2 => false), array(false)),
-        array(array(1.18, false), array(false)),
-        array(array('foo' => false, 'foo', 'lall'), array('lall')),
-        array(array(-8 => -9, 1, 2 => false), array(-9, 1, false), 0),
-        array(array(1.18, false), array(false), 1),
-        array(array('foo' => false, 'foo', 'lall'), array('foo', 'lall'), 2),
-        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'bar', 1 => 'lall'), 2),
-        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'lall')),
-    );
+    return [
+        [[], []],
+        [[0 => null, 1 => null], [0 => null]],
+        [[0 => null, 1 => false], [0 => false]],
+        [[0 => true], [0 => true]],
+        [[0 => -9, 1 => 0], [0 => 0]],
+        [[-8 => -9, 1, 2 => false], [false]],
+        [[1.18, false], [false]],
+        [['foo' => false, 'foo', 'lall'], ['lall']],
+        [[-8 => -9, 1, 2 => false], [-9, 1, false], 0],
+        [[1.18, false], [false], 1],
+        [['foo' => false, 'foo', 'lall'], ['foo', 'lall'], 2],
+        [[2 => 'foo', 3 => 'bar', 4 => 'lall'], [0 => 'bar', 1 => 'lall'], 2],
+        [[2 => 'foo', 3 => 'bar', 4 => 'lall'], [0 => 'lall']],
+    ];
   }
 
   /**
    * @return array
    */
-  public function matchesAnyProvider()
+  public function matchesAnyProvider(): array
   {
-    return array(
-        array(array(), array(0 => null), false),
-        array(array(), array(0 => false), false),
-        array(array(0 => 'string', 1 => 'foo', 2 => 'lall'), array(1 => 'str', 2 => 'bar'), false),
-        array(array(0 => null), array(0 => null), true),
-        array(array(0 => false), array(0 => false), true),
-        array(array(0 => null), array(), false),
-        array(array(0 => false), array(), false),
-        array(array(0 => true), array(0 => true), true),
-        array(array(0 => -9), array(0 => -9, 1 => 1, 2 => 0, 3 => false), true),
-        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => -9, 1 => 1, 2 => 0, false), true),
-        array(array(0 => 1.18), array(0 => 1.18), true),
-        array(array(0 => 'string', 1 => 'foo', 2 => 'lall'), array(1 => 'string', 2 => 'foo'), true),
-        array(array(0 => 'string', 1 => 'foo', 2 => 'lall'), array(1 => 'foo'), true),
-    );
+    return [
+        [[], [0 => null], false],
+        [[], [0 => false], false],
+        [[0 => 'string', 1 => 'foo', 2 => 'lall'], [1 => 'str', 2 => 'bar'], false],
+        [[0 => null], [0 => null], true],
+        [[0 => false], [0 => false], true],
+        [[0 => null], [], false],
+        [[0 => false], [], false],
+        [[0 => true], [0 => true], true],
+        [[0 => -9], [0 => -9, 1 => 1, 2 => 0, 3 => false], true],
+        [[0 => -9, 1 => 1, 2 => 2], [0 => -9, 1 => 1, 2 => 0, false], true],
+        [[0 => 1.18], [0 => 1.18], true],
+        [[0 => 'string', 1 => 'foo', 2 => 'lall'], [1 => 'string', 2 => 'foo'], true],
+        [[0 => 'string', 1 => 'foo', 2 => 'lall'], [1 => 'foo'], true],
+    ];
   }
 
   /**
    * @return array
    */
-  public function matchesProvider()
+  public function matchesProvider(): array
   {
-    return array(
-        array(array(), array(0 => null), false),
-        array(array(), array(0 => false), false),
-        array(array(0 => null), array(0 => null), true),
-        array(array(0 => false), array(), false),
-        array(array(0 => true), array(), false),
-        array(array(0 => false), array(0 => false), true),
-        array(array(0 => true), array(0 => true), true),
-        array(array(0 => -9), array(0 => -9, 1 => 1, 2 => 0, false), true),
-        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => -9, 1 => 1, 2 => 0, 3 => false), false),
-        array(array(0 => 1.18), array(0 => 1.18), true),
-        array(array(0 => 'string', 1 => 'foo', 2 => 'lall'), array(0 => 'string', 1 => 'foo'), false),
-        array(array(0 => 'string', 1 => 'foo', 2 => 'lall'), array(0 => 'str', 1 => 'foo', 2 => 'lall'), false),
-        array(array(0 => 'string', 1 => 'foo', 2 => 'lall'), array(0 => 'String', 1 => 'foo', 2 => 'lall'), false),
-        array(array(0 => 'string', 1 => 'foo', 2 => 'lall'), array(0 => 'string', 1 => 'foo', 2 => 'lall'), true),
-    );
+    return [
+        [[], [0 => null], false],
+        [[], [0 => false], false],
+        [[0 => null], [0 => null], true],
+        [[0 => false], [], false],
+        [[0 => true], [], false],
+        [[0 => false], [0 => false], true],
+        [[0 => true], [0 => true], true],
+        [[0 => -9], [0 => -9, 1 => 1, 2 => 0, false], true],
+        [[0 => -9, 1 => 1, 2 => 2], [0 => -9, 1 => 1, 2 => 0, 3 => false], false],
+        [[0 => 1.18], [0 => 1.18], true],
+        [[0 => 'string', 1 => 'foo', 2 => 'lall'], [0 => 'string', 1 => 'foo'], false],
+        [[0 => 'string', 1 => 'foo', 2 => 'lall'], [0 => 'str', 1 => 'foo', 2 => 'lall'], false],
+        [[0 => 'string', 1 => 'foo', 2 => 'lall'], [0 => 'String', 1 => 'foo', 2 => 'lall'], false],
+        [[0 => 'string', 1 => 'foo', 2 => 'lall'], [0 => 'string', 1 => 'foo', 2 => 'lall'], true],
+    ];
   }
 
   /**
    * @return array
    */
-  public function maxProvider()
+  public function maxProvider(): array
   {
-    return array(
-        array(array(), false),
-        array(array(null), null),
-        array(array(0 => false), false),
-        array(array(0 => true), true),
-        array(array(0 => -9, -8, -7), -7),
-        array(array(0 => -9, -8, -7, 1.32), 1.32),
-        array(array(1.18), 1.18),
-        array(array(1.18, 1.89), 1.89),
-        array(array('string', 'foo'), 'string'),
-        array(array('string', 'zoom'), 'zoom'),
-    );
+    return [
+        [[], false],
+        [[null], null],
+        [[0 => false], false],
+        [[0 => true], true],
+        [[0 => -9, -8, -7], -7],
+        [[0 => -9, -8, -7, 1.32], 1.32],
+        [[1.18], 1.18],
+        [[1.18, 1.89], 1.89],
+        [['string', 'foo'], 'string'],
+        [['string', 'zoom'], 'zoom'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function mergeAppendKeepIndexProvider()
+  public function mergeAppendKeepIndexProvider(): array
   {
-    return array(
-        array(array(), array(), array()),
-        array(array(0 => false), array(false), array(false)),
-        array(array(0 => true), array(true), array(true)),
-        array(
-            array(
+    return [
+        [[], [], []],
+        [[0 => false], [false], [false]],
+        [[0 => true], [true], [true]],
+        [
+            [
                 0 => -9,
                 -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 0 => -9,
                 1,
                 2,
-            ),
-            array(
+            ],
+            [
                 0 => 2,
                 1 => 1,
                 2 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => 2,
                 1 => 1,
                 2 => -9,
-            ),
-        ),
-        array(
-            array(1.18, 1.5),
-            array(1.5, 1.18),
-            array(1.5, 1.18),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [1.18, 1.5],
+            [1.5, 1.18],
+            [1.5, 1.18],
+        ],
+        [
+            [
                 1     => 'one',
                 2     => 'two',
                 'foo' => 'bar1',
-            ),
-            array(
+            ],
+            [
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
                 'foo' => 'bar2',
-            ),
-            array(
+            ],
+            [
                 1     => 'one',
                 2     => 'two',
                 'foo' => 'bar2',
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 3 => 'string',
                 'foo',
                 'lall',
                 'foo',
-            ),
-            array(
+            ],
+            [
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
                 3 => 'string',
-            ),
-            array(
+            ],
+            [
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
@@ -891,96 +907,96 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function mergeAppendNewIndexProvider()
+  public function mergeAppendNewIndexProvider(): array
   {
-    return array(
-        array(array(), array(), array()),
-        array(array(0 => false), array(false), array(false, false)),
-        array(array(0 => true), array(true), array(true, true)),
-        array(
-            array(
+    return [
+        [[], [], []],
+        [[0 => false], [false], [false, false]],
+        [[0 => true], [true], [true, true]],
+        [
+            [
                 0 => -9,
                 -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
                 2 => -9,
                 3 => -9,
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 0 => -9,
                 1 => 1,
                 2 => 2,
-            ),
-            array(
+            ],
+            [
                 0 => 2,
                 1 => 1,
                 2 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => 1,
                 2 => 2,
                 3 => 2,
                 4 => 1,
                 5 => -9,
-            ),
-        ),
-        array(
-            array(1.18, 1.5),
-            array(1.5, 1.18),
-            array(1.18, 1.5, 1.5, 1.18),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [1.18, 1.5],
+            [1.5, 1.18],
+            [1.18, 1.5, 1.5, 1.18],
+        ],
+        [
+            [
                 1     => 'one',
                 2     => 'two',
                 'foo' => 'bar1',
-            ),
-            array(
+            ],
+            [
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
                 'foo' => 'bar2',
-            ),
-            array(
+            ],
+            [
                 0     => 'one',
                 1     => 'two',
                 'foo' => 'bar2',
                 2     => 'three',
                 3     => 'four',
                 4     => 'six',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 3 => 'string',
                 'foo',
                 'lall',
                 'foo',
-            ),
-            array(
+            ],
+            [
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
                 3 => 'string',
-            ),
-            array(
+            ],
+            [
                 0 => 'string',
                 1 => 'foo',
                 2 => 'lall',
@@ -989,91 +1005,91 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
                 5 => 'lall',
                 6 => 'foo',
                 7 => 'string',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function mergePrependKeepIndexProvider()
+  public function mergePrependKeepIndexProvider(): array
   {
-    return array(
-        array(array(), array(), array()),
-        array(array(0 => false), array(false), array(false)),
-        array(array(0 => true), array(true), array(true)),
-        array(
-            array(
+    return [
+        [[], [], []],
+        [[0 => false], [false], [false]],
+        [[0 => true], [true], [true]],
+        [
+            [
                 0 => -9,
                 -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 0 => -9,
                 1,
                 2,
-            ),
-            array(
+            ],
+            [
                 0 => 2,
                 1 => 1,
                 2 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => 1,
                 2 => 2,
-            ),
-        ),
-        array(
-            array(1.18, 1.5),
-            array(1.5, 1.18),
-            array(1.18, 1.5),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [1.18, 1.5],
+            [1.5, 1.18],
+            [1.18, 1.5],
+        ],
+        [
+            [
                 1     => 'one',
                 2     => 'two',
                 'foo' => 'bar1',
-            ),
-            array(
+            ],
+            [
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
                 'foo' => 'bar2',
-            ),
-            array(
+            ],
+            [
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
                 'foo' => 'bar1',
                 1     => 'one',
                 2     => 'two',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 3 => 'string',
                 'foo',
                 'lall',
                 'foo',
-            ),
-            array(
+            ],
+            [
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
                 3 => 'string',
-            ),
-            array(
+            ],
+            [
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
@@ -1081,96 +1097,96 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
                 4 => 'foo',
                 5 => 'lall',
                 6 => 'foo',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function mergePrependNewIndexProvider()
+  public function mergePrependNewIndexProvider(): array
   {
-    return array(
-        array(array(), array(), array()),
-        array(array(0 => false), array(false), array(false, false)),
-        array(array(0 => true), array(true), array(true, true)),
-        array(
-            array(
+    return [
+        [[], [], []],
+        [[0 => false], [false], [false, false]],
+        [[0 => true], [true], [true, true]],
+        [
+            [
                 0 => -9,
                 1 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => -9,
                 1 => -9,
                 2 => -9,
                 3 => -9,
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 0 => -9,
                 1,
                 2,
-            ),
-            array(
+            ],
+            [
                 0 => 2,
                 1 => 1,
                 2 => -9,
-            ),
-            array(
+            ],
+            [
                 0 => 2,
                 1 => 1,
                 2 => -9,
                 3 => -9,
                 4 => 1,
                 5 => 2,
-            ),
-        ),
-        array(
-            array(1.18, 1.5),
-            array(1.5, 1.18),
-            array(1.5, 1.18, 1.18, 1.5),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [1.18, 1.5],
+            [1.5, 1.18],
+            [1.5, 1.18, 1.18, 1.5],
+        ],
+        [
+            [
                 1     => 'one',
                 2     => 'two',
                 'foo' => 'bar1',
-            ),
-            array(
+            ],
+            [
                 3     => 'three',
                 4     => 'four',
                 6     => 'six',
                 'foo' => 'bar2',
-            ),
-            array(
+            ],
+            [
                 0     => 'three',
                 1     => 'four',
                 2     => 'six',
                 'foo' => 'bar1',
                 3     => 'one',
                 4     => 'two',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 3 => 'string',
                 'foo',
                 'lall',
                 'foo',
-            ),
-            array(
+            ],
+            [
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
                 3 => 'string',
-            ),
-            array(
+            ],
+            [
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
@@ -1179,59 +1195,59 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
                 5 => 'foo',
                 6 => 'lall',
                 7 => 'foo',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function minProvider()
+  public function minProvider(): array
   {
-    return array(
-        array(array(), false),
-        array(array(null), null),
-        array(array(0 => false), false),
-        array(array(0 => true), true),
-        array(array(0 => -9, -8, -7), -9),
-        array(array(0 => -9, -8, -7, 1.32), -9),
-        array(array(1.18), 1.18),
-        array(array(1.18, 1.89), 1.18),
-        array(array('string', 'foo'), 'foo'),
-        array(array('string', 'zoom'), 'string'),
-    );
+    return [
+        [[], false],
+        [[null], null],
+        [[0 => false], false],
+        [[0 => true], true],
+        [[0 => -9, -8, -7], -9],
+        [[0 => -9, -8, -7, 1.32], -9],
+        [[1.18], 1.18],
+        [[1.18, 1.89], 1.18],
+        [['string', 'foo'], 'foo'],
+        [['string', 'zoom'], 'string'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function prependProvider()
+  public function prependProvider(): array
   {
-    return array(
-        array(array(), array('foo'), 'foo'),
-        array(array(0 => false), array(true, false), true),
-        array(array(0 => true), array(false, true), false),
-        array(array(0 => -9), array(-6, -9), -6),
-        array(array(0 => -9, 1, 2), array(3, -9, 1, 2), 3),
-        array(array(1.18, 1.5), array(1.2, 1.18, 1.5), 1.2),
-        array(
-            array(3 => 'string', 'foo', 'lall'),
-            array(
+    return [
+        [[], ['foo'], 'foo'],
+        [[0 => false], [true, false], true],
+        [[0 => true], [false, true], false],
+        [[0 => -9], [-6, -9], -6],
+        [[0 => -9, 1, 2], [3, -9, 1, 2], 3],
+        [[1.18, 1.5], [1.2, 1.18, 1.5], 1.2],
+        [
+            [3 => 'string', 'foo', 'lall'],
+            [
                 0 => 'foobar',
                 1 => 'string',
                 2 => 'foo',
                 3 => 'lall',
-            ),
+            ],
             'foobar',
-        ),
-    );
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function prependToEachKeyProvider()
+  public function prependToEachKeyProvider(): array
   {
     $a = new stdClass();
     $a->x = 42;
@@ -1242,65 +1258,65 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $c = new stdClass();
     $c->x = 43;
 
-    return array(
-        array(array(), array()),
-        array(array(0 => false), array('0_foo' => false)),
-        array(array(0 => true), array('0_foo' => true)),
-        array(array(0 => -9, 1 => -9), array('0_foo' => -9, '1_foo' => -9)),
-        array(array(0 => -9, 1 => 1, 2 => 2), array('0_foo' => -9, '1_foo' => 1, '2_foo' => 2)),
-        array(array(0 => 1.18, 1 => 1.5), array('0_foo' => 1.18, '1_foo' => 1.5)),
-        array(array('lall' => 'foo'), array('lall_foo' => 'foo')),
-        array(
-            array(
+    return [
+        [[], []],
+        [[0 => false], ['0_foo' => false]],
+        [[0 => true], ['0_foo' => true]],
+        [[0 => -9, 1 => -9], ['0_foo' => -9, '1_foo' => -9]],
+        [[0 => -9, 1 => 1, 2 => 2], ['0_foo' => -9, '1_foo' => 1, '2_foo' => 2]],
+        [[0 => 1.18, 1 => 1.5], ['0_foo' => 1.18, '1_foo' => 1.5]],
+        [['lall' => 'foo'], ['lall_foo' => 'foo']],
+        [
+            [
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
                 6 => 'foo',
-            ),
-            array(
+            ],
+            [
                 '3_foo' => 'string',
                 '4_foo' => 'foo',
                 '5_foo' => 'lall',
                 '6_foo' => 'foo',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 2 => 1,
                 3 => 2,
                 4 => 2,
-            ),
-            array(
+            ],
+            [
                 '2_foo' => 1,
                 '3_foo' => 2,
                 '4_foo' => 2,
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 $a,
                 $a,
                 $b,
                 $b,
                 $c,
                 $c,
-            ),
-            array(
+            ],
+            [
                 '0_foo' => $a,
                 '1_foo' => $a,
                 '2_foo' => $b,
                 '3_foo' => $b,
                 '4_foo' => $c,
                 '5_foo' => $c,
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function prependToEachValueProvider()
+  public function prependToEachValueProvider(): array
   {
     $a = new stdClass();
     $a->x = 42;
@@ -1311,373 +1327,373 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $c = new stdClass();
     $c->x = 43;
 
-    return array(
-        array(array(), array()),
-        array(array(0 => false), array(0 => '_foo')),
-        array(array(0 => true), array(0 => '1_foo')),
-        array(array(0 => -9, 1 => -9), array(0 => '-9_foo', 1 => '-9_foo')),
-        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => '-9_foo', 1 => '1_foo', 2 => '2_foo')),
-        array(array(0 => 1.18, 1 => 1.5), array(0 => '1.18_foo', 1 => '1.5_foo')),
-        array(array('lall' => 'foo'), array('lall' => 'foo_foo')),
-        array(
-            array(
+    return [
+        [[], []],
+        [[0 => false], [0 => '_foo']],
+        [[0 => true], [0 => '1_foo']],
+        [[0 => -9, 1 => -9], [0 => '-9_foo', 1 => '-9_foo']],
+        [[0 => -9, 1 => 1, 2 => 2], [0 => '-9_foo', 1 => '1_foo', 2 => '2_foo']],
+        [[0 => 1.18, 1 => 1.5], [0 => '1.18_foo', 1 => '1.5_foo']],
+        [['lall' => 'foo'], ['lall' => 'foo_foo']],
+        [
+            [
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
                 6 => 'foo',
-            ),
-            array(
+            ],
+            [
                 3 => 'string_foo',
                 4 => 'foo_foo',
                 5 => 'lall_foo',
                 6 => 'foo_foo',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 2 => 1,
                 3 => 2,
                 4 => 2,
-            ),
-            array(
+            ],
+            [
                 2 => '1_foo',
                 3 => '2_foo',
                 4 => '2_foo',
-            ),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [
                 $a,
                 $a,
                 $b,
                 $b,
                 $c,
                 $c,
-            ),
-            array(
+            ],
+            [
                 $a,
                 $a,
                 $b,
                 $b,
                 $c,
                 $c,
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function randomProvider()
+  public function randomProvider(): array
   {
-    return array(
-        array(array(0 => null)),
-        array(array(0 => true)),
-        array(array(0 => -9, 0)),
-        array(array(-8 => -9, 1, 2 => false)),
-        array(array(-8 => -9, 1, 2 => false), 2),
-        array(array(1.18, false)),
-        array(array('foo' => false, 'foo', 'lall')),
-        array(array('foo' => false, 'foo', 'lall'), 1),
-        array(array('foo' => false, 'foo', 'lall'), 3),
-    );
+    return [
+        [[0 => null]],
+        [[0 => true]],
+        [[0 => -9, 0]],
+        [[-8 => -9, 1, 2 => false]],
+        [[-8 => -9, 1, 2 => false], 2],
+        [[1.18, false]],
+        [['foo' => false, 'foo', 'lall']],
+        [['foo' => false, 'foo', 'lall'], 1],
+        [['foo' => false, 'foo', 'lall'], 3],
+    ];
   }
 
   /**
    * @return array
    */
-  public function randomWeightedProvider()
+  public function randomWeightedProvider(): array
   {
-    return array(
-        array(array(0 => true)),
-        array(array(0 => -9, 0)),
-        array(array(-8 => -9, 1, 2 => false)),
-        array(array(-8 => -9, 1, 2 => false), 2),
-        array(array(1.18, false)),
-        array(array('foo' => false, 'foo', 'lall')),
-        array(array('foo' => false, 'foo', 'lall'), 1),
-        array(array('foo' => false, 'foo', 'lall'), 3),
-    );
+    return [
+        [[0 => true]],
+        [[0 => -9, 0]],
+        [[-8 => -9, 1, 2 => false]],
+        [[-8 => -9, 1, 2 => false], 2],
+        [[1.18, false]],
+        [['foo' => false, 'foo', 'lall']],
+        [['foo' => false, 'foo', 'lall'], 1],
+        [['foo' => false, 'foo', 'lall'], 3],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeFirstProvider()
+  public function removeFirstProvider(): array
   {
-    return array(
-        array(array(), array()),
-        array(array(0 => false), array()),
-        array(array(0 => true), array()),
-        array(array(0 => -9), array()),
-        array(array(0 => -9, 1, 2), array(1, 2)),
-        array(array(1.18, 1.5), array(1.5)),
-        array(array(3 => 'string', 'foo', 'lall'), array('foo', 'lall')),
-    );
+    return [
+        [[], []],
+        [[0 => false], []],
+        [[0 => true], []],
+        [[0 => -9], []],
+        [[0 => -9, 1, 2], [1, 2]],
+        [[1.18, 1.5], [1.5]],
+        [[3 => 'string', 'foo', 'lall'], ['foo', 'lall']],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeLastProvider()
+  public function removeLastProvider(): array
   {
-    return array(
-        array(array(), array()),
-        array(array(0 => false), array()),
-        array(array(0 => true), array()),
-        array(array(0 => -9), array()),
-        array(array(0 => -9, 1, 2), array(-9, 1)),
-        array(array(1.18, 1.5), array(1.18)),
-        array(array(3 => 'string', 'foo', 'lall'), array(3 => 'string', 4 => 'foo')),
-    );
+    return [
+        [[], []],
+        [[0 => false], []],
+        [[0 => true], []],
+        [[0 => -9], []],
+        [[0 => -9, 1, 2], [-9, 1]],
+        [[1.18, 1.5], [1.18]],
+        [[3 => 'string', 'foo', 'lall'], [3 => 'string', 4 => 'foo']],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeProvider()
+  public function removeProvider(): array
   {
-    return array(
-        array(array(null), 0, array()),
-        array(array(false), 0, array()),
-        array(array(true), 1, array(true)),
-        array(array(false), 1, array(false)),
-        array(array(true), 0, array()),
-        array(array(-9, 1, 0, false), 1, array(0 => -9, 2 => 0, 3 => false)),
-        array(array(1.18), 0, array()),
-        array(array(' string  ', 'foo'), 'foo', array(' string  ', 'foo')),
-        array(array(' string  ', 'foo' => 'foo'), 'foo', array(' string  ')),
-    );
+    return [
+        [[null], 0, []],
+        [[false], 0, []],
+        [[true], 1, [true]],
+        [[false], 1, [false]],
+        [[true], 0, []],
+        [[-9, 1, 0, false], 1, [0 => -9, 2 => 0, 3 => false]],
+        [[1.18], 0, []],
+        [[' string  ', 'foo'], 'foo', [' string  ', 'foo']],
+        [[' string  ', 'foo' => 'foo'], 'foo', [' string  ']],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeV2Provider()
+  public function removeV2Provider(): array
   {
-    return array(
-        array(array(), array(), null),
-        array(array(0 => false), array(0 => false), false),
-        array(array(0 => true), array(0 => true), false),
-        array(array(0 => -9), array(0 => -9), -1),
-        array(array(0 => -9, 1, 2), array(0 => -9, 2 => 2), 1),
-        array(array(1.18, 1.5), array(1 => 1.5), 0),
-        array(array(3 => 'string', 'foo', 'lall'), array(3 => 'string', 'foo',), 5),
-    );
+    return [
+        [[], [], null],
+        [[0 => false], [0 => false], false],
+        [[0 => true], [0 => true], false],
+        [[0 => -9], [0 => -9], -1],
+        [[0 => -9, 1, 2], [0 => -9, 2 => 2], 1],
+        [[1.18, 1.5], [1 => 1.5], 0],
+        [[3 => 'string', 'foo', 'lall'], [3 => 'string', 'foo',], 5],
+    ];
   }
 
   /**
    * @return array
    */
-  public function removeValueProvider()
+  public function removeValueProvider(): array
   {
-    return array(
-        array(array(), array(), ''),
-        array(array(0 => false), array(), false),
-        array(array(0 => true), array(), true),
-        array(array(0 => -9), array(), -9),
-        array(array(0 => -9, 1, 2), array(-9, 1), 2),
-        array(array(1.18, 1.5), array(1.18), 1.5),
-        array(array(3 => 'string', 'foo', 'lall'), array(0 => 'string', 1 => 'foo'), 'lall'),
-    );
+    return [
+        [[], [], ''],
+        [[0 => false], [], false],
+        [[0 => true], [], true],
+        [[0 => -9], [], -9],
+        [[0 => -9, 1, 2], [-9, 1], 2],
+        [[1.18, 1.5], [1.18], 1.5],
+        [[3 => 'string', 'foo', 'lall'], [0 => 'string', 1 => 'foo'], 'lall'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function restProvider()
+  public function restProvider(): array
   {
-    return array(
-        array(array(), array()),
-        array(array(null, false), array(false)),
-        array(array(0 => -9, 0), array(0)),
-        array(array(-8 => -9, 1, 2 => false), array(0 => 1, 1 => false)),
-        array(array(1.18, false), array(false)),
-        array(array('foo' => false, 'foo', 'lall'), array(0 => 'foo', 1 => 'lall')),
-        array(array(-8 => -9, 1, 2 => false), array(0 => -9, 1 => 1, 2 => false), 0),
-        array(array(1.18, false), array(false), 1),
-        array(array('foo' => false, 'foo', 'lall'), array('lall'), 2),
-        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'lall'), 2),
-        array(array(2 => 'foo', 3 => 'bar', 4 => 'lall'), array(0 => 'bar', 1 => 'lall'), 1),
-    );
+    return [
+        [[], []],
+        [[null, false], [false]],
+        [[0 => -9, 0], [0]],
+        [[-8 => -9, 1, 2 => false], [0 => 1, 1 => false]],
+        [[1.18, false], [false]],
+        [['foo' => false, 'foo', 'lall'], [0 => 'foo', 1 => 'lall']],
+        [[-8 => -9, 1, 2 => false], [0 => -9, 1 => 1, 2 => false], 0],
+        [[1.18, false], [false], 1],
+        [['foo' => false, 'foo', 'lall'], ['lall'], 2],
+        [[2 => 'foo', 3 => 'bar', 4 => 'lall'], [0 => 'lall'], 2],
+        [[2 => 'foo', 3 => 'bar', 4 => 'lall'], [0 => 'bar', 1 => 'lall'], 1],
+    ];
   }
 
   /**
    * @return array
    */
-  public function reverseProvider()
+  public function reverseProvider(): array
   {
-    return array(
-        array(array(), array()),
-        array(array(0 => false), array(false)),
-        array(array(0 => true), array(true)),
-        array(array(0 => -9, -9), array(0 => -9, 1 => -9)),
-        array(array(0 => -9, 1, 2), array(0 => 2, 1 => 1, 2 => -9)),
-        array(array(1.18, 1.5), array(1.5, 1.18)),
-        array(
-            array(3 => 'string', 'foo', 'lall', 'foo'),
-            array(
+    return [
+        [[], []],
+        [[0 => false], [false]],
+        [[0 => true], [true]],
+        [[0 => -9, -9], [0 => -9, 1 => -9]],
+        [[0 => -9, 1, 2], [0 => 2, 1 => 1, 2 => -9]],
+        [[1.18, 1.5], [1.5, 1.18]],
+        [
+            [3 => 'string', 'foo', 'lall', 'foo'],
+            [
                 0 => 'foo',
                 1 => 'lall',
                 2 => 'foo',
                 3 => 'string',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function searchIndexProvider()
+  public function searchIndexProvider(): array
   {
-    return array(
-        array(false, array(null), ''),
-        array(false, array(false), true),
-        array(0, array(false), false),
-        array(0, array(true), true),
-        array(2, array(-9, 1, 0, false), -0),
-        array(0, array(1.18), 1.18),
-        array(1, array('string', 'foo'), 'foo'),
-    );
+    return [
+        [false, [null], ''],
+        [false, [false], true],
+        [0, [false], false],
+        [0, [true], true],
+        [2, [-9, 1, 0, false], -0],
+        [0, [1.18], 1.18],
+        [1, ['string', 'foo'], 'foo'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function searchValueProvider()
+  public function searchValueProvider(): array
   {
-    return array(
-        array(array(), array(0 => null), ''),
-        array(array(), array(0 => false), 1),
-        array(array(0 => null), array(0 => null), 0),
-        array(array(0 => false), array(0 => false), false),
-        array(array(0 => false), array(0 => false), 0),
-        array(array(0 => true), array(0 => true), 0),
-        array(array(0 => 1), array(0 => -9, 1 => 1, 2 => 0, false), 1),
-        array(array(0 => 1.18), array(0 => 1.18), 0),
-        array(array(0 => 'foo'), array(0 => 'string', 1 => 'foo'), 1),
-    );
+    return [
+        [[], [0 => null], ''],
+        [[], [0 => false], 1],
+        [[0 => null], [0 => null], 0],
+        [[0 => false], [0 => false], false],
+        [[0 => false], [0 => false], 0],
+        [[0 => true], [0 => true], 0],
+        [[0 => 1], [0 => -9, 1 => 1, 2 => 0, false], 1],
+        [[0 => 1.18], [0 => 1.18], 0],
+        [[0 => 'foo'], [0 => 'string', 1 => 'foo'], 1],
+    ];
   }
 
   /**
    * @return array
    */
-  public function setAndGetProvider()
+  public function setAndGetProvider(): array
   {
-    return array(
-        array(array(0 => null), 0, null),
-        array(array(0 => 'foo'), 0, 'foo'),
-        array(array(0 => false), 0, false),
-        array(array(0 => true), 1, 'foo'),
-        array(array(0 => false), 1, 'foo'),
-        array(array(0 => true), 0, true),
-        array(array(0 => -9, 1 => 1, 2 => 0, 3 => false), 1, 1),
-        array(array(0 => 1.18), 0, 1.18),
-        array(array(0 => ' string  ', 1 => 'foo'), 'foo', 'lall'),
-        array(array(0 => ' string  ', 'foo' => 'foo'), 'foo', 'foo'),
-    );
+    return [
+        [[0 => null], 0, null],
+        [[0 => 'foo'], 0, 'foo'],
+        [[0 => false], 0, false],
+        [[0 => true], 1, 'foo'],
+        [[0 => false], 1, 'foo'],
+        [[0 => true], 0, true],
+        [[0 => -9, 1 => 1, 2 => 0, 3 => false], 1, 1],
+        [[0 => 1.18], 0, 1.18],
+        [[0 => ' string  ', 1 => 'foo'], 'foo', 'lall'],
+        [[0 => ' string  ', 'foo' => 'foo'], 'foo', 'foo'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function setProvider()
+  public function setProvider(): array
   {
-    return array(
-        array(array(0 => null), 0, null),
-        array(array(0 => null), 0, 'foo'),
-        array(array(0 => false), 0, true),
-        array(array(0 => true), 1, 'foo'),
-        array(array(0 => false), 1, 'foo'),
-        array(array(0 => true), 0, 'foo'),
-        array(array(0 => -9, 1 => 1, 2 => 0, 3 => false), 1, 'foo'),
-        array(array(0 => 1.18), 0, 1),
-        array(array(0 => ' string  ', 1 => 'foo'), 'foo', 'lall'),
-        array(array(0 => ' string  ', 'foo' => 'foo'), 'foo', 'lall'),
-    );
+    return [
+        [[0 => null], 0, null],
+        [[0 => null], 0, 'foo'],
+        [[0 => false], 0, true],
+        [[0 => true], 1, 'foo'],
+        [[0 => false], 1, 'foo'],
+        [[0 => true], 0, 'foo'],
+        [[0 => -9, 1 => 1, 2 => 0, 3 => false], 1, 'foo'],
+        [[0 => 1.18], 0, 1],
+        [[0 => ' string  ', 1 => 'foo'], 'foo', 'lall'],
+        [[0 => ' string  ', 'foo' => 'foo'], 'foo', 'lall'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function simpleArrayProvider()
+  public function simpleArrayProvider(): array
   {
-    return array(
-        'empty_array'   => array(
-            array(),
+    return [
+        'empty_array'   => [
+            [],
             self::TYPE_EMPTY,
-        ),
-        'indexed_array' => array(
-            array(
+        ],
+        'indexed_array' => [
+            [
                 1 => 'one',
                 2 => 'two',
                 3 => 'three',
-            ),
+            ],
             self::TYPE_NUMERIC,
-        ),
-        'assoc_array'   => array(
-            array(
+        ],
+        'assoc_array'   => [
+            [
                 'one'   => 1,
                 'two'   => 2,
                 'three' => 3,
-            ),
+            ],
             self::TYPE_ASSOC,
-        ),
-        'mixed_array'   => array(
-            array(
+        ],
+        'mixed_array'   => [
+            [
                 1     => 'one',
                 'two' => 2,
                 3     => 'three',
-            ),
+            ],
             self::TYPE_MIXED,
-        ),
-    );
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function sortKeysProvider()
+  public function sortKeysProvider(): array
   {
-    return array(
-        array(array(), array()),
-        array(array(), array()),
-        array(array(0 => false), array(false)),
-        array(array(0 => true), array(true)),
-        array(array(0 => -9), array(-9), 'ASC'),
-        array(array(0 => -9, 1, 2), array(-9, 1, 2), 'asc'),
-        array(array(1 => 2, 0 => 1), array(1, 2), 'asc'),
-        array(array(1.18), array(1.18), 'ASC'),
-        array(array(3 => 'string', 'foo', 'lall'), array(5 => 'lall', 4 => 'foo', 3 => 'string'), 'desc'),
-    );
+    return [
+        [[], []],
+        [[], []],
+        [[0 => false], [false]],
+        [[0 => true], [true]],
+        [[0 => -9], [-9], 'ASC'],
+        [[0 => -9, 1, 2], [-9, 1, 2], 'asc'],
+        [[1 => 2, 0 => 1], [1, 2], 'asc'],
+        [[1.18], [1.18], 'ASC'],
+        [[3 => 'string', 'foo', 'lall'], [5 => 'lall', 4 => 'foo', 3 => 'string'], 'desc'],
+    ];
   }
 
   /**
    * @return array
    */
-  public function stringWithSeparatorProvider()
+  public function stringWithSeparatorProvider(): array
   {
-    return array(
-        array(
+    return [
+        [
             's,t,r,i,n,g',
             ',',
-        ),
-        array(
+        ],
+        [
             'He|ll|o',
             '|',
-        ),
-        array(
+        ],
+        [
             'Wo;rld',
             ';',
-        ),
-    );
+        ],
+    ];
   }
 
   public function testAdd()
   {
-    $array = array(1, 2);
+    $array = [1, 2];
     $arrayy = new A($array);
     $resultArrayy = $arrayy->add(3);
     $array[] = 3;
@@ -1741,7 +1757,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testCanDoSomethingAtEachValue()
   {
-    $arrayy = A::create(array('foo', 'bar' => 'bis'));
+    $arrayy = A::create(['foo', 'bar' => 'bis']);
 
     $closure = function ($value, $key) {
       echo $key . ':' . $value . ':';
@@ -1754,10 +1770,10 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testCanGetIntersectionOfTwoArrays()
   {
-    $a = array('foo', 'bar');
-    $b = array('bar', 'baz');
+    $a = ['foo', 'bar'];
+    $b = ['bar', 'baz'];
     $array = A::create($a)->intersection($b);
-    self::assertSame(array('bar'), $array->getArray());
+    self::assertSame(['bar'], $array->getArray());
   }
 
   public function testCanGroupValues()
@@ -1767,17 +1783,20 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
           return $value % 2 === 0;
         }
     );
-    $matcher = array(
-        array(1, 3, 5),
-        array(2, 4),
-    );
+    $matcher = [
+        [1, 3, 5],
+        [2, 4],
+    ];
     self::assertSame($matcher, $under->getArray());
   }
 
   public function testCanGroupValuesWithNonExistingKey()
   {
-    self::assertSame(array(), A::create(range(1, 5))->group('unknown', true)->getArray());
-    self::assertSame(array(), A::create(range(1, 5))->group('unknown', false)->getArray());
+    /** @noinspection PhpUndefinedCallbackInspection */
+    self::assertSame([], A::create(range(1, 5))->group('unknown', true)->getArray());
+
+    /** @noinspection PhpUndefinedCallbackInspection */
+    self::assertSame([], A::create(range(1, 5))->group('unknown', false)->getArray());
   }
 
   public function testCanGroupValuesWithSavingKeys()
@@ -1786,25 +1805,25 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
       return $value % 2 === 0;
     };
     $under = A::create(range(1, 5))->group($grouper, true);
-    $matcher = array(
-        array(0 => 1, 2 => 3, 4 => 5),
-        array(1 => 2, 3 => 4),
-    );
+    $matcher = [
+        [0 => 1, 2 => 3, 4 => 5],
+        [1 => 2, 3 => 4],
+    ];
     self::assertSame($matcher, $under->getArray());
   }
 
   public function testCanIndexBy()
   {
-    $array = array(
-        array('name' => 'moe', 'age' => 40),
-        array('name' => 'larry', 'age' => 50),
-        array('name' => 'curly', 'age' => 60),
-    );
-    $expected = array(
-        40 => array('name' => 'moe', 'age' => 40),
-        50 => array('name' => 'larry', 'age' => 50),
-        60 => array('name' => 'curly', 'age' => 60),
-    );
+    $array = [
+        ['name' => 'moe', 'age' => 40],
+        ['name' => 'larry', 'age' => 50],
+        ['name' => 'curly', 'age' => 60],
+    ];
+    $expected = [
+        40 => ['name' => 'moe', 'age' => 40],
+        50 => ['name' => 'larry', 'age' => 50],
+        60 => ['name' => 'curly', 'age' => 60],
+    ];
     self::assertSame($expected, A::create($array)->indexBy('age')->getArray());
   }
 
@@ -1812,7 +1831,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   {
     // upper
 
-    $array = array(
+    $array = [
         'foo'   => 'a',
         1       => 'b',
         0       => 'c',
@@ -1820,24 +1839,24 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         'FOO'   => 'e',
         'ΣΣΣ'   => 'f',
         'Κόσμε' => 'g',
-    );
+    ];
 
     $arrayy = A::create($array)->changeKeyCase(CASE_UPPER);
     $result = $arrayy->getArray();
 
-    $expected = array(
+    $expected = [
         'FOO'   => 'e',
         1       => 'b',
         0       => 'c',
         'ΣΣΣ'   => 'f',
         'ΚΌΣΜΕ' => 'g',
-    );
+    ];
 
     self::assertSame($expected, $result);
 
     // lower
 
-    $array = array(
+    $array = [
         'foo'   => 'a',
         1       => 'b',
         0       => 'c',
@@ -1845,18 +1864,18 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         'FOO'   => 'e',
         'ΣΣΣ'   => 'f',
         'Κόσμε' => 'g',
-    );
+    ];
 
     $arrayy = A::create($array)->changeKeyCase(CASE_LOWER);
     $result = $arrayy->getArray();
 
-    $expected = array(
+    $expected = [
         'foo'   => 'e',
         1       => 'b',
         0       => 'c',
         'σσσ'   => 'f',
         'κόσμε' => 'g',
-    );
+    ];
 
     self::assertSame($expected, $result);
   }
@@ -1876,10 +1895,10 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $arrayy = new A(array(-9, -8, -7, 1.32));
+    $arrayy = new A([-9, -8, -7, 1.32]);
     $result = $arrayy->chunk(2);
 
-    self::assertSame(array(array(-9, -8), array(-7, 1.32)), $result->getArray());
+    self::assertSame([[-9, -8], [-7, 1.32]], $result->getArray());
   }
 
   /**
@@ -1905,54 +1924,54 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $arrayy = new A($array);
     $resultArrayy = $arrayy->clear();
 
-    self::assertMutable($arrayy, $resultArrayy, array());
+    self::assertMutable($arrayy, $resultArrayy, []);
   }
 
   public function testColumn()
   {
-    $rows = array(0 => array('id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'));
+    $rows = [0 => ['id' => '3', 'title' => 'Foo', 'date' => '2013-03-25']];
 
     self::assertEquals(A::create($rows), A::create($rows)->getColumn(null, 0));
     self::assertEquals(A::create($rows), A::create($rows)->getColumn(null));
     self::assertEquals(A::create($rows), A::create($rows)->getColumn());
 
-    $expected = array(
+    $expected = [
         0 => '3',
-    );
+    ];
     self::assertEquals(A::create($expected), A::create($rows)->getColumn('id'));
 
     // ---
 
-    $rows = array(
-        456 => array('id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'),
-        457 => array('id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'),
-    );
+    $rows = [
+        456 => ['id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'],
+        457 => ['id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'],
+    ];
 
-    $expected = array(
+    $expected = [
         3 => 'Foo',
         5 => 'Bar',
-    );
+    ];
     self::assertEquals(A::create($expected), A::create($rows)->getColumn('title', 'id'));
 
-    $expected = array(
+    $expected = [
         0 => 'Foo',
         1 => 'Bar',
-    );
+    ];
     self::assertEquals(A::create($expected), A::create($rows)->getColumn('title', null));
 
 
     // pass null as second parameter to get back all columns indexed by third parameter
-    $expected1 = array(
-        3 => array('id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'),
-        5 => array('id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'),
-    );
+    $expected1 = [
+        3 => ['id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'],
+        5 => ['id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'],
+    ];
     self::assertEquals(A::create($expected1), A::create($rows)->getColumn(null, 'id'));
 
     // pass null as second parameter and bogus third param to get back zero-indexed array of all columns
-    $expected2 = array(
-        array('id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'),
-        array('id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'),
-    );
+    $expected2 = [
+        ['id' => '3', 'title' => 'Foo', 'date' => '2013-03-25'],
+        ['id' => '5', 'title' => 'Bar', 'date' => '2012-05-20'],
+    ];
     self::assertEquals(A::create($expected2), A::create($rows)->getColumn(null, 'foo'));
 
     // pass null as second parameter and no third param to get back array_values(input) (same as $expected2)
@@ -1961,7 +1980,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testConstruct()
   {
-    $testArray = array('foo bar', 'UTF-8');
+    $testArray = ['foo bar', 'UTF-8'];
     $arrayy = new A($testArray);
     self::assertArrayy($arrayy);
     self::assertSame('foo bar,UTF-8', (string)$arrayy);
@@ -1993,21 +2012,6 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   }
 
   /**
-   * @dataProvider containsProviderRecursive()
-   *
-   * @param array $array
-   * @param mixed $value
-   * @param       $expected
-   */
-  public function testContainsRecursive($array, $value, $expected)
-  {
-    $arrayy = new A($array);
-
-    self::assertSame($expected, $arrayy->contains($value, true));
-    self::assertSame($expected, $arrayy->containsValueRecursive($value)); // alias
-  }
-
-  /**
    * @dataProvider containsCaseInsensitiveProvider()
    *
    * @param array $array
@@ -2021,7 +2025,6 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     self::assertSame($expected, $arrayy->containsCaseInsensitive($value));
     self::assertSame($expected, $arrayy->containsCaseInsensitive($value, true));
   }
-
 
   /**
    * @dataProvider containsCaseInsensitiveProviderRecursive()
@@ -2039,49 +2042,67 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testContainsKeys()
   {
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array('a', 'b')));
-    self::assertFalse(A::create(array('a' => 0, 'b' => 1, 'd' => 2))->containsKeys(array('a', 'b', 'c')));
-    self::assertTrue(A::create(array())->containsKeys(array()));
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array()));
-    self::assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c')));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->containsKeys(['a', 'b', 'c'], true));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, 'c' => 2])->containsKeys(['a', 'b'], true));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, 'c' => 2])->containsKeys(['a', 'b']));
+    self::assertFalse(A::create(['a' => 0, 'b' => 1, 'd' => 2])->containsKeys(['a', 'b', 'c']));
+    self::assertFalse(A::create(['a' => 0, 'b' => 1, 'e' => ['d' => 2]])->containsKeys(['a', 'b', 'c'], true));
+    self::assertTrue(A::create([])->containsKeys([]));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, 'c' => 2])->containsKeys([]));
+    self::assertFalse(A::create([])->containsKeys(['a', 'b', 'c']));
   }
 
   public function testContainsKeysRecursive()
   {
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeysRecursive(array('a', 'b', 'c')));
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeysRecursive(array('a', 'b')));
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => array(2))))->containsKeysRecursive(array('a', 'b', 'c')));
-    self::assertFalse(A::create(array('a' => 0, 'b' => 1, array('d' => 2)))->containsKeysRecursive(array('a', 'b', 'c')));
-    self::assertTrue(A::create(array())->containsKeysRecursive(array()));
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeysRecursive(array()));
-    self::assertFalse(A::create(array())->containsKeysRecursive(array('a', 'b', 'c')));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => 2]])->containsKeysRecursive(['a', 'b', 'c']));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => 2]])->containsKeysRecursive(['a', 'b']));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => [2]]])->containsKeysRecursive(['a', 'b', 'c']));
+    self::assertFalse(A::create(['a' => 0, 'b' => 1, ['d' => 2]])->containsKeysRecursive(['a', 'b', 'c']));
+    self::assertTrue(A::create([])->containsKeysRecursive([]));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => 2]])->containsKeysRecursive([]));
+    self::assertFalse(A::create([])->containsKeysRecursive(['a', 'b', 'c']));
 
     // ---
 
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeys(array('a', 'b', 'c'), true));
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeys(array('a', 'b'), true));
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => array(2))))->containsKeys(array('a', 'b', 'c'), true));
-    self::assertFalse(A::create(array('a' => 0, 'b' => 1, array('d' => 2)))->containsKeys(array('a', 'b', 'c'), true));
-    self::assertTrue(A::create(array())->containsKeys(array(), true));
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, array('c' => 2)))->containsKeys(array(), true));
-    self::assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c'), true));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => 2]])->containsKeys(['a', 'b', 'c'], true));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => 2]])->containsKeys(['a', 'b'], true));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => [2]]])->containsKeys(['a', 'b', 'c'], true));
+    self::assertFalse(A::create(['a' => 0, 'b' => 1, ['d' => 2]])->containsKeys(['a', 'b', 'c'], true));
+    self::assertTrue(A::create([])->containsKeys([], true));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => 2]])->containsKeys([], true));
+    self::assertFalse(A::create([])->containsKeys(['a', 'b', 'c'], true));
 
     // ---
 
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array('a', 'b'), true));
-    self::assertFalse(A::create(array('a' => 0, 'b' => 1, 'd' => 2))->containsKeys(array('a', 'b', 'c'), true));
-    self::assertTrue(A::create(array())->containsKeys(array(), true));
-    self::assertTrue(A::create(array('a' => 0, 'b' => 1, 'c' => 2))->containsKeys(array(), true));
-    self::assertFalse(A::create(array())->containsKeys(array('a', 'b', 'c'), true));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, 'c' => 2])->containsKeys(['a', 'b'], true));
+    self::assertFalse(A::create(['a' => 0, 'b' => 1, 'd' => 2])->containsKeys(['a', 'b', 'c'], true));
+    self::assertTrue(A::create([])->containsKeys([], true));
+    self::assertTrue(A::create(['a' => 0, 'b' => 1, 'c' => 2])->containsKeys([], true));
+    self::assertFalse(A::create([])->containsKeys(['a', 'b', 'c'], true));
+  }
+
+  /**
+   * @dataProvider containsProviderRecursive()
+   *
+   * @param array $array
+   * @param mixed $value
+   * @param       $expected
+   */
+  public function testContainsRecursive($array, $value, $expected)
+  {
+    $arrayy = new A($array);
+
+    self::assertSame($expected, $arrayy->contains($value, true));
+    self::assertSame($expected, $arrayy->containsValueRecursive($value)); // alias
   }
 
   public function testContainsValues()
   {
-    self::assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array('a', 'b')));
-    self::assertFalse(A::create(array('a', 'b', 'd'))->containsValues(array('a', 'b', 'c')));
-    self::assertTrue(A::create(array())->containsValues(array()));
-    self::assertTrue(A::create(array('a', 'b', 'c'))->containsValues(array()));
-    self::assertFalse(A::create(array())->containsValues(array('a', 'b', 'c')));
+    self::assertTrue(A::create(['a', 'b', 'c'])->containsValues(['a', 'b']));
+    self::assertFalse(A::create(['a', 'b', 'd'])->containsValues(['a', 'b', 'c']));
+    self::assertTrue(A::create([])->containsValues([]));
+    self::assertTrue(A::create(['a', 'b', 'c'])->containsValues([]));
+    self::assertFalse(A::create([])->containsValues(['a', 'b', 'c']));
   }
 
   /**
@@ -2118,21 +2139,21 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testCountValues()
   {
-    $array = array('foo', 'lall', 'bar', 'bar', 'foo', 'bar');
+    $array = ['foo', 'lall', 'bar', 'bar', 'foo', 'bar'];
     $arrayy = new A($array);
 
-    $expected = array('foo' => 2, 'lall' => 1, 'bar' => 3);
+    $expected = ['foo' => 2, 'lall' => 1, 'bar' => 3];
     self::assertSame($expected, $arrayy->countValues()->getArray());
   }
 
   public function testCreateByReference()
   {
-    $testArray = array('foo bar', 'UTF-8');
+    $testArray = ['foo bar', 'UTF-8'];
     $arrayy = new A();
     $arrayy->createByReference($testArray);
     $arrayy['foo'] = 'bar';
 
-    self::assertSame(array('foo bar', 'UTF-8', 'foo' => 'bar'), $testArray);
+    self::assertSame(['foo bar', 'UTF-8', 'foo' => 'bar'], $testArray);
     self::assertSame($testArray, $arrayy->toArray());
   }
 
@@ -2147,29 +2168,29 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     $arrayy = A::createFromJson($str);
 
-    $expected = array(
-        'employees' => array(
-            0 => array(
+    $expected = [
+        'employees' => [
+            0 => [
                 'firstName' => 'John',
                 'lastName'  => 'Doe',
-            ),
-            1 => array(
+            ],
+            1 => [
                 'firstName' => 'Anna',
                 'lastName'  => 'Smith',
-            ),
-            2 => array(
+            ],
+            2 => [
                 'firstName' => 'Peter',
                 'lastName'  => 'Jones',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     // test JSON -> Array
     self::assertSame($expected, $arrayy->getArray());
 
     // test Array -> JSON
     self::assertSame(
-        str_replace(array(' ', "\n", "\n\r", "\r"), '', $str),
+        str_replace([' ', "\n", "\n\r", "\r"], '', $str),
         $arrayy->toJson()
     );
   }
@@ -2201,12 +2222,12 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     $arrayy = A::createFromString($str, null, '/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\].*/');
 
-    $expected = array(
+    $expected = [
         '[2016-03-02 02:37:39] WARN  main : router: error in file-name: jquery.min.map',
         '[2016-03-02 02:39:07] WARN  main : router: error in file-name: jquery.min.map',
         '[2016-03-02 02:44:01] WARN  main : router: error in file-name: jquery.min.map',
         '[2016-03-02 02:45:21] WARN  main : router: error in file-name: jquery.min.map',
-    );
+    ];
 
     // test String -> Array
     self::assertSame($expected, $arrayy->getArray());
@@ -2218,7 +2239,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     $arrayy = A::createFromString($str, ',');
 
-    $expected = array('John', 'Doe', 'Anna', 'Smith');
+    $expected = ['John', 'Doe', 'Anna', 'Smith'];
 
     // test String -> Array
     self::assertSame($expected, $arrayy->getArray());
@@ -2306,53 +2327,53 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     // customSortKeys
 
-    $input = array(
+    $input = [
         'three' => 3,
         'one'   => 1,
         'two'   => 2,
-    );
+    ];
     $arrayy = new A($input);
     $resultArrayy = $arrayy->customSortKeys($callable);
-    $expected = array(
+    $expected = [
         'one'   => 1,
         'three' => 3,
         'two'   => 2,
-    );
+    ];
     self::assertSame($expected, $resultArrayy->getArray());
 
     // uksort
 
-    $input = array(
+    $input = [
         'three' => 3,
         'one'   => 1,
         'two'   => 2,
-    );
+    ];
     $arrayy = new A($input);
     $arrayy->uksort($callable);
-    $expected = array(
+    $expected = [
         'one'   => 1,
         'three' => 3,
         'two'   => 2,
-    );
+    ];
     self::assertSame($expected, $arrayy->getArray());
   }
 
   public function testCustomSortValuesByDateTimeObject()
   {
-    $birthDates = array(
-        array('Lucienne Adkisson', date_create('2017-10-17')),
-        array('Sheryll Nestle', date_create('2017-02-16')),
-        array('Tim Pittman', date_create('2017-07-29')),
-        array('Elmer Letts', date_create('2017-12-01')),
-        array('Gino Massengale', date_create('2017-04-16')),
-        array('Jeremy Wiggs', date_create('2017-09-17')),
-        array('Julian Bulloch', date_create('2017-06 -21')),
-        array('Joella Hinshaw', date_create('2017-06-25')),
-        array('Mamie Burchill', date_create('2017-11-15')),
-        array('Constance Segers', date_create('2017-06-30')),
-        array('Jessy Pinkmann', date_create('2017-09-11')),
-        array('Dudley Currie', date_create('2017-02-10')),
-    );
+    $birthDates = [
+        ['Lucienne Adkisson', date_create('2017-10-17')],
+        ['Sheryll Nestle', date_create('2017-02-16')],
+        ['Tim Pittman', date_create('2017-07-29')],
+        ['Elmer Letts', date_create('2017-12-01')],
+        ['Gino Massengale', date_create('2017-04-16')],
+        ['Jeremy Wiggs', date_create('2017-09-17')],
+        ['Julian Bulloch', date_create('2017-06 -21')],
+        ['Joella Hinshaw', date_create('2017-06-25')],
+        ['Mamie Burchill', date_create('2017-11-15')],
+        ['Constance Segers', date_create('2017-06-30')],
+        ['Jessy Pinkmann', date_create('2017-09-11')],
+        ['Dudley Currie', date_create('2017-02-10')],
+    ];
 
     $birthDatesAraayy = new Arrayy($birthDates);
 
@@ -2421,20 +2442,20 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     //
 
     self::assertEquals(
-        array(
-            array('Jessy Pinkmann', date_create('2017-09-11')),
-            array('Jeremy Wiggs', date_create('2017-09-17')),
-            array('Lucienne Adkisson', date_create('2017-10-17')),
-            array('Mamie Burchill', date_create('2017-11-15')),
-            array('Elmer Letts', date_create('2017-12-01')),
-            array('Dudley Currie', date_create('2018-02-10')),
-            array('Sheryll Nestle', date_create('2018-02-16')),
-            array('Gino Massengale', date_create('2018-04-16')),
-            array('Julian Bulloch', date_create('2018-06 -21')),
-            array('Joella Hinshaw', date_create('2018-06-25')),
-            array('Constance Segers', date_create('2018-06-30')),
-            array('Tim Pittman', date_create('2018-07-29')),
-        ),
+        [
+            ['Jessy Pinkmann', date_create('2017-09-11')],
+            ['Jeremy Wiggs', date_create('2017-09-17')],
+            ['Lucienne Adkisson', date_create('2017-10-17')],
+            ['Mamie Burchill', date_create('2017-11-15')],
+            ['Elmer Letts', date_create('2017-12-01')],
+            ['Dudley Currie', date_create('2018-02-10')],
+            ['Sheryll Nestle', date_create('2018-02-16')],
+            ['Gino Massengale', date_create('2018-04-16')],
+            ['Julian Bulloch', date_create('2018-06 -21')],
+            ['Joella Hinshaw', date_create('2018-06-25')],
+            ['Constance Segers', date_create('2018-06-30')],
+            ['Tim Pittman', date_create('2018-07-29')],
+        ],
         $resultMatch->getArray()
     );
   }
@@ -2455,56 +2476,56 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testDiffRecursive()
   {
-    $testArray1 = array(
-        'test1' => array('lall',),
-        'test2' => array('lall',),
-    );
+    $testArray1 = [
+        'test1' => ['lall',],
+        'test2' => ['lall',],
+    ];
 
-    $testArray2 = array(
-        'test1' => array('lall',),
-        'test2' => array('lall',),
-    );
+    $testArray2 = [
+        'test1' => ['lall',],
+        'test2' => ['lall',],
+    ];
 
     self::assertEquals(
-        new A(array()),
+        new A([]),
         A::create($testArray1)->diffRecursive($testArray2)
     );
 
-    $testArray1 = array(
-        'test1' => array('lall',),
-        'test3' => array('lall',),
-    );
+    $testArray1 = [
+        'test1' => ['lall',],
+        'test3' => ['lall',],
+    ];
 
-    $testArray2 = array(
-        'test1' => array('lall',),
-        'test2' => array('lall',),
-    );
+    $testArray2 = [
+        'test1' => ['lall',],
+        'test2' => ['lall',],
+    ];
 
     self::assertEquals(
-        new A(array('test3' => array('lall',),)),
+        new A(['test3' => ['lall',],]),
         A::create($testArray1)->diffRecursive($testArray2)
     );
 
-    $testArray1 = array(
-        'test1' => array('lall',),
-        'test2' => array('lall',),
-    );
+    $testArray1 = [
+        'test1' => ['lall',],
+        'test2' => ['lall',],
+    ];
 
-    $testArray2 = array(
-        'test1' => array('lall',),
-        'test2' => array('foo',),
-    );
+    $testArray2 = [
+        'test1' => ['lall',],
+        'test2' => ['foo',],
+    ];
 
     self::assertEquals(
-        new A(array('test2' => array('lall',),)),
+        new A(['test2' => ['lall',],]),
         A::create($testArray1)->diffRecursive($testArray2)
     );
 
-    $testArray1 = array(1 => array(1 => 1), 2 => array(2 => 2));
-    $testArray2 = array(1 => array(1 => 1));
+    $testArray1 = [1 => [1 => 1], 2 => [2 => 2]];
+    $testArray2 = [1 => [1 => 1]];
 
     self::assertEquals(
-        new A(array(2 => array(2 => 2))),
+        new A([2 => [2 => 2]]),
         A::create($testArray1)->diffRecursive($testArray2)
     );
   }
@@ -2516,11 +2537,11 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public function testDiffWith(array $array)
   {
-    $secondArray = array(
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($array);
     $resultArrayy = $arrayy->diff($secondArray);
@@ -2531,15 +2552,15 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testDivide()
   {
-    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
-    $arrayyResult = new A(array('id', 'name', 'group', 'value', 'when', 999, 'flux', '', 6868, '2015-01-01'));
+    $arrayy = new A(['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01']);
+    $arrayyResult = new A(['id', 'name', 'group', 'value', 'when', 999, 'flux', '', 6868, '2015-01-01']);
 
     self::assertSame($arrayyResult->toString(), $arrayy->divide()->toString());
   }
 
   public function testEach()
   {
-    $array = array(1 => 'bar', 'foo' => 'foo');
+    $array = [1 => 'bar', 'foo' => 'foo'];
     $arrayy = A::create($array);
 
     $closure = function ($value, $key) {
@@ -2547,7 +2568,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     };
 
     $under = $arrayy->each($closure);
-    $result = array(1 => '1:bar', 'foo' => 'foo:foo');
+    $result = [1 => '1:bar', 'foo' => 'foo:foo'];
     self::assertSame($result, $under->getArray(), 'tested: ' . print_r($array, true));
   }
 
@@ -2560,17 +2581,48 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testExchangeArray()
   {
-    $input = array(
+    $input = [
         'three' => 3,
         'one'   => 1,
         'two'   => 2,
-    );
+    ];
     $arrayy = new A($input);
     /** @noinspection PhpParamsInspection */
     $arrayy->exchangeArray('foo');
 
-    self::assertSame(array('foo'), $arrayy->getArray());
-    self::assertSame(array('foo'), $arrayy->getArrayCopy());
+    self::assertSame(['foo'], $arrayy->getArray());
+    self::assertSame(['foo'], $arrayy->getArrayCopy());
+  }
+
+  /**
+   * @dataProvider fillWithDefaultsProvider()
+   *
+   * @param $array
+   * @param $num
+   * @param $default
+   * @param $expected
+   */
+  public function testFillWithDefaults($array, $num, $default, $expected)
+  {
+    $arrayy = new A($array);
+
+    $result = $arrayy->fillWithDefaults($num, $default);
+
+    // test for immutable
+    self::assertNotSame($result, $arrayy);
+
+    // test for logic
+    self::assertSame($expected, $result->getArray());
+  }
+
+  /**
+   * @expectedException \InvalidArgumentException
+   */
+  public function testFillWithDefaultsException()
+  {
+    $arrayy = new A([1, 2, 3]);
+
+    $arrayy->fillWithDefaults(-1);
   }
 
   public function testFilter()
@@ -2583,53 +2635,53 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
       define('ARRAY_FILTER_USE_KEY', 2);
     }
 
-    $under = A::create(array(1, 2, 3, 4))->filter(
+    $under = A::create([1, 2, 3, 4])->filter(
         function ($value) {
           return $value % 2 !== 0;
         }
     );
-    self::assertSame(array(0 => 1, 2 => 3), $under->getArray());
+    self::assertSame([0 => 1, 2 => 3], $under->getArray());
 
     // ---
 
-    $under = A::create(array(1, 2, 3, 4))->filter();
-    self::assertSame(array(1, 2, 3, 4), $under->getArray());
+    $under = A::create([1, 2, 3, 4])->filter();
+    self::assertSame([1, 2, 3, 4], $under->getArray());
 
-    $under = A::create(array(0 => 1, 1 => false, 2 => 3, 3 => 4))->filter();
-    self::assertSame(array(0 => 1, 2 => 3, 3 => 4), $under->getArray());
+    $under = A::create([0 => 1, 1 => false, 2 => 3, 3 => 4])->filter();
+    self::assertSame([0 => 1, 2 => 3, 3 => 4], $under->getArray());
 
     // ---
 
-    $under = A::create(array(0 => 1, 1 => 2, 2 => 3, 3 => 4))->filter(
+    $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4])->filter(
         function ($value) {
           return $value % 2 !== 0;
         },
         ARRAY_FILTER_USE_KEY
     );
-    self::assertSame(array(1 => 2, 3 => 4), $under->getArray());
+    self::assertSame([1 => 2, 3 => 4], $under->getArray());
 
     // ---
 
-    $under = A::create(array(0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7))->filter(
+    $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
         function ($key, $value) {
           return $value % 2 !== 0 && $key & 2 !== 0;
         },
         ARRAY_FILTER_USE_BOTH
     );
-    self::assertSame(array(7 => 7), $under->getArray());
+    self::assertSame([7 => 7], $under->getArray());
 
   }
 
   public function testFilterBy()
   {
-    $a = array(
-        array('id' => 123, 'name' => 'foo', 'group' => 'primary', 'value' => 123456, 'when' => '2014-01-01'),
-        array('id' => 456, 'name' => 'bar', 'group' => 'primary', 'value' => 1468, 'when' => '2014-07-15'),
-        array('id' => 499, 'name' => 'baz', 'group' => 'secondary', 'value' => 2365, 'when' => '2014-08-23'),
-        array('id' => 789, 'name' => 'ter', 'group' => 'primary', 'value' => 2468, 'when' => '2010-03-01'),
-        array('id' => 888, 'name' => 'qux', 'value' => 6868, 'when' => '2015-01-01'),
-        array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'),
-    );
+    $a = [
+        ['id' => 123, 'name' => 'foo', 'group' => 'primary', 'value' => 123456, 'when' => '2014-01-01'],
+        ['id' => 456, 'name' => 'bar', 'group' => 'primary', 'value' => 1468, 'when' => '2014-07-15'],
+        ['id' => 499, 'name' => 'baz', 'group' => 'secondary', 'value' => 2365, 'when' => '2014-08-23'],
+        ['id' => 789, 'name' => 'ter', 'group' => 'primary', 'value' => 2468, 'when' => '2010-03-01'],
+        ['id' => 888, 'name' => 'qux', 'value' => 6868, 'when' => '2015-01-01'],
+        ['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'],
+    ];
 
     $arrayy = new A($a);
 
@@ -2638,7 +2690,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     /** @noinspection OffsetOperationsInspection */
     self::assertSame(2365, $b[0]['value']);
 
-    $b = $arrayy->filterBy('name', array('baz'));
+    $b = $arrayy->filterBy('name', ['baz']);
     self::assertCount(1, $b);
     /** @noinspection OffsetOperationsInspection */
     self::assertSame(2365, $b[0]['value']);
@@ -2656,7 +2708,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     /** @noinspection OffsetOperationsInspection */
     self::assertSame(1468, $e[0]['value']);
 
-    $e = $arrayy->filterBy('value', array(2468, 2365), 'contains');
+    $e = $arrayy->filterBy('value', [2468, 2365], 'contains');
     self::assertCount(2, $e);
   }
 
@@ -2714,16 +2766,16 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testFlip()
   {
-    $testArray = array(0 => 'foo', 2 => 'bar', 4 => 'lall');
+    $testArray = [0 => 'foo', 2 => 'bar', 4 => 'lall'];
     $arrayy = A::create($testArray)->flip();
 
-    $expected = array('foo' => 0, 'bar' => 2, 'lall' => 4);
+    $expected = ['foo' => 0, 'bar' => 2, 'lall' => 4];
     self::assertSame($expected, $arrayy->getArray());
   }
 
   public function testForEach()
   {
-    $arrayy = new A(array(1 => 'foo bar', 'öäü'));
+    $arrayy = new A([1 => 'foo bar', 'öäü']);
 
     foreach ($arrayy as $key => $value) {
       if ($key === 1) {
@@ -2737,7 +2789,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testGet()
   {
-    $arrayy = new A(array('foo bar', 'öäü'));
+    $arrayy = new A(['foo bar', 'öäü']);
     self::assertArrayy($arrayy);
     self::assertSame('öäü', $arrayy[1]);
   }
@@ -2757,13 +2809,13 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testGetViaDotNotation()
   {
-    $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken')));
+    $arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
     $result = $arrayy->get('Lars.lastname');
     self::assertSame('Moelleken', $result);
 
     // ---
 
-    $arrayy = new A(array('Lars' => array('lastname' => null)));
+    $arrayy = new A(['Lars' => ['lastname' => null]]);
     $result = $arrayy->get('Lars.lastname');
     self::assertNull($result);
   }
@@ -2782,20 +2834,6 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   }
 
   /**
-   * @dataProvider implodeKeysProvider()
-   *
-   * @param $array
-   * @param $result
-   * @param $with
-   */
-  public function testImplodeKeys($array, $result, $with = ',')
-  {
-    $string = A::create($array)->implodeKeys($with);
-
-    self::assertSame($result, $string);
-  }
-
-  /**
    * @dataProvider implodeProvider()
    *
    * @param $array
@@ -2809,27 +2847,41 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     self::assertSame($result, $string);
   }
 
+  /**
+   * @dataProvider implodeKeysProvider()
+   *
+   * @param $array
+   * @param $result
+   * @param $with
+   */
+  public function testImplodeKeys($array, $result, $with = ',')
+  {
+    $string = A::create($array)->implodeKeys($with);
+
+    self::assertSame($result, $string);
+  }
+
   public function testIndexByReturnEmpty()
   {
-    $array = array(
-        array('name' => 'moe', 'age' => 40),
-        array('name' => 'larry', 'age' => 50),
-        array('name' => 'curly'),
-    );
-    self::assertSame(array(), A::create($array)->indexBy('vaaaa')->getArray());
+    $array = [
+        ['name' => 'moe', 'age' => 40],
+        ['name' => 'larry', 'age' => 50],
+        ['name' => 'curly'],
+    ];
+    self::assertSame([], A::create($array)->indexBy('vaaaa')->getArray());
   }
 
   public function testIndexByReturnSome()
   {
-    $array = array(
-        array('name' => 'moe', 'age' => 40),
-        array('name' => 'larry', 'age' => 50),
-        array('name' => 'curly'),
-    );
-    $expected = array(
-        40 => array('name' => 'moe', 'age' => 40),
-        50 => array('name' => 'larry', 'age' => 50),
-    );
+    $array = [
+        ['name' => 'moe', 'age' => 40],
+        ['name' => 'larry', 'age' => 50],
+        ['name' => 'curly'],
+    ];
+    $expected = [
+        40 => ['name' => 'moe', 'age' => 40],
+        50 => ['name' => 'larry', 'age' => 50],
+    ];
     self::assertSame($expected, A::create($array)->indexBy('age')->getArray());
   }
 
@@ -2849,8 +2901,8 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testIntersectsBooleanFlag()
   {
-    $a = array('foo', 'bar');
-    $b = array('bar', 'baz');
+    $a = ['foo', 'bar'];
+    $b = ['bar', 'baz'];
     self::assertTrue(A::create($a)->intersects($b));
 
     $a = 'bar';
@@ -2862,48 +2914,48 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testInvoke()
   {
-    $array = array('   foo  ', '   bar   ');
+    $array = ['   foo  ', '   bar   '];
     $arrayy = A::create($array)->invoke('trim');
-    self::assertSame(array('foo', 'bar'), $arrayy->getArray());
+    self::assertSame(['foo', 'bar'], $arrayy->getArray());
 
-    $array = array('_____foo', '____bar   ');
+    $array = ['_____foo', '____bar   '];
     $arrayy = A::create($array)->invoke('trim', ' _');
-    self::assertSame(array('foo', 'bar'), $arrayy->getArray());
+    self::assertSame(['foo', 'bar'], $arrayy->getArray());
 
-    $array = array('_____foo  ', '__bar   ');
-    $arrayy = A::create($array)->invoke('trim', array('_', ' '));
-    self::assertSame(array('foo  ', '__bar'), $arrayy->getArray());
+    $array = ['_____foo  ', '__bar   '];
+    $arrayy = A::create($array)->invoke('trim', ['_', ' ']);
+    self::assertSame(['foo  ', '__bar'], $arrayy->getArray());
   }
 
   public function testIsArrayAssoc()
   {
 
-    $array0 = array(1 => array(1,),);
-    $array1 = array(
+    $array0 = [1 => [1,],];
+    $array1 = [
         1 => 1,
         2 => 2,
-    );
-    $array2 = array(
-        1 => array(1,),
-        2 => array(2,),
-    );
+    ];
+    $array2 = [
+        1 => [1,],
+        2 => [2,],
+    ];
     $array3 = false;
     $array4 = '';
     $array5 = ' ';
-    $array6 = array();
-    $array7 = array(
+    $array6 = [];
+    $array7 = [
         'test',
         'lall',
-    );
-    $array8 = array(
+    ];
+    $array8 = [
         0 => 'test',
         1 => 'lall',
-    );
-    $array9 = array(
+    ];
+    $array9 = [
         'lall' => 'test',
         'test' => 'lall',
-    );
-    $array10 = array('lall' => array(0 => 'test',),);
+    ];
+    $array10 = ['lall' => [0 => 'test',],];
 
     self::assertFalse(A::create($array0)->isAssoc());
     self::assertFalse(A::create($array1)->isAssoc());
@@ -2925,45 +2977,45 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     self::assertTrue(
         A::create(
-            array(
+            [
                 'foo' => 'wibble',
                 'bar' => 'wubble',
                 'baz' => 'wobble',
-            )
+            ]
         )->isAssoc()
     );
 
     self::assertFalse(
         A::create(
-            array(
+            [
                 'wibble',
                 'wubble',
                 'wobble',
-            )
+            ]
         )->isAssoc()
     );
   }
 
   public function testIsArrayMultidim()
   {
-    $testArrays = array(
-        array(1 => array(1,),),
-        array(0, 1, 2, 3, 4),
-        array(
+    $testArrays = [
+        [1 => [1,],],
+        [0, 1, 2, 3, 4],
+        [
             1 => 1,
             2 => 2,
-        ),
-        array(
-            1 => array(1,),
-            2 => array(2,),
-        ),
+        ],
+        [
+            1 => [1,],
+            2 => [2,],
+        ],
         false,
         '',
         ' ',
-        array(),
-    );
+        [],
+    ];
 
-    $expectedArrays = array(
+    $expectedArrays = [
         true,
         false,
         false,
@@ -2972,7 +3024,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         false,
         false,
         false,
-    );
+    ];
 
     foreach ($testArrays as $key => $testArray) {
       self::assertSame(
@@ -2997,24 +3049,24 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testIsEmpty()
   {
-    $testArrays = array(
-        array(1 => array(1,),),
-        array(0, 1, 2, 3, 4),
-        array(
+    $testArrays = [
+        [1 => [1,],],
+        [0, 1, 2, 3, 4],
+        [
             1 => 1,
             2 => 2,
-        ),
-        array(
-            1 => array(1,),
-            2 => array(2,),
-        ),
+        ],
+        [
+            1 => [1,],
+            2 => [2,],
+        ],
         false,
         '',
         ' ',
-        array(),
-    );
+        [],
+    ];
 
-    $expectedArrays = array(
+    $expectedArrays = [
         false,
         false,
         false,
@@ -3023,7 +3075,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         true,
         false,
         true,
-    );
+    ];
 
     foreach ($testArrays as $key => $testArray) {
       self::assertSame($expectedArrays[$key], A::create($testArray)->isEmpty(), 'tested:' . print_r($testArray, true));
@@ -3032,24 +3084,24 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testIsNumeric()
   {
-    $testArrays = array(
-        array(1 => array(1,),),
-        array(0, 1, 2, 3, 4),
-        array(
+    $testArrays = [
+        [1 => [1,],],
+        [0, 1, 2, 3, 4],
+        [
             1 => 1,
             2 => 2,
-        ),
-        array(
-            1 => array(1,),
-            2 => array(2,),
-        ),
+        ],
+        [
+            1 => [1,],
+            2 => [2,],
+        ],
         false,
         '',
         ' ',
-        array(),
-    );
+        [],
+    ];
 
-    $expectedArrays = array(
+    $expectedArrays = [
         true,
         true,
         true,
@@ -3058,7 +3110,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         false,
         true,
         false,
-    );
+    ];
 
     foreach ($testArrays as $key => $testArray) {
       self::assertSame(
@@ -3070,24 +3122,24 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testIsSequential()
   {
-    $testArrays = array(
-        array(1 => array(1,),),
-        array(0, 1, 2, 3, 4),
-        array(
+    $testArrays = [
+        [1 => [1,],],
+        [0, 1, 2, 3, 4],
+        [
             1 => 1,
             2 => 2,
-        ),
-        array(
-            1 => array(1,),
-            2 => array(2,),
-        ),
+        ],
+        [
+            1 => [1,],
+            2 => [2,],
+        ],
         false,
         '',
         ' ',
-        array(),
-    );
+        [],
+    ];
 
-    $expectedArrays = array(
+    $expectedArrays = [
         false,
         true,
         false,
@@ -3096,7 +3148,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         false,
         true,
         false,
-    );
+    ];
 
     foreach ($testArrays as $key => $testArray) {
       self::assertSame(
@@ -3108,13 +3160,13 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testIsSet()
   {
-    $arrayy = new A(array('foo bar', 'öäü'));
+    $arrayy = new A(['foo bar', 'öäü']);
     self::assertArrayy($arrayy);
     self::assertTrue(isset($arrayy[0]));
 
     // ---
 
-    $arrayy = new A(array(true => 'foo bar', 'lall' => 'öäü'));
+    $arrayy = new A([true => 'foo bar', 'lall' => 'öäü']);
     self::assertArrayy($arrayy);
     self::assertTrue(isset($arrayy[true]));
   }
@@ -3122,29 +3174,29 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   public function testJsonSerializable()
   {
     $arrayy = new A();
-    $arrayy['user'] = array('lastname' => 'Moelleken');
+    $arrayy['user'] = ['lastname' => 'Moelleken'];
     $arrayy['user.firstname'] = 'Lars';
 
     $json = $arrayy->toJson();
     $arrayyFromJson = json_decode($json, true);
 
     self::assertSame(
-        array(
-            'user' => array(
+        [
+            'user' => [
                 'lastname'  => 'Moelleken',
                 'firstname' => 'Lars',
-            ),
-        ),
+            ],
+        ],
         $arrayyFromJson
     );
   }
 
   public function testKeys()
   {
-    $arrayyTmp = A::create(array(1 => 'foo', 2 => 'foo2', 3 => 'bar'));
+    $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
     $keys = $arrayyTmp->keys();
 
-    $matcher = array(1, 2, 3,);
+    $matcher = [1, 2, 3,];
     self::assertSame($matcher, $keys->getArray());
   }
 
@@ -3168,12 +3220,12 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testMagicGet()
   {
-    $array = array(
+    $array = [
         'one'  => 1,
         'test' => 2,
         1      => 'one',
         2      => 2,
-    );
+    ];
 
     $arrayy = new Arrayy($array);
 
@@ -3183,11 +3235,11 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testMagicInvoke()
   {
-    $array = array(
+    $array = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new Arrayy($array);
 
@@ -3198,19 +3250,19 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   public function testMagicSetViaDotNotation()
   {
     $arrayy = new A();
-    $arrayy['user'] = array('lastname' => 'Moelleken');
+    $arrayy['user'] = ['lastname' => 'Moelleken'];
     $arrayy['user.firstname'] = 'Lars';
 
-    self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => 'Lars')), $arrayy->getArray());
+    self::assertSame(['user' => ['lastname' => 'Moelleken', 'firstname' => 'Lars']], $arrayy->getArray());
     self::assertSame('Lars', $arrayy['user.firstname']);
 
     // ---
 
     $arrayy = new A();
-    $arrayy['user'] = array('lastname' => 'Moelleken');
+    $arrayy['user'] = ['lastname' => 'Moelleken'];
     $arrayy['user.firstname'] = null;
 
-    self::assertSame(array('user' => array('lastname' => 'Moelleken', 'firstname' => null)), $arrayy->getArray());
+    self::assertSame(['user' => ['lastname' => 'Moelleken', 'firstname' => null]], $arrayy->getArray());
     self::assertNull($arrayy['user.firstname']);
   }
 
@@ -3287,11 +3339,11 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
       return ($value % 2 === 0);
     };
 
-    $testArray = array(1, 4, 7);
+    $testArray = [1, 4, 7];
     $result = A::create($testArray)->matchesAny($closure);
     self::assertTrue($result);
 
-    $testArray = array(1, 3, 7);
+    $testArray = [1, 3, 7];
     $result = A::create($testArray)->matchesAny($closure);
     self::assertFalse($result);
   }
@@ -3309,11 +3361,11 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
       return ($value % 2 === 0);
     };
 
-    $testArray = array(2, 4, 8);
+    $testArray = [2, 4, 8];
     $result = A::create($testArray)->matches($closure);
     self::assertTrue($result);
 
-    $testArray = array(2, 3, 8);
+    $testArray = [2, 3, 8];
     $result = A::create($testArray)->matches($closure);
     self::assertFalse($result);
   }
@@ -3394,11 +3446,11 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public function testMergePrependNewIndexV2(array $array)
   {
-    $secondArray = array(
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($array);
     $resultArrayy = $arrayy->mergePrependNewIndex($secondArray);
@@ -3414,11 +3466,11 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public function testMergeToRecursively(array $array)
   {
-    $secondArray = array(
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($array);
     $resultArrayy = $arrayy->mergePrependNewIndex($secondArray, true);
@@ -3434,11 +3486,11 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public function testMergeWith(array $array)
   {
-    $secondArray = array(
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($array);
     $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray);
@@ -3454,11 +3506,11 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public function testMergeWithRecursively(array $array)
   {
-    $secondArray = array(
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($array);
     $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray, true);
@@ -3495,16 +3547,16 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testMoveElement()
   {
-    $arr1 = new A(array('a', 'b', 'c', 'd', 'e'));
-    $expected = array('a', 'd', 'b', 'c', 'e');
+    $arr1 = new A(['a', 'b', 'c', 'd', 'e']);
+    $expected = ['a', 'd', 'b', 'c', 'e'];
     $newArr1 = $arr1->moveElement(3, 1);
 
     self::assertSame($expected, $newArr1->toArray());
 
     // ---
 
-    $arr2 = new A(array('A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e'));
-    $expected = array('A' => 'a', 'D' => 'd', 'B' => 'b', 'C' => 'c', 'E' => 'e');
+    $arr2 = new A(['A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e']);
+    $expected = ['A' => 'a', 'D' => 'd', 'B' => 'b', 'C' => 'c', 'E' => 'e'];
     $newArr2 = $arr2->moveElement('D', 1);
 
     self::assertSame($expected, $newArr2->toArray());
@@ -3572,7 +3624,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testOffsetUnsetViaDotNotation()
   {
-    $array = array('a', 'b' => array(0 => 'c', 1 => null));
+    $array = ['a', 'b' => [0 => 'c', 1 => null]];
     $arrayy = new A($array);
 
     // ---
@@ -3604,7 +3656,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testOrderByKey()
   {
-    $array = array(
+    $array = [
         99  => 'aaa',
         100 => 'bcd',
         101 => 123,
@@ -3612,14 +3664,14 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         3   => 'bcde',
         4   => 1.1,
         0   => 0,
-    );
+    ];
 
     // ------
 
     $arrayy = A::create($array)->sortKeys(SORT_DESC, SORT_REGULAR);
     $result = $arrayy->getArray();
 
-    $expected = array(
+    $expected = [
         101 => 123,
         100 => 'bcd',
         99  => 'aaa',
@@ -3627,7 +3679,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         3   => 'bcde',
         1   => 'Bcde',
         0   => 0,
-    );
+    ];
 
     self::assertSame($expected, $result);
 
@@ -3636,7 +3688,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $arrayy = A::create($array)->sortKeys(SORT_ASC);
     $result = $arrayy->getArray();
 
-    $expected = array(
+    $expected = [
         0   => 0,
         1   => 'Bcde',
         3   => 'bcde',
@@ -3644,55 +3696,55 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         99  => 'aaa',
         100 => 'bcd',
         101 => 123,
-    );
+    ];
 
     self::assertSame($expected, $result);
   }
 
   public function testOrderByValueKeepIndex()
   {
-    $array = array(
+    $array = [
         100 => 'abc',
         99  => 'aaa',
         2   => 'bcd',
         1   => 'hcd',
         3   => 'bce',
-    );
+    ];
 
     $arrayy = A::create($array)->sortValueKeepIndex(SORT_DESC);
     $result = $arrayy->getArray();
 
-    $expected = array(
+    $expected = [
         1   => 'hcd',
         3   => 'bce',
         2   => 'bcd',
         100 => 'abc',
         99  => 'aaa',
-    );
+    ];
 
     self::assertSame($expected, $result);
   }
 
   public function testOrderByValueNewIndex()
   {
-    $array = array(
+    $array = [
         1   => 'hcd',
         3   => 'bce',
         2   => 'bcd',
         100 => 'abc',
         99  => 'aaa',
-    );
+    ];
 
     $arrayy = A::create($array)->sortValueNewIndex(SORT_ASC, SORT_REGULAR);
     $result = $arrayy->getArray();
 
-    $expected = array(
+    $expected = [
         0 => 'aaa',
         1 => 'abc',
         2 => 'bcd',
         3 => 'bce',
         4 => 'hcd',
-    );
+    ];
 
     self::assertSame($expected, $result);
   }
@@ -3743,32 +3795,32 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testPrependKey()
   {
-    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
+    $arrayy = new A(['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01']);
     $arrayyResult = new A(
-        array(
+        [
             'foo'   => 'lall',
             'id'    => 999,
             'name'  => 'flux',
             'group' => null,
             'value' => 6868,
             'when'  => '2015-01-01',
-        )
+        ]
     );
 
     self::assertSame($arrayyResult->toString(), $arrayy->prepend('lall', 'foo')->toString());
 
     // ---
 
-    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
+    $arrayy = new A(['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01']);
     $arrayyResult = new A(
-        array(
+        [
             0       => 'lall',
             'id'    => 999,
             'name'  => 'flux',
             'group' => null,
             'value' => 6868,
             'when'  => '2015-01-01',
-        )
+        ]
     );
 
     self::assertSame($arrayyResult->toString(), $arrayy->prepend('lall')->toString());
@@ -3834,7 +3886,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testRandomKey()
   {
-    $array = array(1 => 'one', 2 => 'two');
+    $array = [1 => 'one', 2 => 'two'];
     $arrayy = A::create($array);
     $result = $arrayy->randomKey();
 
@@ -3843,7 +3895,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testRandomKeys()
   {
-    $array = array(1 => 'one', 2 => 'two');
+    $array = [1 => 'one', 2 => 'two'];
     $arrayy = A::create($array);
     $result = $arrayy->randomKeys(2);
 
@@ -3853,7 +3905,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testRandomValue()
   {
-    $array = array(1 => 'one', 2 => 'two');
+    $array = [1 => 'one', 2 => 'two'];
     $arrayy = A::create($array);
     $result = $arrayy->randomValue();
 
@@ -3862,7 +3914,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testRandomValues()
   {
-    $array = array(1 => 'one', 2 => 'two');
+    $array = [1 => 'one', 2 => 'two'];
     $arrayy = A::create($array);
     $result = $arrayy->randomValues(2);
 
@@ -3879,14 +3931,14 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   public function testRandomWeighted($array, $take = null)
   {
     $arrayy = A::create($array);
-    $result = $arrayy->randomWeighted(array(0), $take)->getArray();
+    $result = $arrayy->randomWeighted([0], $take)->getArray();
 
     self::assertTrue(in_array($result[0], $array, true));
   }
 
   public function testReduce()
   {
-    $testArray = array('foo', 2 => 'bar', 4 => 'lall');
+    $testArray = ['foo', 2 => 'bar', 4 => 'lall'];
 
     $myReducer = function ($resultArray, $value) {
       if ($value === 'foo') {
@@ -3898,13 +3950,13 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     $arrayy = A::create($testArray)->reduce($myReducer);
 
-    $expected = array('foo');
+    $expected = ['foo'];
     self::assertSame($expected, $arrayy->getArray());
   }
 
   public function testReduceViaFunction()
   {
-    $testArray = array('foo', 2 => 'bar', 4 => 'lall');
+    $testArray = ['foo', 2 => 'bar', 4 => 'lall'];
 
     /**
      * @param $resultArray
@@ -3923,7 +3975,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     $arrayy = A::create($testArray)->reduce('myReducer');
 
-    $expected = array('foo');
+    $expected = ['foo'];
     self::assertSame($expected, $arrayy->getArray());
   }
 
@@ -3938,29 +3990,29 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $resultArrayy = $arrayy->reindex()->getArray();
     $resultArray = array_values($array);
 
-    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame([], array_diff($resultArrayy, $resultArray));
   }
 
   public function testReindexSimple()
   {
-    $testArray = array(2 => 1, 3 => 2);
+    $testArray = [2 => 1, 3 => 2];
     $arrayy = new A($testArray);
     $arrayy->reindex();
 
-    $result = array(0 => 1, 1 => 2);
+    $result = [0 => 1, 1 => 2];
 
     self::assertSame($result, $arrayy->getArray());
   }
 
   public function testReject()
   {
-    $array = array(1, 2, 3, 4);
+    $array = [1, 2, 3, 4];
     $arrayy = A::create($array)->reject(
         function ($value) {
           return $value % 2 !== 0;
         }
     );
-    self::assertSame(array(1 => 2, 3 => 4), $arrayy->getArray());
+    self::assertSame([1 => 2, 3 => 4], $arrayy->getArray());
   }
 
   /**
@@ -4033,8 +4085,8 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testRepeat()
   {
-    $arrayTmp = array('lall');
-    $arrayExpected = array(array('lall'), array('lall'), array('lall'));
+    $arrayTmp = ['lall'];
+    $arrayExpected = [['lall'], ['lall'], ['lall']];
 
     $arrayyTmp = A::create($arrayTmp);
     $arrayyResult = $arrayyTmp->repeat(3);
@@ -4042,8 +4094,8 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     // --
 
-    $arrayTmp = array('lall');
-    $arrayExpected = array();
+    $arrayTmp = ['lall'];
+    $arrayExpected = [];
 
     $arrayyTmp = A::create($arrayTmp);
     $arrayyResult = $arrayyTmp->repeat(0);
@@ -4051,8 +4103,8 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     // --
 
-    $arrayTmp = array('foo', 'bar');
-    $arrayExpected = array(array('foo', 'bar'), array('foo', 'bar'));
+    $arrayTmp = ['foo', 'bar'];
+    $arrayExpected = [['foo', 'bar'], ['foo', 'bar']];
 
     $arrayyTmp = A::create($arrayTmp);
     $arrayyResult = $arrayyTmp->repeat(2);
@@ -4061,29 +4113,29 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testReplace()
   {
-    $arrayyTmp = A::create(array(1 => 'foo', 2 => 'foo2', 3 => 'bar'));
+    $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
 
     $arrayy = $arrayyTmp->replace(1, 'notfoo', 'notbar');
-    $matcher = array(
+    $matcher = [
         2        => 'foo2',
         3        => 'bar',
         'notfoo' => 'notbar',
-    );
+    ];
     self::assertSame($matcher, $arrayy->getArray());
   }
 
   public function testReplaceAllKeys()
   {
-    $firstArray = array(
+    $firstArray = [
         1 => 'one',
         2 => 'two',
         3 => 'three',
-    );
-    $secondArray = array(
+    ];
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($firstArray);
     $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
@@ -4094,40 +4146,40 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testReplaceAllKeysV2()
   {
-    $firstArray = array(
+    $firstArray = [
         1 => 'one',
         2 => 'two',
         3 => 'three',
-    );
-    $secondArray = array(
+    ];
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($firstArray);
     $resultArrayy = $arrayy->replaceAllKeys($secondArray)->getArray();
 
-    $result = array(
+    $result = [
         1     => 'one',
         'one' => 'two',
         2     => 'three',
-    );
+    ];
     self::assertSame($result, $resultArrayy);
   }
 
   public function testReplaceAllValues()
   {
-    $firstArray = array(
+    $firstArray = [
         1 => 'one',
         2 => 'two',
         3 => 'three',
-    );
-    $secondArray = array(
+    ];
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($firstArray);
     $resultArrayy = $arrayy->replaceAllValues($secondArray);
@@ -4138,25 +4190,25 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testReplaceAllValuesV2()
   {
-    $firstArray = array(
+    $firstArray = [
         1 => 'one',
         2 => 'two',
         3 => 'three',
-    );
-    $secondArray = array(
+    ];
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($firstArray);
     $resultArrayy = $arrayy->replaceAllValues($secondArray);
 
-    $result = array(
+    $result = [
         'one'   => 1,
         'two'   => 'one',
         'three' => 2,
-    );
+    ];
     self::assertSame($result, $resultArrayy->getArray());
   }
 
@@ -4167,17 +4219,17 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public function testReplaceIn(array $array)
   {
-    $secondArray = array(
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($array);
     $resultArrayy = $arrayy->mergePrependKeepIndex($secondArray)->getArray();
     $resultArray = array_replace($secondArray, $array);
 
-    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame([], array_diff($resultArrayy, $resultArray));
   }
 
   /**
@@ -4187,33 +4239,33 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public function testReplaceInRecursively(array $array)
   {
-    $secondArray = array(
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($array);
     $resultArrayy = $arrayy->mergePrependKeepIndex($secondArray, true)->getArray();
     $resultArray = array_replace_recursive($secondArray, $array);
 
-    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame([], array_diff($resultArrayy, $resultArray));
   }
 
   public function testReplaceKeys()
   {
-    $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->replaceKeys(array(1 => 2, 'foo' => 'replaced'));
+    $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']);
     self::assertSame('bar', $arrayy[2]);
     self::assertSame('foo', $arrayy['replaced']);
 
-    $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->replaceKeys(array(1, 'foo' => 'replaced'));
+    $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1, 'foo' => 'replaced']);
     self::assertSame('bar', $arrayy[1]);
     self::assertSame('foo', $arrayy['replaced']);
   }
 
   public function testReplaceOneValue()
   {
-    $testArray = array('bar', 'foo' => 'foo', 'foobar' => 'foobar');
+    $testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
     $arrayy = A::create($testArray)->replaceOneValue('foo', 'replaced');
     self::assertSame('replaced', $arrayy['foo']);
     self::assertSame('foobar', $arrayy['foobar']);
@@ -4221,20 +4273,20 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testReplaceV2()
   {
-    $arrayyTmp = A::create(array(1 => 'foo', 2 => 'foo2', 3 => 'bar'));
+    $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
 
     $arrayy = $arrayyTmp->replace(2, 'notfoo', 'notbar');
-    $matcher = array(
+    $matcher = [
         1        => 'foo',
         3        => 'bar',
         'notfoo' => 'notbar',
-    );
+    ];
     self::assertSame($matcher, $arrayy->getArray());
   }
 
   public function testReplaceValues()
   {
-    $testArray = array('bar', 'foo' => 'foo', 'foobar' => 'foobar');
+    $testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
     $arrayy = A::create($testArray)->replaceValues('foo', 'replaced');
     self::assertSame('replaced', $arrayy['foo']);
     self::assertSame('replacedbar', $arrayy['foobar']);
@@ -4247,17 +4299,17 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public function testReplaceWith(array $array)
   {
-    $secondArray = array(
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($array);
     $resultArrayy = $arrayy->mergeAppendKeepIndex($secondArray)->getArray();
     $resultArray = array_replace($array, $secondArray);
 
-    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame([], array_diff($resultArrayy, $resultArray));
   }
 
   /**
@@ -4267,17 +4319,17 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
    */
   public function testReplaceWithRecursively(array $array)
   {
-    $secondArray = array(
+    $secondArray = [
         'one' => 1,
         1     => 'one',
         2     => 2,
-    );
+    ];
 
     $arrayy = new A($array);
     $resultArrayy = $arrayy->mergeAppendKeepIndex($secondArray, true)->getArray();
     $resultArray = array_replace_recursive($array, $secondArray);
 
-    self::assertSame(array(), array_diff($resultArrayy, $resultArray));
+    self::assertSame([], array_diff($resultArrayy, $resultArray));
   }
 
   /**
@@ -4337,7 +4389,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testSerialize()
   {
-    $testArray = array(1, 4, 7);
+    $testArray = [1, 4, 7];
     $arrayy = A::create($testArray);
     $result = $arrayy->serialize();
 
@@ -4359,12 +4411,12 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     //
 
-    $arrayy = new A(array(1 => 1, 2 => 2, 3 => 3));
+    $arrayy = new A([1 => 1, 2 => 2, 3 => 3]);
     $serialized = $arrayy->serialize();
     $arrayy = new A();
     $result = $arrayy->unserialize($serialized);
 
-    self::assertSame(array(1 => 1, 2 => 2, 3 => 3), $result->getArray());
+    self::assertSame([1 => 1, 2 => 2, 3 => 3], $result->getArray());
   }
 
   /**
@@ -4397,7 +4449,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testSetAndGetSimple()
   {
-    $arrayy = new A(array(1, 2, 3));
+    $arrayy = new A([1, 2, 3]);
     $result = $arrayy->setAndGet(0, 4);
 
     $expected = 1;
@@ -4405,7 +4457,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $arrayy = new A(array(1 => 1, 2 => 2, 3 => 3));
+    $arrayy = new A([1 => 1, 2 => 2, 3 => 3]);
     $result = $arrayy->setAndGet(0, 4);
 
     $expected = 4;
@@ -4414,7 +4466,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testSetV2()
   {
-    $arrayy = new A(array('foo bar', 'UTF-8'));
+    $arrayy = new A(['foo bar', 'UTF-8']);
     $arrayy[1] = 'öäü';
     self::assertArrayy($arrayy);
     self::assertSame('foo bar,öäü', (string)$arrayy);
@@ -4422,20 +4474,20 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testSetValueViaMagicSet()
   {
-    $arrayy = new A(array('Lars' => array('lastname' => 'Mueller2')));
+    $arrayy = new A(['Lars' => ['lastname' => 'Mueller2']]);
 
-    $arrayy->Lars = array('lastname' => 'Moelleken');
-    $arrayy->Sven = array('lastname' => 'Moelleken');
-    $arrayy->foo = array('lastname' => null);
+    $arrayy->Lars = ['lastname' => 'Moelleken'];
+    $arrayy->Sven = ['lastname' => 'Moelleken'];
+    $arrayy->foo = ['lastname' => null];
 
     $resultTmp = $arrayy->get('Lars');
-    self::assertEquals(array('lastname' => 'Moelleken'), $resultTmp->getArray());
+    self::assertEquals(['lastname' => 'Moelleken'], $resultTmp->getArray());
 
     $resultTmp = $arrayy->get('Sven');
-    self::assertEquals(array('lastname' => 'Moelleken'), $resultTmp->getArray());
+    self::assertEquals(['lastname' => 'Moelleken'], $resultTmp->getArray());
 
     $resultTmp = $arrayy->get('foo');
-    self::assertEquals(array('lastname' => null), $resultTmp->getArray());
+    self::assertEquals(['lastname' => null], $resultTmp->getArray());
 
     $resultTmp = $arrayy->get('Lars.lastname');
     self::assertEquals('Moelleken', $resultTmp);
@@ -4449,16 +4501,16 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testSetViaDotNotation()
   {
-    $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken')));
+    $arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
 
-    self::assertSame(array('lastname' => 'Moelleken'), $arrayy['Lars']->getArray());
+    self::assertSame(['lastname' => 'Moelleken'], $arrayy['Lars']->getArray());
 
     $result = $arrayy->get('Lars.lastname');
     self::assertSame('Moelleken', $result);
 
-    self::assertSame(array('lastname' => 'Moelleken'), $arrayy['Lars']->getArray());
+    self::assertSame(['lastname' => 'Moelleken'], $arrayy['Lars']->getArray());
 
-    self::assertEquals(new A(array('lastname' => 'Moelleken')), $arrayy->Lars);
+    self::assertEquals(new A(['lastname' => 'Moelleken']), $arrayy->Lars);
 
     self::assertSame('Moelleken', $arrayy->Lars->lastname);
 
@@ -4471,7 +4523,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $result = $arrayy->set('Lars.lastname', 'Müller');
 
     $resultTmp = $result->get('Lars');
-    self::assertSame(array('lastname' => 'Müller'), $resultTmp->getArray());
+    self::assertSame(['lastname' => 'Müller'], $resultTmp->getArray());
     $resultTmp = $result->get('Lars.lastname');
     self::assertSame('Müller', $resultTmp);
 
@@ -4481,31 +4533,31 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $arrayy['Lars'] = $arrayyLars;
 
     $resultTmp = $arrayy->get('Lars');
-    self::assertEquals(array('lastname' => 'Mueller'), $resultTmp->getArray());
+    self::assertEquals(['lastname' => 'Mueller'], $resultTmp->getArray());
     $resultTmp = $arrayy->get('Lars.lastname');
     self::assertEquals('Mueller', $resultTmp);
 
     // set an new value, again - via array-syntax - multi-dim set isn't working :/
-    $arrayy['Lars'] = array('lastname' => 'Mueller');
+    $arrayy['Lars'] = ['lastname' => 'Mueller'];
 
     $resultTmp = $arrayy->get('Lars');
-    self::assertEquals(array('lastname' => 'Mueller'), $resultTmp->getArray());
+    self::assertEquals(['lastname' => 'Mueller'], $resultTmp->getArray());
     $resultTmp = $arrayy->get('Lars.lastname');
     self::assertEquals('Mueller', $resultTmp);
 
     // set an new value, again - via object-syntax
-    $arrayy->Lars = array('lastname' => 'Mueller2');
+    $arrayy->Lars = ['lastname' => 'Mueller2'];
 
     $resultTmp = $arrayy->get('Lars');
-    self::assertEquals(array('lastname' => 'Mueller2'), $resultTmp->getArray());
+    self::assertEquals(['lastname' => 'Mueller2'], $resultTmp->getArray());
     $resultTmp = $arrayy->get('Lars.lastname');
     self::assertEquals('Mueller2', $resultTmp);
 
     // set an new "null"-value, again - via object-syntax
-    $arrayy->Lars = array('lastname' => null);
+    $arrayy->Lars = ['lastname' => null];
 
     $resultTmp = $arrayy->get('Lars');
-    self::assertEquals(array('lastname' => null), $resultTmp->getArray());
+    self::assertEquals(['lastname' => null], $resultTmp->getArray());
     $resultTmp = $arrayy->get('Lars.lastname');
     self::assertNull($resultTmp);
   }
@@ -4528,14 +4580,14 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testShuffle()
   {
-    $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->shuffle();
+    $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->shuffle();
 
     self::assertTrue(in_array('bar', $arrayy->getArray(), true));
     self::assertTrue(in_array('foo', $arrayy->getArray(), true));
 
     // ---
 
-    $arrayy = A::create(array(1 => 'bar', 'foo' => 'foo'))->shuffle(true);
+    $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->shuffle(true);
 
     self::assertTrue(in_array('bar', $arrayy->getArray(), true));
     self::assertTrue(in_array('foo', $arrayy->getArray(), true));
@@ -4548,8 +4600,8 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
       $result[$key] = ':' . $value . ':';
     };
 
-    A::create(array('foo', 'bar' => 'bis'))->at($closure);
-    self::assertEquals(A::create(array(':foo:', 'bar' => ':bis:')), $result);
+    A::create(['foo', 'bar' => 'bis'])->at($closure);
+    self::assertEquals(A::create([':foo:', 'bar' => ':bis:']), $result);
   }
 
   public function testSimpleEach()
@@ -4558,34 +4610,34 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
       return ':' . $value . ':';
     };
 
-    $result = A::create(array('foo', 'bar' => 'bis'))->each($closure);
-    self::assertSame(array(':foo:', 'bar' => ':bis:'), $result->getArray());
+    $result = A::create(['foo', 'bar' => 'bis'])->each($closure);
+    self::assertSame([':foo:', 'bar' => ':bis:'], $result->getArray());
   }
 
   public function testSimpleRandom()
   {
-    $testArray = array(-8 => -9, 1, 2 => false);
+    $testArray = [-8 => -9, 1, 2 => false];
     $arrayy = A::create($testArray);
     $result = $arrayy->randomMutable(3);
     self::assertSame($arrayy, $result);
     self::assertSame($arrayy, $result);
     self::assertCount(3, $result);
 
-    $testArray = array(-8 => -9, 1, 2 => false);
+    $testArray = [-8 => -9, 1, 2 => false];
     $arrayy = A::create($testArray);
     $result = $arrayy->randomMutable();
     self::assertSame($arrayy, $result);
     self::assertSame($arrayy, $result);
     self::assertCount(1, $result);
 
-    $testArray = array(-8 => -9, 1, 2 => false);
+    $testArray = [-8 => -9, 1, 2 => false];
     $arrayy = A::create($testArray);
     $result = $arrayy->randomImmutable(3);
     self::assertEquals($arrayy, $result);
     self::assertNotSame($arrayy, $result);
     self::assertCount(3, $result);
 
-    $testArray = array(-8 => -9, 1, 2 => false);
+    $testArray = [-8 => -9, 1, 2 => false];
     $arrayy = A::create($testArray);
     $result = $arrayy->randomImmutable();
     self::assertEquals($arrayy, $result);
@@ -4595,12 +4647,12 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testSimpleRandomWeighted()
   {
-    $testArray = array('foo', 'bar');
-    $result = A::create($testArray)->randomWeighted(array('bar' => 2));
+    $testArray = ['foo', 'bar'];
+    $result = A::create($testArray)->randomWeighted(['bar' => 2]);
     self::assertCount(1, $result);
 
-    $testArray = array('foo', 'bar', 'foobar');
-    $result = A::create($testArray)->randomWeighted(array('foobar' => 3), 2);
+    $testArray = ['foo', 'bar', 'foobar'];
+    $result = A::create($testArray)->randomWeighted(['foobar' => 3], 2);
     self::assertCount(2, $result);
   }
 
@@ -4620,9 +4672,9 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testSort()
   {
-    $testArray = array(5, 3, 1, 2, 4);
+    $testArray = [5, 3, 1, 2, 4];
     $under = A::create($testArray)->sorter(null, 'desc');
-    self::assertSame(array(5, 4, 3, 2, 1), $under->getArray());
+    self::assertSame([5, 4, 3, 2, 1], $under->getArray());
 
     $testArray = range(1, 5);
     $under = A::create($testArray)->sorter(
@@ -4634,7 +4686,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
           return 1;
         }
     );
-    self::assertSame(array(2, 4, 1, 3, 5), $under->getArray());
+    self::assertSame([2, 4, 1, 3, 5], $under->getArray());
   }
 
   /**
@@ -4797,24 +4849,24 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testSortV2()
   {
-    $array = array(
+    $array = [
         1   => 'hcd',
         3   => 'bce',
         2   => 'bcd',
         100 => 'abc',
         99  => 'aaa',
-    );
+    ];
 
     $arrayy = A::create($array)->sort(SORT_ASC, SORT_REGULAR, false);
     $result = $arrayy->getArray();
 
-    $expected = array(
+    $expected = [
         0 => 'aaa',
         1 => 'abc',
         2 => 'bcd',
         3 => 'bce',
         4 => 'hcd',
-    );
+    ];
 
     self::assertSame($expected, $result);
   }
@@ -4824,33 +4876,33 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     self::assertArrayy(A::create()->split());
 
     self::assertEquals(
-        A::create(array(array('a'), array('b'))),
-        A::create(array('a', 'b'))->split()
+        A::create([['a'], ['b']]),
+        A::create(['a', 'b'])->split()
     );
 
     self::assertEquals(
-        A::create(array(array('a' => 1), array('b' => 2))),
-        A::create(array('a' => 1, 'b' => 2))->split(2, true)
+        A::create([['a' => 1], ['b' => 2]]),
+        A::create(['a' => 1, 'b' => 2])->split(2, true)
     );
 
     self::assertEquals(
         A::create(
-            array(
-                0 => array(
+            [
+                0 => [
                     0 => 1,
                     1 => 2,
-                ),
-                1 => array(
+                ],
+                1 => [
                     0 => 3,
-                ),
-            )
+                ],
+            ]
         ),
         A::create(
-            array(
+            [
                 'a' => 1,
                 'b' => 2,
                 'c' => 3,
-            )
+            ]
         )->split(2, false)
     );
   }
@@ -4900,7 +4952,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   {
     $a = new stdClass();
     $a->x = 42;
-    $a->y = array('lall', 'foo');
+    $a->y = ['lall', 'foo'];
     $a->z = 'bar';
 
     $resultArrayy = A::createFromObjectVars($a);
@@ -4912,7 +4964,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $object = new stdClass();
     $object->x = 42;
     $arrayy = A::createFromObjectVars($object);
-    self::assertSame(array('x' => 42), $arrayy->getArray());
+    self::assertSame(['x' => 42], $arrayy->getArray());
   }
 
   /**
@@ -4933,23 +4985,23 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testStripEmpty()
   {
-    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
-    $arrayyResult = new A(array('id' => 999, 'name' => 'flux', 'value' => 6868, 'when' => '2015-01-01'));
+    $arrayy = new A(['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01']);
+    $arrayyResult = new A(['id' => 999, 'name' => 'flux', 'value' => 6868, 'when' => '2015-01-01']);
 
     self::assertSame($arrayyResult->toString(), $arrayy->stripEmpty()->toString());
   }
 
   public function testSwap()
   {
-    $arrayy = new A(array('id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01'));
+    $arrayy = new A(['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01']);
     $arrayyResult = new A(
-        array(
+        [
             'id'    => 999,
             'name'  => 'flux',
             'group' => null,
             'value' => '2015-01-01',
             'when'  => 6868,
-        )
+        ]
     );
 
     self::assertSame($arrayyResult->toString(), $arrayy->swap('value', 'when')->toString());
@@ -4995,7 +5047,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testUnset()
   {
-    $arrayy = new A(array('foo bar', 'öäü'));
+    $arrayy = new A(['foo bar', 'öäü']);
     unset($arrayy[1]);
     self::assertArrayy($arrayy);
     self::assertSame('foo bar', $arrayy[0]);
@@ -5004,15 +5056,15 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testUnsetSimple()
   {
-    $arrayy = new A(array(1 => 1, 2 => 2, 3 => 3));
+    $arrayy = new A([1 => 1, 2 => 2, 3 => 3]);
     unset($arrayy[2]);
-    self::assertSame(array(1 => 1, 3 => 3), $arrayy->getArray());
+    self::assertSame([1 => 1, 3 => 3], $arrayy->getArray());
 
     // ---
 
-    $arrayy = new A(array('Lars' => array('lastname' => 'Moelleken', 'status' => 'foo')));
+    $arrayy = new A(['Lars' => ['lastname' => 'Moelleken', 'status' => 'foo']]);
     unset($arrayy['Lars.status']);
-    self::assertSame(array('Lars' => array('lastname' => 'Moelleken')), $arrayy->getArray());
+    self::assertSame(['Lars' => ['lastname' => 'Moelleken']], $arrayy->getArray());
   }
 
   /**
@@ -5035,10 +5087,10 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
   public function testValues()
   {
-    $arrayyTmp = A::create(array(1 => 'foo', 2 => 'foo2', 3 => 'bar'));
+    $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
     $values = $arrayyTmp->values();
 
-    $matcher = array(0 => 'foo', 1 => 'foo2', 2 => 'bar');
+    $matcher = [0 => 'foo', 1 => 'foo2', 2 => 'bar'];
     self::assertSame($matcher, $values->getArray());
   }
 
@@ -5086,11 +5138,11 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
       $value = $key;
     };
 
-    $array = array(1, 2, 3);
+    $array = [1, 2, 3];
     $arrayy = new A($array);
     $resultArrayy = $arrayy->walk($callable);
 
-    $expected = array(0, 1, 2);
+    $expected = [0, 1, 2];
     self::assertSame($expected, $resultArrayy->getArray());
   }
 
@@ -5124,22 +5176,22 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   /**
    * @return array
    */
-  public function toStringProvider()
+  public function toStringProvider(): array
   {
-    return array(
-        array('', array(0 => null)),
-        array('', array(0 => false)),
-        array('1', array(0 => true)),
-        array('-9,1,0,', array(0 => -9, 1 => 1, 2 => 0, false)),
-        array('1.18', array(0 => 1.18)),
-        array(' string  ,foo', array(0 => ' string  ', 1 => 'foo')),
-    );
+    return [
+        ['', [0 => null]],
+        ['', [0 => false]],
+        ['1', [0 => true]],
+        ['-9,1,0,', [0 => -9, 1 => 1, 2 => 0, false]],
+        ['1.18', [0 => 1.18]],
+        [' string  ,foo', [0 => ' string  ', 1 => 'foo']],
+    ];
   }
 
   /**
    * @return array
    */
-  public function uniqueProvider()
+  public function uniqueProvider(): array
   {
     $a = new stdClass();
     $a->x = 42;
@@ -5150,52 +5202,52 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $c = new stdClass();
     $c->x = 43;
 
-    return array(
-        array(array(), array()),
-        array(array(0 => false), array(false)),
-        array(array(0 => true), array(true)),
-        array(array(0 => -9, 1 => -9), array(-9)),
-        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => -9, 1 => 1, 2 => 2)),
-        array(array(0 => 1.18, 1 => 1.5), array(0 => 1.18, 1 => 1.5)),
-        array(
-            array(
+    return [
+        [[], []],
+        [[0 => false], [false]],
+        [[0 => true], [true]],
+        [[0 => -9, 1 => -9], [-9]],
+        [[0 => -9, 1 => 1, 2 => 2], [0 => -9, 1 => 1, 2 => 2]],
+        [[0 => 1.18, 1 => 1.5], [0 => 1.18, 1 => 1.5]],
+        [
+            [
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
                 6 => 'foo',
-            ),
-            array(
+            ],
+            [
                 0 => 'string',
                 1 => 'foo',
                 2 => 'lall',
-            ),
-        ),
-        array(
-            array(2 => 1, 3 => 2, 4 => 2),
-            array(0 => 1, 1 => 2),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [2 => 1, 3 => 2, 4 => 2],
+            [0 => 1, 1 => 2],
+        ],
+        [
+            [
                 $a,
                 $a,
                 $b,
                 $b,
                 $c,
                 $c,
-            ),
-            array(
+            ],
+            [
                 $a,
                 $b,
                 $c,
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 
   /**
    * @return array
    */
-  public function uniqueProviderKeepIndex()
+  public function uniqueProviderKeepIndex(): array
   {
     $a = new stdClass();
     $a->x = 42;
@@ -5206,45 +5258,45 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $c = new stdClass();
     $c->x = 43;
 
-    return array(
-        array(array(), array()),
-        array(array(0 => false), array(false)),
-        array(array(0 => true), array(true)),
-        array(array(0 => -9, 1 => -9), array(-9)),
-        array(array(0 => -9, 1 => 1, 2 => 2), array(0 => -9, 1 => 1, 2 => 2)),
-        array(array(0 => 1.18, 1 => 1.5), array(0 => 1.18, 1 => 1.5)),
-        array(
-            array(
+    return [
+        [[], []],
+        [[0 => false], [false]],
+        [[0 => true], [true]],
+        [[0 => -9, 1 => -9], [-9]],
+        [[0 => -9, 1 => 1, 2 => 2], [0 => -9, 1 => 1, 2 => 2]],
+        [[0 => 1.18, 1 => 1.5], [0 => 1.18, 1 => 1.5]],
+        [
+            [
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
                 6 => 'foo',
-            ),
-            array(
+            ],
+            [
                 3 => 'string',
                 4 => 'foo',
                 5 => 'lall',
-            ),
-        ),
-        array(
-            array(2 => 1, 3 => 2, 4 => 2),
-            array(2 => 1, 3 => 2),
-        ),
-        array(
-            array(
+            ],
+        ],
+        [
+            [2 => 1, 3 => 2, 4 => 2],
+            [2 => 1, 3 => 2],
+        ],
+        [
+            [
                 $a,
                 $a,
                 $b,
                 $b,
                 $c,
                 $c,
-            ),
-            array(
+            ],
+            [
                 0 => $a,
                 2 => $b,
                 4 => $c,
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
   }
 }

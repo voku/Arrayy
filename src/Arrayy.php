@@ -24,7 +24,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * @var string
    */
-  protected $iteratorClass;
+  protected $iteratorClass = ArrayyIterator::class;
 
   /**
    * @var string
@@ -35,7 +35,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Initializes
    *
-   * @param array  $array
+   * @param mixed  $array <p>Should be an array, otherwise it will try to convert it into an array.</p>
    * @param string $iteratorClass
    */
   public function __construct($array = [], $iteratorClass = ArrayyIterator::class)
@@ -179,19 +179,40 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Count the values from the current array.
+   * Counts all elements in an array, or something in an object.
+   * <p>For objects, if you have SPL installed, you can hook into count() by implementing interface {@see Countable}.
+   * The interface has exactly one method, {@see Countable::count()}, which returns the return value for the count()
+   * function. Please see the {@see Array} section of the manual for a detailed explanation of how arrays are
+   * implemented and used in PHP.
    *
-   * alias: for "Arrayy->size()"
+   * @link http://php.net/manual/en/function.count.php
    *
-   * @see Arrayy::size()
+   * @param int $mode [optional] If the optional mode parameter is set to
+   *                  COUNT_RECURSIVE (or 1), count
+   *                  will recursively count the array. This is particularly useful for
+   *                  counting all the elements of a multidimensional array. count does not detect infinite recursion.
    *
-   * @param int $mode
+   * @return int the number of elements in var, which is
+   * typically an array, since anything else will have one
+   * element.
+   * </p>
+   * <p>
+   * If var is not an array or an object with
+   * implemented Countable interface,
+   * 1 will be returned.
+   * There is one exception, if var is &null;,
+   * 0 will be returned.
+   * </p>
+   * <p>
+   * Caution: count may return 0 for a variable that isn't set,
+   * but it may also return 0 for a variable that has been initialized with an
+   * empty array. Use isset to test if a variable is set.
    *
    * @return int
    */
   public function count(int $mode = COUNT_NORMAL): int
   {
-    return $this->size($mode);
+    return \count($this->array, $mode);
   }
 
   /**
@@ -219,11 +240,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Returns a new ArrayyIterator, thus implementing the IteratorAggregate interface.
+   * Returns a new ArrayyIterator, thus implementing the \ArrayIterator interface.
    *
-   * @return ArrayyIterator <p>An iterator for the values in the array.</p>
+   * @return \ArrayIterator <p>An iterator for the values in the array.</p>
    */
-  public function getIterator(): ArrayyIterator
+  public function getIterator(): \ArrayIterator
   {
     $iterator = $this->getIteratorClass();
 
@@ -541,7 +562,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     $object = new \stdClass();
 
-    if (!\is_array($array) || \count($array) <= 0) {
+    if (!\is_array($array) || \count($array, COUNT_NORMAL) <= 0) {
       return $object;
     }
 
@@ -554,6 +575,51 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     return $object;
+  }
+
+  /**
+   * @param array $input        <p>
+   *                            An array containing keys to return.
+   *                            </p>
+   * @param mixed $search_value [optional] <p>
+   *                            If specified, then only keys containing these values are returned.
+   *                            </p>
+   * @param bool  $strict       [optional] <p>
+   *                            Determines if strict comparison (===) should be used during the search.
+   *                            </p>
+   *
+   * @return array an array of all the keys in input.
+   */
+  protected function array_keys_recursive(array $input = null, $search_value = null, bool $strict = true): array
+  {
+    // init
+    $keys = [];
+
+    if ($input === null) {
+      $input = $this->array;
+    }
+
+    foreach ($input as $key => $value) {
+
+      if (
+          $search_value === null
+          ||
+          (
+              \is_array($search_value) === true
+              &&
+              \in_array($key, $search_value, $strict)
+          )
+      ) {
+        $keys[] = $key;
+      }
+
+      // check if recursive is needed
+      if (\is_array($value) === true) {
+        $keys = \array_merge($keys, $this->array_keys_recursive($value));
+      }
+    }
+
+    return $keys;
   }
 
   /**
@@ -595,7 +661,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function average($decimals = 0)
   {
-    $count = $this->count();
+    $count = \count($this->array, COUNT_NORMAL);
 
     if (!$count) {
       return 0;
@@ -726,48 +792,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * @param mixed $needle   <p>
-   *                        The searched value.
-   *                        </p>
-   *                        <p>
-   *                        If needle is a string, the comparison is done
-   *                        in a case-sensitive manner.
-   *                        </p>
-   * @param array $haystack <p>
-   *                        The array.
-   *                        </p>
-   * @param bool  $strict   [optional] <p>
-   *                        If the third parameter strict is set to true
-   *                        then the in_array function will also check the
-   *                        types of the
-   *                        needle in the haystack.
-   *                        </p>
-   *
-   * @return bool true if needle is found in the array, false otherwise.
-   */
-  protected function in_array_recursive($needle, array $haystack = null, $strict = true): bool
-  {
-    if ($haystack === null) {
-      $haystack = $this->array;
-    }
-
-    foreach ($haystack as $item) {
-
-      if (\is_array($item) === true) {
-        $returnTmp = $this->in_array_recursive($needle, $item, $strict);
-      } else {
-        $returnTmp = ($strict === true ? $item === $needle : $item == $needle);
-      }
-
-      if ($returnTmp === true) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  /**
    * Check if an (case-insensitive) string is in the current array.
    *
    * @param string $value
@@ -825,10 +849,26 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function containsKeys(array $needles, $recursive = false): bool
   {
     if ($recursive === true) {
-      return \count(\array_intersect($needles, $this->keys(true)->getArray())) === \count($needles, COUNT_RECURSIVE);
+      return \count(
+                 \array_intersect($needles, $this->keys(true)->getArray()),
+                 COUNT_RECURSIVE
+             )
+             ===
+             \count(
+                 $needles,
+                 COUNT_RECURSIVE
+             );
     }
 
-    return \count(\array_intersect($needles, $this->keys()->getArray())) === \count($needles);
+    return \count(
+               \array_intersect($needles, $this->keys()->getArray()),
+               COUNT_NORMAL
+           )
+           ===
+           \count(
+               $needles,
+               COUNT_NORMAL
+           );
   }
 
   /**
@@ -880,7 +920,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function containsValues(array $needles): bool
   {
-    return \count(\array_intersect($needles, $this->array)) === \count($needles);
+    return \count(\array_intersect($needles, $this->array), COUNT_NORMAL)
+           ===
+           \count($needles, COUNT_NORMAL);
   }
 
   /**
@@ -894,7 +936,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    *                keys and their count as value.
    *                </p>
    */
-  public function countValues()
+  public function countValues(): self
   {
     return new static(\array_count_values($this->array));
   }
@@ -906,7 +948,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    *
    * @return static <p>(Immutable) Returns an new instance of the Arrayy object.</p>
    */
-  public static function create($array = [])
+  public static function create($array = []): self
   {
     return new static($array);
   }
@@ -918,7 +960,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    *
    * @return static <p>(Mutable) Return this Arrayy object.</p>
    */
-  public function createByReference(&$array = [])
+  public function createByReference(array &$array = []): self
   {
     $array = $this->fallbackForArray($array);
 
@@ -966,7 +1008,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    *
    * @return static <p>(Immutable) Returns an new instance of the Arrayy object.</p>
    */
-  public static function createFromObjectVars($object)
+  public static function createFromObjectVars($object): self
   {
     return new static(self::objectToArray($object));
   }
@@ -1113,10 +1155,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
           if (!empty($recursiveDiff)) {
             $result[$key] = $recursiveDiff;
           }
-        } else {
-          if ($value != $array[$key]) {
-            $result[$key] = $value;
-          }
+        } else if ($value != $array[$key]) {
+          $result[$key] = $value;
         }
       } else {
         $result[$key] = $value;
@@ -1251,6 +1291,32 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     throw new \InvalidArgumentException(
         'Passed value should be a array'
     );
+  }
+
+  /**
+   * Fill the array until "$num" with "$default" values.
+   *
+   * @param int   $num
+   * @param mixed $default
+   *
+   * @return static <p>(Immutable)</p>
+   */
+  public function fillWithDefaults(int $num, $default = null)
+  {
+    if ($num < 0) {
+      throw new \InvalidArgumentException('The $num parameter can only contain non-negative values.');
+    }
+
+    $tmpArray = $this->array;
+
+    $count = \count($tmpArray);
+
+    while ($count < $num) {
+      $tmpArray[] = $default;
+      $count++;
+    }
+
+    return static::create($tmpArray);
   }
 
   /**
@@ -1693,7 +1759,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $array = (array)$this->array;
     $result = [];
 
-    // Iterate over values, group by property/results from closure
+    // Iterate over values, group by property/results from closure.
     foreach ($array as $key => $value) {
 
       $groupKey = \is_callable($grouper) ? $grouper($value, $key) : $this->get($grouper, null, $array);
@@ -1707,7 +1773,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $newValue = $newValue->getArray();
       }
 
-      // Add to results
+      // Add to results.
       if ($groupKey !== null) {
         if ($saveKeys) {
           $result[$groupKey] = $newValue;
@@ -1739,18 +1805,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Implodes the keys of this array.
-   *
-   * @param string $glue
-   *
-   * @return string
-   */
-  public function implodeKeys(string $glue = ''): string
-  {
-    return $this->implode_recursive($glue, $this->array, true);
-  }
-
-  /**
    * Implodes the values of this array.
    *
    * @param string $glue
@@ -1763,20 +1817,32 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Implodes the keys of this array.
+   *
+   * @param string $glue
+   *
+   * @return string
+   */
+  public function implodeKeys(string $glue = ''): string
+  {
+    return $this->implode_recursive($glue, $this->array, true);
+  }
+
+  /**
    * @param mixed               $glue
    * @param string|array|static $pieces
    * @param bool                $useKeys
    *
    * @return string
    */
-  protected function implode_recursive($glue = '', $pieces, bool $useKeys = false): string
+  protected function implode_recursive($glue = '', $pieces = [], bool $useKeys = false): string
   {
     if ($pieces instanceof self) {
       $pieces = $pieces->getArray();
     }
 
     if (\is_array($pieces)) {
-      $pieces_count = \count($pieces);
+      $pieces_count = \count($pieces, COUNT_NORMAL);
       $pieces_count_not_zero = $pieces_count > 0;
 
       return \implode(
@@ -1793,11 +1859,51 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * @param mixed $needle   <p>
+   *                        The searched value.
+   *                        </p>
+   *                        <p>
+   *                        If needle is a string, the comparison is done
+   *                        in a case-sensitive manner.
+   *                        </p>
+   * @param array $haystack <p>
+   *                        The array.
+   *                        </p>
+   * @param bool  $strict   [optional] <p>
+   *                        If the third parameter strict is set to true
+   *                        then the in_array function will also check the
+   *                        types of the
+   *                        needle in the haystack.
+   *                        </p>
+   *
+   * @return bool true if needle is found in the array, false otherwise.
+   */
+  protected function in_array_recursive($needle, array $haystack = null, $strict = true): bool
+  {
+    if ($haystack === null) {
+      $haystack = $this->array;
+    }
+
+    foreach ($haystack as $item) {
+
+      if (\is_array($item) === true) {
+        $returnTmp = $this->in_array_recursive($needle, $item, $strict);
+      } else {
+        $returnTmp = ($strict === true ? $item === $needle : $item == $needle);
+      }
+
+      if ($returnTmp === true) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
    * Given a list and an iterate-function that returns
    * a key for each element in the list (or a property name),
    * returns an object with an index of each item.
-   *
-   * Just like groupBy, but for when you know your keys are unique.
    *
    * @param mixed $key
    *
@@ -1839,9 +1945,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function initial(int $to = 1)
   {
-    $slice = \count($this->array) - $to;
-
-    return $this->firstsImmutable($slice);
+    return $this->firstsImmutable(\count($this->array, COUNT_NORMAL) - $to);
   }
 
   /**
@@ -1852,7 +1956,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     if ($value instanceof self) {
 
       $valueTmp = $value->getArray();
-      if (\count($valueTmp) === 0) {
+      if (\count($valueTmp, COUNT_NORMAL) === 0) {
         $value = [];
       } else {
         /** @noinspection PhpUnusedLocalVariableInspection */
@@ -1877,7 +1981,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $path = \explode($this->pathSeparator, (string)$key);
 
     // Crawl though the keys
-    while (\count($path) > 1) {
+    while (\count($path, COUNT_NORMAL) > 1) {
       $key = \array_shift($path);
 
       if (!$this->has($key)) {
@@ -1913,7 +2017,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $path = \explode($this->pathSeparator, (string)$key);
 
     // Crawl through the keys
-    while (\count($path) > 1) {
+    while (\count($path, COUNT_NORMAL) > 1) {
       $key = \array_shift($path);
 
       // If the key doesn't exist at this depth, we will just create an empty array
@@ -1952,7 +2056,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function intersects(array $search): bool
   {
-    return \count($this->intersection($search)->array) > 0;
+    return \count($this->intersection($search)->array, COUNT_NORMAL) > 0;
   }
 
   /**
@@ -1967,7 +2071,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     // If one argument given for each iteration, create an array for it.
     if (!\is_array($arguments)) {
-      $arguments = StaticArrayy::repeat($arguments, \count($this->array))->getArray();
+      $arguments = StaticArrayy::repeat(
+          $arguments,
+          \count($this->array, COUNT_NORMAL)
+      )->getArray();
     }
 
     // If the callable has arguments, pass them.
@@ -2031,7 +2138,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function isMultiArray(): bool
   {
-    return !(\count($this->array) === \count($this->array, COUNT_RECURSIVE));
+    return !(
+        \count($this->array, COUNT_NORMAL)
+        ===
+        \count($this->array, COUNT_RECURSIVE)
+    );
   }
 
   /**
@@ -2063,11 +2174,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function isSequential(bool $recursive = false): bool
   {
+
+    // recursive
+
     if ($recursive === true) {
-      return $this->array_keys_recursive($this->array) === \range(0, \count($this->array, COUNT_RECURSIVE) - 1);
+      return $this->array_keys_recursive($this->array)
+             ===
+             \range(0, \count($this->array, COUNT_RECURSIVE) - 1);
     }
 
-    return \array_keys($this->array) === \range(0, \count($this->array) - 1);
+    // non recursive
+
+    return \array_keys($this->array)
+           ===
+           \range(0, \count($this->array, COUNT_NORMAL) - 1);
   }
 
   /**
@@ -2095,66 +2215,28 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function keys(bool $recursive = false, $search_value = null, bool $strict = true)
   {
+
+    // recursive
+
     if ($recursive === true) {
       if ($search_value === null) {
         $array = $this->array_keys_recursive($this->array);
       } else {
         $array = $this->array_keys_recursive($this->array, $search_value, $strict);
       }
+
+      return static::create($array);
+    }
+
+    // non recursive
+
+    if ($search_value === null) {
+      $array = \array_keys($this->array);
     } else {
-      if ($search_value === null) {
-        $array = \array_keys($this->array);
-      } else {
-        $array = \array_keys($this->array, $search_value, $strict);
-      }
+      $array = \array_keys($this->array, $search_value, $strict);
     }
 
     return static::create($array);
-  }
-
-  /**
-   * @param array $input        <p>
-   *                            An array containing keys to return.
-   *                            </p>
-   * @param mixed $search_value [optional] <p>
-   *                            If specified, then only keys containing these values are returned.
-   *                            </p>
-   * @param bool  $strict       [optional] <p>
-   *                            Determines if strict comparison (===) should be used during the search.
-   *                            </p>
-   *
-   * @return array an array of all the keys in input.
-   */
-  protected function array_keys_recursive(array $input = null, $search_value = null, bool $strict = true): array
-  {
-    // init
-    $keys = [];
-
-    if ($input === null) {
-      $input = $this->array;
-    }
-
-    foreach ($input as $key => $value) {
-
-      if (
-          $search_value === null
-          ||
-          (
-              \is_array($search_value) === true
-              &&
-              \in_array($key, $search_value, $strict)
-          )
-      ) {
-        $keys[] = $key;
-      }
-
-      // recursive needed?
-      if (\is_array($value) === true) {
-        $keys = \array_merge($keys, $this->array_keys_recursive($value));
-      }
-    }
-
-    return $keys;
   }
 
   /**
@@ -2250,9 +2332,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Count the values from the current array.
    *
-   * alias: for "Arrayy->size()"
+   * alias: for "Arrayy->count()"
    *
-   * @see Arrayy::size()
+   * @see Arrayy::count()
    *
    * @param int $mode
    *
@@ -2260,7 +2342,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function length(int $mode = COUNT_NORMAL): int
   {
-    return $this->size($mode);
+    return $this->count($mode);
   }
 
   /**
@@ -2287,7 +2369,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function matches(\Closure $closure): bool
   {
-    if (\count($this->array) === 0) {
+    if (\count($this->array, COUNT_NORMAL) === 0) {
       return false;
     }
 
@@ -2314,7 +2396,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function matchesAny(\Closure $closure): bool
   {
-    if (\count($this->array) === 0) {
+    if (\count($this->array, COUNT_NORMAL) === 0) {
       return false;
     }
 
@@ -2339,7 +2421,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function max()
   {
-    if ($this->count() === 0) {
+    if (\count($this->array, COUNT_NORMAL) === 0) {
       return false;
     }
 
@@ -2439,7 +2521,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function min()
   {
-    if ($this->count() === 0) {
+    if (\count($this->array, COUNT_NORMAL) === 0) {
       return false;
     }
 
@@ -2636,7 +2718,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function randomImmutable(int $number = null)
   {
-    if ($this->count() === 0) {
+    if (\count($this->array, COUNT_NORMAL) === 0) {
       return static::create();
     }
 
@@ -2673,7 +2755,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Pick a given number of random keys/indexes out of this array.
    *
-   * @param int $number <p>The number of keys/indexes (should be <= $this->count())</p>
+   * @param int $number <p>The number of keys/indexes (should be <= \count($this->array))</p>
    *
    * @return static <p>(Immutable)</p>
    *
@@ -2681,7 +2763,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function randomKeys(int $number)
   {
-    $count = $this->count();
+    $count = \count($this->array, COUNT_NORMAL);
 
     if ($number === 0 || $number > $count) {
       throw new \RangeException(
@@ -2707,7 +2789,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function randomMutable(int $number = null)
   {
-    if ($this->count() === 0) {
+    if (\count($this->array, COUNT_NORMAL) === 0) {
       return static::create();
     }
 
@@ -3164,10 +3246,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     if ($secure !== true) {
       \shuffle($array);
     } else {
-      $size = \count($array);
+      $size = \count($array, COUNT_NORMAL);
       $keys = \array_keys($array);
       for ($i = $size - 1; $i > 0; --$i) {
-        $r = \random_int(0, $i);
+        try {
+          $r = \random_int(0, $i);
+        } catch (\Exception $e) {
+          $r = \mt_rand();
+        }
         if ($r !== $i) {
           $temp = $array[$keys[$r]];
           $array[$keys[$r]] = $array[$keys[$i]];
@@ -3175,18 +3261,32 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
       }
 
-      // Reset indices
+      // reset indices
       $array = \array_values($array);
     }
 
     foreach ($array as $key => $value) {
-      // recursive needed?
+      // check if recursive is needed
       if (\is_array($value) === true) {
         $array[$key] = $this->shuffle($secure, $value);
       }
     }
 
     return static::create($array);
+  }
+
+  /**
+   * Count the values from the current array.
+   *
+   * alias: for "Arrayy->count()"
+   *
+   * @param int $mode
+   *
+   * @return int
+   */
+  public function size(int $mode = COUNT_NORMAL): int
+  {
+    return $this->count($mode);
   }
 
   /**
@@ -3217,43 +3317,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function sizeRecursive(): int
   {
     return \count($this->array, COUNT_RECURSIVE);
-  }
-
-  /**
-   * Counts all elements in an array, or something in an object.
-   * <p>For objects, if you have SPL installed, you can hook into count() by implementing interface {@see Countable}.
-   * The interface has exactly one method, {@see Countable::count()}, which returns the return value for the count()
-   * function. Please see the {@see Array} section of the manual for a detailed explanation of how arrays are
-   * implemented and used in PHP.
-   *
-   * @link http://php.net/manual/en/function.count.php
-   *
-   * @param int $mode [optional] If the optional mode parameter is set to
-   *                  COUNT_RECURSIVE (or 1), count
-   *                  will recursively count the array. This is particularly useful for
-   *                  counting all the elements of a multidimensional array. count does not detect infinite recursion.
-   *
-   * @return int the number of elements in var, which is
-   * typically an array, since anything else will have one
-   * element.
-   * </p>
-   * <p>
-   * If var is not an array or an object with
-   * implemented Countable interface,
-   * 1 will be returned.
-   * There is one exception, if var is &null;,
-   * 0 will be returned.
-   * </p>
-   * <p>
-   * Caution: count may return 0 for a variable that isn't set,
-   * but it may also return 0 for a variable that has been initialized with an
-   * empty array. Use isset to test if a variable is set.
-   *
-   * @return int
-   */
-  public function size(int $mode = COUNT_NORMAL): int
-  {
-    return \count($this->array, $mode);
   }
 
   /**
@@ -3453,7 +3516,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function split(int $numberOfPieces = 2, bool $keepKeys = false)
   {
-    $arrayCount = $this->count();
+    $arrayCount = \count($this->array, COUNT_NORMAL);
 
     if ($arrayCount === 0) {
       $result = [];

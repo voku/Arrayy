@@ -49,7 +49,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
    *
    * @return A
    */
-  protected function createArrayy(array $array = array())
+  protected function createArrayy(array $array = [])
   {
     return new $this->arrayyClassName($array);
   }
@@ -59,37 +59,37 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
    */
   public function simpleArrayProvider()
   {
-    return array(
-        'empty_array'   => array(
-            array(),
+    return [
+        'empty_array'   => [
+            [],
             self::TYPE_EMPTY,
-        ),
-        'indexed_array' => array(
-            array(
+        ],
+        'indexed_array' => [
+            [
                 1 => 'one',
                 2 => 'two',
                 3 => 'three',
-            ),
+            ],
             self::TYPE_NUMERIC,
-        ),
-        'assoc_array'   => array(
-            array(
+        ],
+        'assoc_array'   => [
+            [
                 'one'   => 1,
                 'two'   => 2,
                 'three' => 3,
-            ),
+            ],
             self::TYPE_ASSOC,
-        ),
-        'mixed_array'   => array(
-            array(
+        ],
+        'mixed_array'   => [
+            [
                 1     => 'one',
                 'two' => 2,
                 3     => 'three',
-                4     => array('1', '2')
-            ),
+                4     => ['1', '2'],
+            ],
             self::TYPE_MIXED,
-        ),
-    );
+        ],
+    ];
   }
 
   /**
@@ -97,20 +97,20 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
    */
   public function stringWithSeparatorProvider()
   {
-    return array(
-        array(
+    return [
+        [
             's,t,r,i,n,g',
             ',',
-        ),
-        array(
+        ],
+        [
             'He|ll|o',
             '|',
-        ),
-        array(
+        ],
+        [
             'Wo;rld',
             ';',
-        ),
-    );
+        ],
+    ];
   }
 
   // The method list order by ASC
@@ -208,7 +208,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
       return 'a' === $value and 2 < $key;
     };
 
-    $a = $this->createArrayy(array('a', 'b', 'c', 'b', 'a'));
+    $a = $this->createArrayy(['a', 'b', 'c', 'b', 'a']);
     $found = $a->find($callable);
 
     self::assertSame('a', $found);
@@ -238,7 +238,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
     $first = reset($array);
 
     if ($first === false) {
-      $first = array();
+      $first = [];
     } else {
       $first = (array)$first;
     }
@@ -248,7 +248,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
   public function testGetIterator()
   {
-    $arrayy = $this->createArrayy(array('foo', 'bar', 1, null));
+    $arrayy = $this->createArrayy(['foo', 'bar', 1, null]);
 
     $result = $arrayy->getIterator();
     self::assertInstanceOf('ArrayIterator', $result);
@@ -259,30 +259,31 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
   public function testGetIteratorWithSubArray()
   {
-    $arrayy = $this->createArrayy(array('foo' => array(3,2,1), 'bar' => array(1,2,3), 1, null));
+    $arrayy = $this->createArrayy(['foo' => [3, 2, 1], 'bar' => [1, 2, 3], 1, null]);
 
     $result = $arrayy->getIterator();
     self::assertInstanceOf('\ArrayIterator', $result);
     self::assertInstanceOf('Arrayy\ArrayyIterator', $result);
 
     $result->next();
-    self::assertSame(array(1, 2, 3), $result->current()->getArray());
-    self::assertSame(array(1, 2, 3), $result->current()->getArray());
+    self::assertSame([1, 2, 3], $result->current()->getArray());
+    self::assertSame([1, 2, 3], $result->current()->getArray());
   }
 
   public function testForEachWithInnerArrayy()
   {
-    $arrayy = $this->createArrayy(array('foo' => array(3 => array(33, 34, 35), 2 => array(22, 23, 24), 1 => array(11, 12, 13))));
+    $arrayy = $this->createArrayy(['foo' => [3 => [33, 34, 35], 2 => [22, 23, 24], 1 => [11, 12, 13]]]);
 
     foreach ($arrayy as $arrayyInner) {
-      self::assertInstanceOf('Arrayy\Arrayy', $arrayyInner);
-      self::assertSame(array(3, 2, 1), $arrayyInner->getKeys()->getArray());
+      self::assertInstanceOf(\Arrayy\Arrayy::class, $arrayyInner);
+      self::assertSame([3, 2, 1], $arrayyInner->getKeys()->getArray());
 
       foreach ($arrayyInner as $arrayyInnerInnerKey => $arrayyInnerInner) {
-        self::assertInstanceOf('Arrayy\Arrayy', $arrayyInnerInner);
+        self::assertInstanceOf(\Arrayy\Arrayy::class, $arrayyInnerInner);
 
         if ($arrayyInnerInnerKey == 3) {
-          self::assertSame(array(33, 34, 35), $arrayyInnerInner->getArray());
+          /* @var $arrayyInnerInner \Arrayy\Arrayy */
+          self::assertSame([33, 34, 35], $arrayyInnerInner->getArray());
         }
       }
     }
@@ -316,11 +317,11 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
       if (!$value instanceof \Arrayy\Arrayy) {
         /** @noinspection TypeUnsafeArraySearchInspection */
-        self::assertTrue(in_array($value[0], $arrayy->toArray()));
+        self::assertContains($value[0], $arrayy->toArray());
       }
 
     } else {
-      self::assertTrue(is_array($value));
+      self::assertInternalType('array', $value);
     }
   }
 
@@ -340,7 +341,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
       self::assertNotNull($key);
       self::assertTrue(array_key_exists($key, $arrayy->toArray()));
     } else {
-      self::assertTrue(is_array($arrayy->getArray()));
+      self::assertInternalType('array', $arrayy->getArray());
     }
   }
 
@@ -355,7 +356,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
     if (2 > count($array)) {
 
-      self::assertTrue(is_array($arrayy->getArray()));
+      self::assertInternalType('array', $arrayy->getArray());
 
     } else {
 
@@ -373,7 +374,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
    */
   public function testGetRandomKeysLogicExceptionGivenZero()
   {
-    $arrayy = $this->createArrayy(array('a', 'b', 'c'));
+    $arrayy = $this->createArrayy(['a', 'b', 'c']);
     $arrayy->getRandomKeys(0);
   }
 
@@ -382,7 +383,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
    */
   public function testGetRandomKeysRangeException()
   {
-    $arrayy = $this->createArrayy(array('a', 'b', 'c'));
+    $arrayy = $this->createArrayy(['a', 'b', 'c']);
     $arrayy->getRandomKeys(4);
   }
 
@@ -397,7 +398,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
     if (0 === count($array)) {
 
-      self::assertTrue(is_array($arrayy->getArray()));
+      self::assertInternalType('array', $arrayy->getArray());
 
     } else {
 
@@ -418,15 +419,17 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
     if (0 === count($array)) {
 
-      self::assertTrue(is_array($arrayy->getArray()));
+      self::assertInternalType('array', $arrayy->getArray());
 
     } else {
 
       $value = $arrayy->getRandomValue();
 
-      if (!$value instanceof \Arrayy\Arrayy) {
-        /** @noinspection TypeUnsafeArraySearchInspection */
-        self::assertTrue(in_array($value, $array));
+      if ($value instanceof \Arrayy\Arrayy) {
+        $valueFirst = $value->first();
+        self::assertTrue((new A($array))->contains($valueFirst, true, true));
+      } else {
+        self::assertContains($value, $array);
       }
     }
   }
@@ -441,7 +444,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
     $arrayy = $this->createArrayy($array);
 
     if (2 > count($array)) {
-      self::assertTrue(is_array($arrayy->getArray()));
+      self::assertInternalType('array', $arrayy->getArray());
 
       return;
     }
@@ -452,7 +455,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
     foreach ($values as $value) {
       if (!$value instanceof \Arrayy\Arrayy) {
         /** @noinspection TypeUnsafeArraySearchInspection */
-        self::assertTrue(in_array($value, $array));
+        self::assertContains($value, $array);
       }
     }
   }
@@ -467,7 +470,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
     $arrayy = $this->createArrayy($array);
 
     if (0 === count($array)) {
-      self::assertTrue(is_array($arrayy->getArray()));
+      self::assertInternalType('array', $arrayy->getArray());
 
       return;
     }
@@ -479,7 +482,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
     foreach ($values as $value) {
       if (!$value instanceof \Arrayy\Arrayy) {
         /** @noinspection TypeUnsafeArraySearchInspection */
-        self::assertTrue(in_array($value, $array));
+        self::assertContains($value, $array);
       }
     }
   }
@@ -650,7 +653,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
       return $resultArray;
     };
-    $array = array(1, 2, 3, 4);
+    $array = [1, 2, 3, 4];
     $arrayy = $this->createArrayy($array);
     $arrayyReduced = $arrayy->reduce($func)->getArray();
     $arrayReduced = (array)array_reduce($array, $func);

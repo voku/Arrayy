@@ -12,7 +12,7 @@ class ModelA extends \Arrayy\Arrayy
    * @param array  $array
    * @param string $iteratorClass
    */
-  public function __construct($array = array(), $iteratorClass = '\\Arrayy\\ArrayyIterator')
+  public function __construct($array = [], $iteratorClass = '\\Arrayy\\ArrayyIterator')
   {
     parent::__construct($array, $iteratorClass);
 

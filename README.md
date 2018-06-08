@@ -570,6 +570,14 @@ $callable = function ($value, $key) {
 a(['foo', 2 => 'two'])->exists($callable); // true
 ```
 
+##### fillWithDefaults(int $num, mixed $default = null) : Arrayy (Immutable)
+
+Fill the array until "$num" with "$default" values.
+
+```php
+a(['bar'])->fillWithDefaults(3, 'foo'); // Arrayy['bar', 'foo', 'foo']
+```
+
 ##### filter(Closure|null $closure) : Arrayy (Immutable)
 
 Find all items in an array that pass the truth test.

@@ -28,52 +28,52 @@ class StaticArrayyTest extends \PHPUnit\Framework\TestCase
   public function testInvocation()
   {
     /** @noinspection PhpUndefinedMethodInspection */
-    $result = A::first(array('lall', 'FOOBAR'), 1);
+    $result = A::first(['lall', 'FOOBAR'], 1);
     self::assertSame('lall', $result);
   }
 
   public function testPartialArgsInvocation()
   {
     /** @noinspection PhpUndefinedMethodInspection */
-    $result = A::replaceOneValue(array('foo', 'bar'), 'foo');
+    $result = A::replaceOneValue(['foo', 'bar'], 'foo');
     /** @noinspection PhpUndefinedMethodInspection */
-    self::assertSame(array('', 'bar'), $result->getArray());
+    self::assertSame(['', 'bar'], $result->getArray());
   }
 
   public function testFullArgsInvocation()
   {
     /** @noinspection PhpUndefinedMethodInspection */
-    $result = A::replaceOneValue(array('foo', 'bar'), 'foo', 'test');
+    $result = A::replaceOneValue(['foo', 'bar'], 'foo', 'test');
     /** @noinspection PhpUndefinedMethodInspection */
-    self::assertSame(array('test', 'bar'), $result->getArray());
+    self::assertSame(['test', 'bar'], $result->getArray());
   }
 
   public function testArrayyRange()
   {
     $result = A::range(1, null);
 
-    self::assertSame(array(1), $result->getArray());
+    self::assertSame([1], $result->getArray());
   }
 
   public function testArrayyRange1()
   {
     $result = A::range(1, null, 10);
 
-    self::assertSame(array(1), $result->getArray());
+    self::assertSame([1], $result->getArray());
   }
 
   public function testArrayyRange10()
   {
     $result = A::range(1, 10);
 
-    self::assertSame(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), $result->getArray());
+    self::assertSame([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], $result->getArray());
   }
 
   public function testArrayyRange100()
   {
     $result = A::range(0, 100, 10);
 
-    self::assertSame(array(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100), $result->getArray());
+    self::assertSame([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100], $result->getArray());
   }
 
   public function testArrayyRepeat()

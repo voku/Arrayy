@@ -57,7 +57,7 @@ class StaticArrayy
 
     $arrayy = Arrayy::create($array);
 
-    return \call_user_func_array(array($arrayy, $name), $args);
+    return \call_user_func_array([$arrayy, $name], $args);
   }
 
   ////////////////////////////////////////////////////////////////////
