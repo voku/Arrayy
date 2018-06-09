@@ -1155,7 +1155,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
           if (!empty($recursiveDiff)) {
             $result[$key] = $recursiveDiff;
           }
-        } else if ($value != $array[$key]) {
+        } elseif ($value != $array[$key]) {
           $result[$key] = $value;
         }
       } else {
