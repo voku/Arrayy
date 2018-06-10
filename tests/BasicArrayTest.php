@@ -1,5 +1,6 @@
 <?php
 
+use Arrayy\ArrayyIterator;
 use Arrayy\Arrayy as A;
 
 /**
@@ -17,7 +18,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
   /**
    * @var string
    */
-  protected $arrayyClassName = 'Arrayy\Arrayy';
+  protected $arrayyClassName = A::class;
 
   /**
    * @param A     $arrayy
@@ -49,7 +50,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
    *
    * @return A
    */
-  protected function createArrayy(array $array = [])
+  protected function createArrayy(array $array = []): A
   {
     return new $this->arrayyClassName($array);
   }
@@ -57,7 +58,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
   /**
    * @return array
    */
-  public function simpleArrayProvider()
+  public function simpleArrayProvider(): array
   {
     return [
         'empty_array'   => [
@@ -95,7 +96,7 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
   /**
    * @return array
    */
-  public function stringWithSeparatorProvider()
+  public function stringWithSeparatorProvider(): array
   {
     return [
         [
@@ -262,8 +263,8 @@ class BasicArrayTest extends \PHPUnit\Framework\TestCase
     $arrayy = $this->createArrayy(['foo' => [3, 2, 1], 'bar' => [1, 2, 3], 1, null]);
 
     $result = $arrayy->getIterator();
-    self::assertInstanceOf('\ArrayIterator', $result);
-    self::assertInstanceOf('Arrayy\ArrayyIterator', $result);
+    self::assertInstanceOf(\ArrayIterator::class, $result);
+    self::assertInstanceOf(ArrayyIterator::class, $result);
 
     $result->next();
     self::assertSame([1, 2, 3], $result->current()->getArray());

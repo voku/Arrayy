@@ -3562,6 +3562,45 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     self::assertSame($expected, $newArr2->toArray());
   }
 
+  public function testNested()
+  {
+    $array = [
+        'one' => 'yes_one',
+        'two' => [
+            'two_2' => 'yes_two_2',
+            'two_3' => ['three' => 'yes_three'],
+        ],
+    ];
+
+    $arrayzy = new A($array);
+    $answer = $arrayzy->has('one');
+    self::assertTrue($answer);
+
+    $answer = $arrayzy->has('two.two_2');
+    self::assertTrue($answer);
+
+    $answer = $arrayzy->has('two.two_3');
+    self::assertTrue($answer);
+
+    $answer = $arrayzy->has('two.two_3.three');
+    self::assertTrue($answer);
+
+    $answer = $arrayzy->get('one');
+    self::assertEquals('yes_one', $answer);
+
+    $answer = $arrayzy->get('two.two_2');
+    self::assertEquals($array['two']['two_2'], $answer);
+
+    $answer = $arrayzy->get('two.two_3.three');
+    self::assertEquals($array['two']['two_3']['three'], $answer);
+
+    $answer = $arrayzy->has('kin.dza');
+    self::assertFalse($answer);
+
+    $answer = $arrayzy->get('kin.dza', 'no');
+    self::assertEquals('no', $answer);
+  }
+
   /**
    * @dataProvider simpleArrayProvider
    *
@@ -3881,7 +3920,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomMutable($take)->getArray();
 
-    self::assertTrue(in_array($result[0], $array, true));
+    self::assertContains($result[0], $array);
   }
 
   public function testRandomKey()
@@ -3909,7 +3948,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomValue();
 
-    self::assertTrue(in_array($result, $array, true));
+    self::assertContains($result, $array);
   }
 
   public function testRandomValues()
@@ -3918,8 +3957,8 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomValues(2);
 
-    self::assertTrue(in_array($result[0], $array, true));
-    self::assertTrue(in_array($result[1], $array, true));
+    self::assertContains($result[0], $array);
+    self::assertContains($result[1], $array);
   }
 
   /**
@@ -3933,7 +3972,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $arrayy = A::create($array);
     $result = $arrayy->randomWeighted([0], $take)->getArray();
 
-    self::assertTrue(in_array($result[0], $array, true));
+    self::assertContains($result[0], $array);
   }
 
   public function testReduce()
@@ -4582,15 +4621,15 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   {
     $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->shuffle();
 
-    self::assertTrue(in_array('bar', $arrayy->getArray(), true));
-    self::assertTrue(in_array('foo', $arrayy->getArray(), true));
+    self::assertContains('bar', $arrayy->getArray());
+    self::assertContains('foo', $arrayy->getArray());
 
     // ---
 
     $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->shuffle(true);
 
-    self::assertTrue(in_array('bar', $arrayy->getArray(), true));
-    self::assertTrue(in_array('foo', $arrayy->getArray(), true));
+    self::assertContains('bar', $arrayy->getArray());
+    self::assertContains('foo', $arrayy->getArray());
   }
 
   public function testSimpleAt()

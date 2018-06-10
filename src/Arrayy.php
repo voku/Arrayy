@@ -944,7 +944,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Creates an Arrayy object.
    *
-   * @param array $array
+   * @param mixed $array
    *
    * @return static <p>(Immutable) Returns an new instance of the Arrayy object.</p>
    */
@@ -1798,10 +1798,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function has($key): bool
   {
-    // Generate unique string to use as marker.
-    $unFound = \uniqid('arrayy', true);
+    static $UN_FOUND = null;
 
-    return $this->get($key, $unFound) !== $unFound;
+    if ($UN_FOUND === null) {
+      // Generate unique string to use as marker.
+      $UN_FOUND = \uniqid('arrayy', true);
+    }
+
+    return $this->get($key, $UN_FOUND) !== $UN_FOUND;
   }
 
   /**
