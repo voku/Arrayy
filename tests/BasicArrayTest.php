@@ -1,7 +1,7 @@
 <?php
 
-use Arrayy\ArrayyIterator;
 use Arrayy\Arrayy as A;
+use Arrayy\ArrayyIterator;
 
 /**
  * Copy of a test class from "https://github.com/bocharsky-bw/Arrayzy/"
