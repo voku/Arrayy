@@ -1581,6 +1581,36 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   }
 
   /**
+   * Replaces first occurrences of $search from the beginning of string with $replacement.
+   *
+   * @param string $search      <p>The string to search for.</p>
+   * @param string $replacement <p>The replacement.</p>
+   *
+   * @return static <p>Object with the resulting $str after the replacements.</p>
+   */
+  public function replaceFirst(string $search, string $replacement): self
+  {
+    $str = UTF8::str_replace_first($this->str, $search, $replacement);
+
+    return static::create($str, $this->encoding);
+  }
+
+  /**
+   * Replaces last occurrences of $search from the ending of string with $replacement.
+   *
+   * @param string $search      <p>The string to search for.</p>
+   * @param string $replacement <p>The replacement.</p>
+   *
+   * @return static <p>Object with the resulting $str after the replacements.</p>
+   */
+  public function replaceLast(string $search, string $replacement): self
+  {
+    $str = UTF8::str_replace_last($this->str, $search, $replacement);
+
+    return static::create($str, $this->encoding);
+  }
+
+  /**
    * Replaces all occurrences of $search from the beginning of string with $replacement.
    *
    * @param string $search      <p>The string to search for.</p>
@@ -1606,7 +1636,6 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
   public function replaceEnding(string $search, string $replacement): self
   {
     $str = UTF8::str_replace_ending($this->str, $search, $replacement);
-
 
     return static::create($str, $this->encoding);
   }
