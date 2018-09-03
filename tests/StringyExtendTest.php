@@ -13,8 +13,9 @@ class StringyExtendTest extends \PHPUnit\Framework\TestCase
     $stringyEx = new StringyExtend();
 
     $result = $stringyEx->first(2);
+    self::assertInstanceOf('StringyExtend', $result);
     self::assertSame('Tö', $result->toString());
-    self::assertSame('Töst', $stringyEx->toString());
+    self::assertSame('Töst', $stringyEx->fooBar());
   }
 
   public function testAfterFirst()

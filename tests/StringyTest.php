@@ -203,6 +203,7 @@ class StringyTest extends \PHPUnit\Framework\TestCase
     $provider = [
       // One needle
       [false, 'Str contains foo bar', []],
+      [false, 'Str contains foo bar', ['']],
       // Multiple needles
       [true, 'Str contains foo bar', ['foo', 'bar']],
       [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*', '&^%']],
@@ -310,11 +311,11 @@ class StringyTest extends \PHPUnit\Framework\TestCase
   public function countSubstrProvider(): array
   {
     return [
-        [false, '', 'foo'],
+        [0, '', 'foo'],
         [0, 'foo', 'bar'],
         [1, 'foo bar', 'foo'],
         [2, 'foo bar', 'o'],
-        [false, '', 'fòô', 'UTF-8'],
+        [0, '', 'fòô', 'UTF-8'],
         [0, 'fòô', 'bàř', 'UTF-8'],
         [1, 'fòô bàř', 'fòô', 'UTF-8'],
         [2, 'fôòô bàř', 'ô', 'UTF-8'],
@@ -741,18 +742,18 @@ class StringyTest extends \PHPUnit\Framework\TestCase
     return [
         [false, ''],
         [false, '  '],
-        [true, 'null'],
-        [true, 'true'],
-        [true, 'false'],
+        [false, 'null'],
+        [false, 'true'],
+        [false, 'false'],
         [true, '[]'],
         [true, '{}'],
-        [true, '123'],
+        [false, '123'],
         [true, '{"foo": "bar"}'],
         [false, '{"foo":"bar",}'],
         [false, '{"foo"}'],
         [true, '["foo"]'],
         [false, '{"foo": "bar"]'],
-        [true, '123', 'UTF-8'],
+        [false, '123', 'UTF-8'],
         [true, '{"fòô": "bàř"}', 'UTF-8'],
         [false, '{"fòô":"bàř",}', 'UTF-8'],
         [false, '{"fòô"}', 'UTF-8'],
@@ -889,6 +890,8 @@ class StringyTest extends \PHPUnit\Framework\TestCase
         [['fòô', '', 'bàř'], "fòô\r\n\r\nbàř", 'UTF-8'],
         [['fòô', 'bàř', ''], "fòô\r\nbàř\r\n", 'UTF-8'],
         [['', 'fòô', 'bàř'], "\r\nfòô\r\nbàř", 'UTF-8'],
+        [['1111111111111111111'], '1111111111111111111', 'UTF-8'],
+        [['1111111111111111111111'], '1111111111111111111111', 'UTF-8'],
     ];
   }
 
@@ -1612,7 +1615,7 @@ class StringyTest extends \PHPUnit\Framework\TestCase
   {
     // init
     $disallowedChars = 'ф0Oo1l';
-    $allowedChars = '2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ';
+    $allowedChars = '2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ!?_#';
 
     $passwords = [];
     for ($i = 0; $i <= 100; $i++) {
@@ -1651,8 +1654,10 @@ class StringyTest extends \PHPUnit\Framework\TestCase
   public function testAddRandomString()
   {
     $testArray = [
+        'abc'       => [1, 1],
         'öäü'       => [10, 10],
         ''          => [10, 0],
+        ' '         => [10, 10],
         'κόσμε-öäü' => [10, 10],
     ];
 
@@ -2038,18 +2043,18 @@ class StringyTest extends \PHPUnit\Framework\TestCase
   /**
    * @dataProvider containsAllProvider()
    *
-   * @param      $expected
-   * @param      $haystack
-   * @param      $needles
-   * @param bool $caseSensitive
-   * @param null $encoding
+   * @param bool     $expected
+   * @param string   $haystack
+   * @param string[] $needles
+   * @param bool     $caseSensitive
+   * @param string   $encoding
    */
   public function testContainsAll($expected, $haystack, $needles, $caseSensitive = true, $encoding = null)
   {
     $stringy = S::create($haystack, $encoding);
     $result = $stringy->containsAll($needles, $caseSensitive);
     self::assertInternalType('boolean', $result);
-    self::assertSame($expected, $result);
+    self::assertSame($expected, $result, 'tested: ' . $haystack);
     self::assertSame($haystack, $stringy->toString());
   }
 
@@ -2623,16 +2628,16 @@ class StringyTest extends \PHPUnit\Framework\TestCase
   /**
    * @dataProvider isJsonProvider()
    *
-   * @param      $expected
-   * @param      $str
-   * @param null $encoding
+   * @param bool   $expected
+   * @param string $str
+   * @param mixed  $encoding
    */
   public function testIsJson($expected, $str, $encoding = null)
   {
     $stringy = S::create($str, $encoding);
     $result = $stringy->isJson();
     self::assertInternalType('boolean', $result);
-    self::assertSame($expected, $result, 'tested:' . $str);
+    self::assertSame($expected, $result, 'tested: ' . $str);
     self::assertSame($str, $stringy->toString());
   }
 
@@ -3675,7 +3680,7 @@ class StringyTest extends \PHPUnit\Framework\TestCase
     $stringy = S::create($str, $encoding);
     $result = $stringy->toBoolean();
     self::assertInternalType('boolean', $result);
-    self::assertSame($expected, $result);
+    self::assertSame($expected, $result, 'tested: ' . $str);
     self::assertSame($str, $stringy->toString());
   }
 

@@ -12,4 +12,11 @@ class StringyExtend extends Stringy\Stringy
       $this->str = 'Töst';
     }
   }
+
+  /**
+   * @return string
+   */
+  public function fooBar() {
+    return $this->str;
+  }
 }
