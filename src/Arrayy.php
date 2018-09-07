@@ -142,6 +142,39 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * Append a (key) + values to the current array.
+   *
+   * @param array $values
+   * @param mixed $key
+   *
+   * @return static <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+   */
+  public function appendArrayValues(array $values, $key = null)
+  {
+    if ($key !== null) {
+      if (
+          isset($this->array[$key])
+          &&
+          is_array($this->array[$key])
+      ) {
+        foreach ($values as $value) {
+          $this->array[$key][] = $value;
+        }
+      } else {
+        foreach ($values as $value) {
+          $this->array[$key] = $value;
+        }
+      }
+    } else {
+      foreach ($values as $value) {
+        $this->array[] = $value;
+      }
+    }
+
+    return $this;
+  }
+
+  /**
    * Append a (key) + value to the current array.
    *
    * @param mixed $value
@@ -152,7 +185,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function append($value, $key = null)
   {
     if ($key !== null) {
-      $this->array[$key] = $value;
+      if (
+          isset($this->array[$key])
+          &&
+          is_array($this->array[$key])
+      ) {
+        $this->array[$key][] = $value;
+      } else {
+        $this->array[$key] = $value;
+      }
     } else {
       $this->array[] = $value;
     }
@@ -1347,7 +1388,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    *
    * @return static <p>(Immutable)</p>
    */
-  public function filter($closure = null, int $flag = 0)
+  public function filter($closure = null, int $flag = ARRAY_FILTER_USE_BOTH)
   {
     if (!$closure) {
       return $this->clean();
@@ -1556,7 +1597,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * @param array $array     <p>The array to get from, if it's set to "null" we use the current array from the
    *                         class.</p>
    *
-   * @return mixed
+   * @return mixed|static
    */
   public function get($key, $fallback = null, array $array = null)
   {
@@ -1607,6 +1648,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function getArray(): array
   {
     \array_map(['self', 'internalGetArray'], $this->array);
+
+    foreach ($this->array as $key => $item) {
+      if ($item instanceof self) {
+        $this->array[$key] = $item->getArray();
+      }
+    }
 
     return $this->array;
   }
@@ -2023,13 +2070,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     // Crawl through the keys
     while (\count($path, COUNT_NORMAL) > 1) {
       $key = \array_shift($path);
-
-      // If the key doesn't exist at this depth, we will just create an empty array
-      // to hold the next value, allowing us to create the arrays to hold final
-      // values at the correct depth. Then we'll keep digging into the array.
-      if (!isset($array[$key]) || !\is_array($array[$key])) {
-        $array[$key] = static::create([]);
-      }
 
       $array =& $array[$key];
     }
@@ -2727,12 +2767,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     if ($number === null) {
+      /** @noinspection NonSecureArrayRandUsageInspection */
       $arrayRandValue = [$this->array[\array_rand($this->array)]];
 
       return static::create($arrayRandValue);
     }
 
     $arrayTmp = $this->array;
+    /** @noinspection NonSecureShuffleUsageInspection */
     \shuffle($arrayTmp);
 
     return static::create($arrayTmp)->firstsImmutable($number);
@@ -2798,12 +2840,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     if ($number === null) {
+      /** @noinspection NonSecureArrayRandUsageInspection */
       $arrayRandValue = [$this->array[\array_rand($this->array)]];
       $this->array = $arrayRandValue;
 
       return $this;
     }
 
+    /** @noinspection NonSecureShuffleUsageInspection */
     \shuffle($this->array);
 
     return $this->firstsMutable($number);
@@ -3248,6 +3292,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     if ($secure !== true) {
+      /** @noinspection NonSecureShuffleUsageInspection */
       \shuffle($array);
     } else {
       $size = \count($array, COUNT_NORMAL);
@@ -3492,7 +3537,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       case 'desc':
       case SORT_DESC:
         if ($keepKeys) {
-          arsort($elements, $strategy);
+          \arsort($elements, $strategy);
         } else {
           \rsort($elements, $strategy);
         }

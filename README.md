@@ -383,7 +383,7 @@ foreach ($arrayy) as $key => $value) {
 }
 ```
 
-##### append(mixed $value) : Arrayy (Mutable)
+##### append(mixed $value, mixed $key) : Arrayy (Mutable)
 
 Append a value to the current array.
 
@@ -391,6 +391,14 @@ alias: "Arrayy->add()"
 
 ```php
 a(['fòô' => 'bàř'])->append('foo'); // Arrayy['fòô' => 'bàř', 0 => 'foo']
+```
+
+##### appendArrayValues(array $values, mixed $key) : Arrayy (Mutable)
+
+Append a (key) + values to the current array.
+
+```php
+a(['fòô' => ['bàř']])->appendArrayValues(['foo1', 'foo2'], 'fòô'); // Arrayy['fòô' => ['bàř', 'foo1', 'foo2']]
 ```
 
 ##### prepend(mixed $value) : Arrayy (Mutable)

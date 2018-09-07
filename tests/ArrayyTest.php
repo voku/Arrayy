@@ -5185,6 +5185,35 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     self::assertSame($expected, $resultArrayy->getArray());
   }
 
+  public function testCompareToPhpArray()
+  {
+    $initArray = [
+        'fruit' => [
+            'orange',
+            'avocado',
+            'cherry',
+        ],
+    ];
+
+    $arrayy = Arrayy::create($initArray)
+                    ->appendArrayValues(['pear', 'avocado'], 'fruit')
+                    ->get('fruit')
+                    ->uniqueKeepIndex()
+                    ->walk(
+                        function (&$value) {
+                          $value .= '*';
+                        },
+                        true
+                    )
+                    ->filter(
+                        function ($value) {
+                          return (strpos($value, 'a') !== false);
+                        }
+                    );
+
+    self::assertSame([0 => 'orange*', 1 => 'avocado*', 3 => 'pear*'], $arrayy->getArray());
+  }
+
   /**
    * @dataProvider diffReverseProvider()
    *
