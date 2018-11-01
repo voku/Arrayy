@@ -142,39 +142,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Append a (key) + values to the current array.
-   *
-   * @param array $values
-   * @param mixed $key
-   *
-   * @return static <p>(Mutable) Return this Arrayy object, with the appended values.</p>
-   */
-  public function appendArrayValues(array $values, $key = null)
-  {
-    if ($key !== null) {
-      if (
-          isset($this->array[$key])
-          &&
-          is_array($this->array[$key])
-      ) {
-        foreach ($values as $value) {
-          $this->array[$key][] = $value;
-        }
-      } else {
-        foreach ($values as $value) {
-          $this->array[$key] = $value;
-        }
-      }
-    } else {
-      foreach ($values as $value) {
-        $this->array[] = $value;
-      }
-    }
-
-    return $this;
-  }
-
-  /**
    * Append a (key) + value to the current array.
    *
    * @param mixed $value
@@ -411,8 +378,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Assigns a value to the specified offset.
    *
-   * @param int|float|string $offset
-   * @param mixed            $value
+   * @param null|int|string $offset
+   * @param mixed           $value
    */
   public function offsetSet($offset, $value)
   {
@@ -540,6 +507,39 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function unserialize($string)
   {
     parent::unserialize($string);
+
+    return $this;
+  }
+
+  /**
+   * Append a (key) + values to the current array.
+   *
+   * @param array $values
+   * @param mixed $key
+   *
+   * @return static <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+   */
+  public function appendArrayValues(array $values, $key = null)
+  {
+    if ($key !== null) {
+      if (
+          isset($this->array[$key])
+          &&
+          is_array($this->array[$key])
+      ) {
+        foreach ($values as $value) {
+          $this->array[$key][] = $value;
+        }
+      } else {
+        foreach ($values as $value) {
+          $this->array[$key] = $value;
+        }
+      }
+    } else {
+      foreach ($values as $value) {
+        $this->array[] = $value;
+      }
+    }
 
     return $this;
   }
@@ -1530,10 +1530,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $tmpArray = $this->array;
     $result = \array_shift($tmpArray);
 
-    if ($result === null) {
-      return null;
-    }
-
     return $result;
   }
 
@@ -1647,8 +1643,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function getArray(): array
   {
-    \array_map(['self', 'internalGetArray'], $this->array);
-
     foreach ($this->array as $key => $item) {
       if ($item instanceof self) {
         $this->array[$key] = $item->getArray();
@@ -2053,7 +2047,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * Internal mechanic of set method.
    *
    * @param mixed $key
-   * @param mixed $value
+   * @param mixed  $value
    *
    * @return bool
    */
@@ -3236,7 +3230,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * Set a value for the current array (optional using dot-notation).
    *
    * @param mixed $key   <p>The key to set.</p>
-   * @param mixed $value <p>Its value.</p>
+   * @param mixed  $value <p>Its value.</p>
    *
    * @return static <p>(Immutable)</p>
    */
