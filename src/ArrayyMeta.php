@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Arrayy;
 
-class ArrayyMeta {
+class ArrayyMeta
+{
 
     /**
      * @param string $obj
