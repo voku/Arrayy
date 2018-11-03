@@ -1,8 +1,15 @@
 # Changelog
 
+### 5.3.0 (2018-11-03)
+
+- add "type checking for @property"
+
+
 ### 5.2.0 (2018-09-08)
+
 - add Arrayy->appendArrayValues()
 - fix usage of set() with nested dot-notation
+
 
 ### 5.1.0 (2018-06-08)
 
