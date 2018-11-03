@@ -6,8 +6,6 @@ namespace Arrayy;
 
 /**
  * Class ArrayyIterator
- *
- * @package Arrayy
  */
 class ArrayyIterator extends \ArrayIterator
 {

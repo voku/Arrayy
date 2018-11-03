@@ -199,9 +199,31 @@ $arrayy->Lars = array('lastname' => 'Müller');
 $arrayy->Lars->lastname; // 'Müller'
 ```
 
+## PhpDoc @property checking
+
+The library offers a type checking for @property phpdoc-class-comments, as seen below:
+
+```php
+/**
+ * @property int        $id
+ * @property int|string $firstName
+ * @property string     $lastName
+ * @property null|City  $city
+ */
+class User extends \Arrayy\Arrayy
+{
+  protected $checkPropertyTypes = true;
+
+  protected $checkPropertiesMismatchInConstructor = true;
+}
+```
+
+- "checkPropertyTypes": activate the type checking for @property values for the constructor and for the internal "set"-method
+- "checkPropertiesMismatchInConstructor": activate the property check in the constructor, so you can only add an array with all needed properties into the constructor
+
 ## OO and Chaining
 
-The library offers OO method chaining, as seen below:
+The library also offers OO method chaining, as seen below:
 
 ```php
 echo a(['fòô', 'bàř', 'bàř'])->unique()->reverse()->implode(','); // 'bàř,fòô'

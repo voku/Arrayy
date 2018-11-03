@@ -31,6 +31,21 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   protected $pathSeparator = '.';
 
+  /**
+   * @var bool
+   */
+  protected $checkPropertyTypes = false;
+
+  /**
+   * @var bool
+   */
+  protected $checkPropertiesMismatchInConstructor = false;
+
+  /**
+   * @var array|Property[]
+   */
+  protected $properties = [];
+
   /** @noinspection MagicMethodsValidityInspection */
   /**
    * Initializes
@@ -41,7 +56,24 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function __construct($array = [], $iteratorClass = ArrayyIterator::class)
   {
     $array = $this->fallbackForArray($array);
-    $this->array = $array;
+
+    if (
+        $this->checkPropertyTypes === true
+        ||
+        $this->checkForMissingPropertiesInConstructor === true
+    ) {
+      $this->properties = $this->getPublicProperties();
+    }
+
+    if ($this->checkPropertiesMismatchInConstructor === true) {
+      if (\count(\array_diff_key($this->properties, $array)) > 0) {
+        throw new \InvalidArgumentException('Property mismatch - input: ' . print_r(array_keys($array), true) . ' | expected: ' . print_r(array_keys($this->properties), true));
+      }
+    }
+
+    foreach ($array as $key => $value) {
+      $this->internalSet($key, $value);
+    }
 
     $this->setIteratorClass($iteratorClass);
   }
@@ -1724,6 +1756,32 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
+   * @return array|Property[]
+   */
+  protected function getPublicProperties(): array
+  {
+    static $PROPERTY_CACHE = [];
+    $cacheKey = 'Class::' . static::class;
+
+    if (isset($PROPERTY_CACHE[$cacheKey])) {
+      return $PROPERTY_CACHE[$cacheKey];
+    }
+
+    // init
+    $properties = [];
+
+    $reflector = new \ReflectionClass($this);
+    $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
+    $docblock = $factory->create($reflector->getDocComment());
+    foreach ($docblock->getTagsByName('property') as $tag) {
+      /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Property */
+      $properties[$tag->getVariableName()] = Property::fromPhpDocumentorProperty($this, $tag);
+    }
+
+    return $PROPERTY_CACHE[$cacheKey] = $properties;
+  }
+
+  /**
    * alias: for "Arrayy->randomImmutable()"
    *
    * @see Arrayy::randomImmutable()
@@ -2046,13 +2104,21 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Internal mechanic of set method.
    *
-   * @param mixed $key
+   * @param string $key
    * @param mixed  $value
    *
    * @return bool
    */
   protected function internalSet($key, $value): bool
   {
+    if ($this->checkPropertyTypes === true) {
+      if (isset($this->properties[$key]) === false) {
+        throw new \InvalidArgumentException('The key ' . $key . ' does not exists as @property in the class (' . \get_class($this) . ').');
+      }
+
+      $this->properties[$key]->set($value);
+    }
+
     if ($key === null) {
       return false;
     }
@@ -2550,6 +2616,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     return static::create($result);
+  }
+
+  /**
+   * @return ArrayyMeta|static
+   */
+  public static function meta()
+  {
+    return (new ArrayyMeta())->getMetaObject(static::class);
   }
 
   /**
@@ -3229,7 +3303,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Set a value for the current array (optional using dot-notation).
    *
-   * @param mixed $key   <p>The key to set.</p>
+   * @param string $key   <p>The key to set.</p>
    * @param mixed  $value <p>Its value.</p>
    *
    * @return static <p>(Immutable)</p>
