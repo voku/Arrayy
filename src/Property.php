@@ -20,11 +20,6 @@ class Property extends \ReflectionProperty
   ];
 
   /**
-   * @var Arrayy
-   */
-  protected $valueObject;
-
-  /**
    * @var bool
    */
   protected $hasTypeDeclaration = false;
@@ -35,11 +30,6 @@ class Property extends \ReflectionProperty
   protected $isNullable = false;
 
   /**
-   * @var bool
-   */
-  protected $isInitialised = false;
-
-  /**
    * @var array
    */
   protected $types = [];
@@ -47,17 +37,14 @@ class Property extends \ReflectionProperty
   /**
    * Property constructor.
    *
-   * @param Arrayy              $valueObject
    * @param null|\ReflectionProperty $reflectionProperty
-   * @param object              $fakeObject
+   * @param object                   $fakeObject
    *
    * @throws \ReflectionException
    */
-  public function __construct(Arrayy $valueObject, $reflectionProperty, $fakeObject = null)
+  public function __construct($reflectionProperty, $fakeObject = null)
   {
     parent::__construct($fakeObject, $reflectionProperty->getName());
-
-    $this->valueObject = $valueObject;
   }
 
   /**
@@ -81,13 +68,20 @@ class Property extends \ReflectionProperty
            \gettype($value) === (self::$typeMapping[$type] ?? $type);
   }
 
-  public static function fromPhpDocumentorProperty(Arrayy $valueObject, \phpDocumentor\Reflection\DocBlock\Tags\Property $phpDocumentorReflectionProperty): self
+  public function checkType($value)
+  {
+    if (!$this->isValidType($value)) {
+      $this->throwInvalidType($value);
+    }
+  }
+
+  public static function fromPhpDocumentorProperty(\phpDocumentor\Reflection\DocBlock\Tags\Property $phpDocumentorReflectionProperty): self
   {
     $tmpProperty = $phpDocumentorReflectionProperty->getVariableName();
     $tmpObject = new \stdClass();
     $tmpObject->{$tmpProperty} = null;
 
-    $tmpReflection = new self($valueObject, new \ReflectionProperty($tmpObject, $tmpProperty), $tmpObject);
+    $tmpReflection = new self(new \ReflectionProperty($tmpObject, $tmpProperty), $tmpObject);
 
     $type = $phpDocumentorReflectionProperty->getType();
 
@@ -109,69 +103,6 @@ class Property extends \ReflectionProperty
     }
 
     return $tmpReflection;
-  }
-
-  /**
-   * @param Type $type
-   *
-   * @return string[]|string
-   */
-  protected static function parseDocTypeObject(Type $type)
-  {
-    if ($type instanceof \phpDocumentor\Reflection\Types\Object_) {
-      return (string)$type->getFqsen();
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\Array_) {
-      $value = $type->getValueType();
-      if ($value instanceof \phpDocumentor\Reflection\Types\Mixed_) {
-        return 'mixed';
-      }
-
-      return 'array';
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\Null_) {
-      return 'null';
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\Mixed_) {
-      return 'mixed';
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\Scalar) {
-      return 'string|int|float|bool';
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\Boolean) {
-      return 'bool';
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\Callable_) {
-      return 'callable';
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\Compound) {
-      $types = [];
-      foreach ($type as $subType) {
-        $types[] = self::parseDocTypeObject($subType);
-      }
-      return $types;
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\Float_) {
-      return 'float';
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\String_) {
-      return 'string';
-    }
-
-    if ($type instanceof \phpDocumentor\Reflection\Types\Integer) {
-      return 'int';
-    }
-
-    throw new \Exception('Unhandled PhpDoc type: ' . get_class($type));
   }
 
   public function getTypes(): array
@@ -222,15 +153,68 @@ class Property extends \ReflectionProperty
     return false;
   }
 
-  public function set($value)
+  /**
+   * @param Type $type
+   *
+   * @return string[]|string
+   */
+  protected static function parseDocTypeObject(Type $type)
   {
-    if (!$this->isValidType($value)) {
-      $this->throwInvalidType($value);
+    if ($type instanceof \phpDocumentor\Reflection\Types\Object_) {
+      return (string)$type->getFqsen();
     }
 
-    $this->isInitialised = true;
+    if ($type instanceof \phpDocumentor\Reflection\Types\Array_) {
+      $value = $type->getValueType();
+      if ($value instanceof \phpDocumentor\Reflection\Types\Mixed_) {
+        return 'mixed';
+      }
 
-    $this->valueObject->{$this->getName()} = $value;
+      return 'array';
+    }
+
+    if ($type instanceof \phpDocumentor\Reflection\Types\Null_) {
+      return 'null';
+    }
+
+    if ($type instanceof \phpDocumentor\Reflection\Types\Mixed_) {
+      return 'mixed';
+    }
+
+    if ($type instanceof \phpDocumentor\Reflection\Types\Scalar) {
+      return 'string|int|float|bool';
+    }
+
+    if ($type instanceof \phpDocumentor\Reflection\Types\Boolean) {
+      return 'bool';
+    }
+
+    if ($type instanceof \phpDocumentor\Reflection\Types\Callable_) {
+      return 'callable';
+    }
+
+    if ($type instanceof \phpDocumentor\Reflection\Types\Compound) {
+      $types = [];
+      foreach ($type as $subType) {
+        $types[] = self::parseDocTypeObject($subType);
+      }
+
+      return $types;
+    }
+
+    if ($type instanceof \phpDocumentor\Reflection\Types\Float_) {
+      return 'float';
+    }
+
+    if ($type instanceof \phpDocumentor\Reflection\Types\String_) {
+      return 'string';
+    }
+
+    if ($type instanceof \phpDocumentor\Reflection\Types\Integer) {
+      return 'int';
+    }
+
+    throw new \Exception('Unhandled PhpDoc type: ' . get_class($type));
   }
 
   /**

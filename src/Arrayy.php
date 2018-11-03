@@ -1775,7 +1775,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $docblock = $factory->create($reflector->getDocComment());
     foreach ($docblock->getTagsByName('property') as $tag) {
       /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Property */
-      $properties[$tag->getVariableName()] = Property::fromPhpDocumentorProperty($this, $tag);
+      $properties[$tag->getVariableName()] = Property::fromPhpDocumentorProperty($tag);
     }
 
     return $PROPERTY_CACHE[$cacheKey] = $properties;
@@ -2116,7 +2116,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         throw new \InvalidArgumentException('The key ' . $key . ' does not exists as @property in the class (' . \get_class($this) . ').');
       }
 
-      $this->properties[$key]->set($value);
+      $this->properties[$key]->checkType($value);
     }
 
     if ($key === null) {
