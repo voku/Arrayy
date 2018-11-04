@@ -1,5 +1,7 @@
 <?php
 
+use Arrayy\Arrayy;
+
 require_once __DIR__ . '/UserData.php';
 require_once __DIR__ . '/CityData.php';
 
@@ -28,11 +30,11 @@ class UserDataTest extends \PHPUnit\Framework\TestCase
             $modelMeta->id        => 1,
             $modelMeta->firstName => 'Lars',
             $modelMeta->lastName  => 'Moelleken',
-            $modelMeta->city      => $city
+            $modelMeta->city      => $city,
         ]
     );
 
-    static::assertInstanceOf('Arrayy\Arrayy', $model);
+    static::assertInstanceOf(Arrayy::class, $model);
     static::assertSame('Moelleken', $model['lastName']);
     static::assertSame('Moelleken', $model[$modelMeta->lastName]);
     static::assertSame('Düsseldorf', $model->city->name);
@@ -50,11 +52,11 @@ class UserDataTest extends \PHPUnit\Framework\TestCase
         [
             $modelMeta->id        => 2,
             $modelMeta->firstName => 'Lars1',
-            $modelMeta->lastName  => 'Moelleken1'
+            $modelMeta->lastName  => 'Moelleken1',
         ]
     );
 
-    static::assertInstanceOf('Arrayy\Arrayy', $model);
+    static::assertInstanceOf(Arrayy::class, $model);
     static::assertSame('Moelleken1', $model['lastName']);
     static::assertSame('Moelleken1', $model[$modelMeta->lastName]);
     static::assertNull($model[3]);
@@ -74,12 +76,13 @@ class UserDataTest extends \PHPUnit\Framework\TestCase
         ]
     );
 
-    static::assertInstanceOf('Arrayy\Arrayy', $model);
+    static::assertInstanceOf(Arrayy::class, $model);
   }
 
   /**
    * @expectedException InvalidArgumentException
-   * @expectedExceptionMessage expected city to be of type {null|\CityData}, instead got value `stdClass` with type {object}
+   * @expectedExceptionMessage expected city to be of type {null|\CityData}, instead got value `stdClass` with type
+   *                           {object}
    */
   public function testSetFailObject()
   {
@@ -91,11 +94,11 @@ class UserDataTest extends \PHPUnit\Framework\TestCase
             $modelMeta->id        => 1,
             $modelMeta->firstName => 'Lars',
             $modelMeta->lastName  => 'Moelleken',
-            $modelMeta->city      => (new \stdClass())
+            $modelMeta->city      => (new \stdClass()),
         ]
     );
 
-    static::assertInstanceOf('Arrayy\Arrayy', $model);
+    static::assertInstanceOf(Arrayy::class, $model);
     static::assertSame('Moelleken', $model['lastName']);
     static::assertSame('Moelleken', $model[$modelMeta->lastName]);
     static::assertSame('Düsseldorf', $model->city->name);

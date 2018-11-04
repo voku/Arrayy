@@ -218,8 +218,9 @@ class User extends \Arrayy\Arrayy
 }
 ```
 
-- "checkPropertyTypes": activate the type checking for @property values for the constructor and for the internal "set"-method
-- "checkPropertiesMismatchInConstructor": activate the property check in the constructor, so you can only add an array with all needed properties into the constructor
+- "checkPropertyTypes": activate the type checking for all defined @property in the class-phpdoc
+- "checkPropertiesMismatchInConstructor": activate the property mismatch check, so you can only add an 
+                                          array with all needed properties (or an empty array) into the constructor
 
 ## OO and Chaining
 

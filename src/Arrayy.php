@@ -66,7 +66,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     if ($this->checkPropertiesMismatchInConstructor === true) {
-      if (\count(\array_diff_key($this->properties, $array)) > 0) {
+      if (
+          \count($array) !== 0
+          &&
+          \count(\array_diff_key($this->properties, $array)) > 0
+      ) {
         throw new \InvalidArgumentException('Property mismatch - input: ' . print_r(array_keys($array), true) . ' | expected: ' . print_r(array_keys($this->properties), true));
       }
     }
@@ -187,7 +191,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       if (
           isset($this->array[$key])
           &&
-          is_array($this->array[$key])
+          \is_array($this->array[$key])
       ) {
         $this->array[$key][] = $value;
       } else {
@@ -454,6 +458,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
   }
 
+  /** @noinspection SenselessProxyMethodInspection | can not add return type, because of the "Serializable" interface */
   /**
    * Serialize the current "Arrayy"-object.
    *
@@ -557,7 +562,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       if (
           isset($this->array[$key])
           &&
-          is_array($this->array[$key])
+          \is_array($this->array[$key])
       ) {
         foreach ($values as $value) {
           $this->array[$key][] = $value;
@@ -635,7 +640,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     $object = new \stdClass();
 
-    if (!\is_array($array) || \count($array, COUNT_NORMAL) <= 0) {
+    if (\count($array, COUNT_NORMAL) <= 0) {
       return $object;
     }
 
@@ -2066,9 +2071,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $value = &$valueTmp;
       }
 
-    } elseif ($value instanceof \JsonSerializable) {
+    } elseif (
+        \class_exists('JsonSerializable')
+        &&
+        $value instanceof \JsonSerializable
+    ) {
+
       /** @noinspection PhpUnusedLocalVariableInspection */
       $value = &$value->jsonSerialize();
+
     }
   }
 
@@ -2104,8 +2115,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Internal mechanic of set method.
    *
-   * @param string $key
-   * @param mixed  $value
+   * @param null|string $key
+   * @param mixed       $value
    *
    * @return bool
    */
@@ -3128,9 +3139,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function replace($replace, $key, $value)
   {
-    $this->remove($replace);
+    $that = $this->remove($replace);
 
-    return $this->set($key, $value);
+    return $that->set($key, $value);
   }
 
   /**
@@ -3464,6 +3475,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function sort($direction = SORT_ASC, int $strategy = SORT_REGULAR, bool $keepKeys = false)
   {
+    /** @noinspection UnusedFunctionResultInspection */
     $this->sorting($this->array, $direction, $strategy, $keepKeys);
 
     return $this;
@@ -3483,6 +3495,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function sortKeys($direction = SORT_ASC, int $strategy = SORT_REGULAR)
   {
+    /** @noinspection UnusedFunctionResultInspection */
     $this->sorterKeys($this->array, $direction, $strategy);
 
     return $this;
@@ -3586,10 +3599,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
   /**
    * @param array      &$elements
-   * @param int|string $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
-   * @param int        $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
-   *                              <strong>SORT_NATURAL</strong></p>
-   * @param bool       $keepKeys
+   * @param int|string  $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
+   * @param int         $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
+   *                               <strong>SORT_NATURAL</strong></p>
+   * @param bool        $keepKeys
    *
    * @return static <p>(Mutable) Return this Arrayy object.</p>
    */

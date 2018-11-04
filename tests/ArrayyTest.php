@@ -2664,7 +2664,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
         function ($key, $value) {
-          return $value % 2 !== 0 && $key & 2 !== 0;
+          return ($value % 2 !== 0) && ($key & 2 !== 0);
         },
         ARRAY_FILTER_USE_BOTH
     );
@@ -4248,6 +4248,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         'two'   => 'one',
         'three' => 2,
     ];
+
     self::assertSame($result, $resultArrayy->getArray());
   }
 
@@ -4294,10 +4295,12 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   public function testReplaceKeys()
   {
     $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']);
+
     self::assertSame('bar', $arrayy[2]);
     self::assertSame('foo', $arrayy['replaced']);
 
     $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1, 'foo' => 'replaced']);
+
     self::assertSame('bar', $arrayy[1]);
     self::assertSame('foo', $arrayy['replaced']);
   }
@@ -4306,6 +4309,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   {
     $testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
     $arrayy = A::create($testArray)->replaceOneValue('foo', 'replaced');
+
     self::assertSame('replaced', $arrayy['foo']);
     self::assertSame('foobar', $arrayy['foobar']);
   }
@@ -4320,13 +4324,16 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         3        => 'bar',
         'notfoo' => 'notbar',
     ];
+
     self::assertSame($matcher, $arrayy->getArray());
+    self::assertNotSame($arrayyTmp, $arrayy);
   }
 
   public function testReplaceValues()
   {
     $testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
     $arrayy = A::create($testArray)->replaceValues('foo', 'replaced');
+
     self::assertSame('replaced', $arrayy['foo']);
     self::assertSame('replacedbar', $arrayy['foobar']);
   }
