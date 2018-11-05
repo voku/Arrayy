@@ -1,0 +1,15 @@
+{
+    "timeout": 2,
+    "source": {
+        "directories": [
+            "src"
+        ]
+    },
+    "phpUnit": {
+        "customPath": "vendor\/bin\/phpunit"
+    },
+    "tmpDir": "build/infection/",
+    "logs": {
+        "text": "infection-log.txt"
+    }
+}

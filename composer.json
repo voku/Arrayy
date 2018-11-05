@@ -26,6 +26,7 @@
     "phpdocumentor/reflection-docblock": "~4.1"
   },
   "require-dev": {
+    "infection/infection": "~0.10",
     "phpunit/phpunit": "~6.0"
   },
   "support": {

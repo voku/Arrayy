@@ -4921,17 +4921,27 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   {
     self::assertArrayy(A::create()->split());
 
-    self::assertEquals(
-        A::create([['a'], ['b']]),
-        A::create(['a', 'b'])->split()
+    self::assertSame(
+        A::create([['a', 'b'], ['c', 'd']])->getArray(),
+        A::create(['a', 'b', 'c', 'd'])->split()->getArray()
     );
 
-    self::assertEquals(
-        A::create([['a' => 1], ['b' => 2]]),
-        A::create(['a' => 1, 'b' => 2])->split(2, true)
+    self::assertSame(
+        A::create([['a' => 1, 'b' => 2], ['c' => 3, 'd' => 4]])->getArray(),
+        A::create(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4])->split(2, true)->getArray()
     );
 
-    self::assertEquals(
+    self::assertSame(
+        A::create([[1, 2], [3]])->getArray(),
+        A::create(['a' => 1, 'b' => 2, 'c' => 3])->split(2, false)->getArray()
+    );
+
+    self::assertSame(
+        A::create([['a' => 1, 'b' => 2], ['c' => 3]])->getArray(),
+        A::create(['a' => 1, 'b' => 2, 'c' => 3])->split(2, true)->getArray()
+    );
+
+    self::assertSame(
         A::create(
             [
                 0 => [
@@ -4942,14 +4952,14 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
                     0 => 3,
                 ],
             ]
-        ),
+        )->getArray(),
         A::create(
             [
                 'a' => 1,
                 'b' => 2,
                 'c' => 3,
             ]
-        )->split(2, false)
+        )->split(2, false)->getArray()
     );
   }
 
@@ -5178,13 +5188,27 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     self::assertMutable($arrayy, $resultArrayy, $resultArray);
   }
 
+  public function testWalkSimpleRecursively()
+  {
+    $callable = function (&$value, $key) {
+      $value = $key;
+    };
+
+    $array = [1, 2, [3, 4, [5, 6]]];
+    $arrayy = new A($array);
+    $resultArrayy = $arrayy->walk($callable, true);
+
+    $expected = [0, 1, [0, 1, [0, 1]]];
+    self::assertSame($expected, $resultArrayy->getArray());
+  }
+
   public function testWalkSimple()
   {
     $callable = function (&$value, $key) {
       $value = $key;
     };
 
-    $array = [1, 2, 3];
+    $array = [1, 2, [3, 4, [5, 6]]];
     $arrayy = new A($array);
     $resultArrayy = $arrayy->walk($callable);
 
@@ -5282,6 +5306,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         [[0 => false], [false]],
         [[0 => true], [true]],
         [[0 => -9, 1 => -9], [-9]],
+        [[0 => null, 1 => 0], [null, 0]],
         [[0 => -9, 1 => 1, 2 => 2], [0 => -9, 1 => 1, 2 => 2]],
         [[0 => 1.18, 1 => 1.5], [0 => 1.18, 1 => 1.5]],
         [
@@ -5338,6 +5363,7 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
         [[0 => false], [false]],
         [[0 => true], [true]],
         [[0 => -9, 1 => -9], [-9]],
+        [[0 => null, 1 => 0], [null, 0]],
         [[0 => -9, 1 => 1, 2 => 2], [0 => -9, 1 => 1, 2 => 2]],
         [[0 => 1.18, 1 => 1.5], [0 => 1.18, 1 => 1.5]],
         [

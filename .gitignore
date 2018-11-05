@@ -5,6 +5,9 @@ composer.lock
 # php (phpunit)
 build/
 
+# php (infection)
+infection-log.txt
+
 # gitbook
 _book/
 

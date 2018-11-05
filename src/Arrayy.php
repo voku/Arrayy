@@ -65,14 +65,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $this->properties = $this->getPublicProperties();
     }
 
-    if ($this->checkPropertiesMismatchInConstructor === true) {
-      if (
-          \count($array) !== 0
-          &&
-          \count(\array_diff_key($this->properties, $array)) > 0
-      ) {
-        throw new \InvalidArgumentException('Property mismatch - input: ' . print_r(array_keys($array), true) . ' | expected: ' . print_r(array_keys($this->properties), true));
-      }
+    if (
+        $this->checkPropertiesMismatchInConstructor === true
+        &&
+        \count($array) !== 0
+        &&
+        \count(\array_diff_key($this->properties, $array)) > 0
+    ) {
+      throw new \InvalidArgumentException('Property mismatch - input: ' . print_r(array_keys($array), true) . ' | expected: ' . print_r(array_keys($this->properties), true));
     }
 
     foreach ($array as $key => $value) {
@@ -672,6 +672,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     // init
     $keys = [];
+    $keysTmp = [[]]; // the inner empty array covers cases when no loops were made
 
     if ($input === null) {
       $input = $this->array;
@@ -693,9 +694,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
       // check if recursive is needed
       if (\is_array($value) === true) {
-        $keys = \array_merge($keys, $this->array_keys_recursive($value));
+        $keysTmp[] = $this->array_keys_recursive($value);
       }
     }
+
+    $keys = \array_merge($keys, ...$keysTmp);
 
     return $keys;
   }
@@ -3475,10 +3478,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function sort($direction = SORT_ASC, int $strategy = SORT_REGULAR, bool $keepKeys = false)
   {
-    /** @noinspection UnusedFunctionResultInspection */
-    $this->sorting($this->array, $direction, $strategy, $keepKeys);
-
-    return $this;
+    return $this->sorting($this->array, $direction, $strategy, $keepKeys);
   }
 
   /**
