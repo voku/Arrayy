@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.3.1 (2018-11-05)
+
+- test the tests via "infection" (Mutation Code Coverage: 91%)
+- optimize performance
+
+
 ### 5.3.0 (2018-11-03)
 
 - add "type checking for @property"
