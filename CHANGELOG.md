@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.3.2 (2018-11-10)
+
+- use generators for for-each loops
+- add "Arrayy->getGenerator()" + tests
+
+
 ### 5.3.1 (2018-11-05)
 
 - test the tests via "infection" (Mutation Code Coverage: 91%)
