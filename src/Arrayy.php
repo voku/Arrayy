@@ -590,8 +590,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function appendToEachKey($prefix)
   {
+    // init
     $result = [];
-    foreach ($this->array as $key => $item) {
+
+    foreach ($this->getGenerator() as $key => $item) {
       if ($item instanceof self) {
         $result[$prefix . $key] = $item->appendToEachKey($prefix);
       } elseif (\is_array($item)) {
@@ -613,8 +615,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function appendToEachValue($prefix)
   {
+    // init
     $result = [];
-    foreach ($this->array as $key => $item) {
+
+    foreach ($this->getGenerator() as $key => $item) {
       if ($item instanceof self) {
         $result[$key] = $item->appendToEachValue($prefix);
       } elseif (\is_array($item)) {
@@ -638,6 +642,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   protected static function arrayToObject(array $array = []): \stdClass
   {
+    // init
     $object = new \stdClass();
 
     if (\count($array, COUNT_NORMAL) <= 0) {
@@ -647,9 +652,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     foreach ($array as $name => $value) {
       if (\is_array($value)) {
         $object->{$name} = self::arrayToObject($value);
-        continue;
+      } else {
+        $object->{$name} = $value;
       }
-      $object->{$name} = $value;
     }
 
     return $object;
@@ -675,7 +680,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $keysTmp = [[]]; // the inner empty array covers cases when no loops were made
 
     if ($input === null) {
-      $input = $this->array;
+      $input = $this->getGenerator();
     }
 
     foreach ($input as $key => $value) {
@@ -724,13 +729,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function at(\Closure $closure)
   {
-    $array = $this->array;
+    $arrayy = clone $this;
 
-    foreach ($array as $key => $value) {
+    foreach ($arrayy->getGenerator() as $key => $value) {
       $closure($value, $key);
     }
 
-    return static::create($array);
+    return static::create($arrayy->toArray());
   }
 
   /**
@@ -1073,9 +1078,35 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public static function createFromObject(\ArrayAccess $object)
   {
+    // init
     $array = new static();
-    foreach ($object as $key => $value) {
-      /** @noinspection OffsetOperationsInspection */
+
+    if ($object instanceof self) {
+      $objectArray = $object->getGenerator();
+    } else {
+      $objectArray = $object;
+    }
+
+    foreach ($objectArray as $key => $value) {
+      $array[$key] = $value;
+    }
+
+    return $array;
+  }
+
+  /**
+   * Create an new instance filled with a copy of values from a "Generator"-object.
+   *
+   * @param \Generator $generator
+   *
+   * @return static <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+   */
+  public static function createFromGeneratorImmutable(\Generator $generator)
+  {
+    // init
+    $array = new static();
+
+    foreach ($generator as $key => $value) {
       $array[$key] = $value;
     }
 
@@ -1217,6 +1248,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function diffRecursive(array $array = [], $helperVariableForRecursion = null)
   {
+    // init
     $result = [];
 
     if (
@@ -1226,7 +1258,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     ) {
       $arrayForTheLoop = $helperVariableForRecursion;
     } else {
-      $arrayForTheLoop = $this->array;
+      $arrayForTheLoop = $this->getGenerator();
     }
 
     foreach ($arrayForTheLoop as $key => $value) {
@@ -1285,9 +1317,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function each(\Closure $closure)
   {
-    $array = $this->array;
+    // init
+    $array = [];
 
-    foreach ($array as $key => $value) {
+    foreach ($this->getGenerator() as $key => $value) {
       $array[$key] = $closure($value, $key);
     }
 
@@ -1303,8 +1336,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function exists(\Closure $closure): bool
   {
+    // init
     $isExists = false;
-    foreach ($this->array as $key => $value) {
+
+    foreach ($this->getGenerator() as $key => $value) {
       if ($closure($value, $key)) {
         $isExists = true;
         break;
@@ -1318,14 +1353,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * create a fallback for array
    *
    * 1. use the current array, if it's a array
-   * 2. call "getArray()" on object, if there is a "Arrayy"-object
-   * 3. fallback to empty array, if there is nothing
+   * 2. fallback to empty array, if there is nothing
+   * 3. call "getArray()" on object, if there is a "Arrayy"-object
    * 4. call "createFromObject()" on object, if there is a "\ArrayAccess"-object
    * 5. call "__toArray()" on object, if the method exists
    * 6. cast a string or object with "__toString()" into an array
    * 7. throw a "InvalidArgumentException"-Exception
    *
-   * @param $array
+   * @param mixed $array
    *
    * @return array
    *
@@ -1337,15 +1372,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       return $array;
     }
 
-    if ($array instanceof self) {
-      return $array->getArray();
-    }
-
     if (!$array) {
       return [];
     }
 
     $isObject = \is_object($array);
+
+    if ($isObject && $array instanceof self) {
+      return $array->getArray();
+    }
 
     if ($isObject && $array instanceof \ArrayAccess) {
       /** @noinspection ReferenceMismatchInspection */
@@ -1537,7 +1572,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function find(\Closure $closure)
   {
-    foreach ($this->array as $key => $value) {
+    foreach ($this->getGenerator() as $key => $value) {
       if ($closure($value, $key)) {
         return $value;
       }
@@ -1683,13 +1718,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function getArray(): array
   {
-    foreach ($this->array as $key => $item) {
-      if ($item instanceof self) {
-        $this->array[$key] = $item->getArray();
-      }
-    }
-
     return $this->array;
+  }
+
+  /**
+   * Get the current array from the "Arrayy"-object as generator.
+   *
+   * @return \Generator
+   */
+  public function getGenerator(): \Generator
+  {
+    yield from $this->array;
   }
 
   /**
@@ -1863,13 +1902,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function group($grouper, bool $saveKeys = false)
   {
-    $array = (array)$this->array;
+    // init
     $result = [];
 
     // Iterate over values, group by property/results from closure.
-    foreach ($array as $key => $value) {
+    foreach ($this->getGenerator() as $key => $value) {
 
-      $groupKey = \is_callable($grouper) ? $grouper($value, $key) : $this->get($grouper, null, $array);
+      $groupKey = \is_callable($grouper) ? $grouper($value, $key) : $this->get($grouper, null, $this->array);
       $newValue = $this->get($groupKey, null, $result);
 
       if ($groupKey instanceof self) {
@@ -1992,7 +2031,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   protected function in_array_recursive($needle, array $haystack = null, $strict = true): bool
   {
     if ($haystack === null) {
-      $haystack = $this->array;
+      $haystack = $this->getGenerator();
     }
 
     foreach ($haystack as $item) {
@@ -2022,9 +2061,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function indexBy($key)
   {
+    // init
     $results = [];
 
-    foreach ($this->array as $a) {
+    foreach ($this->getGenerator() as $a) {
       if (\array_key_exists($key, $a) === true) {
         $results[$a[$key]] = $a;
       }
@@ -2218,7 +2258,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       return false;
     }
 
-    foreach ($this->keys($recursive)->getArray() as $key) {
+    foreach ($this->keys($recursive)->getGenerator() as $key) {
       if (!\is_string($key)) {
         return false;
       }
@@ -2274,7 +2314,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       return false;
     }
 
-    foreach ($this->keys() as $key) {
+    foreach ($this->keys()->getGenerator() as $key) {
       if (!\is_int($key)) {
         return false;
       }
@@ -2491,10 +2531,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       return false;
     }
 
-    // init
-    $array = $this->array;
-
-    foreach ($array as $key => $value) {
+    foreach ($this->getGenerator() as $key => $value) {
       $value = $closure($value, $key);
 
       if ($value === false) {
@@ -2518,10 +2555,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       return false;
     }
 
-    // init
-    $array = $this->array;
-
-    foreach ($array as $key => $value) {
+    foreach ($this->getGenerator() as $key => $value) {
       $value = $closure($value, $key);
 
       if ($value === true) {
@@ -2780,8 +2814,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function prependToEachKey($suffix)
   {
+    // init
     $result = [];
-    foreach ($this->array as $key => $item) {
+
+    foreach ($this->getGenerator() as $key => $item) {
       if ($item instanceof self) {
         $result[$key] = $item->prependToEachKey($suffix);
       } elseif (\is_array($item)) {
@@ -2804,8 +2840,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function prependToEachValue($suffix)
   {
+    // init
     $result = [];
-    foreach ($this->array as $key => $item) {
+
+    foreach ($this->getGenerator() as $key => $item) {
       if ($item instanceof self) {
         $result[$key] = $item->prependToEachValue($suffix);
       } elseif (\is_array($item)) {
@@ -2975,7 +3013,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function randomWeighted(array $array, int $number = null)
   {
+    // init
     $options = [];
+
     foreach ($array as $option => $weight) {
       if ($this->searchIndex($option) !== false) {
         for ($i = 0; $i < $weight; ++$i) {
@@ -3031,7 +3071,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     $filtered = [];
 
-    foreach ($this->array as $key => $value) {
+    foreach ($this->getGenerator() as $key => $value) {
       if (!$closure($value, $key)) {
         $filtered[$key] = $value;
       }
@@ -3099,7 +3139,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function removeValue($value)
   {
     $isNumericArray = true;
-    foreach ($this->array as $key => $item) {
+    foreach ($this->getGenerator() as $key => $item) {
       if ($item === $value) {
         if (!\is_int($key)) {
           $isNumericArray = false;

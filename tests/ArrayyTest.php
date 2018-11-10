@@ -1827,6 +1827,44 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     self::assertSame($expected, A::create($array)->indexBy('age')->getArray());
   }
 
+  public function testCanGroupValuesWithSavingKeysViaYield()
+  {
+    $grouper = function ($value) {
+      return $value % 2 === 0;
+    };
+    $under = A::create(range(1, 5))->group($grouper, true);
+    $matcher = [
+        [0 => 1, 2 => 3, 4 => 5],
+        [1 => 2, 3 => 4],
+    ];
+
+    $result = [];
+    foreach ($under->getGenerator() as $key => $value) {
+      $result[$key] = $value;
+    }
+    self::assertSame($matcher, $result);
+  }
+
+  public function testCanIndexByViaYield()
+  {
+    $array = [
+        ['name' => 'moe', 'age' => 40],
+        ['name' => 'larry', 'age' => 50],
+        ['name' => 'curly', 'age' => 60],
+    ];
+    $expected = [
+        40 => ['name' => 'moe', 'age' => 40],
+        50 => ['name' => 'larry', 'age' => 50],
+        60 => ['name' => 'curly', 'age' => 60],
+    ];
+
+    $result = [];
+    foreach (A::create($array)->indexBy('age')->getGenerator() as $key => $value) {
+      $result[$key] = $value;
+    }
+    self::assertSame($expected, $result);
+  }
+
   public function testChangeKeyCase()
   {
     // upper
@@ -3876,6 +3914,13 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
     $resultTmp = A::create($array)->prependToEachKey('_foo');
 
     self::assertEquals($result, $resultTmp->toArray());
+
+    // ---
+
+    $orig = A::create($array)->toArray();
+    if ($orig !== [] && $result !== []) {
+      self::assertNotEquals($result, $orig);
+    }
   }
 
   /**
@@ -5000,6 +5045,20 @@ class ArrayyTest extends \PHPUnit\Framework\TestCase
   {
     $arrayy = A::create($array);
     $resultArrayy = A::createFromObject($arrayy);
+
+    self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+  }
+
+  /**
+   * @dataProvider simpleArrayProvider
+   *
+   * @param array $array
+   */
+  public function testStaticCreateFromGeneratorImmutableFromArray(array $array)
+  {
+    $arrayy = A::create($array);
+    $generator = $arrayy->getGenerator();
+    $resultArrayy = A::createFromGeneratorImmutable($generator);
 
     self::assertImmutable($arrayy, $resultArrayy, $array, $array);
   }
