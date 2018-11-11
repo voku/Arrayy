@@ -1271,6 +1271,55 @@ class StringyTest extends \PHPUnit\Framework\TestCase
   /**
    * @return array
    */
+  public function replaceFirstProvider(): array
+  {
+    return [
+        ['', '', '', ''],
+        ['foofoofoo', 'foofoo', 'foo', 'foofoo'],
+        ['foo', '\s', '\s', 'foo'],
+        ['foo bar', 'foo bar', '', ''],
+        ['foo bar', 'foo bar', 'f(o)o', '\1'],
+        ['\1 bar', 'foo bar', 'foo', '\1'],
+        ['bar', 'foo bar', 'foo ', ''],
+        ['far bar', 'foo bar', 'foo', 'far'],
+        ['bar foo bar', 'foo bar foo bar', 'foo ', ''],
+        ['', '', '', '', 'UTF-8'],
+        ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
+        ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'],
+        ['fòô bàř', 'fòô fòô bàř', 'fòô ', '', 'UTF-8'],
+        ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'],
+        ['bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'],
+    ];
+  }
+
+  /**
+   * @return array
+   */
+  public function replaceLastProvider(): array
+  {
+    return [
+        ['', '', '', ''],
+        ['foofoofoo', 'foofoo', 'foo', 'foofoo'],
+        ['foo', '\s', '\s', 'foo'],
+        ['foo bar', 'foo bar', '', ''],
+        ['foo bar', 'foo bar', 'f(o)o', '\1'],
+        ['\1 bar', 'foo bar', 'foo', '\1'],
+        ['bar', 'foo bar', 'foo ', ''],
+        ['foo lall', 'foo bar', 'bar', 'lall'],
+        ['foo bar foo ', 'foo bar foo bar', 'bar', ''],
+        ['', '', '', '', 'UTF-8'],
+        ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
+        ['fòô', 'fòô bàř', ' bàř', '', 'UTF-8'],
+        ['fòôfar', 'fòô bàř', ' bàř', 'far', 'UTF-8'],
+        ['fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'],
+    ];
+  }
+
+  /**
+   * @return array
+   */
   public function replaceEndingProvider(): array
   {
     return [
@@ -3217,6 +3266,43 @@ class StringyTest extends \PHPUnit\Framework\TestCase
     self::assertSame($expected, $result->toString());
     self::assertSame($str, $stringy->toString());
   }
+
+  /**
+   * @dataProvider replaceFirstProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $search
+   * @param      $replacement
+   * @param null $encoding
+   */
+  public function testReplaceFirst($expected, $str, $search, $replacement, $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->replaceFirst($search, $replacement);
+    $this->assertStringy($result);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
+  }
+
+  /**
+   * @dataProvider replaceLastProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $search
+   * @param      $replacement
+   * @param null $encoding
+   */
+  public function testReplaceLast($expected, $str, $search, $replacement, $encoding = null)
+  {
+    $stringy = S::create($str, $encoding);
+    $result = $stringy->replaceLast($search, $replacement);
+    $this->assertStringy($result);
+    self::assertSame($expected, $result->toString());
+    self::assertSame($str, $stringy->toString());
+  }
+
 
   /**
    * @dataProvider reverseProvider()

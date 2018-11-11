@@ -1590,7 +1590,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function replaceFirst(string $search, string $replacement): self
   {
-    $str = UTF8::str_replace_first($this->str, $search, $replacement);
+    $str = UTF8::str_replace_first($search, $replacement, $this->str);
 
     return static::create($str, $this->encoding);
   }
@@ -1605,7 +1605,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function replaceLast(string $search, string $replacement): self
   {
-    $str = UTF8::str_replace_last($this->str, $search, $replacement);
+    $str = UTF8::str_replace_last($search, $replacement, $this->str);
 
     return static::create($str, $this->encoding);
   }
