@@ -1,3 +1,7 @@
+### 4.1.1 (2018-11-11)
+- fix "replaceFirst()" + "replaceLast()"
+
+
 ### 4.1.0 (2018-08-03)
 - add "replaceFirst()" + "replaceLast()"
 - optimize the performance of almost all methods
