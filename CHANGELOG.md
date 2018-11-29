@@ -1,3 +1,7 @@
+### 4.1.2 (2018-11-29)
+- fix error from "UTF8::remove_html()" with strict types
+
+
 ### 4.1.1 (2018-11-11)
 - fix "replaceFirst()" + "replaceLast()"
 
