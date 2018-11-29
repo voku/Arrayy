@@ -1460,7 +1460,7 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
    */
   public function removeHtml(string $allowableTags = null): self
   {
-    $str = UTF8::remove_html($this->str, $allowableTags);
+    $str = UTF8::remove_html($this->str, $allowableTags . '');
 
     return static::create($str, $this->encoding);
   }
