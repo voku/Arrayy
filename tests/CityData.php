@@ -5,6 +5,7 @@
  *
  * @property null|string $plz
  * @property string      $name
+ * @property string[]    $infos
  */
 class CityData extends \Arrayy\Arrayy
 {

@@ -15,10 +15,11 @@ class UserDataTest extends \PHPUnit\Framework\TestCase
     $modelMeta = CityData::meta();
 
     $city = new CityData(
-        [
-            $modelMeta->name => 'Düsseldorf',
-            $modelMeta->plz  => null,
-        ]
+      [
+        $modelMeta->name  => 'Düsseldorf',
+        $modelMeta->plz   => null,
+        $modelMeta->infos => ['lall'],
+      ]
     );
 
     // ---
@@ -26,12 +27,12 @@ class UserDataTest extends \PHPUnit\Framework\TestCase
     $modelMeta = UserData::meta();
 
     $model = new UserData(
-        [
-            $modelMeta->id        => 1,
-            $modelMeta->firstName => 'Lars',
-            $modelMeta->lastName  => 'Moelleken',
-            $modelMeta->city      => $city,
-        ]
+      [
+        $modelMeta->id        => 1,
+        $modelMeta->firstName => 'Lars',
+        $modelMeta->lastName  => 'Moelleken',
+        $modelMeta->city      => $city,
+      ]
     );
 
     static::assertInstanceOf(Arrayy::class, $model);
@@ -49,11 +50,11 @@ class UserDataTest extends \PHPUnit\Framework\TestCase
     $modelMeta = UserData::meta();
 
     $model = new UserData(
-        [
-            $modelMeta->id        => 2,
-            $modelMeta->firstName => 'Lars1',
-            $modelMeta->lastName  => 'Moelleken1',
-        ]
+      [
+        $modelMeta->id        => 2,
+        $modelMeta->firstName => 'Lars1',
+        $modelMeta->lastName  => 'Moelleken1',
+      ]
     );
 
     static::assertInstanceOf(Arrayy::class, $model);
@@ -71,9 +72,9 @@ class UserDataTest extends \PHPUnit\Framework\TestCase
     $modelMeta = UserData::meta();
 
     $model = new UserData(
-        [
-            $modelMeta->id => '3',
-        ]
+      [
+        $modelMeta->id => '3',
+      ]
     );
 
     static::assertInstanceOf(Arrayy::class, $model);
@@ -90,12 +91,12 @@ class UserDataTest extends \PHPUnit\Framework\TestCase
     $modelMeta = UserData::meta();
 
     $model = new UserData(
-        [
-            $modelMeta->id        => 1,
-            $modelMeta->firstName => 'Lars',
-            $modelMeta->lastName  => 'Moelleken',
-            $modelMeta->city      => (new \stdClass()),
-        ]
+      [
+        $modelMeta->id        => 1,
+        $modelMeta->firstName => 'Lars',
+        $modelMeta->lastName  => 'Moelleken',
+        $modelMeta->city      => (new \stdClass()),
+      ]
     );
 
     static::assertInstanceOf(Arrayy::class, $model);

@@ -47,30 +47,46 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   protected $properties = [];
 
   /** @noinspection MagicMethodsValidityInspection */
+  /** @noinspection PhpMissingParentConstructorInspection */
   /**
    * Initializes
    *
-   * @param mixed  $array <p>Should be an array, otherwise it will try to convert it into an array.</p>
-   * @param string $iteratorClass
+   * @param mixed  $array                                  <p>
+   *                                                       Should be an array, otherwise it will try to convert
+   *                                                       it into an array.
+   *                                                       </p>
+   * @param string $iteratorClass                          optional <p>
+   *                                                       You can overwrite the ArrayyIterator, but mostly you don't
+   *                                                       need this option.
+   *                                                       </p>
+   * @param bool   $checkForMissingPropertiesInConstructor optional <p>
+   *                                                       You need to extend the "Arrayy"-class and you need to set
+   *                                                       the $checkPropertiesMismatchInConstructor class property to
+   *                                                       true, otherwise this option didn't not work anyway.
+   *                                                       </p>
    */
-  public function __construct($array = [], $iteratorClass = ArrayyIterator::class)
+  public function __construct($array = [], string $iteratorClass = ArrayyIterator::class, bool $checkForMissingPropertiesInConstructor = true)
   {
     $array = $this->fallbackForArray($array);
 
     if (
-        $this->checkPropertyTypes === true
-        ||
+      $this->checkPropertyTypes === true
+      ||
+      (
         $this->checkForMissingPropertiesInConstructor === true
+        &&
+        $checkForMissingPropertiesInConstructor === true
+      )
     ) {
       $this->properties = $this->getPublicProperties();
     }
 
     if (
-        $this->checkPropertiesMismatchInConstructor === true
-        &&
-        \count($array) !== 0
-        &&
-        \count(\array_diff_key($this->properties, $array)) > 0
+      $this->checkPropertiesMismatchInConstructor === true
+      &&
+      \count($array) !== 0
+      &&
+      \count(\array_diff_key($this->properties, $array)) > 0
     ) {
       throw new \InvalidArgumentException('Property mismatch - input: ' . print_r(array_keys($array), true) . ' | expected: ' . print_r(array_keys($this->properties), true));
     }
@@ -94,7 +110,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $return = $this->get($key);
 
     if (\is_array($return)) {
-      return static::create($return);
+      return static::create($return, $this->iteratorClass, false);
     }
 
     return $return;
@@ -110,11 +126,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function __invoke($key = null)
   {
     if ($key !== null) {
-      if (isset($this->array[$key])) {
-        return $this->array[$key];
-      }
-
-      return false;
+      return $this->array[$key] ?? false;
     }
 
     return (array)$this->array;
@@ -189,9 +201,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if ($key !== null) {
       if (
-          isset($this->array[$key])
-          &&
-          \is_array($this->array[$key])
+        isset($this->array[$key])
+        &&
+        \is_array($this->array[$key])
       ) {
         $this->array[$key][] = $value;
       } else {
@@ -368,13 +380,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $tmpReturn = \array_key_exists($offset, $this->array);
 
     if (
-        $tmpReturn === true
-        ||
-        (
-            $tmpReturn === false
-            &&
-            \strpos((string)$offset, $this->pathSeparator) === false
-        )
+      $tmpReturn === true
+      ||
+      (
+        $tmpReturn === false
+        &&
+        \strpos((string)$offset, $this->pathSeparator) === false
+      )
     ) {
       return $tmpReturn;
     }
@@ -389,10 +401,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $containerPath = \implode($this->pathSeparator, $explodedPath);
 
       $this->callAtPath(
-          $containerPath,
-          function ($container) use ($lastOffset, &$offsetExists) {
-            $offsetExists = \array_key_exists($lastOffset, $container);
-          }
+        $containerPath,
+        function ($container) use ($lastOffset, &$offsetExists) {
+          $offsetExists = \array_key_exists($lastOffset, $container);
+        }
       );
     }
 
@@ -449,10 +461,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $pathToUnset = \array_pop($path);
 
       $this->callAtPath(
-          \implode($this->pathSeparator, $path),
-          function (&$offset) use ($pathToUnset) {
-            unset($offset[$pathToUnset]);
-          }
+        \implode($this->pathSeparator, $path),
+        function (&$offset) use ($pathToUnset) {
+          unset($offset[$pathToUnset]);
+        }
       );
 
     }
@@ -511,7 +523,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if (!\is_callable($function)) {
       throw new \InvalidArgumentException(
-          'Passed function must be callable'
+        'Passed function must be callable'
       );
     }
 
@@ -560,9 +572,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if ($key !== null) {
       if (
-          isset($this->array[$key])
-          &&
-          \is_array($this->array[$key])
+        isset($this->array[$key])
+        &&
+        \is_array($this->array[$key])
       ) {
         foreach ($values as $value) {
           $this->array[$key][] = $value;
@@ -597,13 +609,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       if ($item instanceof self) {
         $result[$prefix . $key] = $item->appendToEachKey($prefix);
       } elseif (\is_array($item)) {
-        $result[$prefix . $key] = self::create($item)->appendToEachKey($prefix)->toArray();
+        $result[$prefix . $key] = self::create($item, $this->iteratorClass, false)
+                                      ->appendToEachKey($prefix)
+                                      ->toArray();
       } else {
         $result[$prefix . $key] = $item;
       }
     }
 
-    return self::create($result);
+    return self::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -622,7 +636,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       if ($item instanceof self) {
         $result[$key] = $item->appendToEachValue($prefix);
       } elseif (\is_array($item)) {
-        $result[$key] = self::create($item)->appendToEachValue($prefix)->toArray();
+        $result[$key] = self::create($item, $this->iteratorClass, false)->appendToEachValue($prefix)->toArray();
       } elseif (\is_object($item)) {
         $result[$key] = $item;
       } else {
@@ -630,7 +644,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       }
     }
 
-    return self::create($result);
+    return self::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -661,15 +675,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * @param array $input        <p>
-   *                            An array containing keys to return.
-   *                            </p>
-   * @param mixed $search_value [optional] <p>
-   *                            If specified, then only keys containing these values are returned.
-   *                            </p>
-   * @param bool  $strict       [optional] <p>
-   *                            Determines if strict comparison (===) should be used during the search.
-   *                            </p>
+   * @param array|\Generator $input        <p>
+   *                                       An array containing keys to return.
+   *                                       </p>
+   * @param mixed            $search_value [optional] <p>
+   *                                       If specified, then only keys containing these values are returned.
+   *                                       </p>
+   * @param bool             $strict       [optional] <p>
+   *                                       Determines if strict comparison (===) should be used during the search.
+   *                                       </p>
    *
    * @return array an array of all the keys in input.
    */
@@ -686,13 +700,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     foreach ($input as $key => $value) {
 
       if (
-          $search_value === null
-          ||
-          (
-              \is_array($search_value) === true
-              &&
-              \in_array($key, $search_value, $strict)
-          )
+        $search_value === null
+        ||
+        (
+          \is_array($search_value) === true
+          &&
+          \in_array($key, $search_value, $strict)
+        )
       ) {
         $keys[] = $key;
       }
@@ -735,7 +749,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $closure($value, $key);
     }
 
-    return static::create($arrayy->toArray());
+    return static::create(
+      $arrayy->toArray(),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -780,9 +798,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     if (!empty($explodedPath)) {
       $this->callAtPath(
-          \implode($this->pathSeparator, $explodedPath),
-          $callable,
-          $currentOffset[$nextPath]
+        \implode($this->pathSeparator, $explodedPath),
+        $callable,
+        $currentOffset[$nextPath]
       );
     } else {
       $callable($currentOffset[$nextPath]);
@@ -799,7 +817,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function changeKeyCase(int $case = CASE_LOWER)
   {
-    return static::create(UTF8::array_change_key_case($this->array, $case));
+    return static::create(
+      UTF8::array_change_key_case($this->array, $case),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -828,9 +850,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function chunk($size, $preserveKeys = false)
   {
-    $result = \array_chunk($this->array, $size, $preserveKeys);
-
-    return static::create($result);
+    return static::create(
+      \array_chunk($this->array, $size, $preserveKeys),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -841,9 +865,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function clean()
   {
     return $this->filter(
-        function ($value) {
-          return (bool)$value;
-        }
+      function ($value) {
+        return (bool)$value;
+      }
     );
   }
 
@@ -889,26 +913,26 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if ($recursive === true) {
       return $this->in_array_recursive(
-          UTF8::strtoupper($value),
-          $this->walk(
-              function (&$val) {
-                $val = UTF8::strtoupper($val);
-              },
-              true
-          )->getArray(),
+        UTF8::strtoupper($value),
+        $this->walk(
+          function (&$val) {
+            $val = UTF8::strtoupper($val);
+          },
           true
+        )->getArray(),
+        true
       );
     }
 
     return \in_array(
-        UTF8::strtoupper($value),
-        $this->walk(
-            function (&$val) {
-              $val = UTF8::strtoupper($val);
-            },
-            false
-        )->getArray(),
-        true
+      UTF8::strtoupper($value),
+      $this->walk(
+        function (&$val) {
+          $val = UTF8::strtoupper($val);
+        },
+        false
+      )->getArray(),
+      true
     );
   }
 
@@ -936,24 +960,24 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if ($recursive === true) {
       return \count(
-                 \array_intersect($needles, $this->keys(true)->getArray()),
-                 COUNT_RECURSIVE
+               \array_intersect($needles, $this->keys(true)->getArray()),
+               COUNT_RECURSIVE
              )
              ===
              \count(
-                 $needles,
-                 COUNT_RECURSIVE
+               $needles,
+               COUNT_RECURSIVE
              );
     }
 
     return \count(
-               \array_intersect($needles, $this->keys()->getArray()),
-               COUNT_NORMAL
+             \array_intersect($needles, $this->keys()->getArray()),
+             COUNT_NORMAL
            )
            ===
            \count(
-               $needles,
-               COUNT_NORMAL
+             $needles,
+             COUNT_NORMAL
            );
   }
 
@@ -1030,13 +1054,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   /**
    * Creates an Arrayy object.
    *
-   * @param mixed $array
+   * @param mixed  $array
+   * @param string $iteratorClass
+   * @param bool   $checkForMissingPropertiesInConstructor
    *
    * @return static <p>(Immutable) Returns an new instance of the Arrayy object.</p>
    */
-  public static function create($array = []): self
+  public static function create($array = [], string $iteratorClass = ArrayyIterator::class, bool $checkForMissingPropertiesInConstructor = true): self
   {
-    return new static($array);
+    return new static($array, $iteratorClass, $checkForMissingPropertiesInConstructor);
   }
 
   /**
@@ -1064,9 +1090,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public static function createFromJson(string $json)
   {
-    $array = UTF8::json_decode($json, true);
-
-    return static::create($array);
+    return static::create(UTF8::json_decode($json, true));
   }
 
   /**
@@ -1150,13 +1174,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     // trim all string in the array
     \array_walk(
-        $array,
-        function (&$val) {
-          /** @noinspection ReferenceMismatchInspection */
-          if (\is_string($val)) {
-            $val = \trim($val);
-          }
+      $array,
+      function (&$val) {
+        /** @noinspection ReferenceMismatchInspection */
+        if (\is_string($val)) {
+          $val = \trim($val);
         }
+      }
     );
 
     return static::create($array);
@@ -1191,7 +1215,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if (!\is_callable($function)) {
       throw new \InvalidArgumentException(
-          'Passed function must be callable'
+        'Passed function must be callable'
       );
     }
 
@@ -1215,7 +1239,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     if (!\is_callable($function)) {
       throw new \InvalidArgumentException(
-          'Passed function must be callable'
+        'Passed function must be callable'
       );
     }
 
@@ -1235,7 +1259,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     $result = \array_diff($this->array, $array);
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -1252,9 +1276,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $result = [];
 
     if (
-        $helperVariableForRecursion !== null
-        &&
-        \is_array($helperVariableForRecursion)
+      $helperVariableForRecursion !== null
+      &&
+      \is_array($helperVariableForRecursion)
     ) {
       $arrayForTheLoop = $helperVariableForRecursion;
     } else {
@@ -1276,7 +1300,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       }
     }
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -1288,9 +1312,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function diffReverse(array $array = [])
   {
-    $result = \array_diff($array, $this->array);
-
-    return static::create($result);
+    return static::create(
+      \array_diff($array, $this->array),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -1301,10 +1327,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function divide()
   {
     return static::create(
-        [
-            $this->keys(),
-            $this->values(),
-        ]
+      [
+        $this->keys(),
+        $this->values(),
+      ],
+      $this->iteratorClass,
+      false
     );
   }
 
@@ -1324,7 +1352,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $array[$key] = $closure($value, $key);
     }
 
-    return static::create($array);
+    return static::create($array, $this->iteratorClass, false);
   }
 
   /**
@@ -1397,15 +1425,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /** @noinspection ReferenceMismatchInspection */
     if (
-        \is_string($array)
-        ||
-        ($isObject && \method_exists($array, '__toString'))
+      \is_string($array)
+      ||
+      ($isObject && \method_exists($array, '__toString'))
     ) {
       return [(string)$array];
     }
 
     throw new \InvalidArgumentException(
-        'Passed value should be a array'
+      'Passed value should be a array'
     );
   }
 
@@ -1432,7 +1460,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $count++;
     }
 
-    return static::create($tmpArray);
+    return static::create($tmpArray, $this->iteratorClass, false);
   }
 
   /**
@@ -1469,14 +1497,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       return $this->clean();
     }
 
-    $array = \array_filter($this->array, $closure, $flag);
-
-    return static::create($array);
+    return static::create(
+      \array_filter($this->array, $closure, $flag),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
-   * Filters an array of objects (or a numeric array of associative arrays) based on the value of a particular property
-   * within that.
+   * Filters an array of objects (or a numeric array of associative arrays) based on the value of a particular
+   * property within that.
    *
    * @param string          $property
    * @param string|string[] $value
@@ -1503,63 +1533,63 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     $ops = [
-        'eq'          => function ($item, $prop, $value) {
-          return $item[$prop] === $value;
-        },
-        'gt'          => function ($item, $prop, $value) {
-          return $item[$prop] > $value;
-        },
-        'ge'          => function ($item, $prop, $value) {
-          return $item[$prop] >= $value;
-        },
-        'gte'         => function ($item, $prop, $value) {
-          return $item[$prop] >= $value;
-        },
-        'lt'          => function ($item, $prop, $value) {
-          return $item[$prop] < $value;
-        },
-        'le'          => function ($item, $prop, $value) {
-          return $item[$prop] <= $value;
-        },
-        'lte'         => function ($item, $prop, $value) {
-          return $item[$prop] <= $value;
-        },
-        'ne'          => function ($item, $prop, $value) {
-          return $item[$prop] !== $value;
-        },
-        'contains'    => function ($item, $prop, $value) {
-          return \in_array($item[$prop], (array)$value, true);
-        },
-        'notContains' => function ($item, $prop, $value) {
-          return !\in_array($item[$prop], (array)$value, true);
-        },
-        'newer'       => function ($item, $prop, $value) {
-          return \strtotime($item[$prop]) > \strtotime($value);
-        },
-        'older'       => function ($item, $prop, $value) {
-          return \strtotime($item[$prop]) < \strtotime($value);
-        },
+      'eq'          => function ($item, $prop, $value) {
+        return $item[$prop] === $value;
+      },
+      'gt'          => function ($item, $prop, $value) {
+        return $item[$prop] > $value;
+      },
+      'ge'          => function ($item, $prop, $value) {
+        return $item[$prop] >= $value;
+      },
+      'gte'         => function ($item, $prop, $value) {
+        return $item[$prop] >= $value;
+      },
+      'lt'          => function ($item, $prop, $value) {
+        return $item[$prop] < $value;
+      },
+      'le'          => function ($item, $prop, $value) {
+        return $item[$prop] <= $value;
+      },
+      'lte'         => function ($item, $prop, $value) {
+        return $item[$prop] <= $value;
+      },
+      'ne'          => function ($item, $prop, $value) {
+        return $item[$prop] !== $value;
+      },
+      'contains'    => function ($item, $prop, $value) {
+        return \in_array($item[$prop], (array)$value, true);
+      },
+      'notContains' => function ($item, $prop, $value) {
+        return !\in_array($item[$prop], (array)$value, true);
+      },
+      'newer'       => function ($item, $prop, $value) {
+        return \strtotime($item[$prop]) > \strtotime($value);
+      },
+      'older'       => function ($item, $prop, $value) {
+        return \strtotime($item[$prop]) < \strtotime($value);
+      },
     ];
 
     $result = \array_values(
-        \array_filter(
-            (array)$this->array,
-            function ($item) use (
-                $property,
-                $value,
-                $ops,
-                $comparisonOp
-            ) {
-              $item = (array)$item;
-              $itemArrayy = new Arrayy($item);
-              $item[$property] = $itemArrayy->get($property, []);
+      \array_filter(
+        (array)$this->array,
+        function ($item) use (
+          $property,
+          $value,
+          $ops,
+          $comparisonOp
+        ) {
+          $item = (array)$item;
+          $itemArrayy = new Arrayy($item);
+          $item[$property] = $itemArrayy->get($property, []);
 
-              return $ops[$comparisonOp]($item, $property, $value);
-            }
-        )
+          return $ops[$comparisonOp]($item, $property, $value);
+        }
+      )
     );
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -1626,7 +1656,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $array = \array_splice($arrayTmp, 0, $number, true);
     }
 
-    return static::create($array);
+    return static::create($array, $this->iteratorClass, false);
   }
 
   /**
@@ -1655,9 +1685,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function flip()
   {
-    $result = \array_flip($this->array);
-
-    return static::create($result);
+    return static::create(
+      \array_flip($this->array),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -1679,7 +1711,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     if ($key === null) {
-      return static::create($usedArray);
+      return static::create($usedArray, $this->iteratorClass, false);
     }
 
     // php cast "bool"-index into "int"-index
@@ -1689,7 +1721,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     if (\array_key_exists($key, $usedArray) === true) {
       if (\is_array($usedArray[$key])) {
-        return static::create($usedArray[$key]);
+        return static::create($usedArray[$key], $this->iteratorClass, false);
       }
 
       return $usedArray[$key];
@@ -1705,7 +1737,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     if (\is_array($usedArray)) {
-      return static::create($usedArray);
+      return static::create($usedArray, $this->iteratorClass, false);
     }
 
     return $usedArray;
@@ -1745,9 +1777,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function getColumn($columnKey = null, $indexKey = null)
   {
-    $result = \array_column($this->array, $columnKey, $indexKey);
-
-    return static::create($result);
+    return static::create(
+      \array_column($this->array, $columnKey, $indexKey),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -1770,9 +1804,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     if (
-        $direction !== SORT_DESC
-        &&
-        $direction !== SORT_ASC
+      $direction !== SORT_DESC
+      &&
+      $direction !== SORT_ASC
     ) {
       $direction = SORT_ASC;
     }
@@ -1932,7 +1966,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     }
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -1996,12 +2030,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $pieces_count_not_zero = $pieces_count > 0;
 
       return \implode(
-          $glue,
-          \array_map(
-              [$this, 'implode_recursive'],
-              \array_fill(0, ($pieces_count_not_zero ? $pieces_count : 1), $glue),
-              ($useKeys === true && $pieces_count_not_zero ? $this->array_keys_recursive($pieces) : $pieces)
-          )
+        $glue,
+        \array_map(
+          [$this, 'implode_recursive'],
+          \array_fill(0, ($pieces_count_not_zero ? $pieces_count : 1), $glue),
+          ($useKeys === true && $pieces_count_not_zero ? $this->array_keys_recursive($pieces) : $pieces)
+        )
       );
     }
 
@@ -2009,22 +2043,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * @param mixed $needle   <p>
-   *                        The searched value.
-   *                        </p>
-   *                        <p>
-   *                        If needle is a string, the comparison is done
-   *                        in a case-sensitive manner.
-   *                        </p>
-   * @param array $haystack <p>
-   *                        The array.
-   *                        </p>
-   * @param bool  $strict   [optional] <p>
-   *                        If the third parameter strict is set to true
-   *                        then the in_array function will also check the
-   *                        types of the
-   *                        needle in the haystack.
-   *                        </p>
+   * @param mixed            $needle   <p>
+   *                                   The searched value.
+   *                                   </p>
+   *                                   <p>
+   *                                   If needle is a string, the comparison is done
+   *                                   in a case-sensitive manner.
+   *                                   </p>
+   * @param array|\Generator $haystack <p>
+   *                                   The array.
+   *                                   </p>
+   * @param bool             $strict   [optional] <p>
+   *                                   If the third parameter strict is set to true
+   *                                   then the in_array function will also check the
+   *                                   types of the
+   *                                   needle in the haystack.
+   *                                   </p>
    *
    * @return bool true if needle is found in the array, false otherwise.
    */
@@ -2070,7 +2104,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       }
     }
 
-    return static::create($results);
+    return static::create($results, $this->iteratorClass, false);
   }
 
   /**
@@ -2114,10 +2148,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $value = &$valueTmp;
       }
 
-    } elseif (
-        \class_exists('JsonSerializable')
-        &&
-        $value instanceof \JsonSerializable
+    }
+
+    /** @noinspection PhpComposerExtensionStubsInspection */
+    /** @noinspection NotOptimalIfConditionsInspection */
+    if (
+      \class_exists('JsonSerializable')
+      &&
+      $value instanceof \JsonSerializable
     ) {
 
       /** @noinspection PhpUnusedLocalVariableInspection */
@@ -2202,7 +2240,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function intersection(array $search)
   {
-    return static::create(\array_values(\array_intersect($this->array, $search)));
+    return static::create(
+      \array_values(\array_intersect($this->array, $search)),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -2230,8 +2272,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     // If one argument given for each iteration, create an array for it.
     if (!\is_array($arguments)) {
       $arguments = StaticArrayy::repeat(
-          $arguments,
-          \count($this->array, COUNT_NORMAL)
+        $arguments,
+        \count($this->array, COUNT_NORMAL)
       )->getArray();
     }
 
@@ -2242,7 +2284,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $array = \array_map($callable, $this->array);
     }
 
-    return static::create($array);
+    return static::create($array, $this->iteratorClass, false);
   }
 
   /**
@@ -2297,9 +2339,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function isMultiArray(): bool
   {
     return !(
-        \count($this->array, COUNT_NORMAL)
-        ===
-        \count($this->array, COUNT_RECURSIVE)
+      \count($this->array, COUNT_NORMAL)
+      ===
+      \count($this->array, COUNT_RECURSIVE)
     );
   }
 
@@ -2383,7 +2425,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $array = $this->array_keys_recursive($this->array, $search_value, $strict);
       }
 
-      return static::create($array);
+      return static::create($array, $this->iteratorClass, false);
     }
 
     // non recursive
@@ -2394,7 +2436,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $array = \array_keys($this->array, $search_value, $strict);
     }
 
-    return static::create($array);
+    return static::create($array, $this->iteratorClass, false);
   }
 
   /**
@@ -2435,7 +2477,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function lastsImmutable(int $number = null)
   {
     if ($this->isEmpty()) {
-      return static::create();
+      return static::create([], $this->iteratorClass, false);
     }
 
     if ($number === null) {
@@ -2447,7 +2489,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $poppedValue = (array)$poppedValue;
       }
 
-      $arrayy = static::create($poppedValue);
+      $arrayy = static::create($poppedValue, $this->iteratorClass, false);
     } else {
       $number = (int)$number;
       $arrayy = $this->rest(-$number);
@@ -2478,7 +2520,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $poppedValue = (array)$poppedValue;
       }
 
-      $this->array = static::create($poppedValue)->array;
+      $this->array = static::create($poppedValue, $this->iteratorClass, false)->array;
     } else {
       $number = (int)$number;
       $this->array = $this->rest(-$number)->array;
@@ -2513,9 +2555,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function map($callable)
   {
-    $result = \array_map($callable, $this->array);
-
-    return static::create($result);
+    return static::create(
+      \array_map($callable, $this->array),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -2598,7 +2642,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $result = \array_replace($this->array, $array);
     }
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -2620,7 +2664,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $result = \array_merge($this->array, $array);
     }
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -2641,7 +2685,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $result = \array_replace($array, $this->array);
     }
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -2663,7 +2707,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $result = \array_merge($array, $this->array);
     }
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -2723,7 +2767,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $output = [];
     }
 
-    return static::create($output);
+    return static::create($output, $this->iteratorClass, false);
   }
 
   /**
@@ -2757,7 +2801,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     $array = $this->array;
 
-    return static::create(\array_intersect_key($array, \array_flip($keys)));
+    return static::create(
+      \array_intersect_key($array, \array_flip($keys)),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -2770,9 +2818,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function pad(int $size, $value)
   {
-    $result = \array_pad($this->array, $size, $value);
-
-    return static::create($result);
+    return static::create(
+      \array_pad($this->array, $size, $value),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -2821,14 +2871,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       if ($item instanceof self) {
         $result[$key] = $item->prependToEachKey($suffix);
       } elseif (\is_array($item)) {
-        $result[$key] = self::create($item)->prependToEachKey($suffix)->toArray();
+        $result[$key] = self::create($item, $this->iteratorClass, false)->prependToEachKey($suffix)->toArray();
       } else {
         $result[$key . $suffix] = $item;
       }
 
     }
 
-    return self::create($result);
+    return self::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -2847,7 +2897,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       if ($item instanceof self) {
         $result[$key] = $item->prependToEachValue($suffix);
       } elseif (\is_array($item)) {
-        $result[$key] = self::create($item)->prependToEachValue($suffix)->toArray();
+        $result[$key] = self::create($item, $this->iteratorClass, false)
+                            ->prependToEachValue($suffix)
+                            ->toArray();
       } elseif (\is_object($item)) {
         $result[$key] = $item;
       } else {
@@ -2855,7 +2907,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       }
     }
 
-    return self::create($result);
+    return self::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -2883,21 +2935,21 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function randomImmutable(int $number = null)
   {
     if (\count($this->array, COUNT_NORMAL) === 0) {
-      return static::create();
+      return static::create([], $this->iteratorClass, false);
     }
 
     if ($number === null) {
       /** @noinspection NonSecureArrayRandUsageInspection */
       $arrayRandValue = [$this->array[\array_rand($this->array)]];
 
-      return static::create($arrayRandValue);
+      return static::create($arrayRandValue, $this->iteratorClass, false);
     }
 
     $arrayTmp = $this->array;
     /** @noinspection NonSecureShuffleUsageInspection */
     \shuffle($arrayTmp);
 
-    return static::create($arrayTmp)->firstsImmutable($number);
+    return static::create($arrayTmp, $this->iteratorClass, false)->firstsImmutable($number);
   }
 
   /**
@@ -2933,17 +2985,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     if ($number === 0 || $number > $count) {
       throw new \RangeException(
-          \sprintf(
-              'Number of requested keys (%s) must be equal or lower than number of elements in this array (%s)',
-              $number,
-              $count
-          )
+        \sprintf(
+          'Number of requested keys (%s) must be equal or lower than number of elements in this array (%s)',
+          $number,
+          $count
+        )
       );
     }
 
     $result = (array)\array_rand($this->array, $number);
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -2956,7 +3008,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function randomMutable(int $number = null)
   {
     if (\count($this->array, COUNT_NORMAL) === 0) {
-      return static::create();
+      return static::create([], $this->iteratorClass, false);
     }
 
     if ($number === null) {
@@ -3045,7 +3097,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $this->array = (array)$result;
     }
 
-    return static::create($this->array);
+    return static::create($this->array, $this->iteratorClass, false);
   }
 
   /**
@@ -3077,7 +3129,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       }
     }
 
-    return static::create($filtered);
+    return static::create($filtered, $this->iteratorClass, false);
   }
 
   /**
@@ -3095,12 +3147,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->internalRemove($k);
       }
 
-      return static::create($this->array);
+      return static::create($this->array, $this->iteratorClass, false);
     }
 
     $this->internalRemove($key);
 
-    return static::create($this->array);
+    return static::create($this->array, $this->iteratorClass, false);
   }
 
   /**
@@ -3113,7 +3165,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $tmpArray = $this->array;
     \array_shift($tmpArray);
 
-    return static::create($tmpArray);
+    return static::create($tmpArray, $this->iteratorClass, false);
   }
 
   /**
@@ -3126,7 +3178,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $tmpArray = $this->array;
     \array_pop($tmpArray);
 
-    return static::create($tmpArray);
+    return static::create($tmpArray, $this->iteratorClass, false);
   }
 
   /**
@@ -3152,7 +3204,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $this->array = \array_values($this->array);
     }
 
-    return static::create($this->array);
+    return static::create($this->array, $this->iteratorClass, false);
   }
 
   /**
@@ -3168,7 +3220,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       return new static();
     }
 
-    return static::create(\array_fill(0, (int)$times, $this->array));
+    return static::create(
+      \array_fill(0, (int)$times, $this->array),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -3196,9 +3252,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function replaceAllKeys(array $keys)
   {
-    $result = \array_combine($keys, $this->array);
-
-    return static::create($result);
+    return static::create(
+      \array_combine($keys, $this->array),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -3210,9 +3268,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function replaceAllValues(array $array)
   {
-    $result = \array_combine($this->array, $array);
-
-    return static::create($result);
+    return static::create(
+      \array_combine($this->array, $array),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -3227,7 +3287,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $values = \array_values($this->array);
     $result = \array_combine($keys, $values);
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -3247,7 +3307,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $array[$key] = $replacement;
     }
 
-    return static::create($array);
+    return static::create($array, $this->iteratorClass, false);
   }
 
   /**
@@ -3261,9 +3321,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function replaceValues($search, $replacement = '')
   {
     $array = $this->each(
-        function ($value) use ($search, $replacement) {
-          return UTF8::str_replace($search, $replacement, $value);
-        }
+      function ($value) use ($search, $replacement) {
+        return UTF8::str_replace($search, $replacement, $value);
+      }
     );
 
     return $array;
@@ -3280,7 +3340,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     $tmpArray = $this->array;
 
-    return static::create(\array_splice($tmpArray, $from));
+    return static::create(
+      \array_splice($tmpArray, $from),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -3338,7 +3402,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $return = [];
 
     if ($this->isEmpty()) {
-      return static::create();
+      return static::create([], $this->iteratorClass, false);
     }
 
     // php cast "bool"-index into "int"-index
@@ -3351,7 +3415,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
 
-    return static::create($return);
+    return static::create($return, $this->iteratorClass, false);
   }
 
   /**
@@ -3360,13 +3424,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    * @param string $key   <p>The key to set.</p>
    * @param mixed  $value <p>Its value.</p>
    *
-   * @return static <p>(Immutable)</p>
+   * @return static <p>(Mutable)</p>
    */
   public function set($key, $value)
   {
     $this->internalSet($key, $value);
 
-    return static::create($this->array);
+    return $this;
   }
 
   /**
@@ -3443,7 +3507,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       }
     }
 
-    return static::create($array);
+    return static::create($array, $this->iteratorClass, false);
   }
 
   /**
@@ -3501,9 +3565,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function slice(int $offset, int $length = null, bool $preserveKeys = false)
   {
-    $result = \array_slice($this->array, $offset, $length, $preserveKeys);
-
-    return static::create($result);
+    return static::create(
+      \array_slice($this->array, $offset, $length, $preserveKeys),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**
@@ -3589,13 +3655,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     // Transform all values into their results.
     if ($sorter) {
-      $arrayy = static::create($array);
+      $arrayy = static::create($array, $this->iteratorClass, false);
 
       $that = $this;
       $results = $arrayy->each(
-          function ($value) use ($sorter, $that) {
-            return \is_callable($sorter) ? $sorter($value) : $that->get($sorter, null, $value);
-          }
+        function ($value) use ($sorter, $that) {
+          return \is_callable($sorter) ? $sorter($value) : $that->get($sorter, null, $value);
+        }
       );
 
       $results = $results->getArray();
@@ -3606,7 +3672,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     // Sort by the results and replace by original values
     \array_multisort($results, $direction, $strategy, $array);
 
-    return static::create($array);
+    return static::create($array, $this->iteratorClass, false);
   }
 
   /**
@@ -3695,7 +3761,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       $result = \array_chunk($this->array, $splitSize, $keepKeys);
     }
 
-    return static::create($result);
+    return static::create($result, $this->iteratorClass, false);
   }
 
   /**
@@ -3706,13 +3772,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function stripEmpty()
   {
     return $this->filter(
-        function ($item) {
-          if ($item === null) {
-            return false;
-          }
-
-          return (bool)\trim((string)$item);
+      function ($item) {
+        if ($item === null) {
+          return false;
         }
+
+        return (bool)\trim((string)$item);
+      }
     );
   }
 
@@ -3730,7 +3796,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     list($array[$swapA], $array[$swapB]) = [$array[$swapB], $array[$swapA]];
 
-    return static::create($array);
+    return static::create($array, $this->iteratorClass, false);
   }
 
   /**
@@ -3778,15 +3844,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     // INFO: \array_unique() can't handle e.g. "stdClass"-values in an array
 
     $this->array = \array_reduce(
-        $this->array,
-        function ($resultArray, $value) {
-          if (!\in_array($value, $resultArray, true)) {
-            $resultArray[] = $value;
-          }
+      $this->array,
+      function ($resultArray, $value) {
+        if (!\in_array($value, $resultArray, true)) {
+          $resultArray[] = $value;
+        }
 
-          return $resultArray;
-        },
-        []
+        return $resultArray;
+      },
+      []
     );
 
     if ($this->array === null) {
@@ -3811,15 +3877,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     $array = $this->array;
 
     $this->array = \array_reduce(
-        \array_keys($array),
-        function ($resultArray, $key) use ($array) {
-          if (!\in_array($array[$key], $resultArray, true)) {
-            $resultArray[$key] = $array[$key];
-          }
+      \array_keys($array),
+      function ($resultArray, $key) use ($array) {
+        if (!\in_array($array[$key], $resultArray, true)) {
+          $resultArray[$key] = $array[$key];
+        }
 
-          return $resultArray;
-        },
-        []
+        return $resultArray;
+      },
+      []
     );
 
     if ($this->array === null) {
@@ -3865,7 +3931,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function values()
   {
-    return static::create(\array_values((array)$this->array));
+    return static::create(
+      \array_values((array)$this->array),
+      $this->iteratorClass,
+      false
+    );
   }
 
   /**

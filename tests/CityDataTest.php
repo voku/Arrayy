@@ -14,10 +14,11 @@ class CityDataTest extends \PHPUnit\Framework\TestCase
     $modelMeta = CityData::meta();
 
     $model = new CityData(
-        [
-            $modelMeta->name => 'Düsseldorf',
-            $modelMeta->plz  => null,
-        ]
+      [
+        $modelMeta->name  => 'Düsseldorf',
+        $modelMeta->plz   => null,
+        $modelMeta->infos => ['foo', 'bar', 'lall'],
+      ]
     );
 
     static::assertInstanceOf(Arrayy::class, $model);
@@ -34,10 +35,11 @@ class CityDataTest extends \PHPUnit\Framework\TestCase
     $modelMeta = CityData::meta();
 
     $model = new CityData(
-        [
-            $modelMeta->name => 'Düsseldorf',
-            $modelMeta->plz  => null,
-        ]
+      [
+        $modelMeta->name  => 'Düsseldorf',
+        $modelMeta->plz   => null,
+        $modelMeta->infos => ['foo'],
+      ]
     );
 
     static::assertInstanceOf(Arrayy::class, $model);
@@ -48,16 +50,35 @@ class CityDataTest extends \PHPUnit\Framework\TestCase
 
   /**
    * @expectedException InvalidArgumentException
-   * @expectedExceptionMessage Property mismatch
+   * @expectedExceptionMessage Invalid type: expected infos to be of type {array}, instead got value `foo` with type {string}.
    */
   public function testParameterMatchFail()
   {
     $modelMeta = CityData::meta();
 
     $model = new CityData(
-        [
-            $modelMeta->name => 'Düsseldorf',
-        ]
+      [
+        $modelMeta->name  => 'Düsseldorf',
+        $modelMeta->plz   => null,
+        $modelMeta->infos => 'foo',
+      ]
+    );
+
+    static::assertInstanceOf(Arrayy::class, $model);
+  }
+
+  /**
+   * @expectedException InvalidArgumentException
+   * @expectedExceptionMessage Property mismatch
+   */
+  public function testParameterMatchFailWithArray()
+  {
+    $modelMeta = CityData::meta();
+
+    $model = new CityData(
+      [
+        $modelMeta->name => 'Düsseldorf',
+      ]
     );
 
     static::assertInstanceOf(Arrayy::class, $model);
@@ -66,7 +87,7 @@ class CityDataTest extends \PHPUnit\Framework\TestCase
   public function testParameterMatchEmpty()
   {
     $model = new CityData(
-        []
+      []
     );
 
     static::assertInstanceOf(Arrayy::class, $model);
