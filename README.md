@@ -124,6 +124,14 @@ in your composer.json file:
 }
 ```
 
+If your project do not need some of the Symfony polyfill please use the `replace` section of your `composer.json`. 
+This removes any overhead from these polyfills as they are no longer part of your project. e.g.:
+```json
+"replace": {
+  "symfony/polyfill-mbstring": "1.99"
+}
+```
+
 Then, after running `composer update` or `php composer.phar update`, you can
 load the class using Composer's autoloading:
 

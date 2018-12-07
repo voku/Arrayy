@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Arrayy;
 
-use voku\helper\UTF8;
-
 /** @noinspection ClassReImplementsParentInterfaceInspection */
-
 /**
  * Methods to manage arrays.
  *
@@ -817,8 +814,30 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function changeKeyCase(int $case = CASE_LOWER)
   {
+    if (
+        $case !== CASE_LOWER
+        &&
+        $case !== CASE_UPPER
+    ) {
+      $case = CASE_LOWER;
+    }
+
+    $return = [];
+    foreach ($this->array as $key => $value) {
+
+      if ($case === CASE_LOWER) {
+        /** @noinspection PhpComposerExtensionStubsInspection */
+        $key = \mb_strtolower((string)$key);
+      } else {
+        /** @noinspection PhpComposerExtensionStubsInspection */
+        $key = \mb_strtoupper((string)$key);
+      }
+
+      $return[$key] = $value;
+    }
+
     return static::create(
-      UTF8::array_change_key_case($this->array, $case),
+        $return,
       $this->iteratorClass,
       false
     );
@@ -912,11 +931,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   public function containsCaseInsensitive($value, $recursive = false): bool
   {
     if ($recursive === true) {
+      /** @noinspection PhpComposerExtensionStubsInspection */
       return $this->in_array_recursive(
-        UTF8::strtoupper($value),
+        \mb_strtoupper((string)$value),
         $this->walk(
           function (&$val) {
-            $val = UTF8::strtoupper($val);
+            /** @noinspection PhpComposerExtensionStubsInspection */
+            $val = \mb_strtoupper((string)$val);
           },
           true
         )->getArray(),
@@ -924,11 +945,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
       );
     }
 
+    /** @noinspection PhpComposerExtensionStubsInspection */
     return \in_array(
-      UTF8::strtoupper($value),
+      \mb_strtoupper((string)$value),
       $this->walk(
         function (&$val) {
-          $val = UTF8::strtoupper($val);
+          /** @noinspection PhpComposerExtensionStubsInspection */
+          $val = \mb_strtoupper((string)$val);
         },
         false
       )->getArray(),
@@ -1090,7 +1113,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public static function createFromJson(string $json)
   {
-    return static::create(UTF8::json_decode($json, true));
+    /** @noinspection PhpComposerExtensionStubsInspection */
+    return static::create(json_decode($json, true));
   }
 
   /**
@@ -3322,7 +3346,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
   {
     $array = $this->each(
       function ($value) use ($search, $replacement) {
-        return UTF8::str_replace($search, $replacement, $value);
+        return \str_replace($search, $replacement, $value);
       }
     );
 
@@ -3819,7 +3843,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
    */
   public function toJson(int $options = 0, int $depth = 512): string
   {
-    return UTF8::json_encode($this->array, $options, $depth);
+    /** @noinspection PhpComposerExtensionStubsInspection */
+    return json_encode($this->array, $options, $depth);
   }
 
   /**
