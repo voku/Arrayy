@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.0 (2018-12-07)
+
+- fix "checkForMissingPropertiesInConstructor" with arrays
+
+
 ### 5.3.2 (2018-11-10)
 
 - use generators for for-each loops
