@@ -1,21 +1,21 @@
 [![Build Status](https://api.travis-ci.org/voku/Arrayy.svg?branch=master)](https://travis-ci.org/voku/Arrayy)
-[![Coverage Status](https://coveralls.io/repos/voku/Arrayy/badge.svg?branch=master&service=github)](https://coveralls.io/github/voku/Arrayy?branch=master)
 [![codecov.io](https://codecov.io/github/voku/Arrayy/coverage.svg?branch=master)](https://codecov.io/github/voku/Arrayy?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/Arrayy/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/Arrayy/?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/b8c4c88a063545d787e2a4f1f5dfdf23)](https://www.codacy.com/app/voku/Arrayy)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/1c9c7bda-18ab-46da-a9f4-f9a4db1dc45c/mini.png)](https://insight.sensiolabs.com/projects/1c9c7bda-18ab-46da-a9f4-f9a4db1dc45c)
 [![Latest Stable Version](https://poser.pugx.org/voku/arrayy/v/stable)](https://packagist.org/packages/voku/arrayy) 
 [![Total Downloads](https://poser.pugx.org/voku/arrayy/downloads)](https://packagist.org/packages/voku/arrayy) 
-[![Latest Unstable Version](https://poser.pugx.org/voku/arrayy/v/unstable)](https://packagist.org/packages/voku/arrayy)
 [![License](https://poser.pugx.org/voku/arrayy/license)](https://packagist.org/packages/voku/arrayy)
 
-[documentation via gitbooks.io](https://voku.gitbooks.io/arrayy/content/)
+:card_file_box: Arrayy
+=============
 
 A PHP array manipulation library. Compatible with PHP 7+
+
 
 ``` php
 Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 ```
+[documentation via gitbooks.io](https://voku.gitbooks.io/arrayy/content/)
+
 
 * [Instance methods](#instance-methods)
     * ["set an array value"](#set-an-array-value)
