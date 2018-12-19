@@ -2,6 +2,14 @@ language: php
 
 sudo: false
 
+os:
+  - linux
+
+env:
+  global:
+    - PHP_COMPOSER_SETUP=basic
+    - PHP_CS_FIXER_IGNORE=false
+
 matrix:
   fast_finish: true
   allow_failures:
@@ -11,6 +19,12 @@ matrix:
     - php: 7.1
     - php: 7.2
     - php: 7.3
+      env:
+        - PHP_CS_FIXER_IGNORE=true
+    - php: 7.3
+      env:
+        - PHP_COMPOSER_SETUP=lowest
+        - PHP_CS_FIXER_IGNORE=true
     - php: nightly
 
 before_script:
@@ -19,6 +33,9 @@ before_script:
   - travis_retry composer self-update
   - travis_retry composer require satooshi/php-coveralls:1.0.0
   - travis_retry composer install --no-interaction --prefer-source
+  - if [[ $PHP_CS_FIXER_IGNORE = false ]]; then travis_retry composer require friendsofphp/php-cs-fixer; fi
+  - if [[ $PHP_COMPOSER_SETUP = 'basic' ]]; then travis_retry composer install --prefer-dist --no-interaction; fi
+  - if [[ $PHP_COMPOSER_SETUP = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
   - composer dump-autoload -o
 
 script:

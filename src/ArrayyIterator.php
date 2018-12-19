@@ -9,44 +9,44 @@ namespace Arrayy;
  */
 class ArrayyIterator extends \ArrayIterator
 {
-  /**
-   * ArrayyIterator constructor.
-   *
-   * @param array $array
-   * @param int   $flags
-   */
-  public function __construct(array $array = [], $flags = 0)
-  {
-    parent::__construct($array, $flags);
-  }
-
-  /**
-   * @return Arrayy|mixed will return a "Arrayy"-object instead of an array
-   */
-  public function current()
-  {
-    $value = parent::current();
-
-    if (\is_array($value)) {
-      $value = Arrayy::create($value);
+    /**
+     * ArrayyIterator constructor.
+     *
+     * @param array $array
+     * @param int   $flags
+     */
+    public function __construct(array $array = [], $flags = 0)
+    {
+        parent::__construct($array, $flags);
     }
 
-    return $value;
-  }
+    /**
+     * @return Arrayy|mixed will return a "Arrayy"-object instead of an array
+     */
+    public function current()
+    {
+        $value = parent::current();
 
-  /**
-   * @param string $offset
-   *
-   * @return Arrayy|mixed will return a "Arrayy"-object instead of an array
-   */
-  public function offsetGet($offset)
-  {
-    $value = parent::offsetGet($offset);
+        if (\is_array($value)) {
+            $value = Arrayy::create($value);
+        }
 
-    if (\is_array($value)) {
-      $value = Arrayy::create($value);
+        return $value;
     }
 
-    return $value;
-  }
+    /**
+     * @param string $offset
+     *
+     * @return Arrayy|mixed will return a "Arrayy"-object instead of an array
+     */
+    public function offsetGet($offset)
+    {
+        $value = parent::offsetGet($offset);
+
+        if (\is_array($value)) {
+            $value = Arrayy::create($value);
+        }
+
+        return $value;
+    }
 }

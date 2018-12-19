@@ -5,17 +5,16 @@
  */
 class ModelA extends \Arrayy\Arrayy
 {
+    /**
+     * ModelA constructor.
+     *
+     * @param array  $array
+     * @param string $iteratorClass
+     */
+    public function __construct($array = [], $iteratorClass = '\\Arrayy\\ArrayyIterator')
+    {
+        parent::__construct($array, $iteratorClass);
 
-  /**
-   * ModelA constructor.
-   *
-   * @param array  $array
-   * @param string $iteratorClass
-   */
-  public function __construct($array = [], $iteratorClass = '\\Arrayy\\ArrayyIterator')
-  {
-    parent::__construct($array, $iteratorClass);
-
-    $this->changeSeparator('^');
-  }
+        $this->changeSeparator('^');
+    }
 }

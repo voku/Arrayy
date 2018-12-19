@@ -8,12 +8,12 @@ require_once __DIR__ . '/CityData.php';
  * @property int           $id
  * @property int|string    $firstName
  * @property string        $lastName
- * @property null|CityData $city
+ * @property CityData|null $city
  */
 class UserData extends \Arrayy\Arrayy
 {
-  /**
-   * @var bool
-   */
-  protected $checkPropertyTypes = true;
+    /**
+     * @var bool
+     */
+    protected $checkPropertyTypes = true;
 }

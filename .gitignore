@@ -8,6 +8,9 @@ build/
 # php (infection)
 infection-log.txt
 
+# php (phpcs fixer)
+.php_cs.cache
+
 # gitbook
 _book/
 

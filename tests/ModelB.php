@@ -5,5 +5,4 @@
  */
 class ModelB extends \Arrayy\Arrayy
 {
-
 }
