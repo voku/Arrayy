@@ -24,7 +24,7 @@ class ArrayyMeta
         $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
         $docblock = $factory->create($reflector->getDocComment());
         foreach ($docblock->getTagsByName('property') as $tag) {
-            /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Property */
+            /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
             $PropertyName = $tag->getVariableName();
             $this->{$PropertyName} = $PropertyName;
         }

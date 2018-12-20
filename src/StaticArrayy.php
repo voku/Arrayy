@@ -17,7 +17,7 @@ class StaticArrayy
      * should be two more than the equivalent Arrayy method. Necessary as
      * static methods place the optional $encoding as the last parameter.
      *
-     * @var string[]
+     * @var int[]|string[]
      */
     protected static $methodArgs;
 
@@ -29,7 +29,7 @@ class StaticArrayy
      *
      * @return Arrayy
      */
-    public static function __callStatic($name, $arguments)
+    public static function __callStatic(string $name, $arguments)
     {
         if (!static::$methodArgs) {
             $arrayyClass = new \ReflectionClass(Arrayy::class);
@@ -72,16 +72,8 @@ class StaticArrayy
      *
      * @return Arrayy
      */
-    public static function range($base, $stop = null, $step = 1): Arrayy
+    public static function range(int $base, int $stop = null, int $step = 1): Arrayy
     {
-        if (!\is_int($base) || !\is_int($step)) {
-            throw new \InvalidArgumentException('Passed value must be a int');
-        }
-
-        if (!\is_int($stop) && $stop !== null) {
-            throw new \InvalidArgumentException('Passed value must be a int or nul');
-        }
-
         if ($stop !== null) {
             $start = $base;
         } else {
@@ -100,10 +92,8 @@ class StaticArrayy
      *
      * @return Arrayy
      */
-    public static function repeat($data, $times): Arrayy
+    public static function repeat($data, int $times): Arrayy
     {
-        $times = (int) $times;
-
         if ($times === 0 || empty($data)) {
             return Arrayy::create();
         }

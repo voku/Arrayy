@@ -28,11 +28,12 @@ matrix:
     - php: nightly
 
 before_script:
+  - stty cols 120
   - php --version
   - wget https://scrutinizer-ci.com/ocular.phar
   - travis_retry composer self-update
-  - travis_retry composer require satooshi/php-coveralls:1.0.0
-  - travis_retry composer install --no-interaction --prefer-source
+  - travis_retry composer require satooshi/php-coveralls
+  - travis_retry composer require phpstan/phpstan-shim
   - if [[ $PHP_CS_FIXER_IGNORE = false ]]; then travis_retry composer require friendsofphp/php-cs-fixer; fi
   - if [[ $PHP_COMPOSER_SETUP = 'basic' ]]; then travis_retry composer install --prefer-dist --no-interaction; fi
   - if [[ $PHP_COMPOSER_SETUP = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
@@ -41,6 +42,7 @@ before_script:
 script:
   - mkdir -p build/logs
   - php vendor/bin/phpunit -c phpunit.xml.dist --debug
+  - php vendor/bin/phpstan analyse --level=5 --configuration=phpstan.neon src
 
 after_script:
   - php vendor/bin/coveralls -v

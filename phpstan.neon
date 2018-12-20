@@ -1,0 +1,12 @@
+parameters:
+    excludes_analyse:
+        - %rootDir%/vendor/*
+        - %rootDir%/tests/*
+    autoload_files:
+        - %rootDir%/vendor/autoload.php
+    ignoreErrors:
+        - '#Casting to .* something .* already#'
+        - '/has invalid typehint type callable/'
+        - '/unknown class callable/'
+        - '/undefined method phpDocumentor\\Reflection\\DocBlock\\Tag::getVariableName/'
+        - '/phpDocumentorReflectionProperty of static method/'

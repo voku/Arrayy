@@ -8,11 +8,11 @@ if (!\function_exists('Arrayy\create')) {
     /**
      * Creates a Arrayy object
      *
-     * @param $array
+     * @param mixed $array
      *
      * @return Arrayy
      */
-    function create(array $array)
+    function create($array)
     {
         return new Arrayy($array);
     }

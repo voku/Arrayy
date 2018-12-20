@@ -64,8 +64,8 @@ class Property extends \ReflectionProperty
         }
 
         return $value instanceof $type
-           ||
-           \gettype($value) === (self::$typeMapping[$type] ?? $type);
+               ||
+               \gettype($value) === (self::$typeMapping[$type] ?? $type);
     }
 
     public function checkType($value)
