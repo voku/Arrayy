@@ -1,9 +1,15 @@
 # Changelog
 
+### 5.6.0 (2018-12-20)
+- use phpstan + fixes (level 5)
+- use phpcs fixer
+
+
 ### 5.5.0 (2018-12-07)
 - replace "UTF8" with "mbstring"
   -> Warning: is you need the "UTF8" class, please add it separately in you composer.json 
   -> "voku/portable-utf8": "~5.0"
+
 
 ### 5.4.0 (2018-12-07)
 
