@@ -11,4 +11,5 @@
 /.travis.yml export-ignore
 /book.json export-ignore
 /package.json export-ignore
+/phpstan.neon export-ignore
 /phpunit.xml.dist export-ignore
