@@ -101,7 +101,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         \array_walk(
             $array,
-            function(&$value, &$key) {
+            function (&$value, &$key) {
                 $this->internalSet($key, $value);
             }
         );
