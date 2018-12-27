@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arrayy;
 
 /** @noinspection ClassReImplementsParentInterfaceInspection */
+/** @noinspection PhpComposerExtensionStubsInspection */
 
 /**
  * Methods to manage arrays.
@@ -12,7 +13,7 @@ namespace Arrayy;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \Countable
+class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \JsonSerializable, \Countable
 {
     /**
      * @var array
@@ -3637,7 +3638,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 try {
                     $r = \random_int(0, $i);
                 } catch (\Exception $e) {
-                    $r = \mt_rand();
+                    /** @noinspection RandomApiMigrationInspection */
+                    $r = \mt_rand(0, $i);
                 }
                 if ($r !== $i) {
                     $temp = $array[$keys[$r]];
