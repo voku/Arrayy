@@ -74,7 +74,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $array = $this->fallbackForArray($array);
 
-        parent::__construct($array, 0, $iteratorClass);
+        // used only for serialize + unserialize, all other methods are overwritten
+        parent::__construct([], 0, $iteratorClass);
 
         if (
             $this->checkPropertyTypes === true
@@ -98,9 +99,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             throw new \InvalidArgumentException('Property mismatch - input: ' . \print_r(\array_keys($array), true) . ' | expected: ' . \print_r(\array_keys($this->properties), true));
         }
 
-        foreach ($array as $key => $value) {
-            $this->internalSet($key, $value);
-        }
+        \array_walk(
+            $array,
+            function(&$value, &$key) {
+                $this->internalSet($key, $value);
+            }
+        );
 
         $this->setIteratorClass($iteratorClass);
     }
@@ -568,12 +572,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Unserialize an string and return this object.
+     * Unserialize an string and return the instance of the "Arrayy"-class.
      *
      * @param string $string
      *
      * @return static
-     *                <p>(Mutable)</p>
      */
     public function unserialize($string)
     {

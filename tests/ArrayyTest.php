@@ -4493,6 +4493,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $arrayy->searchValue($value)->getArray());
     }
 
+    public function testSerializeSimple()
+    {
+        $arrayy = A::create([1, 'a', 4.4]);
+
+        static::assertSame($arrayy->getArray(), \unserialize(\serialize($arrayy))->getArray());
+    }
+
     public function testSerialize()
     {
         $testArray = [1, 4, 7];
