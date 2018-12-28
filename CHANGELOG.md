@@ -1,5 +1,12 @@
 # Changelog
 
+### 5.6.1 (2018-12-20)
+- update "require-dev"
+- optimize the "constructor"
+- use the "JsonSerializable" interface
+- fix fallback for "this->shuffle()"
+
+
 ### 5.6.0 (2018-12-20)
 - use phpstan + fixes (level 5)
 - use phpcs fixer
