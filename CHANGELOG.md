@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.6.2 (2019-01-02)
+- fix issue when requiring float types
+- update phpcs fixer config
+
+
 ### 5.6.1 (2018-12-20)
 - update "require-dev"
 - optimize the "constructor"
