@@ -7,6 +7,7 @@ WARNING: this is only a extened Fork of "https://github.com/danielstjules/String
 [![Total Downloads](https://poser.pugx.org/voku/stringy/downloads)](https://packagist.org/packages/voku/stringy) 
 [![License](https://poser.pugx.org/voku/stringy/license)](https://packagist.org/packages/voku/stringy)
 
+## :accept: Stringy 
 
 A PHP string manipulation library with multibyte support. Compatible with PHP 7+
 
