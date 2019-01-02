@@ -15,8 +15,9 @@ class Property extends \ReflectionProperty
      * @var array
      */
     protected static $typeMapping = [
-        'int'  => 'integer',
-        'bool' => 'boolean',
+        'int'   => 'integer',
+        'bool'  => 'boolean',
+        'float' => 'double',
     ];
 
     /**
