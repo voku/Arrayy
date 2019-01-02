@@ -8,7 +8,7 @@ WARNING: this is only a extened Fork of "https://github.com/danielstjules/String
 [![License](https://poser.pugx.org/voku/stringy/license)](https://packagist.org/packages/voku/stringy)
 
 
-A PHP string manipulation library with multibyte support.
+A PHP string manipulation library with multibyte support. Compatible with PHP 7+
 
 ``` php
 s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
