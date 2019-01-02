@@ -1,19 +1,14 @@
 WARNING: this is only a extened Fork of "https://github.com/danielstjules/Stringy"
 
-[![Stories in Ready](https://badge.waffle.io/voku/Stringy.png?label=ready&title=Ready)](https://waffle.io/voku/Stringy)
 [![Build Status](https://api.travis-ci.org/voku/Stringy.svg?branch=master)](https://travis-ci.org/voku/Stringy)
-[![Coverage Status](https://coveralls.io/repos/voku/Stringy/badge.svg?branch=master&service=github)](https://coveralls.io/github/voku/Stringy?branch=master)
 [![codecov.io](https://codecov.io/github/voku/Stringy/coverage.svg?branch=master)](https://codecov.io/github/voku/Stringy?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/Stringy/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/Stringy/?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/97c46467e585467d884bac1130cb45e5)](https://www.codacy.com/app/voku/Stringy)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/76973bbc-7cf6-4df6-8791-80ed9c7612ee/mini.png)](https://insight.sensiolabs.com/projects/76973bbc-7cf6-4df6-8791-80ed9c7612ee)
-[![Latest Stable Version](https://poser.pugx.org/voku/stringy/v/stable)](https://packagist.org/packages/voku/stringy) [![Total Downloads](https://poser.pugx.org/voku/stringy/downloads)](https://packagist.org/packages/voku/stringy) [![Latest Unstable Version](https://poser.pugx.org/voku/stringy/v/unstable)](https://packagist.org/packages/voku/stringy)
-[![PHP 7 ready](http://php7ready.timesplinter.ch/voku/Stringy/badge.svg)](https://travis-ci.org/voku/Stringy)
+[![Latest Stable Version](https://poser.pugx.org/voku/stringy/v/stable)](https://packagist.org/packages/voku/stringy)
+[![Total Downloads](https://poser.pugx.org/voku/stringy/downloads)](https://packagist.org/packages/voku/stringy) 
 [![License](https://poser.pugx.org/voku/stringy/license)](https://packagist.org/packages/voku/stringy)
 
 
-A PHP string manipulation library with multibyte support. Compatible with PHP
-5.3+, PHP 7, and HHVM.
+A PHP string manipulation library with multibyte support.
 
 ``` php
 s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
@@ -24,7 +19,7 @@ s('string')->toTitleCase()->ensureRight('y') == 'Stringy'
 * [Installation](#installation-via-composer-require)
 * [OO and Chaining](#oo-and-chaining)
 * [Implemented Interfaces](#implemented-interfaces)
-* [PHP 5.6 Creation](#php-56-creation)
+* [PHP Class Call Creation](#php-class-call-creation)
 * [StaticStringy](#staticstringy)
 * [Class methods](#class-methods)
     * [create](#createmixed-str--encoding-)
@@ -246,13 +241,11 @@ $stringy[3];          // OutOfBoundsException
 $stringy[2] = 'a';    // Exception
 ```
 
-## PHP 5.6 Creation
+## PHP Class Call Creation
 
-As of PHP 5.6, [`use function`](https://wiki.php.net/rfc/use_function) is
+As of PHP 5.6+, [`use function`](https://wiki.php.net/rfc/use_function) is
 available for importing functions. Stringy exposes a namespaced function,
 `Stringy\create`, which emits the same behaviour as `Stringy\Stringy::create()`.
-If running PHP 5.6, or another runtime that supports the `use function` syntax,
-you can take advantage of an even simpler API as seen below:
 
 ``` php
 use function Stringy\create as s;
