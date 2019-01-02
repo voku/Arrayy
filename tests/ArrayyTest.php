@@ -193,31 +193,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param A     $arrayzy
-     * @param A     $resultArrayzy
-     * @param array $array
-     * @param array $resultArray
-     */
-    protected static function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray)
-    {
-        static::assertNotSame($arrayzy, $resultArrayzy);
-        static::assertSame($array, $arrayzy->toArray());
-        static::assertSame($resultArray, $resultArrayzy->toArray());
-    }
-
-    /**
-     * @param A     $arrayzy
-     * @param A     $resultArrayzy
-     * @param array $resultArray
-     */
-    protected static function assertMutable(A $arrayzy, A $resultArrayzy, array $resultArray)
-    {
-        static::assertSame($arrayzy, $resultArrayzy);
-        static::assertSame($resultArray, $arrayzy->toArray());
-        static::assertSame($resultArray, $resultArrayzy->toArray());
-    }
-
-    /**
      * @return array
      */
     public function averageProvider(): array
@@ -1764,7 +1739,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $arrayy = A::create(['foo', 'bar' => 'bis']);
 
-        $closure = function ($value, $key) {
+        $closure = static function ($value, $key) {
             echo $key . ':' . $value . ':';
         };
 
@@ -1784,7 +1759,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     public function testCanGroupValues()
     {
         $under = A::create(\range(1, 5))->group(
-            function ($value) {
+            static function ($value) {
                 return $value % 2 === 0;
             }
         );
@@ -1806,7 +1781,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testCanGroupValuesWithSavingKeys()
     {
-        $grouper = function ($value) {
+        $grouper = static function ($value) {
             return $value % 2 === 0;
         };
         $under = A::create(\range(1, 5))->group($grouper, true);
@@ -1815,6 +1790,24 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             [1 => 2, 3 => 4],
         ];
         static::assertSame($matcher, $under->getArray());
+    }
+
+    public function testCanGroupValuesWithSavingKeysViaYield()
+    {
+        $grouper = static function ($value) {
+            return $value % 2 === 0;
+        };
+        $under = A::create(\range(1, 5))->group($grouper, true);
+        $matcher = [
+            [0 => 1, 2 => 3, 4 => 5],
+            [1 => 2, 3 => 4],
+        ];
+
+        $result = [];
+        foreach ($under->getGenerator() as $key => $value) {
+            $result[$key] = $value;
+        }
+        static::assertSame($matcher, $result);
     }
 
     public function testCanIndexBy()
@@ -1830,24 +1823,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             60 => ['name' => 'curly', 'age' => 60],
         ];
         static::assertSame($expected, A::create($array)->indexBy('age')->getArray());
-    }
-
-    public function testCanGroupValuesWithSavingKeysViaYield()
-    {
-        $grouper = function ($value) {
-            return $value % 2 === 0;
-        };
-        $under = A::create(\range(1, 5))->group($grouper, true);
-        $matcher = [
-            [0 => 1, 2 => 3, 4 => 5],
-            [1 => 2, 3 => 4],
-        ];
-
-        $result = [];
-        foreach ($under->getGenerator() as $key => $value) {
-            $result[$key] = $value;
-        }
-        static::assertSame($matcher, $result);
     }
 
     public function testCanIndexByViaYield()
@@ -2018,6 +1993,35 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         // pass null as second parameter and no third param to get back array_values(input) (same as $expected2)
         static::assertSame(A::create($expected2)->getArray(), A::create($rows)->getColumn(null)->getArray());
+    }
+
+    public function testCompareToPhpArray()
+    {
+        $initArray = [
+            'fruit' => [
+                'orange',
+                'avocado',
+                'cherry',
+            ],
+        ];
+
+        $arrayy = Arrayy::create($initArray)
+            ->appendArrayValues(['pear', 'avocado'], 'fruit')
+            ->get('fruit')
+            ->uniqueKeepIndex()
+            ->walk(
+                            static function (&$value) {
+                                $value .= '*';
+                            },
+                            true
+                        )
+            ->filter(
+                            static function ($value) {
+                                return \strpos($value, 'a') !== false;
+                            }
+                        );
+
+        static::assertSame([0 => 'orange*', 1 => 'avocado*', 3 => 'pear*'], $arrayy->getArray());
     }
 
     public function testConstruct()
@@ -2309,7 +2313,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function testCustomSort(array $array)
     {
-        $callable = function ($a, $b) {
+        $callable = static function ($a, $b) {
             if ($a === $b) {
                 return 0;
             }
@@ -2332,7 +2336,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function testCustomSortKeys(array $array)
     {
-        $callable = function ($a, $b) {
+        $callable = static function ($a, $b) {
             if ($a === $b) {
                 return 0;
             }
@@ -2357,7 +2361,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testCustomSortKeysSimple()
     {
-        $callable = function ($a, $b) {
+        $callable = static function ($a, $b) {
             if ($a === $b) {
                 return 0;
             }
@@ -2428,7 +2432,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
          *
          * @return int
          */
-        $closureSort = function ($a, $b) use ($format) {
+        $closureSort = static function ($a, $b) use ($format) {
             /* @var $aDate \DateTime */
             /* @var $bDate \DateTime */
             $aDate = $a[1];
@@ -2449,7 +2453,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
          *
          * @return array
          */
-        $closureReduce = function ($resultArray, $value) use ($currentDate) {
+        $closureReduce = static function ($resultArray, $value) use ($currentDate) {
             /* @var $valueDate \DateTime */
             $valueDate = $value[1];
             $valueDateInterval = $currentDate->diff($valueDate);
@@ -2610,7 +2614,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $array = [1 => 'bar', 'foo' => 'foo'];
         $arrayy = A::create($array);
 
-        $closure = function ($value, $key) {
+        $closure = static function ($value, $key) {
             return $key . ':' . $value;
         };
 
@@ -2682,7 +2686,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
 
         $under = A::create([1, 2, 3, 4])->filter(
-            function ($value) {
+            static function ($value) {
                 return $value % 2 !== 0;
             }
         );
@@ -2699,7 +2703,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         // ---
 
         $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4])->filter(
-            function ($value) {
+            static function ($value) {
                 return $value % 2 !== 0;
             },
             \ARRAY_FILTER_USE_KEY
@@ -2709,7 +2713,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         // ---
 
         $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
-            function ($key, $value) {
+            static function ($key, $value) {
                 return ($value % 2 !== 0) && ($key & 2 !== 0);
             },
             \ARRAY_FILTER_USE_BOTH
@@ -2766,7 +2770,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function testFind($array, $search, $result)
     {
-        $closure = function ($value) use ($search) {
+        $closure = static function ($value) use ($search) {
             return $value === $search;
         };
 
@@ -3073,7 +3077,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             static::assertSame(
                 $expectedArrays[$key],
                 A::create($testArray)
-                 ->isMultiArray(),
+                    ->isMultiArray(),
                 'tested:' . \print_r($testArray, true)
             );
         }
@@ -3126,7 +3130,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             static::assertSame(
                 $expectedArrays[$key],
                 A::create($testArray)
-                 ->isEmpty(),
+                    ->isEmpty(),
                 'tested:' . \print_r($testArray, true)
             );
         }
@@ -3166,7 +3170,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             static::assertSame(
                 $expectedArrays[$key],
                 A::create($testArray)
-                 ->isNumeric(),
+                    ->isNumeric(),
                 'tested:' . \print_r($testArray, true)
             );
         }
@@ -3206,7 +3210,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             static::assertSame(
                 $expectedArrays[$key],
                 A::create($testArray)
-                 ->isSequential(),
+                    ->isSequential(),
                 'tested:' . \print_r($testArray, true)
             );
         }
@@ -3327,7 +3331,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function testMap(array $array)
     {
-        $callable = function ($value) {
+        $callable = static function ($value) {
             return \str_repeat($value, 2);
         };
         $arrayy = new A($array);
@@ -3347,7 +3351,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $arrayy = A::create($array);
 
-        $closure = function ($a) use ($search) {
+        $closure = static function ($a) use ($search) {
             return \in_array($a, $search, true);
         };
 
@@ -3371,7 +3375,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $arrayy = A::create($array);
 
-        $closure = function ($a) use ($search) {
+        $closure = static function ($a) use ($search) {
             return \in_array($a, $search, true);
         };
 
@@ -3389,7 +3393,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
          *
          * @return bool
          */
-        $closure = function ($value, $key) {
+        $closure = static function ($value, $key) {
             return $value % 2 === 0;
         };
 
@@ -3411,7 +3415,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
          *
          * @return bool
          */
-        $closure = function ($value, $key) {
+        $closure = static function ($value, $key) {
             return $value % 2 === 0;
         };
 
@@ -4039,7 +4043,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $testArray = ['foo', 2 => 'bar', 4 => 'lall'];
 
-        $myReducer = function ($resultArray, $value) {
+        $myReducer = static function ($resultArray, $value) {
             if ($value === 'foo') {
                 $resultArray[] = $value;
             }
@@ -4107,7 +4111,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $array = [1, 2, 3, 4];
         $arrayy = A::create($array)->reject(
-            function ($value) {
+            static function ($value) {
                 return $value % 2 !== 0;
             }
         );
@@ -4493,13 +4497,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $arrayy->searchValue($value)->getArray());
     }
 
-    public function testSerializeSimple()
-    {
-        $arrayy = A::create([1, 'a', 4.4]);
-
-        static::assertSame($arrayy->getArray(), \unserialize(\serialize($arrayy))->getArray());
-    }
-
     public function testSerialize()
     {
         $testArray = [1, 4, 7];
@@ -4528,6 +4525,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $result = $arrayy->unserialize($serialized);
 
         static::assertSame([1 => 1, 2 => 2, 3 => 3], $result->getArray());
+    }
+
+    public function testSerializeSimple()
+    {
+        $arrayy = A::create([1, 'a', 4.4]);
+
+        static::assertSame($arrayy->getArray(), \unserialize(\serialize($arrayy))->getArray());
     }
 
     /**
@@ -4707,7 +4711,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     public function testSimpleAt()
     {
         $result = A::create();
-        $closure = function ($value, $key) use ($result) {
+        $closure = static function ($value, $key) use ($result) {
             $result[$key] = ':' . $value . ':';
         };
 
@@ -4717,7 +4721,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testSimpleEach()
     {
-        $closure = function ($value) {
+        $closure = static function ($value) {
             return ':' . $value . ':';
         };
 
@@ -4789,7 +4793,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $testArray = \range(1, 5);
         $under = A::create($testArray)->sorter(
-            function ($value) {
+            static function ($value) {
                 if ($value % 2 === 0) {
                     return -1;
                 }
@@ -5046,6 +5050,20 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
+    public function testStaticCreateFromGeneratorImmutableFromArray(array $array)
+    {
+        $arrayy = A::create($array);
+        $generator = $arrayy->getGenerator();
+        $resultArrayy = A::createFromGeneratorImmutable($generator);
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
     public function testStaticCreateFromJson(array $array)
     {
         $json = \json_encode($array);
@@ -5065,20 +5083,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $arrayy = A::create($array);
         $resultArrayy = A::createFromObject($arrayy);
-
-        self::assertImmutable($arrayy, $resultArrayy, $array, $array);
-    }
-
-    /**
-     * @dataProvider simpleArrayProvider
-     *
-     * @param array $array
-     */
-    public function testStaticCreateFromGeneratorImmutableFromArray(array $array)
-    {
-        $arrayy = A::create($array);
-        $generator = $arrayy->getGenerator();
-        $resultArrayy = A::createFromGeneratorImmutable($generator);
 
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
@@ -5140,6 +5144,33 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         );
 
         static::assertSame($arrayyResult->toString(), $arrayy->swap('value', 'when')->toString());
+    }
+
+    /**
+     * @dataProvider diffReverseProvider()
+     *
+     * @param $array
+     * @param $arrayNew
+     * @param $result
+     */
+    public function testTestdiffReverse($array, $arrayNew, $result)
+    {
+        $arrayy = A::create($array)->diffReverse($arrayNew);
+
+        static::assertSame($result, $arrayy->getArray(), 'tested:' . \print_r($array, true));
+    }
+
+    /**
+     * @dataProvider isMultiArrayProvider()
+     *
+     * @param array $array
+     * @param bool  $result
+     */
+    public function testTestisMultiArray($array, $result)
+    {
+        $resultTmp = A::create($array)->isMultiArray();
+
+        static::assertSame($result, $resultTmp);
     }
 
     /**
@@ -5236,7 +5267,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function testWalk(array $array)
     {
-        $callable = function (&$value, $key) {
+        $callable = static function (&$value, $key) {
             $value = $key;
         };
 
@@ -5255,7 +5286,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function testWalkRecursively(array $array)
     {
-        $callable = function (&$value, $key) {
+        $callable = static function (&$value, $key) {
             $value = $key;
         };
 
@@ -5267,23 +5298,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertMutable($arrayy, $resultArrayy, $resultArray);
     }
 
-    public function testWalkSimpleRecursively()
-    {
-        $callable = function (&$value, $key) {
-            $value = $key;
-        };
-
-        $array = [1, 2, [3, 4, [5, 6]]];
-        $arrayy = new A($array);
-        $resultArrayy = $arrayy->walk($callable, true);
-
-        $expected = [0, 1, [0, 1, [0, 1]]];
-        static::assertSame($expected, $resultArrayy->getArray());
-    }
-
     public function testWalkSimple()
     {
-        $callable = function (&$value, $key) {
+        $callable = static function (&$value, $key) {
             $value = $key;
         };
 
@@ -5295,60 +5312,18 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $resultArrayy->getArray());
     }
 
-    public function testCompareToPhpArray()
+    public function testWalkSimpleRecursively()
     {
-        $initArray = [
-            'fruit' => [
-                'orange',
-                'avocado',
-                'cherry',
-            ],
-        ];
+        $callable = static function (&$value, $key) {
+            $value = $key;
+        };
 
-        $arrayy = Arrayy::create($initArray)
-                        ->appendArrayValues(['pear', 'avocado'], 'fruit')
-                        ->get('fruit')
-                        ->uniqueKeepIndex()
-                        ->walk(
-                            function (&$value) {
-                                $value .= '*';
-                            },
-                            true
-                        )
-                        ->filter(
-                            function ($value) {
-                                return \strpos($value, 'a') !== false;
-                            }
-                        );
+        $array = [1, 2, [3, 4, [5, 6]]];
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->walk($callable, true);
 
-        static::assertSame([0 => 'orange*', 1 => 'avocado*', 3 => 'pear*'], $arrayy->getArray());
-    }
-
-    /**
-     * @dataProvider diffReverseProvider()
-     *
-     * @param $array
-     * @param $arrayNew
-     * @param $result
-     */
-    public function testTestdiffReverse($array, $arrayNew, $result)
-    {
-        $arrayy = A::create($array)->diffReverse($arrayNew);
-
-        static::assertSame($result, $arrayy->getArray(), 'tested:' . \print_r($array, true));
-    }
-
-    /**
-     * @dataProvider isMultiArrayProvider()
-     *
-     * @param array $array
-     * @param bool  $result
-     */
-    public function testTestisMultiArray($array, $result)
-    {
-        $resultTmp = A::create($array)->isMultiArray();
-
-        static::assertSame($result, $resultTmp);
+        $expected = [0, 1, [0, 1, [0, 1]]];
+        static::assertSame($expected, $resultArrayy->getArray());
     }
 
     /**
@@ -5478,5 +5453,30 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param A     $arrayzy
+     * @param A     $resultArrayzy
+     * @param array $array
+     * @param array $resultArray
+     */
+    protected static function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray)
+    {
+        static::assertNotSame($arrayzy, $resultArrayzy);
+        static::assertSame($array, $arrayzy->toArray());
+        static::assertSame($resultArray, $resultArrayzy->toArray());
+    }
+
+    /**
+     * @param A     $arrayzy
+     * @param A     $resultArrayzy
+     * @param array $resultArray
+     */
+    protected static function assertMutable(A $arrayzy, A $resultArrayzy, array $resultArray)
+    {
+        static::assertSame($arrayzy, $resultArrayzy);
+        static::assertSame($resultArray, $arrayzy->toArray());
+        static::assertSame($resultArray, $resultArrayzy->toArray());
     }
 }

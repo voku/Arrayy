@@ -11,17 +11,60 @@ require_once __DIR__ . '/CityData.php';
  */
 final class CityDataTest extends \PHPUnit\Framework\TestCase
 {
+    public function testParameterMatchEmpty()
+    {
+        $model = new CityData(
+            []
+        );
+
+        static::assertInstanceOf(Arrayy::class, $model);
+    }
+
+    public function testParameterMatchFail()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid type: expected infos to be of type {array}, instead got value `foo` with type {string}.');
+
+        $modelMeta = CityData::meta();
+
+        $model = new CityData(
+            [
+                $modelMeta->name  => 'Düsseldorf',
+                $modelMeta->plz   => null,
+                $modelMeta->infos => 'foo',
+            ]
+        );
+
+        static::assertInstanceOf(Arrayy::class, $model);
+    }
+
+    public function testParameterMatchFailWithArray()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Property mismatch');
+
+        $modelMeta = CityData::meta();
+
+        $model = new CityData(
+            [
+                $modelMeta->name => 'Düsseldorf',
+            ]
+        );
+
+        static::assertInstanceOf(Arrayy::class, $model);
+    }
+
     public function testSetAndGet()
     {
         $modelMeta = CityData::meta();
 
         $model = new CityData(
-      [
-          $modelMeta->name  => 'Düsseldorf',
-          $modelMeta->plz   => null,
-          $modelMeta->infos => ['foo', 'bar', 'lall'],
-      ]
-    );
+            [
+                $modelMeta->name  => 'Düsseldorf',
+                $modelMeta->plz   => null,
+                $modelMeta->infos => ['foo', 'bar', 'lall'],
+            ]
+        );
 
         static::assertInstanceOf(Arrayy::class, $model);
         static::assertSame('Düsseldorf', $model['name']);
@@ -37,59 +80,16 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         $modelMeta = CityData::meta();
 
         $model = new CityData(
-      [
-          $modelMeta->name  => 'Düsseldorf',
-          $modelMeta->plz   => null,
-          $modelMeta->infos => ['foo'],
-      ]
-    );
+            [
+                $modelMeta->name  => 'Düsseldorf',
+                $modelMeta->plz   => null,
+                $modelMeta->infos => ['foo'],
+            ]
+        );
 
         static::assertInstanceOf(Arrayy::class, $model);
         static::assertSame('Düsseldorf', $model['name']);
         static::assertSame('Düsseldorf', $model[$modelMeta->name]);
         static::assertNull($model[3]);
-    }
-
-    public function testParameterMatchFail()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid type: expected infos to be of type {array}, instead got value `foo` with type {string}.');
-
-        $modelMeta = CityData::meta();
-
-        $model = new CityData(
-      [
-          $modelMeta->name  => 'Düsseldorf',
-          $modelMeta->plz   => null,
-          $modelMeta->infos => 'foo',
-      ]
-    );
-
-        static::assertInstanceOf(Arrayy::class, $model);
-    }
-
-    public function testParameterMatchFailWithArray()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Property mismatch');
-
-        $modelMeta = CityData::meta();
-
-        $model = new CityData(
-      [
-          $modelMeta->name => 'Düsseldorf',
-      ]
-    );
-
-        static::assertInstanceOf(Arrayy::class, $model);
-    }
-
-    public function testParameterMatchEmpty()
-    {
-        $model = new CityData(
-      []
-    );
-
-        static::assertInstanceOf(Arrayy::class, $model);
     }
 }

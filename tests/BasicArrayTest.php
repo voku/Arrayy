@@ -24,41 +24,6 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     protected $arrayyClassName = A::class;
 
     /**
-     * @param A     $arrayy
-     * @param A     $resultArrayy
-     * @param array $array
-     * @param array $resultArray
-     */
-    protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray)
-    {
-        static::assertNotSame($arrayy, $resultArrayy);
-        static::assertSame($array, $arrayy->toArray());
-        static::assertSame($resultArray, $resultArrayy->toArray());
-    }
-
-    /**
-     * @param A     $arrayy
-     * @param A     $resultArrayy
-     * @param array $resultArray
-     */
-    protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray)
-    {
-        static::assertSame($arrayy, $resultArrayy);
-        static::assertSame($resultArray, $arrayy->toArray());
-        static::assertSame($resultArray, $resultArrayy->toArray());
-    }
-
-    /**
-     * @param array $array
-     *
-     * @return A
-     */
-    protected function createArrayy(array $array = []): A
-    {
-        return new $this->arrayyClassName($array);
-    }
-
-    /**
      * @return array
      */
     public function simpleArrayProvider(): array
@@ -116,8 +81,6 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-
-    // The method list order by ASC
 
     /**
      * @dataProvider simpleArrayProvider
@@ -196,7 +159,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      */
     public function testExists(array $array)
     {
-        $callable = function ($value, $key) {
+        $callable = static function ($value, $key) {
             return $key === 2 && $value === 'two';
         };
 
@@ -208,7 +171,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
     public function testFind()
     {
-        $callable = function ($value, $key) {
+        $callable = static function ($value, $key) {
             return $value === 'a' && $key > 2;
         };
 
@@ -216,19 +179,6 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $found = $a->find($callable);
 
         static::assertSame('a', $found);
-    }
-
-    /**
-     * @dataProvider simpleArrayProvider
-     *
-     * @param array $array
-     */
-    public function testGetObject(array $array)
-    {
-        $arrayy = $this->createArrayy($array);
-        $result = \Arrayy\Arrayy::createFromObjectVars($arrayy->getObject())->toArray();
-
-        static::assertSame($array, $result, \print_r($result, true));
     }
 
     /**
@@ -248,6 +198,25 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         }
 
         static::assertSame($first, $arrayy->firstsMutable()->getArray());
+    }
+
+    public function testForEachWithInnerArrayy()
+    {
+        $arrayy = $this->createArrayy(['foo' => [3 => [33, 34, 35], 2 => [22, 23, 24], 1 => [11, 12, 13]]]);
+
+        foreach ($arrayy as $arrayyInner) {
+            static::assertInstanceOf(\Arrayy\Arrayy::class, $arrayyInner);
+            static::assertSame([3, 2, 1], $arrayyInner->getKeys()->getArray());
+
+            foreach ($arrayyInner as $arrayyInnerInnerKey => $arrayyInnerInner) {
+                static::assertInstanceOf(\Arrayy\Arrayy::class, $arrayyInnerInner);
+
+                if ($arrayyInnerInnerKey === 3) {
+                    /* @var $arrayyInnerInner \Arrayy\Arrayy */
+                    static::assertSame([33, 34, 35], $arrayyInnerInner->getArray());
+                }
+            }
+        }
     }
 
     public function testGetIterator()
@@ -274,25 +243,6 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame([1, 2, 3], $result->current()->getArray());
     }
 
-    public function testForEachWithInnerArrayy()
-    {
-        $arrayy = $this->createArrayy(['foo' => [3 => [33, 34, 35], 2 => [22, 23, 24], 1 => [11, 12, 13]]]);
-
-        foreach ($arrayy as $arrayyInner) {
-            static::assertInstanceOf(\Arrayy\Arrayy::class, $arrayyInner);
-            static::assertSame([3, 2, 1], $arrayyInner->getKeys()->getArray());
-
-            foreach ($arrayyInner as $arrayyInnerInnerKey => $arrayyInnerInner) {
-                static::assertInstanceOf(\Arrayy\Arrayy::class, $arrayyInnerInner);
-
-                if ($arrayyInnerInnerKey === 3) {
-                    /* @var $arrayyInnerInner \Arrayy\Arrayy */
-                    static::assertSame([33, 34, 35], $arrayyInnerInner->getArray());
-                }
-            }
-        }
-    }
-
     /**
      * @dataProvider simpleArrayProvider
      *
@@ -304,6 +254,19 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $keys = \array_keys($array);
 
         static::assertSame($keys, $arrayy->keys()->getArray());
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testGetObject(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        $result = \Arrayy\Arrayy::createFromObjectVars($arrayy->getObject())->toArray();
+
+        static::assertSame($array, $result, \print_r($result, true));
     }
 
     /**
@@ -637,7 +600,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
     public function testReduce()
     {
-        $func = function ($resultArray, $value) {
+        $func = static function ($resultArray, $value) {
             if ($value % 2 === 0) {
                 $resultArray[] = $value;
             }
@@ -681,5 +644,42 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame($resultString, (string) $arrayy);
         static::assertSame($string, $arrayy->toString($separator));
+    }
+
+    /**
+     * @param A     $arrayy
+     * @param A     $resultArrayy
+     * @param array $array
+     * @param array $resultArray
+     */
+    protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray)
+    {
+        static::assertNotSame($arrayy, $resultArrayy);
+        static::assertSame($array, $arrayy->toArray());
+        static::assertSame($resultArray, $resultArrayy->toArray());
+    }
+
+    /**
+     * @param A     $arrayy
+     * @param A     $resultArrayy
+     * @param array $resultArray
+     */
+    protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray)
+    {
+        static::assertSame($arrayy, $resultArrayy);
+        static::assertSame($resultArray, $arrayy->toArray());
+        static::assertSame($resultArray, $resultArrayy->toArray());
+    }
+
+    // The method list order by ASC
+
+    /**
+     * @param array $array
+     *
+     * @return A
+     */
+    protected function createArrayy(array $array = []): A
+    {
+        return new $this->arrayyClassName($array);
     }
 }

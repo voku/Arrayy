@@ -48,27 +48,6 @@ class Property extends \ReflectionProperty
         parent::__construct($fakeObject, $reflectionProperty->getName());
     }
 
-    /**
-     * @param string $type
-     * @param mixed  $value
-     *
-     * @return bool
-     */
-    protected function assertTypeEquals(string $type, $value): bool
-    {
-        if (\strpos($type, '[]') !== false) {
-            return $this->isValidGenericCollection($type, $value);
-        }
-
-        if ($type === 'mixed' && $value !== null) {
-            return true;
-        }
-
-        return $value instanceof $type
-               ||
-               \gettype($value) === (self::$typeMapping[$type] ?? $type);
-    }
-
     public function checkType($value)
     {
         if (!$this->isValidType($value)) {
@@ -109,6 +88,27 @@ class Property extends \ReflectionProperty
     public function getTypes(): array
     {
         return $this->types;
+    }
+
+    /**
+     * @param string $type
+     * @param mixed  $value
+     *
+     * @return bool
+     */
+    protected function assertTypeEquals(string $type, $value): bool
+    {
+        if (\strpos($type, '[]') !== false) {
+            return $this->isValidGenericCollection($type, $value);
+        }
+
+        if ($type === 'mixed' && $value !== null) {
+            return true;
+        }
+
+        return $value instanceof $type
+               ||
+               \gettype($value) === (self::$typeMapping[$type] ?? $type);
     }
 
     protected function isValidGenericCollection(string $type, $collection): bool

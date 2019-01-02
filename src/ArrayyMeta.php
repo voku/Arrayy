@@ -6,12 +6,25 @@ namespace Arrayy;
 
 class ArrayyMeta
 {
+
+    /** @noinspection MagicMethodsValidityInspection */
+
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
+    public function __get($name)
+    {
+        return '';
+    }
+
     /**
      * @param string $obj
      *
      * @return $this
      */
-    public function getMetaObject(string $obj)
+    public function getMetaObject(string $obj): self
     {
         static $STATIC_CACHE = [];
 
