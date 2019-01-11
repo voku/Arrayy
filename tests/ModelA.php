@@ -1,5 +1,9 @@
 <?php
 
+namespace Arrayy\tests;
+
+use Arrayy\ArrayyIterator;
+
 /**
  * Class ModelA
  */
@@ -11,7 +15,7 @@ class ModelA extends \Arrayy\Arrayy
      * @param array  $array
      * @param string $iteratorClass
      */
-    public function __construct($array = [], $iteratorClass = '\\Arrayy\\ArrayyIterator')
+    public function __construct($array = [], $iteratorClass = ArrayyIterator::class)
     {
         parent::__construct($array, $iteratorClass);
 

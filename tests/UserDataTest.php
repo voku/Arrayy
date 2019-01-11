@@ -1,9 +1,8 @@
 <?php
 
-use Arrayy\Arrayy;
+namespace Arrayy\tests;
 
-require_once __DIR__ . '/UserData.php';
-require_once __DIR__ . '/CityData.php';
+use Arrayy\Arrayy;
 
 /**
  * Class UserDataTest
@@ -84,7 +83,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
     public function testSetFailObject()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('expected city to be of type {\\CityData|null}, instead got value `stdClass` with type {object}');
+        $this->expectExceptionMessage('expected city to be of type {\\Arrayy\\tests\\CityData|null}, instead got value `stdClass` with type {object}');
 
         $modelMeta = UserData::meta();
 

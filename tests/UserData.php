@@ -1,14 +1,14 @@
 <?php
 
-require_once __DIR__ . '/CityData.php';
+namespace Arrayy\tests;
 
 /**
  * Class UserData
  *
- * @property int           $id
- * @property int|string    $firstName
- * @property string        $lastName
- * @property CityData|null $city
+ * @property int                         $id
+ * @property int|string                  $firstName
+ * @property string                      $lastName
+ * @property \Arrayy\tests\CityData|null $city
  */
 class UserData extends \Arrayy\Arrayy
 {

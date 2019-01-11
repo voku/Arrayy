@@ -1,5 +1,7 @@
 <?php
 
+namespace Arrayy\tests;
+
 use Arrayy\Arrayy;
 
 require_once __DIR__ . '/CityData.php';

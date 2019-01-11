@@ -1,7 +1,8 @@
 <?php
 
-require_once __DIR__ . '/ModelA.php';
-require_once __DIR__ . '/ModelB.php';
+namespace Arrayy\tests;
+
+use Arrayy\Arrayy;
 
 /**
  * Class ModelTest
@@ -14,7 +15,7 @@ final class ModelTest extends \PHPUnit\Framework\TestCase
     {
         $model = new ModelA(['foo', 'bar' => ['config' => ['lall' => true]]]);
 
-        static::assertInstanceOf('Arrayy\Arrayy', $model);
+        static::assertInstanceOf(Arrayy::class, $model);
         static::assertSame('foo', $model[0]);
         static::assertTrue($model['bar^config^lall']); // the separator was changed in the "ModelA"-class
         static::assertNull($model[3]);

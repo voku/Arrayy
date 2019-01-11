@@ -1,5 +1,7 @@
 <?php
 
+namespace Arrayy\tests;
+
 use Arrayy\Arrayy as A;
 use Arrayy\ArrayyIterator;
 

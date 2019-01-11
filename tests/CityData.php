@@ -1,5 +1,7 @@
 <?php
 
+namespace Arrayy\tests;
+
 /**
  * Class CityData
  *

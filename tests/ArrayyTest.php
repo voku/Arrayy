@@ -1,5 +1,7 @@
 <?php
 
+namespace Arrayy\tests;
+
 use Arrayy\Arrayy;
 use Arrayy\Arrayy as A;
 
@@ -49,13 +51,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function appendToEachKeyProvider(): array
     {
-        $a = new stdClass();
+        $a = new \stdClass();
         $a->x = 42;
 
-        $b = new stdClass();
+        $b = new \stdClass();
         $b->y = 42;
 
-        $c = new stdClass();
+        $c = new \stdClass();
         $c->x = 43;
 
         return [
@@ -118,13 +120,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function appendToEachValueProvider(): array
     {
-        $a = new stdClass();
+        $a = new \stdClass();
         $a->x = 42;
 
-        $b = new stdClass();
+        $b = new \stdClass();
         $b->y = 42;
 
-        $c = new stdClass();
+        $c = new \stdClass();
         $c->x = 43;
 
         return [
@@ -1229,13 +1231,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function prependToEachKeyProvider(): array
     {
-        $a = new stdClass();
+        $a = new \stdClass();
         $a->x = 42;
 
-        $b = new stdClass();
+        $b = new \stdClass();
         $b->y = 42;
 
-        $c = new stdClass();
+        $c = new \stdClass();
         $c->x = 43;
 
         return [
@@ -1298,13 +1300,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function prependToEachValueProvider(): array
     {
-        $a = new stdClass();
+        $a = new \stdClass();
         $a->x = 42;
 
-        $b = new stdClass();
+        $b = new \stdClass();
         $b->y = 42;
 
-        $c = new stdClass();
+        $c = new \stdClass();
         $c->x = 43;
 
         return [
@@ -3595,7 +3597,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         /** @noinspection PhpExpressionResultUnusedInspection */
-        (string) new A(new stdClass());
+        (string) new A(new \stdClass());
         static::fail(
             'Expecting exception when the constructor is passed an ' .
             'object without a __toString method'
@@ -4076,7 +4078,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             return $resultArray;
         }
 
-        $arrayy = A::create($testArray)->reduce('myReducer');
+        $arrayy = A::create($testArray)->reduce('Arrayy\tests\myReducer');
 
         $expected = ['foo'];
         static::assertSame($expected, $arrayy->getArray());
@@ -4509,7 +4511,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         // create a object with an "arrayy"-property
 
-        $object = new stdClass();
+        $object = new \stdClass();
         $object->arrayy = $arrayy;
 
         static::assertSame($object->arrayy, $arrayy);
@@ -5089,7 +5091,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testStaticCreateFromObjectVars()
     {
-        $a = new stdClass();
+        $a = new \stdClass();
         $a->x = 42;
         $a->y = ['lall', 'foo'];
         $a->z = 'bar';
@@ -5100,7 +5102,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
-        $object = new stdClass();
+        $object = new \stdClass();
         $object->x = 42;
         $arrayy = A::createFromObjectVars($object);
         static::assertSame(['x' => 42], $arrayy->getArray());
@@ -5346,13 +5348,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function uniqueProvider(): array
     {
-        $a = new stdClass();
+        $a = new \stdClass();
         $a->x = 42;
 
-        $b = new stdClass();
+        $b = new \stdClass();
         $b->y = 42;
 
-        $c = new stdClass();
+        $c = new \stdClass();
         $c->x = 43;
 
         return [
@@ -5403,13 +5405,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function uniqueProviderKeepIndex(): array
     {
-        $a = new stdClass();
+        $a = new \stdClass();
         $a->x = 42;
 
-        $b = new stdClass();
+        $b = new \stdClass();
         $b->y = 42;
 
-        $c = new stdClass();
+        $c = new \stdClass();
         $c->x = 43;
 
         return [
