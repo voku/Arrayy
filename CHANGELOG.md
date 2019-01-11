@@ -1,3 +1,11 @@
+### 5.0.0 (2019-01-11)
+- rename "slugify()" into "urlify()"
+- re-add original "slugify()" method
+- rename "toAscii()" into "toTransliterate()"
+- re-add toAscii "slugify()" method
+- apply php-cs fixes rules
+
+
 ### 4.1.2 (2018-11-29)
 - fix error from "UTF8::remove_html()" with strict types
 
