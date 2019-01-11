@@ -2,8 +2,8 @@
 
 namespace Arrayy\tests;
 
-use Arrayy\StaticArrayy as A;
 use Arrayy\Arrayy;
+use Arrayy\StaticArrayy as A;
 
 /**
  * Class StaticArrayyTest
@@ -111,7 +111,7 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
         // getStaticPropertyValue can't access protected properties
         $properties = $staticArrayyClass->getStaticProperties();
 
-        foreach ( (array) $properties['methodArgs'] as $method => $expected) {
+        foreach ((array) $properties['methodArgs'] as $method => $expected) {
             $num = $arrayyClass->getMethod($method)->getNumberOfParameters() + 2;
 
             static::assertSame($expected, $num, 'Invalid num args for ' . $method);
