@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.6.3 (2019-01-11)
+- "ramsey/array_column" is not needed anymore
+
+
 ### 5.6.2 (2019-01-02)
 - fix issue when requiring float types
 - update phpcs fixer config
