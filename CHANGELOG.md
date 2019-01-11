@@ -2,6 +2,7 @@
 
 ### 5.6.3 (2019-01-11)
 - "ramsey/array_column" is not needed anymore
+- use autoloader also for the tests 
 
 
 ### 5.6.2 (2019-01-02)
