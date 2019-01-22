@@ -1,3 +1,8 @@
+### 5.0.1 (2019-01-22)
+- inline some simple functions
+- update vendor
+
+
 ### 5.0.0 (2019-01-11)
 - rename "slugify()" into "urlify()"
 - re-add original "slugify()" method
