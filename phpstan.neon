@@ -1,4 +1,5 @@
 parameters:
+    reportUnmatchedIgnoredErrors: false
     excludes_analyse:
         - %rootDir%/vendor/*
         - %rootDir%/tests/*
