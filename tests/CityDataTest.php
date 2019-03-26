@@ -70,6 +70,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
 
         static::assertInstanceOf(Arrayy::class, $model);
         static::assertSame('Düsseldorf', $model['name']);
+        static::assertSame('Düsseldorf', $model->name);
         static::assertSame('Düsseldorf', $model[$modelMeta->name]);
         static::assertNull($model[3]);
     }
