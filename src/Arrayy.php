@@ -70,8 +70,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                                       true, otherwise this option didn't not work anyway.
      *                                                       </p>
      */
-    public function __construct($array = [], string $iteratorClass = ArrayyIterator::class, bool $checkForMissingPropertiesInConstructor = true)
-    {
+    public function __construct(
+        $array = [],
+        string $iteratorClass = ArrayyIterator::class,
+        bool $checkForMissingPropertiesInConstructor = true
+    ) {
         $array = $this->fallbackForArray($array);
 
         // used only for serialize + unserialize, all other methods are overwritten
@@ -133,7 +136,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>True is the key/index exists, otherwise false.</p>
      */
-    public function __isset($key)
+    public function __isset($key): bool
     {
         return $this->offsetExists($key);
     }
@@ -154,7 +157,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toString();
     }
@@ -191,14 +194,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->append()"
      *
-     * @see Arrayy::append()
-     *
      * @param mixed $value
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+     *
+     * @see Arrayy::append()
      */
-    public function add($value)
+    public function add($value): self
     {
         return $this->append($value);
     }
@@ -212,7 +215,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      */
-    public function append($value, $key = null)
+    public function append($value, $key = null): self
     {
         if ($key !== null) {
             if (
@@ -243,7 +246,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function asort(int $sort_flags = 0)
+    public function asort(int $sort_flags = 0): self
     {
         \asort($this->array, $sort_flags);
 
@@ -350,7 +353,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function ksort(int $sort_flags = 0)
+    public function ksort(int $sort_flags = 0): self
     {
         \ksort($this->array, $sort_flags);
 
@@ -363,7 +366,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function natcasesort()
+    public function natcasesort(): self
     {
         \natcasesort($this->array);
 
@@ -376,7 +379,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function natsort()
+    public function natsort(): self
     {
         \natsort($this->array);
 
@@ -499,7 +502,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return string
      */
-    public function serialize()
+    public function serialize(): string
     {
         return parent::serialize();
     }
@@ -541,7 +544,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function uasort($function)
+    public function uasort($function): self
     {
         if (!\is_callable($function)) {
             throw new \InvalidArgumentException(
@@ -564,7 +567,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function uksort($function)
+    public function uksort($function): self
     {
         return $this->customSortKeys($function);
     }
@@ -576,7 +579,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      */
-    public function unserialize($string)
+    public function unserialize($string): self
     {
         parent::unserialize($string);
 
@@ -592,7 +595,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      */
-    public function appendArrayValues(array $values, $key = null)
+    public function appendArrayValues(array $values, $key = null): self
     {
         if ($key !== null) {
             if (
@@ -625,7 +628,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Return an Arrayy object, with the prefixed keys.</p>
      */
-    public function appendToEachKey($prefix)
+    public function appendToEachKey($prefix): self
     {
         // init
         $result = [];
@@ -653,7 +656,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Return an Arrayy object, with the prefixed values.</p>
      */
-    public function appendToEachValue($prefix)
+    public function appendToEachValue($prefix): self
     {
         // init
         $result = [];
@@ -679,7 +682,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function arsort()
+    public function arsort(): self
     {
         \arsort($this->array);
 
@@ -694,7 +697,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function at(\Closure $closure)
+    public function at(\Closure $closure): self
     {
         $arrayy = clone $this;
 
@@ -741,7 +744,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function changeKeyCase(int $case = \CASE_LOWER)
+    public function changeKeyCase(int $case = \CASE_LOWER): self
     {
         if (
             $case !== \CASE_LOWER
@@ -781,7 +784,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>Mutable</p>
      */
-    public function changeSeparator($separator)
+    public function changeSeparator($separator): self
     {
         $this->pathSeparator = $separator;
 
@@ -797,7 +800,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) A new array of chunks from the original array.</p>
      */
-    public function chunk($size, $preserveKeys = false)
+    public function chunk($size, $preserveKeys = false): self
     {
         return static::create(
             \array_chunk($this->array, $size, $preserveKeys),
@@ -812,7 +815,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function clean()
+    public function clean(): self
     {
         return $this->filter(
             static function ($value) {
@@ -827,7 +830,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with an empty array.</p>
      */
-    public function clear()
+    public function clear(): self
     {
         $this->array = [];
 
@@ -954,11 +957,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->contains()"
      *
-     * @see Arrayy::contains()
-     *
      * @param float|int|string $value
      *
      * @return bool
+     *
+     * @see Arrayy::contains()
      */
     public function containsValue($value): bool
     {
@@ -968,11 +971,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->contains($value, true)"
      *
-     * @see Arrayy::contains()
-     *
      * @param float|int|string $value
      *
      * @return bool
+     *
+     * @see Arrayy::contains()
      */
     public function containsValueRecursive($value): bool
     {
@@ -1051,7 +1054,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      */
-    public static function createFromGeneratorImmutable(\Generator $generator)
+    public static function createFromGeneratorImmutable(\Generator $generator): self
     {
         // init
         $array = new static();
@@ -1071,7 +1074,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      */
-    public static function createFromJson(string $json)
+    public static function createFromJson(string $json): self
     {
         /** @noinspection PhpComposerExtensionStubsInspection */
         return static::create(\json_decode($json, true));
@@ -1085,7 +1088,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      */
-    public static function createFromObject(\ArrayAccess $object)
+    public static function createFromObject(\ArrayAccess $object): self
     {
         // init
         $array = new static();
@@ -1127,7 +1130,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      */
-    public static function createFromString(string $str, string $delimiter = null, string $regEx = null)
+    public static function createFromString(string $str, string $delimiter = null, string $regEx = null): self
     {
         if ($regEx) {
             \preg_match_all($regEx, $str, $array);
@@ -1143,7 +1146,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         \array_walk(
             $array,
             static function (&$val) {
-                /** @noinspection ReferenceMismatchInspection */
                 if (\is_string($val)) {
                     $val = \trim($val);
                 }
@@ -1163,7 +1165,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      */
-    public static function createWithRange($low, $high, int $step = 1)
+    public static function createWithRange($low, $high, int $step = 1): self
     {
         return static::create(\range($low, $high, $step));
     }
@@ -1180,7 +1182,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function customSortKeys($function)
+    public function customSortKeys($function): self
     {
         if (!\is_callable($function)) {
             throw new \InvalidArgumentException(
@@ -1205,7 +1207,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function customSortValues($function)
+    public function customSortValues($function): self
     {
         if (!\is_callable($function)) {
             throw new \InvalidArgumentException(
@@ -1226,7 +1228,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function diff(array $array = [])
+    public function diff(array $array = []): self
     {
         $result = \array_diff($this->array, $array);
 
@@ -1242,7 +1244,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function diffRecursive(array $array = [], $helperVariableForRecursion = null)
+    public function diffRecursive(array $array = [], $helperVariableForRecursion = null): self
     {
         // init
         $result = [];
@@ -1282,7 +1284,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function diffReverse(array $array = [])
+    public function diffReverse(array $array = []): self
     {
         return static::create(
             \array_diff($array, $this->array),
@@ -1297,7 +1299,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function divide()
+    public function divide(): self
     {
         return static::create(
             [
@@ -1317,7 +1319,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function each(\Closure $closure)
+    public function each(\Closure $closure): self
     {
         // init
         $array = [];
@@ -1362,7 +1364,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function fillWithDefaults(int $num, $default = null)
+    public function fillWithDefaults(int $num, $default = null): self
     {
         if ($num < 0) {
             throw new \InvalidArgumentException('The $num parameter can only contain non-negative values.');
@@ -1408,7 +1410,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH)
+    public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH): self
     {
         if (!$closure) {
             return $this->clean();
@@ -1444,7 +1446,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function filterBy(string $property, $value, string $comparisonOp = null)
+    public function filterBy(string $property, $value, string $comparisonOp = null): self
     {
         if (!$comparisonOp) {
             $comparisonOp = \is_array($value) ? 'contains' : 'eq';
@@ -1540,7 +1542,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function findBy(string $property, $value, string $comparisonOp = 'eq')
+    public function findBy(string $property, $value, string $comparisonOp = 'eq'): self
     {
         return $this->filterBy($property, $value, $comparisonOp);
     }
@@ -1566,7 +1568,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function firstsImmutable(int $number = null)
+    public function firstsImmutable(int $number = null): self
     {
         if ($number === null) {
             $arrayTmp = $this->array;
@@ -1588,7 +1590,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function firstsMutable(int $number = null)
+    public function firstsMutable(int $number = null): self
     {
         if ($number === null) {
             $this->array = (array) \array_shift($this->array);
@@ -1606,7 +1608,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function flip()
+    public function flip(): self
     {
         return static::create(
             \array_flip($this->array),
@@ -1700,7 +1702,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function getColumn($columnKey = null, $indexKey = null)
+    public function getColumn($columnKey = null, $indexKey = null): self
     {
         return static::create(
             \array_column($this->array, $columnKey, $indexKey),
@@ -1722,12 +1724,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->keys()"
      *
-     * @see Arrayy::keys()
-     *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @see Arrayy::keys()
      */
-    public function getKeys()
+    public function getKeys(): self
     {
         return $this->keys();
     }
@@ -1745,12 +1747,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomImmutable()"
      *
-     * @see Arrayy::randomImmutable()
-     *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @see Arrayy::randomImmutable()
      */
-    public function getRandom()
+    public function getRandom(): self
     {
         return $this->randomImmutable();
     }
@@ -1758,10 +1760,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomKey()"
      *
-     * @see Arrayy::randomKey()
-     *
      * @return mixed
      *               <p>Get a key/index or null if there wasn't a key/index.</p>
+     *
+     * @see Arrayy::randomKey()
      */
     public function getRandomKey()
     {
@@ -1771,14 +1773,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomKeys()"
      *
-     * @see Arrayy::randomKeys()
-     *
      * @param int $number
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @see Arrayy::randomKeys()
      */
-    public function getRandomKeys(int $number)
+    public function getRandomKeys(int $number): self
     {
         return $this->randomKeys($number);
     }
@@ -1786,10 +1788,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomValue()"
      *
-     * @see Arrayy::randomValue()
-     *
      * @return mixed
      *               <p>Get a random value or null if there wasn't a value.</p>
+     *
+     * @see Arrayy::randomValue()
      */
     public function getRandomValue()
     {
@@ -1799,14 +1801,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomValues()"
      *
-     * @see Arrayy::randomValues()
-     *
      * @param int $number
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @see Arrayy::randomValues()
      */
-    public function getRandomValues(int $number)
+    public function getRandomValues(int $number): self
     {
         return $this->randomValues($number);
     }
@@ -1820,7 +1822,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function group($grouper, bool $saveKeys = false)
+    public function group($grouper, bool $saveKeys = false): self
     {
         // init
         $result = [];
@@ -1906,7 +1908,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function indexBy($key)
+    public function indexBy($key): self
     {
         // init
         $results = [];
@@ -1923,11 +1925,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->searchIndex()"
      *
-     * @see Arrayy::searchIndex()
-     *
      * @param mixed $value <p>The value to search for.</p>
      *
      * @return mixed
+     *
+     * @see Arrayy::searchIndex()
      */
     public function indexOf($value)
     {
@@ -1942,7 +1944,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function initial(int $to = 1)
+    public function initial(int $to = 1): self
     {
         return $this->firstsImmutable(\count($this->array, \COUNT_NORMAL) - $to);
     }
@@ -1955,7 +1957,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function intersection(array $search)
+    public function intersection(array $search): self
     {
         return static::create(
             \array_values(\array_intersect($this->array, $search)),
@@ -1985,7 +1987,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function invoke($callable, $arguments = [])
+    public function invoke($callable, $arguments = []): self
     {
         // If one argument given for each iteration, create an array for it.
         if (!\is_array($arguments)) {
@@ -2135,7 +2137,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) An array of all the keys in input.</p>
      */
-    public function keys(bool $recursive = false, $search_value = null, bool $strict = true)
+    public function keys(bool $recursive = false, $search_value = null, bool $strict = true): self
     {
 
         // recursive
@@ -2173,7 +2175,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function krsort(int $sort_flags = 0)
+    public function krsort(int $sort_flags = 0): self
     {
         \krsort($this->array, $sort_flags);
 
@@ -2199,7 +2201,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function lastsImmutable(int $number = null)
+    public function lastsImmutable(int $number = null): self
     {
         if ($this->isEmpty()) {
             return static::create([], $this->iteratorClass, false);
@@ -2231,7 +2233,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function lastsMutable(int $number = null)
+    public function lastsMutable(int $number = null): self
     {
         if ($this->isEmpty()) {
             return $this;
@@ -2260,11 +2262,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * alias: for "Arrayy->count()"
      *
-     * @see Arrayy::count()
-     *
      * @param int $mode
      *
      * @return int
+     *
+     * @see Arrayy::count()
      */
     public function length(int $mode = \COUNT_NORMAL): int
     {
@@ -2280,7 +2282,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Arrayy object with modified elements.</p>
      */
-    public function map($callable)
+    public function map($callable): self
     {
         return static::create(
             \array_map($callable, $this->array),
@@ -2362,7 +2364,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function mergeAppendKeepIndex(array $array = [], bool $recursive = false)
+    public function mergeAppendKeepIndex(array $array = [], bool $recursive = false): self
     {
         if ($recursive === true) {
             $result = \array_replace_recursive($this->array, $array);
@@ -2385,7 +2387,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function mergeAppendNewIndex(array $array = [], bool $recursive = false)
+    public function mergeAppendNewIndex(array $array = [], bool $recursive = false): self
     {
         if ($recursive === true) {
             $result = \array_merge_recursive($this->array, $array);
@@ -2407,7 +2409,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function mergePrependKeepIndex(array $array = [], bool $recursive = false)
+    public function mergePrependKeepIndex(array $array = [], bool $recursive = false): self
     {
         if ($recursive === true) {
             $result = \array_replace_recursive($array, $this->array);
@@ -2430,7 +2432,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function mergePrependNewIndex(array $array = [], bool $recursive = false)
+    public function mergePrependNewIndex(array $array = [], bool $recursive = false): self
     {
         if ($recursive === true) {
             $result = \array_merge_recursive($array, $this->array);
@@ -2474,7 +2476,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function moveElement($from, $to)
+    public function moveElement($from, $to): self
     {
         $array = $this->array;
 
@@ -2510,7 +2512,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function only(array $keys)
+    public function only(array $keys): self
     {
         $array = $this->array;
 
@@ -2530,7 +2532,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Arrayy object padded to $size with $value.</p>
      */
-    public function pad(int $size, $value)
+    public function pad(int $size, $value): self
     {
         return static::create(
             \array_pad($this->array, $size, $value),
@@ -2559,7 +2561,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the prepended value.</p>
      */
-    public function prepend($value, $key = null)
+    public function prepend($value, $key = null): self
     {
         if ($key === null) {
             \array_unshift($this->array, $value);
@@ -2579,7 +2581,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Return an Arrayy object, with the prepended keys.</p>
      */
-    public function prependToEachKey($suffix)
+    public function prependToEachKey($suffix): self
     {
         // init
         $result = [];
@@ -2605,7 +2607,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Return an Arrayy object, with the prepended values.</p>
      */
-    public function prependToEachValue($suffix)
+    public function prependToEachValue($suffix): self
     {
         // init
         $result = [];
@@ -2633,7 +2635,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with pushed elements to the end of array.</p>
      */
-    public function push(/* variadic arguments allowed */)
+    public function push(/* variadic arguments allowed */): self
     {
         if (\func_num_args()) {
             $args = \array_merge([&$this->array], \func_get_args());
@@ -2651,7 +2653,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function randomImmutable(int $number = null)
+    public function randomImmutable(int $number = null): self
     {
         if (\count($this->array, \COUNT_NORMAL) === 0) {
             return static::create([], $this->iteratorClass, false);
@@ -2700,7 +2702,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function randomKeys(int $number)
+    public function randomKeys(int $number): self
     {
         $count = \count($this->array, \COUNT_NORMAL);
 
@@ -2727,7 +2729,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function randomMutable(int $number = null)
+    public function randomMutable(int $number = null): self
     {
         if (\count($this->array, \COUNT_NORMAL) === 0) {
             return static::create([], $this->iteratorClass, false);
@@ -2772,7 +2774,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function randomValues(int $number)
+    public function randomValues(int $number): self
     {
         return $this->randomMutable($number);
     }
@@ -2788,7 +2790,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function randomWeighted(array $array, int $number = null)
+    public function randomWeighted(array $array, int $number = null): self
     {
         // init
         $options = [];
@@ -2813,7 +2815,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function reduce($callable, array $init = [])
+    public function reduce($callable, array $init = []): self
     {
         $result = \array_reduce($this->array, $callable, $init);
 
@@ -2832,7 +2834,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with re-indexed array-elements.</p>
      */
-    public function reindex()
+    public function reindex(): self
     {
         $this->array = \array_values($this->array);
 
@@ -2847,7 +2849,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function reject(\Closure $closure)
+    public function reject(\Closure $closure): self
     {
         $filtered = [];
 
@@ -2868,7 +2870,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function remove($key)
+    public function remove($key): self
     {
         // recursive call
         if (\is_array($key)) {
@@ -2890,7 +2892,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function removeFirst()
+    public function removeFirst(): self
     {
         $tmpArray = $this->array;
         \array_shift($tmpArray);
@@ -2904,7 +2906,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function removeLast()
+    public function removeLast(): self
     {
         $tmpArray = $this->array;
         \array_pop($tmpArray);
@@ -2920,7 +2922,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function removeValue($value)
+    public function removeValue($value): self
     {
         $isNumericArray = true;
         foreach ($this->getGenerator() as $key => $item) {
@@ -2970,7 +2972,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function replace($replace, $key, $value)
+    public function replace($replace, $key, $value): self
     {
         $that = $this->remove($replace);
 
@@ -2985,7 +2987,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Arrayy object with keys from the other array.</p>
      */
-    public function replaceAllKeys(array $keys)
+    public function replaceAllKeys(array $keys): self
     {
         return static::create(
             \array_combine($keys, $this->array),
@@ -3002,7 +3004,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Arrayy object with values from the other array.</p>
      */
-    public function replaceAllValues(array $array)
+    public function replaceAllValues(array $array): self
     {
         return static::create(
             \array_combine($this->array, $array),
@@ -3019,7 +3021,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function replaceKeys(array $keys)
+    public function replaceKeys(array $keys): self
     {
         $values = \array_values($this->array);
         $result = \array_combine($keys, $values);
@@ -3036,7 +3038,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function replaceOneValue($search, $replacement = '')
+    public function replaceOneValue($search, $replacement = ''): self
     {
         $array = $this->array;
         $key = \array_search($search, $array, true);
@@ -3057,7 +3059,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function replaceValues($search, $replacement = '')
+    public function replaceValues($search, $replacement = ''): self
     {
         $array = $this->each(
             static function ($value) use ($search, $replacement) {
@@ -3076,7 +3078,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function rest(int $from = 1)
+    public function rest(int $from = 1): self
     {
         $tmpArray = $this->array;
 
@@ -3093,7 +3095,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function reverse()
+    public function reverse(): self
     {
         $this->array = \array_reverse($this->array);
 
@@ -3112,7 +3114,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function rsort(int $sort_flags = 0)
+    public function rsort(int $sort_flags = 0): self
     {
         \rsort($this->array, $sort_flags);
 
@@ -3139,7 +3141,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Will return a empty Arrayy if the value wasn't found.</p>
      */
-    public function searchValue($index)
+    public function searchValue($index): self
     {
         // init
         $return = [];
@@ -3169,7 +3171,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function set($key, $value)
+    public function set($key, $value): self
     {
         $this->internalSet($key, $value);
 
@@ -3217,7 +3219,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function shuffle(bool $secure = false, array $array = null)
+    public function shuffle(bool $secure = false, array $array = null): self
     {
         if ($array === null) {
             $array = $this->array;
@@ -3315,7 +3317,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>A slice of the original array with length $length.</p>
      */
-    public function slice(int $offset, int $length = null, bool $preserveKeys = false)
+    public function slice(int $offset, int $length = null, bool $preserveKeys = false): self
     {
         return static::create(
             \array_slice($this->array, $offset, $length, $preserveKeys),
@@ -3335,7 +3337,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function sort($direction = \SORT_ASC, int $strategy = \SORT_REGULAR, bool $keepKeys = false)
+    public function sort($direction = \SORT_ASC, int $strategy = \SORT_REGULAR, bool $keepKeys = false): self
     {
         return $this->sorting($this->array, $direction, $strategy, $keepKeys);
     }
@@ -3353,7 +3355,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function sortKeys($direction = \SORT_ASC, int $strategy = \SORT_REGULAR)
+    public function sortKeys($direction = \SORT_ASC, int $strategy = \SORT_REGULAR): self
     {
         /** @noinspection UnusedFunctionResultInspection */
         $this->sorterKeys($this->array, $direction, $strategy);
@@ -3371,7 +3373,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function sortValueKeepIndex($direction = \SORT_ASC, int $strategy = \SORT_REGULAR)
+    public function sortValueKeepIndex($direction = \SORT_ASC, int $strategy = \SORT_REGULAR): self
     {
         return $this->sort($direction, $strategy, true);
     }
@@ -3386,7 +3388,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function sortValueNewIndex($direction = \SORT_ASC, int $strategy = \SORT_REGULAR)
+    public function sortValueNewIndex($direction = \SORT_ASC, int $strategy = \SORT_REGULAR): self
     {
         return $this->sort($direction, $strategy, false);
     }
@@ -3405,7 +3407,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function sorter($sorter = null, $direction = \SORT_ASC, int $strategy = \SORT_REGULAR)
+    public function sorter($sorter = null, $direction = \SORT_ASC, int $strategy = \SORT_REGULAR): self
     {
         $array = (array) $this->array;
         $direction = $this->getDirection($direction);
@@ -3441,7 +3443,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function split(int $numberOfPieces = 2, bool $keepKeys = false)
+    public function split(int $numberOfPieces = 2, bool $keepKeys = false): self
     {
         $arrayCount = \count($this->array, \COUNT_NORMAL);
 
@@ -3461,7 +3463,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function stripEmpty()
+    public function stripEmpty(): self
     {
         return $this->filter(
             static function ($item) {
@@ -3483,7 +3485,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function swap($swapA, $swapB)
+    public function swap($swapA, $swapB): self
     {
         $array = $this->array;
 
@@ -3535,7 +3537,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function unique()
+    public function unique(): self
     {
         // INFO: \array_unique() can't handle e.g. "stdClass"-values in an array
 
@@ -3566,7 +3568,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function uniqueKeepIndex()
+    public function uniqueKeepIndex(): self
     {
         // INFO: \array_unique() can't handle e.g. "stdClass"-values in an array
 
@@ -3597,12 +3599,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->unique()"
      *
-     * @see Arrayy::unique()
-     *
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+     *
+     * @see Arrayy::unique()
      */
-    public function uniqueNewIndex()
+    public function uniqueNewIndex(): self
     {
         return $this->unique();
     }
@@ -3613,7 +3615,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with prepended elements to the beginning of array.</p>
      */
-    public function unshift(/* variadic arguments allowed */)
+    public function unshift(/* variadic arguments allowed */): self
     {
         if (\func_num_args()) {
             $args = \array_merge([&$this->array], \func_get_args());
@@ -3629,7 +3631,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function values()
+    public function values(): self
     {
         return static::create(
             \array_values((array) $this->array),
@@ -3647,7 +3649,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with modified elements.</p>
      */
-    public function walk($callable, bool $recursive = false)
+    public function walk($callable, bool $recursive = false): self
     {
         if ($recursive === true) {
             \array_walk_recursive($this->array, $callable);
@@ -3795,7 +3797,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($isObject && $array instanceof \ArrayAccess) {
-            /** @noinspection ReferenceMismatchInspection */
             return static::createFromObject($array)->getArray();
         }
 
@@ -3807,7 +3808,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return (array) $array->__toArray();
         }
 
-        /** @noinspection ReferenceMismatchInspection */
         if (
             \is_string($array)
             ||
@@ -4075,7 +4075,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    protected function sorterKeys(array &$elements, $direction = \SORT_ASC, int $strategy = \SORT_REGULAR)
+    protected function sorterKeys(array &$elements, $direction = \SORT_ASC, int $strategy = \SORT_REGULAR): self
     {
         $direction = $this->getDirection($direction);
 
@@ -4104,7 +4104,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    protected function sorting(array &$elements, $direction = \SORT_ASC, int $strategy = \SORT_REGULAR, bool $keepKeys = false)
+    protected function sorting(array &$elements, $direction = \SORT_ASC, int $strategy = \SORT_REGULAR, bool $keepKeys = false): self
     {
         $direction = $this->getDirection($direction);
 

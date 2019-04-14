@@ -160,7 +160,7 @@ return PhpCsFixer\Config::create()
                                 'phpdoc_single_line_var_spacing'                => true,
                                 'phpdoc_summary'                                => false,
                                 'phpdoc_to_comment'                             => false,
-                                'phpdoc_to_return_type'                         => false,
+                                'phpdoc_to_return_type'                         => true,
                                 'phpdoc_trim'                                   => true,
                                 'phpdoc_trim_consecutive_blank_line_separation' => true,
                                 'phpdoc_types'                                  => true,

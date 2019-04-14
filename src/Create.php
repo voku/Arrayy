@@ -12,7 +12,7 @@ if (!\function_exists('Arrayy\create')) {
      *
      * @return Arrayy
      */
-    function create($array)
+    function create($array): Arrayy
     {
         return new Arrayy($array);
     }

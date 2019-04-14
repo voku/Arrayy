@@ -25,7 +25,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
     public function testParameterMatchFail()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid type: expected infos to be of type {array}, instead got value `foo` with type {string}.');
+        $this->expectExceptionMessage('Invalid type: expected infos to be of type {string[]}, instead got value `foo` with type {string}.');
 
         $modelMeta = CityData::meta();
 
@@ -34,6 +34,23 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
                 $modelMeta->name  => 'Düsseldorf',
                 $modelMeta->plz   => null,
                 $modelMeta->infos => 'foo',
+            ]
+        );
+
+        static::assertInstanceOf(Arrayy::class, $model);
+    }
+
+    public function testParameterMatchFailV2()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $modelMeta = CityData::meta();
+
+        $model = new CityData(
+            [
+                $modelMeta->name  => 'Düsseldorf',
+                $modelMeta->plz   => null,
+                $modelMeta->infos => [1, 2, 3],
             ]
         );
 

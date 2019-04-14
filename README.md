@@ -225,6 +225,20 @@ class User extends \Arrayy\Arrayy
 
   protected $checkPropertiesMismatchInConstructor = true;
 }
+
+/**
+ * Class CityData
+ *
+ * @property string|null $plz
+ * @property string      $name
+ * @property string[]    $infos
+ */
+class CityData extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected $checkPropertiesMismatchInConstructor = true;
+}
 ```
 
 - "checkPropertyTypes": activate the type checking for all defined @property in the class-phpdoc

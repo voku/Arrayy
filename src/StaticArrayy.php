@@ -27,7 +27,7 @@ class StaticArrayy
      * @param string  $name
      * @param mixed[] $arguments
      *
-     * @return Arrayy
+     * @return mixed
      */
     public static function __callStatic(string $name, $arguments)
     {

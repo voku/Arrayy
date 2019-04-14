@@ -14,7 +14,7 @@ class ArrayyMeta
      *
      * @return string
      */
-    public function __get($name)
+    public function __get($name): string
     {
         return '';
     }

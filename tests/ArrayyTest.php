@@ -4069,7 +4069,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
          *
          * @return array
          */
-        function myReducer($resultArray, $value)
+        function myReducer($resultArray, $value): array
         {
             if ($value === 'foo') {
                 $resultArray[] = $value;
