@@ -609,12 +609,27 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
             return $resultArray;
         };
+
+        // ---
+
         $array = [1, 2, 3, 4];
         $arrayy = $this->createArrayy($array);
         $arrayyReduced = $arrayy->reduce($func)->getArray();
         $arrayReduced = (array) \array_reduce($array, $func);
 
         static::assertSame($arrayReduced, $arrayyReduced);
+
+        // ---
+
+
+        $arrayyGenerator = (new A([1, 2, 3, 4]))->getGenerator();
+        $arrayy = new A($arrayyGenerator);
+        $arrayyReduced = $arrayy->reduce($func)->getArray();
+        $arrayReduced = (array) \array_reduce($array, $func);
+
+        static::assertSame($arrayReduced, $arrayyReduced);
+
+
     }
 
     /**
