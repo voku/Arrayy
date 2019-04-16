@@ -17,6 +17,37 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 ```
 [documentation via gitbooks.io](https://voku.gitbooks.io/arrayy/content/)
 
+## Installation via composer (manually)
+
+If you're using Composer to manage dependencies, you can include the following
+in your composer.json file:
+
+```json
+"require": {
+    "voku/arrayy": "5.*"
+}
+```
+
+If your project do not need some of the Symfony polyfill please use the `replace` section of your `composer.json`. 
+This removes any overhead from these polyfills as they are no longer part of your project. e.g.:
+```json
+"replace": {
+  "symfony/polyfill-mbstring": "1.99"
+}
+```
+
+Then, after running `composer update` or `php composer.phar update`, you can
+load the class using Composer's autoloading:
+
+```php
+require 'vendor/autoload.php';
+```
+
+And in either case, I'd suggest using an alias.
+
+```php
+use Arrayy\Arrayy as A;
+```
 
 * [Instance methods](#instance-methods)
     * ["set an array value"](#set-an-array-value)
@@ -112,38 +143,6 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 ## Installation via "composer require"
 ```shell
 composer require voku/arrayy
-```
-
-## Installation via composer (manually)
-
-If you're using Composer to manage dependencies, you can include the following
-in your composer.json file:
-
-```json
-"require": {
-    "voku/arrayy": "5.*"
-}
-```
-
-If your project do not need some of the Symfony polyfill please use the `replace` section of your `composer.json`. 
-This removes any overhead from these polyfills as they are no longer part of your project. e.g.:
-```json
-"replace": {
-  "symfony/polyfill-mbstring": "1.99"
-}
-```
-
-Then, after running `composer update` or `php composer.phar update`, you can
-load the class using Composer's autoloading:
-
-```php
-require 'vendor/autoload.php';
-```
-
-And in either case, I'd suggest using an alias.
-
-```php
-use Arrayy\Arrayy as A;
 ```
 
 ## Multidimensional ArrayAccess
