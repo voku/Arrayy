@@ -43,7 +43,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @var bool
      */
-    protected $checkForMissingPropertiesInConstructor = false;
+    protected $checkForMissingPropertiesInConstructor = true;
 
     /**
      * @var bool
@@ -62,7 +62,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Initializes
      *
      * @param mixed  $array                                  <p>
-     *                                                       Should be an array, otherwise it will try to convert
+     *                                                       Should be an array or a generator, otherwise it will try to convert
      *                                                       it into an array.
      *                                                       </p>
      * @param string $iteratorClass                          optional <p>
@@ -85,14 +85,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         // used only for serialize + unserialize, all other methods are overwritten
         parent::__construct([], 0, $iteratorClass);
 
+        $checkForMissingPropertiesInConstructor = $this->checkForMissingPropertiesInConstructor === true
+                                                  &&
+                                                  $checkForMissingPropertiesInConstructor === true;
+
         if (
             $this->checkPropertyTypes === true
             ||
-            (
-                $this->checkForMissingPropertiesInConstructor === true
-                &&
-                $checkForMissingPropertiesInConstructor === true
-            )
+            $checkForMissingPropertiesInConstructor === true
         ) {
             $this->properties = $this->getPublicProperties();
         }
@@ -105,14 +105,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             \count(\array_diff_key($this->properties, $array)) > 0
         ) {
             throw new \InvalidArgumentException('Property mismatch - input: ' . \print_r(\array_keys($array), true) . ' | expected: ' . \print_r(\array_keys($this->properties), true));
-        }
+        };
 
-        \array_walk(
-            $array,
-            function (&$value, &$key) {
-                $this->internalSet($key, $value);
-            }
-        );
+        foreach ($array as $key => &$value) {
+            $this->internalSet(
+                $key,
+                $value,
+                $checkForMissingPropertiesInConstructor
+            );
+        }
 
         $this->setIteratorClass($iteratorClass);
     }
@@ -4161,12 +4162,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param string|null $key
      * @param mixed       $value
+     * @param bool        $checkProperties
      *
      * @return bool
      */
-    protected function internalSet($key, $value): bool
+    protected function internalSet($key, $value, $checkProperties = true): bool
     {
-        if ($this->checkPropertyTypes === true) {
+        if (
+            $checkProperties === true
+            &&
+            $this->properties !== []
+        ) {
             if (isset($this->properties[$key]) === false) {
                 throw new \InvalidArgumentException('The key ' . $key . ' does not exists as @property in the class (' . \get_class($this) . ').');
             }
