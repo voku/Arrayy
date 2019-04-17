@@ -14,4 +14,6 @@ class CityData extends \Arrayy\Arrayy
     protected $checkPropertyTypes = true;
 
     protected $checkPropertiesMismatchInConstructor = true;
+
+    protected $checkForMissingPropertiesInConstructor = true;
 }

@@ -43,7 +43,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @var bool
      */
-    protected $checkForMissingPropertiesInConstructor = true;
+    protected $checkForMissingPropertiesInConstructor = false;
 
     /**
      * @var bool
@@ -86,15 +86,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         parent::__construct([], 0, $iteratorClass);
 
         $checkForMissingPropertiesInConstructor = $this->checkForMissingPropertiesInConstructor === true
-                                                  &&
-                                                  $checkForMissingPropertiesInConstructor === true;
+                                        &&
+                                        $checkForMissingPropertiesInConstructor === true;
 
         if (
             $this->checkPropertyTypes === true
             ||
             $checkForMissingPropertiesInConstructor === true
         ) {
-            $this->properties = $this->getPublicProperties();
+            $this->properties = $this->getPropertiesFromPhpDoc();
         }
 
         if (
@@ -4003,7 +4003,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @return array|Property[]
      */
-    protected function getPublicProperties(): array
+    private function getPropertiesFromPhpDoc(): array
     {
         static $PROPERTY_CACHE = [];
         $cacheKey = 'Class::' . static::class;

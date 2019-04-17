@@ -12,8 +12,7 @@ namespace Arrayy\tests;
  */
 class UserData extends \Arrayy\Arrayy
 {
-    /**
-     * @var bool
-     */
     protected $checkPropertyTypes = true;
+
+    protected $checkForMissingPropertiesInConstructor = true;
 }
