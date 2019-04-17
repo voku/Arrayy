@@ -5066,6 +5066,23 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
+    public function testStaticCreateFromGeneratorFunctionFromArray(array $array)
+    {
+        $arrayy = A::create($array);
+        $resultArrayy = A::createFromGeneratorFunction(
+            static function() use ($arrayy) {
+                yield from $arrayy->getArray();
+            }
+        );
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
     public function testStaticCreateFromJson(array $array)
     {
         $json = \json_encode($array);

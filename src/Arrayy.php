@@ -21,7 +21,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected $array = [];
 
     /**
-     * @var \Generator|null
+     * @var ArrayyRewindableGenerator|null
      */
     protected $generator;
 
@@ -343,7 +343,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $iterator = $this->getIteratorClass();
 
-        return new $iterator($this->getArray());
+        return new $iterator($this->getArray(), 0, static::class);
     }
 
     /**
@@ -1097,9 +1097,28 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public static function createFromGeneratorImmutable(\Generator $generator): self
     {
         // init
-        $array = new static( $generator);
+        $arrayy = new static();
 
-        return $array;
+        foreach ($generator as $key => $value) {
+            $arrayy[$key] = $value;
+        }
+
+        return $arrayy;
+    }
+
+    /**
+     * Create an new instance from a callable function which will return an Generator.
+     *
+     * @param callable<mixed, \Generator> $generatorFunction
+     *
+     * @return static
+     *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+     */
+    public static function createFromGeneratorFunction(callable $generatorFunction): self
+    {
+        $arrayy = new static($generatorFunction);
+
+        return $arrayy;
     }
 
     /**
@@ -1315,7 +1334,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -1370,7 +1393,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $array[$key] = $closure($value, $key);
         }
 
-        return static::create($array, $this->iteratorClass, false);
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -1423,7 +1450,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             ++$count;
         }
 
-        return static::create($tmpArray, $this->iteratorClass, false);
+        return static::create(
+            $tmpArray,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -1553,7 +1584,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             )
         );
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -1623,7 +1658,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $array = \array_splice($arrayTmp, 0, $number);
         }
 
-        return static::create($array, $this->iteratorClass, false);
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -1693,11 +1732,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ($array !== null) {
             $usedArray = $array;
         } else {
+            $this->generatorToArray();
+
             $usedArray = $this->array;
         }
 
         if ($key === null) {
-            return static::create($usedArray, $this->iteratorClass, false);
+            return static::create(
+                $usedArray,
+                $this->iteratorClass,
+                false
+            );
         }
 
         // php cast "bool"-index into "int"-index
@@ -1707,13 +1752,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if (\array_key_exists($key, $usedArray) === true) {
             if (\is_array($usedArray[$key])) {
-                return static::create($usedArray[$key], $this->iteratorClass, false);
+                return static::create(
+                    $usedArray[$key],
+                    $this->iteratorClass,
+                    false
+                );
             }
 
             return $usedArray[$key];
         }
 
-        // Crawl through array, get key according to object or not
+        // crawl through array, get key according to object or not
         foreach (\explode($this->pathSeparator, (string) $key) as $segment) {
             if (!isset($usedArray[$segment])) {
                 return $fallback instanceof \Closure ? $fallback() : $fallback;
@@ -1723,7 +1772,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if (\is_array($usedArray)) {
-            return static::create($usedArray, $this->iteratorClass, false);
+            return static::create(
+                $usedArray,
+                $this->iteratorClass,
+                false
+            );
         }
 
         return $usedArray;
@@ -1779,7 +1832,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function getGenerator(): \Generator
     {
-        if ($this->generator instanceof \Generator) {
+        if ($this->generator instanceof ArrayyRewindableGenerator) {
             yield from $this->generator;
         }
 
@@ -1917,7 +1970,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -1984,7 +2041,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        return static::create($results, $this->iteratorClass, false);
+        return static::create(
+            $results,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2069,7 +2130,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $array = \array_map($callable, $this->getArray());
         }
 
-        return static::create($array, $this->iteratorClass, false);
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2218,7 +2283,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $array = $this->array_keys_recursive($this->getArray(), $search_value, $strict);
             }
 
-            return static::create($array, $this->iteratorClass, false);
+            return static::create(
+                $array,
+                $this->iteratorClass,
+                false
+            );
         }
 
         // non recursive
@@ -2229,7 +2298,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $array = \array_keys($this->getArray(), $search_value, $strict);
         }
 
-        return static::create($array, $this->iteratorClass, false);
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2275,7 +2348,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function lastsImmutable(int $number = null): self
     {
         if ($this->isEmpty()) {
-            return static::create([], $this->iteratorClass, false);
+            return static::create(
+                [],
+                $this->iteratorClass,
+                false
+            );
         }
 
         if ($number === null) {
@@ -2287,7 +2364,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $poppedValue = (array) $poppedValue;
             }
 
-            $arrayy = static::create($poppedValue, $this->iteratorClass, false);
+            $arrayy = static::create(
+                $poppedValue,
+                $this->iteratorClass,
+                false
+            );
         } else {
             $number = (int) $number;
             $arrayy = $this->rest(-$number);
@@ -2319,7 +2400,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $poppedValue = (array) $poppedValue;
             }
 
-            $this->array = static::create($poppedValue, $this->iteratorClass, false)->getArray();
+            $this->array = static::create(
+                $poppedValue,
+                $this->iteratorClass,
+                false
+            )->getArray();
         } else {
             $number = (int) $number;
             $this->array = $this->rest(-$number)->getArray();
@@ -2445,7 +2530,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $result = \array_replace($this->getArray(), $array);
         }
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2468,7 +2557,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $result = \array_merge($this->getArray(), $array);
         }
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2490,7 +2583,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $result = \array_replace($array, $this->getArray());
         }
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2513,7 +2610,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $result = \array_merge($array, $this->getArray());
         }
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2574,7 +2675,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $output = [];
         }
 
-        return static::create($output, $this->iteratorClass, false);
+        return static::create(
+            $output,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2667,13 +2772,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if ($item instanceof self) {
                 $result[$key] = $item->prependToEachKey($suffix);
             } elseif (\is_array($item)) {
-                $result[$key] = self::create($item, $this->iteratorClass, false)->prependToEachKey($suffix)->toArray();
+                $result[$key] = self::create(
+                    $item,
+                    $this->iteratorClass,
+                    false
+                )->prependToEachKey($suffix)
+                 ->toArray();
             } else {
                 $result[$key . $suffix] = $item;
             }
         }
 
-        return self::create($result, $this->iteratorClass, false);
+        return self::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2693,9 +2807,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if ($item instanceof self) {
                 $result[$key] = $item->prependToEachValue($suffix);
             } elseif (\is_array($item)) {
-                $result[$key] = self::create($item, $this->iteratorClass, false)
-                    ->prependToEachValue($suffix)
-                    ->toArray();
+                $result[$key] = self::create(
+                    $item,
+                    $this->iteratorClass,
+                    false
+                )->prependToEachValue($suffix)
+                 ->toArray();
             } elseif (\is_object($item)) {
                 $result[$key] = $item;
             } else {
@@ -2703,7 +2820,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        return self::create($result, $this->iteratorClass, false);
+        return self::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2737,21 +2858,33 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray();
 
         if (\count($this->array, \COUNT_NORMAL) === 0) {
-            return static::create([], $this->iteratorClass, false);
+            return static::create(
+                [],
+                $this->iteratorClass,
+                false
+            );
         }
 
         if ($number === null) {
             /** @noinspection NonSecureArrayRandUsageInspection */
             $arrayRandValue = [$this->array[\array_rand($this->array)]];
 
-            return static::create($arrayRandValue, $this->iteratorClass, false);
+            return static::create(
+                $arrayRandValue,
+                $this->iteratorClass,
+                false
+            );
         }
 
         $arrayTmp = $this->array;
         /** @noinspection NonSecureShuffleUsageInspection */
         \shuffle($arrayTmp);
 
-        return static::create($arrayTmp, $this->iteratorClass, false)->firstsImmutable($number);
+        return static::create(
+            $arrayTmp,
+            $this->iteratorClass,
+            false
+        )->firstsImmutable($number);
     }
 
     /**
@@ -2801,7 +2934,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $result = (array) \array_rand($this->array, $number);
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2817,7 +2954,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray();
 
         if (\count($this->array, \COUNT_NORMAL) === 0) {
-            return static::create([], $this->iteratorClass, false);
+            return static::create(
+                [],
+                $this->iteratorClass,
+                false
+            );
         }
 
         if ($number === null) {
@@ -2909,7 +3050,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $result = $callable($result, $value);
             }
 
-            return static::create($result, $this->iteratorClass, false);
+            return static::create(
+                $result,
+                $this->iteratorClass,
+                false
+            );
         }
 
         $result = \array_reduce($this->array, $callable, $init);
@@ -2920,7 +3065,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $this->array = (array) $result;
         }
 
-        return static::create($this->array, $this->iteratorClass, false);
+        return static::create(
+            $this->array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2957,7 +3106,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        return static::create($filtered, $this->iteratorClass, false);
+        return static::create(
+            $filtered,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2976,12 +3129,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $this->internalRemove($k);
             }
 
-            return static::create($this->getArray(), $this->iteratorClass, false);
+            return static::create(
+                $this->getArray(),
+                $this->iteratorClass,
+                false
+            );
         }
 
         $this->internalRemove($key);
 
-        return static::create($this->getArray(), $this->iteratorClass, false);
+        return static::create(
+            $this->getArray(),
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2996,7 +3157,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         \array_shift($tmpArray);
 
-        return static::create($tmpArray, $this->iteratorClass, false);
+        return static::create(
+            $tmpArray,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3011,7 +3176,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         \array_pop($tmpArray);
 
-        return static::create($tmpArray, $this->iteratorClass, false);
+        return static::create(
+            $tmpArray,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3042,7 +3211,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $this->array = \array_values($this->array);
         }
 
-        return static::create($this->array, $this->iteratorClass, false);
+        return static::create(
+            $this->array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3130,7 +3303,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $values = \array_values($this->getArray());
         $result = \array_combine($keys, $values);
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3151,7 +3328,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $array[$key] = $replacement;
         }
 
-        return static::create($array, $this->iteratorClass, false);
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3264,7 +3445,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $return = [];
 
         if ($this->isEmpty()) {
-            return static::create([], $this->iteratorClass, false);
+            return static::create(
+                [],
+                $this->iteratorClass,
+                false
+            );
         }
 
         // php cast "bool"-index into "int"-index
@@ -3276,7 +3461,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $return = [$this->array[$index]];
         }
 
-        return static::create($return, $this->iteratorClass, false);
+        return static::create(
+            $return,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3379,7 +3568,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        return static::create($array, $this->iteratorClass, false);
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3550,7 +3743,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         // Transform all values into their results.
         if ($sorter) {
-            $arrayy = static::create($array, $this->iteratorClass, false);
+            $arrayy = static::create(
+                $array,
+                $this->iteratorClass,
+                false
+            );
 
             $that = $this;
             $results = $arrayy->each(
@@ -3567,7 +3764,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         // Sort by the results and replace by original values
         \array_multisort($results, $direction, $strategy, $array);
 
-        return static::create($array, $this->iteratorClass, false);
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3592,7 +3793,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $result = \array_chunk($this->array, $splitSize, $keepKeys);
         }
 
-        return static::create($result, $this->iteratorClass, false);
+        return static::create(
+            $result,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3629,7 +3834,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         list($array[$swapA], $array[$swapB]) = [$array[$swapB], $array[$swapA]];
 
-        return static::create($array, $this->iteratorClass, false);
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3948,7 +4157,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($isObject && $array instanceof \Generator) {
-            $this->generator = $array;
+            return static::createFromGeneratorImmutable($array)->getArray();
+        }
+
+        if (is_callable($array)) {
+            $this->generator = new ArrayyRewindableGenerator($array);
 
             return [];
         }

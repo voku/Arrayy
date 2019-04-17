@@ -10,13 +10,19 @@ namespace Arrayy;
 class ArrayyIterator extends \ArrayIterator
 {
     /**
-     * ArrayyIterator constructor.
-     *
-     * @param array $array
-     * @param int   $flags
+     * @var string
      */
-    public function __construct(array $array = [], $flags = 0)
+    private $class;
+
+    /**
+     * @param array  $array
+     * @param int    $flags
+     * @param string $class
+     */
+    public function __construct(array $array = [], int $flags = 0, string $class = '')
     {
+        $this->class = $class;
+
         parent::__construct($array, $flags);
     }
 
@@ -28,7 +34,7 @@ class ArrayyIterator extends \ArrayIterator
         $value = parent::current();
 
         if (\is_array($value)) {
-            $value = Arrayy::create($value);
+            $value = call_user_func([$this->class, 'create'], $value);
         }
 
         return $value;
@@ -44,7 +50,7 @@ class ArrayyIterator extends \ArrayIterator
         $value = parent::offsetGet($offset);
 
         if (\is_array($value)) {
-            $value = Arrayy::create($value);
+            $value = call_user_func([$this->class, 'create'], $value);
         }
 
         return $value;

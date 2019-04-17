@@ -3,11 +3,9 @@
 namespace Arrayy;
 
 /**
- * Class Property
- *
  * inspired by https://github.com/spatie/value-object
  */
-class Property extends \ReflectionProperty
+final class Property extends \ReflectionProperty
 {
     /**
      * @var array

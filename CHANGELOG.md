@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.7.0 (2019-04-17)
+- optimize property check in the constructor
+- better support for PhpDoc @property checks
+- allow callable<mixed, \Generator> as input (Arrayy::createFromGeneratorFunction())
+
+
 ### 5.6.3 (2019-01-11)
 - "ramsey/array_column" is not needed anymore
 - use autoloader also for the tests 

@@ -621,15 +621,54 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
+        $generator = static function() {
+            return (new A([1, 2, 3, 4]))->getGenerator();
+        };
 
-        $arrayyGenerator = (new A([1, 2, 3, 4]))->getGenerator();
-        $arrayy = new A($arrayyGenerator);
+        $arrayy = new A($generator);
         $arrayyReduced = $arrayy->reduce($func)->getArray();
         $arrayReduced = (array) \array_reduce($array, $func);
 
         static::assertSame($arrayReduced, $arrayyReduced);
 
+        // ---
 
+        $generator = static function() {
+            return A::createWithRange(2, 4)->getGenerator();
+        };
+        $arrayy = A::createFromGeneratorFunction($generator);
+
+        static::assertSame([2, 3, 4], $arrayy->getArray());
+
+        // ---
+
+        $generator = static function() {
+            return A::createWithRange(2, 4)->getGenerator();
+        };
+        $arrayy = A::createFromGeneratorFunction($generator);
+
+        static::assertSame(2, $arrayy->get(0));
+
+        // ---
+
+        $generator = static function() {
+            return A::createWithRange(2, 4)->getGenerator();
+        };
+        $arrayy = A::createFromGeneratorFunction($generator);
+        $arrayy->set(0, 99);
+
+        static::assertSame([99, 3, 4], $arrayy->getArray());
+
+        // ---
+
+        $generator = static function() {
+            return A::createWithRange(2, 4)->getGenerator();
+        };
+        $arrayy = A::createFromGeneratorFunction($generator);
+        $arrayy->set(0, 99);
+        $arrayy = A::createFromGeneratorFunction($generator);
+
+        static::assertSame([2, 3, 4], $arrayy->getArray());
     }
 
     /**
@@ -639,6 +678,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      */
     public function testToJson(array $array)
     {
+        /** @noinspection PhpComposerExtensionStubsInspection */
         $json = \json_encode($array);
 
         $arrayy = $this->createArrayy($array);

@@ -346,6 +346,29 @@ Create an new instance containing a range of elements.
 $arrayy = A::createWithRange(2, 4); // Arrayy[2, 3, 4]
 ```
 
+##### createFromGeneratorImmutable() : Arrayy (Immutable)
+
+Create an new instance filled with a copy of values from a "Generator"-object.
+
+WARNING: Need more memory then the "A::createFromGeneratorFunction()" call, because we
+         will fetch and store all keys and values from the Generator.
+
+```php
+$generator = A::createWithRange(2, 4)->getGenerator();
+$arrayy = A::createFromGeneratorImmutable($generator); // Arrayy[2, 3, 4]
+```
+
+##### createFromGeneratorFunction() : Arrayy (Immutable)
+
+Create an new instance from a callable function which will return an Generator.
+
+```php
+$generatorFunction = static function() {
+    yield from A::createWithRange(2, 4)->getArray();
+};
+$arrayy = A::createFromGeneratorImmutable($generatorFunction); // Arrayy[2, 3, 4]
+```
+
 ##### createFromString(string $str) : Arrayy (Immutable)
 
 Create an new Arrayy object via string.

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arrayy;
 
-class ArrayyMeta
+final class ArrayyMeta
 {
 
     /** @noinspection MagicMethodsValidityInspection */
