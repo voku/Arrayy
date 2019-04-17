@@ -3978,7 +3978,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function values(): self
     {
         return static::create(
-            \array_values( $this->getArray()),
+            \array_values($this->getArray()),
             $this->iteratorClass,
             false
         );
