@@ -3,8 +3,6 @@
 namespace Arrayy\tests;
 
 /**
- * Class UserData
- *
  * @property int                         $id
  * @property int|string                  $firstName
  * @property string                      $lastName

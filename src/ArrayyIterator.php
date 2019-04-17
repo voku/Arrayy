@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Arrayy;
 
-/**
- * Class ArrayyIterator
- */
 class ArrayyIterator extends \ArrayIterator
 {
     /**
@@ -34,7 +31,7 @@ class ArrayyIterator extends \ArrayIterator
         $value = parent::current();
 
         if (\is_array($value)) {
-            $value = call_user_func([$this->class, 'create'], $value);
+            $value = \call_user_func([$this->class, 'create'], $value);
         }
 
         return $value;
@@ -50,7 +47,7 @@ class ArrayyIterator extends \ArrayIterator
         $value = parent::offsetGet($offset);
 
         if (\is_array($value)) {
-            $value = call_user_func([$this->class, 'create'], $value);
+            $value = \call_user_func([$this->class, 'create'], $value);
         }
 
         return $value;

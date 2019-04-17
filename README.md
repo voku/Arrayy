@@ -270,6 +270,41 @@ use function Arrayy\create as a;
 a(['fòô', 'bàř'])->reverse()->implode(','); // 'bàř,fòô'
 ```
 
+## Collections
+
+If you need to group objects together, it's not a good idea 
+to use a simple array or Arrayy object. For this cases you can use the ```AbstractCollection```
+class.
+
+It will throw a ```InvalidArgumentException``` if you try to add a non valid object into the collection.
+
+e.g.: "YOURCollection.php" (see example ```/tests/CollectionTest.php``` on github)
+```php
+use Arrayy\Collection\AbstractCollection;
+
+class YOURCollection extends AbstractCollection
+{
+    /**
+     * The type (FQCN) associated with this collection.
+     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return YOURInterface::class;
+    }
+}
+
+$YOURobject1 = new YOURClass();
+$YOURobject2 = new YOURClass();
+
+$YOURcollection = new YOURCollection([$YOURobject1, $YOURobject2]);
+
+$YOURcollection->each(static function ($YOURobject) {
+    var_dump($YOURobject);
+});
+``` 
+
 ## StaticArrayy
 
 All methods listed under "Instance methods" are available as part of a static

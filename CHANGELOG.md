@@ -4,6 +4,7 @@
 - optimize property check in the constructor
 - better support for PhpDoc @property checks
 - allow callable<mixed, \Generator> as input (Arrayy::createFromGeneratorFunction())
+- add a "Collection" implementation
 
 
 ### 5.6.3 (2019-01-11)

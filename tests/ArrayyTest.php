@@ -6,8 +6,6 @@ use Arrayy\Arrayy;
 use Arrayy\Arrayy as A;
 
 /**
- * Class ArrayyTestCase
- *
  * @internal
  */
 final class ArrayyTest extends \PHPUnit\Framework\TestCase
@@ -1754,8 +1752,16 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $a = ['foo', 'bar'];
         $b = ['bar', 'baz'];
-        $array = A::create($a)->intersection($b);
-        static::assertSame(['bar'], $array->getArray());
+        $array = A::create($a)->intersection($b, false);
+        static::assertSame([0 => 'bar'], $array->getArray());
+    }
+
+    public function testCanGetIntersectionOfTwoArraysKeepKeys()
+    {
+        $a = ['foo', 'bar'];
+        $b = ['bar', 'baz'];
+        $array = A::create($a)->intersection($b, true);
+        static::assertSame([1 => 'bar'], $array->getArray());
     }
 
     public function testCanGroupValues()
@@ -5070,7 +5076,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $arrayy = A::create($array);
         $resultArrayy = A::createFromGeneratorFunction(
-            static function() use ($arrayy) {
+            static function () use ($arrayy) {
                 yield from $arrayy->getArray();
             }
         );

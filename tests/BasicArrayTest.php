@@ -621,7 +621,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
-        $generator = static function() {
+        $generator = static function () {
             return (new A([1, 2, 3, 4]))->getGenerator();
         };
 
@@ -633,7 +633,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
-        $generator = static function() {
+        $generator = static function () {
             return A::createWithRange(2, 4)->getGenerator();
         };
         $arrayy = A::createFromGeneratorFunction($generator);
@@ -642,7 +642,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
-        $generator = static function() {
+        $generator = static function () {
             return A::createWithRange(2, 4)->getGenerator();
         };
         $arrayy = A::createFromGeneratorFunction($generator);
@@ -651,7 +651,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
-        $generator = static function() {
+        $generator = static function () {
             return A::createWithRange(2, 4)->getGenerator();
         };
         $arrayy = A::createFromGeneratorFunction($generator);
@@ -661,7 +661,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
-        $generator = static function() {
+        $generator = static function () {
             return A::createWithRange(2, 4)->getGenerator();
         };
         $arrayy = A::createFromGeneratorFunction($generator);

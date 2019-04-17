@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Arrayy;
 
 /**
- * Class StaticArrayy
- *
  * INFO: "Method Parameter Information" via PhpStorm |
  * https://www.jetbrains.com/phpstorm/help/viewing-method-parameter-information.html
  */

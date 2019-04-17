@@ -6,8 +6,6 @@ use Arrayy\Arrayy;
 use Arrayy\StaticArrayy as A;
 
 /**
- * Class StaticArrayyTest
- *
  * @internal
  */
 final class StaticArrayyTest extends \PHPUnit\Framework\TestCase

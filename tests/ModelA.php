@@ -4,10 +4,7 @@ namespace Arrayy\tests;
 
 use Arrayy\ArrayyIterator;
 
-/**
- * Class ModelA
- */
-class ModelA extends \Arrayy\Arrayy
+class ModelA extends \Arrayy\Arrayy implements ModelInterface
 {
     /**
      * ModelA constructor.

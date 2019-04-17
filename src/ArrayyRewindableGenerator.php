@@ -38,20 +38,12 @@ final class ArrayyRewindableGenerator implements \Iterator
         $this->generateGenerator();
     }
 
-    private function generateGenerator()
-    {
-        $this->generator = call_user_func($this->generatorFunction);
-
-        if (!($this->generator instanceof \Generator)) {
-            throw new \InvalidArgumentException('The callable needs to return a Generator');
-        }
-    }
-
     /**
      * Return the current element.
      *
      * @return mixed
-     * @link http://php.net/manual/en/iterator.current.php
+     *
+     * @see http://php.net/manual/en/iterator.current.php
      * @see  Iterator::current
      */
     public function current()
@@ -63,7 +55,7 @@ final class ArrayyRewindableGenerator implements \Iterator
      * Move forward to next element.
      *
      * @see  Iterator::next
-     * @link http://php.net/manual/en/iterator.next.php
+     * @see http://php.net/manual/en/iterator.next.php
      */
     public function next()
     {
@@ -73,8 +65,9 @@ final class ArrayyRewindableGenerator implements \Iterator
     /**
      * Return the key of the current element.
      *
-     * @return mixed scalar on success, or null on failure.
-     * @link http://php.net/manual/en/iterator.key.php
+     * @return mixed scalar on success, or null on failure
+     *
+     * @see http://php.net/manual/en/iterator.key.php
      * @see  Iterator::key
      */
     public function key()
@@ -85,11 +78,12 @@ final class ArrayyRewindableGenerator implements \Iterator
     /**
      * Checks if current position is valid.
      *
-     * @return boolean
-     * @link http://php.net/manual/en/iterator.valid.php
+     * @return bool
+     *
+     * @see http://php.net/manual/en/iterator.valid.php
      * @see  Iterator::rewind
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->generator->valid();
     }
@@ -98,14 +92,23 @@ final class ArrayyRewindableGenerator implements \Iterator
      * Rewind the Iterator to the first element.
      *
      * @see  Iterator::rewind
-     * @link http://php.net/manual/en/iterator.rewind.php
+     * @see http://php.net/manual/en/iterator.rewind.php
      */
     public function rewind()
     {
         $this->generateGenerator();
 
-        if (is_callable($this->onRewind)) {
-            call_user_func($this->onRewind);
+        if (\is_callable($this->onRewind)) {
+            \call_user_func($this->onRewind);
+        }
+    }
+
+    private function generateGenerator()
+    {
+        $this->generator = \call_user_func($this->generatorFunction);
+
+        if (!($this->generator instanceof \Generator)) {
+            throw new \InvalidArgumentException('The callable needs to return a Generator');
         }
     }
 }

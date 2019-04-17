@@ -7,8 +7,6 @@ use Arrayy\Arrayy;
 require_once __DIR__ . '/CityData.php';
 
 /**
- * Class CityDataTest
- *
  * @internal
  */
 final class CityDataTest extends \PHPUnit\Framework\TestCase

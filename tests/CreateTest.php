@@ -5,8 +5,6 @@ namespace Arrayy\tests;
 use Arrayy\Arrayy;
 
 /**
- * Class CreateTestCase
- *
  * @internal
  */
 final class CreateTest extends \PHPUnit\Framework\TestCase

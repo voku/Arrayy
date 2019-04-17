@@ -3,8 +3,6 @@
 namespace Arrayy\tests;
 
 /**
- * Class CityData
- *
  * @property string|null $plz
  * @property string      $name
  * @property string[]    $infos
