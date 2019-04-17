@@ -1097,7 +1097,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public static function createFromGeneratorImmutable(\Generator $generator): self
     {
         // init
-        $array = new static( $generator);
+        $array = new static($generator);
 
         return $array;
     }
@@ -3769,7 +3769,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function values(): self
     {
         return static::create(
-            \array_values( $this->getArray()),
+            \array_values($this->getArray()),
             $this->iteratorClass,
             false
         );
