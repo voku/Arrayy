@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.7.1 (2019-04-18)
+- optimize foreach usage for "Collection"-objects
+
+
 ### 5.7.0 (2019-04-17)
 - optimize property check in the constructor
 - better support for PhpDoc @property checks
