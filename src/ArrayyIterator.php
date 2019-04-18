@@ -31,7 +31,7 @@ class ArrayyIterator extends \ArrayIterator
         $value = parent::current();
 
         if (\is_array($value)) {
-            $value = \call_user_func([$this->class, 'create'], $value);
+            return \call_user_func([$this->class, 'create'], $value);
         }
 
         return $value;

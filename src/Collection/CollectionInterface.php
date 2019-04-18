@@ -31,7 +31,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      */
-    public function merge(self ...$collections): self;
+    public function merge(CollectionInterface ...$collections): self;
 
     /**
      * Assigns a value to the specified offset + check the type.

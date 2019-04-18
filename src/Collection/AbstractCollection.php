@@ -23,9 +23,16 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * Constructs a collection object of the specified type, optionally with the
      * specified data.
      *
-     * @param array $data the initial items to store in the collection
+     * @param mixed $data
+     *                     <p>
+     *                     The initial items to store in the collection.
+     *                     </p>
+     *                     <p>
+     *                     Should be an array or a generator, otherwise it will try
+     *                     to convert it into an array.
+     *                     </p>
      */
-    public function __construct(array $data = [])
+    public function __construct($data = [])
     {
         $this->collectionType = $this->getType();
         parent::__construct($data);
@@ -80,9 +87,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function offsetSet($offset, $value)
     {
-        if ($this->checkType($this->getType(), $value) === false) {
+        if ($this->checkType($this->collectionType, $value) === false) {
             throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->getType() . '; value is ' . $this->valueToString($value)
+                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
             );
         }
 
@@ -100,9 +107,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function prepend($value, $key = null): Arrayy
     {
-        if ($this->checkType($this->getType(), $value) === false) {
+        if ($this->checkType($this->collectionType, $value) === false) {
             throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->getType() . '; value is ' . $this->valueToString($value)
+                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
             );
         }
 
@@ -120,9 +127,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function append($value, $key = null): Arrayy
     {
-        if ($this->checkType($this->getType(), $value) === false) {
+        if ($this->checkType($this->collectionType, $value) === false) {
             throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->getType() . '; value is ' . $this->valueToString($value)
+                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
             );
         }
 
@@ -185,9 +192,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     protected function internalSet($key, $value, $checkProperties = true): bool
     {
-        if ($this->checkType($this->getType(), $value) === false) {
+        if ($this->checkType($this->collectionType, $value) === false) {
             throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->getType() . '; value is ' . $this->valueToString($value)
+                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
             );
         }
 

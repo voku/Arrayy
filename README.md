@@ -300,9 +300,9 @@ $YOURobject2 = new YOURClass();
 
 $YOURcollection = new YOURCollection([$YOURobject1, $YOURobject2]);
 
-$YOURcollection->each(static function ($YOURobject) {
+foreach ($YOURcollection as $YOURobject) {
     var_dump($YOURobject);
-});
+}
 ``` 
 
 ## StaticArrayy

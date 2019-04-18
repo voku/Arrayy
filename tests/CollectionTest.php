@@ -2,6 +2,8 @@
 
 namespace Arrayy\tests;
 
+use Arrayy\Arrayy;
+
 /**
  * @internal
  */
@@ -168,5 +170,31 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
             ['a', 'b', 'c'],
             $barCollection->column('name')
         );
+    }
+
+    public function testWithGeneratorsV1()
+    {
+        $arrayyFunction = static function () {
+            $bar1 = new ModelA();
+            $bar1['name'] = 'a';
+            $bar1['foo'] = 'bar';
+            yield $bar1;
+
+            $bar2 = new ModelA();
+            $bar2['name'] = 'b';
+            $bar2['foo'] = 'bar';
+            yield $bar2;
+
+            $bar3 = new ModelB();
+            $bar3['name'] = 'c';
+            $bar3['foo'] = 'bar';
+            yield $bar3;
+        };
+
+        $barCollection = new ModelsCollection($arrayyFunction);
+
+        foreach ($barCollection as $item) {
+            self::assertInstanceOf(ModelInterface::class, $item);
+        }
     }
 }

@@ -51,7 +51,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected $checkPropertiesMismatchInConstructor = false;
 
     /**
-     * @var array|Property[]
+     * @var Property[]
      */
     protected $properties = [];
 
@@ -61,7 +61,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Initializes
      *
-     * @param mixed  $array                                  <p>
+     * @param mixed  $data                                   <p>
      *                                                       Should be an array or a generator, otherwise it will try
      *                                                       to convert it into an array.
      *                                                       </p>
@@ -77,11 +77,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                                       </p>
      */
     public function __construct(
-        $array = [],
+        $data = [],
         string $iteratorClass = ArrayyIterator::class,
         bool $checkForMissingPropertiesInConstructor = true
     ) {
-        $array = $this->fallbackForArray($array);
+        $data = $this->fallbackForArray($data);
 
         // used only for serialize + unserialize, all other methods are overwritten
         parent::__construct([], 0, $iteratorClass);
@@ -101,14 +101,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if (
             $this->checkPropertiesMismatchInConstructor === true
             &&
-            \count($array) !== 0
+            \count($data) !== 0
             &&
-            \count(\array_diff_key($this->properties, $array)) > 0
+            \count(\array_diff_key($this->properties, $data)) > 0
         ) {
-            throw new \InvalidArgumentException('Property mismatch - input: ' . \print_r(\array_keys($array), true) . ' | expected: ' . \print_r(\array_keys($this->properties), true));
+            throw new \InvalidArgumentException('Property mismatch - input: ' . \print_r(\array_keys($data), true) . ' | expected: ' . \print_r(\array_keys($this->properties), true));
         }
 
-        foreach ($array as $key => &$value) {
+        foreach ($data as $key => &$value) {
             $this->internalSet(
                 $key,
                 $value,
@@ -334,13 +334,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Returns a new ArrayyIterator, thus implementing the \ArrayIterator interface.
+     * Returns a new iterator, thus implementing the \Iterator interface.
      *
-     * @return \ArrayIterator
+     * @return \Iterator
      *                        <p>An iterator for the values in the array.</p>
      */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): \Iterator
     {
+        if ($this->generator instanceof ArrayyRewindableGenerator) {
+            return $this->generator;
+        }
+
         $iterator = $this->getIteratorClass();
 
         return new $iterator($this->getArray(), 0, static::class);
@@ -1111,14 +1115,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromGeneratorImmutable(\Generator $generator): self
     {
-        // init
-        $arrayy = new static();
-
-        foreach ($generator as $key => $value) {
-            $arrayy[$key] = $value;
-        }
-
-        return $arrayy;
+        return new static(\iterator_to_array($generator, true));
     }
 
     /**
@@ -4125,56 +4122,56 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * 6. cast a string or object with "__toString()" into an array
      * 7. throw a "InvalidArgumentException"-Exception
      *
-     * @param mixed $array
-     *
-     * @throws \InvalidArgumentException
+     * @param mixed $data
      *
      * @return array
+     *@throws \InvalidArgumentException
+     *
      */
-    protected function fallbackForArray(&$array): array
+    protected function fallbackForArray(&$data): array
     {
-        if (\is_array($array)) {
-            return $array;
+        if (\is_array($data)) {
+            return $data;
         }
 
-        if (!$array) {
+        if (!$data) {
             return [];
         }
 
-        $isObject = \is_object($array);
+        $isObject = \is_object($data);
 
-        if ($isObject && $array instanceof self) {
-            return $array->getArray();
+        if ($isObject && $data instanceof self) {
+            return $data->getArray();
         }
 
-        if ($isObject && $array instanceof \ArrayAccess) {
-            return static::createFromObject($array)->getArray();
+        if ($isObject && $data instanceof \ArrayAccess) {
+            return static::createFromObject($data)->getArray();
         }
 
-        if ($isObject && $array instanceof \ArrayObject) {
-            return $array->getArrayCopy();
+        if ($isObject && $data instanceof \ArrayObject) {
+            return $data->getArrayCopy();
         }
 
-        if ($isObject && $array instanceof \Generator) {
-            return static::createFromGeneratorImmutable($array)->getArray();
+        if ($isObject && $data instanceof \Generator) {
+            return static::createFromGeneratorImmutable($data)->getArray();
         }
 
-        if (\is_callable($array)) {
-            $this->generator = new ArrayyRewindableGenerator($array);
+        if (\is_callable($data)) {
+            $this->generator = new ArrayyRewindableGenerator($data);
 
             return [];
         }
 
-        if ($isObject && \method_exists($array, '__toArray')) {
-            return (array) $array->__toArray();
+        if ($isObject && \method_exists($data, '__toArray')) {
+            return (array) $data->__toArray();
         }
 
         if (
-            \is_string($array)
+            \is_string($data)
             ||
-            ($isObject && \method_exists($array, '__toString'))
+            ($isObject && \method_exists($data, '__toString'))
         ) {
-            return [(string) $array];
+            return [(string) $data];
         }
 
         throw new \InvalidArgumentException(
@@ -4495,7 +4492,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * @return array|Property[]
+     * @return Property[]
      */
     private function getPropertiesFromPhpDoc(): array
     {
