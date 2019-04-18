@@ -21,6 +21,7 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 * [Multidimensional ArrayAccess](#multidimensional-arrayaccess)
 * [PhpDoc @property checking](#phpdoc-property-checking)
 * [OO and Chaining](#oo-and-chaining)
+* [Collections](#collections)
 * [Class methods](#class-methods)
     * [use a "default object"](#use-a-default-object)
     * [create](#createarray-array--arrayy-immutable)
@@ -29,6 +30,8 @@ Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
     * [createFromObject](#createfromobjectarrayaccess-object--arrayy-immutable)
     * [createFromObjectVars](#createfromobjectvarsobject-object--arrayy-immutable)
     * [createWithRange](#createwithrange--arrayy-immutable)
+    * [createFromGeneratorImmutable](#createfromgeneratorimmutable--arrayy-immutable)
+    * [createFromGeneratorFunction](#createfromgeneratorfunction--arrayy-immutable)
     * [createFromString](#createfromstringstring-str--arrayy-immutable)
 * [Instance methods](#instance-methods)
     * ["set an array value"](#set-an-array-value)
@@ -301,7 +304,9 @@ $YOURobject2 = new YOURClass();
 $YOURcollection = new YOURCollection([$YOURobject1, $YOURobject2]);
 
 foreach ($YOURcollection as $YOURobject) {
-    var_dump($YOURobject);
+    if ($YOURobject instanceof YOURInterface) {
+        // ...
+    }
 }
 ``` 
 
@@ -401,7 +406,7 @@ Create an new instance from a callable function which will return an Generator.
 $generatorFunction = static function() {
     yield from A::createWithRange(2, 4)->getArray();
 };
-$arrayy = A::createFromGeneratorImmutable($generatorFunction); // Arrayy[2, 3, 4]
+$arrayy = A::createFromGeneratorFunction($generatorFunction); // Arrayy[2, 3, 4]
 ```
 
 ##### createFromString(string $str) : Arrayy (Immutable)
