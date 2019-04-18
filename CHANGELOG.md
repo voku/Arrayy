@@ -1,7 +1,8 @@
 # Changelog
 
 ### 5.7.1 (2019-04-18)
-- optimize foreach usage for "Collection"-objects
+- "AbstractCollection" -> optimize foreach usage
+- "AbstractCollection" -> fix merge && where methods
 
 
 ### 5.7.0 (2019-04-17)
