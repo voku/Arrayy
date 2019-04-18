@@ -65,8 +65,10 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     public function merge(CollectionInterface ...$collections): CollectionInterface
     {
         foreach ($collections as $collection) {
-            foreach ($collection as $item) {
-                $this->append($item);
+            if ($collection instanceof Arrayy) {
+                foreach ($collection as $item) {
+                    $this->append($item);
+                }
             }
         }
 
@@ -198,7 +200,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     /**
      * Extracts the value of the given property or method from the object.
      *
-     * @param object $object                the object to extract the value from
+     * @param Arrayy $object                the object to extract the value from
      * @param string $keyOrPropertyOrMethod the property or method for which the
      *                                      value should be extracted
      *
@@ -206,7 +208,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return mixed the value extracted from the specified property or method
      */
-    private function extractValue($object, string $keyOrPropertyOrMethod)
+    private function extractValue(Arrayy $object, string $keyOrPropertyOrMethod)
     {
         if (isset($object[$keyOrPropertyOrMethod])) {
             $return = $object->get($keyOrPropertyOrMethod);
@@ -218,13 +220,11 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             return $return;
         }
 
-        $isObject = \is_object($object);
-
-        if ($isObject && \property_exists($object, $keyOrPropertyOrMethod)) {
+        if (\property_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod};
         }
 
-        if ($isObject && \method_exists($object, $keyOrPropertyOrMethod)) {
+        if (\method_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod}();
         }
 
