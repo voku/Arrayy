@@ -64,19 +64,13 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function merge(CollectionInterface ...$collections): CollectionInterface
     {
-        $temp = [$this->array];
-
-        foreach ($collections as $index => $collection) {
-            if (!$collection instanceof static) {
-                throw new \InvalidArgumentException(
-                    \sprintf('Collection with index %d must be of type %s', $index, static::class)
-                );
+        foreach ($collections as $collection) {
+            foreach ($collection as $item) {
+                $this->append($item);
             }
-
-            $temp[] = $collection->toArray();
         }
 
-        return new static(\array_replace(...$temp));
+        return $this;
     }
 
     /**
@@ -214,20 +208,28 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     private function extractValue($object, string $keyOrPropertyOrMethod)
     {
-        if (\array_key_exists($keyOrPropertyOrMethod, $object->array)) {
-            return $object[$keyOrPropertyOrMethod];
+        if (isset($object[$keyOrPropertyOrMethod])) {
+            $return = $object->get($keyOrPropertyOrMethod);
+
+            if ($return instanceof Arrayy) {
+                return $return->getArray();
+            }
+
+            return $return;
         }
 
-        if (\property_exists($object, $keyOrPropertyOrMethod)) {
+        $isObject = \is_object($object);
+
+        if ($isObject && \property_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod};
         }
 
-        if (\method_exists($object, $keyOrPropertyOrMethod)) {
+        if ($isObject && \method_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod}();
         }
 
         throw new \InvalidArgumentException(
-            \sprintf('array-key & property & method "%s" not defined in %s', $keyOrPropertyOrMethod, \get_class($object))
+            \sprintf('array-key & property & method "%s" not defined in %s', $keyOrPropertyOrMethod, \gettype($object))
         );
     }
 

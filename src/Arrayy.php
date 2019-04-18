@@ -347,7 +347,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $iterator = $this->getIteratorClass();
 
-        return new $iterator($this->getArray(), 0, static::class);
+        if ($iterator === ArrayyIterator::class) {
+            return new $iterator($this->getArray(), 0, static::class, false);
+        }
+
+        return new $iterator($this->getArray());
     }
 
     /**
@@ -1775,11 +1779,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $array = [];
 
         foreach ($this->getGenerator() as $key => $value) {
-            if ($value instanceof self) {
-                $array[$key] = $value->getArray();
-            } else {
-                $array[$key] = $value;
-            }
+            $array[$key] = $value;
         }
 
         return $array;

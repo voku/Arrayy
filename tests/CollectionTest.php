@@ -2,8 +2,6 @@
 
 namespace Arrayy\tests;
 
-use Arrayy\Arrayy;
-
 /**
  * @internal
  */
@@ -104,6 +102,23 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame(ModelInterface::class, $modelCollection->getType());
     }
 
+    public function testWhere()
+    {
+        $pet1 = new ModelA(['pet' => ['cat']]);
+        $pet2 = new ModelB(['pet' => ['dog', 'bird']]);
+
+        $modelCollection = new ModelsCollection([$pet1, $pet2]);
+
+        static::assertSame(ModelInterface::class, $modelCollection->getType());
+
+        $newCollection = $modelCollection->where('pet', ['cat']);
+
+        $modelCollectionExpected = new ModelsCollection([$pet1]);
+        /** @noinspection PhpNonStrictObjectEqualityInspection */
+        /** @noinspection PhpUnitTestsInspection */
+        self::assertTrue($modelCollectionExpected == $newCollection);
+    }
+
     public function testPrependExceptionV1()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -170,6 +185,10 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
             ['a', 'b', 'c'],
             $barCollection->column('name')
         );
+
+        foreach ($barCollection as $item) {
+            self::assertInstanceOf(ModelInterface::class, $item);
+        }
     }
 
     public function testWithGeneratorsV1()
@@ -196,5 +215,29 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         foreach ($barCollection as $item) {
             self::assertInstanceOf(ModelInterface::class, $item);
         }
+    }
+
+    public function testMerge()
+    {
+        $bar1 = new ModelA();
+        $bar1['name'] = 'a';
+        $bar1['foo'] = 'bar';
+
+        $bar2 = new ModelA();
+        $bar2['name'] = 'b';
+        $bar2['foo'] = 'bar';
+
+        $bar3 = new ModelB();
+        $bar3['name'] = 'c';
+        $bar3['foo'] = 'bar';
+
+        $barCollection1 = new ModelsCollection([$bar1, $bar3]);
+
+        $barCollection2 = new ModelsCollection([$bar1, $bar2]);
+
+        static::assertSame(
+            [$bar1, $bar3, $bar1, $bar2],
+            $barCollection1->merge($barCollection2)->getCollection()
+        );
     }
 }

@@ -25,13 +25,13 @@ interface CollectionInterface
     /**
      * Merge current items and items of given collections into a new one.
      *
-     * @param CollectionInterface ...$collections The collections to merge.
+     * @param self ...$collections The collections to merge.
      *
      * @throws \InvalidArgumentException if any of the given collections are not of the same type
      *
-     * @return CollectionInterface
+     * @return self
      */
-    public function merge(CollectionInterface ...$collections): self;
+    public function merge(self ...$collections): self;
 
     /**
      * Assigns a value to the specified offset + check the type.
@@ -82,7 +82,7 @@ interface CollectionInterface
      *
      * @throws \InvalidArgumentException if property or method is not defined
      *
-     * @return CollectionInterface
+     * @return self
      */
     public function where(string $keyOrPropertyOrMethod, $value): self;
 }
