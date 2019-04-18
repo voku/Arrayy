@@ -212,7 +212,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         }
 
         if (\property_exists($object, $keyOrPropertyOrMethod)) {
-            return $object->{$propertyOrMethod};
+            return $object->{$keyOrPropertyOrMethod};
         }
 
         if (\method_exists($object, $keyOrPropertyOrMethod)) {

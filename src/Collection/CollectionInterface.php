@@ -47,7 +47,7 @@ interface CollectionInterface
      * @param mixed $value
      * @param mixed $key
      *
-     * @return static
+     * @return Arrayy
      *                <p>(Mutable) Return this Arrayy object, with the prepended value.</p>
      */
     public function prepend($value, $key = null): Arrayy;
@@ -58,7 +58,7 @@ interface CollectionInterface
      * @param mixed $value
      * @param mixed $key
      *
-     * @return static
+     * @return Arrayy
      *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      */
     public function append($value, $key = null): Arrayy;

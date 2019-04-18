@@ -2435,7 +2435,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Apply the given function to the every element of the array,
      * collecting the results.
      *
-     * @param \callable $callable
+     * @param callable $callable
      *
      * @return static
      *                <p>(Immutable) Arrayy object with modified elements.</p>
@@ -3897,7 +3897,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 return $resultArray;
             },
             []
-        );
+        )->getArray();
         $this->generator = null;
 
         return $this;
