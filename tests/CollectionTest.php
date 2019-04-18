@@ -214,6 +214,10 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         foreach ($barCollection as $item) {
             self::assertInstanceOf(ModelInterface::class, $item);
+
+            if ($item instanceof ModelInterface) {
+                self::assertStringStartsWith('foo', $item->getFoo());
+            }
         }
     }
 

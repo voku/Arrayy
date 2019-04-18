@@ -18,4 +18,9 @@ class ModelA extends \Arrayy\Arrayy implements ModelInterface
 
         $this->changeSeparator('^');
     }
+
+    public function getFoo(): string
+    {
+        return 'foo_A';
+    }
 }
