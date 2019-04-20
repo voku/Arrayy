@@ -1801,11 +1801,31 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $usePath = true;
 
                 foreach ($segments as $segment) {
-                    if (!isset($usedArray[$segment])) {
-                        return $fallback instanceof \Closure ? $fallback() : $fallback;
+                    if (
+                        (
+                            \is_array($usedArray)
+                            ||
+                            $usedArray instanceof \ArrayAccess
+                        )
+                        &&
+                        isset($usedArray[$segment])
+                    ) {
+                        $usedArray = $usedArray[$segment];
+
+                        continue;
                     }
 
-                    $usedArray = $usedArray[$segment];
+                    if (
+                        \is_object($usedArray)
+                        &&
+                        property_exists($usedArray, $segment)
+                    ) {
+                        $usedArray = $usedArray->{$segment};
+
+                        continue;
+                    }
+
+                    return $fallback instanceof \Closure ? $fallback() : $fallback;
                 }
             }
         }

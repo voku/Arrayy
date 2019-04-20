@@ -2,6 +2,9 @@
 
 ### 5.8.0 (2019-04-20)
 - add a simple "Collection" implementation + function alias \Arrayy\collection()
+- fix errors reported by phpstan (level 7)
+- improve performance (use "dot-notation" internally only if needed)
+- improve "dot-notation" handling for non "Arrayy" objects
 
 
 ### 5.7.1 (2019-04-18)

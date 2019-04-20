@@ -326,6 +326,9 @@ foreach ($YOURcollection as $YOURobject) {
 }
 ``` 
 
+PS: you can also use "dot-notation" to get data from your collections e.g.
+    ```$YOURcollection->get('3123.foo.bar');```
+
 ## StaticArrayy
 
 All methods listed under "Instance methods" are available as part of a static
