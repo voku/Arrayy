@@ -2,11 +2,37 @@
 
 namespace Arrayy\tests;
 
+use function Arrayy\collection;
+
 /**
  * @internal
  */
 final class CollectionTest extends \PHPUnit\Framework\TestCase
 {
+    public function testSimpleGenericCollection()
+    {
+        $pets = new \stdClass();
+        $pets->foo = 1;
+
+        $colors = new \stdClass();
+        $colors->color = 'red';
+
+        $collection = collection('mixed', [$pets, $colors]);
+
+        static::assertSame([$pets, $colors], $collection->getCollection());
+    }
+
+    public function testSimpleGenericFailCollection()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Value must be of type Arrayy\tests\ModelInterface; value is stdClass Object');
+
+        $pets = new \stdClass();
+        $pets->foo = 1;
+
+        collection(ModelInterface::class, $pets);
+    }
+
     public function testSimpleCollection()
     {
         $pets = new \stdClass();
@@ -19,8 +45,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame(\stdClass::class, $stdClassCollection->getType());
 
-        /** @noinspection PhpUnitTestsInspection */
-        static::assertTrue([$pets, $colors] === $stdClassCollection->getCollection());
+        static::assertSame([$pets, $colors], $stdClassCollection->getCollection());
     }
 
     public function testModelCollection()
@@ -34,8 +59,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
 
-        /** @noinspection PhpUnitTestsInspection */
-        static::assertTrue([$pets, $colors] === $modelCollection->getCollection());
+        static::assertSame([$pets, $colors], $modelCollection->getCollection());
     }
 
     public function testConstructorException()

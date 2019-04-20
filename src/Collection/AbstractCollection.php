@@ -9,6 +9,8 @@ use Arrayy\Arrayy;
 /**
  * This class provides a full implementation of `CollectionInterface`, to
  * minimize the effort required to implement this interface.
+ *
+ * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
  */
 abstract class AbstractCollection extends Arrayy implements CollectionInterface
 {
@@ -27,15 +29,44 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *                     <p>
      *                     The initial items to store in the collection.
      *                     </p>
-     *                     <p>
-     *                     Should be an array or a generator, otherwise it will try
-     *                     to convert it into an array.
-     *                     </p>
      */
     public function __construct($data = [])
     {
         $this->collectionType = $this->getType();
+
+        // cast into array, if needed
+        if (
+            !is_array($data)
+            &&
+            ! ($data instanceof \Traversable)
+            &&
+            ! ($data instanceof \Closure)
+        ) {
+            $data = [$data];
+        }
+
+        // check the type, if needed
+        if (! ($data instanceof \Closure)) {
+            foreach ($data as $value) {
+                $this->checkTypeWrapper($value);
+            }
+        }
+
         parent::__construct($data);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return void
+     */
+    private function checkTypeWrapper($value)
+    {
+        if ($this->checkType($this->collectionType, $value) === false) {
+            throw new \InvalidArgumentException(
+                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
+            );
+        }
     }
 
     /**
@@ -83,11 +114,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function offsetSet($offset, $value)
     {
-        if ($this->checkType($this->collectionType, $value) === false) {
-            throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
-            );
-        }
+        $this->checkTypeWrapper($value);
 
         parent::offsetSet($offset, $value);
     }
@@ -103,11 +130,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function prepend($value, $key = null): Arrayy
     {
-        if ($this->checkType($this->collectionType, $value) === false) {
-            throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
-            );
-        }
+        $this->checkTypeWrapper($value);
 
         return parent::prepend($value, $key);
     }
@@ -123,11 +146,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function append($value, $key = null): Arrayy
     {
-        if ($this->checkType($this->collectionType, $value) === false) {
-            throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
-            );
-        }
+        $this->checkTypeWrapper($value);
 
         return parent::append($value, $key);
     }
@@ -188,11 +207,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     protected function internalSet($key, $value, $checkProperties = true): bool
     {
-        if ($this->checkType($this->collectionType, $value) === false) {
-            throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
-            );
-        }
+        $this->checkTypeWrapper($value);
 
         return parent::internalSet($key, $value, $checkProperties);
     }

@@ -2,9 +2,7 @@
 
 namespace Arrayy\tests;
 
-use Arrayy\Collection\AbstractCollection;
-
-class ModelsCollection extends AbstractCollection
+class ModelsCollection extends \Arrayy\Collection\AbstractCollection
 {
     /**
      * The type (FQCN) associated with this collection.

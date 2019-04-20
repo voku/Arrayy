@@ -301,11 +301,22 @@ class YOURCollection extends AbstractCollection
 $YOURobject1 = new YOURClass();
 $YOURobject2 = new YOURClass();
 
-$YOURcollection = new YOURCollection([$YOURobject1, $YOURobject2]);
+$YOURcollection = new YOURCollection($YOURobject1);
+$YOURcollection->add($YOURobject2); // add one more object
+
+// Or, you can use an array of objects.
+//
+// $YOURcollection = new YOURCollection([$YOURobject1, $YOURobject2]);
+
+// Or, if you don't want to create new classes ... 
+// ... and you don't need autocompletion for this new classes.
+//
+// $YOURcollection = \Arrayy\Collection(YOURInterface::class, [$YOURobject1]);
+// $YOURcollection->add($YOURobject2); // add one more object
 
 foreach ($YOURcollection as $YOURobject) {
     if ($YOURobject instanceof YOURInterface) {
-        // ...
+        // Do something with $YOURobject
     }
 }
 ``` 

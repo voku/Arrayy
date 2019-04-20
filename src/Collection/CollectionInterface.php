@@ -5,8 +5,12 @@ namespace Arrayy\Collection;
 use Arrayy\Arrayy;
 
 /**
- * This class provides a basic implementation of `CollectionInterface`, to
- * minimize the effort required to implement this interface
+ * A collection represents a group of objects, known as its elements.
+ *
+ * Some collections allow duplicate elements and others do not. Some are ordered
+ * and others unordered.
+ *
+ * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
  */
 interface CollectionInterface
 {
@@ -62,6 +66,18 @@ interface CollectionInterface
      *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      */
     public function append($value, $key = null): Arrayy;
+
+    /**
+     * alias: for "append()"
+     *
+     * @param mixed $value
+     *
+     * @return Arrayy
+     *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+     *
+     * @see Arrayy::append()
+     */
+    public function add($value): Arrayy;
 
     /**
      * Returns the values from given property or method.

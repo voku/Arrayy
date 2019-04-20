@@ -1112,12 +1112,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Create an new instance filled with a copy of values from a "Generator"-object.
      *
-     * @param \Generator $generator
+     * @param \Traversable $generator
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      */
-    public static function createFromGeneratorImmutable(\Generator $generator): self
+    public static function createFromGeneratorImmutable(\Traversable $generator): self
     {
         return new static(\iterator_to_array($generator, true));
     }
@@ -4125,8 +4125,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param mixed $data
      *
      * @return array
-     *@throws \InvalidArgumentException
      *
+     * @throws \InvalidArgumentException
      */
     protected function fallbackForArray(&$data): array
     {
@@ -4172,6 +4172,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             ($isObject && \method_exists($data, '__toString'))
         ) {
             return [(string) $data];
+        }
+
+        if ($data instanceof \Traversable) {
+
         }
 
         throw new \InvalidArgumentException(
