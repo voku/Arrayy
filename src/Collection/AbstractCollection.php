@@ -26,9 +26,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * specified data.
      *
      * @param mixed $data
-     *                     <p>
-     *                     The initial items to store in the collection.
-     *                     </p>
+     *                    <p>
+     *                    The initial items to store in the collection.
+     *                    </p>
      */
     public function __construct($data = [])
     {
@@ -36,37 +36,23 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
 
         // cast into array, if needed
         if (
-            !is_array($data)
+            !\is_array($data)
             &&
-            ! ($data instanceof \Traversable)
+            !($data instanceof \Traversable)
             &&
-            ! ($data instanceof \Closure)
+            !($data instanceof \Closure)
         ) {
             $data = [$data];
         }
 
         // check the type, if needed
-        if (! ($data instanceof \Closure)) {
+        if (!($data instanceof \Closure)) {
             foreach ($data as $value) {
                 $this->checkTypeWrapper($value);
             }
         }
 
         parent::__construct($data);
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @return void
-     */
-    private function checkTypeWrapper($value)
-    {
-        if ($this->checkType($this->collectionType, $value) === false) {
-            throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
-            );
-        }
     }
 
     /**
@@ -210,6 +196,18 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         $this->checkTypeWrapper($value);
 
         return parent::internalSet($key, $value, $checkProperties);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function checkTypeWrapper($value)
+    {
+        if ($this->checkType($this->collectionType, $value) === false) {
+            throw new \InvalidArgumentException(
+                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
+            );
+        }
     }
 
     /**

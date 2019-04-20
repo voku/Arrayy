@@ -309,9 +309,14 @@ $YOURcollection->add($YOURobject2); // add one more object
 // $YOURcollection = new YOURCollection([$YOURobject1, $YOURobject2]);
 
 // Or, if you don't want to create new classes ... 
-// ... and you don't need autocompletion for this new classes.
+// ... and you don't need typehints and autocompletion via classes.
 //
 // $YOURcollection = \Arrayy\Collection(YOURInterface::class, [$YOURobject1]);
+// $YOURcollection->add($YOURobject2); // add one more object
+
+// Or, if you don't like classes at all. ;-)
+//
+// $YOURcollection = \Arrayy\collection(YOURInterface::class, [$YOURobject1]);
 // $YOURcollection->add($YOURobject2); // add one more object
 
 foreach ($YOURcollection as $YOURobject) {

@@ -140,7 +140,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $modelCollectionExpected = new ModelsCollection([$pet1]);
         /** @noinspection PhpNonStrictObjectEqualityInspection */
         /** @noinspection PhpUnitTestsInspection */
-        self::assertTrue($modelCollectionExpected == $newCollection);
+        static::assertTrue($modelCollectionExpected == $newCollection);
     }
 
     public function testPrependExceptionV1()
@@ -211,7 +211,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         );
 
         foreach ($barCollection as $item) {
-            self::assertInstanceOf(ModelInterface::class, $item);
+            static::assertInstanceOf(ModelInterface::class, $item);
         }
     }
 
@@ -237,10 +237,10 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $barCollection = new ModelsCollection($arrayyFunction);
 
         foreach ($barCollection as $item) {
-            self::assertInstanceOf(ModelInterface::class, $item);
+            static::assertInstanceOf(ModelInterface::class, $item);
 
             if ($item instanceof ModelInterface) {
-                self::assertStringStartsWith('foo', $item->getFoo());
+                static::assertStringStartsWith('foo', $item->getFoo());
             }
         }
     }

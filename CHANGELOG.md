@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.8.0 (2019-04-20)
+- add a simple "Collection" implementation + function alias \Arrayy\collection()
+
+
 ### 5.7.1 (2019-04-18)
 - "AbstractCollection" -> optimize foreach usage
 - "AbstractCollection" -> fix merge && where methods
@@ -9,7 +13,7 @@
 - optimize property check in the constructor
 - better support for PhpDoc @property checks
 - allow callable<mixed, \Generator> as input (Arrayy::createFromGeneratorFunction())
-- add a "Collection" implementation
+- add a abstract "Collection" implementation
 
 
 ### 5.6.3 (2019-01-11)

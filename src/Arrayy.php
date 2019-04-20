@@ -108,6 +108,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             throw new \InvalidArgumentException('Property mismatch - input: ' . \print_r(\array_keys($data), true) . ' | expected: ' . \print_r(\array_keys($this->properties), true));
         }
 
+        /** @noinspection AlterInForeachInspection */
         foreach ($data as $key => &$value) {
             $this->internalSet(
                 $key,
@@ -337,7 +338,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Returns a new iterator, thus implementing the \Iterator interface.
      *
      * @return \Iterator
-     *                        <p>An iterator for the values in the array.</p>
+     *                   <p>An iterator for the values in the array.</p>
      */
     public function getIterator(): \Iterator
     {
@@ -418,7 +419,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Whether or not an offset exists.
      *
-     * @param bool|float|int|string $offset
+     * @param bool|int|string $offset
      *
      * @return bool
      */
@@ -426,12 +427,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        if ($this->isEmpty()) {
+        if ($this->array === []) {
             return false;
         }
 
         // php cast "bool"-index into "int"-index
-        if ((bool) $offset === $offset) {
+        if (is_bool($offset)) {
             $offset = (int) $offset;
         }
 
@@ -451,18 +452,27 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $offsetExists = false;
 
-        if (\strpos((string) $offset, $this->pathSeparator) !== false) {
-            $offsetExists = false;
+        if (
+            $this->pathSeparator
+            &&
+            \is_string($offset)
+            &&
+            \strpos($offset, $this->pathSeparator) !== false
+        ) {
             $explodedPath = \explode($this->pathSeparator, (string) $offset);
-            $lastOffset = \array_pop($explodedPath);
-            $containerPath = \implode($this->pathSeparator, $explodedPath);
+            if ($explodedPath !== false) {
+                $lastOffset = \array_pop($explodedPath);
+                if ($lastOffset !== null) {
+                    $containerPath = \implode($this->pathSeparator, $explodedPath);
 
-            $this->callAtPath(
-                $containerPath,
-                static function ($container) use ($lastOffset, &$offsetExists) {
-                    $offsetExists = \array_key_exists($lastOffset, $container);
+                    $this->callAtPath(
+                        $containerPath,
+                        static function ($container) use ($lastOffset, &$offsetExists) {
+                            $offsetExists = \array_key_exists($lastOffset, $container);
+                        }
+                    );
                 }
-            );
+            }
         }
 
         return $offsetExists;
@@ -471,7 +481,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Returns the value at specified offset.
      *
-     * @param float|int|string $offset
+     * @param int|string $offset
      *
      * @return mixed
      *               <p>Will return null if the offset did not exists.</p>
@@ -501,13 +511,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Unset an offset.
      *
-     * @param float|int|string $offset
+     * @param int|string $offset
      */
     public function offsetUnset($offset)
     {
         $this->generatorToArray();
 
-        if ($this->isEmpty()) {
+        if ($this->array === []) {
             return;
         }
 
@@ -517,17 +527,28 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return;
         }
 
-        if (\strpos((string) $offset, $this->pathSeparator) !== false) {
+        if (
+            $this->pathSeparator
+            &&
+            \is_string($offset)
+            &&
+            \strpos($offset, $this->pathSeparator) !== false
+        ) {
             $path = \explode($this->pathSeparator, (string) $offset);
-            $pathToUnset = \array_pop($path);
 
-            $this->callAtPath(
-                \implode($this->pathSeparator, $path),
-                static function (&$offset) use ($pathToUnset) {
-                    unset($offset[$pathToUnset]);
-                }
-            );
+            if ($path !== false) {
+                $pathToUnset = \array_pop($path);
+
+                $this->callAtPath(
+                    \implode($this->pathSeparator, $path),
+                    static function (&$offset) use ($pathToUnset) {
+                        unset($offset[$pathToUnset]);
+                    }
+                );
+            }
         }
+
+        unset($this->array[$offset]);
     }
 
     /** @noinspection SenselessProxyMethodInspection | can not add return type, because of the "Serializable" interface */
@@ -941,7 +962,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Check if the given key/index exists in the array.
      *
-     * @param float|int|string $key <p>key/index to search for</p>
+     * @param int|string $key <p>key/index to search for</p>
      *
      * @return bool
      *              <p>Returns true if the given key/index exists in the array, false otherwise.</p>
@@ -1110,14 +1131,27 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Create an new instance filled with a copy of values from a "Generator"-object.
+     * Create an new instance filled with a copy of values from a "Traversable"-object.
      *
-     * @param \Traversable $generator
+     * @param \Traversable $traversable
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      */
-    public static function createFromGeneratorImmutable(\Traversable $generator): self
+    public static function createFromTraversableImmutable(\Traversable $traversable): self
+    {
+        return new static(\iterator_to_array($traversable, true));
+    }
+
+    /**
+     * Create an new instance filled with a copy of values from a "Generator"-object.
+     *
+     * @param \Generator $generator
+     *
+     * @return static
+     *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+     */
+    public static function createFromGeneratorImmutable(\Generator $generator): self
     {
         return new static(\iterator_to_array($generator, true));
     }
@@ -1137,14 +1171,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Create an new instance filled with values from an object that have implemented ArrayAccess.
+     * Create an new instance filled with values from an object that is iterable.
      *
-     * @param \ArrayAccess $object <p>Object that implements ArrayAccess</p>
+     * @param \Traversable $object <p>iterable object</p>
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      */
-    public static function createFromObject(\ArrayAccess $object): self
+    public static function createFromObject(\Traversable $object): self
     {
         // init
         $array = new static();
@@ -1195,7 +1229,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $array = $array[0];
             }
         } else {
-            $array = \explode($delimiter, $str);
+            /** @noinspection NestedPositiveIfStatementsInspection */
+            if ($delimiter !== null) {
+                $array = \explode($delimiter, $str);
+            } else {
+                $array = [$str];
+            }
         }
 
         // trim all string in the array
@@ -1749,12 +1788,30 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         // crawl through array, get key according to object or not
-        foreach (\explode($this->pathSeparator, (string) $key) as $segment) {
-            if (!isset($usedArray[$segment])) {
-                return $fallback instanceof \Closure ? $fallback() : $fallback;
-            }
+        $usePath = false;
+        if (
+            $this->pathSeparator
+            &&
+            \is_string($key)
+            &&
+            \strpos($key, $this->pathSeparator) !== false
+        ) {
+            $segments = \explode($this->pathSeparator, (string) $key);
+            if ($segments !== false) {
+                $usePath = true;
 
-            $usedArray = $usedArray[$segment];
+                foreach ($segments as $segment) {
+                    if (!isset($usedArray[$segment])) {
+                        return $fallback instanceof \Closure ? $fallback() : $fallback;
+                    }
+
+                    $usedArray = $usedArray[$segment];
+                }
+            }
+        }
+
+        if (!$usePath && !isset($usedArray[$key])) {
+            return $fallback instanceof \Closure ? $fallback() : $fallback;
         }
 
         if (\is_array($usedArray)) {
@@ -2642,7 +2699,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * cherry-picked from: http://stackoverflow.com/questions/12624153/move-an-array-element-to-a-new-index-in-php
      *
      * @param int|string $from
-     * @param int|string $to
+     * @param int $to
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -2653,12 +2710,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if (\is_int($from)) {
             $tmp = \array_splice($array, $from, 1);
-            \array_splice($array, $to, 0, $tmp);
+            \array_splice($array, (int) $to, 0, $tmp);
             $output = $array;
         } elseif (\is_string($from)) {
             $indexToMove = \array_search($from, \array_keys($array), true);
             $itemToMove = $array[$from];
-            \array_splice($array, $indexToMove, 1);
+            if ($indexToMove !== false) {
+                \array_splice($array, $indexToMove, 1);
+            }
             $i = 0;
             $output = [];
             foreach ($array as $key => $item) {
@@ -3441,7 +3500,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         // init
         $return = [];
 
-        if ($this->isEmpty()) {
+        if ($this->array === []) {
             return static::create(
                 [],
                 $this->iteratorClass,
@@ -3859,7 +3918,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function toJson(int $options = 0, int $depth = 512): string
     {
         /** @noinspection PhpComposerExtensionStubsInspection */
-        return \json_encode($this->getArray(), $options, $depth);
+        $return = \json_encode($this->getArray(), $options, $depth);
+        if ($return === false) {
+            return '';
+        }
+
+        return $return;
     }
 
     /**
@@ -4094,6 +4158,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         $explodedPath = \explode($this->pathSeparator, $path);
+        if ($explodedPath === false) {
+            return;
+        }
+
         $nextPath = \array_shift($explodedPath);
 
         if (!isset($currentOffset[$nextPath])) {
@@ -4117,16 +4185,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * 1. use the current array, if it's a array
      * 2. fallback to empty array, if there is nothing
      * 3. call "getArray()" on object, if there is a "Arrayy"-object
-     * 4. call "createFromObject()" on object, if there is a "\ArrayAccess"-object
+     * 4. call "createFromObject()" on object, if there is a "\Traversable"-object
      * 5. call "__toArray()" on object, if the method exists
      * 6. cast a string or object with "__toString()" into an array
      * 7. throw a "InvalidArgumentException"-Exception
      *
      * @param mixed $data
      *
-     * @return array
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return array
      */
     protected function fallbackForArray(&$data): array
     {
@@ -4144,16 +4212,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $data->getArray();
         }
 
-        if ($isObject && $data instanceof \ArrayAccess) {
-            return static::createFromObject($data)->getArray();
-        }
-
         if ($isObject && $data instanceof \ArrayObject) {
             return $data->getArrayCopy();
         }
 
         if ($isObject && $data instanceof \Generator) {
             return static::createFromGeneratorImmutable($data)->getArray();
+        }
+
+        if ($isObject && $data instanceof \Traversable) {
+            return static::createFromObject($data)->getArray();
         }
 
         if (\is_callable($data)) {
@@ -4172,10 +4240,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             ($isObject && \method_exists($data, '__toString'))
         ) {
             return [(string) $data];
-        }
-
-        if ($data instanceof \Traversable) {
-
         }
 
         throw new \InvalidArgumentException(
@@ -4324,20 +4388,30 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        $path = \explode($this->pathSeparator, (string) $key);
+        if (
+            $this->pathSeparator
+            &&
+            \is_string($key)
+            &&
+            \strpos($key, $this->pathSeparator) !== false
+        ) {
+            $path = \explode($this->pathSeparator, (string) $key);
 
-        // Crawl though the keys
-        while (\count($path, \COUNT_NORMAL) > 1) {
-            $key = \array_shift($path);
+            if ($path !== false) {
+                // crawl though the keys
+                while (\count($path, \COUNT_NORMAL) > 1) {
+                    $key = \array_shift($path);
 
-            if (!$this->has($key)) {
-                return false;
+                    if (!$this->has($key)) {
+                        return false;
+                    }
+
+                    $this->array = &$this->array[$key];
+                }
+
+                $key = \array_shift($path);
             }
-
-            $this->array = &$this->array[$key];
         }
-
-        $key = \array_shift($path);
 
         unset($this->array[$key]);
 
@@ -4347,9 +4421,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Internal mechanic of set method.
      *
-     * @param string|null $key
-     * @param mixed       $value
-     * @param bool        $checkProperties
+     * @param int|string|null $key
+     * @param mixed           $value
+     * @param bool            $checkProperties
      *
      * @return bool
      */
@@ -4373,18 +4447,30 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $this->generatorToArray();
 
-        // init
         $array = &$this->array;
-        $path = \explode($this->pathSeparator, (string) $key);
 
-        // Crawl through the keys
-        while (\count($path, \COUNT_NORMAL) > 1) {
-            $key = \array_shift($path);
+        if (
+            $this->pathSeparator
+            &&
+            \is_string($key)
+            &&
+            \strpos($key, $this->pathSeparator) !== false
+        ) {
+            $path = \explode($this->pathSeparator, (string) $key);
 
-            $array = &$array[$key];
+            if ($path !== false) {
+                // crawl through the keys
+                while (\count($path, \COUNT_NORMAL) > 1) {
+                    $key = \array_shift($path);
+
+                    $array = &$array[$key];
+                }
+
+                $key = \array_shift($path);
+            }
         }
 
-        $array[\array_shift($path)] = $value;
+        $array[$key] = $value;
 
         return true;
     }
@@ -4406,7 +4492,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $object = \get_object_vars($object);
         }
 
-        return \array_map(['self', 'objectToArray'], $object);
+        return \array_map(['static', 'objectToArray'], $object);
     }
 
     /**
@@ -4512,10 +4598,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $reflector = new \ReflectionClass($this);
         $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
-        $docblock = $factory->create($reflector->getDocComment());
-        foreach ($docblock->getTagsByName('property') as $tag) {
-            /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Property */
-            $properties[$tag->getVariableName()] = Property::fromPhpDocumentorProperty($tag);
+        $docComment = $reflector->getDocComment();
+        if ($docComment) {
+            $docblock = $factory->create($docComment);
+            foreach ($docblock->getTagsByName('property') as $tag) {
+                /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Property */
+                $properties[$tag->getVariableName()] = Property::fromPhpDocumentorProperty($tag);
+            }
         }
 
         return $PROPERTY_CACHE[$cacheKey] = $properties;

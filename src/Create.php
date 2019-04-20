@@ -6,7 +6,6 @@ namespace Arrayy;
 
 use Arrayy\Collection\Collection;
 use Arrayy\Collection\CollectionInterface;
-use Arrayy\Collection\CollectionSetTypeInterface;
 
 if (!\function_exists('Arrayy\create')) {
     /**

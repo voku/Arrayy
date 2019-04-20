@@ -1454,8 +1454,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [[], [], null],
-            [[0 => false], [0 => false], false],
-            [[0 => true], [0 => true], false],
+            [[0 => false], [], 0],
+            [[0 => true], [], 0],
             [[0 => -9], [0 => -9], -1],
             [[0 => -9, 1, 2], [0 => -9, 2 => 2], 1],
             [[1.18, 1.5], [1 => 1.5], 0],
@@ -1667,6 +1667,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             [
                 'Wo;rld',
                 ';',
+            ],
+            [
+                'Wo;rld',
+                null,
             ],
         ];
     }
@@ -2250,12 +2254,16 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider stringWithSeparatorProvider
      *
-     * @param string $string
-     * @param string $separator
+     * @param string      $string
+     * @param string|null $separator
      */
     public function testCreateFromString($string, $separator)
     {
-        $array = \explode($separator, $string);
+        if ($separator !== null) {
+            $array = \explode($separator, $string);
+        } else {
+            $array = [$string];
+        }
         $arrayy = new A($array);
 
         $resultArrayy = A::createFromString($string, $separator);
@@ -5134,12 +5142,16 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider stringWithSeparatorProvider
      *
-     * @param string $string
-     * @param string $separator
+     * @param string      $string
+     * @param string|null $separator
      */
     public function testStaticCreateFromString($string, $separator)
     {
-        $array = \explode($separator, $string);
+        if ($separator !== null) {
+            $array = \explode($separator, $string);
+        } else {
+            $array = [$string];
+        }
 
         $arrayy = A::create($array);
         $resultArrayy = A::createFromString($string, $separator);
