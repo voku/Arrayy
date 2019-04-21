@@ -114,7 +114,7 @@ class StaticStringy
      * should be two more than the equivalent Stringy method. Necessary as
      * static methods place the optional $encoding as the last parameter.
      *
-     * @var string[]
+     * @var array
      */
     protected static $methodArgs = null;
 

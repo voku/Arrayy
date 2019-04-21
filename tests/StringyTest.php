@@ -1186,7 +1186,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
                 '<IMG >',
                 '<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>',
             ],
-            ['&lt;XSS &gt;', '<XSS STYLE="behavior: url(xss.htc);">'],
+            ['<XSS >', '<XSS STYLE="behavior: url(xss.htc);">'],
             ['<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'],
             ['\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'],
         ];
@@ -1527,7 +1527,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             ['serve_h_t_t_p', 'ServeHTTP'],
             ['1_camel_2_case', '1camel2case'],
             ['camel_σase', 'camel σase', 'UTF-8'],
-            ['Στανιλ_case', 'Στανιλ case', 'UTF-8'],
+            ['στανιλ_case', 'Στανιλ case', 'UTF-8'],
             ['σamel_case', 'σamel  Case', 'UTF-8'],
         ];
     }
