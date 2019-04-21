@@ -1,3 +1,8 @@
+### 5.0.2 (2019-04-21)
+- fix issues reported by phpstan (level 7)
+- update vendor (better unicode support for regex stuff)
+
+
 ### 5.0.1 (2019-01-22)
 - inline some simple functions
 - update vendor
