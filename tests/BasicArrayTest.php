@@ -200,6 +200,93 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         }
 
         static::assertSame($first, $arrayy->firstsMutable()->getArray());
+        static::assertSame($arrayy->firstsMutable(), $arrayy->firstsMutable());
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testFirstInLoop(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        $first = \reset($array);
+
+        if ($first === false) {
+            $first = [];
+        } else {
+            $first = (array) $first;
+        }
+
+        if ($arrayy->firstsMutable()->getArray() === []) {
+            static::assertSame([], $first);
+        }
+
+        $count = $arrayy->count();
+        $tmpCount = 0;
+        foreach ($arrayy as $item) {
+            $tmpCount++;
+
+            static::assertTrue(is_int($item) || is_string($item) || is_array($item));
+            /** @noinspection DisconnectedForeachInstructionInspection */
+            static::assertSame($first, $arrayy->firstsMutable()->getArray());
+        }
+
+        static::assertSame($count, $tmpCount);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testFirstImmutable(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        $first = \reset($array);
+
+        if ($first === false) {
+            $first = [];
+        } else {
+            $first = (array) $first;
+        }
+
+        static::assertSame($first, $arrayy->firstsImmutable()->getArray());
+        static::assertNotSame($arrayy->firstsImmutable(), $arrayy->firstsImmutable());
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testFirstImmutableInLoop(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        $first = \reset($array);
+
+        if ($first === false) {
+            $first = [];
+        } else {
+            $first = (array) $first;
+        }
+
+        if ($arrayy->firstsMutable()->getArray() === []) {
+            static::assertSame([], $first);
+        }
+
+        $count = $arrayy->count();
+        $tmpCount = 0;
+        foreach ($arrayy as $item) {
+            $tmpCount++;
+
+            static::assertTrue(is_int($item) || is_string($item) || is_array($item));
+            /** @noinspection DisconnectedForeachInstructionInspection */
+            static::assertSame($first, $arrayy->firstsImmutable()->getArray());
+        }
+
+        static::assertSame($count, $tmpCount);
     }
 
     public function testForEachWithInnerArrayy()

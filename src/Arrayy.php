@@ -1681,6 +1681,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * Get the first value(s) from the current array.
+     * And will return an empty array if there was no first entry.
      *
      * @param int|null $number <p>How many values you will take?</p>
      *
@@ -1707,6 +1708,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * Get the first value(s) from the current array.
+     * And will return an empty array if there was no first entry.
      *
      * @param int|null $number <p>How many values you will take?</p>
      *
