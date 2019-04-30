@@ -226,9 +226,9 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $count = $arrayy->count();
         $tmpCount = 0;
         foreach ($arrayy as $item) {
-            $tmpCount++;
+            ++$tmpCount;
 
-            static::assertTrue(is_int($item) || is_string($item) || is_array($item));
+            static::assertTrue(\is_int($item) || \is_string($item) || \is_array($item));
             /** @noinspection DisconnectedForeachInstructionInspection */
             static::assertSame($first, $arrayy->firstsMutable()->getArray());
         }
@@ -279,9 +279,9 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $count = $arrayy->count();
         $tmpCount = 0;
         foreach ($arrayy as $item) {
-            $tmpCount++;
+            ++$tmpCount;
 
-            static::assertTrue(is_int($item) || is_string($item) || is_array($item));
+            static::assertTrue(\is_int($item) || \is_string($item) || \is_array($item));
             /** @noinspection DisconnectedForeachInstructionInspection */
             static::assertSame($first, $arrayy->firstsImmutable()->getArray());
         }

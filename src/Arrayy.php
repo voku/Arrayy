@@ -432,7 +432,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         // php cast "bool"-index into "int"-index
-        if (is_bool($offset)) {
+        if (\is_bool($offset)) {
             $offset = (int) $offset;
         }
 
@@ -595,7 +595,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Sort the entries with a user-defined comparison function and maintain key association.
      *
-     * @param \callable $function
+     * @param callable $function
      *
      * @throws \InvalidArgumentException
      *
@@ -620,7 +620,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Sort the entries by keys using a user-defined comparison function.
      *
-     * @param \callable $function
+     * @param callable $function
      *
      * @throws \InvalidArgumentException
      *
@@ -1270,7 +1270,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see http://php.net/manual/en/function.uksort.php
      *
-     * @param \callable $function
+     * @param callable $function
      *
      * @throws \InvalidArgumentException
      *
@@ -1297,7 +1297,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see http://php.net/manual/en/function.usort.php
      *
-     * @param \callable $function
+     * @param callable $function
      *
      * @throws \InvalidArgumentException
      *
@@ -1820,7 +1820,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     if (
                         \is_object($usedArray)
                         &&
-                        property_exists($usedArray, $segment)
+                        \property_exists($usedArray, $segment)
                     ) {
                         $usedArray = $usedArray->{$segment};
 
@@ -1995,8 +1995,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Group values from a array according to the results of a closure.
      *
-     * @param \callable $grouper  <p>A callable function name.</p>
-     * @param bool      $saveKeys
+     * @param callable $grouper  <p>A callable function name.</p>
+     * @param bool     $saveKeys
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -2721,7 +2721,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * cherry-picked from: http://stackoverflow.com/questions/12624153/move-an-array-element-to-a-new-index-in-php
      *
      * @param int|string $from
-     * @param int $to
+     * @param int        $to
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -2916,8 +2916,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray();
 
         if (\func_num_args()) {
-            $args = \array_merge([&$this->array], \func_get_args());
-            \array_push(...$args);
+            $args = \func_get_args();
+            \array_push(...[&$this->array], ...$args);
         }
 
         return $this;
@@ -3113,8 +3113,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Reduce the current array via callable e.g. anonymous-function.
      *
-     * @param \callable $callable
-     * @param array     $init
+     * @param callable $callable
+     * @param array    $init
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -3806,10 +3806,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * - If the sorter is null, the array is sorted naturally.
      * - Associative (string) keys will be maintained, but numeric keys will be re-indexed.
      *
-     * @param \callable|null $sorter
-     * @param int|string     $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
-     * @param int            $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
-     *                                  <strong>SORT_NATURAL</strong></p>
+     * @param callable|null $sorter
+     * @param int|string    $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
+     * @param int           $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
+     *                                 <strong>SORT_NATURAL</strong></p>
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -4070,8 +4070,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Apply the given function to every element in the array, discarding the results.
      *
-     * @param \callable $callable
-     * @param bool      $recursive <p>Whether array will be walked recursively or no</p>
+     * @param callable $callable
+     * @param bool     $recursive <p>Whether array will be walked recursively or no</p>
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with modified elements.</p>
@@ -4168,7 +4168,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * @param mixed      $path
-     * @param \callable  $callable
+     * @param callable   $callable
      * @param array|null $currentOffset
      */
     protected function callAtPath($path, $callable, &$currentOffset = null)
