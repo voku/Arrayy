@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.8.1 (2019-04-30)
+- optimize performance from "Arrayy->unshift()"
+- optimize performance from "Arrayy->push()"
+
+
 ### 5.8.0 (2019-04-20)
 - add a simple "Collection" implementation + function alias \Arrayy\collection()
 - fix errors reported by phpstan (level 7)
