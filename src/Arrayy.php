@@ -4045,8 +4045,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray();
 
         if (\func_num_args()) {
-            $args = \array_merge([&$this->array], \func_get_args());
-            \array_unshift(...$args);
+            $args = \func_get_args();
+            \array_unshift(...[&$this->array], ...$args);
         }
 
         return $this;
