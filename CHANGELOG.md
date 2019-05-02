@@ -6,6 +6,8 @@
 - "keys()" / "values()" -> optimize generator usage
 - "replace()" -> fix immutable of the input
 - "sizeIs()" / "sizeIsLessThan()" / "sizeIsGreaterThan()" / "sizeIsBetween()" -> added
+- "invoke()" -> improve generator usage + fix phpdoc
+- "map()" -> allow to use the key, in the callable + additional parameter
 
 
 ### 5.8.1 (2019-04-30)
