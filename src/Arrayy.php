@@ -917,7 +917,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $this->in_array_recursive($value, $this->getArray(), $strict);
         }
 
-        return \in_array($value, $this->getArray(), $strict);
+        foreach ($this->getGenerator() as $valueFromArray) {
+            if ($strict) {
+                if ($value === $valueFromArray) {
+                    return true;
+                }
+            } else {
+                /** @noinspection NestedPositiveIfStatementsInspection */
+                if ($value == $valueFromArray) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -4039,7 +4052,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $result[] = [$val];
             }
         }
-        $result = array_merge(...$result);
+        $result = \array_merge(...$result);
 
         $resultArrayy = new self($result);
 
