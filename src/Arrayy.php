@@ -2201,8 +2201,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Invoke a function on all of an array's values.
      *
-     * @param mixed $callable
-     * @param mixed $arguments
+     * @param callable $callable
+     * @param mixed    $arguments
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -2221,7 +2221,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ($arguments) {
             $array = \array_map($callable, $this->getArray(), $arguments);
         } else {
-            $array = \array_map($callable, $this->getArray());
+            $array = $this->map($callable, false);
         }
 
         return static::create(
@@ -2388,13 +2388,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($search_value === null) {
             $arrayFunction = function () {
-                foreach ($this->array as $key => $value) {
+                foreach ($this->getGenerator() as $key => $value) {
                     yield $key;
                 }
             };
         } else {
             $arrayFunction = function () use ($search_value, $strict) {
-                foreach ($this->array as $key => $value) {
+                foreach ($this->getGenerator() as $key => $value) {
                     if ($strict) {
                         if ($search_value === $value) {
                             yield $key;
@@ -2547,14 +2547,35 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * collecting the results.
      *
      * @param callable $callable
+     * @param bool     $useKeyAsSecondParameter
+     * @param mixed    ...$arguments
      *
      * @return static
      *                <p>(Immutable) Arrayy object with modified elements.</p>
      */
-    public function map(callable $callable): self
+    public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments): self
     {
+        $useArguments = \func_num_args() > 2;
+
         return static::create(
-            \array_map($callable, $this->getArray()),
+            function () use ($useArguments, $callable, $useKeyAsSecondParameter, $arguments) {
+                foreach ($this->getGenerator() as $key => $value) {
+                    if ($useArguments) {
+                        if ($useKeyAsSecondParameter) {
+                            yield $key => $callable($value, $key, ...$arguments);
+                        } else {
+                            yield $key => $callable($value, ...$arguments);
+                        }
+                    } else {
+                        /** @noinspection NestedPositiveIfStatementsInspection */
+                        if ($useKeyAsSecondParameter) {
+                            yield $key => $callable($value, $key);
+                        } else {
+                            yield $key => $callable($value);
+                        }
+                    }
+                }
+            },
             $this->iteratorClass,
             false
         );
@@ -4167,7 +4188,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         // init
         $result = [[]];
 
-        foreach ($this->array as $val) {
+        foreach ($this->getGenerator() as $val) {
             if (\is_array($val)) {
                 $result[] = (new self($val))->reduce_dimension($unique)->getArray();
             } else {

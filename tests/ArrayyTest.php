@@ -3379,6 +3379,17 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->map($callable);
         $resultArray = \array_map($callable, $array);
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+
+        // ---
+
+        foreach ($array as $key => $value) {
+            $array[$key] = (string) $value;
+        }
+
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->map('str_repeat', false, 2);
+        $resultArray = \array_map($callable, $array);
+        self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
     /**

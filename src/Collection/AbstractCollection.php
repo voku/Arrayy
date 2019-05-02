@@ -151,7 +151,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         // init
         $temp = [];
 
-        foreach ($this->array as $item) {
+        foreach ($this->getGenerator() as $item) {
             $temp[] = $this->extractValue($item, $keyOrPropertyOrMethod);
         }
 
