@@ -1635,6 +1635,29 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+    public function reduceDimensionProvider(): array
+    {
+        return [
+            [[], [], false],
+            [[], [], false],
+            [[0 => false], [0 => false], false],
+            [[0 => true], [0 => true], false],
+            [[0 => -9], [-9], false],
+            [[0 => -9, 1, 2], [-9, 1, 2] , false],
+            [[1 => 2, 0 => 1], [2, 1], false],
+            [[1.18], [1.18], false],
+            [[3 => 'string', 'foo', 'lall'], ['string', 'foo', 'lall'], false],
+            [[3 => 'string', [3 => 'foo', 'lall'], ['lall', 3 => 'string']], ['string', 'foo', 'lall', 'lall', 'string'], false],
+            [[3 => 'string', [3 => 'foo', 'lall'], ['lall', 3 => 'string']], ['string', 'foo', 'lall'], true],
+            [[3 => 'string', [3 => 'foo', 'lall'], ['lall', 3 => 'string']], ['string', 'foo', 'lall', 'lall', 'string'], false],
+            [[3 => 'string', [3 => 'foo', 'lall'], ['lall', 3 => ['string', 'lall3']]], ['string', 'foo', 'lall', 'lall3'], true],
+            [[3 => 'string', [3 => 'foo', 'lall'], ['lall', 3 => ['string', 'lall3']]], ['string', 'foo', 'lall', 'lall', 'string', 'lall3'], false],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function sortKeysProvider(): array
     {
         return [
@@ -4096,6 +4119,21 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $expected = ['foo'];
         static::assertSame($expected, $arrayy->getArray());
+    }
+
+    /**
+     * @dataProvider reduceDimensionProvider
+     *
+     * @param array $array
+     * @param array $expected
+     * @param bool  $unique
+     */
+    public function testReduceDimension(array $array, array $expected, bool $unique = false)
+    {
+        $arrayy = new A($array);
+        $result = $arrayy->reduce_dimension($unique)->getArray();
+
+        static::assertSame($expected, $result);
     }
 
     /**

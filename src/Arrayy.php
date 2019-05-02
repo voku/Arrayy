@@ -4022,6 +4022,31 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * @param bool $unique
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function reduce_dimension(bool $unique = true): self
+    {
+        // init
+        $result = [[]];
+
+        foreach ($this->array as $val) {
+            if (\is_array($val)) {
+                $result[] = (new self($val))->reduce_dimension($unique)->getArray();
+            } else {
+                $result[] = [$val];
+            }
+        }
+        $result = array_merge(...$result);
+
+        $resultArrayy = new self($result);
+
+        return $unique ? $resultArrayy->unique() : $resultArrayy;
+    }
+
+    /**
      * alias: for "Arrayy->unique()"
      *
      * @return static
