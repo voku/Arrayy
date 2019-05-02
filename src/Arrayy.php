@@ -944,32 +944,27 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function containsCaseInsensitive($value, $recursive = false): bool
     {
         if ($recursive === true) {
-            /** @noinspection PhpComposerExtensionStubsInspection */
-            return $this->in_array_recursive(
-                \mb_strtoupper((string) $value),
-                $this->walk(
-                    static function (&$val) {
-                        /** @noinspection PhpComposerExtensionStubsInspection */
-                        $val = \mb_strtoupper((string) $val);
-                    },
-                    true
-                )->getArray(),
-                true
-            );
+            foreach ($this->getGenerator() as $key => $valueTmp) {
+                if (\is_array($valueTmp)) {
+                    $return = (new self($valueTmp))->containsCaseInsensitive($value, $recursive);
+                    if ($return === true) {
+                        return $return;
+                    }
+                } elseif (\mb_strtoupper((string) $valueTmp) === \mb_strtoupper((string) $value)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        /** @noinspection PhpComposerExtensionStubsInspection */
-        return \in_array(
-            \mb_strtoupper((string) $value),
-            $this->walk(
-                static function (&$val) {
-                    /** @noinspection PhpComposerExtensionStubsInspection */
-                    $val = \mb_strtoupper((string) $val);
-                },
-                false
-            )->getArray(),
-            true
-        );
+        foreach ($this->getGenerator() as $key => $valueTmp) {
+            if (\mb_strtoupper((string) $valueTmp) === \mb_strtoupper((string) $value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -2221,7 +2216,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ($arguments) {
             $array = \array_map($callable, $this->getArray(), $arguments);
         } else {
-            $array = $this->map($callable, false);
+            $array = $this->map($callable);
         }
 
         return static::create(
@@ -4546,7 +4541,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if (\is_array($item) === true) {
                 $returnTmp = $this->in_array_recursive($needle, $item, $strict);
             } else {
-                $returnTmp = ($strict === true ? $item === $needle : $item == $needle);
+                /** @noinspection NestedPositiveIfStatementsInspection */
+                if ($strict === true) {
+                    $returnTmp = $item === $needle;
+                } else {
+                    $returnTmp = $item == $needle;
+                }
             }
 
             if ($returnTmp === true) {
