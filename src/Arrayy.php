@@ -3367,7 +3367,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $that = clone $this;
 
         return $that->remove($replace)
-                    ->set($key, $value);
+            ->set($key, $value);
     }
 
     /**
@@ -3702,7 +3702,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $itemsTempCount = 0;
 
         foreach ($this->getGenerator() as $key => $value) {
-            $itemsTempCount++;
+            ++$itemsTempCount;
             if ($itemsTempCount > $size) {
                 return false;
             }
@@ -3710,6 +3710,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         return $itemsTempCount === $size;
     }
+
     /**
      * Checks whether array has less than $size items.
      *
@@ -3723,7 +3724,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $itemsTempCount = 0;
 
         foreach ($this->getGenerator() as $key => $value) {
-            $itemsTempCount++;
+            ++$itemsTempCount;
             if ($itemsTempCount > $size) {
                 return false;
             }
@@ -3745,7 +3746,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $itemsTempCount = 0;
 
         foreach ($this->getGenerator() as $key => $value) {
-            $itemsTempCount++;
+            ++$itemsTempCount;
             if ($itemsTempCount > $size) {
                 return true;
             }
@@ -3753,6 +3754,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         return $itemsTempCount > $size;
     }
+
     /**
      * Checks whether array has between $fromSize to $toSize items. $toSize can be
      * smaller than $fromSize.
@@ -3774,7 +3776,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $itemsTempCount = 0;
 
         foreach ($this->getGenerator() as $key => $value) {
-            $itemsTempCount++;
+            ++$itemsTempCount;
             if ($itemsTempCount > $toSize) {
                 return false;
             }
@@ -3937,9 +3939,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * - Associative (string) keys will be maintained, but numeric keys will be re-indexed.
      *
      * @param callable|string|null $sorter
-     * @param int|string    $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
-     * @param int           $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
-     *                                 <strong>SORT_NATURAL</strong></p>
+     * @param int|string           $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
+     * @param int                  $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
+     *                                        <strong>SORT_NATURAL</strong></p>
      *
      * @return static
      *                <p>(Immutable)</p>

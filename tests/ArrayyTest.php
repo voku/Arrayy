@@ -4781,37 +4781,37 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $a = A::create([1, 2]);
 
-        self::assertTrue($a->sizeIs(2));
-        self::assertFalse($a->sizeIs(3));
-        self::assertFalse($a->sizeIs(0));
+        static::assertTrue($a->sizeIs(2));
+        static::assertFalse($a->sizeIs(3));
+        static::assertFalse($a->sizeIs(0));
     }
 
     public function testSizeIsLessThen()
     {
         $a = A::create([1, 2]);
 
-        self::assertFalse($a->sizeIsLessThan(0));
-        self::assertFalse($a->sizeIsLessThan(2));
-        self::assertTrue($a->sizeIsLessThan(3));
+        static::assertFalse($a->sizeIsLessThan(0));
+        static::assertFalse($a->sizeIsLessThan(2));
+        static::assertTrue($a->sizeIsLessThan(3));
     }
 
     public function testSizeIsGreaterThan()
     {
         $a = A::create([1, 2]);
 
-        self::assertFalse($a->sizeIsGreaterThan(2));
-        self::assertTrue($a->sizeIsGreaterThan(1));
-        self::assertTrue($a->sizeIsGreaterThan(0));
+        static::assertFalse($a->sizeIsGreaterThan(2));
+        static::assertTrue($a->sizeIsGreaterThan(1));
+        static::assertTrue($a->sizeIsGreaterThan(0));
     }
 
     public function testSizeIsBetween()
     {
         $a = A::create([1, 2]);
 
-        self::assertTrue($a->sizeIsBetween(1, 3));
-        self::assertFalse($a->sizeIsBetween(3, 4));
-        self::assertFalse($a->sizeIsBetween(0, 0));
-        self::assertTrue($a->sizeIsBetween(3, 1));
+        static::assertTrue($a->sizeIsBetween(1, 3));
+        static::assertFalse($a->sizeIsBetween(3, 4));
+        static::assertFalse($a->sizeIsBetween(0, 0));
+        static::assertTrue($a->sizeIsBetween(3, 1));
     }
 
     public function testSimpleEach()
