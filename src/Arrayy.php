@@ -2008,8 +2008,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Group values from a array according to the results of a closure.
      *
-     * @param callable $grouper  <p>A callable function name.</p>
-     * @param bool     $saveKeys
+     * @param callable|string $grouper  <p>A callable function name.</p>
+     * @param bool            $saveKeys
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -2021,7 +2021,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         // Iterate over values, group by property/results from closure.
         foreach ($this->getGenerator() as $key => $value) {
-            $groupKey = \is_callable($grouper) ? $grouper($value, $key) : $this->get($grouper, null, $this->getArray());
+            if (\is_callable($grouper)) {
+                $groupKey = $grouper($value, $key);
+            } else {
+                $groupKey = $this->get($grouper, null, $this->getArray());
+            }
+
             $newValue = $this->get($groupKey, null, $result);
 
             if ($groupKey instanceof self) {
@@ -2382,13 +2387,30 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         // non recursive
 
         if ($search_value === null) {
-            $array = \array_keys($this->getArray());
+            $arrayFunction = function () {
+                foreach ($this->array as $key => $value) {
+                    yield $key;
+                }
+            };
         } else {
-            $array = \array_keys($this->getArray(), $search_value, $strict);
+            $arrayFunction = function () use ($search_value, $strict) {
+                foreach ($this->array as $key => $value) {
+                    if ($strict) {
+                        if ($search_value === $value) {
+                            yield $key;
+                        }
+                    } else {
+                        /** @noinspection NestedPositiveIfStatementsInspection */
+                        if ($search_value == $value) {
+                            yield $key;
+                        }
+                    }
+                }
+            };
         }
 
         return static::create(
-            $array,
+            $arrayFunction,
             $this->iteratorClass,
             false
         );
@@ -3210,7 +3232,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param mixed $key
      *
      * @return static
-     *                <p>(Immutable)</p>
+     *                <p>(Mutable)</p>
      */
     public function remove($key): self
     {
@@ -3342,9 +3364,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function replace($replace, $key, $value): self
     {
-        $that = $this->remove($replace);
+        $that = clone $this;
 
-        return $that->set($key, $value);
+        return $that->remove($replace)
+                    ->set($key, $value);
     }
 
     /**
@@ -3667,6 +3690,100 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Checks whether array has exactly $size items.
+     *
+     * @param int $size
+     *
+     * @return bool
+     */
+    public function sizeIs(int $size): bool
+    {
+        // init
+        $itemsTempCount = 0;
+
+        foreach ($this->getGenerator() as $key => $value) {
+            $itemsTempCount++;
+            if ($itemsTempCount > $size) {
+                return false;
+            }
+        }
+
+        return $itemsTempCount === $size;
+    }
+    /**
+     * Checks whether array has less than $size items.
+     *
+     * @param int $size
+     *
+     * @return bool
+     */
+    public function sizeIsLessThan(int $size): bool
+    {
+        // init
+        $itemsTempCount = 0;
+
+        foreach ($this->getGenerator() as $key => $value) {
+            $itemsTempCount++;
+            if ($itemsTempCount > $size) {
+                return false;
+            }
+        }
+
+        return $itemsTempCount < $size;
+    }
+
+    /**
+     * Checks whether array has more than $size items.
+     *
+     * @param int $size
+     *
+     * @return bool
+     */
+    public function sizeIsGreaterThan(int $size): bool
+    {
+        // init
+        $itemsTempCount = 0;
+
+        foreach ($this->getGenerator() as $key => $value) {
+            $itemsTempCount++;
+            if ($itemsTempCount > $size) {
+                return true;
+            }
+        }
+
+        return $itemsTempCount > $size;
+    }
+    /**
+     * Checks whether array has between $fromSize to $toSize items. $toSize can be
+     * smaller than $fromSize.
+     *
+     * @param int $fromSize
+     * @param int $toSize
+     *
+     * @return bool
+     */
+    public function sizeIsBetween(int $fromSize, int $toSize): bool
+    {
+        if ($fromSize > $toSize) {
+            $tmp = $toSize;
+            $toSize = $fromSize;
+            $fromSize = $tmp;
+        }
+
+        // init
+        $itemsTempCount = 0;
+
+        foreach ($this->getGenerator() as $key => $value) {
+            $itemsTempCount++;
+            if ($itemsTempCount > $toSize) {
+                return false;
+            }
+        }
+
+        return $fromSize < $itemsTempCount && $itemsTempCount < $toSize;
+    }
+
+    /**
      * Count the values from the current array.
      *
      * alias: for "Arrayy->count()"
@@ -3819,7 +3936,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * - If the sorter is null, the array is sorted naturally.
      * - Associative (string) keys will be maintained, but numeric keys will be re-indexed.
      *
-     * @param callable|null $sorter
+     * @param callable|string|null $sorter
      * @param int|string    $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
      * @param int           $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
      *                                 <strong>SORT_NATURAL</strong></p>
@@ -3840,10 +3957,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 false
             );
 
-            $that = $this;
             $results = $arrayy->each(
-                static function ($value) use ($sorter, $that) {
-                    return \is_callable($sorter) ? $sorter($value) : $that->get($sorter, null, $value);
+                function ($value) use ($sorter) {
+                    if (\is_callable($sorter)) {
+                        return $sorter($value);
+                    }
+
+                    return $this->get($sorter, null, $this->getArray());
                 }
             );
 
@@ -4099,7 +4219,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function values(): self
     {
         return static::create(
-            \array_values($this->getArray()),
+            function () {
+                /** @noinspection YieldFromCanBeUsedInspection */
+                foreach ($this->getGenerator() as $value) {
+                    yield $value;
+                }
+            },
             $this->iteratorClass,
             false
         );

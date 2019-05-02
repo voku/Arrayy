@@ -1643,7 +1643,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             [[0 => false], [0 => false], false],
             [[0 => true], [0 => true], false],
             [[0 => -9], [-9], false],
-            [[0 => -9, 1, 2], [-9, 1, 2] , false],
+            [[0 => -9, 1, 2], [-9, 1, 2], false],
             [[1 => 2, 0 => 1], [2, 1], false],
             [[1.18], [1.18], false],
             [[3 => 'string', 'foo', 'lall'], ['string', 'foo', 'lall'], false],
@@ -2123,6 +2123,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     public function testContainsKeys()
     {
         static::assertTrue(A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->containsKeys(['a', 'b', 'c'], true));
+        static::assertFalse(A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->containsKeys(['a', 'b', 'c'], false));
+        static::assertTrue(A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->containsKeys(['a', 'b'], false));
         static::assertTrue(A::create(['a' => 0, 'b' => 1, 'c' => 2])->containsKeys(['a', 'b'], true));
         static::assertTrue(A::create(['a' => 0, 'b' => 1, 'c' => 2])->containsKeys(['a', 'b']));
         static::assertFalse(A::create(['a' => 0, 'b' => 1, 'd' => 2])->containsKeys(['a', 'b', 'c']));
@@ -4270,7 +4272,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testReplace()
     {
-        $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
+        $arraySource = [1 => 'foo', 2 => 'foo2', 3 => 'bar'];
+        $arrayyTmp = A::create($arraySource);
 
         $arrayy = $arrayyTmp->replace(1, 'notfoo', 'notbar');
         $matcher = [
@@ -4279,6 +4282,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             'notfoo' => 'notbar',
         ];
         static::assertSame($matcher, $arrayy->getArray());
+        static::assertSame($arraySource, $arrayyTmp->getArray());
     }
 
     public function testReplaceAllKeys()
@@ -4773,6 +4777,43 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(A::create([':foo:', 'bar' => ':bis:'])->getArray(), $result->getArray());
     }
 
+    public function testSizeIs()
+    {
+        $a = A::create([1, 2]);
+
+        self::assertTrue($a->sizeIs(2));
+        self::assertFalse($a->sizeIs(3));
+        self::assertFalse($a->sizeIs(0));
+    }
+
+    public function testSizeIsLessThen()
+    {
+        $a = A::create([1, 2]);
+
+        self::assertFalse($a->sizeIsLessThan(0));
+        self::assertFalse($a->sizeIsLessThan(2));
+        self::assertTrue($a->sizeIsLessThan(3));
+    }
+
+    public function testSizeIsGreaterThan()
+    {
+        $a = A::create([1, 2]);
+
+        self::assertFalse($a->sizeIsGreaterThan(2));
+        self::assertTrue($a->sizeIsGreaterThan(1));
+        self::assertTrue($a->sizeIsGreaterThan(0));
+    }
+
+    public function testSizeIsBetween()
+    {
+        $a = A::create([1, 2]);
+
+        self::assertTrue($a->sizeIsBetween(1, 3));
+        self::assertFalse($a->sizeIsBetween(3, 4));
+        self::assertFalse($a->sizeIsBetween(0, 0));
+        self::assertTrue($a->sizeIsBetween(3, 1));
+    }
+
     public function testSimpleEach()
     {
         $closure = static function ($value) {
@@ -4844,6 +4885,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $testArray = [5, 3, 1, 2, 4];
         $under = A::create($testArray)->sorter(null, 'desc');
         static::assertSame([5, 4, 3, 2, 1], $under->getArray());
+
+        // ---
+
+        $testArray = ['foo' => 5, 'bar' => 3, 'lll' => 1, 2, 4];
+        $under = A::create($testArray)->sorter('lll', 'desc');
+        static::assertSame(['lll' => 1, 0 => 2, 'bar' => 3, 1 => 4, 'foo' => 5], $under->getArray());
+
+        // ---
 
         $testArray = \range(1, 5);
         $under = A::create($testArray)->sorter(
