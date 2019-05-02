@@ -1,5 +1,13 @@
 # Changelog
 
+### 5.9.0 (2019-05-03)
+
+- "group()" / "sorter()" -> fix phpdoc
+- "keys()" / "values()" -> optimize generator usage
+- "replace()" -> fix immutable of the input
+- "sizeIs()" / "sizeIsLessThan()" / "sizeIsGreaterThan()" / "sizeIsBetween()" -> added
+
+
 ### 5.8.1 (2019-04-30)
 - optimize performance from "Arrayy->unshift()"
 - optimize performance from "Arrayy->push()"
