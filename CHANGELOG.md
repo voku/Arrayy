@@ -8,6 +8,7 @@
 - "sizeIs()" / "sizeIsLessThan()" / "sizeIsGreaterThan()" / "sizeIsBetween()" -> added
 - "invoke()" -> improve generator usage + fix phpdoc
 - "map()" -> allow to use the key, in the callable + additional parameter
+- "containsCaseInsensitive()" -> optimize for generator usage
 
 
 ### 5.8.1 (2019-04-30)
