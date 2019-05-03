@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.9.1 (2019-05-03)
+
+- "first()" / "last()" -> fix -> do not change the current array, if it's not needed 
+
+
 ### 5.9.0 (2019-05-03)
 
 - "group()" / "sorter()" -> fix phpdoc

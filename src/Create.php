@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace {
 
-    if (PHP_VERSION_ID < 70300) {
-        if (!function_exists('is_countable')) {
+    if (\PHP_VERSION_ID < 70300) {
+        if (!\function_exists('is_countable')) {
             function is_countable($var)
             {
                 /** @noinspection PhpComposerExtensionStubsInspection */
-                return is_array($var)
+                return \is_array($var)
                        ||
                        $var instanceof Countable
                        ||
@@ -19,7 +19,7 @@ namespace {
             }
         }
 
-        if (!function_exists('array_key_first')) {
+        if (!\function_exists('array_key_first')) {
             function array_key_first(array $array)
             {
                 foreach ($array as $key => $value) {
@@ -30,12 +30,12 @@ namespace {
             }
         }
 
-        if (!function_exists('array_key_last')) {
+        if (!\function_exists('array_key_last')) {
             function array_key_last(array $array)
             {
-                end($array);
+                \end($array);
 
-                return key($array);
+                return \key($array);
             }
         }
     }
