@@ -738,7 +738,7 @@ a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
 
 ##### firstsMutable(null|int $take) : Arrayy (Mutable)
 
-Get the first value(s) from the current array.
+Get and remove the first value(s) from the current array.
 
 ```php
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->firsts(2); // Arrayy[0 => 'foo', 1 => 'bar']

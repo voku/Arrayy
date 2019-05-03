@@ -3,6 +3,7 @@
 namespace Arrayy\tests;
 
 use Arrayy\Arrayy as A;
+use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
 
 /**
@@ -613,6 +614,10 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
         if (empty($array)) {
             $last = null;
+        }
+
+        if ($result instanceof Arrayy) {
+            $result = $result->getArray();
         }
 
         static::assertSame($last, $result);

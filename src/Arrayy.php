@@ -1684,7 +1684,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $tmpArray = $this->getArray();
 
-        return \array_shift($tmpArray);
+        $key_first = array_key_first($tmpArray);
+        if ($key_first === null) {
+            return null;
+        }
+
+        return $tmpArray[$key_first];
     }
 
     /**
@@ -1715,7 +1720,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Get the first value(s) from the current array.
+     * Get and rmove the first value(s) from the current array.
      * And will return an empty array if there was no first entry.
      *
      * @param int|null $number <p>How many values you will take?</p>
@@ -2206,10 +2211,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         // If one argument given for each iteration, create an array for it.
         if (!\is_array($arguments)) {
-            $arguments = StaticArrayy::repeat(
-                $arguments,
-                \count($this->getArray(), \COUNT_NORMAL)
-            )->getArray();
+            $arguments = \array_fill(
+                0,
+                \count($this->getArray(), \COUNT_NORMAL),
+                $arguments
+            );
         }
 
         // If the callable has arguments, pass them.
@@ -2440,7 +2446,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function last()
     {
-        return $this->pop();
+        $this->generatorToArray();
+
+        $key_last = \array_key_last($this->array);
+
+        if ($key_last === null) {
+            return null;
+        }
+
+        return $this->get($key_last);
     }
 
     /**
@@ -2462,7 +2476,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($number === null) {
-            $poppedValue = $this->pop();
+            $poppedValue = $this->last();
 
             if ($poppedValue === null) {
                 $poppedValue = [$poppedValue];
@@ -2498,7 +2512,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($number === null) {
-            $poppedValue = $this->pop();
+            $poppedValue = $this->last();
 
             if ($poppedValue === null) {
                 $poppedValue = [$poppedValue];
