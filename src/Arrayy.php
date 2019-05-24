@@ -349,7 +349,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $iterator = $this->getIteratorClass();
 
         if ($iterator === ArrayyIterator::class) {
-            return new $iterator($this->getArray(), 0, static::class, false);
+            return new $iterator($this->getArray(), 0, static::class);
         }
 
         return new $iterator($this->getArray());
