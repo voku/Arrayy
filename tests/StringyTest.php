@@ -1179,7 +1179,7 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
         return [
             ['', ''],
             [
-                'Hello, i try to alert&#40;\'Hack\'&#41;; your site',
+                'Hello, i try to  your site',
                 'Hello, i try to <script>alert(\'Hack\');</script> your site',
             ],
             [
@@ -4496,6 +4496,185 @@ final class StringyTest extends \PHPUnit\Framework\TestCase
             ['1a', '1a'],
             ['Σ test', 'σ test', 'UTF-8'],
             [' σ test', ' σ test', 'UTF-8'],
+        ];
+    }
+
+    /**
+     * @param $haystack
+     * @param $needle
+     * @param $expected
+     * @param $mainEncoding
+     * @param $encodingParameter
+     * @dataProvider strBeginsProvider
+     */
+    public function testStrBegins($haystack, $needle, $expected, $mainEncoding, $encodingParameter)
+    {
+        self::assertSame(
+            $expected,
+            S::create($haystack, $encodingParameter)->startsWith($needle)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function strBeginsProvider()
+    {
+        $euc_jp = '0123この文字列は日本語です。EUC-JPを使っています。0123日本語は面倒臭い。';
+        $string_ascii = 'abc def';
+        $string_mb = base64_decode('5pel5pys6Kqe44OG44Kt44K544OI44Gn44GZ44CCMDEyMzTvvJXvvJbvvJfvvJjvvJnjgII=');
+        return [
+            [$euc_jp, '0123こ', true, 'UTF-8', 'EUC-JP'],
+            [$euc_jp, '韓国語', false, 'UTF-8', 'EUC-JP'],
+            [$euc_jp, '0123', true, 'EUC-JP', null],
+            [$euc_jp, '韓国語', false, 'EUC-JP', null],
+            [$euc_jp, '', true, 'UTF-8', 'EUC-JP'],
+            [$string_ascii, 'a', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'A', false, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'b', false, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, '', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'abc', true, 'UTF-8', null],
+            [$string_ascii, 'bc', false, 'UTF-8', null],
+            [$string_ascii, '', true, 'UTF-8', null],
+            [$string_mb, base64_decode('5pel5pys6Kqe'), true, 'UTF-8', null],
+            [$string_mb, base64_decode('44GT44KT44Gr44Gh44Gv44CB5LiW55WM'), false, 'UTF-8', null],
+            [$string_mb, '', true, 'UTF-8', null],
+            ['Τὴ γλῶσσα μοῦ ἔδωσαν ἑλληνικὴ', 'ΤῊ', false, 'UTF-8', null],
+        ];
+    }
+
+
+    /**
+     * @param $haystack
+     * @param $needle
+     * @param $expected
+     * @param $mainEncoding
+     * @param $encodingParameter
+     * @dataProvider strEndsProvider
+     */
+    public function testStrEnds($haystack, $needle, $expected, $mainEncoding, $encodingParameter)
+    {
+        self::assertSame(
+            $expected,
+            S::create($haystack, $encodingParameter)->endsWith($needle)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function strEndsProvider()
+    {
+        $euc_jp = '0123この文字列は日本語です。EUC-JPを使っています。0123日本語は面倒臭い。';
+        $string_ascii = 'abc def';
+        $string_mb = base64_decode('5pel5pys6Kqe44OG44Kt44K544OI44Gn44GZ44CCMDEyMzTvvJXvvJbvvJfvvJjvvJnjgII=');
+        return [
+            [$euc_jp, 'い。', true, 'UTF-8', 'EUC-JP'],
+            [$euc_jp, '韓国語', false, 'UTF-8', 'EUC-JP'],
+            [$euc_jp, 'い。', true, 'EUC-JP', null],
+            [$euc_jp, '韓国語', false, 'EUC-JP', null],
+            [$euc_jp, '', true, 'UTF-8', 'EUC-JP'],
+            [$string_ascii, 'f', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'F', false, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'e', false, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, '', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'def', true, 'UTF-8', null],
+            [$string_ascii, 'de', false, 'UTF-8', null],
+            [$string_ascii, '', true, 'UTF-8', null],
+            [$string_mb, base64_decode('77yZ44CC'), true, 'UTF-8', null],
+            [$string_mb, base64_decode('44GT44KT44Gr44Gh44Gv44CB5LiW55WM'), false, 'UTF-8', null],
+            [$string_mb, '', true, 'UTF-8', null],
+            ['Τὴ γλῶσσα μοῦ ἔδωσαν ἑλληνικὴ', 'ἙΛΛΗΝΙΚῊ', false, 'UTF-8', null],
+        ];
+    }
+
+    /**
+     * @param $haystack
+     * @param $needle
+     * @param $expected
+     * @param $mainEncoding
+     * @param $encodingParameter
+     * @dataProvider strIbeginsProvider
+     */
+    public function testStrIbegins($haystack, $needle, $expected, $mainEncoding, $encodingParameter)
+    {
+        self::assertSame(
+            $expected,
+            S::create($haystack, $encodingParameter)->startsWith($needle, false)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function strIbeginsProvider()
+    {
+        $euc_jp = '0123この文字列は日本語です。EUC-JPを使っています。0123日本語は面倒臭い。';
+        $string_ascii = 'abc def';
+        $string_mb = base64_decode('5pel5pys6Kqe44OG44Kt44K544OI44Gn44GZ44CCMDEyMzTvvJXvvJbvvJfvvJjvvJnjgII=');
+        return [
+            [$euc_jp, '0123こ', true, 'UTF-8', 'EUC-JP'],
+            [$euc_jp, '韓国語', false, 'UTF-8', 'EUC-JP'],
+            [$euc_jp, '0123', true, 'EUC-JP', null],
+            [$euc_jp, '韓国語', false, 'EUC-JP', null],
+            [$euc_jp, '', true, 'UTF-8', 'EUC-JP'],
+            [$string_ascii, 'a', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'A', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'b', false, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, '', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'abc', true, 'UTF-8', null],
+            [$string_ascii, 'AbC', true, 'UTF-8', null],
+            [$string_ascii, 'bc', false, 'UTF-8', null],
+            [$string_ascii, '', true, 'UTF-8', null],
+            [$string_mb, base64_decode('5pel5pys6Kqe'), true, 'UTF-8', null],
+            [$string_mb, base64_decode('44GT44KT44Gr44Gh44Gv44CB5LiW55WM'), false, 'UTF-8', null],
+            [$string_mb, '', true, 'UTF-8', null],
+            ['Τὴ γλῶσσα μοῦ ἔδωσαν ἑλληνικὴ', 'ΤῊ', true, 'UTF-8', null],
+        ];
+    }
+
+    /**
+     * @param $haystack
+     * @param $needle
+     * @param $expected
+     * @param $mainEncoding
+     * @param $encodingParameter
+     * @dataProvider strIendsProvider
+     */
+    public function testStrIends($haystack, $needle, $expected, $mainEncoding, $encodingParameter)
+    {
+        self::assertSame(
+            $expected,
+            S::create($haystack, $encodingParameter)->endsWith($needle, false)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function strIendsProvider()
+    {
+        $euc_jp = '0123この文字列は日本語です。EUC-JPを使っています。0123日本語は面倒臭い。';
+        $string_ascii = 'abc def';
+        $string_mb = base64_decode('5pel5pys6Kqe44OG44Kt44K544OI44Gn44GZ44CCMDEyMzTvvJXvvJbvvJfvvJjvvJnjgII=');
+        return [
+            [$euc_jp, 'い。', true, 'UTF-8', 'EUC-JP'],
+            [$euc_jp, '韓国語', false, 'UTF-8', 'EUC-JP'],
+            [$euc_jp, 'い。', true, 'EUC-JP', null],
+            [$euc_jp, '韓国語', false, 'EUC-JP', null],
+            [$euc_jp, '', true, 'UTF-8', 'EUC-JP'],
+            [$string_ascii, 'f', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'F', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'e', false, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, '', true, 'UTF-8', 'ISO-8859-1'],
+            [$string_ascii, 'def', true, 'UTF-8', null],
+            [$string_ascii, 'DeF', true, 'UTF-8', null],
+            [$string_ascii, 'de', false, 'UTF-8', null],
+            [$string_ascii, '', true, 'UTF-8', null],
+            [$string_mb, base64_decode('77yZ44CC'), true, 'UTF-8', null],
+            [$string_mb, base64_decode('44GT44KT44Gr44Gh44Gv44CB5LiW55WM'), false, 'UTF-8', null],
+            [$string_mb, '', true, 'UTF-8', null],
+            ['Τὴ γλῶσσα μοῦ ἔδωσαν ἑλληνικὴ', 'ἙΛΛΗΝΙΚῊ', true, 'UTF-8', null],
         ];
     }
 }
