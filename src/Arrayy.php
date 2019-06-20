@@ -4534,9 +4534,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * @param mixed               $glue
-     * @param array|static|string $pieces
-     * @param bool                $useKeys
+     * @param mixed $glue
+     * @param mixed $pieces
+     * @param bool  $useKeys
      *
      * @return string
      */
