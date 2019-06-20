@@ -92,4 +92,14 @@ class Collection extends AbstractCollection
     {
         return $this->collectionTypeTmp;
     }
+
+    /**
+     * Get a base Collection instance from this Collection.
+     *
+     * @return self
+     */
+    public function toBase(): self
+    {
+        return new self($this);
+    }
 }

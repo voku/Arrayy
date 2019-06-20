@@ -21,6 +21,7 @@
   ],
   "require": {
     "php": ">=7.0.0",
+    "ext-json": "*",
     "symfony/polyfill-mbstring": "~1.0",
     "phpdocumentor/reflection-docblock": "~4.1"
   },

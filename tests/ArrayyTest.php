@@ -189,6 +189,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public static function assertArrayy($actual)
     {
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         static::assertInstanceOf(\Arrayy\Arrayy::class, $actual);
     }
 
@@ -2045,15 +2046,15 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             ->get('fruit')
             ->uniqueKeepIndex()
             ->walk(
-                            static function (&$value) {
-                                $value .= '*';
-                            },
-                            true
+                static function (&$value) {
+                    $value .= '*';
+                },
+                true
                         )
             ->filter(
-                            static function ($value) {
-                                return \strpos($value, 'a') !== false;
-                            }
+                static function ($value) {
+                    return \strpos($value, 'a') !== false;
+                }
                         );
 
         static::assertSame([0 => 'orange*', 1 => 'avocado*', 3 => 'pear*'], $arrayy->getArray());
@@ -2071,7 +2072,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        new A(5);
+        new A(new \stdClass());
         static::fail('Expecting exception when the constructor is passed an array');
     }
 
@@ -2132,6 +2133,22 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertTrue(A::create([])->containsKeys([]));
         static::assertTrue(A::create(['a' => 0, 'b' => 1, 'c' => 2])->containsKeys([]));
         static::assertFalse(A::create([])->containsKeys(['a', 'b', 'c']));
+    }
+
+    public function testPull()
+    {
+        static::assertSame([0, 1, null], A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->pull(['a', 'b', 'foo']));
+        static::assertSame([0, 1], A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->pull(['a', 'b']));
+        static::assertSame([], A::create([])->pull([]));
+        static::assertSame([], A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->pull([]));
+        static::assertSame(0, A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->pull('a'));
+        static::assertSame([null, null, null], A::create([])->pull(['a', 'b', 'c']));
+
+        // ---
+
+        $test = A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]]);
+        static::assertSame([0, 1, null], $test->pull(['a', 'b', 'foo']));
+        static::assertSame(['d' => ['c' => 2]], $test->getArray());
     }
 
     public function testContainsKeysRecursive()
@@ -3763,6 +3780,24 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $offset = 1;
 
         $arrayy->offsetUnset($offset);
+        unset($array[$offset]);
+
+        static::assertSame($array, $arrayy->toArray());
+        static::assertFalse(isset($array[$offset]));
+        static::assertFalse($arrayy->offsetExists($offset));
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testDeleteKey(array $array)
+    {
+        $arrayy = new A($array);
+        $offset = 1;
+
+        $arrayy->delete($offset);
         unset($array[$offset]);
 
         static::assertSame($array, $arrayy->toArray());

@@ -3,6 +3,7 @@
 namespace Arrayy\tests;
 
 use function Arrayy\collection;
+use Arrayy\Collection\Collection;
 
 /**
  * @internal
@@ -20,6 +21,22 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $collection = collection('mixed', [$pets, $colors]);
 
         static::assertSame([$pets, $colors], $collection->getCollection());
+    }
+
+    public function testSimpleBaseGenericCollection()
+    {
+        $pets = new \stdClass();
+        $pets->foo = 1;
+
+        $colors = new \stdClass();
+        $colors->color = 'red';
+
+        $collection = new StdBaseClassCollection(\stdClass::class, [$pets, $colors]);
+
+        static::assertSame([$pets, $colors], $collection->getCollection());
+
+        /** @noinspection UnnecessaryAssertionInspection */
+        static::assertInstanceOf(Collection::class, $collection->toBase());
     }
 
     public function testSimpleGenericFailCollection()

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Arrayy;
 
 /** @noinspection ClassReImplementsParentInterfaceInspection */
-/** @noinspection PhpComposerExtensionStubsInspection */
 
 /**
  * Methods to manage arrays.
@@ -54,9 +53,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @var Property[]
      */
     protected $properties = [];
-
-    /** @noinspection MagicMethodsValidityInspection */
-    /** @noinspection PhpMissingParentConstructorInspection */
 
     /**
      * Initializes
@@ -436,7 +432,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $offset = (int) $offset;
         }
 
-        $tmpReturn = \array_key_exists($offset, $this->array);
+        $tmpReturn = $this->keyExists($offset);
 
         if (
             $tmpReturn === true
@@ -521,7 +517,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return;
         }
 
-        if (\array_key_exists($offset, $this->array)) {
+        if ($this->keyExists($offset)) {
             unset($this->array[$offset]);
 
             return;
@@ -550,8 +546,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         unset($this->array[$offset]);
     }
-
-    /** @noinspection SenselessProxyMethodInspection | can not add return type, because of the "Serializable" interface */
 
     /**
      * Serialize the current "Arrayy"-object.
@@ -821,10 +815,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $return = [];
         foreach ($this->getGenerator() as $key => $value) {
             if ($case === \CASE_LOWER) {
-                /** @noinspection PhpComposerExtensionStubsInspection */
                 $key = \mb_strtolower((string) $key);
             } else {
-                /** @noinspection PhpComposerExtensionStubsInspection */
                 $key = \mb_strtoupper((string) $key);
             }
 
@@ -992,20 +984,24 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function containsKeys(array $needles, $recursive = false): bool
     {
         if ($recursive === true) {
-            return \count(
-                       \array_intersect($needles, $this->keys(true)->getArray()),
-                       \COUNT_RECURSIVE
-                   )
-                   ===
-                   \count(
-                       $needles,
-                       \COUNT_RECURSIVE
-                   );
+            return
+                \count(
+                    \array_intersect(
+                        $needles,
+                        $this->keys(true)->getArray()
+                    ),
+                    \COUNT_RECURSIVE
+                )
+                ===
+                \count(
+                    $needles,
+                    \COUNT_RECURSIVE
+                );
         }
 
         return \count(
-                   \array_intersect($needles, $this->keys()->getArray()),
-                   \COUNT_NORMAL
+            \array_intersect($needles, $this->keys()->getArray()),
+            \COUNT_NORMAL
                )
                ===
                \count(
@@ -1139,19 +1135,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Create an new instance filled with a copy of values from a "Traversable"-object.
-     *
-     * @param \Traversable $traversable
-     *
-     * @return static
-     *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
-     */
-    public static function createFromTraversableImmutable(\Traversable $traversable): self
-    {
-        return new static(\iterator_to_array($traversable, true));
-    }
-
-    /**
      * Create an new instance filled with a copy of values from a "Generator"-object.
      *
      * @param \Generator $generator
@@ -1174,7 +1157,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromJson(string $json): self
     {
-        /** @noinspection PhpComposerExtensionStubsInspection */
         return static::create(\json_decode($json, true));
     }
 
@@ -1259,6 +1241,19 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Create an new instance filled with a copy of values from a "Traversable"-object.
+     *
+     * @param \Traversable $traversable
+     *
+     * @return static
+     *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+     */
+    public static function createFromTraversableImmutable(\Traversable $traversable): self
+    {
+        return new static(\iterator_to_array($traversable, true));
+    }
+
+    /**
      * Create an new instance containing a range of elements.
      *
      * @param mixed $low  <p>First value of the sequence.</p>
@@ -1325,6 +1320,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         \usort($this->array, $function);
 
         return $this;
+    }
+
+    /**
+     * Delete the given key or keys.
+     *
+     * @param int|int[]|string|string[] $keyOrKeys
+     */
+    public function delete($keyOrKeys)
+    {
+        $keyOrKeys = (array) $keyOrKeys;
+
+        foreach ($keyOrKeys as $key) {
+            $this->offsetUnset($key);
+        }
     }
 
     /**
@@ -1861,6 +1870,18 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * alias: for "Arrayy->getArray()"
+     *
+     * @return array
+     *
+     * @see Arrayy::getArray()
+     */
+    public function getAll(): array
+    {
+        return $this->getArray();
+    }
+
+    /**
      * Get the current array from the "Arrayy"-object.
      *
      * @return array
@@ -2256,18 +2277,30 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Check whether the array is empty or not.
+     * Check if a given key or keys are empty.
+     *
+     * @param int|int[]|string|string[]|null $keys
      *
      * @return bool
      *              <p>Returns true if empty, false otherwise.</p>
      */
-    public function isEmpty(): bool
+    public function isEmpty($keys = null): bool
     {
         if ($this->generator) {
             return $this->getArray() === [];
         }
 
-        return $this->array === [];
+        if ($keys === null) {
+            return $this->array === [];
+        }
+
+        foreach ((array) $keys as $key) {
+            if (!empty($this->get($key))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -2348,6 +2381,18 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function jsonSerialize(): array
     {
         return $this->getArray();
+    }
+
+    /**
+     * Checks if the given key exists in the provided array.
+     *
+     * @param int|string $key the key to look for
+     *
+     * @return bool
+     */
+    public function keyExists($key): bool
+    {
+        return \array_key_exists($key, $this->array);
     }
 
     /**
@@ -2971,6 +3016,38 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Return the value of a given key and
+     * delete the key.
+     *
+     * @param int|int[]|string|string[]|null $keyOrKeys
+     * @param mixed                          $fallback
+     *
+     * @return mixed
+     */
+    public function pull($keyOrKeys = null, $fallback = null)
+    {
+        if ($keyOrKeys === null) {
+            $array = $this->getArray();
+            $this->clear();
+
+            return $array;
+        }
+
+        if (\is_array($keyOrKeys)) {
+            $valueOrValues = [];
+            foreach ($keyOrKeys as $key) {
+                $valueOrValues[] = $this->get($key, $fallback);
+                $this->offsetUnset($key);
+            }
+        } else {
+            $valueOrValues = $this->get($keyOrKeys, $fallback);
+            $this->offsetUnset($keyOrKeys);
+        }
+
+        return $valueOrValues;
+    }
+
+    /**
      * Push one or more values onto the end of array at once.
      *
      * @return static
@@ -3213,6 +3290,31 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $this->iteratorClass,
             false
         );
+    }
+
+    /**
+     * @param bool $unique
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function reduce_dimension(bool $unique = true): self
+    {
+        // init
+        $result = [[]];
+
+        foreach ($this->getGenerator() as $val) {
+            if (\is_array($val)) {
+                $result[] = (new self($val))->reduce_dimension($unique)->getArray();
+            } else {
+                $result[] = [$val];
+            }
+        }
+        $result = \array_merge(...$result);
+
+        $resultArrayy = new self($result);
+
+        return $unique ? $resultArrayy->unique() : $resultArrayy;
     }
 
     /**
@@ -3720,6 +3822,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Count the values from the current array.
+     *
+     * alias: for "Arrayy->count()"
+     *
+     * @param int $mode
+     *
+     * @return int
+     */
+    public function size(int $mode = \COUNT_NORMAL): int
+    {
+        return $this->count($mode);
+    }
+
+    /**
      * Checks whether array has exactly $size items.
      *
      * @param int $size
@@ -3739,50 +3855,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $itemsTempCount === $size;
-    }
-
-    /**
-     * Checks whether array has less than $size items.
-     *
-     * @param int $size
-     *
-     * @return bool
-     */
-    public function sizeIsLessThan(int $size): bool
-    {
-        // init
-        $itemsTempCount = 0;
-
-        foreach ($this->getGenerator() as $key => $value) {
-            ++$itemsTempCount;
-            if ($itemsTempCount > $size) {
-                return false;
-            }
-        }
-
-        return $itemsTempCount < $size;
-    }
-
-    /**
-     * Checks whether array has more than $size items.
-     *
-     * @param int $size
-     *
-     * @return bool
-     */
-    public function sizeIsGreaterThan(int $size): bool
-    {
-        // init
-        $itemsTempCount = 0;
-
-        foreach ($this->getGenerator() as $key => $value) {
-            ++$itemsTempCount;
-            if ($itemsTempCount > $size) {
-                return true;
-            }
-        }
-
-        return $itemsTempCount > $size;
     }
 
     /**
@@ -3816,17 +3888,47 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Count the values from the current array.
+     * Checks whether array has more than $size items.
      *
-     * alias: for "Arrayy->count()"
+     * @param int $size
      *
-     * @param int $mode
-     *
-     * @return int
+     * @return bool
      */
-    public function size(int $mode = \COUNT_NORMAL): int
+    public function sizeIsGreaterThan(int $size): bool
     {
-        return $this->count($mode);
+        // init
+        $itemsTempCount = 0;
+
+        foreach ($this->getGenerator() as $key => $value) {
+            ++$itemsTempCount;
+            if ($itemsTempCount > $size) {
+                return true;
+            }
+        }
+
+        return $itemsTempCount > $size;
+    }
+
+    /**
+     * Checks whether array has less than $size items.
+     *
+     * @param int $size
+     *
+     * @return bool
+     */
+    public function sizeIsLessThan(int $size): bool
+    {
+        // init
+        $itemsTempCount = 0;
+
+        foreach ($this->getGenerator() as $key => $value) {
+            ++$itemsTempCount;
+            if ($itemsTempCount > $size) {
+                return false;
+            }
+        }
+
+        return $itemsTempCount < $size;
     }
 
     /**
@@ -3969,7 +4071,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * - Associative (string) keys will be maintained, but numeric keys will be re-indexed.
      *
      * @param callable|string|null $sorter
-     * @param int|string           $direction <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
+     * @param int|string           $direction <p>use <strong>SORT_ASC</strong> (default) or
+     *                                        <strong>SORT_DESC</strong></p>
      * @param int                  $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
      *                                        <strong>SORT_NATURAL</strong></p>
      *
@@ -4104,7 +4207,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function toJson(int $options = 0, int $depth = 512): string
     {
-        /** @noinspection PhpComposerExtensionStubsInspection */
         $return = \json_encode($this->getArray(), $options, $depth);
         if ($return === false) {
             return '';
@@ -4184,31 +4286,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $this;
-    }
-
-    /**
-     * @param bool $unique
-     *
-     * @return static
-     *                <p>(Immutable)</p>
-     */
-    public function reduce_dimension(bool $unique = true): self
-    {
-        // init
-        $result = [[]];
-
-        foreach ($this->getGenerator() as $val) {
-            if (\is_array($val)) {
-                $result[] = (new self($val))->reduce_dimension($unique)->getArray();
-            } else {
-                $result[] = [$val];
-            }
-        }
-        $result = \array_merge(...$result);
-
-        $resultArrayy = new self($result);
-
-        return $unique ? $resultArrayy->unique() : $resultArrayy;
     }
 
     /**
@@ -4415,53 +4492,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     protected function fallbackForArray(&$data): array
     {
-        if (\is_array($data)) {
-            return $data;
+        $data = $this->internalGetArray($data);
+
+        if ($data === null) {
+            throw new \InvalidArgumentException(
+                'Passed value should be a array'
+            );
         }
 
-        if (!$data) {
-            return [];
-        }
-
-        $isObject = \is_object($data);
-
-        if ($isObject && $data instanceof self) {
-            return $data->getArray();
-        }
-
-        if ($isObject && $data instanceof \ArrayObject) {
-            return $data->getArrayCopy();
-        }
-
-        if ($isObject && $data instanceof \Generator) {
-            return static::createFromGeneratorImmutable($data)->getArray();
-        }
-
-        if ($isObject && $data instanceof \Traversable) {
-            return static::createFromObject($data)->getArray();
-        }
-
-        if (\is_callable($data)) {
-            $this->generator = new ArrayyRewindableGenerator($data);
-
-            return [];
-        }
-
-        if ($isObject && \method_exists($data, '__toArray')) {
-            return (array) $data->__toArray();
-        }
-
-        if (
-            \is_string($data)
-            ||
-            ($isObject && \method_exists($data, '__toString'))
-        ) {
-            return [(string) $data];
-        }
-
-        throw new \InvalidArgumentException(
-            'Passed value should be a array'
-        );
+        return $data;
     }
 
     /**
@@ -4521,7 +4560,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             );
         }
 
-        return (string) $pieces;
+        if (
+            \is_scalar($pieces)
+            ||
+            (\is_object($pieces) && \method_exists($pieces, '__toString'))
+        ) {
+            return (string) $pieces;
+        }
+
+        return '';
     }
 
     /**
@@ -4572,31 +4619,61 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * @param mixed $value
+     * @param mixed $data
+     *
+     * @return array|null
      */
-    protected function internalGetArray(&$value)
+    protected function internalGetArray(&$data)
     {
-        if ($value instanceof self) {
-            $valueTmp = $value->getArray();
-            if (\count($valueTmp, \COUNT_NORMAL) === 0) {
-                $value = [];
-            } else {
-                /** @noinspection PhpUnusedLocalVariableInspection */
-                $value = &$valueTmp;
-            }
+        if (\is_array($data)) {
+            return $data;
         }
 
-        /** @noinspection PhpComposerExtensionStubsInspection */
-        /** @noinspection NotOptimalIfConditionsInspection */
-        if (
-            \class_exists('JsonSerializable')
-            &&
-            $value instanceof \JsonSerializable
-        ) {
-
-            /** @noinspection PhpUnusedLocalVariableInspection */
-            $value = &$value->jsonSerialize();
+        if (!$data) {
+            return [];
         }
+
+        $isObject = \is_object($data);
+
+        if ($isObject && $data instanceof self) {
+            return $data->getArray();
+        }
+
+        if ($isObject && $data instanceof \ArrayObject) {
+            return $data->getArrayCopy();
+        }
+
+        if ($isObject && $data instanceof \Generator) {
+            return static::createFromGeneratorImmutable($data)->getArray();
+        }
+
+        if ($isObject && $data instanceof \Traversable) {
+            return static::createFromObject($data)->getArray();
+        }
+
+        if ($data instanceof \JsonSerializable) {
+            return (array) $data->jsonSerialize();
+        }
+
+        if (\is_callable($data)) {
+            $this->generator = new ArrayyRewindableGenerator($data);
+
+            return [];
+        }
+
+        if ($isObject && \method_exists($data, '__toArray')) {
+            return (array) $data->__toArray();
+        }
+
+        if (\is_scalar($data)) {
+            return [$data];
+        }
+
+        if ($isObject && \method_exists($data, '__toString')) {
+            return [(string) $data];
+        }
+
+        return null;
     }
 
     /**

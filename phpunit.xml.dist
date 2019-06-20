@@ -7,11 +7,8 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
          bootstrap="tests/bootstrap.php"
          verbose="true"
-         tap="true"
-         testdox="true"
 >
     <testsuite name="Arrayy Test Suite">
         <directory>tests</directory>
@@ -20,9 +17,6 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/</directory>
         </whitelist>
-        <blacklist>
-            <directory suffix=".php">./vendor</directory>
-        </blacklist>
     </filter>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
