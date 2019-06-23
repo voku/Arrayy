@@ -754,7 +754,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $language = 'en',
-                                $removeUnsupported = true
+        $removeUnsupported = true
     ) {
         $stringy = S::create($str);
         $result = $stringy->toAscii($language, $removeUnsupported);

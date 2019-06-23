@@ -1185,7 +1185,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     public function lastSubstringOf(string $needle, bool $beforeNeedle = false): self
     {
         return static::create(
-            $this->utf8::str_substr_last($this->str, $needle, $beforeNeedle, $this->encoding),
+            $this->utf8::str_substr_last(
+                $this->str,
+                $needle,
+                $beforeNeedle,
+                $this->encoding
+            ),
             $this->encoding
         );
     }
@@ -1202,7 +1207,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     public function lastSubstringOfIgnoreCase(string $needle, bool $beforeNeedle = false): self
     {
         return static::create(
-            $this->utf8::str_isubstr_last($this->str, $needle, $beforeNeedle, $this->encoding),
+            $this->utf8::str_isubstr_last(
+                $this->str,
+                $needle,
+                $beforeNeedle,
+                $this->encoding
+            ),
             $this->encoding
         );
     }
@@ -1868,13 +1878,13 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         $stringy->str = \str_replace('@', $replacement, $stringy->str);
 
         $stringy->str = (string) \preg_replace(
-            '/[^a-zA-Z\d\s\-_' . \preg_quote($replacement, '/') . ']/u',
+            '/[^a-zA-Z\\d\\s\\-_' . \preg_quote($replacement, '/') . ']/u',
             '',
             $stringy->str
         );
-        $stringy->str = (string) \preg_replace("/^['\s']+|['\s']+\$/", '', \strtolower($stringy->str));
-        $stringy->str = (string) \preg_replace('/\B([A-Z])/', '/-\1/', $stringy->str);
-        $stringy->str = (string) \preg_replace('/[-_\s]+/', $replacement, $stringy->str);
+        $stringy->str = (string) \preg_replace("/^['\\s']+|['\\s']+\$/", '', \strtolower($stringy->str));
+        $stringy->str = (string) \preg_replace('/\\B([A-Z])/', '/-\\1/', $stringy->str);
+        $stringy->str = (string) \preg_replace('/[-_\\s]+/', $replacement, $stringy->str);
 
         $l = \strlen($replacement);
         if (\strpos($stringy->str, $replacement) === 0) {
@@ -2067,7 +2077,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     public function substringOf(string $needle, bool $beforeNeedle = false): self
     {
         return static::create(
-            $this->utf8::str_substr_first($this->str, $needle, $beforeNeedle, $this->encoding),
+            $this->utf8::str_substr_first(
+                $this->str,
+                $needle,
+                $beforeNeedle,
+                $this->encoding
+            ),
             $this->encoding
         );
     }
@@ -2084,7 +2099,12 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
     public function substringOfIgnoreCase(string $needle, bool $beforeNeedle = false): self
     {
         return static::create(
-            $this->utf8::str_isubstr_first($this->str, $needle, $beforeNeedle, $this->encoding),
+            $this->utf8::str_isubstr_first(
+                $this->str,
+                $needle,
+                $beforeNeedle,
+                $this->encoding
+            ),
             $this->encoding
         );
     }
@@ -2225,7 +2245,8 @@ class Stringy implements \Countable, \IteratorAggregate, \ArrayAccess
         }
 
         if ($removeUnsupported) {
-            $str = \preg_replace('/[^\x20-\x7E]/u', '', $str);
+            /** @noinspection NotOptimalRegularExpressionsInspection */
+            $str = \preg_replace('/[^\\x20-\\x7E]/u', '', $str);
         }
 
         return static::create($str, $this->encoding);

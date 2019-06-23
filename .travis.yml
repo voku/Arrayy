@@ -18,10 +18,12 @@ matrix:
   allow_failures:
     - php: nightly
   include:
+    - php: nightly
     - php: 7.0
     - php: 7.1
     - php: 7.2
     - php: 7.3
+    - php: 7.4snapshot
 
 before_script:
   - php --version
