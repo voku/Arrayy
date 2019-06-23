@@ -1,10 +1,10 @@
 parameters:
     reportUnmatchedIgnoredErrors: false
     excludes_analyse:
-        - %rootDir%/vendor/*
-        - %rootDir%/tests/*
+        - %currentWorkingDirectory%/vendor/*
+        - %currentWorkingDirectory%/tests/*
     autoload_files:
-        - %rootDir%/vendor/autoload.php
+        - %currentWorkingDirectory%/vendor/autoload.php
     ignoreErrors:
         - '/Parameter #1 \$function of function call_user_func_array expects callable\(\): mixed, array\(Stringy\\Stringy, string\) given\./'
         - '/Method Stringy\\Stringy::lines\(\) should return array<static\(Stringy\\Stringy\)> but returns array<string>\./'
