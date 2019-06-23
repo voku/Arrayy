@@ -632,7 +632,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $ignore = null,
-                                 $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->titleize($ignore);
@@ -805,7 +805,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $length,
         $padStr = ' ',
-                            $padType = 'right',
+        $padType = 'right',
         $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
@@ -862,7 +862,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $length,
         $padStr = ' ',
-                                $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->padLeft($length, $padStr);
@@ -898,7 +898,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $length,
         $padStr = ' ',
-                                 $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->padRight($length, $padStr);
@@ -934,7 +934,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $length,
         $padStr = ' ',
-                                $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->padBoth($length, $padStr);
@@ -973,7 +973,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $substring,
-                                   $caseSensitive = true,
+        $caseSensitive = true,
         $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
@@ -1013,7 +1013,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $substrings,
-                                      $caseSensitive = true,
+        $caseSensitive = true,
         $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
@@ -1053,7 +1053,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $substring,
-                                 $caseSensitive = true,
+        $caseSensitive = true,
         $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
@@ -1093,7 +1093,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $substrings,
-                                    $caseSensitive = true,
+        $caseSensitive = true,
         $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
@@ -1347,7 +1347,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $start,
         $end,
         $offset = null,
-                                $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->between($start, $end, $offset);
@@ -1391,7 +1391,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $haystack,
         $needle,
-                                 $caseSensitive = true,
+        $caseSensitive = true,
         $encoding = null
     ) {
         $stringy = S::create($haystack, $encoding);
@@ -1441,7 +1441,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $haystack,
         $needles,
-                                    $caseSensitive = true,
+        $caseSensitive = true,
         $encoding = null
     ) {
         $stringy = S::create($haystack, $encoding);
@@ -1506,7 +1506,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $haystack,
         $needles,
-                                    $caseSensitive = true,
+        $caseSensitive = true,
         $encoding = null
     ) {
         $stringy = S::create($haystack, $encoding);
@@ -1599,7 +1599,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $substring,
         $index,
-                               $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->insert($substring, $index);
@@ -1636,7 +1636,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $length,
         $substring = '',
-                                 $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->truncate($length, $substring);
@@ -1687,7 +1687,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $length,
         $substring = '',
-                                     $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->safeTruncate($length, $substring);
@@ -1865,7 +1865,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $chars = null,
-                                 $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->trimLeft($chars);
@@ -1905,7 +1905,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $chars = null,
-                                  $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->trimRight($chars);
@@ -1945,7 +1945,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $otherStr,
-                                            $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->longestCommonPrefix($otherStr);
@@ -1982,7 +1982,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $otherStr,
-                                            $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->longestCommonSuffix($otherStr);
@@ -2019,7 +2019,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $otherStr,
-                                               $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->longestCommonSubstring($otherStr);
@@ -2084,7 +2084,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $start,
         $end = null,
-                              $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->slice($start, $end);
@@ -2129,7 +2129,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $pattern,
         $limit = null,
-                              $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->split($pattern, $limit);
@@ -2217,7 +2217,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $start,
         $length = null,
-                               $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->substr($start, $length);
@@ -2857,7 +2857,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $expected,
         $str,
         $substring,
-                                    $caseSensitive = true,
+        $caseSensitive = true,
         $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
@@ -2902,7 +2902,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $search,
         $replacement,
-                                $encoding = null
+        $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
         $result = $stringy->replace($search, $replacement);
@@ -2948,7 +2948,7 @@ final class StringyOrigTest extends \PHPUnit\Framework\TestCase
         $str,
         $pattern,
         $replacement,
-                                     $options = 'msr',
+        $options = 'msr',
         $encoding = null
     ) {
         $stringy = S::create($str, $encoding);
