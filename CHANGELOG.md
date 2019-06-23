@@ -1,3 +1,7 @@
+### 5.0.3 (2019-06-24)
+- fix regex for php 7.3
+
+
 ### 5.0.2 (2019-04-21)
 - fix issues reported by phpstan (level 7)
 - update vendor (better unicode support for regex stuff)
