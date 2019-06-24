@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.11.0 (2019-06-25)
+
+- AbstractCollection -> accept collections (self) as valid source + fix phpdoc
+
+
 ### 5.10.0 (2019-06-21)
 
 - add "keyExists()" / "delete()" / "pull()"
