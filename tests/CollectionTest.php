@@ -77,9 +77,9 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $stdClassCollection = new StdClassCollection([123 => $pets, 555 => $colors]);
 
-        static::assertSame([123 => $pets, 555 => $colors],  $stdClassCollection->getCollection());
-        static::assertSame([999 => $colors, 123 => $pets, 555 => $colors],  $stdClassCollection->prepend($colors, 999)->getCollection());
-        static::assertSame([999 => $colors, 123 => $pets, 555 => $colors, 1000 => $colors],  $stdClassCollection->append(new StdClassCollection($colors))->getCollection());
+        static::assertSame([123 => $pets, 555 => $colors], $stdClassCollection->getCollection());
+        static::assertSame([999 => $colors, 123 => $pets, 555 => $colors], $stdClassCollection->prepend($colors, 999)->getCollection());
+        static::assertSame([999 => $colors, 123 => $pets, 555 => $colors, 1000 => $colors], $stdClassCollection->append(new StdClassCollection($colors))->getCollection());
     }
 
     public function testModelCollection()
