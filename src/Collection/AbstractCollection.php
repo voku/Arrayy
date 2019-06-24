@@ -73,11 +73,11 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     /**
      * Merge current items and items of given collections into a new one.
      *
-     * @param CollectionInterface ...$collections The collections to merge.
+     * @param static ...$collections The collections to merge.
      *
      * @throws \InvalidArgumentException if any of the given collections are not of the same type
      *
-     * @return CollectionInterface
+     * @return static
      */
     public function merge(CollectionInterface ...$collections): CollectionInterface
     {
@@ -100,6 +100,14 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function offsetSet($offset, $value)
     {
+        if ($value instanceof static) {
+            foreach ($value as $valueTmp) {
+                parent::offsetSet($offset, $valueTmp);
+            }
+
+            return;
+        }
+
         $this->checkTypeWrapper($value);
 
         parent::offsetSet($offset, $value);
@@ -116,6 +124,14 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function prepend($value, $key = null): Arrayy
     {
+        if ($value instanceof static) {
+            foreach ($value as $valueTmp) {
+                parent::prepend($valueTmp, $key);
+            }
+
+            return $this;
+        }
+
         $this->checkTypeWrapper($value);
 
         return parent::prepend($value, $key);
@@ -132,6 +148,14 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function append($value, $key = null): Arrayy
     {
+        if ($value instanceof static) {
+            foreach ($value as $valueTmp) {
+                parent::append($valueTmp, $key);
+            }
+
+            return $this;
+        }
+
         $this->checkTypeWrapper($value);
 
         return parent::append($value, $key);
@@ -166,7 +190,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @throws \InvalidArgumentException if property or method is not defined
      *
-     * @return CollectionInterface
+     * @return static
      */
     public function where(string $keyOrPropertyOrMethod, $value): CollectionInterface
     {
@@ -193,6 +217,14 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     protected function internalSet($key, $value, $checkProperties = true): bool
     {
+        if ($value instanceof static) {
+            foreach ($value as $valueTmp) {
+                parent::internalSet($key, $valueTmp);
+            }
+
+            return true;
+        }
+
         $this->checkTypeWrapper($value);
 
         return parent::internalSet($key, $value, $checkProperties);
@@ -205,7 +237,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     {
         if ($this->checkType($this->collectionType, $value) === false) {
             throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->collectionType . '; value is ' . $this->valueToString($value)
+                'Value must be of type ' . $this->collectionType . '; type is ' . \gettype($value) . ', value is "' . $this->valueToString($value) . '"'
             );
         }
     }
