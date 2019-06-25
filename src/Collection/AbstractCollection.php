@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arrayy\Collection;
 
 use Arrayy\Arrayy;
+use Arrayy\ArrayyIterator;
 
 /**
  * This class provides a full implementation of `CollectionInterface`, to
@@ -29,8 +30,14 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *                    <p>
      *                    The initial items to store in the collection.
      *                    </p>
+     * @param string $iteratorClass
+     * @param bool   $checkForMissingPropertiesInConstructorAndType
      */
-    public function __construct($data = [])
+    public function __construct(
+        $data = [],
+        string $iteratorClass = ArrayyIterator::class,
+        bool $checkForMissingPropertiesInConstructorAndType = true
+    )
     {
         $this->collectionType = $this->getType();
 
@@ -46,13 +53,17 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         }
 
         // check the type, if needed
-        if (!($data instanceof \Closure)) {
+        if (
+            $checkForMissingPropertiesInConstructorAndType
+            &&
+            !($data instanceof \Closure)
+        ) {
             foreach ($data as $value) {
                 $this->checkTypeWrapper($value);
             }
         }
 
-        parent::__construct($data);
+        parent::__construct($data, $iteratorClass, $checkForMissingPropertiesInConstructorAndType);
     }
 
     /**
@@ -211,23 +222,25 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @param string|null $key
      * @param mixed       $value
-     * @param bool        $checkProperties
+     * @param bool        $checkPropertiesAndType
      *
      * @return bool
      */
-    protected function internalSet($key, $value, $checkProperties = true): bool
+    protected function internalSet($key, $value, $checkPropertiesAndType = true): bool
     {
         if ($value instanceof static) {
             foreach ($value as $valueTmp) {
-                parent::internalSet($key, $valueTmp);
+                parent::internalSet($key, $valueTmp, $checkPropertiesAndType);
             }
 
             return true;
         }
 
-        $this->checkTypeWrapper($value);
+        if ($checkPropertiesAndType) {
+            $this->checkTypeWrapper($value);
+        }
 
-        return parent::internalSet($key, $value, $checkProperties);
+        return parent::internalSet($key, $value, $checkPropertiesAndType);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Arrayy\Collection;
 
+use Arrayy\ArrayyIterator;
+
 /**
  * A collection represents a group of objects.
  *
@@ -75,12 +77,13 @@ class Collection extends AbstractCollection
      *                     <p>
      *                     The initial items to store in the collection.
      *                     </p>
+     * @param bool   $checkForMissingPropertiesInConstructorAndType
      */
-    public function __construct(string $type, $data = [])
+    public function __construct(string $type, $data = [], $checkForMissingPropertiesInConstructorAndType = true)
     {
         $this->collectionTypeTmp = $type;
 
-        parent::__construct($data);
+        parent::__construct($data, ArrayyIterator::class, $checkForMissingPropertiesInConstructorAndType);
     }
 
     /**
