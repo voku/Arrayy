@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.11.1 (2019-06-25)
+
+- Collection -> fix some string methods from the parent "Arrayy"-class
+
+
 ### 5.11.0 (2019-06-25)
 
 - AbstractCollection -> accept collections (self) as valid source + fix phpdoc
