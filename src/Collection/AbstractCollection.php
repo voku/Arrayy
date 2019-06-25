@@ -26,10 +26,10 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * Constructs a collection object of the specified type, optionally with the
      * specified data.
      *
-     * @param mixed $data
-     *                    <p>
-     *                    The initial items to store in the collection.
-     *                    </p>
+     * @param mixed  $data
+     *                                                              <p>
+     *                                                              The initial items to store in the collection.
+     *                                                              </p>
      * @param string $iteratorClass
      * @param bool   $checkForMissingPropertiesInConstructorAndType
      */
@@ -37,8 +37,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         $data = [],
         string $iteratorClass = ArrayyIterator::class,
         bool $checkForMissingPropertiesInConstructorAndType = true
-    )
-    {
+    ) {
         $this->collectionType = $this->getType();
 
         // cast into array, if needed

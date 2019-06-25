@@ -74,9 +74,9 @@ class Collection extends AbstractCollection
      *
      * @param string $type
      * @param mixed  $data
-     *                     <p>
-     *                     The initial items to store in the collection.
-     *                     </p>
+     *                                                              <p>
+     *                                                              The initial items to store in the collection.
+     *                                                              </p>
      * @param bool   $checkForMissingPropertiesInConstructorAndType
      */
     public function __construct(string $type, $data = [], $checkForMissingPropertiesInConstructorAndType = true)
