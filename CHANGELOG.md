@@ -1,5 +1,12 @@
 # Changelog
 
+### 5.12.0 (2019-07-03)
+
+- add new array key functions + most value functions 
+
+   -> "Arrayy->firstKey()", "Arrayy->lastKey()", "Arrayy->mostUsedValue()", "Arrayy->mostUsedValues()"
+
+
 ### 5.11.1 (2019-06-25)
 
 - Collection -> fix some string methods from the parent "Arrayy"-class
