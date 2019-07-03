@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.12.1 (2019-07-03)
+
+- fix for php >= 7.3
+
+
 ### 5.12.0 (2019-07-03)
 
 - add new array key functions + most value functions 
