@@ -189,7 +189,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testFirst(array $array)
+    public function testFirstMutable(array $array)
     {
         $arrayy = $this->createArrayy($array);
         $first = \reset($array);
@@ -624,6 +624,140 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testLastKey(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        $last = \array_key_last($array);
+        $result = $arrayy->lastKey();
+
+        if (empty($array)) {
+            $last = null;
+        }
+
+        if ($result instanceof Arrayy) {
+            $result = $result->getArray();
+        }
+
+        static::assertSame($last, $result);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testFirst(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        $first = \array_first($array);
+        $result = $arrayy->first();
+
+        if (empty($array)) {
+            $first = null;
+        }
+
+        if ($result instanceof Arrayy) {
+            $result = $result->getArray();
+        }
+
+        static::assertSame($first, $result);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testFirstKey(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        $first = \array_key_first($array);
+        $result = $arrayy->firstKey();
+
+        if (empty($array)) {
+            $first = null;
+        }
+
+        if ($result instanceof Arrayy) {
+            $result = $result->getArray();
+        }
+
+        static::assertSame($first, $result);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     *
+     * @return void
+     */
+    public function testMostUsedValue(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        if ($arrayy->isMultiArray()) {
+            // not supported by php (array_count_values)
+            self::assertTrue(true);
+
+            return;
+        }
+
+        $first = \array_count_values($array);
+        \arsort($first);
+        $first = \array_key_first($first);
+
+        $result = $arrayy->mostUsedValue();
+
+        if (empty($array)) {
+            $first = null;
+        }
+
+        if ($result instanceof Arrayy) {
+            $result = $result->getArray();
+        }
+
+        static::assertSame($first, $result);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     *
+     * @return void
+     */
+    public function testMostUsedValues(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        if ($arrayy->isMultiArray()) {
+            // not supported by php (array_count_values)
+            self::assertTrue(true);
+
+            return;
+        }
+
+        $firsts = \array_count_values($array);
+        \arsort($firsts);
+        $firsts = array_keys($firsts);
+
+        $result = $arrayy->mostUsedValues($arrayy->count());
+
+        if (empty($array)) {
+            $firsts = [];
+        }
+
+        if ($result instanceof Arrayy) {
+            $result = $result->getArray();
+        }
+
+        static::assertSame($firsts, $result);
+    }
+
+        /**
      * @dataProvider simpleArrayProvider
      *
      * @param array $array

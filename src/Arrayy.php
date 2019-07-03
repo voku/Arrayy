@@ -1691,14 +1691,74 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function first()
     {
-        $tmpArray = $this->getArray();
-
-        $key_first = array_key_first($tmpArray);
+        $key_first = $this->firstKey();
         if ($key_first === null) {
             return null;
         }
 
-        return $tmpArray[$key_first];
+        return $this->get($key_first);
+    }
+
+    /**
+     * Get the first key from the current array.
+     *
+     * @return mixed
+     *               <p>Return null if there wasn't a element.</p>
+     */
+    public function firstKey()
+    {
+        $this->generatorToArray();
+
+        return \array_key_first($this->array);
+    }
+
+    /**
+     * Get the most used value from the array.
+     *
+     * @return mixed
+     *               <p>Return null if there wasn't a element.</p>
+     */
+    public function mostUsedValue() {
+        return $this->countValues()->arsort()->firstKey();
+    }
+
+    /**
+     * Get the most used value from the array.
+     *
+     * @param int|null $number <p>How many values you will take?</p>
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function mostUsedValues(int $number = null) {
+        return $this->countValues()->arsort()->firstsKeys($number);
+    }
+
+    /**
+     * Get the first value(s) from the current array.
+     * And will return an empty array if there was no first entry.
+     *
+     * @param int|null $number <p>How many values you will take?</p>
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function firstsKeys(int $number = null): self
+    {
+        $arrayTmp = $this->keys()->getArray();
+
+        if ($number === null) {
+            $array = (array) \array_shift($arrayTmp);
+        } else {
+            $number = (int) $number;
+            $array = \array_splice($arrayTmp, 0, $number);
+        }
+
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -2491,15 +2551,25 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function last()
     {
-        $this->generatorToArray();
-
-        $key_last = \array_key_last($this->array);
-
+        $key_last = $this->lastKey();
         if ($key_last === null) {
             return null;
         }
 
         return $this->get($key_last);
+    }
+
+    /**
+     * Get the last key from the current array.
+     *
+     * @return mixed
+     *               <p>Return null if there wasn't a element.</p>
+     */
+    public function lastKey()
+    {
+        $this->generatorToArray();
+
+        return \array_key_last($this->array);
     }
 
     /**

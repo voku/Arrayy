@@ -38,6 +38,31 @@ namespace {
                 return \key($array);
             }
         }
+
+        if (!\function_exists('array_last')) {
+            function array_last($array)
+            {
+                $key_last = \array_key_last($array);
+
+                if ($key_last === null) {
+                    return null;
+                }
+
+                return $array[$key_last];
+            }
+        }
+
+        if (!\function_exists('array_first')) {
+            function array_first($array)
+            {
+                $key_first = array_key_first($array);
+                if ($key_first === null) {
+                    return null;
+                }
+
+                return $array[$key_first];
+            }
+        }
     }
 
 }
