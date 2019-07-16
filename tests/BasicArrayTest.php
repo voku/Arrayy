@@ -693,15 +693,13 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      * @dataProvider simpleArrayProvider
      *
      * @param array $array
-     *
-     * @return void
      */
     public function testMostUsedValue(array $array)
     {
         $arrayy = $this->createArrayy($array);
         if ($arrayy->isMultiArray()) {
             // not supported by php (array_count_values)
-            self::assertTrue(true);
+            static::assertTrue(true);
 
             return;
         }
@@ -727,22 +725,20 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      * @dataProvider simpleArrayProvider
      *
      * @param array $array
-     *
-     * @return void
      */
     public function testMostUsedValues(array $array)
     {
         $arrayy = $this->createArrayy($array);
         if ($arrayy->isMultiArray()) {
             // not supported by php (array_count_values)
-            self::assertTrue(true);
+            static::assertTrue(true);
 
             return;
         }
 
         $firsts = \array_count_values($array);
         \arsort($firsts);
-        $firsts = array_keys($firsts);
+        $firsts = \array_keys($firsts);
 
         $result = $arrayy->mostUsedValues($arrayy->count());
 
@@ -757,7 +753,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame($firsts, $result);
     }
 
-        /**
+    /**
      * @dataProvider simpleArrayProvider
      *
      * @param array $array

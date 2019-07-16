@@ -1700,6 +1700,34 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Move an array element to the first place.
+     *
+     * INFO: Instead of "Arrayy->moveElement()" this method will NOT
+     *       loss the keys of an indexed array.
+     *
+     * @param int|string $key
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function moveElementToFirstPlace($key): self
+    {
+        $array = $this->getArray();
+
+        if ($this->offsetExists($key)) {
+            $tmpValue = $this->get($key);
+            unset($array[$key]);
+            $array = [$key => $tmpValue] + $array;
+        }
+
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
+    }
+
+    /**
      * Get the first key from the current array.
      *
      * @return mixed
@@ -1718,7 +1746,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *               <p>Return null if there wasn't a element.</p>
      */
-    public function mostUsedValue() {
+    public function mostUsedValue()
+    {
         return $this->countValues()->arsort()->firstKey();
     }
 
@@ -1730,7 +1759,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function mostUsedValues(int $number = null) {
+    public function mostUsedValues(int $number = null): self
+    {
         return $this->countValues()->arsort()->firstsKeys($number);
     }
 
@@ -2445,6 +2475,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * Checks if the given key exists in the provided array.
+     *
+     * INFO: This method only use "array_key_exists()" if you want to use "dot"-notation,
+     *       then you need to use "Arrayy->offsetExists()".
      *
      * @param int|string $key the key to look for
      *
@@ -3773,7 +3806,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $index = (int) $index;
         }
 
-        if (\array_key_exists($index, $this->array) === true) {
+        if ($this->offsetExists($index)) {
             $return = [$this->array[$index]];
         }
 
@@ -4693,7 +4726,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array|null
      */
-    protected function internalGetArray(&$data)
+    protected function internalGetArray(&$data): ?array
     {
         if (\is_array($data)) {
             return $data;
