@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.13.0 (2019-07-19)
+
+- add Arrayy->moveElementToFirstPlace()
+- add Arrayy->moveElementToLastPlace()
+
+
 ### 5.12.1 (2019-07-03)
 
 - fix for php >= 7.3
