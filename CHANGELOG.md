@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.13.1 (2019-07-19)
+
+- fix return type of "Arrayy->internalGetArray()"
+
+
 ### 5.13.0 (2019-07-19)
 
 - add Arrayy->moveElementToFirstPlace()
