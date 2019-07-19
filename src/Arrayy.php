@@ -4754,7 +4754,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array|null
      */
-    protected function internalGetArray(&$data): array
+    protected function internalGetArray(&$data)
     {
         if (\is_array($data)) {
             return $data;
