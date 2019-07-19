@@ -3688,6 +3688,23 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $newArr2->toArray());
     }
 
+    public function testMoveElementToLastPlace()
+    {
+        $arr1 = new A(['a', 'b', 'c', 'd', 'e']);
+        $expected = [0 => 'a', 1 => 'b', 2 => 'c', 4 => 'e', 3 => 'd'];
+        $newArr1 = $arr1->moveElementToLastPlace(3);
+
+        static::assertSame($expected, $newArr1->toArray());
+
+        // ---
+
+        $arr2 = new A(['A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e']);
+        $expected = ['A' => 'a', 'B' => 'b', 'C' => 'c', 'E' => 'e', 'D' => 'd'];
+        $newArr2 = $arr2->moveElementToLastPlace('D');
+
+        static::assertSame($expected, $newArr2->toArray());
+    }
+
     public function testMoveElement()
     {
         $arr1 = new A(['a', 'b', 'c', 'd', 'e']);

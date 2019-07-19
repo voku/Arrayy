@@ -1728,6 +1728,34 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Move an array element to the last place.
+     *
+     * INFO: Instead of "Arrayy->moveElement()" this method will NOT
+     *       loss the keys of an indexed array.
+     *
+     * @param int|string $key
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function moveElementToLastPlace($key): self
+    {
+        $array = $this->getArray();
+
+        if ($this->offsetExists($key)) {
+            $tmpValue = $this->get($key);
+            unset($array[$key]);
+            $array += [$key => $tmpValue];
+        }
+
+        return static::create(
+            $array,
+            $this->iteratorClass,
+            false
+        );
+    }
+
+    /**
      * Get the first key from the current array.
      *
      * @return mixed
@@ -4726,7 +4754,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array|null
      */
-    protected function internalGetArray(&$data): ?array
+    protected function internalGetArray(&$data): array
     {
         if (\is_array($data)) {
             return $data;
