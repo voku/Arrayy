@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.13.2 (2019-08-01)
+
+- fix "array_first()" + "array_last()" (move from global namespace into Arrayy)
+
+
 ### 5.13.1 (2019-07-19)
 
 - fix return type of "Arrayy->internalGetArray()"
