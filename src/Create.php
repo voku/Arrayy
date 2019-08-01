@@ -74,7 +74,6 @@ namespace Arrayy {
         }
     }
 
-    /** @noinspection PhpUnused */
     /**
      * @param array $array
      *
@@ -91,7 +90,6 @@ namespace Arrayy {
         return $array[$key_last];
     }
 
-    /** @noinspection PhpUnused */
     /**
      * @param array $array
      *
