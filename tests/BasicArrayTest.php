@@ -5,6 +5,8 @@ namespace Arrayy\tests;
 use Arrayy\Arrayy;
 use Arrayy\Arrayy as A;
 use Arrayy\ArrayyIterator;
+use function Arrayy\array_first;
+use function Arrayy\array_last;
 
 /**
  * Copy of a test class from "https://github.com/bocharsky-bw/Arrayzy/"
@@ -650,11 +652,33 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testFirst(array $array)
+    public function testArrayyFirst(array $array)
     {
         $arrayy = $this->createArrayy($array);
-        $first = \array_first($array);
+        $first = array_first($array);
         $result = $arrayy->first();
+
+        if (empty($array)) {
+            $first = null;
+        }
+
+        if ($result instanceof Arrayy) {
+            $result = $result->getArray();
+        }
+
+        static::assertSame($first, $result);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testArrayyLast(array $array)
+    {
+        $arrayy = $this->createArrayy($array);
+        $first = array_last($array);
+        $result = $arrayy->last();
 
         if (empty($array)) {
             $first = null;
