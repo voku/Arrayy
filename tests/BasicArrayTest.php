@@ -2,11 +2,11 @@
 
 namespace Arrayy\tests;
 
+use function Arrayy\array_first;
+use function Arrayy\array_last;
 use Arrayy\Arrayy;
 use Arrayy\Arrayy as A;
 use Arrayy\ArrayyIterator;
-use function Arrayy\array_first;
-use function Arrayy\array_last;
 
 /**
  * Copy of a test class from "https://github.com/bocharsky-bw/Arrayzy/"

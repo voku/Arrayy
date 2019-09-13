@@ -1002,7 +1002,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         return \count(
             \array_intersect($needles, $this->keys()->getArray()),
             \COUNT_NORMAL
-               )
+        )
                ===
                \count(
                    $needles,
@@ -1354,6 +1354,40 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Return values that are only in the current array.
+     *
+     * @param array $array
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function diffKey(array $array = []): self
+    {
+        return static::create(
+            \array_diff_key($this->getArray(), $array),
+            $this->iteratorClass,
+            false
+        );
+    }
+
+    /**
+     * Return values and Keys that are only in the current array.
+     *
+     * @param array $array
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function diffKeyAndValue(array $array = []): self
+    {
+        return static::create(
+            \array_diff_assoc($this->getArray(), $array),
+            $this->iteratorClass,
+            false
+        );
+    }
+
+    /**
      * Return values that are only in the current multi-dimensional array.
      *
      * @param array      $array
@@ -1671,9 +1705,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * find by ...
      *
-     * @param string          $property
-     * @param string|string[] $value
-     * @param string          $comparisonOp
+     * @param string $property
+     * @param string $value
+     * @param string $comparisonOp
      *
      * @return static
      *                <p>(Immutable)</p>

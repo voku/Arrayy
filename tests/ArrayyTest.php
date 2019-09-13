@@ -423,6 +423,156 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+    public function diffKeyProvider(): array
+    {
+        return [
+            [[], [], []],
+            [[0 => false], [false], []],
+            [[0 => true], [true], []],
+            [
+                [
+                    0 => -9,
+                    1 => -9,
+                ],
+                [
+                    0 => -9,
+                    1 => -9,
+                ],
+                [],
+            ],
+            [
+                [
+                    0 => -9,
+                    1,
+                    2,
+                ],
+                [
+                    0 => 2,
+                    1 => 1,
+                    2 => -9,
+                ],
+                [],
+            ],
+            [
+                [1.18, 1.5],
+                [1.5, 1.18],
+                [],
+            ],
+            [
+                [
+                    1     => 'one',
+                    2     => 'two',
+                    'foo' => 'bar1',
+                ],
+                [
+                    3     => 'three',
+                    4     => 'four',
+                    6     => 'six',
+                    'foo' => 'bar2',
+                ],
+                [
+                    1 => 'one',
+                    2 => 'two',
+                ],
+            ],
+            [
+                [
+                    3 => 'string',
+                    'foo',
+                    'lall',
+                    'foo',
+                ],
+                [
+                    3 => 'string',
+                    4 => 'foo',
+                    5 => 'lall',
+                    6 => 'foo',
+                ],
+                [],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function diffKeyAndValueProvider(): array
+    {
+        return [
+            [[], [], []],
+            [[0 => false], [false], []],
+            [[0 => true], [true], []],
+            [
+                [
+                    0 => -9,
+                    1 => -9,
+                ],
+                [
+                    0 => -9,
+                    1 => -9,
+                ],
+                [],
+            ],
+            [
+                [
+                    0 => -9,
+                    1,
+                    2,
+                ],
+                [
+                    0 => 2,
+                    1 => 1,
+                    2 => -9,
+                ],
+                [
+                    0 => -9,
+                    2 => 2,
+                ],
+            ],
+            [
+                [1.18, 1.5],
+                [1.5, 1.18],
+                [1.18, 1.5],
+            ],
+            [
+                [
+                    1     => 'one',
+                    2     => 'two',
+                    'foo' => 'bar1',
+                ],
+                [
+                    3     => 'three',
+                    4     => 'four',
+                    6     => 'six',
+                    'foo' => 'bar2',
+                ],
+                [
+                    1     => 'one',
+                    2     => 'two',
+                    'foo' => 'bar1',
+                ],
+            ],
+            [
+                [
+                    3 => 'string',
+                    'foo',
+                    'lall',
+                    'foo',
+                ],
+                [
+                    3 => 'string',
+                    4 => 'foo',
+                    5 => 'lall',
+                    6 => 'foo',
+                ],
+                [],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function diffReverseProvider(): array
     {
         return [
@@ -1804,6 +1954,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             [2, 4],
         ];
         static::assertSame($matcher, $under->getArray());
+        static::assertSame($matcher, $under->getAll());
     }
 
     public function testCanGroupValuesWithNonExistingKey()
@@ -2050,12 +2201,12 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
                     $value .= '*';
                 },
                 true
-                        )
+            )
             ->filter(
                 static function ($value) {
                     return \strpos($value, 'a') !== false;
                 }
-                        );
+            );
 
         static::assertSame([0 => 'orange*', 1 => 'avocado*', 3 => 'pear*'], $arrayy->getArray());
     }
@@ -2309,6 +2460,17 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy = new A($array);
 
         $resultArrayy = A::createFromString($string, $separator);
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $array);
+    }
+
+    public function testCreateFromTraversableImmutable()
+    {
+        $array = ['recipe' => 'pancakes', 'egg', 'milk', 'flour'];
+        $iterator = new \ArrayIterator($array);
+        $arrayy = new A($array);
+
+        $resultArrayy = A::createFromTraversableImmutable($iterator);
 
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
@@ -2583,6 +2745,34 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $arrayy->getArray(), 'tested: ' . \print_r($array, true));
     }
 
+    /**
+     * @dataProvider diffKeyProvider()
+     *
+     * @param $array
+     * @param $arrayNew
+     * @param $result
+     */
+    public function testDiffKey($array, $arrayNew, $result)
+    {
+        $arrayy = A::create($array)->diffKey($arrayNew);
+
+        static::assertSame($result, $arrayy->getArray(), 'tested: ' . \print_r($array, true));
+    }
+
+    /**
+     * @dataProvider diffKeyAndValueProvider()
+     *
+     * @param $array
+     * @param $arrayNew
+     * @param $result
+     */
+    public function testDiffKeyAndValue($array, $arrayNew, $result)
+    {
+        $arrayy = A::create($array)->diffKeyAndValue($arrayNew);
+
+        static::assertSame($result, $arrayy->getArray(), 'tested: ' . \print_r($array, true));
+    }
+
     public function testDiffRecursive()
     {
         $testArray1 = [
@@ -2733,6 +2923,15 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy->fillWithDefaults(-1);
     }
 
+    public function testIsEqual()
+    {
+        $arrayy = new A([1, 2, 3]);
+
+        static::assertTrue($arrayy->isEqual([1, 2, 3]));
+        static::assertFalse($arrayy->isEqual([3, 2, 3]));
+        static::assertFalse($arrayy->isEqual([3, 2, 1]));
+    }
+
     public function testFilter()
     {
         if (!\defined('ARRAY_FILTER_USE_BOTH')) {
@@ -2817,6 +3016,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $e = $arrayy->filterBy('value', [2468, 2365], 'contains');
         static::assertCount(2, $e);
+
+        // ---
+
+        $e = $arrayy->findBy('value', [2468, 2365], 'contains');
+        static::assertCount(2, $e);
+
+        $e = $arrayy->findBy('value', 2468);
+        static::assertCount(1, $e);
     }
 
     /**
@@ -3311,6 +3518,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
         $keys = $arrayyTmp->keys();
+
+        $matcher = [1, 2, 3];
+        static::assertSame($matcher, $keys->getArray());
+
+        // ---
+
+        $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
+        $keys = $arrayyTmp->getKeys();
 
         $matcher = [1, 2, 3];
         static::assertSame($matcher, $keys->getArray());
