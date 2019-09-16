@@ -33,9 +33,13 @@ namespace {
         if (!\function_exists('array_key_last')) {
             function array_key_last(array $array)
             {
-                \end($array);
+                if (\count($array) === 0) {
+                    return null;
+                }
 
-                return \key($array);
+                return \array_keys(
+                    \array_slice($array, -1, 1, true)
+                )[0];
             }
         }
     }
@@ -82,7 +86,6 @@ namespace Arrayy {
     function array_last(array $array)
     {
         $key_last = \array_key_last($array);
-
         if ($key_last === null) {
             return null;
         }
