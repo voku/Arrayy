@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.14.1 (2019-09-16)
+
+- optimize "array_last"-polyfill (php < 7.3)
+
+
 ### 5.14.0 (2019-09-13)
 
 - add "Arrayy->diffKey" + "Arrayy->diffKeyAndValue"
