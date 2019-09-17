@@ -5065,8 +5065,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $docComment = $reflector->getDocComment();
         if ($docComment) {
             $docblock = $factory->create($docComment);
+            /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
             foreach ($docblock->getTagsByName('property') as $tag) {
-                /* @var $tag \phpDocumentor\Reflection\DocBlock\Tags\Property */
                 $properties[$tag->getVariableName()] = Property::fromPhpDocumentorProperty($tag);
             }
         }

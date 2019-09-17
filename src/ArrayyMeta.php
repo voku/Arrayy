@@ -38,8 +38,8 @@ final class ArrayyMeta
         $docComment = $reflector->getDocComment();
         if ($docComment) {
             $docblock = $factory->create($docComment);
+            /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
             foreach ($docblock->getTagsByName('property') as $tag) {
-                /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
                 $PropertyName = $tag->getVariableName();
                 $this->{$PropertyName} = $PropertyName;
             }
