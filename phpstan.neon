@@ -1,16 +1,8 @@
 parameters:
-    reportUnmatchedIgnoredErrors: false
-    excludes_analyse:
-        - %currentWorkingDirectory%/vendor/*
-        - %currentWorkingDirectory%/tests/*
-    autoload_files:
-        - %currentWorkingDirectory%/vendor/autoload.php
+    level: 7
+    paths:
+        - %currentWorkingDirectory%/src/
     ignoreErrors:
-        - '/has invalid typehint type callable/'
-        - '/unknown class callable/'
-        - '/undefined method phpDocumentor\\Reflection\\DocBlock\\Tag::getVariableName/'
-        - '/phpDocumentorReflectionProperty of static method/'
         - '/Method Arrayy\\Property::parseDocTypeObject\(\) should return array<string>\|string but returns array<int, array<string>\|string>\./'
         - '/Parameter #[1-2] \$function of.*callable.*/'
         - '/Parameter #[1-2] \$callback of.*callable.*/'
-        - '/Parameter #[1-2] \$callable of.*callable.*/'
