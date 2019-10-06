@@ -1129,9 +1129,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromGeneratorFunction(callable $generatorFunction): self
     {
-        $arrayy = new static($generatorFunction);
-
-        return $arrayy;
+        return new static($generatorFunction);
     }
 
     /**
@@ -2553,30 +2551,33 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get all keys from the current array.
      *
-     * @param bool  $recursive    [optional] <p>
-     *                            Get all keys, also from all sub-arrays from an multi-dimensional array.
-     *                            </p>
-     * @param mixed $search_value [optional] <p>
-     *                            If specified, then only keys containing these values are returned.
-     *                            </p>
-     * @param bool  $strict       [optional] <p>
-     *                            Determines if strict comparison (===) should be used during the search.
-     *                            </p>
+     * @param bool       $recursive     [optional] <p>
+     *                                  Get all keys, also from all sub-arrays from an multi-dimensional array.
+     *                                  </p>
+     * @param mixed|null $search_values [optional] <p>
+     *                                  If specified, then only keys containing these values are returned.
+     *                                  </p>
+     * @param bool       $strict        [optional] <p>
+     *                                  Determines if strict comparison (===) should be used during the search.
+     *                                  </p>
      *
      * @return static
      *                <p>(Immutable) An array of all the keys in input.</p>
      */
-    public function keys(bool $recursive = false, $search_value = null, bool $strict = true): self
-    {
+    public function keys(
+        bool $recursive = false,
+        $search_values = null,
+        bool $strict = true
+    ): self {
 
         // recursive
 
         if ($recursive === true) {
-            if ($search_value === null) {
-                $array = $this->array_keys_recursive($this->getArray());
-            } else {
-                $array = $this->array_keys_recursive($this->getArray(), $search_value, $strict);
-            }
+            $array = $this->array_keys_recursive(
+                null,
+                $search_values,
+                $strict
+            );
 
             return static::create(
                 $array,
@@ -2587,24 +2588,41 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         // non recursive
 
-        if ($search_value === null) {
+        if ($search_values === null) {
             $arrayFunction = function () {
                 foreach ($this->getGenerator() as $key => $value) {
                     yield $key;
                 }
             };
         } else {
-            $arrayFunction = function () use ($search_value, $strict) {
+            $arrayFunction = function () use ($search_values, $strict) {
+                $is_array_tmp = \is_array($search_values);
+
                 foreach ($this->getGenerator() as $key => $value) {
-                    if ($strict) {
-                        if ($search_value === $value) {
-                            yield $key;
-                        }
-                    } else {
-                        /** @noinspection NestedPositiveIfStatementsInspection */
-                        if ($search_value == $value) {
-                            yield $key;
-                        }
+                    if (
+                        (
+                            $is_array_tmp === false
+                            &&
+                            $strict === true
+                            &&
+                            $search_values === $value
+                        )
+                        ||
+                        (
+                            $is_array_tmp === false
+                            &&
+                            $strict === false
+                            &&
+                            $search_values == $value
+                        )
+                        ||
+                        (
+                            $is_array_tmp === true
+                            &&
+                            \in_array($value, $search_values, $strict)
+                        )
+                    ) {
+                        yield $key;
                     }
                 }
             };
@@ -3101,7 +3119,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ($key === null) {
             \array_unshift($this->array, $value);
         } else {
-            /** @noinspection AdditionOperationOnArraysInspection */
             $this->array = [$key => $value] + $this->array;
         }
 
@@ -3757,13 +3774,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function replaceValues($search, $replacement = ''): self
     {
-        $array = $this->each(
+        return $this->each(
             static function ($value) use ($search, $replacement) {
                 return \str_replace($search, $replacement, $value);
             }
         );
-
-        return $array;
     }
 
     /**
@@ -4554,53 +4569,80 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * @param array|\Generator|null $input        <p>
-     *                                            An array containing keys to return.
-     *                                            </p>
-     * @param mixed                 $search_value [optional] <p>
-     *                                            If specified, then only keys containing these values are returned.
-     *                                            </p>
-     * @param bool                  $strict       [optional] <p>
-     *                                            Determines if strict comparison (===) should be used during the
-     *                                            search.
-     *                                            </p>
+     * @param array|\Generator|null $input         <p>
+     *                                             An array containing keys to return.
+     *                                             </p>
+     * @param mixed|null            $search_values [optional] <p>
+     *                                             If specified, then only keys containing these values are returned.
+     *                                             </p>
+     * @param bool                  $strict        [optional] <p>
+     *                                             Determines if strict comparison (===) should be used during the
+     *                                             search.
+     *                                             </p>
      *
      * @return array
      *               <p>an array of all the keys in input</p>
      */
     protected function array_keys_recursive(
         $input = null,
-        $search_value = null,
+        $search_values = null,
         bool $strict = true
     ): array {
         // init
         $keys = [];
-        $keysTmp = [[]]; // the inner empty array covers cases when no loops were made
+        $keysTmp = [];
 
         if ($input === null) {
             $input = $this->getGenerator();
         }
 
-        foreach ($input as $key => $value) {
-            if (
-                $search_value === null
-                ||
-                (
-                    \is_array($search_value) === true
-                    &&
-                    \in_array($key, $search_value, $strict)
-                )
-            ) {
+        if ($search_values === null) {
+            foreach ($input as $key => $value) {
                 $keys[] = $key;
-            }
 
-            // check if recursive is needed
-            if (\is_array($value) === true) {
-                $keysTmp[] = $this->array_keys_recursive($value);
+                // check if recursive is needed
+                if (\is_array($value) === true) {
+                    $keysTmp[] = $this->array_keys_recursive($value);
+                }
+            }
+        } else {
+            $is_array_tmp = \is_array($search_values);
+
+            foreach ($input as $key => $value) {
+                if (
+                    (
+                        $is_array_tmp === false
+                        &&
+                        $strict === true
+                        &&
+                        $search_values === $value
+                    )
+                    ||
+                    (
+                        $is_array_tmp === false
+                        &&
+                        $strict === false
+                        &&
+                        $search_values == $value
+                    )
+                    ||
+                    (
+                        $is_array_tmp === true
+                        &&
+                        \in_array($value, $search_values, $strict)
+                    )
+                ) {
+                    $keys[] = $key;
+                }
+
+                // check if recursive is needed
+                if (\is_array($value) === true) {
+                    $keysTmp[] = $this->array_keys_recursive($value);
+                }
             }
         }
 
-        return \array_merge($keys, ...$keysTmp);
+        return $keysTmp === [] ? $keys : \array_merge($keys, ...$keysTmp);
     }
 
     /**

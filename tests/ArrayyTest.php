@@ -3525,6 +3525,37 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         // ---
 
         $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
+        $keys = $arrayyTmp->keys(false, ['foo', 'foo2']);
+
+        $matcher = [1, 2];
+        static::assertSame($matcher, $keys->getArray());
+        // ---
+
+        $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', [3 => 'foo']]);
+        $keys = $arrayyTmp->keys(false, 'foo');
+
+        $matcher = [1];
+        static::assertSame($matcher, $keys->getArray());
+
+        // ---
+
+        $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', [3 => 'foo']]);
+        $keys = $arrayyTmp->keys(true, ['foo']);
+
+        $matcher = [1, 3];
+        static::assertSame($matcher, $keys->getArray());
+
+        // ---
+
+        $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', [3 => 'foo']]);
+        $keys = $arrayyTmp->keys(true, 'foo');
+
+        $matcher = [1, 3];
+        static::assertSame($matcher, $keys->getArray());
+
+        // ---
+
+        $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
         $keys = $arrayyTmp->getKeys();
 
         $matcher = [1, 2, 3];
