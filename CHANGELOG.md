@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.14.2 (2019-10-06)
+
+- fix "Arrayy->keys()" -> use strict and non-strict comparision 
+
+
 ### 5.14.1 (2019-09-16)
 
 - optimize "array_last"-polyfill (php < 7.3)
