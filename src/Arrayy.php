@@ -3483,7 +3483,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function reduce_dimension(bool $unique = true): self
     {
         // init
-        $result = [[]];
+        $result = [];
 
         foreach ($this->getGenerator() as $val) {
             if (\is_array($val)) {
@@ -3492,7 +3492,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $result[] = [$val];
             }
         }
-        $result = \array_merge(...$result);
+
+        $result = $result === [] ? [] : \array_merge(...$result);
 
         $resultArrayy = new self($result);
 
