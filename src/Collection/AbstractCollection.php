@@ -298,7 +298,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return bool
      */
-    private function checkType(string $type, $value): bool
+    private function checkType(string $type, $value)
     {
         switch ($type) {
             case 'array':
@@ -337,8 +337,10 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @param mixed $value
      *
      * @return string
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
-    private function valueToString($value): string
+    private function valueToString($value)
     {
         // null
         if ($value === null) {

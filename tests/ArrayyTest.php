@@ -1959,10 +1959,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testCanGroupValuesWithNonExistingKey()
     {
-        /** @noinspection PhpUndefinedCallbackInspection */
         static::assertSame([], A::create(\range(1, 5))->group('unknown', true)->getArray());
 
-        /** @noinspection PhpUndefinedCallbackInspection */
         static::assertSame([], A::create(\range(1, 5))->group('unknown', false)->getArray());
     }
 
@@ -2365,6 +2363,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $arrayy = new A($array);
 
+        /** @noinspection PhpUnitTestsInspection */
+        static::assertSame($expected, \count($arrayy));
         static::assertSame($expected, $arrayy->count());
         static::assertSame($expected, $arrayy->size());
         static::assertSame($expected, $arrayy->length());
@@ -2708,7 +2708,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $result = [];
         foreach ($resultMatch->getArray() as $key => $value) {
             $result[$key][] = $value[0];
-            /** @noinspection PhpUndefinedMethodInspection */
             $result[$key][] = $value[1]->format('Y-m-d');
         }
 
@@ -2886,7 +2885,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             'two'   => 2,
         ];
         $arrayy = new A($input);
-        /** @noinspection PhpParamsInspection */
         $arrayy->exchangeArray('foo');
 
         static::assertSame(['foo'], $arrayy->getArray());
@@ -3701,7 +3699,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testMatchesAnySimple()
     {
-        /** @noinspection PhpUnusedParameterInspection */
         /**
          * @param $value
          * @param $key
@@ -3723,7 +3720,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testMatchesSimple()
     {
-        /** @noinspection PhpUnusedParameterInspection */
         /**
          * @param $value
          * @param $key
@@ -3747,7 +3743,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @dataProvider maxProvider()
      *
      * @param array $array
-     * @param       $expected
+     * @param mixed $expected
      */
     public function testMax($array, $expected)
     {
