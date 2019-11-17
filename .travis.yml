@@ -21,6 +21,7 @@ matrix:
     - php: 7.3
       env:
         - PHP_COMPOSER_SETUP=lowest
+    - php: 7.4snapshot
     - php: nightly
 
 before_script:
