@@ -4,13 +4,15 @@ namespace Arrayy;
 
 /**
  * inspired by https://github.com/spatie/value-object
+ *
+ * @internal
  */
-final class Property extends \ReflectionProperty
+final class Property
 {
     /**
      * @var array
      */
-    protected static $typeMapping = [
+    private static $typeMapping = [
         'int'   => 'integer',
         'bool'  => 'boolean',
         'float' => 'double',
@@ -19,29 +21,29 @@ final class Property extends \ReflectionProperty
     /**
      * @var bool
      */
-    protected $hasTypeDeclaration = false;
+    private $hasTypeDeclaration = false;
 
     /**
      * @var bool
      */
-    protected $isNullable = false;
+    private $isNullable = false;
 
     /**
      * @var array
      */
-    protected $types = [];
+    private $types = [];
 
     /**
-     * Property constructor.
-     *
-     * @param \ReflectionProperty $reflectionProperty
-     * @param object              $fakeObject
-     *
-     * @throws \ReflectionException
+     * @var string
      */
-    public function __construct($reflectionProperty, $fakeObject = null)
+    private $property_name;
+
+    /**
+     * @param string $reflectionPropertyName
+     */
+    public function __construct($reflectionPropertyName)
     {
-        parent::__construct($fakeObject, $reflectionProperty->getName());
+        $this->property_name = $reflectionPropertyName;
     }
 
     /**
@@ -71,7 +73,7 @@ final class Property extends \ReflectionProperty
 
         $expectedTypes = \implode('|', $this->getTypes());
 
-        throw new \InvalidArgumentException("Invalid type: expected {$this->name} to be of type {{$expectedTypes}}, instead got value `" . \print_r($value, true) . "` with type {{$type}}.");
+        throw new \InvalidArgumentException("Invalid type: expected {$this->property_name} to be of type {{$expectedTypes}}, instead got value `" . \print_r($value, true) . "` with type {{$type}}.");
     }
 
     public static function fromPhpDocumentorProperty(\phpDocumentor\Reflection\DocBlock\Tags\Property $phpDocumentorReflectionProperty): self
@@ -80,7 +82,7 @@ final class Property extends \ReflectionProperty
         $tmpObject = new \stdClass();
         $tmpObject->{$tmpProperty} = null;
 
-        $tmpReflection = new self(new \ReflectionProperty($tmpObject, $tmpProperty), $tmpObject);
+        $tmpReflection = new self((new \ReflectionProperty($tmpObject, $tmpProperty))->getName());
 
         $type = $phpDocumentorReflectionProperty->getType();
 
@@ -192,7 +194,7 @@ final class Property extends \ReflectionProperty
      *
      * @return bool
      */
-    protected function assertTypeEquals(string $type, $value): bool
+    private function assertTypeEquals(string $type, $value): bool
     {
         if (\strpos($type, '[]') !== false) {
             return $this->isValidGenericCollection($type, $value);
@@ -207,7 +209,7 @@ final class Property extends \ReflectionProperty
                \gettype($value) === (self::$typeMapping[$type] ?? $type);
     }
 
-    protected function isValidGenericCollection(string $type, $collection): bool
+    private function isValidGenericCollection(string $type, $collection): bool
     {
         if (!\is_array($collection)) {
             return false;
