@@ -4895,9 +4895,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($object->arrayy, $arrayy);
 
         // serialize + tests
-
-        static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
-        static::assertNotSame($object, \unserialize(\serialize($object)));
+        if (\PHP_VERSION_ID < 70400) {
+            static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
+            static::assertNotSame($object, \unserialize(\serialize($object)));
+        } else {
+            static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";O:13:"Arrayy\\Arrayy":', \serialize($object));
+            static::assertNotSame($object, \unserialize(\serialize($object)));
+        }
 
         $arrayy = new A([1 => 1, 2 => 2, 3 => 3]);
         $serialized = $arrayy->serialize();
@@ -4905,6 +4909,30 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $result = $arrayy->unserialize($serialized);
 
         static::assertSame([1 => 1, 2 => 2, 3 => 3], $result->getArray());
+
+        // ---
+
+        $modelMeta = CityData::meta();
+        $model = new CityData(
+            [
+                $modelMeta->name  => 'Düsseldorf',
+                $modelMeta->plz   => null,
+                $modelMeta->infos => ['foo'],
+            ]
+        );
+
+        // serialize + tests
+        if (\PHP_VERSION_ID < 70400) {
+            static::assertInstanceOf(CityData::class, $model);
+            static::assertContains('C:21:"Arrayy\tests\CityData":', \serialize($model));
+            static::assertNotSame($model, \unserialize(\serialize($model)));
+            static::assertInstanceOf(CityData::class, $model);
+        } else {
+            static::assertInstanceOf(CityData::class, $model);
+            static::assertContains('O:21:"Arrayy\tests\CityData":', \serialize($model));
+            static::assertNotSame($model, \unserialize(\serialize($model)));
+            static::assertInstanceOf(CityData::class, $model);
+        }
     }
 
     public function testSerializeSimple()

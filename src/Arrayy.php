@@ -556,7 +556,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        return parent::serialize();
+        if (\PHP_VERSION_ID < 70400) {
+            return parent::serialize();
+        }
+
+        return \serialize($this);
     }
 
     /**
@@ -635,9 +639,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function unserialize($string): self
     {
-        parent::unserialize($string);
+        if (\PHP_VERSION_ID < 70400) {
+            parent::unserialize($string);
 
-        return $this;
+            return $this;
+        }
+
+        return \unserialize($string, ['allowed_classed' => [__CLASS__]]);
     }
 
     /**
