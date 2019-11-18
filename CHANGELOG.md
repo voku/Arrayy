@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.15.0
+
+- fix serialization of "Arrayy" + "Property" (Property !== instance of ReflectionProperty anymore)
+- fix for php 7.4 (ArrayObject use __serialize + __unserialize)
+
 ### 5.14.2 (2019-10-06)
 
 - fix "Arrayy->keys()" -> use strict and non-strict comparision 
