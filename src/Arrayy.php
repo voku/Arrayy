@@ -645,7 +645,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $this;
         }
 
-        return \unserialize($string, ['allowed_classed' => [__CLASS__]]);
+        return \unserialize($string, ['allowed_classes' => [__CLASS__, Property::class]]);
     }
 
     /**
