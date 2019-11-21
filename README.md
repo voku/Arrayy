@@ -135,8 +135,6 @@ You can access / change the array via Object, Array or with "Arrayy"-syntax.
 
 ### Access via "Arrayy"-syntax: (dot-notation)
 
--- **Recommended** --
-
 ```php
 $arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
 
@@ -163,8 +161,6 @@ $arrayy->Lars->lastname; // 'Moelleken'
 ```
 
 ### Set values via "Arrayy"-syntax: (dot-notation)
-
--- **Recommended** --
 
 ```php
 $arrayy = new A(['Lars' => ['lastname' => 'Mueller']]);
@@ -210,18 +206,43 @@ class User extends \Arrayy\Arrayy
 }
 
 /**
- * Class CityData
- *
  * @property string|null $plz
  * @property string      $name
  * @property string[]    $infos
  */
-class CityData extends \Arrayy\Arrayy
+class City extends \Arrayy\Arrayy
 {
     protected $checkPropertyTypes = true;
 
     protected $checkPropertiesMismatchInConstructor = true;
 }
+
+$cityMeta = City::meta();
+$city = new City(
+    [
+        $cityMeta->plz   => null,
+        $cityMeta->name  => 'Düsseldorf',
+        $cityMeta->infos => ['lall'],
+    ]
+);
+
+$userMeta = User::meta();
+$user = new User(
+    [
+        $userMeta->id        => 1,
+        $userMeta->firstName => 'Lars',
+        $userMeta->lastName  => 'Moelleken',
+        $userMeta->city      => $city,
+    ]
+);
+
+var_dump($user['lastName']); // 'Moelleken'
+var_dump($user[$userMeta->lastName]); // 'Moelleken'
+var_dump($user->lastName); // Moelleken
+
+var_dump($user['city.name']); // 'Düsseldorf'
+var_dump($user[$userMeta->city][$cityMeta->name]); // 'Düsseldorf'
+var_dump($user->city->name); // Düsseldorf
 ```
 
 - "checkPropertyTypes": activate the type checking for all defined @property in the class-phpdoc

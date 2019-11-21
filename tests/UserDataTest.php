@@ -11,13 +11,13 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetAndGet()
     {
-        $modelMeta = CityData::meta();
+        $cityMeta = CityData::meta();
 
         $city = new CityData(
             [
-                $modelMeta->name  => 'Düsseldorf',
-                $modelMeta->plz   => null,
-                $modelMeta->infos => ['lall'],
+                $cityMeta->name  => 'Düsseldorf',
+                $cityMeta->plz   => null,
+                $cityMeta->infos => ['lall'],
             ]
         );
 
@@ -37,7 +37,12 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf(Arrayy::class, $model);
         static::assertSame('Moelleken', $model['lastName']);
         static::assertSame('Moelleken', $model[$modelMeta->lastName]);
+        static::assertSame('Moelleken', $model->lastName);
+
+        static::assertSame('Düsseldorf', $model['city']['name']);
+        static::assertSame('Düsseldorf', $model[$modelMeta->city][$cityMeta->name]);
         static::assertSame('Düsseldorf', $model->city->name);
+
         static::assertNull($model[3]);
     }
 
