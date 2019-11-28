@@ -1,9 +1,19 @@
 # Changelog
 
+### 6.0.0
+
+- add "Arrayy->checkPropertiesMismatch"
+- add pre-defined typified collections (TypeInterface)
+- merge type check from Arrayy & Collection
+- add "TypeCheckInterface"
+- fix type checks
+
+
 ### 5.15.0
 
 - fix serialization of "Arrayy" + "Property" (Property !== instance of ReflectionProperty anymore)
 - fix for php 7.4 (ArrayObject use __serialize + __unserialize)
+
 
 ### 5.14.2 (2019-10-06)
 
