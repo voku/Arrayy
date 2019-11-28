@@ -22,8 +22,8 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
 
     public function testParameterMatchFail()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid type: expected infos to be of type {string[]}, instead got value `foo` with type {string}.');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}, instead got value "foo" (foo) with type {string}.');
 
         $modelMeta = CityData::meta();
 
@@ -40,7 +40,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
 
     public function testParameterMatchFailV2()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\TypeError::class);
 
         $modelMeta = CityData::meta();
 
@@ -57,7 +57,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
 
     public function testParameterMatchFailWithArray()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Property mismatch');
 
         $modelMeta = CityData::meta();

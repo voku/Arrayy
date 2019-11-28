@@ -31,18 +31,19 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $colors = new \stdClass();
         $colors->color = 'red';
 
-        $collection = new StdBaseClassCollection(\stdClass::class, [$pets, $colors]);
+        $collection = StdBaseClassCollection::construct(\stdClass::class, [$pets, $colors]);
 
         static::assertSame([$pets, $colors], $collection->getCollection());
 
+        $baseCollection = $collection->toBase();
+
         /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf(Collection::class, $collection->toBase());
+        static::assertInstanceOf(Collection::class, $baseCollection);
     }
 
     public function testSimpleGenericFailCollection()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value must be of type Arrayy\tests\ModelInterface; type is object, value is "stdClass Object"');
+        $this->expectException(\TypeError::class);
 
         $pets = new \stdClass();
         $pets->foo = 1;
@@ -98,8 +99,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testConstructorException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value must be of type Arrayy\tests\ModelInterface; type is object, value is "Arrayy\tests\CityData Object"');
+        $this->expectException(\TypeError::class);
 
         $cityData = new CityData(
             [
@@ -116,8 +116,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testAddExceptionV1()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value must be of type Arrayy\tests\ModelInterface; type is object, value is "Arrayy\tests\CityData Object"');
+        $this->expectException(\TypeError::class);
 
         $pets = new ModelA(['cat', 'dog', 'bird']);
         $colors = new ModelB(['red', 'yellow', 'green', 'white']);
@@ -139,8 +138,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testAddExceptionV2()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value must be of type Arrayy\tests\ModelInterface; type is object, value is "Arrayy\tests\CityData Object"');
+        $this->expectException(\TypeError::class);
 
         $pets = new ModelA(['cat', 'dog', 'bird']);
         $colors = new ModelB(['red', 'yellow', 'green', 'white']);
@@ -177,10 +175,46 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertTrue($modelCollectionExpected == $newCollection);
     }
 
+    public function testTypesForAllProperties()
+    {
+        $model = new ModelC(['test', 'foo']);
+
+        static::assertSame(['test', 'foo'], $model->getArray());
+    }
+
+    public function testTypesForAllPropertiesFail()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected to be of type {string}, instead got value `1` with type {integer}.');
+
+        new ModelC(['test', 1]);
+    }
+
+    public function testTypesForOneProperties()
+    {
+        $model = new ModelC(['test', 'foo']);
+
+        static::assertSame(['test', 'foo'], $model->getArray());
+    }
+
+    public function testTypesForOnePropertiesFail()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected to be of type {int}, instead got value `a` with type {string}.');
+
+        new ModelD(['foo' => 'a']);
+    }
+
+    public function testTypesForOnePropertiesCorrect()
+    {
+        $d = new ModelD(['foo' => 1]);
+
+        static::assertSame(['foo' => 1], $d->getArray());
+    }
+
     public function testPrependExceptionV1()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value must be of type Arrayy\tests\ModelInterface; type is object, value is "Arrayy\tests\CityData Object"');
+        $this->expectException(\TypeError::class);
 
         $pets = new ModelA(['cat', 'dog', 'bird']);
         $colors = new ModelB(['red', 'yellow', 'green', 'white']);
@@ -202,8 +236,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testPrependExceptionV2()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Value must be of type Arrayy\tests\ModelInterface; type is object, value is "Arrayy\tests\CityData Object"');
+        $this->expectException(\TypeError::class);
 
         $pets = new ModelA(['cat', 'dog', 'bird']);
         $colors = new ModelB(['red', 'yellow', 'green', 'white']);
@@ -217,6 +250,9 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         );
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
+
+        $rand = $modelCollection->randomImmutable(1);
+        static::assertInstanceOf(ModelInterface::class, $rand->first());
 
         $modelCollection->prepend($cityData, 0);
 

@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arrayy\Collection;
 
 use Arrayy\ArrayyIterator;
+use Arrayy\TypeCheck\TypeCheckArray;
+use Arrayy\TypeCheck\TypeCheckInterface;
 
 /**
  * A collection represents a group of objects.
@@ -34,7 +38,7 @@ use Arrayy\ArrayyIterator;
  *
  * class FooCollection extends \Arrayy\Collection\AbstractCollection
  * {
- *     public function getType(): string
+ *     public function getType()
  *     {
  *         return FooInterface::class;
  *     }
@@ -62,38 +66,80 @@ use Arrayy\ArrayyIterator;
 class Collection extends AbstractCollection
 {
     /**
-     * The type of elements stored in this collection.
-     *
-     * @var string
-     */
-    private $collectionTypeTmp;
-
-    /**
      * Constructs a collection object of the specified type, optionally with the
      * specified data.
      *
-     * @param string $type
-     * @param mixed  $data
-     *                                                              <p>
-     *                                                              The initial items to store in the collection.
-     *                                                              </p>
-     * @param bool   $checkForMissingPropertiesInConstructorAndType
+     * @param mixed                                    $data
+     *                                                                               <p>
+     *                                                                               The initial items to store in the collection.
+     *                                                                               </p>
+     * @param string                                   $iteratorClass                optional <p>
+     *                                                                               You can overwrite the ArrayyIterator, but mostly you don't
+     *                                                                               need this option.
+     *                                                                               </p>
+     * @param bool                                     $checkPropertiesInConstructor optional <p>
+     *                                                                               You need to extend the "Arrayy"-class and you need to set
+     *                                                                               the $checkPropertiesMismatchInConstructor class property
+     *                                                                               to
+     *                                                                               true, otherwise this option didn't not work anyway.
+     *                                                                               </p>
+     * @param TypeCheckArray|TypeCheckInterface[]|null $type
      */
-    public function __construct(string $type, $data = [], $checkForMissingPropertiesInConstructorAndType = true)
-    {
-        $this->collectionTypeTmp = $type;
+    public function __construct(
+        $data = [],
+        string $iteratorClass = null,
+        bool $checkPropertiesInConstructor = null,
+        TypeCheckArray $type = null
+    ) {
+        // fallback
+        if ($iteratorClass === null) {
+            $iteratorClass = ArrayyIterator::class;
+        }
+        if ($checkPropertiesInConstructor === null) {
+            $checkPropertiesInConstructor = true;
+        }
 
-        parent::__construct($data, ArrayyIterator::class, $checkForMissingPropertiesInConstructorAndType);
+        if ($type !== null) {
+            $this->properties = $type;
+        }
+
+        parent::__construct(
+            $data,
+            $iteratorClass,
+            $checkPropertiesInConstructor
+        );
+    }
+
+    /**
+     * @param string|TypeCheckArray|TypeCheckInterface[] $type
+     * @param array                                      $data
+     * @param bool                                       $checkPropertiesInConstructorAndType
+     *
+     * @return static
+     */
+    public static function construct(
+        $type,
+        $data = [],
+        bool $checkPropertiesInConstructorAndType = true
+    ): self {
+        $type = self::convertIntoTypeCheckArray($type);
+
+        return new static(
+            $data,
+            ArrayyIterator::class,
+            $checkPropertiesInConstructorAndType,
+            $type
+        );
     }
 
     /**
      * The type (FQCN) associated with this collection.
      *
-     * @return string
+     * @return TypeCheckArray|TypeCheckInterface[]
      */
-    public function getType(): string
+    public function getType()
     {
-        return $this->collectionTypeTmp;
+        return $this->properties;
     }
 
     /**
@@ -103,6 +149,7 @@ class Collection extends AbstractCollection
      */
     public function toBase(): self
     {
-        return new self($this);
+        /** @noinspection SelfClassReferencingInspection */
+        return Collection::construct($this->getType(), $this->getArray());
     }
 }

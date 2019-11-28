@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Arrayy;
 
+use Arrayy\TypeCheck\TypeCheckArray;
+use Arrayy\TypeCheck\TypeCheckInterface;
+use Arrayy\TypeCheck\TypeCheckPhpDoc;
+
 /** @noinspection ClassReImplementsParentInterfaceInspection */
 
 /**
@@ -14,6 +18,8 @@ namespace Arrayy;
  */
 class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \JsonSerializable, \Countable
 {
+    const ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES = '!!!!Arrayy_Helper_Types_For_All_Properties!!!!';
+
     /**
      * @var array
      */
@@ -50,68 +56,44 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected $checkPropertiesMismatchInConstructor = false;
 
     /**
-     * @var Property[]
+     * @var bool
+     */
+    protected $checkPropertiesMismatch = true;
+
+    /**
+     * @var array|TypeCheckArray|TypeCheckInterface[]
      */
     protected $properties = [];
 
     /**
      * Initializes
      *
-     * @param mixed  $data                                   <p>
-     *                                                       Should be an array or a generator, otherwise it will try
-     *                                                       to convert it into an array.
-     *                                                       </p>
-     * @param string $iteratorClass                          optional <p>
-     *                                                       You can overwrite the ArrayyIterator, but mostly you don't
-     *                                                       need this option.
-     *                                                       </p>
-     * @param bool   $checkForMissingPropertiesInConstructor optional <p>
-     *                                                       You need to extend the "Arrayy"-class and you need to set
-     *                                                       the $checkPropertiesMismatchInConstructor class property
-     *                                                       to
-     *                                                       true, otherwise this option didn't not work anyway.
-     *                                                       </p>
+     * @param mixed  $data                         <p>
+     *                                             Should be an array or a generator, otherwise it will try
+     *                                             to convert it into an array.
+     *                                             </p>
+     * @param string $iteratorClass                optional <p>
+     *                                             You can overwrite the ArrayyIterator, but mostly you don't
+     *                                             need this option.
+     *                                             </p>
+     * @param bool   $checkPropertiesInConstructor optional <p>
+     *                                             You need to extend the "Arrayy"-class and you need to set
+     *                                             the $checkPropertiesMismatchInConstructor class property
+     *                                             to
+     *                                             true, otherwise this option didn't not work anyway.
+     *                                             </p>
      */
     public function __construct(
         $data = [],
         string $iteratorClass = ArrayyIterator::class,
-        bool $checkForMissingPropertiesInConstructor = true
+        bool $checkPropertiesInConstructor = true
     ) {
         $data = $this->fallbackForArray($data);
 
         // used only for serialize + unserialize, all other methods are overwritten
         parent::__construct([], 0, $iteratorClass);
 
-        $checkForMissingPropertiesInConstructor = $this->checkForMissingPropertiesInConstructor === true
-                                                  &&
-                                                  $checkForMissingPropertiesInConstructor === true;
-
-        if (
-            $this->checkPropertyTypes === true
-            ||
-            $checkForMissingPropertiesInConstructor === true
-        ) {
-            $this->properties = $this->getPropertiesFromPhpDoc();
-        }
-
-        if (
-            $this->checkPropertiesMismatchInConstructor === true
-            &&
-            \count($data) !== 0
-            &&
-            \count(\array_diff_key($this->properties, $data)) > 0
-        ) {
-            throw new \InvalidArgumentException('Property mismatch - input: ' . \print_r(\array_keys($data), true) . ' | expected: ' . \print_r(\array_keys($this->properties), true));
-        }
-
-        /** @noinspection AlterInForeachInspection */
-        foreach ($data as $key => &$value) {
-            $this->internalSet(
-                $key,
-                $value,
-                $checkForMissingPropertiesInConstructor
-            );
-        }
+        $this->setInitialValuesAndProperties($data, $checkPropertiesInConstructor);
 
         $this->setIteratorClass($iteratorClass);
     }
@@ -224,6 +206,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function append($value, $key = null): self
     {
         $this->generatorToArray();
+
+        if ($this->properties !== []) {
+            $this->checkType($key, $value);
+        }
 
         if ($key !== null) {
             if (
@@ -498,9 +484,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray();
 
         if ($offset === null) {
+            if ($this->properties !== []) {
+                $this->checkType(null, $value);
+            }
+
             $this->array[] = $value;
         } else {
-            $this->internalSet($offset, $value);
+            $this->internalSet(
+                $offset,
+                $value,
+                true
+            );
         }
     }
 
@@ -603,9 +597,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function uasort($function): self
     {
         if (!\is_callable($function)) {
-            throw new \InvalidArgumentException(
-                'Passed function must be callable'
-            );
+            throw new \InvalidArgumentException('Passed function must be callable');
         }
 
         $this->generatorToArray();
@@ -645,7 +637,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $this;
         }
 
-        return \unserialize($string, ['allowed_classes' => [__CLASS__, Property::class]]);
+        return \unserialize($string, ['allowed_classes' => [__CLASS__, TypeCheckPhpDoc::class]]);
     }
 
     /**
@@ -1088,25 +1080,28 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function countValues(): self
     {
-        return new static(\array_count_values($this->getArray()));
+        return self::create(\array_count_values($this->getArray()), $this->iteratorClass);
     }
 
     /**
      * Creates an Arrayy object.
      *
-     * @param mixed  $array
+     * @param mixed  $data
      * @param string $iteratorClass
-     * @param bool   $checkForMissingPropertiesInConstructor
+     * @param bool   $checkPropertiesInConstructor
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      */
-    public static function create($array = [], string $iteratorClass = ArrayyIterator::class, bool $checkForMissingPropertiesInConstructor = true): self
-    {
+    public static function create(
+        $data = [],
+        string $iteratorClass = ArrayyIterator::class,
+        bool $checkPropertiesInConstructor = true
+    ): self {
         return new static(
-            $array,
+            $data,
             $iteratorClass,
-            $checkForMissingPropertiesInConstructor
+            $checkPropertiesInConstructor
         );
     }
 
@@ -1137,7 +1132,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromGeneratorFunction(callable $generatorFunction): self
     {
-        return new static($generatorFunction);
+        return self::create($generatorFunction);
     }
 
     /**
@@ -1150,7 +1145,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromGeneratorImmutable(\Generator $generator): self
     {
-        return new static(\iterator_to_array($generator, true));
+        return self::create(\iterator_to_array($generator, true));
     }
 
     /**
@@ -1177,7 +1172,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public static function createFromObject(\Traversable $object): self
     {
         // init
-        $array = new static();
+        $array = self::create();
 
         if ($object instanceof self) {
             $objectArray = $object->getGenerator();
@@ -1202,7 +1197,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromObjectVars($object): self
     {
-        return new static(self::objectToArray($object));
+        return self::create(self::objectToArray($object));
     }
 
     /**
@@ -1256,7 +1251,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromTraversableImmutable(\Traversable $traversable): self
     {
-        return new static(\iterator_to_array($traversable, true));
+        return self::create(\iterator_to_array($traversable, true));
     }
 
     /**
@@ -1289,9 +1284,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function customSortKeys($function): self
     {
         if (\is_callable($function) === false) {
-            throw new \InvalidArgumentException(
-                'Passed function must be callable'
-            );
+            throw new \InvalidArgumentException('Passed function must be callable');
         }
 
         $this->generatorToArray();
@@ -1316,9 +1309,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function customSortValues($function): self
     {
         if (\is_callable($function) === false) {
-            throw new \InvalidArgumentException(
-                'Passed function must be callable'
-            );
+            throw new \InvalidArgumentException('Passed function must be callable');
         }
 
         $this->generatorToArray();
@@ -1345,15 +1336,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Return values that are only in the current array.
      *
-     * @param array $array
+     * @param array ...$array
      *
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function diff(array $array = []): self
+    public function diff(...$array): self
     {
         return static::create(
-            \array_diff($this->getArray(), $array),
+            \array_diff($this->getArray(), ...$array),
             $this->iteratorClass,
             false
         );
@@ -1362,15 +1353,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Return values that are only in the current array.
      *
-     * @param array $array
+     * @param array ...$array
      *
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function diffKey(array $array = []): self
+    public function diffKey(...$array): self
     {
         return static::create(
-            \array_diff_key($this->getArray(), $array),
+            \array_diff_key($this->getArray(), ...$array),
             $this->iteratorClass,
             false
         );
@@ -1673,7 +1664,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     $comparisonOp
                 ) {
                     $item = (array) $item;
-                    $itemArrayy = new static($item);
+                    $itemArrayy = static::create($item);
                     $item[$property] = $itemArrayy->get($property, []);
 
                     return $ops[$comparisonOp]($item, $property, $value);
@@ -2156,6 +2147,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Check if an array has a given value.
+     *
+     * INFO: if you need to search recursive please use ```contains()```
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function hasValue($value): bool
+    {
+        return $this->contains($value);
+    }
+
+    /**
      * Check if an array has a given key.
      *
      * @param mixed $key
@@ -2251,6 +2256,23 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function initial(int $to = 1): self
     {
         return $this->firstsImmutable(\count($this->getArray(), \COUNT_NORMAL) - $to);
+    }
+
+    /**
+     * Return an array with all elements found in input array.
+     *
+     * @param array ...$array
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function intersectionMulti(...$array): self
+    {
+        return static::create(
+            \array_values(\array_intersect($this->getArray(), ...$array)),
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -3124,6 +3146,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
+        if ($this->properties !== []) {
+            $this->checkType($key, $value);
+        }
+
         if ($key === null) {
             \array_unshift($this->array, $value);
         } else {
@@ -3240,17 +3266,28 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Push one or more values onto the end of array at once.
      *
+     * @param array ...$args
+     *
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with pushed elements to the end of array.</p>
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
-    public function push(/* variadic arguments allowed */): self
+    public function push(...$args)
     {
         $this->generatorToArray();
 
-        if (\func_num_args()) {
-            $args = \func_get_args();
-            \array_push(...[&$this->array], ...$args);
+        if (
+            $this->checkPropertyTypes
+            &&
+            $this->properties !== []
+        ) {
+            foreach ($args as $key => $value) {
+                $this->checkType($key, $value);
+            }
         }
+
+        \array_push(...[&$this->array], ...$args);
 
         return $this;
     }
@@ -3446,12 +3483,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Reduce the current array via callable e.g. anonymous-function.
      *
      * @param callable $callable
-     * @param array    $init
+     * @param mixed    $init
      *
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function reduce($callable, array $init = []): self
+    public function reduce($callable, $init = []): self
     {
         if ($this->generator) {
             $result = $init;
@@ -3665,7 +3702,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function repeat($times): self
     {
         if ($times === 0) {
-            return new static();
+            return static::create([], $this->iteratorClass);
         }
 
         return static::create(
@@ -3804,6 +3841,27 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         return static::create(
             \array_splice($tmpArray, $from),
+            $this->iteratorClass,
+            false
+        );
+    }
+
+    /**
+     * @param int      $offset
+     * @param int|null $length
+     * @param array    $replacement
+     *
+     * @return static
+     *                <p>(Immutable)</p>
+     */
+    public function splice(int $offset, int $length = null, $replacement = []): self
+    {
+        $tmpArray = $this->getArray();
+
+        \array_splice($tmpArray, $offset, $length ?? $this->count(), $replacement);
+
+        return static::create(
+            $tmpArray,
             $this->iteratorClass,
             false
         );
@@ -4493,17 +4551,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Prepends one or more values to the beginning of array at once.
      *
+     * @param array ...$args
+     *
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with prepended elements to the beginning of array.</p>
      */
-    public function unshift(/* variadic arguments allowed */): self
+    public function unshift(...$args): self
     {
         $this->generatorToArray();
 
-        if (\func_num_args()) {
-            $args = \func_get_args();
-            \array_unshift(...[&$this->array], ...$args);
-        }
+        \array_unshift(...[&$this->array], ...$args);
 
         return $this;
     }
@@ -4548,6 +4605,53 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $this;
+    }
+
+    /**
+     * @param array $data
+     * @param bool  $checkPropertiesInConstructor
+     */
+    protected function setInitialValuesAndProperties(array &$data, bool $checkPropertiesInConstructor)
+    {
+        $checkPropertiesInConstructor = $this->checkForMissingPropertiesInConstructor === true
+                                        &&
+                                        $checkPropertiesInConstructor === true;
+
+        if ($this->properties !== []) {
+            foreach ($data as $key => &$valueInner) {
+                $this->internalSet(
+                    $key,
+                    $valueInner,
+                    $checkPropertiesInConstructor
+                );
+            }
+        } else {
+            if (
+                $this->checkPropertyTypes === true
+                ||
+                $checkPropertiesInConstructor === true
+            ) {
+                $this->properties = $this->getPropertiesFromPhpDoc();
+            }
+
+            if (
+                $this->checkPropertiesMismatchInConstructor === true
+                &&
+                \count($data) !== 0
+                &&
+                \count(\array_diff_key($this->properties, $data)) > 0
+            ) {
+                throw new \TypeError('Property mismatch - input: ' . \print_r(\array_keys($data), true) . ' | expected: ' . \print_r(\array_keys($this->properties), true));
+            }
+
+            foreach ($data as $key => &$valueInner) {
+                $this->internalSet(
+                    $key,
+                    $valueInner,
+                    $checkPropertiesInConstructor
+                );
+            }
+        }
     }
 
     /**
@@ -4711,9 +4815,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $data = $this->internalGetArray($data);
 
         if ($data === null) {
-            throw new \InvalidArgumentException(
-                'Passed value should be a array'
-            );
+            throw new \InvalidArgumentException('Passed value should be a array');
         }
 
         return $data;
@@ -4938,18 +5040,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      */
-    protected function internalSet($key, $value, $checkProperties = true): bool
+    protected function internalSet($key, &$value, $checkProperties = true): bool
     {
         if (
             $checkProperties === true
             &&
             $this->properties !== []
         ) {
-            if (isset($this->properties[$key]) === false) {
-                throw new \InvalidArgumentException('The key ' . $key . ' does not exists as @property in the class (' . \get_class($this) . ').');
-            }
-
-            $this->properties[$key]->checkType($value);
+            $this->checkType($key, $value);
         }
 
         if ($key === null) {
@@ -5078,28 +5176,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * @return bool
+     * @return TypeCheckPhpDoc[]
      *
      * @noinspection ReturnTypeCanBeDeclaredInspection
      */
-    private function generatorToArray()
-    {
-        if ($this->generator) {
-            $this->array = $this->getArray();
-            $this->generator = null;
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return Property[]
-     *
-     * @noinspection ReturnTypeCanBeDeclaredInspection
-     */
-    private function getPropertiesFromPhpDoc()
+    protected function getPropertiesFromPhpDoc()
     {
         static $PROPERTY_CACHE = [];
         $cacheKey = 'Class::' . static::class;
@@ -5118,10 +5199,48 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $docblock = $factory->create($docComment);
             /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
             foreach ($docblock->getTagsByName('property') as $tag) {
-                $properties[$tag->getVariableName()] = Property::fromPhpDocumentorProperty($tag);
+                $properties[$tag->getVariableName()] = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag);
             }
         }
 
         return $PROPERTY_CACHE[$cacheKey] = $properties;
+    }
+
+    /**
+     * @return bool
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
+     */
+    protected function generatorToArray()
+    {
+        if ($this->generator) {
+            $this->array = $this->getArray();
+            $this->generator = null;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int|string|null $key
+     * @param mixed           $value
+     */
+    private function checkType($key, $value)
+    {
+        if (
+            isset($this->properties[$key]) === false
+            &&
+            $this->checkPropertiesMismatch === true
+        ) {
+            throw new \TypeError('The key ' . $key . ' does not exists in "properties". Maybe because @property was not used for the class (' . \get_class($this) . ').');
+        }
+
+        if (isset($this->properties[self::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES])) {
+            $this->properties[self::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES]->checkType($value);
+        } elseif (isset($this->properties[$key])) {
+            $this->properties[$key]->checkType($value);
+        }
     }
 }

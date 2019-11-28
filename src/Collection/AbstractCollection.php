@@ -6,6 +6,10 @@ namespace Arrayy\Collection;
 
 use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
+use Arrayy\Type\TypeInterface;
+use Arrayy\TypeCheck\TypeCheckArray;
+use Arrayy\TypeCheck\TypeCheckInterface;
+use Arrayy\TypeCheck\TypeCheckSimple;
 
 /**
  * This class provides a full implementation of `CollectionInterface`, to
@@ -16,29 +20,49 @@ use Arrayy\ArrayyIterator;
 abstract class AbstractCollection extends Arrayy implements CollectionInterface
 {
     /**
-     * The type of elements stored in this collection.
-     *
-     * @var string
+     * @var bool
      */
-    private $collectionType;
+    protected $checkPropertyTypes = true;
+
+    /**
+     * @var bool
+     */
+    protected $checkPropertiesMismatch = false;
+
+    /**
+     * @var bool
+     */
+    protected $checkForMissingPropertiesInConstructor = true;
 
     /**
      * Constructs a collection object of the specified type, optionally with the
      * specified data.
      *
      * @param mixed  $data
-     *                                                              <p>
-     *                                                              The initial items to store in the collection.
-     *                                                              </p>
-     * @param string $iteratorClass
-     * @param bool   $checkForMissingPropertiesInConstructorAndType
+     *                                             <p>
+     *                                             The initial items to store in the collection.
+     *                                             </p>
+     * @param string $iteratorClass                optional <p>
+     *                                             You can overwrite the ArrayyIterator, but mostly you don't
+     *                                             need this option.
+     *                                             </p>
+     * @param bool   $checkPropertiesInConstructor optional <p>
+     *                                             You need to extend the "Arrayy"-class and you need to set
+     *                                             the $checkPropertiesMismatchInConstructor class property
+     *                                             to
+     *                                             true, otherwise this option didn't not work anyway.
+     *                                             </p>
      */
     public function __construct(
         $data = [],
         string $iteratorClass = ArrayyIterator::class,
-        bool $checkForMissingPropertiesInConstructorAndType = true
+        bool $checkPropertiesInConstructor = true
     ) {
-        $this->collectionType = $this->getType();
+        $type = $this->getType();
+
+        $type = self::convertIntoTypeCheckArray($type);
+
+        $this->properties = $type;
 
         // cast into array, if needed
         if (
@@ -51,18 +75,11 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             $data = [$data];
         }
 
-        // check the type, if needed
-        if (
-            $checkForMissingPropertiesInConstructorAndType
-            &&
-            !($data instanceof \Closure)
-        ) {
-            foreach ($data as $value) {
-                $this->checkTypeWrapper($value);
-            }
-        }
-
-        parent::__construct($data, $iteratorClass, $checkForMissingPropertiesInConstructorAndType);
+        parent::__construct(
+            $data,
+            $iteratorClass,
+            $checkPropertiesInConstructor
+        );
     }
 
     /**
@@ -76,14 +93,14 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     /**
      * The type (FQCN) associated with this collection.
      *
-     * @return string
+     * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
      */
-    abstract public function getType(): string;
+    abstract public function getType();
 
     /**
      * Merge current items and items of given collections into a new one.
      *
-     * @param static ...$collections The collections to merge.
+     * @param CollectionInterface ...$collections The collections to merge.
      *
      * @throws \InvalidArgumentException if any of the given collections are not of the same type
      *
@@ -110,15 +127,17 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function offsetSet($offset, $value)
     {
-        if ($value instanceof static) {
+        if (
+            $value instanceof self
+            &&
+            !$value instanceof TypeInterface
+        ) {
             foreach ($value as $valueTmp) {
                 parent::offsetSet($offset, $valueTmp);
             }
 
             return;
         }
-
-        $this->checkTypeWrapper($value);
 
         parent::offsetSet($offset, $value);
     }
@@ -134,15 +153,17 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function prepend($value, $key = null): Arrayy
     {
-        if ($value instanceof static) {
+        if (
+            $value instanceof self
+            &&
+            !$value instanceof TypeInterface
+        ) {
             foreach ($value as $valueTmp) {
                 parent::prepend($valueTmp, $key);
             }
 
             return $this;
         }
-
-        $this->checkTypeWrapper($value);
 
         return parent::prepend($value, $key);
     }
@@ -158,15 +179,17 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function append($value, $key = null): Arrayy
     {
-        if ($value instanceof static) {
+        if (
+            $value instanceof self
+            &&
+            !$value instanceof TypeInterface
+        ) {
             foreach ($value as $valueTmp) {
                 parent::append($valueTmp, $key);
             }
 
             return $this;
         }
-
-        $this->checkTypeWrapper($value);
 
         return parent::append($value, $key);
     }
@@ -225,33 +248,52 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return bool
      */
-    protected function internalSet($key, $value, $checkPropertiesAndType = true): bool
+    protected function internalSet($key, &$value, $checkPropertiesAndType = true): bool
     {
-        if ($value instanceof static) {
+        if (
+            $value instanceof self
+            &&
+            !$value instanceof TypeInterface
+        ) {
             foreach ($value as $valueTmp) {
-                parent::internalSet($key, $valueTmp, $checkPropertiesAndType);
+                parent::internalSet(
+                    $key,
+                    $valueTmp,
+                    $checkPropertiesAndType
+                );
             }
 
             return true;
         }
 
-        if ($checkPropertiesAndType) {
-            $this->checkTypeWrapper($value);
-        }
-
-        return parent::internalSet($key, $value, $checkPropertiesAndType);
+        return parent::internalSet(
+            $key,
+            $value,
+            $checkPropertiesAndType
+        );
     }
 
     /**
-     * @param mixed $value
+     * @param mixed $type
+     *
+     * @return TypeCheckArray
      */
-    private function checkTypeWrapper($value)
+    protected static function convertIntoTypeCheckArray($type): TypeCheckArray
     {
-        if ($this->checkType($this->collectionType, $value) === false) {
-            throw new \InvalidArgumentException(
-                'Value must be of type ' . $this->collectionType . '; type is ' . \gettype($value) . ', value is "' . $this->valueToString($value) . '"'
+        $is_array = false;
+        if (
+            \is_scalar($type)
+            ||
+            $is_array = \is_array($type)
+        ) {
+            $type = TypeCheckArray::create(
+                [
+                    Arrayy::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES => new TypeCheckSimple($is_array ? $type : (string) $type),
+                ]
             );
         }
+
+        return $type;
     }
 
     /**
@@ -285,89 +327,6 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             return $object->{$keyOrPropertyOrMethod}();
         }
 
-        throw new \InvalidArgumentException(
-            \sprintf('array-key & property & method "%s" not defined in %s', $keyOrPropertyOrMethod, \gettype($object))
-        );
-    }
-
-    /**
-     * Returns `true` if value is of the specified type.
-     *
-     * @param string $type  the type to check the value against
-     * @param mixed  $value the value to check
-     *
-     * @return bool
-     */
-    private function checkType(string $type, $value)
-    {
-        switch ($type) {
-            case 'array':
-                return \is_array($value);
-            case 'bool':
-            case 'boolean':
-                return \is_bool($value);
-            case 'callable':
-                return \is_callable($value);
-            case 'float':
-            case 'double':
-                return \is_float($value);
-            case 'int':
-            case 'integer':
-                return \is_int($value);
-            case 'null':
-                return $value === null;
-            case 'numeric':
-                return \is_numeric($value);
-            case 'object':
-                return \is_object($value);
-            case 'resource':
-                return \is_resource($value);
-            case 'scalar':
-                return \is_scalar($value);
-            case 'string':
-                return \is_string($value);
-            case 'mixed':
-                return true;
-            default:
-                return $value instanceof $type;
-        }
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @return string
-     *
-     * @noinspection ReturnTypeCanBeDeclaredInspection
-     */
-    private function valueToString($value)
-    {
-        // null
-        if ($value === null) {
-            return 'NULL';
-        }
-
-        // bool
-        if (\is_bool($value)) {
-            return $value ? 'TRUE' : 'FALSE';
-        }
-
-        // array
-        if (\is_array($value)) {
-            return 'Array';
-        }
-
-        // scalar types (integer, float, string)
-        if (\is_scalar($value)) {
-            return (string) $value;
-        }
-
-        // resource
-        if (\is_resource($value)) {
-            return \get_resource_type($value) . ' resource #' . (int) $value;
-        }
-
-        // object
-        return \get_class($value) . ' Object';
+        throw new \InvalidArgumentException(\sprintf('array-key & property & method "%s" not defined in %s', $keyOrPropertyOrMethod, \gettype($object)));
     }
 }

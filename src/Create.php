@@ -49,7 +49,6 @@ namespace {
 namespace Arrayy {
 
     use Arrayy\Collection\Collection;
-    use Arrayy\Collection\CollectionInterface;
 
     if (!\function_exists('Arrayy\create')) {
         /**
@@ -65,16 +64,28 @@ namespace Arrayy {
         }
 
         /**
+         * Creates a ArrayyStrict object.
+         *
+         * @param mixed $data
+         *
+         * @return ArrayyStrict
+         */
+        function strict($data): ArrayyStrict
+        {
+            return new ArrayyStrict($data);
+        }
+
+        /**
          * Creates a Collection object.
          *
          * @param string $type
          * @param mixed  $data
          *
-         * @return CollectionInterface
+         * @return Collection
          */
-        function collection($type, $data = []): CollectionInterface
+        function collection($type, $data = []): Collection
         {
-            return new Collection($type, $data);
+            return Collection::construct($type, $data);
         }
     }
 

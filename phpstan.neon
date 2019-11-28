@@ -3,8 +3,9 @@ parameters:
     paths:
         - %currentWorkingDirectory%/src/
     ignoreErrors:
+        - '/TypeCheckArray&iterable/'
         - '/comparison using === between true and false/'
         - '/Arrayy\\Arrayy::keyExists\(\) expects int\|string, bool\|int\|string given/'
-        - '/Method Arrayy\\Property::parseDocTypeObject\(\) should return array<string>\|string but returns array<int, array<string>\|string>\./'
+        - '/parseDocTypeObject\(\) should return array<string>\|string but returns array<int, array<string>\|string>\./'
         - '/Parameter #[1-2] \$function of.*callable.*/'
         - '/Parameter #[1-2] \$callback of.*callable.*/'

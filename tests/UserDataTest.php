@@ -69,7 +69,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
 
     public function testSetFail()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type');
 
         $modelMeta = UserData::meta();
@@ -85,7 +85,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
 
     public function testSetFailObject()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\TypeError::class);
 
         $modelMeta = UserData::meta();
 

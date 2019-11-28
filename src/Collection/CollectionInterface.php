@@ -3,6 +3,8 @@
 namespace Arrayy\Collection;
 
 use Arrayy\Arrayy;
+use Arrayy\TypeCheck\TypeCheckArray;
+use Arrayy\TypeCheck\TypeCheckInterface;
 
 /**
  * A collection represents a group of objects, known as its elements.
@@ -22,9 +24,9 @@ interface CollectionInterface
     /**
      * The type (FQCN) associated with this collection.
      *
-     * @return string
+     * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
      */
-    public function getType(): string;
+    public function getType();
 
     /**
      * Merge current items and items of given collections into a new one.

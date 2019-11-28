@@ -1,37 +1,20 @@
 <?php
 
-namespace Arrayy;
+declare(strict_types=1);
+
+namespace Arrayy\TypeCheck;
 
 /**
  * inspired by https://github.com/spatie/value-object
  *
  * @internal
  */
-final class Property
+final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterface
 {
-    /**
-     * @var array
-     */
-    private static $typeMapping = [
-        'int'   => 'integer',
-        'bool'  => 'boolean',
-        'float' => 'double',
-    ];
-
     /**
      * @var bool
      */
     private $hasTypeDeclaration = false;
-
-    /**
-     * @var bool
-     */
-    private $isNullable = false;
-
-    /**
-     * @var array
-     */
-    private $types = [];
 
     /**
      * @var string
@@ -47,35 +30,10 @@ final class Property
     }
 
     /**
-     * @param mixed $value
+     * @param \phpDocumentor\Reflection\DocBlock\Tags\Property $phpDocumentorReflectionProperty
      *
-     * @return bool
+     * @return static
      */
-    public function checkType($value): bool
-    {
-        if (!$this->hasTypeDeclaration) {
-            return true;
-        }
-
-        if ($this->isNullable && $value === null) {
-            return true;
-        }
-
-        foreach ($this->types as $currentType) {
-            $isValidType = $this->assertTypeEquals($currentType, $value);
-
-            if ($isValidType) {
-                return true;
-            }
-        }
-
-        $type = \gettype($value);
-
-        $expectedTypes = \implode('|', $this->getTypes());
-
-        throw new \InvalidArgumentException("Invalid type: expected {$this->property_name} to be of type {{$expectedTypes}}, instead got value `" . \print_r($value, true) . "` with type {{$type}}.");
-    }
-
     public static function fromPhpDocumentorProperty(\phpDocumentor\Reflection\DocBlock\Tags\Property $phpDocumentorReflectionProperty): self
     {
         $tmpProperty = $phpDocumentorReflectionProperty->getVariableName();
@@ -104,11 +62,6 @@ final class Property
         }
 
         return $tmpReflection;
-    }
-
-    public function getTypes(): array
-    {
-        return $this->types;
     }
 
     /**
@@ -189,40 +142,14 @@ final class Property
     }
 
     /**
-     * @param string $type
+     * @param string $expectedTypes
      * @param mixed  $value
+     * @param string $type
      *
-     * @return bool
+     * @return \TypeError
      */
-    private function assertTypeEquals(string $type, $value): bool
+    public function throwException($expectedTypes, $value, $type): \Throwable
     {
-        if (\strpos($type, '[]') !== false) {
-            return $this->isValidGenericCollection($type, $value);
-        }
-
-        if ($type === 'mixed' && $value !== null) {
-            return true;
-        }
-
-        return $value instanceof $type
-               ||
-               \gettype($value) === (self::$typeMapping[$type] ?? $type);
-    }
-
-    private function isValidGenericCollection(string $type, $collection): bool
-    {
-        if (!\is_array($collection)) {
-            return false;
-        }
-
-        $valueType = \str_replace('[]', '', $type);
-
-        foreach ($collection as $value) {
-            if (!$this->assertTypeEquals($valueType, $value)) {
-                return false;
-            }
-        }
-
-        return true;
+        throw new \TypeError("Invalid type: expected \"{$this->property_name}\" to be of type {{$expectedTypes}}, instead got value \"" . $this->valueToString($value) . '" (' . \print_r($value, true) . ") with type {{$type}}.");
     }
 }
