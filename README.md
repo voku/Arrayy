@@ -13,7 +13,7 @@ A PHP array manipulation library. Compatible with PHP 7+
 
 
 ``` php
-Arrayy::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
+\Arrayy\Type\StringCollection::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 ```
 [documentation via gitbooks.io](https://voku.gitbooks.io/arrayy/content/)
 
