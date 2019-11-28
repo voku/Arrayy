@@ -54,7 +54,7 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
 
         $type = \gettype($value);
 
-        $expectedTypes = \implode('|', $this->getTypes());
+        $expectedTypes = \implode('|', $this->types);
 
         $this->throwException($expectedTypes, $value, $type);
 
@@ -136,11 +136,11 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
         $valueType = \str_replace('[]', '', $type);
 
         foreach ($collection as $value) {
-            if (!$this->assertTypeEquals($valueType, $value)) {
-                return false;
+            if ($this->assertTypeEquals($valueType, $value)) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }

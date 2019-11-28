@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpSuperClassIncompatibleWithInterfaceInspection */
+
 declare(strict_types=1);
 
 namespace Arrayy\Collection;

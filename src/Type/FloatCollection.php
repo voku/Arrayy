@@ -17,6 +17,6 @@ final class FloatCollection extends Collection implements TypeInterface
      */
     public function getType()
     {
-        return ['float', 'int'];
+        return 'float|int';
     }
 }

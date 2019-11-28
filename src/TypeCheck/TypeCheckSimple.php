@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arrayy\TypeCheck;
 
-final class TypeCheckSimple extends AbstractTypeCheck implements TypeCheckInterface
+class TypeCheckSimple extends AbstractTypeCheck implements TypeCheckInterface
 {
     /**
      * @param string|string[] $type
@@ -12,13 +12,7 @@ final class TypeCheckSimple extends AbstractTypeCheck implements TypeCheckInterf
      */
     public function __construct($type, bool $isNullable = false)
     {
-        if (\is_array($type)) {
-            foreach ($type as $typeTmp) {
-                $this->types[] = $typeTmp;
-            }
-        } else {
-            $this->types[] = $type;
-        }
+        $this->getTypesHelper($type);
 
         $this->isNullable = $isNullable;
     }
@@ -33,5 +27,29 @@ final class TypeCheckSimple extends AbstractTypeCheck implements TypeCheckInterf
     public function throwException($expectedTypes, $value, $type): \Throwable
     {
         throw new \TypeError("Invalid type: expected to be of type {{$expectedTypes}}, instead got value `" . \print_r($value, true) . "` with type {{$type}}.");
+    }
+
+    /**
+     * @param mixed $type
+     */
+    protected function getTypesHelper($type)
+    {
+        if (\is_array($type)) {
+            foreach ($type as $typeTmp) {
+                $this->getTypesHelper($typeTmp);
+            }
+
+            return;
+        }
+
+        if (\strpos($type, '|') !== false) {
+            $typesTmp = \explode('|', $type);
+
+            foreach ($typesTmp as $typeTmp) {
+                $this->types[] = $typeTmp;
+            }
+        } else {
+            $this->types[] = $type;
+        }
     }
 }

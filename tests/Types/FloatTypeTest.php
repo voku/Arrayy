@@ -22,10 +22,10 @@ final class FloatTypeTest extends TestCase
 
     public function testFloatArray()
     {
-        $set = new \Arrayy\Type\FloatArrayCollection([[1.0, 1.1, 1.2,], [2.3, 2]]);
+        $set = new \Arrayy\Type\FloatArrayCollection([[1.0, 1.1, 1.2], [2.3, 2]]);
 
         static::assertSame(
-            [[1.0, 1.1, 1.2,], [2.3, 2]],
+            [[1.0, 1.1, 1.2], [2.3, 2]],
             $set->toArray()
         );
     }
