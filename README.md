@@ -350,6 +350,37 @@ foreach ($YOURcollection as $YOURobject) {
 PS: you can also use "dot-notation" to get data from your collections e.g.
     ```$YOURcollection->get('3123.foo.bar');```
 
+## Pre-Defined Typified Collections
+
+### simple example
+
+This will throw a "TypeError"-Exception. 
+
+```php
+use Arrayy\Type\StringCollection;
+
+$collection = new StringCollection(['A', 'B', 'C', 1]);
+
+```
+
+### complex example
+
+This will NOT throw a "TypeError"-Exception. 
+
+```php
+use Arrayy\Type\IntCollection;
+use Arrayy\Type\StringCollection;
+use Arrayy\Type\InstanceCollection;
+use Arrayy\Type\TypeInterface;
+
+$collection = InstanceCollection::construct(
+    TypeInterface::class,
+    [new StringCollection(['A', 'B', 'C']), new IntCollection([1])]
+);
+
+$collection->toArray(true); // [['A', 'B', 'C'], [1]]
+```
+
 ## StaticArrayy
 
 All methods listed under "Instance methods" are available as part of a static

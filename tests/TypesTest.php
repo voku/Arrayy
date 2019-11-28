@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Arrayy\Type\IntCollection;
-use Arrayy\Type\StringType;
+use Arrayy\Type\StringCollection;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -13,7 +13,7 @@ final class TypesTest extends TestCase
 {
     public function testCount()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             4,
@@ -23,7 +23,7 @@ final class TypesTest extends TestCase
 
     public function testChunk()
     {
-        $set = new StringType(['A', 'B', 'C', 'D', 'E']);
+        $set = new StringCollection(['A', 'B', 'C', 'D', 'E']);
 
         $newSet = $set->chunk(2);
 
@@ -39,9 +39,9 @@ final class TypesTest extends TestCase
 
     public function testDiff()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
-        $set1 = new StringType(['A', 'C']);
-        $set2 = new StringType(['D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
+        $set1 = new StringCollection(['A', 'C']);
+        $set2 = new StringCollection(['D']);
 
         static::assertSame(
             [1 => 'B', 3 => 'D'],
@@ -56,7 +56,7 @@ final class TypesTest extends TestCase
 
     public function testEach()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         $newMap = $set->each(static function ($item) {
             return '_' . $item . '_';
@@ -75,7 +75,7 @@ final class TypesTest extends TestCase
 
     public function testFilter()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         $newMap = $set->filter(static function ($item) {
             return \in_array($item, ['A', 'D'], true);
@@ -94,7 +94,7 @@ final class TypesTest extends TestCase
 
     public function testFirst()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             'A',
@@ -109,7 +109,7 @@ final class TypesTest extends TestCase
 
     public function testGet()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             'A',
@@ -119,7 +119,7 @@ final class TypesTest extends TestCase
 
     public function testHas()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertTrue($set->hasValue('A'));
         static::assertFalse($set->hasValue('E'));
@@ -127,7 +127,7 @@ final class TypesTest extends TestCase
 
     public function testImplode()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             'ABCD',
@@ -142,9 +142,9 @@ final class TypesTest extends TestCase
 
     public function testIntersect()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
-        $set1 = new StringType(['A', 'C']);
-        $set2 = new StringType(['A']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
+        $set1 = new StringCollection(['A', 'C']);
+        $set2 = new StringCollection(['A']);
 
         static::assertSame(
             ['A', 'C'],
@@ -159,7 +159,7 @@ final class TypesTest extends TestCase
 
     public function testLast()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             'D',
@@ -174,7 +174,7 @@ final class TypesTest extends TestCase
 
     public function testPad()
     {
-        $set = new StringType(['A', 'B']);
+        $set = new StringCollection(['A', 'B']);
 
         static::assertSame(
             ['A', 'B', 'C', 'C'],
@@ -189,7 +189,7 @@ final class TypesTest extends TestCase
 
     public function testPush()
     {
-        $set = new StringType(['A', 'B', 'C']);
+        $set = new StringCollection(['A', 'B', 'C']);
         $set->push('D');
 
         static::assertSame(
@@ -203,7 +203,7 @@ final class TypesTest extends TestCase
 
     public function testPop()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             'D',
@@ -232,7 +232,7 @@ final class TypesTest extends TestCase
 
     public function testReverse()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             ['D', 'C', 'B', 'A'],
@@ -242,7 +242,7 @@ final class TypesTest extends TestCase
 
     public function testSearch()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             2,
@@ -252,7 +252,7 @@ final class TypesTest extends TestCase
 
     public function testShift()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             'A',
@@ -262,7 +262,7 @@ final class TypesTest extends TestCase
 
     public function testShuffle()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         $newSet = $set->shuffle();
 
@@ -289,7 +289,7 @@ final class TypesTest extends TestCase
 
     public function testSlice()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             ['C', 'D'],
@@ -304,7 +304,7 @@ final class TypesTest extends TestCase
 
     public function testSort()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             ['D', 'C', 'B', 'A'],
@@ -316,7 +316,7 @@ final class TypesTest extends TestCase
 
     public function testSplice()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
         $array = $set->splice(1, 2, ['E', 'F']);
 
         static::assertSame(
@@ -327,14 +327,14 @@ final class TypesTest extends TestCase
 
     public function shuffle()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertIsArray($set->toArray());
     }
 
     public function testUnique()
     {
-        $set = new StringType(['A', 'B', 'C', 'D', 'A']);
+        $set = new StringCollection(['A', 'B', 'C', 'D', 'A']);
 
         static::assertSame(
             ['A', 'B', 'C', 'D'],
@@ -347,7 +347,7 @@ final class TypesTest extends TestCase
      */
     public function testWalk()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         $set->walk(static function (&$item, $index) {
             $item = '_' . $item . '_';
@@ -361,7 +361,7 @@ final class TypesTest extends TestCase
 
     public function testToJson()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             '["A","B","C","D"]',

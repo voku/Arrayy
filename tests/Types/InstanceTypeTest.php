@@ -25,6 +25,18 @@ final class InstanceTypeTest extends TestCase
             [new BoolCollection(), new BoolCollection()],
             $set->toArray()
         );
+
+        // ---
+
+        $collection = InstanceCollection::construct(
+            TypeInterface::class,
+            [new \Arrayy\Type\StringCollection(['A', 'B', 'C']), new \Arrayy\Type\IntCollection([1])]
+        );
+
+        static::assertEquals(
+            [['A', 'B', 'C'], [1]],
+            $collection->toArray(true)
+        );
     }
 
     public function testWrongValue()

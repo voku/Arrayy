@@ -8,7 +8,7 @@ use Arrayy\Collection\Collection;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckInterface;
 
-class StringType extends Collection implements \Arrayy\Type\TypeInterface
+class StringCollection extends Collection implements \Arrayy\Type\TypeInterface
 {
     /**
      * The type (FQCN) associated with this collection.

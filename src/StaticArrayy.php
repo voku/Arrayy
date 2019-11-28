@@ -7,6 +7,8 @@ namespace Arrayy;
 /**
  * INFO: "Method Parameter Information" via PhpStorm |
  * https://www.jetbrains.com/phpstorm/help/viewing-method-parameter-information.html
+ *
+ * @deprecated please use e.g. "\Arrayy\create()"
  */
 class StaticArrayy
 {

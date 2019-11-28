@@ -1953,15 +1953,27 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the current array from the "Arrayy"-object.
      *
+     * @param bool $convertAllArrayyElements
+     *
      * @return array
      */
-    public function getArray(): array
+    public function getArray($convertAllArrayyElements = false): array
     {
         // init
         $array = [];
 
-        foreach ($this->getGenerator() as $key => $value) {
-            $array[$key] = $value;
+        if ($convertAllArrayyElements) {
+            foreach ($this->getGenerator() as $key => $value) {
+                if ($value instanceof Arrayy) {
+                    $value = $value->getArray(true);
+                }
+
+                $array[$key] = $value;
+            }
+        } else {
+            foreach ($this->getGenerator() as $key => $value) {
+                $array[$key] = $value;
+            }
         }
 
         return $array;
@@ -4438,10 +4450,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * alias: for "Arrayy->getArray()"
      *
      * @see Arrayy::getArray()
+     *
+     * @param bool $convertAllArrayyElements
      */
-    public function toArray()
+    public function toArray(bool $convertAllArrayyElements = false)
     {
-        return $this->getArray();
+        return $this->getArray($convertAllArrayyElements);
     }
 
     /**

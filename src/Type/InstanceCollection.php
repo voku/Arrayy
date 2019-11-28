@@ -21,7 +21,7 @@ final class InstanceCollection extends Collection implements \Arrayy\Type\TypeIn
         $data = [],
         string $iteratorClass = null,
         bool $checkPropertiesInConstructor = null,
-        string $className = ''
+        $className = ''
     ) {
         // fallback
         if ($iteratorClass === null) {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Arrayy\Type\StringType;
+use Arrayy\Type\StringCollection;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -12,7 +12,7 @@ final class StringTypeTest extends TestCase
 {
     public function testArray()
     {
-        $set = new StringType(['A', 'B', 'C', 'D']);
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             ['A', 'B', 'C', 'D'],
@@ -24,6 +24,6 @@ final class StringTypeTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        new StringType(['A', 'B', 'C', 1]);
+        new StringCollection(['A', 'B', 'C', 1]);
     }
 }
