@@ -22,6 +22,7 @@ A PHP array manipulation library. Compatible with PHP 7+
 * [PhpDoc @property checking](#phpdoc-property-checking)
 * [OO and Chaining](#oo-and-chaining)
 * [Collections](#collections)
+* [Pre-Defined Typified Collections](#pre-defined-typified-collections])
 * [Class methods](#class-methods)
     * [use a "default object"](#use-a-default-object)
     * [create](#createarray-array--arrayy-immutable)
