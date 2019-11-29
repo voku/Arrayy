@@ -149,7 +149,6 @@ class Collection extends AbstractCollection
      */
     public function toBase(): self
     {
-        /** @noinspection SelfClassReferencingInspection */
         return self::construct($this->getType(), $this->getArray());
     }
 }
