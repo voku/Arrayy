@@ -1964,7 +1964,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($convertAllArrayyElements) {
             foreach ($this->getGenerator() as $key => $value) {
-                if ($value instanceof Arrayy) {
+                if ($value instanceof self) {
                     $value = $value->getArray(true);
                 }
 
