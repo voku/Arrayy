@@ -2,6 +2,7 @@
 
 ### 6.0.0
 
+- instance of "InvalidArgumentException" we now use "TypeError" for type errors
 - add "Arrayy->checkPropertiesMismatch"
 - add pre-defined typified collections (TypeInterface)
 - merge type check from Arrayy & Collection
