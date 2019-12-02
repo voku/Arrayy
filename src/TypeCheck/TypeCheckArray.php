@@ -7,7 +7,14 @@ use Arrayy\ArrayyIterator;
 
 class TypeCheckArray extends \Arrayy\ArrayyStrict
 {
-    public function __construct($data = [], string $iteratorClass = ArrayyIterator::class, bool $checkPropertiesInConstructor = true)
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(
+        $data = [],
+        string $iteratorClass = ArrayyIterator::class,
+        bool $checkPropertiesInConstructor = true
+    )
     {
         $this->properties[Arrayy::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES] = new TypeCheckSimple(TypeCheckInterface::class);
 

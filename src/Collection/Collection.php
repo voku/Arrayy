@@ -71,17 +71,22 @@ class Collection extends AbstractCollection
      *
      * @param mixed                                    $data
      *                                                                               <p>
-     *                                                                               The initial items to store in the collection.
+     *                                                                               The initial items to store in the
+     *                                                                               collection.
      *                                                                               </p>
      * @param string                                   $iteratorClass                optional <p>
-     *                                                                               You can overwrite the ArrayyIterator, but mostly you don't
-     *                                                                               need this option.
+     *                                                                               You can overwrite the
+     *                                                                               ArrayyIterator, but mostly you
+     *                                                                               don't need this option.
      *                                                                               </p>
      * @param bool                                     $checkPropertiesInConstructor optional <p>
-     *                                                                               You need to extend the "Arrayy"-class and you need to set
-     *                                                                               the $checkPropertiesMismatchInConstructor class property
-     *                                                                               to
-     *                                                                               true, otherwise this option didn't not work anyway.
+     *                                                                               You need to extend the
+     *                                                                               "Arrayy"-class and you need to set
+     *                                                                               the
+     *                                                                               $checkPropertiesMismatchInConstructor
+     *                                                                               class property to true, otherwise
+     *                                                                               this option didn't not work
+     *                                                                               anyway.
      *                                                                               </p>
      * @param TypeCheckArray|TypeCheckInterface[]|null $type
      */

@@ -18,6 +18,10 @@ use Arrayy\TypeCheck\TypeCheckSimple;
  * minimize the effort required to implement this interface.
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
+ *
+ * @psalm-template      TKey of array-key
+ * @psalm-template      T
+ * @template-implements CollectionInterface<TKey,T>
  */
 abstract class AbstractCollection extends Arrayy implements CollectionInterface
 {
@@ -85,38 +89,32 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * @return static[]
-     */
-    public function getCollection(): array
-    {
-        return $this->array;
-    }
-
-    /**
-     * The type (FQCN) associated with this collection.
+     * Append a (key) + value to the current array.
      *
-     * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
-     */
-    abstract public function getType();
-
-    /**
-     * Merge current items and items of given collections into a new one.
-     *
-     * @param CollectionInterface ...$collections The collections to merge.
-     *
-     * @throws \InvalidArgumentException if any of the given collections are not of the same type
+     * @param mixed $value
+     * @param mixed $key
      *
      * @return static
+     *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+     *
+     * @psalm-return Arrayy<TKey,T>
      */
-    public function merge(CollectionInterface ...$collections): CollectionInterface
+    public function append($value, $key = null): self
     {
-        foreach ($collections as $collection) {
-            if ($collection instanceof Arrayy) {
-                foreach ($collection as $item) {
-                    $this->append($item);
-                }
+        if (
+            $value instanceof self
+            &&
+            !$value instanceof TypeInterface
+        ) {
+            foreach ($value as $valueTmp) {
+                parent::append($valueTmp, $key);
             }
+
+            return $this;
         }
+
+        $return = parent::append($value, $key);
+        $this->array = $return->array;
 
         return $this;
     }
@@ -152,8 +150,10 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the prepended value.</p>
+     *
+     * @psalm-return Arrayy<TKey,T>
      */
-    public function prepend($value, $key = null): Arrayy
+    public function prepend($value, $key = null): self
     {
         if (
             $value instanceof self
@@ -167,33 +167,10 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             return $this;
         }
 
-        return parent::prepend($value, $key);
-    }
+        $return = parent::prepend($value, $key);
+        $this->array = $return->array;
 
-    /**
-     * Append a (key) + value to the current array.
-     *
-     * @param mixed $value
-     * @param mixed $key
-     *
-     * @return static
-     *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
-     */
-    public function append($value, $key = null): Arrayy
-    {
-        if (
-            $value instanceof self
-            &&
-            !$value instanceof TypeInterface
-        ) {
-            foreach ($value as $valueTmp) {
-                parent::append($valueTmp, $key);
-            }
-
-            return $this;
-        }
-
-        return parent::append($value, $key);
+        return $this;
     }
 
     /**
@@ -218,6 +195,43 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
+     * @return static[]
+     */
+    public function getCollection(): array
+    {
+        return $this->array;
+    }
+
+    /**
+     * The type (FQCN) associated with this collection.
+     *
+     * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
+     */
+    abstract public function getType();
+
+    /**
+     * Merge current items and items of given collections into a new one.
+     *
+     * @param CollectionInterface ...$collections The collections to merge.
+     *
+     * @throws \InvalidArgumentException if any of the given collections are not of the same type
+     *
+     * @return static
+     */
+    public function merge(CollectionInterface ...$collections): self
+    {
+        foreach ($collections as $collection) {
+            if ($collection instanceof Arrayy) {
+                foreach ($collection as $item) {
+                    $this->append($item);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Returns a collection of matching items.
      *
      * @param string $keyOrPropertyOrMethod the property or method to evaluate
@@ -227,7 +241,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return static
      */
-    public function where(string $keyOrPropertyOrMethod, $value): CollectionInterface
+    public function where(string $keyOrPropertyOrMethod, $value): self
     {
         return $this->filter(
             function ($item) use ($keyOrPropertyOrMethod, $value) {

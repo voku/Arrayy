@@ -175,6 +175,21 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertTrue($modelCollectionExpected == $newCollection);
     }
 
+    public function testClear()
+    {
+        $pet1 = new ModelA(['pet' => ['cat']]);
+        $pet2 = new ModelB(['pet' => ['dog', 'bird']]);
+
+        $modelCollection = new ModelsCollection([$pet1, $pet2]);
+
+        static::assertSame(ModelInterface::class, $modelCollection->getType());
+        static::assertTrue($modelCollection->count() > 0);
+
+        $modelCollection->clear();
+
+        static::assertSame(0, $modelCollection->count());
+    }
+
     public function testTypesForAllProperties()
     {
         $model = new ModelC(['test', 'foo']);

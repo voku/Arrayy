@@ -4562,6 +4562,12 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy = A::create($array)->removeValue($value);
 
         static::assertSame($result, $arrayy->getArray());
+
+        // --
+
+        $arrayy = A::create($array)->removeElement($value);
+
+        static::assertSame($result, $arrayy->getArray());
     }
 
     public function testRepeat()

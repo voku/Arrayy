@@ -31,6 +31,8 @@ class TypeCheckSimple extends AbstractTypeCheck implements TypeCheckInterface
 
     /**
      * @param mixed $type
+     *
+     * @return void
      */
     protected function getTypesHelper($type)
     {
