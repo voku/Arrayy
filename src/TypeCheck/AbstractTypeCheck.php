@@ -12,12 +12,12 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
     protected $isNullable = false;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $types = [];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     private static $typeMapping = [
         'int'   => 'integer',
@@ -26,7 +26,7 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
     ];
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getTypes(): array
     {

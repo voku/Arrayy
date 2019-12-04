@@ -56,6 +56,8 @@ final class ArrayyRewindableGenerator implements \Iterator
      *
      * @see  Iterator::next
      * @see http://php.net/manual/en/iterator.next.php
+     *
+     * @return void
      */
     public function next()
     {
@@ -93,6 +95,8 @@ final class ArrayyRewindableGenerator implements \Iterator
      *
      * @see  Iterator::rewind
      * @see http://php.net/manual/en/iterator.rewind.php
+     *
+     * @return void
      */
     public function rewind()
     {
@@ -103,6 +107,9 @@ final class ArrayyRewindableGenerator implements \Iterator
         }
     }
 
+    /**
+     * @return void
+     */
     private function generateGenerator()
     {
         $this->generator = \call_user_func($this->generatorFunction);

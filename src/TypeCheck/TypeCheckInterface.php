@@ -17,7 +17,7 @@ interface TypeCheckInterface
     public function checkType(&$value): bool;
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getTypes(): array;
 

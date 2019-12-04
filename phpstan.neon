@@ -1,11 +1,34 @@
 parameters:
-    level: 7
+    level: max
+    checkGenericClassInNonGenericObjectType: false
     paths:
         - %currentWorkingDirectory%/src/
     ignoreErrors:
-        - '/TypeCheckArray&iterable/'
-        - '/comparison using === between true and false/'
-        - '/Arrayy\\Arrayy::keyExists\(\) expects int\|string, bool\|int\|string given/'
-        - '/parseDocTypeObject\(\) should return array<string>\|string but returns array<int, array<string>\|string>\./'
+        # not supported by phpstan?
+        - '/between mixed and ResourceBundle/'
+        - '/between mixed and SimpleXMLElement/'
+        - '/call_user_func_array/'
         - '/Parameter #[1-2] \$function of.*callable.*/'
         - '/Parameter #[1-2] \$callback of.*callable.*/'
+        # false-positive?
+        - '/createFromObject\(\) should return static/'
+        - '/comparison using === between true and false/'
+        # ignore gernal errors
+        - '/Unsafe usage of new static/'
+        - '/getIterator\(\) should be compatible/'
+        - '/getIterator\(\) should return Iterator/'
+        # ignore not specific types
+        - '/parseDocTypeObject\(\) should return array<string>\|string/'
+        - '/Collection::getType\(\) should return/'
+        -
+            message: ~Result of \&\& is always false~
+            path: %currentWorkingDirectory%/src/Collection/AbstractCollection.php
+        -
+            message: ~Instanceof between \*NEVER\*~
+            path: %currentWorkingDirectory%/src/Collection/AbstractCollection.php
+        -
+            message: ~no value type specified in iterable~
+            path: %currentWorkingDirectory%/src/Arrayy.php
+        -
+            message: ~no value type specified in iterable~
+            path: %currentWorkingDirectory%/src/ArrayyRewindableGenerator.php

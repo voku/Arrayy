@@ -8,8 +8,6 @@ use function Arrayy\array_first;
 use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
 use Arrayy\Collection\Collection;
-use Arrayy\TypeCheck\TypeCheckArray;
-use Arrayy\TypeCheck\TypeCheckInterface;
 
 final class DetectTypeCollection extends Collection implements TypeInterface
 {
@@ -43,7 +41,7 @@ final class DetectTypeCollection extends Collection implements TypeInterface
     /**
      * The type (FQCN) associated with this collection.
      *
-     * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
+     * @return string
      */
     public function getType()
     {

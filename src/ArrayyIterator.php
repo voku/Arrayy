@@ -12,9 +12,9 @@ class ArrayyIterator extends \ArrayIterator
     private $class;
 
     /**
-     * @param array  $array
-     * @param int    $flags
-     * @param string $class
+     * @param array<mixed> $array
+     * @param int          $flags
+     * @param string       $class
      */
     public function __construct(array $array = [], int $flags = 0, string $class = '')
     {

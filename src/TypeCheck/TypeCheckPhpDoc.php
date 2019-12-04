@@ -32,7 +32,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
     /**
      * @param \phpDocumentor\Reflection\DocBlock\Tags\Property $phpDocumentorReflectionProperty
      *
-     * @return static
+     * @return self
      */
     public static function fromPhpDocumentorProperty(\phpDocumentor\Reflection\DocBlock\Tags\Property $phpDocumentorReflectionProperty): self
     {

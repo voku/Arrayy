@@ -3,15 +3,17 @@
 namespace Arrayy\tests;
 
 use Arrayy\Collection\AbstractCollection;
-use Arrayy\TypeCheck\TypeCheckArray;
-use Arrayy\TypeCheck\TypeCheckInterface;
+use Arrayy\Collection\CollectionInterface;
 
-class StdClassCollection extends AbstractCollection
+/**
+ * @phpstan-implements CollectionInterface<\stdClass>
+ */
+class StdClassCollection extends AbstractCollection implements CollectionInterface
 {
     /**
      * The type (FQCN) associated with this collection.
      *
-     * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
+     * @return string
      */
     public function getType()
     {

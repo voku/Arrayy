@@ -15,6 +15,8 @@ use Arrayy\TypeCheck\TypeCheckPhpDoc;
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @phpstan-template T
  */
 class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \JsonSerializable, \Countable
 {
@@ -22,13 +24,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * @var array
-     * @psalm-var array<TKey,T>
+     * @phpstan-var array<T>
      */
     protected $array = [];
 
     /**
      * @var ArrayyRewindableGenerator|null
-     * @psalm-var ArrayyRewindableGenerator<TKey,T>|null
+     * @phpstan-var ArrayyRewindableGenerator<T>|null
      */
     protected $generator;
 
@@ -63,7 +65,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected $checkPropertiesMismatch = true;
 
     /**
-     * @var array|TypeCheckArray<TypeCheckInterface>
+     * @var array<TypeCheckInterface>|\Arrayy\Type\TypeInterface|TypeCheckArray<TypeCheckInterface>
      */
     protected $properties = [];
 
@@ -84,6 +86,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                             to
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
+     *
+     * @phpstan-param class-string $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -136,6 +140,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param mixed $key
      * @param mixed $value
+     *
+     * @return void
      */
     public function __set($key, $value)
     {
@@ -191,7 +197,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see Arrayy::append()
      */
-    public function add($value): self
+    public function add($value)
     {
         return $this->append($value);
     }
@@ -310,6 +316,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Creates a copy of the ArrayyObject.
      *
      * @return array
+     *
+     * @phpstan-return array<T>
      */
     public function getArrayCopy(): array
     {
@@ -321,8 +329,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Returns a new iterator, thus implementing the \Iterator interface.
      *
-     * @return \Iterator
-     *                   <p>An iterator for the values in the array.</p>
+     * @return \Iterator<mixed, mixed>
+     *                          <p>An iterator for the values in the array.</p>
      */
     public function getIterator(): \Iterator
     {
@@ -406,6 +414,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param bool|int|string $offset
      *
      * @return bool
+     *
+     * @noinspection PhpSillyAssignmentInspection
      */
     public function offsetExists($offset): bool
     {
@@ -419,6 +429,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ((bool) $offset === $offset) {
             $offset = (int) $offset;
         }
+
+        /** @var int|string $offset - hint for phpstan */
+        $offset = $offset;
 
         $tmpReturn = $this->keyExists($offset);
 
@@ -480,6 +493,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param int|string|null $offset
      * @param mixed           $value
+     *
+     * @return void
      */
     public function offsetSet($offset, $value)
     {
@@ -504,6 +519,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Unset an offset.
      *
      * @param int|string $offset
+     *
+     * @return void
      */
     public function offsetUnset($offset)
     {
@@ -565,6 +582,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param string $class
      *
      * @throws \InvalidArgumentException
+     *
+     * @return void
      */
     public function setIteratorClass($class)
     {
@@ -904,6 +923,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param bool             $strict
      *
      * @return bool
+     *
+     * @phpstan-param T $value
      */
     public function contains($value, bool $recursive = false, bool $strict = true): bool
     {
@@ -1033,6 +1054,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *
      * @see Arrayy::contains()
+     *
+     * @phpstan-param T $value
      */
     public function containsValue($value): bool
     {
@@ -1047,6 +1070,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *
      * @see Arrayy::contains()
+     *
+     * @phpstan-param T $value
      */
     public function containsValueRecursive($value): bool
     {
@@ -1275,6 +1300,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Gets the element of the array at the current internal iterator position.
      *
      * @return mixed
+     *
+     * @phpstan-return T|false
      */
     public function current()
     {
@@ -1335,6 +1362,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Delete the given key or keys.
      *
      * @param int|int[]|string|string[] $keyOrKeys
+     *
+     * @return void
      */
     public function delete($keyOrKeys)
     {
@@ -1595,7 +1624,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      */
-    public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH): self
+    public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH)
     {
         if (!$closure) {
             return $this->clean();
@@ -1638,40 +1667,40 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         $ops = [
-            'eq' => static function ($item, $prop, $value) {
+            'eq' => static function ($item, $prop, $value): bool {
                 return $item[$prop] === $value;
             },
-            'gt' => static function ($item, $prop, $value) {
+            'gt' => static function ($item, $prop, $value): bool {
                 return $item[$prop] > $value;
             },
-            'ge' => static function ($item, $prop, $value) {
+            'ge' => static function ($item, $prop, $value): bool {
                 return $item[$prop] >= $value;
             },
-            'gte' => static function ($item, $prop, $value) {
+            'gte' => static function ($item, $prop, $value): bool {
                 return $item[$prop] >= $value;
             },
-            'lt' => static function ($item, $prop, $value) {
+            'lt' => static function ($item, $prop, $value): bool {
                 return $item[$prop] < $value;
             },
-            'le' => static function ($item, $prop, $value) {
+            'le' => static function ($item, $prop, $value): bool {
                 return $item[$prop] <= $value;
             },
-            'lte' => static function ($item, $prop, $value) {
+            'lte' => static function ($item, $prop, $value): bool {
                 return $item[$prop] <= $value;
             },
-            'ne' => static function ($item, $prop, $value) {
+            'ne' => static function ($item, $prop, $value): bool {
                 return $item[$prop] !== $value;
             },
-            'contains' => static function ($item, $prop, $value) {
+            'contains' => static function ($item, $prop, $value): bool {
                 return \in_array($item[$prop], (array) $value, true);
             },
-            'notContains' => static function ($item, $prop, $value) {
+            'notContains' => static function ($item, $prop, $value): bool {
                 return !\in_array($item[$prop], (array) $value, true);
             },
-            'newer' => static function ($item, $prop, $value) {
+            'newer' => static function ($item, $prop, $value): bool {
                 return \strtotime($item[$prop]) > \strtotime($value);
             },
-            'older' => static function ($item, $prop, $value) {
+            'older' => static function ($item, $prop, $value): bool {
                 return \strtotime($item[$prop]) < \strtotime($value);
             },
         ];
@@ -2064,7 +2093,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see Arrayy::keys()
      */
-    public function getKeys(): self
+    public function getKeys()
     {
         return $this->keys();
     }
@@ -2155,7 +2184,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                <p>The values of all elements in this array, in the order they
      *                appear in the array.</p>
      */
-    public function getValues(): self
+    public function getValues()
     {
         $this->generatorToArray();
 
@@ -2319,7 +2348,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param mixed $value <p>The value to search for.</p>
      *
-     * @return mixed
+     * @return false|mixed
      *
      * @see Arrayy::searchIndex()
      */
@@ -2632,13 +2661,23 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         // non recursive
 
         if ($search_values === null) {
-            $arrayFunction = function () {
+            $arrayFunction = /**
+             * @return \Generator
+             *
+             * @phpstan-return \Generator<int, mixed, mixed, void>
+             */
+            function (): \Generator {
                 foreach ($this->getGenerator() as $key => $value) {
                     yield $key;
                 }
             };
         } else {
-            $arrayFunction = function () use ($search_values, $strict) {
+            $arrayFunction = /**
+             * @return \Generator
+             *
+             * @phpstan-return \Generator<int, mixed, mixed, void>
+             */
+            function () use ($search_values, $strict): \Generator {
                 $is_array_tmp = \is_array($search_values);
 
                 foreach ($this->getGenerator() as $key => $value) {
@@ -2833,7 +2872,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Arrayy object with modified elements.</p>
      */
-    public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments): self
+    public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments)
     {
         $useArguments = \func_num_args() > 2;
 
@@ -3664,7 +3703,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         foreach ($this->getGenerator() as $val) {
             if (\is_array($val) === true) {
-                $result[] = (new self($val))->reduce_dimension($unique)->getArray();
+                $result[] = (new static($val))->reduce_dimension($unique)->getArray();
             } else {
                 $result[] = [$val];
             }
@@ -3672,7 +3711,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $result = $result === [] ? [] : \array_merge(...$result);
 
-        $resultArrayy = new self($result);
+        $resultArrayy = new static($result);
 
         return $unique ? $resultArrayy->unique() : $resultArrayy;
     }
@@ -3726,7 +3765,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      */
-    public function remove($key): self
+    public function remove($key)
     {
         // recursive call
         if (\is_array($key) === true) {
@@ -3757,7 +3796,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      */
-    public function removeElement($element): self
+    public function removeElement($element)
     {
         return $this->removeValue($element);
     }
@@ -4342,7 +4381,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>A slice of the original array with length $length.</p>
      */
-    public function slice(int $offset, int $length = null, bool $preserveKeys = false): self
+    public function slice(int $offset, int $length = null, bool $preserveKeys = false)
     {
         return static::create(
             \array_slice(
@@ -4860,6 +4899,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param mixed      $path
      * @param callable   $callable
      * @param array|null $currentOffset
+     *
+     * @return void
      */
     protected function callAtPath($path, $callable, &$currentOffset = null)
     {
@@ -5186,8 +5227,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      */
-    protected function internalSet($key, &$value, $checkProperties = true): bool
-    {
+    protected function internalSet(
+        $key,
+        &$value,
+        $checkProperties = true
+    ): bool {
         if (
             $checkProperties === true
             &&
@@ -5253,6 +5297,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @param array $data
      * @param bool  $checkPropertiesInConstructor
+     *
+     * @return void
      */
     protected function setInitialValuesAndProperties(array &$data, bool $checkPropertiesInConstructor)
     {
@@ -5371,6 +5417,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @param int|string|null $key
      * @param mixed           $value
+     *
+     * @return void
      */
     private function checkType($key, $value)
     {

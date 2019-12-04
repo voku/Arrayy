@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arrayy\Collection;
 
 use Arrayy\ArrayyIterator;
+use Arrayy\Type\TypeInterface;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckInterface;
 
@@ -62,6 +63,9 @@ use Arrayy\TypeCheck\TypeCheckInterface;
  * ```
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
+ *
+ * @phpstan-template T
+ * @phpstan-extends AbstractCollection<T>
  */
 class Collection extends AbstractCollection
 {
@@ -69,32 +73,34 @@ class Collection extends AbstractCollection
      * Constructs a collection object of the specified type, optionally with the
      * specified data.
      *
-     * @param mixed                                    $data
-     *                                                                               <p>
-     *                                                                               The initial items to store in the
-     *                                                                               collection.
-     *                                                                               </p>
-     * @param string                                   $iteratorClass                optional <p>
-     *                                                                               You can overwrite the
-     *                                                                               ArrayyIterator, but mostly you
-     *                                                                               don't need this option.
-     *                                                                               </p>
-     * @param bool                                     $checkPropertiesInConstructor optional <p>
-     *                                                                               You need to extend the
-     *                                                                               "Arrayy"-class and you need to set
-     *                                                                               the
-     *                                                                               $checkPropertiesMismatchInConstructor
-     *                                                                               class property to true, otherwise
-     *                                                                               this option didn't not work
-     *                                                                               anyway.
-     *                                                                               </p>
-     * @param TypeCheckArray|TypeCheckInterface[]|null $type
+     * @param mixed              $data
+     *                                                         <p>
+     *                                                         The initial items to store in the
+     *                                                         collection.
+     *                                                         </p>
+     * @param string             $iteratorClass                optional <p>
+     *                                                         You can overwrite the
+     *                                                         ArrayyIterator, but mostly you
+     *                                                         don't need this option.
+     *                                                         </p>
+     * @param bool               $checkPropertiesInConstructor optional <p>
+     *                                                         You need to extend the
+     *                                                         "Arrayy"-class and you need to set
+     *                                                         the
+     *                                                         $checkPropertiesMismatchInConstructor
+     *                                                         class property to true, otherwise
+     *                                                         this option didn't not work
+     *                                                         anyway.
+     *                                                         </p>
+     * @param TypeInterface|null $type
+     *
+     * @phpstan-param class-string $iteratorClass
      */
     public function __construct(
         $data = [],
         string $iteratorClass = null,
         bool $checkPropertiesInConstructor = null,
-        TypeCheckArray $type = null
+        TypeInterface $type = null
     ) {
         // fallback
         if ($iteratorClass === null) {
@@ -117,10 +123,13 @@ class Collection extends AbstractCollection
 
     /**
      * @param string|TypeCheckArray|TypeCheckInterface[] $type
-     * @param array                                      $data
+     * @param array<mixed>                               $data
      * @param bool                                       $checkPropertiesInConstructorAndType
      *
      * @return static
+     *
+     * @phpstan-param array<T> $data
+     * @phpstan-return static<T>
      */
     public static function construct(
         $type,
@@ -140,7 +149,7 @@ class Collection extends AbstractCollection
     /**
      * The type (FQCN) associated with this collection.
      *
-     * @return TypeCheckArray|TypeCheckInterface[]
+     * @return string|TypeCheckArray|TypeCheckInterface[]
      */
     public function getType()
     {
@@ -148,9 +157,26 @@ class Collection extends AbstractCollection
     }
 
     /**
+     * Returns a new iterator, thus implementing the \Iterator interface.
+     *
+     * @return \ArrayIterator<mixed, mixed>
+     *                               <p>An iterator for the values in the array.</p>
+     *
+     * @phpstan-return \Iterator<T>
+     *
+     * @noinspection SenselessProxyMethodInspection
+     */
+    public function getIterator(): \Iterator
+    {
+        return parent::getIterator();
+    }
+
+    /**
      * Get a base Collection instance from this Collection.
      *
      * @return self
+     *
+     * @phpstan-return self<T>
      */
     public function toBase(): self
     {

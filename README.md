@@ -371,10 +371,10 @@ This will NOT throw a "TypeError"-Exception.
 ```php
 use Arrayy\Type\IntCollection;
 use Arrayy\Type\StringCollection;
-use Arrayy\Type\InstanceCollection;
+use Arrayy\Type\InstancesCollection;
 use Arrayy\Type\TypeInterface;
 
-$collection = InstanceCollection::construct(
+$collection = InstancesCollection::construct(
     TypeInterface::class,
     [new StringCollection(['A', 'B', 'C']), new IntCollection([1])]
 );

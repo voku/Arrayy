@@ -2,7 +2,6 @@
 
 namespace Arrayy\Collection;
 
-use Arrayy\Arrayy;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckInterface;
 
@@ -13,6 +12,8 @@ use Arrayy\TypeCheck\TypeCheckInterface;
  * and others unordered.
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
+ *
+ * @phpstan-template T
  */
 interface CollectionInterface
 {
@@ -21,15 +22,15 @@ interface CollectionInterface
      *
      * @param mixed $value
      *
-     * @return Arrayy
-     *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+     * @return CollectionInterface
+     *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @see          CollectionInterface::append()
+     * @see CollectionInterface::append()
      *
-     * @psalm-param  T $value
-     * @psalm-return Arrayy<TKey,T>
+     * @phpstan-param  T $value
+     * @phpstan-return CollectionInterface<T>
      */
-    public function add($value): Arrayy;
+    public function add($value);
 
     /**
      * Append a (key) + value to the current array.
@@ -37,16 +38,18 @@ interface CollectionInterface
      * @param mixed $value
      * @param mixed $key
      *
-     * @return Arrayy
-     *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+     * @return CollectionInterface
+     *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @psalm-param  T $value
-     * @psalm-return Arrayy<TKey,T>
+     * @phpstan-param  T|array<T> $value
+     * @phpstan-return CollectionInterface<T>
      */
-    public function append($value, $key = null): Arrayy;
+    public function append($value, $key = null): CollectionInterface;
 
     /**
      * Clears the current collection, by removing all elements.
+     *
+     * @return void
      */
     public function clear();
 
@@ -57,7 +60,7 @@ interface CollectionInterface
      *
      * @throws \InvalidArgumentException if property or method is not defined
      *
-     * @return array
+     * @return array<mixed>
      */
     public function column(string $keyOrPropertyOrMethod): array;
 
@@ -73,7 +76,7 @@ interface CollectionInterface
      * @return bool
      *              <p>TRUE if the collection contains the element, FALSE otherwise.</p>
      *
-     * @psalm-param T $value
+     * @phpstan-param T $value
      */
     public function contains($value, bool $recursive = false, bool $strict = true): bool;
 
@@ -86,8 +89,6 @@ interface CollectionInterface
      * @return bool
      *              <p>TRUE if the collection contains an element with the specified key/index,
      *              FALSE otherwise.</p>
-     *
-     * @psalm-param TKey $key
      */
     public function containsKey($key): bool;
 
@@ -96,7 +97,7 @@ interface CollectionInterface
      *
      * @return mixed
      *
-     * @psalm-return T|false
+     * @phpstan-return T|false
      */
     public function current();
 
@@ -107,8 +108,6 @@ interface CollectionInterface
      *
      * @return bool
      *              <p>TRUE if the predicate is TRUE for at least one element, FALSE otherwise.</p>
-     *
-     * @psalm-param Closure(TKey=, T=):bool $closure
      */
     public function exists(\Closure $closure): bool;
 
@@ -119,33 +118,30 @@ interface CollectionInterface
      * @param \Closure $closure the predicate used for filtering
      * @param int      $flag    [optional]
      *
-     * @return Arrayy
-     *                <p>A collection with the results of the filter operation.</p>
+     * @return CollectionInterface
+     *                             <p>A collection with the results of the filter operation.</p>
      *
-     * @psalm-param  Closure(T=, TKey=):bool $closure
-     * @psalm-return Collection<TKey, T>
+     * @phpstan-return CollectionInterface<T>
      */
-    public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH): Arrayy;
+    public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH);
 
     /**
      * Sets the internal iterator to the first element in the collection and returns this element.
      *
      * @return mixed
      *
-     * @psalm-return T|false
+     * @phpstan-return T|false
      */
     public function first();
 
     /**
      * Tests whether the given predicate p holds for all elements of this collection.
      *
-     * @param \Closure $p the predicate
+     * @param \Closure $closure the predicate
      *
      * @return bool TRUE, if the predicate yields TRUE for all elements, FALSE otherwise
-     *
-     * @psalm-param Closure(TKey=, T=):bool $p
      */
-    public function forAll(\Closure $p): bool;
+    public function forAll(\Closure $closure): bool;
 
     /**
      * Gets the element at the specified key/index.
@@ -155,26 +151,23 @@ interface CollectionInterface
      *
      * @return mixed
      *
-     * @psalm-param  TKey $key
-     * @psalm-return T|null
+     * @phpstan-return T|null
      */
     public function get($key);
 
     /**
-     * @return static[]
+     * @return array
+     *
+     * @phpstan-return array<T>
      */
     public function getCollection(): array;
 
     /**
      * Gets all keys/indices of the collection.
      *
-     * @return Arrayy
-     *                <p>The keys/indices of the collection, in the order of the corresponding
-     *                elements in the collection.</p>
-     *
-     * @psalm-return TKey[]
+     * @return CollectionInterface
      */
-    public function getKeys(): Arrayy;
+    public function getKeys();
 
     /**
      * The type (FQCN) associated with this collection.
@@ -186,13 +179,11 @@ interface CollectionInterface
     /**
      * Gets all values of the collection.
      *
-     * @return Arrayy
-     *                <p>The values of all elements in the collection, in the order they
-     *                appear in the collection.</p>
+     * @return CollectionInterface
      *
-     * @psalm-return T[]
+     * @phpstan-return T[]
      */
-    public function getValues(): Arrayy;
+    public function getValues();
 
     /**
      * Gets the index/key of a given element. The comparison of two elements is strict,
@@ -201,10 +192,9 @@ interface CollectionInterface
      *
      * @param mixed $element the element to search for
      *
-     * @return bool|int|string the key/index of the element or FALSE if the element was not found
+     * @return false|mixed the key/index of the element or FALSE if the element was not found
      *
-     * @psalm-param  T $element
-     * @psalm-return TKey|false
+     * @phpstan-param T $element
      */
     public function indexOf($element);
 
@@ -222,8 +212,6 @@ interface CollectionInterface
      * Gets the key/index of the element at the current iterator position.
      *
      * @return int|string|null
-     *
-     * @psalm-return TKey|null
      */
     public function key();
 
@@ -232,7 +220,7 @@ interface CollectionInterface
      *
      * @return mixed
      *
-     * @psalm-return T|false
+     * @phpstan-return T|false
      */
     public function last();
 
@@ -244,13 +232,11 @@ interface CollectionInterface
      * @param bool     $useKeyAsSecondParameter
      * @param mixed    ...$arguments
      *
-     * @return Arrayy
+     * @return CollectionInterface
      *
-     * @psalm-template U
-     * @psalm-param    Closure(T=):U $func
-     * @psalm-return   Collection<TKey, U>
+     * @phpstan-return   CollectionInterface<T>
      */
-    public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments): Arrayy;
+    public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments);
 
     /**
      * Merge current items and items of given collections into a new one.
@@ -268,7 +254,7 @@ interface CollectionInterface
      *
      * @return mixed
      *
-     * @psalm-return T|false
+     * @phpstan-return T|false
      */
     public function next();
 
@@ -277,6 +263,8 @@ interface CollectionInterface
      *
      * @param int|string|null $offset
      * @param mixed           $value
+     *
+     * @return void
      */
     public function offsetSet($offset, $value);
 
@@ -286,12 +274,11 @@ interface CollectionInterface
      *
      * @param \Closure $p the predicate on which to partition
      *
-     * @return array<int, Collection> An array with two elements. The first element contains the collection
+     * @return array<int, CollectionInterface> An array with two elements. The first element contains the collection
      *                    of elements where the predicate returned TRUE, the second element
      *                    contains the collection of elements where the predicate returned FALSE.
      *
-     * @psalm-param  Closure(TKey=, T=):bool $p
-     * @psalm-return array{0: Collection<TKey, T>, 1: Collection<TKey, T>}
+     * @phpstan-return array{0: CollectionInterface<T>, 1: CollectionInterface<T>}
      */
     public function partition(\Closure $p): array;
 
@@ -301,13 +288,13 @@ interface CollectionInterface
      * @param mixed $value
      * @param mixed $key
      *
-     * @return Arrayy
-     *                <p>(Mutable) Return this Arrayy object, with the prepended value.</p>
+     * @return CollectionInterface
+     *                             <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
-     * @psalm-param  T $element
-     * @psalm-return Arrayy<TKey,T>
+     * @phpstan-param  T $value
+     * @phpstan-return CollectionInterface<T>
      */
-    public function prepend($value, $key = null): Arrayy;
+    public function prepend($value, $key = null): CollectionInterface;
 
     /**
      * Removes the element at the specified index from the collection.
@@ -316,12 +303,11 @@ interface CollectionInterface
      *
      * @param mixed $key
      *
-     * @return Arrayy
+     * @return CollectionInterface
      *
-     * @psalm-param  TKey $key
-     * @psalm-return Arrayy<TKey,T>
+     * @phpstan-return CollectionInterface<T>
      */
-    public function remove($key): Arrayy;
+    public function remove($key);
 
     /**
      * Removes the specified element from the collection, if it is found.
@@ -329,12 +315,12 @@ interface CollectionInterface
      * @param mixed $element
      *                       <p>The element to remove.</p>
      *
-     * @return Arrayy
+     * @return CollectionInterface
      *
-     * @psalm-param  T $element
-     * @psalm-return Arrayy<TKey,T>
+     * @phpstan-param  T $element
+     * @phpstan-return CollectionInterface<T>
      */
-    public function removeElement($element): Arrayy;
+    public function removeElement($element);
 
     /**
      * Sets an element in the collection at the specified key/index.
@@ -344,8 +330,10 @@ interface CollectionInterface
      * @param mixed      $value
      *                          <p>The element to set.<p>
      *
-     * @psalm-param TKey $key
-     * @psalm-param T $value
+     * @return CollectionInterface
+     *
+     * @phpstan-param T $value
+     * @phpstan-return CollectionInterface<T>
      */
     public function set($key, $value);
 
@@ -360,18 +348,18 @@ interface CollectionInterface
      * @param int|null $length       the maximum number of elements to return, or null for no limit
      * @param bool     $preserveKeys
      *
-     * @return Arrayy
+     * @return CollectionInterface
      *
-     * @psalm-return Arrayy<TKey,T>
+     * @phpstan-return CollectionInterface<T>
      */
-    public function slice(int $offset, int $length = null, bool $preserveKeys = false): Arrayy;
+    public function slice(int $offset, int $length = null, bool $preserveKeys = false);
 
     /**
      * Gets a native PHP array representation of the collection.
      *
      * @return array
      *
-     * @psalm-return array<TKey,T>
+     * @phpstan-return array<T>
      */
     public function toArray(): array;
 

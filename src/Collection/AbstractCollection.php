@@ -10,7 +10,6 @@ use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
 use Arrayy\Type\TypeInterface;
 use Arrayy\TypeCheck\TypeCheckArray;
-use Arrayy\TypeCheck\TypeCheckInterface;
 use Arrayy\TypeCheck\TypeCheckSimple;
 
 /**
@@ -19,9 +18,8 @@ use Arrayy\TypeCheck\TypeCheckSimple;
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
  *
- * @psalm-template      TKey of array-key
- * @psalm-template      T
- * @template-implements CollectionInterface<TKey,T>
+ * @phpstan-template T
+ * @phpstan-implements CollectionInterface<T>
  */
 abstract class AbstractCollection extends Arrayy implements CollectionInterface
 {
@@ -58,6 +56,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *                                             to
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
+     *
+     * @phpstan-param array<T> $data
+     * @phpstan-param class-string $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -89,15 +90,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * Append a (key) + value to the current array.
-     *
-     * @param mixed $value
-     * @param mixed $key
-     *
-     * @return static
-     *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
-     *
-     * @psalm-return Arrayy<TKey,T>
+     * {@inheritdoc}
      */
     public function append($value, $key = null): self
     {
@@ -120,10 +113,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * Assigns a value to the specified offset + check the type.
-     *
-     * @param int|string|null $offset
-     * @param mixed           $value
+     * {@inheritdoc}
      */
     public function offsetSet($offset, $value)
     {
@@ -143,15 +133,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * Prepend a (key) + value to the current array.
-     *
-     * @param mixed $value
-     * @param mixed $key
-     *
-     * @return static
-     *                <p>(Mutable) Return this Arrayy object, with the prepended value.</p>
-     *
-     * @psalm-return Arrayy<TKey,T>
+     * {@inheritdoc}
      */
     public function prepend($value, $key = null): self
     {
@@ -174,13 +156,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * Returns the values from given property or method.
-     *
-     * @param string $keyOrPropertyOrMethod the property or method name to filter by
-     *
-     * @throws \InvalidArgumentException if property or method is not defined
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function column(string $keyOrPropertyOrMethod): array
     {
@@ -195,7 +171,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * @return static[]
+     * {@inheritdoc}
      */
     public function getCollection(): array
     {
@@ -203,20 +179,12 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * The type (FQCN) associated with this collection.
-     *
-     * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
+     * {@inheritdoc}
      */
     abstract public function getType();
 
     /**
-     * Merge current items and items of given collections into a new one.
-     *
-     * @param CollectionInterface ...$collections The collections to merge.
-     *
-     * @throws \InvalidArgumentException if any of the given collections are not of the same type
-     *
-     * @return static
+     * {@inheritdoc}
      */
     public function merge(CollectionInterface ...$collections): self
     {
@@ -232,14 +200,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * Returns a collection of matching items.
-     *
-     * @param string $keyOrPropertyOrMethod the property or method to evaluate
-     * @param mixed  $value                 the value to match
-     *
-     * @throws \InvalidArgumentException if property or method is not defined
-     *
-     * @return static
+     * {@inheritdoc}
      */
     public function where(string $keyOrPropertyOrMethod, $value): self
     {
@@ -256,16 +217,13 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * Internal mechanic of set method.
-     *
-     * @param string|null $key
-     * @param mixed       $value
-     * @param bool        $checkPropertiesAndType
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    protected function internalSet($key, &$value, $checkPropertiesAndType = true): bool
-    {
+    protected function internalSet(
+        $key,
+        &$value,
+        $checkProperties = true
+    ): bool {
         if (
             $value instanceof self
             &&
@@ -275,7 +233,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
                 parent::internalSet(
                     $key,
                     $valueTmp,
-                    $checkPropertiesAndType
+                    $checkProperties
                 );
             }
 
@@ -285,7 +243,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         return parent::internalSet(
             $key,
             $value,
-            $checkPropertiesAndType
+            $checkProperties
         );
     }
 
@@ -315,13 +273,14 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     /**
      * Extracts the value of the given property or method from the object.
      *
-     * @param Arrayy $object                the object to extract the value from
-     * @param string $keyOrPropertyOrMethod the property or method for which the
-     *                                      value should be extracted
+     * @param \Arrayy\Arrayy $object                <p>The object to extract the value from.</p>
+     * @param string         $keyOrPropertyOrMethod <p>The property or method for which the
+     *                                              value should be extracted.</p>
      *
      * @throws \InvalidArgumentException if the method or property is not defined
      *
-     * @return mixed the value extracted from the specified property or method
+     * @return mixed
+     *               <p>The value extracted from the specified property or method.</p>
      */
     private function extractValue(Arrayy $object, string $keyOrPropertyOrMethod)
     {

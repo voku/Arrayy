@@ -20,20 +20,22 @@ final class ArrayyMeta
     }
 
     /**
-     * @param string $obj
+     * @param string $className
      *
      * @return $this
+     *
+     * @phpstan-param class-string $className
      */
-    public function getMetaObject(string $obj): self
+    public function getMetaObject(string $className): self
     {
         static $STATIC_CACHE = [];
 
-        $cacheKey = $obj;
+        $cacheKey = $className;
         if (!empty($STATIC_CACHE[$cacheKey])) {
             return $STATIC_CACHE[$cacheKey];
         }
 
-        $reflector = new \ReflectionClass($obj);
+        $reflector = new \ReflectionClass($className);
         $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
         $docComment = $reflector->getDocComment();
         if ($docComment) {

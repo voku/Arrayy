@@ -1626,7 +1626,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             [[0 => -9], [], -9],
             [[0 => -9, 1, 2], [-9, 1], 2],
             [[1.18, 1.5], [1.18], 1.5],
-            [[3 => 'string', 'foo', 'lall'], [0 => 'string', 1 => 'foo'], 'lall'],
+            [[3 => 'string', 'foo', 'lall'], [3 => 'string', 4 => 'foo'], 'lall'],
+            [['string', 'foo', 'lall'], [0 => 'string', 1 => 'foo'], 'lall'],
         ];
     }
 

@@ -6,9 +6,15 @@ namespace {
 
     if (\PHP_VERSION_ID < 70300) {
         if (!\function_exists('is_countable')) {
+            /**
+             * @param mixed $var
+             *
+             * @return bool
+             *
+             * @noinspection PhpComposerExtensionStubsInspection
+             */
             function is_countable($var)
             {
-                /** @noinspection PhpComposerExtensionStubsInspection */
                 return \is_array($var)
                        ||
                        $var instanceof Countable
@@ -56,7 +62,7 @@ namespace Arrayy {
          *
          * @param mixed $data
          *
-         * @return Arrayy
+         * @return Arrayy<mixed>
          */
         function create($data): Arrayy
         {
@@ -69,7 +75,9 @@ namespace Arrayy {
          * @param string $type
          * @param mixed  $data
          *
-         * @return Collection
+         * @return Collection<mixed>
+         *
+         * @phpstan-implements Collection<mixed, mixed>
          */
         function collection($type, $data = []): Collection
         {
@@ -78,7 +86,7 @@ namespace Arrayy {
     }
 
     /**
-     * @param array $array
+     * @param array<mixed> $array
      *
      * @return mixed|null
      */
@@ -93,7 +101,7 @@ namespace Arrayy {
     }
 
     /**
-     * @param array $array
+     * @param array<mixed> $array
      *
      * @return mixed|null
      */

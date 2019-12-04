@@ -43,6 +43,6 @@ final class InstanceTypeTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        InstanceCollection::construct(TypeInterface::class, [new BoolCollection(), new stdClass()]);
+        \Arrayy\Type\InstancesCollection::construct(TypeInterface::class, [new BoolCollection(), new stdClass()]);
     }
 }
