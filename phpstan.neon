@@ -13,13 +13,18 @@ parameters:
         # false-positive?
         - '/createFromObject\(\) should return static/'
         - '/comparison using === between true and false/'
+        - '/has parameter \$iteratorClass with no value type specified/'
         # ignore gernal errors
         - '/Unsafe usage of new static/'
         - '/getIterator\(\) should be compatible/'
         - '/getIterator\(\) should return Iterator/'
         # ignore not specific types
+        - '/iteratorClass \(class-string<ArrayIterator>\) does not accept class-string/'
         - '/parseDocTypeObject\(\) should return array<string>\|string/'
         - '/Collection::getType\(\) should return/'
+        -
+            message: '/expects array, array/'
+            path: %currentWorkingDirectory%/src/Type/DetectFirstValueTypeCollection.php
         -
             message: ~Result of \&\& is always false~
             path: %currentWorkingDirectory%/src/Collection/AbstractCollection.php

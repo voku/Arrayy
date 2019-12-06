@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection ReturnTypeCanBeDeclaredInspection */
+
 declare(strict_types=1);
 
 namespace Arrayy;
@@ -16,7 +18,7 @@ use Arrayy\TypeCheck\TypeCheckPhpDoc;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @phpstan-template T
+ * @template T
  */
 class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \JsonSerializable, \Countable
 {
@@ -24,18 +26,18 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * @var array
-     * @phpstan-var array<T>
      */
     protected $array = [];
 
     /**
-     * @var ArrayyRewindableGenerator|null
-     * @phpstan-var ArrayyRewindableGenerator<T>|null
+     * @var \Arrayy\ArrayyRewindableGenerator|null
      */
     protected $generator;
 
     /**
      * @var string
+     *
+     * @psalm-var class-string<\ArrayIterator>
      */
     protected $iteratorClass = ArrayyIterator::class;
 
@@ -87,7 +89,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
      *
-     * @phpstan-param class-string $iteratorClass
+     * @psalm-param class-string<\ArrayIterator> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -316,8 +318,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Creates a copy of the ArrayyObject.
      *
      * @return array
-     *
-     * @phpstan-return array<T>
      */
     public function getArrayCopy(): array
     {
@@ -489,7 +489,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Assigns a value to the specified offset.
+     * Assigns a value to the specified offset + check the type.
      *
      * @param int|string|null $offset
      * @param mixed           $value
@@ -579,30 +579,32 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Sets the iterator classname for the current "Arrayy"-object.
      *
-     * @param string $class
+     * @param string $iteratorClass
      *
      * @throws \InvalidArgumentException
      *
      * @return void
+     *
+     * @psalm-param class-string<\ArrayIterator> $iteratorClass
      */
-    public function setIteratorClass($class)
+    public function setIteratorClass($iteratorClass)
     {
-        if (\class_exists($class)) {
-            $this->iteratorClass = $class;
+        if (\class_exists($iteratorClass)) {
+            $this->iteratorClass = $iteratorClass;
 
             return;
         }
 
-        if (\strpos($class, '\\') === 0) {
-            $class = '\\' . $class;
-            if (\class_exists($class)) {
-                $this->iteratorClass = $class;
+        if (\strpos($iteratorClass, '\\') === 0) {
+            $iteratorClass = '\\' . $iteratorClass;
+            if (\class_exists($iteratorClass)) {
+                $this->iteratorClass = $iteratorClass;
 
                 return;
             }
         }
 
-        throw new \InvalidArgumentException('The iterator class does not exist: ' . $class);
+        throw new \InvalidArgumentException('The iterator class does not exist: ' . $iteratorClass);
     }
 
     /**
@@ -670,7 +672,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      */
-    public function appendArrayValues(array $values, $key = null): self
+    public function appendArrayValues(array $values, $key = null)
     {
         $this->generatorToArray();
 
@@ -923,8 +925,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param bool             $strict
      *
      * @return bool
-     *
-     * @phpstan-param T $value
      */
     public function contains($value, bool $recursive = false, bool $strict = true): bool
     {
@@ -1054,8 +1054,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *
      * @see Arrayy::contains()
-     *
-     * @phpstan-param T $value
      */
     public function containsValue($value): bool
     {
@@ -1070,8 +1068,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *
      * @see Arrayy::contains()
-     *
-     * @phpstan-param T $value
      */
     public function containsValueRecursive($value): bool
     {
@@ -1119,12 +1115,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+     *
+     * @psalm-param class-string<\ArrayIterator> $iteratorClass
      */
     public static function create(
         $data = [],
         string $iteratorClass = ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
-    ): self {
+    ) {
         return new static(
             $data,
             $iteratorClass,
@@ -1299,9 +1297,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Gets the element of the array at the current internal iterator position.
      *
-     * @return mixed
-     *
-     * @phpstan-return T|false
+     * @return false|mixed
      */
     public function current()
     {
@@ -2661,23 +2657,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         // non recursive
 
         if ($search_values === null) {
-            $arrayFunction = /**
-             * @return \Generator
-             *
-             * @phpstan-return \Generator<int, mixed, mixed, void>
-             */
-            function (): \Generator {
+            $arrayFunction = function (): \Generator {
                 foreach ($this->getGenerator() as $key => $value) {
                     yield $key;
                 }
             };
         } else {
-            $arrayFunction = /**
-             * @return \Generator
-             *
-             * @phpstan-return \Generator<int, mixed, mixed, void>
-             */
-            function () use ($search_values, $strict): \Generator {
+            $arrayFunction = function () use ($search_values, $strict): \Generator {
                 $is_array_tmp = \is_array($search_values);
 
                 foreach ($this->getGenerator() as $key => $value) {
@@ -3313,7 +3299,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the prepended value.</p>
      */
-    public function prepend($value, $key = null): self
+    public function prepend($value, $key = null)
     {
         $this->generatorToArray();
 
@@ -3790,7 +3776,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * alias: for "Arrayy->count()"
+     * alias: for "Arrayy->removeValue()"
      *
      * @param mixed $element
      *
@@ -5230,7 +5216,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected function internalSet(
         $key,
         &$value,
-        $checkProperties = true
+        bool $checkProperties = true
     ): bool {
         if (
             $checkProperties === true
@@ -5423,6 +5409,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     private function checkType($key, $value)
     {
         if (
+            $key !== null
+            &&
             isset($this->properties[$key]) === false
             &&
             $this->checkPropertiesMismatch === true
@@ -5432,7 +5420,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if (isset($this->properties[self::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES])) {
             $this->properties[self::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES]->checkType($value);
-        } elseif (isset($this->properties[$key])) {
+        } elseif ($key !== null && isset($this->properties[$key])) {
             $this->properties[$key]->checkType($value);
         }
     }

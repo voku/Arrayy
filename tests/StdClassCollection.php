@@ -3,12 +3,8 @@
 namespace Arrayy\tests;
 
 use Arrayy\Collection\AbstractCollection;
-use Arrayy\Collection\CollectionInterface;
 
-/**
- * @phpstan-implements CollectionInterface<\stdClass>
- */
-class StdClassCollection extends AbstractCollection implements CollectionInterface
+class StdClassCollection extends AbstractCollection
 {
     /**
      * The type (FQCN) associated with this collection.

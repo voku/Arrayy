@@ -20,7 +20,7 @@ final class ArrayTypeTest extends TestCase
         );
     }
 
-    public function testStringArray()
+    public function testStringArrayFalse()
     {
         $this->expectException(TypeError::class);
 
@@ -28,6 +28,16 @@ final class ArrayTypeTest extends TestCase
 
         static::assertEquals(
             [['a', 1, 1.4], [], [true, new stdClass()], []],
+            $set->toArray()
+        );
+    }
+
+    public function testStringArray()
+    {
+        $set = new \Arrayy\Type\StringArrayCollection([['a', 'foo']]);
+
+        static::assertEquals(
+            [['a', 'foo']],
             $set->toArray()
         );
     }

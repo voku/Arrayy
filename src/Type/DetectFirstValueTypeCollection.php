@@ -9,13 +9,25 @@ use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
 use Arrayy\Collection\Collection;
 
-final class DetectTypeCollection extends Collection implements TypeInterface
+/**
+ * @template T
+ * @extends Collection<T>
+ */
+final class DetectFirstValueTypeCollection extends Collection implements TypeInterface
 {
     /**
      * @var string
      */
     private $getTypeHelper;
 
+    /**
+     * @param array|Arrayy $data
+     * @param string       $iteratorClass
+     * @param bool         $checkPropertiesInConstructor
+     *
+     * @psalm-param array<T>|Arrayy $data
+     * @psalm-param class-string<\ArrayIterator> $iteratorClass
+     */
     public function __construct(
         $data = [],
         string $iteratorClass = ArrayyIterator::class,
@@ -27,6 +39,7 @@ final class DetectTypeCollection extends Collection implements TypeInterface
             $firstValue = array_first($data);
         } else {
             $firstValue = $data;
+            $data = [$data];
         }
 
         $this->getTypeHelper = $this->getTypeFromFirstValue($firstValue);
@@ -52,6 +65,8 @@ final class DetectTypeCollection extends Collection implements TypeInterface
      * @param mixed $value
      *
      * @return string
+     *
+     * @psalm-param T $value
      */
     private function getTypeFromFirstValue($value): string
     {

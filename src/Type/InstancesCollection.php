@@ -15,8 +15,8 @@ final class InstancesCollection extends Collection implements TypeInterface
      * @param bool|null     $checkPropertiesInConstructor
      * @param string[]|null $className
      *
-     * @phpstan-param class-string|null $iteratorClass
-     * @phpstan-param class-string[]|null $className
+     * @psalm-param class-string<\ArrayIterator>|null $iteratorClass
+     * @psalm-param class-string[]|null $className
      */
     public function __construct(
         array $data = [],

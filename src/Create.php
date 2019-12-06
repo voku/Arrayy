@@ -75,9 +75,10 @@ namespace Arrayy {
          * @param string $type
          * @param mixed  $data
          *
-         * @return Collection<mixed>
+         * @return Collection
          *
-         * @phpstan-implements Collection<mixed, mixed>
+         * @template T
+         * @psalm-return Collection<T>
          */
         function collection($type, $data = []): Collection
         {

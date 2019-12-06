@@ -7,7 +7,7 @@ namespace Arrayy\Type;
 use Arrayy\Collection\Collection;
 
 /**
- * @phpstan-extends Collection<array<bool>>
+ * @extends Collection<array<bool>>
  */
 final class BoolArrayCollection extends Collection implements TypeInterface
 {

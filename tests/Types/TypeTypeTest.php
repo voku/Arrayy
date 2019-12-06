@@ -24,6 +24,7 @@ final class TypeTypeTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
+        /** @noinspection PhpStrictTypeCheckingInspection */
         new Collection(stdClass::class, [new stdClass(), 'A']);
     }
 }

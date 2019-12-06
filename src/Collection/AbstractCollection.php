@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection ClassOverridesFieldOfSuperClassInspection */
+/** @noinspection PropertyInitializationFlawsInspection */
 /** @noinspection PhpSuperClassIncompatibleWithInterfaceInspection */
 
 declare(strict_types=1);
@@ -8,6 +10,7 @@ namespace Arrayy\Collection;
 
 use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
+use Arrayy\ArrayyRewindableGenerator;
 use Arrayy\Type\TypeInterface;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckSimple;
@@ -18,11 +21,24 @@ use Arrayy\TypeCheck\TypeCheckSimple;
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
  *
- * @phpstan-template T
- * @phpstan-implements CollectionInterface<T>
+ * @template   T
+ * @extends    Arrayy<T>
+ * @implements CollectionInterface<T>
  */
 abstract class AbstractCollection extends Arrayy implements CollectionInterface
 {
+    /**
+     * @var array
+     * @psalm-var array<T>
+     */
+    protected $array = [];
+
+    /**
+     * @var ArrayyRewindableGenerator|null
+     * @psalm-var \Arrayy\ArrayyRewindableGenerator<T>|null
+     */
+    protected $generator;
+
     /**
      * @var bool
      */
@@ -57,8 +73,8 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
      *
-     * @phpstan-param array<T> $data
-     * @phpstan-param class-string $iteratorClass
+     * @psalm-param array<T> $data
+     * @psalm-param class-string<\ArrayIterator> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -92,7 +108,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function append($value, $key = null): self
+    public function append($value, $key = null): Arrayy
     {
         if (
             $value instanceof self
@@ -135,7 +151,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     /**
      * {@inheritdoc}
      */
-    public function prepend($value, $key = null): self
+    public function prepend($value, $key = null): Arrayy
     {
         if (
             $value instanceof self
@@ -222,7 +238,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     protected function internalSet(
         $key,
         &$value,
-        $checkProperties = true
+        bool $checkProperties = true
     ): bool {
         if (
             $value instanceof self

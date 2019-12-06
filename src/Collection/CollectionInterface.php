@@ -2,6 +2,7 @@
 
 namespace Arrayy\Collection;
 
+use Arrayy\ArrayyIterator;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckInterface;
 
@@ -13,22 +14,34 @@ use Arrayy\TypeCheck\TypeCheckInterface;
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
  *
- * @phpstan-template T
+ * @template T
  */
 interface CollectionInterface
 {
     /**
-     * alias: for "append()"
+     * Assigns a value to the specified element.
+     *
+     * @param mixed $key
+     * @param mixed $value
+     *
+     * @return void
+     *
+     * @psalm-param T $value
+     */
+    public function __set($key, $value);
+
+    /**
+     * alias: for "CollectionInterface->append()"
      *
      * @param mixed $value
      *
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @see CollectionInterface::append()
+     * @see          CollectionInterface::append()
      *
-     * @phpstan-param  T $value
-     * @phpstan-return CollectionInterface<T>
+     * @psalm-param  T $value
+     * @psalm-return CollectionInterface<T>
      */
     public function add($value);
 
@@ -41,10 +54,24 @@ interface CollectionInterface
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @phpstan-param  T|array<T> $value
-     * @phpstan-return CollectionInterface<T>
+     * @psalm-param  T|array<T> $value
+     * @psalm-return CollectionInterface<T>
      */
-    public function append($value, $key = null): CollectionInterface;
+    public function append($value, $key = null);
+
+    /**
+     * Append a (key) + values to the current array.
+     *
+     * @param array $values
+     * @param mixed $key
+     *
+     * @return CollectionInterface
+     *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
+     *
+     * @psalm-param  array<T> $values
+     * @psalm-return CollectionInterface<T>
+     */
+    public function appendArrayValues(array $values, $key = null);
 
     /**
      * Clears the current collection, by removing all elements.
@@ -65,18 +92,15 @@ interface CollectionInterface
     public function column(string $keyOrPropertyOrMethod): array;
 
     /**
-     * Checks whether an element is contained in the collection.
-     * This is an O(n) operation, where n is the size of the collection.
+     * Check if an item is in the current array.
      *
-     * @param mixed $value
-     *                         <p>The element to search for.</p>
-     * @param bool  $recursive
-     * @param bool  $strict
+     * @param float|int|string $value
+     * @param bool             $recursive
+     * @param bool             $strict
      *
      * @return bool
-     *              <p>TRUE if the collection contains the element, FALSE otherwise.</p>
      *
-     * @phpstan-param T $value
+     * @psalm-param T $value
      */
     public function contains($value, bool $recursive = false, bool $strict = true): bool;
 
@@ -93,11 +117,57 @@ interface CollectionInterface
     public function containsKey($key): bool;
 
     /**
+     * alias: for "CollectionInterface->contains()"
+     *
+     * @param float|int|string $value
+     *
+     * @return bool
+     *
+     * @see         CollectionInterface::contains()
+     *
+     * @psalm-param T $value
+     */
+    public function containsValue($value): bool;
+
+    /**
+     * alias: for "CollectionInterface->contains($value, true)"
+     *
+     * @param float|int|string $value
+     *
+     * @return bool
+     *
+     * @see         CollectionInterface::contains()
+     *
+     * @psalm-param T $value
+     */
+    public function containsValueRecursive($value): bool;
+
+    /**
+     * Creates an CollectionInterface object.
+     *
+     * @param mixed  $data
+     * @param string $iteratorClass
+     * @param bool   $checkPropertiesInConstructor
+     *
+     * @return CollectionInterface
+     *                             <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
+     *
+     * @psalm-param  array<T> $data
+     * @psalm-param  class-string<\ArrayIterator> $iteratorClass
+     * @psalm-return CollectionInterface<T>
+     */
+    public static function create(
+        $data = [],
+        string $iteratorClass = ArrayyIterator::class,
+        bool $checkPropertiesInConstructor = true
+    );
+
+    /**
      * Gets the element of the collection at the current iterator position.
      *
-     * @return mixed
+     * @return false|mixed
      *
-     * @phpstan-return T|false
+     * @psalm-return T|false
      */
     public function current();
 
@@ -121,7 +191,7 @@ interface CollectionInterface
      * @return CollectionInterface
      *                             <p>A collection with the results of the filter operation.</p>
      *
-     * @phpstan-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<T>
      */
     public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH);
 
@@ -130,7 +200,7 @@ interface CollectionInterface
      *
      * @return mixed
      *
-     * @phpstan-return T|false
+     * @psalm-return T|false
      */
     public function first();
 
@@ -151,14 +221,23 @@ interface CollectionInterface
      *
      * @return mixed
      *
-     * @phpstan-return T|null
+     * @psalm-return T|null
      */
     public function get($key);
 
     /**
+     * Creates a copy of the CollectionInterface.
+     *
      * @return array
      *
-     * @phpstan-return array<T>
+     * @psalm-return array<T>
+     */
+    public function getArrayCopy(): array;
+
+    /**
+     * @return array
+     *
+     * @psalm-return array<T>
      */
     public function getCollection(): array;
 
@@ -181,9 +260,22 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @phpstan-return T[]
+     * @psalm-return T[]
      */
     public function getValues();
+
+    /**
+     * Check if an array has a given value.
+     *
+     * INFO: if you need to search recursive please use ```contains()```
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     *
+     * @psalm-param T $value
+     */
+    public function hasValue($value): bool;
 
     /**
      * Gets the index/key of a given element. The comparison of two elements is strict,
@@ -194,7 +286,7 @@ interface CollectionInterface
      *
      * @return false|mixed the key/index of the element or FALSE if the element was not found
      *
-     * @phpstan-param T $element
+     * @psalm-param T $element
      */
     public function indexOf($element);
 
@@ -220,7 +312,7 @@ interface CollectionInterface
      *
      * @return mixed
      *
-     * @phpstan-return T|false
+     * @psalm-return T|false
      */
     public function last();
 
@@ -234,7 +326,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @phpstan-return   CollectionInterface<T>
+     * @psalm-return   CollectionInterface<T>
      */
     public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments);
 
@@ -247,14 +339,14 @@ interface CollectionInterface
      *
      * @return self
      */
-    public function merge(self ...$collections): self;
+    public function merge(self ...$collections);
 
     /**
      * Moves the internal iterator position to the next element and returns this element.
      *
      * @return mixed
      *
-     * @phpstan-return T|false
+     * @psalm-return T|false
      */
     public function next();
 
@@ -265,6 +357,8 @@ interface CollectionInterface
      * @param mixed           $value
      *
      * @return void
+     *
+     * @psalm-param T $value
      */
     public function offsetSet($offset, $value);
 
@@ -278,7 +372,7 @@ interface CollectionInterface
      *                    of elements where the predicate returned TRUE, the second element
      *                    contains the collection of elements where the predicate returned FALSE.
      *
-     * @phpstan-return array{0: CollectionInterface<T>, 1: CollectionInterface<T>}
+     * @psalm-return array{0: CollectionInterface<T>, 1: CollectionInterface<T>}
      */
     public function partition(\Closure $p): array;
 
@@ -291,10 +385,10 @@ interface CollectionInterface
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
-     * @phpstan-param  T $value
-     * @phpstan-return CollectionInterface<T>
+     * @psalm-param  T $value
+     * @psalm-return CollectionInterface<T>
      */
-    public function prepend($value, $key = null): CollectionInterface;
+    public function prepend($value, $key = null);
 
     /**
      * Removes the element at the specified index from the collection.
@@ -305,7 +399,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @phpstan-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<T>
      */
     public function remove($key);
 
@@ -317,10 +411,22 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @phpstan-param  T $element
-     * @phpstan-return CollectionInterface<T>
+     * @psalm-param  T $element
+     * @psalm-return CollectionInterface<T>
      */
     public function removeElement($element);
+
+    /**
+     * Removes a particular value from an array (numeric or associative).
+     *
+     * @param mixed $value
+     *
+     * @return CollectionInterface
+     *                             <p>(Immutable)</p>
+     *
+     * @psalm-param T $value
+     */
+    public function removeValue($value);
 
     /**
      * Sets an element in the collection at the specified key/index.
@@ -332,8 +438,8 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @phpstan-param T $value
-     * @phpstan-return CollectionInterface<T>
+     * @psalm-param  T $value
+     * @psalm-return CollectionInterface<T>
      */
     public function set($key, $value);
 
@@ -350,7 +456,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @phpstan-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<T>
      */
     public function slice(int $offset, int $length = null, bool $preserveKeys = false);
 
@@ -359,7 +465,7 @@ interface CollectionInterface
      *
      * @return array
      *
-     * @phpstan-return array<T>
+     * @psalm-return array<T>
      */
     public function toArray(): array;
 
@@ -373,5 +479,5 @@ interface CollectionInterface
      *
      * @return self
      */
-    public function where(string $keyOrPropertyOrMethod, $value): self;
+    public function where(string $keyOrPropertyOrMethod, $value);
 }

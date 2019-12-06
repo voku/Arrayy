@@ -31,7 +31,10 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $colors = new \stdClass();
         $colors->color = 'red';
 
-        $collection = StdBaseClassCollection::construct(\stdClass::class, [$pets, $colors]);
+        $collection = StdBaseClassCollection::construct(
+            \stdClass::class,
+            [$pets, $colors]
+        );
 
         static::assertSame([$pets, $colors], $collection->getCollection());
 

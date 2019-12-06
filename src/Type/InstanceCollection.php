@@ -8,8 +8,8 @@ use Arrayy\ArrayyIterator;
 use Arrayy\Collection\Collection;
 
 /**
- * @phpstan-template T
- * @phpstan-extends Collection<T>
+ * @template T
+ * @extends Collection<T>
  */
 final class InstanceCollection extends Collection implements TypeInterface
 {
@@ -19,14 +19,14 @@ final class InstanceCollection extends Collection implements TypeInterface
      * @param bool|null     $checkPropertiesInConstructor
      * @param string|null   $className
      *
-     * @phpstan-param class-string|null $iteratorClass
-     * @phpstan-param class-string|null $className
+     * @psalm-param class-string<\ArrayIterator>|null $iteratorClass
+     * @psalm-param class-string<T>|null $className
      */
     public function __construct(
         array $data = [],
         string $iteratorClass = null,
         bool $checkPropertiesInConstructor = null,
-        string $className = null
+        $className = null
     ) {
         // fallback
         if ($iteratorClass === null) {

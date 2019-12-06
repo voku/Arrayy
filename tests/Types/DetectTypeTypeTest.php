@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Arrayy\Type\DetectTypeCollection;
+use Arrayy\Type\DetectFirstValueTypeCollection;
 use Arrayy\Type\MixedCollection;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ final class DetectTypeTypeTest extends TestCase
 {
     public function testArrayDetectString()
     {
-        $set = new DetectTypeCollection(['A', 'B', 'C', 'D']);
+        $set = new DetectFirstValueTypeCollection(['A', 'B', 'C', 'D']);
 
         static::assertSame(
             ['A', 'B', 'C', 'D'],
@@ -23,7 +23,7 @@ final class DetectTypeTypeTest extends TestCase
 
     public function testArrayDetectInteger()
     {
-        $set = new DetectTypeCollection([1, 2, 3, 4]);
+        $set = new DetectFirstValueTypeCollection([1, 2, 3, 4]);
 
         static::assertSame(
             [1, 2, 3, 4],
@@ -33,7 +33,7 @@ final class DetectTypeTypeTest extends TestCase
 
     public function testArrayDetectClass()
     {
-        $set = new DetectTypeCollection([new stdClass(), new stdClass()]);
+        $set = new DetectFirstValueTypeCollection([new stdClass(), new stdClass()]);
 
         static::assertEquals(
             [new stdClass(), new stdClass()],
@@ -43,7 +43,7 @@ final class DetectTypeTypeTest extends TestCase
 
     public function testArrayDetectTraversable()
     {
-        $set = new DetectTypeCollection(new MixedCollection(['A', 'B', 'C', 'D']));
+        $set = new DetectFirstValueTypeCollection(new MixedCollection(['A', 'B', 'C', 'D']));
 
         static::assertSame(
             ['A', 'B', 'C', 'D'],
@@ -55,27 +55,27 @@ final class DetectTypeTypeTest extends TestCase
     {
         $this->expectException(TypeError::class);
 
-        new DetectTypeCollection(['A', 'B', 'C', 1]);
+        new DetectFirstValueTypeCollection(['A', 'B', 'C', 1]);
     }
 
     public function testWrongValueDetectInteger()
     {
         $this->expectException(TypeError::class);
 
-        new DetectTypeCollection([1, 2, 3, 4.0]);
+        new DetectFirstValueTypeCollection([1, 2, 3, 4.0]);
     }
 
     public function testWrongValueDetectClass()
     {
         $this->expectException(TypeError::class);
 
-        new DetectTypeCollection([new stdClass(), new DetectTypeCollection()]);
+        new DetectFirstValueTypeCollection([new stdClass(), new DetectFirstValueTypeCollection()]);
     }
 
     public function testWrongValueDetectTraversable()
     {
         $this->expectException(TypeError::class);
 
-        new DetectTypeCollection(new MixedCollection(['A', 'B', 'C', 1]));
+        new DetectFirstValueTypeCollection(new MixedCollection(['A', 'B', 'C', 1]));
     }
 }

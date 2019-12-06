@@ -7,7 +7,7 @@ namespace Arrayy\Type;
 use Arrayy\Collection\Collection;
 
 /**
- * @phpstan-extends Collection<array<int>>
+ * @extends Collection<array<int>>
  */
 final class IntArrayCollection extends Collection implements TypeInterface
 {

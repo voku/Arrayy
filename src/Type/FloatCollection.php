@@ -7,7 +7,7 @@ namespace Arrayy\Type;
 use Arrayy\Collection\Collection;
 
 /**
- * @phpstan-extends Collection<float|int>
+ * @extends Collection<float|int>
  */
 final class FloatCollection extends Collection implements TypeInterface
 {

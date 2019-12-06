@@ -64,8 +64,8 @@ use Arrayy\TypeCheck\TypeCheckInterface;
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
  *
- * @phpstan-template T
- * @phpstan-extends AbstractCollection<T>
+ * @template T
+ * @extends  AbstractCollection<T>
  */
 class Collection extends AbstractCollection
 {
@@ -94,7 +94,8 @@ class Collection extends AbstractCollection
      *                                                         </p>
      * @param TypeInterface|null $type
      *
-     * @phpstan-param class-string $iteratorClass
+     * @psalm-param array<T> $data
+     * @psalm-param class-string<\ArrayIterator> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -128,8 +129,9 @@ class Collection extends AbstractCollection
      *
      * @return static
      *
-     * @phpstan-param array<T> $data
-     * @phpstan-return static<T>
+     * @psalm-param  class-string<T>|string|TypeCheckArray|TypeCheckInterface[] $type
+     * @psalm-param  array<T> $data
+     * @psalm-return static<T>
      */
     public static function construct(
         $type,
@@ -147,6 +149,21 @@ class Collection extends AbstractCollection
     }
 
     /**
+     * Returns a new iterator, thus implementing the \Iterator interface.
+     *
+     * @return \ArrayIterator<mixed, mixed>
+     *                               <p>An iterator for the values in the array.</p>
+     *
+     * @psalm-return \Iterator<T>
+     *
+     * @noinspection SenselessProxyMethodInspection
+     */
+    public function getIterator(): \Iterator
+    {
+        return parent::getIterator();
+    }
+
+    /**
      * The type (FQCN) associated with this collection.
      *
      * @return string|TypeCheckArray|TypeCheckInterface[]
@@ -157,26 +174,11 @@ class Collection extends AbstractCollection
     }
 
     /**
-     * Returns a new iterator, thus implementing the \Iterator interface.
-     *
-     * @return \ArrayIterator<mixed, mixed>
-     *                               <p>An iterator for the values in the array.</p>
-     *
-     * @phpstan-return \Iterator<T>
-     *
-     * @noinspection SenselessProxyMethodInspection
-     */
-    public function getIterator(): \Iterator
-    {
-        return parent::getIterator();
-    }
-
-    /**
      * Get a base Collection instance from this Collection.
      *
      * @return self
      *
-     * @phpstan-return self<T>
+     * @psalm-return self<T>
      */
     public function toBase(): self
     {

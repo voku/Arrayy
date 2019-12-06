@@ -43,7 +43,7 @@ final class ArrayyRewindableGenerator implements \Iterator
      *
      * @return mixed
      *
-     * @see http://php.net/manual/en/iterator.current.php
+     * @see  http://php.net/manual/en/iterator.current.php
      * @see  Iterator::current
      */
     public function current()
@@ -52,24 +52,11 @@ final class ArrayyRewindableGenerator implements \Iterator
     }
 
     /**
-     * Move forward to next element.
-     *
-     * @see  Iterator::next
-     * @see http://php.net/manual/en/iterator.next.php
-     *
-     * @return void
-     */
-    public function next()
-    {
-        $this->generator->next();
-    }
-
-    /**
      * Return the key of the current element.
      *
      * @return mixed scalar on success, or null on failure
      *
-     * @see http://php.net/manual/en/iterator.key.php
+     * @see  http://php.net/manual/en/iterator.key.php
      * @see  Iterator::key
      */
     public function key()
@@ -78,25 +65,25 @@ final class ArrayyRewindableGenerator implements \Iterator
     }
 
     /**
-     * Checks if current position is valid.
+     * Move forward to next element.
      *
-     * @return bool
+     * @return void
      *
-     * @see http://php.net/manual/en/iterator.valid.php
-     * @see  Iterator::rewind
+     * @see  http://php.net/manual/en/iterator.next.php
+     * @see  Iterator::next
      */
-    public function valid(): bool
+    public function next()
     {
-        return $this->generator->valid();
+        $this->generator->next();
     }
 
     /**
      * Rewind the Iterator to the first element.
      *
-     * @see  Iterator::rewind
-     * @see http://php.net/manual/en/iterator.rewind.php
-     *
      * @return void
+     *
+     * @see  http://php.net/manual/en/iterator.rewind.php
+     * @see  Iterator::rewind
      */
     public function rewind()
     {
@@ -105,6 +92,19 @@ final class ArrayyRewindableGenerator implements \Iterator
         if (\is_callable($this->onRewind)) {
             \call_user_func($this->onRewind);
         }
+    }
+
+    /**
+     * Checks if current position is valid.
+     *
+     * @return bool
+     *
+     * @see  http://php.net/manual/en/iterator.valid.php
+     * @see  Iterator::rewind
+     */
+    public function valid(): bool
+    {
+        return $this->generator->valid();
     }
 
     /**

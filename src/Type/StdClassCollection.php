@@ -7,17 +7,20 @@ namespace Arrayy\Type;
 use Arrayy\Collection\Collection;
 
 /**
- * @extends Collection<bool>
+ * @template T of \stdClass
+ * @extends Collection<T>
  */
-final class BoolCollection extends Collection implements TypeInterface
+class StdClassCollection extends Collection implements TypeInterface
 {
     /**
      * The type (FQCN) associated with this collection.
      *
      * @return string
+     *
+     * @psalm-return class-string<T>
      */
     public function getType()
     {
-        return 'bool';
+        return \stdClass::class;
     }
 }
