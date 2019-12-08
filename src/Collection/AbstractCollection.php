@@ -226,6 +226,32 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
+     * Creates an CollectionInterface object.
+     *
+     * @param mixed  $data
+     * @param string $iteratorClass
+     * @param bool   $checkPropertiesInConstructor
+     *
+     * @return static
+     *                <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
+     *
+     * @psalm-param  array<T> $data
+     * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @psalm-return static<T>
+     */
+    public static function create(
+        $data = [],
+        string $iteratorClass = ArrayyIterator::class,
+        bool $checkPropertiesInConstructor = true
+    ) {
+        return new static(
+            $data,
+            $iteratorClass,
+            $checkPropertiesInConstructor
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function internalSet(
