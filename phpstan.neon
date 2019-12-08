@@ -1,4 +1,5 @@
 parameters:
+    reportUnmatchedIgnoredErrors: false
     level: max
     checkGenericClassInNonGenericObjectType: false
     paths:
@@ -22,6 +23,12 @@ parameters:
         - '/iteratorClass \(class-string<ArrayIterator>\) does not accept class-string/'
         - '/parseDocTypeObject\(\) should return array<string>\|string/'
         - '/Collection::getType\(\) should return/'
+        -
+            message: '/\$iteratorClass \(class-string<Arrayy\\ArrayyIterator>\) does not accept class-string/'
+            path: %currentWorkingDirectory%/src/Arrayy.php
+        -
+            message: '/should return static\(Arrayy\\Arrayy\) but returns Arrayy\\Arrayy/'
+            path: %currentWorkingDirectory%/src/Arrayy.php
         -
             message: '/expects array, array/'
             path: %currentWorkingDirectory%/src/Type/DetectFirstValueTypeCollection.php

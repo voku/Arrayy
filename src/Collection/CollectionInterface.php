@@ -153,7 +153,7 @@ interface CollectionInterface
      *                             <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
      * @psalm-param  array<T> $data
-     * @psalm-param  class-string<\ArrayIterator> $iteratorClass
+     * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
      * @psalm-return CollectionInterface<T>
      */
     public static function create(
@@ -245,13 +245,15 @@ interface CollectionInterface
      * Gets all keys/indices of the collection.
      *
      * @return CollectionInterface
+     *
+     * @psalm-return CollectionInterface<array-key>
      */
     public function getKeys();
 
     /**
      * The type (FQCN) associated with this collection.
      *
-     * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
+     * @return string|string[]|TypeCheckArray<mixed>|TypeCheckInterface[]
      */
     public function getType();
 
@@ -326,20 +328,23 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @psalm-return   CollectionInterface<T>
+     * @psalm-return CollectionInterface<T>
      */
     public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments);
 
     /**
      * Merge current items and items of given collections into a new one.
      *
-     * @param self ...$collections The collections to merge.
+     * @param CollectionInterface ...$collections The collections to merge.
      *
      * @throws \InvalidArgumentException if any of the given collections are not of the same type
      *
-     * @return self
+     * @return CollectionInterface
+     *
+     * @psalm-param  array<CollectionInterface<T>> ...$collections
+     * @psalm-return CollectionInterface<T>
      */
-    public function merge(self ...$collections);
+    public function merge(CollectionInterface ...$collections);
 
     /**
      * Moves the internal iterator position to the next element and returns this element.
@@ -425,6 +430,7 @@ interface CollectionInterface
      *                             <p>(Immutable)</p>
      *
      * @psalm-param T $value
+     * @psalm-return CollectionInterface<T>
      */
     public function removeValue($value);
 
@@ -477,7 +483,9 @@ interface CollectionInterface
      *
      * @throws \InvalidArgumentException if property or method is not defined
      *
-     * @return self
+     * @return CollectionInterface
+     *
+     * @psalm-return CollectionInterface<T>
      */
     public function where(string $keyOrPropertyOrMethod, $value);
 }

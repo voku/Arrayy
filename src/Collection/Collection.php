@@ -95,7 +95,7 @@ class Collection extends AbstractCollection
      * @param TypeInterface|null $type
      *
      * @psalm-param array<T> $data
-     * @psalm-param class-string<\ArrayIterator> $iteratorClass
+     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -129,7 +129,7 @@ class Collection extends AbstractCollection
      *
      * @return static
      *
-     * @psalm-param  class-string<T>|string|TypeCheckArray|TypeCheckInterface[] $type
+     * @psalm-param  class-string<T>|string|TypeCheckArray<T>|array<TypeCheckInterface> $type
      * @psalm-param  array<T> $data
      * @psalm-return static<T>
      */
@@ -151,8 +151,8 @@ class Collection extends AbstractCollection
     /**
      * Returns a new iterator, thus implementing the \Iterator interface.
      *
-     * @return \ArrayIterator<mixed, mixed>
-     *                               <p>An iterator for the values in the array.</p>
+     * @return \Iterator
+     *                   <p>An iterator for the values in the array.</p>
      *
      * @psalm-return \Iterator<T>
      *
@@ -167,6 +167,8 @@ class Collection extends AbstractCollection
      * The type (FQCN) associated with this collection.
      *
      * @return string|TypeCheckArray|TypeCheckInterface[]
+     *
+     * @psalm-return class-string<T>|string|TypeCheckArray<T>|array<TypeCheckInterface>
      */
     public function getType()
     {

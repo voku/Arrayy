@@ -5,6 +5,10 @@ namespace Arrayy\TypeCheck;
 use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
 
+/**
+ * @template T
+ * @extends  \Arrayy\ArrayyStrict<T>
+ */
 class TypeCheckArray extends \Arrayy\ArrayyStrict
 {
     /**

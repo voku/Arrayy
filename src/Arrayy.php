@@ -1,6 +1,7 @@
 <?php
 
 /** @noinspection ReturnTypeCanBeDeclaredInspection */
+/** @noinspection ClassReImplementsParentInterfaceInspection */
 
 declare(strict_types=1);
 
@@ -9,8 +10,6 @@ namespace Arrayy;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckInterface;
 use Arrayy\TypeCheck\TypeCheckPhpDoc;
-
-/** @noinspection ClassReImplementsParentInterfaceInspection */
 
 /**
  * Methods to manage arrays.
@@ -37,7 +36,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @var string
      *
-     * @psalm-var class-string<\ArrayIterator>
+     * @psalm-var class-string<\Arrayy\ArrayyIterator>
      */
     protected $iteratorClass = ArrayyIterator::class;
 
@@ -89,7 +88,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
      *
-     * @psalm-param class-string<\ArrayIterator> $iteratorClass
+     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -585,7 +584,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return void
      *
-     * @psalm-param class-string<\ArrayIterator> $iteratorClass
+     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function setIteratorClass($iteratorClass)
     {
@@ -1116,7 +1115,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-param class-string<\ArrayIterator> $iteratorClass
+     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public static function create(
         $data = [],
@@ -3255,7 +3254,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param \Closure $closure
      *                          <p>The predicate on which to partition.</p>
      *
-     * @return array<int, Arrayy>
+     * @return array<int, static>
      *                    <p>An array with two elements. The first element contains the array
      *                    of elements where the predicate returned TRUE, the second element
      *                    contains the array of elements where the predicate returned FALSE.</p>
@@ -4778,13 +4777,39 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Returns a collection of matching items.
+     *
+     * @param string $keyOrPropertyOrMethod the property or method to evaluate
+     * @param mixed  $value                 the value to match
+     *
+     * @throws \InvalidArgumentException if property or method is not defined
+     *
+     * @return static
+     *
+     * @psalm-return static<T>
+     */
+    public function where(string $keyOrPropertyOrMethod, $value): self
+    {
+        return $this->filter(
+            function ($item) use ($keyOrPropertyOrMethod, $value) {
+                $accessorValue = $this->extractValue(
+                    $item,
+                    $keyOrPropertyOrMethod
+                );
+
+                return $accessorValue === $value;
+            }
+        );
+    }
+
+    /**
      * Convert an array into a object.
      *
      * @param array $array PHP array
      *
      * @return \stdClass
      */
-    protected static function arrayToObject(array $array = []): \stdClass
+    final protected static function arrayToObject(array $array = []): \stdClass
     {
         // init
         $object = new \stdClass();
@@ -4795,7 +4820,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         foreach ($array as $name => $value) {
             if (\is_array($value) === true) {
-                $object->{$name} = self::arrayToObject($value);
+                $object->{$name} = static::arrayToObject($value);
             } else {
                 $object->{$name} = $value;
             }
@@ -5398,6 +5423,41 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $this;
+    }
+
+    /**
+     * Extracts the value of the given property or method from the object.
+     *
+     * @param \Arrayy\Arrayy $object                <p>The object to extract the value from.</p>
+     * @param string         $keyOrPropertyOrMethod <p>The property or method for which the
+     *                                              value should be extracted.</p>
+     *
+     * @throws \InvalidArgumentException if the method or property is not defined
+     *
+     * @return mixed
+     *               <p>The value extracted from the specified property or method.</p>
+     */
+    final protected function extractValue(Arrayy $object, string $keyOrPropertyOrMethod)
+    {
+        if (isset($object[$keyOrPropertyOrMethod])) {
+            $return = $object->get($keyOrPropertyOrMethod);
+
+            if ($return instanceof Arrayy) {
+                return $return->getArray();
+            }
+
+            return $return;
+        }
+
+        if (\property_exists($object, $keyOrPropertyOrMethod)) {
+            return $object->{$keyOrPropertyOrMethod};
+        }
+
+        if (\method_exists($object, $keyOrPropertyOrMethod)) {
+            return $object->{$keyOrPropertyOrMethod}();
+        }
+
+        throw new \InvalidArgumentException(\sprintf('array-key & property & method "%s" not defined in %s', $keyOrPropertyOrMethod, \gettype($object)));
     }
 
     /**

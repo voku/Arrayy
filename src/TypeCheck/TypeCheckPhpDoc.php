@@ -1,5 +1,8 @@
 <?php
 
+/** @noinspection TransitiveDependenciesUsageInspection */
+/** @noinspection ClassReImplementsParentInterfaceInspection */
+
 declare(strict_types=1);
 
 namespace Arrayy\TypeCheck;

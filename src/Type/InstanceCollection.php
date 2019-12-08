@@ -19,7 +19,7 @@ final class InstanceCollection extends Collection implements TypeInterface
      * @param bool|null     $checkPropertiesInConstructor
      * @param string|null   $className
      *
-     * @psalm-param class-string<\ArrayIterator>|null $iteratorClass
+     * @psalm-param class-string<\Arrayy\ArrayyIterator>|null $iteratorClass
      * @psalm-param class-string<T>|null $className
      */
     public function __construct(

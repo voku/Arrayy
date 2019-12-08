@@ -21,12 +21,12 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
     private $getTypeHelper;
 
     /**
-     * @param array|Arrayy $data
-     * @param string       $iteratorClass
-     * @param bool         $checkPropertiesInConstructor
+     * @param array|Arrayy|mixed $data
+     * @param string             $iteratorClass
+     * @param bool               $checkPropertiesInConstructor
      *
-     * @psalm-param array<T>|Arrayy $data
-     * @psalm-param class-string<\ArrayIterator> $iteratorClass
+     * @psalm-param array<T>|Arrayy|mixed $data
+     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
         $data = [],

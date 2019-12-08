@@ -7,22 +7,26 @@ namespace Arrayy\Type;
 use Arrayy\ArrayyIterator;
 use Arrayy\Collection\Collection;
 
+/**
+ * @template T
+ */
 final class InstancesCollection extends Collection implements TypeInterface
 {
     /**
      * @param array<object> $data
      * @param string|null   $iteratorClass
      * @param bool|null     $checkPropertiesInConstructor
-     * @param string[]|null $className
+     * @param string[]|null $classNames
      *
-     * @psalm-param class-string<\ArrayIterator>|null $iteratorClass
-     * @psalm-param class-string[]|null $className
+     * @psalm-param array|object[<T>] $data
+     * @psalm-param class-string<\Arrayy\ArrayyIterator>|null $iteratorClass
+     * @psalm-param array<class-string<T>>|null $classNames
      */
     public function __construct(
         array $data = [],
         string $iteratorClass = null,
         bool $checkPropertiesInConstructor = null,
-        array $className = null
+        array $classNames = null
     ) {
         // fallback
         if ($iteratorClass === null) {
@@ -36,7 +40,7 @@ final class InstancesCollection extends Collection implements TypeInterface
             $data,
             $iteratorClass,
             $checkPropertiesInConstructor,
-            self::convertIntoTypeCheckArray($className)
+            self::convertIntoTypeCheckArray($classNames)
         );
     }
 }

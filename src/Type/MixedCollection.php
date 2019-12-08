@@ -6,6 +6,9 @@ namespace Arrayy\Type;
 
 use Arrayy\Collection\Collection;
 
+/**
+ * @extends Collection<mixed>
+ */
 final class MixedCollection extends Collection implements TypeInterface
 {
     /**

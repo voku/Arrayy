@@ -13,6 +13,7 @@ use Arrayy\ArrayyIterator;
 use Arrayy\ArrayyRewindableGenerator;
 use Arrayy\Type\TypeInterface;
 use Arrayy\TypeCheck\TypeCheckArray;
+use Arrayy\TypeCheck\TypeCheckInterface;
 use Arrayy\TypeCheck\TypeCheckSimple;
 
 /**
@@ -74,7 +75,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *                                             </p>
      *
      * @psalm-param array<T> $data
-     * @psalm-param class-string<\ArrayIterator> $iteratorClass
+     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -200,7 +201,16 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     abstract public function getType();
 
     /**
-     * {@inheritdoc}
+     * Merge current items and items of given collections into a new one.
+     *
+     * @param CollectionInterface|static ...$collections The collections to merge.
+     *
+     * @throws \InvalidArgumentException if any of the given collections are not of the same type
+     *
+     * @return $this
+     *
+     * @psalm-param  array<CollectionInterface<T>> ...$collections
+     * @psalm-return $this<T>
      */
     public function merge(CollectionInterface ...$collections): self
     {
@@ -213,23 +223,6 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         }
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function where(string $keyOrPropertyOrMethod, $value): self
-    {
-        return $this->filter(
-            function ($item) use ($keyOrPropertyOrMethod, $value) {
-                $accessorValue = $this->extractValue(
-                    $item,
-                    $keyOrPropertyOrMethod
-                );
-
-                return $accessorValue === $value;
-            }
-        );
     }
 
     /**
@@ -264,9 +257,11 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * @param mixed $type
+     * @param string|string[]|TypeCheckArray|TypeCheckInterface[]|null $type
      *
      * @return TypeCheckArray
+     *
+     * @psalm-param null|string|class-string|string[]|array<class-string>|TypeCheckArray|array<TypeCheckInterface>|mixed $type
      */
     protected static function convertIntoTypeCheckArray($type): TypeCheckArray
     {
@@ -284,40 +279,5 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         }
 
         return $type;
-    }
-
-    /**
-     * Extracts the value of the given property or method from the object.
-     *
-     * @param \Arrayy\Arrayy $object                <p>The object to extract the value from.</p>
-     * @param string         $keyOrPropertyOrMethod <p>The property or method for which the
-     *                                              value should be extracted.</p>
-     *
-     * @throws \InvalidArgumentException if the method or property is not defined
-     *
-     * @return mixed
-     *               <p>The value extracted from the specified property or method.</p>
-     */
-    private function extractValue(Arrayy $object, string $keyOrPropertyOrMethod)
-    {
-        if (isset($object[$keyOrPropertyOrMethod])) {
-            $return = $object->get($keyOrPropertyOrMethod);
-
-            if ($return instanceof Arrayy) {
-                return $return->getArray();
-            }
-
-            return $return;
-        }
-
-        if (\property_exists($object, $keyOrPropertyOrMethod)) {
-            return $object->{$keyOrPropertyOrMethod};
-        }
-
-        if (\method_exists($object, $keyOrPropertyOrMethod)) {
-            return $object->{$keyOrPropertyOrMethod}();
-        }
-
-        throw new \InvalidArgumentException(\sprintf('array-key & property & method "%s" not defined in %s', $keyOrPropertyOrMethod, \gettype($object)));
     }
 }
