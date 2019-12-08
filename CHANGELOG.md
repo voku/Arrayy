@@ -1,5 +1,10 @@
 # Changelog
 
+### 6.1.1
+
+- fix phpstan (0.12) generic support
+
+
 ### 6.1.0
 
 - use phpstan (0.12) generic support
