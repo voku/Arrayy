@@ -18,7 +18,6 @@ final class InstancesCollection extends Collection implements TypeInterface
      * @param bool|null     $checkPropertiesInConstructor
      * @param string[]|null $classNames
      *
-     * @psalm-param array|object[<T>] $data
      * @psalm-param class-string<\Arrayy\ArrayyIterator>|null $iteratorClass
      * @psalm-param array<class-string<T>>|null $classNames
      */
