@@ -1,5 +1,11 @@
 # Changelog
 
+### 6.1.0
+
+- use phpstan (0.12) generic support
+- split "InstanceCollection" into "InstancesCollection" && "InstanceCollection"
+
+
 ### 6.0.0
 
 - instance of "InvalidArgumentException" we now use "TypeError" for type errors
