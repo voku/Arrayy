@@ -344,7 +344,7 @@ interface CollectionInterface
      * @psalm-param  array<CollectionInterface<T>> ...$collections
      * @psalm-return CollectionInterface<T>
      */
-    public function merge(CollectionInterface ...$collections);
+    public function merge(self ...$collections);
 
     /**
      * Moves the internal iterator position to the next element and returns this element.
