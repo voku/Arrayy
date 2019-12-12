@@ -11,14 +11,11 @@ use PHPUnit\Framework\TestCase;
  */
 final class TypesTest extends TestCase
 {
-    public function testCount()
+    public function shuffle()
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
-        static::assertSame(
-            4,
-            $set->count()
-        );
+        static::assertIsArray($set->toArray());
     }
 
     public function testChunk()
@@ -34,6 +31,16 @@ final class TypesTest extends TestCase
                 ['E'],
             ],
             $newSet->toArray()
+        );
+    }
+
+    public function testCount()
+    {
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
+
+        static::assertSame(
+            4,
+            $set->count()
         );
     }
 
@@ -58,9 +65,11 @@ final class TypesTest extends TestCase
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
-        $newMap = $set->each(static function ($item) {
-            return '_' . $item . '_';
-        });
+        $newMap = $set->each(
+            static function ($item) {
+                return '_' . $item . '_';
+            }
+        );
 
         static::assertSame(
             ['A', 'B', 'C', 'D'],
@@ -77,9 +86,11 @@ final class TypesTest extends TestCase
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
-        $newMap = $set->filter(static function ($item) {
-            return \in_array($item, ['A', 'D'], true);
-        });
+        $newMap = $set->filter(
+            static function ($item) {
+                return \in_array($item, ['A', 'D'], true);
+            }
+        );
 
         static::assertSame(
             ['A', 'B', 'C', 'D'],
@@ -172,6 +183,41 @@ final class TypesTest extends TestCase
         );
     }
 
+    public function testNth()
+    {
+        $set = new StringCollection(['A', 'B', 'C', 'D']);
+
+        static::assertSame(
+            [],
+            $set->nth(1, 2)->toArray()
+        );
+
+        static::assertSame(
+            [0 => 'A', 2 => 'C'],
+            $set->nth(2, 0)->toArray()
+        );
+
+        static::assertSame(
+            [0 => 'A', 2 => 'C'],
+            $set->nth(2)->toArray()
+        );
+    }
+
+    public function testOnly()
+    {
+        $set = new StringCollection(['A', 'c' => 'B']);
+
+        static::assertSame(
+            [],
+            $set->only([4, 'C'])->toArray()
+        );
+
+        static::assertSame(
+            ['A', 'c' => 'B'],
+            $set->only([0, 'c'])->toArray()
+        );
+    }
+
     public function testPad()
     {
         $set = new StringCollection(['A', 'B']);
@@ -185,20 +231,6 @@ final class TypesTest extends TestCase
             ['C', 'C', 'A', 'B'],
             $set->pad(-4, 'C')->toArray()
         );
-    }
-
-    public function testPush()
-    {
-        $set = new StringCollection(['A', 'B', 'C']);
-        $set->push('D');
-
-        static::assertSame(
-            ['A', 'B', 'C', 'D'],
-            $set->toArray()
-        );
-
-        $this->expectException(TypeError::class);
-        $set->push(1);
     }
 
     public function testPop()
@@ -216,13 +248,30 @@ final class TypesTest extends TestCase
         );
     }
 
+    public function testPush()
+    {
+        $set = new StringCollection(['A', 'B', 'C']);
+        $set->push('D');
+
+        static::assertSame(
+            ['A', 'B', 'C', 'D'],
+            $set->toArray()
+        );
+
+        $this->expectException(TypeError::class);
+        $set->push(1);
+    }
+
     public function testReduce()
     {
         $set = new IntCollection([1, 2, 3, 4]);
 
-        $value = $set->reduce(static function ($carry, $item) {
-            return $carry * $item;
-        }, 10)->getArray();
+        $value = $set->reduce(
+            static function ($carry, $item) {
+                return $carry * $item;
+            },
+            10
+        )->getArray();
 
         static::assertSame(
             [240],
@@ -308,9 +357,11 @@ final class TypesTest extends TestCase
 
         static::assertSame(
             ['D', 'C', 'B', 'A'],
-            $set->customSortValues(static function ($a, $b) {
-                return -1 * \strcmp($a, $b);
-            })->toArray()
+            $set->customSortValues(
+                static function ($a, $b) {
+                    return -1 * \strcmp($a, $b);
+                }
+            )->toArray()
         );
     }
 
@@ -325,11 +376,55 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function shuffle()
+    public function testToJson()
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
-        static::assertIsArray($set->toArray());
+        static::assertSame(
+            '["A","B","C","D"]',
+            $set->toJson()
+        );
+    }
+
+    public function testToPermutation()
+    {
+        $set = new StringCollection(['A', 'B', 'C']);
+
+        static::assertSame(
+            [
+                0 => [
+                    0 => 'A',
+                    1 => 'B',
+                    2 => 'C',
+                ],
+                1 => [
+                    0 => 'B',
+                    1 => 'A',
+                    2 => 'C',
+                ],
+                2 => [
+                    0 => 'A',
+                    1 => 'C',
+                    2 => 'B',
+                ],
+                3 => [
+                    0 => 'C',
+                    1 => 'A',
+                    2 => 'B',
+                ],
+                4 => [
+                    0 => 'B',
+                    1 => 'C',
+                    2 => 'A',
+                ],
+                5 => [
+                    0 => 'C',
+                    1 => 'B',
+                    2 => 'A',
+                ],
+            ],
+            $set->toPermutation()->toArray()
+        );
     }
 
     public function testUnique()
@@ -349,23 +444,15 @@ final class TypesTest extends TestCase
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
-        $set->walk(static function (&$item, $index) {
-            $item = '_' . $item . '_';
-        });
+        $set->walk(
+            static function (&$item, $index) {
+                $item = '_' . $item . '_';
+            }
+        );
 
         static::assertSame(
             ['_A_', '_B_', '_C_', '_D_'],
             $set->toArray()
-        );
-    }
-
-    public function testToJson()
-    {
-        $set = new StringCollection(['A', 'B', 'C', 'D']);
-
-        static::assertSame(
-            '["A","B","C","D"]',
-            $set->toJson()
         );
     }
 }

@@ -296,6 +296,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function count(int $mode = \COUNT_NORMAL): int
     {
+        if (
+            $this->generator
+            &&
+            $mode === \COUNT_NORMAL
+        ) {
+            return \iterator_count($this->generator);
+        }
+
         return \count($this->getArray(), $mode);
     }
 
@@ -1882,25 +1890,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Tests whether the given predicate p holds for all elements of this array.
-     *
-     * @param \Closure $closure the predicate
-     *
-     * @return bool
-     *              <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>
-     */
-    public function forAll(\Closure $closure): bool
-    {
-        foreach ($this->getGenerator() as $key => $element) {
-            if (!$closure($key, $element)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Get a value from an array (optional using dot-notation).
      *
      * @param mixed $key      <p>The key to look for.</p>
@@ -2379,7 +2368,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ($keepKeys) {
             return static::create(
                 \array_uintersect(
-                    $this->array,
+                    $this->getArray(),
                     $search,
                     static function ($a, $b) {
                         return $a === $b ? 0 : -1;
@@ -2423,7 +2412,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function intersects(array $search): bool
     {
-        return \count($this->intersection($search)->array, \COUNT_NORMAL) > 0;
+        return $this->intersection($search)->count() > 0;
     }
 
     /**
@@ -2441,7 +2430,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if (\is_array($arguments) === false) {
             $arguments = \array_fill(
                 0,
-                \count($this->getArray(), \COUNT_NORMAL),
+                $this->count(),
                 $arguments
             );
         }
@@ -2894,7 +2883,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function matches(\Closure $closure): bool
     {
-        if (\count($this->getArray(), \COUNT_NORMAL) === 0) {
+        if ($this->count() === 0) {
             return false;
         }
 
@@ -2918,7 +2907,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function matchesAny(\Closure $closure): bool
     {
-        if (\count($this->getArray(), \COUNT_NORMAL) === 0) {
+        if ($this->count() === 0) {
             return false;
         }
 
@@ -2940,11 +2929,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function max()
     {
-        if (\count($this->getArray(), \COUNT_NORMAL) === 0) {
+        if ($this->count() === 0) {
             return false;
         }
 
-        return \max($this->getArray());
+        $max = false;
+        foreach ($this->getGenerator() as $value) {
+            if (
+                $max === false
+                ||
+                $value > $max
+            ) {
+                $max = $value;
+            }
+        }
+
+        return $max;
     }
 
     /**
@@ -3068,11 +3068,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function min()
     {
-        if (\count($this->getArray(), \COUNT_NORMAL) === 0) {
+        if ($this->count() === 0) {
             return false;
         }
 
-        return \min($this->getArray());
+        $min = false;
+        foreach ($this->getGenerator() as $value) {
+            if (
+                $min === false
+                ||
+                $value < $min
+            ) {
+                $min = $value;
+            }
+        }
+
+        return $min;
     }
 
     /**
@@ -3211,6 +3222,34 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Get the next nth keys and values from the array.
+     *
+     * @param int $step
+     * @param int $offset
+     *
+     * @return static
+     */
+    public function nth(int $step, int $offset = 0): self
+    {
+        $arrayFunction = function () use ($step, $offset): \Generator {
+            $position = 0;
+            foreach ($this->getGenerator() as $key => $value) {
+                if ($position++ % $step !== $offset) {
+                    continue;
+                }
+
+                yield $key => $value;
+            }
+        };
+
+        return static::create(
+            $arrayFunction,
+            $this->iteratorClass,
+            false
+        );
+    }
+
+    /**
      * Get a subset of the items from the given array.
      *
      * @param mixed[] $keys
@@ -3265,11 +3304,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $matches = [];
         $noMatches = [];
 
-        foreach ($this->array as $key => $element) {
-            if ($closure($key, $element)) {
-                $matches[$key] = $element;
+        foreach ($this->array as $key => $value) {
+            if ($closure($value, $key)) {
+                $matches[$key] = $value;
             } else {
-                $noMatches[$key] = $element;
+                $noMatches[$key] = $value;
             }
         }
 
@@ -3460,7 +3499,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        if (\count($this->array, \COUNT_NORMAL) === 0) {
+        if ($this->count() === 0) {
             return static::create(
                 [],
                 $this->iteratorClass,
@@ -3523,9 +3562,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        $count = \count($this->array, \COUNT_NORMAL);
+        $count = $this->count();
 
-        if ($number === 0 || $number > $count) {
+        if (
+            $number === 0
+            ||
+            $number > $count
+        ) {
             throw new \RangeException(
                 \sprintf(
                     'Number of requested keys (%s) must be equal or lower than number of elements in this array (%s)',
@@ -3556,7 +3599,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        if (\count($this->array, \COUNT_NORMAL) === 0) {
+        if ($this->count() === 0) {
             return static::create(
                 [],
                 $this->iteratorClass,
@@ -4520,7 +4563,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $tmpArray = $this->getArray();
 
-        \array_splice($tmpArray, $offset, $length ?? $this->count(), $replacement);
+        \array_splice(
+            $tmpArray,
+            $offset,
+            $length ?? $this->count(),
+            $replacement
+        );
 
         return static::create(
             $tmpArray,
@@ -4542,12 +4590,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        $arrayCount = \count($this->array, \COUNT_NORMAL);
+        $count = $this->count();
 
-        if ($arrayCount === 0) {
+        if ($count === 0) {
             $result = [];
         } else {
-            $splitSize = (int) \ceil($arrayCount / $numberOfPieces);
+            $splitSize = (int) \ceil($count / $numberOfPieces);
             $result = \array_chunk($this->array, $splitSize, $keepKeys);
         }
 
@@ -4629,6 +4677,47 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $return;
+    }
+
+    /**
+     * @param string[]|null $items
+     * @param string[]      $helper
+     *
+     * @return static
+     */
+    public function toPermutation(array $items = null, array $helper = []): self
+    {
+        // init
+        $return = [];
+
+        if ($items === null) {
+            $items = $this->getArray();
+        }
+
+        if (empty($items)) {
+            $return[] = $helper;
+        } else {
+            for ($i = \count($items) - 1; $i >= 0; --$i) {
+                $new_items = $items;
+                $new_helper = $helper;
+                list($tmp_helper) = \array_splice($new_items, $i, 1);
+                /** @noinspection PhpSillyAssignmentInspection */
+                /** @var string[] $new_items */
+                $new_items = $new_items;
+                \array_unshift($new_helper, $tmp_helper);
+                /** @noinspection SlowArrayOperationsInLoopInspection */
+                $return = \array_merge(
+                    $return,
+                    $this->toPermutation($new_items, $new_helper)->toArray()
+                );
+            }
+        }
+
+        return static::create(
+            $return,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -4732,6 +4821,25 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         \array_unshift(...[&$this->array], ...$args);
 
         return $this;
+    }
+
+    /**
+     * Tests whether the given closure retrun something valid for all elements of this array.
+     *
+     * @param \Closure $closure the predicate
+     *
+     * @return bool
+     *              <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>
+     */
+    public function validate(\Closure $closure): bool
+    {
+        foreach ($this->getGenerator() as $key => $value) {
+            if (!$closure($value, $key)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -4941,6 +5049,41 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         } else {
             $callable($currentOffset[$nextPath]);
         }
+    }
+
+    /**
+     * Extracts the value of the given property or method from the object.
+     *
+     * @param \Arrayy\Arrayy $object                <p>The object to extract the value from.</p>
+     * @param string         $keyOrPropertyOrMethod <p>The property or method for which the
+     *                                              value should be extracted.</p>
+     *
+     * @throws \InvalidArgumentException if the method or property is not defined
+     *
+     * @return mixed
+     *               <p>The value extracted from the specified property or method.</p>
+     */
+    final protected function extractValue(self $object, string $keyOrPropertyOrMethod)
+    {
+        if (isset($object[$keyOrPropertyOrMethod])) {
+            $return = $object->get($keyOrPropertyOrMethod);
+
+            if ($return instanceof self) {
+                return $return->getArray();
+            }
+
+            return $return;
+        }
+
+        if (\property_exists($object, $keyOrPropertyOrMethod)) {
+            return $object->{$keyOrPropertyOrMethod};
+        }
+
+        if (\method_exists($object, $keyOrPropertyOrMethod)) {
+            return $object->{$keyOrPropertyOrMethod}();
+        }
+
+        throw new \InvalidArgumentException(\sprintf('array-key & property & method "%s" not defined in %s', $keyOrPropertyOrMethod, \gettype($object)));
     }
 
     /**
@@ -5423,41 +5566,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $this;
-    }
-
-    /**
-     * Extracts the value of the given property or method from the object.
-     *
-     * @param \Arrayy\Arrayy $object                <p>The object to extract the value from.</p>
-     * @param string         $keyOrPropertyOrMethod <p>The property or method for which the
-     *                                              value should be extracted.</p>
-     *
-     * @throws \InvalidArgumentException if the method or property is not defined
-     *
-     * @return mixed
-     *               <p>The value extracted from the specified property or method.</p>
-     */
-    final protected function extractValue(Arrayy $object, string $keyOrPropertyOrMethod)
-    {
-        if (isset($object[$keyOrPropertyOrMethod])) {
-            $return = $object->get($keyOrPropertyOrMethod);
-
-            if ($return instanceof Arrayy) {
-                return $return->getArray();
-            }
-
-            return $return;
-        }
-
-        if (\property_exists($object, $keyOrPropertyOrMethod)) {
-            return $object->{$keyOrPropertyOrMethod};
-        }
-
-        if (\method_exists($object, $keyOrPropertyOrMethod)) {
-            return $object->{$keyOrPropertyOrMethod}();
-        }
-
-        throw new \InvalidArgumentException(\sprintf('array-key & property & method "%s" not defined in %s', $keyOrPropertyOrMethod, \gettype($object)));
     }
 
     /**

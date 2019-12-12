@@ -1755,6 +1755,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         return [
             'empty_array' => [
                 [],
+                0,
                 self::TYPE_EMPTY,
             ],
             'indexed_array' => [
@@ -1763,6 +1764,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
                     2 => 'two',
                     3 => 'three',
                 ],
+                3,
                 self::TYPE_NUMERIC,
             ],
             'assoc_array' => [
@@ -1771,6 +1773,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
                     'two'   => 2,
                     'three' => 3,
                 ],
+                3,
                 self::TYPE_ASSOC,
             ],
             'mixed_array' => [
@@ -1779,6 +1782,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
                     'two' => 2,
                     3     => 'three',
                 ],
+                3,
                 self::TYPE_MIXED,
             ],
         ];
@@ -1988,6 +1992,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             [0 => 1, 2 => 3, 4 => 5],
             [1 => 2, 3 => 4],
         ];
+
+        static::assertSame(2, $under->count());
 
         $result = [];
         foreach ($under->getGenerator() as $key => $value) {
@@ -4466,6 +4472,38 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
+    public function testTestgetValues(array $array)
+    {
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->getValues()->getArray();
+        $resultArray = \array_values($array);
+
+        static::assertSame([], \array_diff($resultArrayy, $resultArray));
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testTestgetValuesYield(array $array)
+    {
+        $arrayy = new A($array);
+        $resultGenerator = $arrayy->getValuesYield();
+        $result = [];
+        foreach ($resultGenerator as $key => $value) {
+            $result[$key] = $value;
+        }
+        $resultArray = \array_values($array);
+
+        static::assertSame([], \array_diff($result, $resultArray));
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
     public function testReindex(array $array)
     {
         $arrayy = new A($array);
@@ -4486,6 +4524,29 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $arrayy->getArray());
     }
 
+    public function testPartition()
+    {
+        $array = [1, 2, 3, 4];
+        $arrayy = A::create($array)->partition(
+            static function ($value) {
+                return $value % 2 !== 0;
+            }
+        );
+        static::assertEquals([0 => 1, 2 => 3], $arrayy[0]->toArray());
+        static::assertEquals([1 => 2, 3 => 4], $arrayy[1]->toArray());
+
+        // ---
+
+        $array = [1 => 'foo', 2 => 'bar', 3 => 'lall', 4 => '123'];
+        $arrayy = A::create($array)->partition(
+            static function ($value, $key) {
+                return $key % 2 !== 0;
+            }
+        );
+        static::assertEquals([1 => 'foo', 3 => 'lall'], $arrayy[0]->toArray());
+        static::assertEquals([2 => 'bar', 4 => '123'], $arrayy[1]->toArray());
+    }
+
     public function testReject()
     {
         $array = [1, 2, 3, 4];
@@ -4495,6 +4556,47 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             }
         );
         static::assertSame([1 => 2, 3 => 4], $arrayy->getArray());
+
+        // ---
+
+        $array = [1 => 'foo', 2 => 'bar', 3 => 'lall', 4 => '123'];
+        $arrayy = A::create($array)->reject(
+            static function ($value, $key) {
+                return $key % 2 !== 0;
+            }
+        );
+        static::assertSame([2 => 'bar', 4 => '123'], $arrayy->getArray());
+    }
+
+    public function testValidate()
+    {
+        $array = [2, 4];
+        $result = A::create($array)->validate(
+            static function ($value) {
+                return $value % 2 === 0;
+            }
+        );
+        static::assertTrue($result);
+
+        // ---
+
+        $array = [1, 4];
+        $result = A::create($array)->validate(
+            static function ($value) {
+                return $value % 2 === 0;
+            }
+        );
+        static::assertFalse($result);
+
+        // ---
+
+        $array = [2 => 1, 4 => 3];
+        $result = A::create($array)->validate(
+            static function ($value, $key) {
+                return $key % 2 === 0;
+            }
+        );
+        static::assertTrue($result);
     }
 
     /**
@@ -5523,8 +5625,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @dataProvider simpleArrayProvider
      *
      * @param array $array
+     * @param int   $count
      */
-    public function testStaticCreateFromGeneratorFunctionFromArray(array $array)
+    public function testStaticCreateFromGeneratorFunctionFromArray(array $array, int $count)
     {
         $arrayy = A::create($array);
         $resultArrayy = A::createFromGeneratorFunction(
@@ -5532,6 +5635,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
                 yield from $arrayy->getArray();
             }
         );
+
+        static::assertSame($count, $resultArrayy->count());
 
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }

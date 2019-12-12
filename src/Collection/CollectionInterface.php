@@ -205,13 +205,13 @@ interface CollectionInterface
     public function first();
 
     /**
-     * Tests whether the given predicate p holds for all elements of this collection.
+     * Tests whether the given closure retrun something valid for all elements of this array.
      *
      * @param \Closure $closure the predicate
      *
      * @return bool TRUE, if the predicate yields TRUE for all elements, FALSE otherwise
      */
-    public function forAll(\Closure $closure): bool;
+    public function validate(\Closure $closure): bool;
 
     /**
      * Gets the element at the specified key/index.
