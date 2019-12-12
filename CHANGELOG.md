@@ -1,5 +1,15 @@
 # Changelog
 
+### 7.0.0 (2019-12-13)
+
+- normalize $closure (value => key instead of key => value) for "forAll()"
+- normalize $closure (value => key instead of key => value) for "partition()"
+- rename "forAll()" into "validate()"
+- use "iterator_count()" if possible
+- add "nth()"
+- add "toPermutation()"
+
+
 ### 6.1.1
 
 - fix phpstan (0.12) generic support
