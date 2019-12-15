@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Arrayy\tests\Collection;
+
 use Arrayy\Type\IntCollection;
 use Arrayy\Type\StringCollection;
 use PHPUnit\Framework\TestCase;
@@ -258,7 +260,7 @@ final class TypesTest extends TestCase
             $set->toArray()
         );
 
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
         $set->push(1);
     }
 

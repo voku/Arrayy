@@ -17,7 +17,11 @@ use Arrayy\TypeCheck\TypeCheckPhpDoc;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
+ * @template TKey of array-key
  * @template T
+ * @template-extends \ArrayObject<TKey,T>
+ * @template-implements \IteratorAggregate<TKey,T>
+ * @template-implements \ArrayAccess<TKey|null,T>
  */
 class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \JsonSerializable, \Countable
 {
@@ -25,11 +29,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * @var array
+     *
+     * @psalm-var array<TKey,T>
      */
     protected $array = [];
 
     /**
      * @var \Arrayy\ArrayyRewindableGenerator|null
+     *
+     * @psalm-var \Arrayy\ArrayyRewindableGenerator<TKey,T>|null
      */
     protected $generator;
 
@@ -313,6 +321,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param array|static $data
      *
      * @return array
+     *
+     * @psalm-param  array<TKey,T>|self<TKey,T> $data
+     * @psalm-return array<TKey,T>
      */
     public function exchangeArray($data): array
     {
@@ -325,6 +336,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Creates a copy of the ArrayyObject.
      *
      * @return array
+     *
+     * @psalm-return array<TKey,T>
      */
     public function getArrayCopy(): array
     {
@@ -358,6 +371,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Gets the iterator classname for the ArrayObject.
      *
      * @return string
+     *
+     * @psalm-return class-string
      */
     public function getIteratorClass(): string
     {
@@ -678,6 +693,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+     *
+     * @psalm-param array<mixed,T> $values
+     * @psalm-param TKey|null $key
      */
     public function appendArrayValues(array $values, $key = null)
     {
@@ -1010,6 +1028,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *              <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey> $needles
      */
     public function containsKeys(array $needles, $recursive = false): bool
     {
@@ -1047,6 +1067,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *              <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey> $needles
      */
     public function containsKeysRecursive(array $needles): bool
     {
@@ -1088,6 +1110,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *              <p>Returns true if all the given values exists in the array, false otherwise.</p>
+     *
+     * @psalm-param array<mixed>|array<T> $needles
      */
     public function containsValues(array $needles): bool
     {
@@ -1144,6 +1168,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function createByReference(array &$array = []): self
     {
@@ -1157,10 +1183,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Create an new instance from a callable function which will return an Generator.
      *
-     * @param callable():Generator $generatorFunction
+     * @param callable $generatorFunction
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+     *
+     * @psalm-param callable():\Generator<TKey,T> $generatorFunction
      */
     public static function createFromGeneratorFunction(callable $generatorFunction): self
     {
@@ -1174,6 +1202,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+     *
+     * @psalm-param \Generator<TKey,T> $generator
      */
     public static function createFromGeneratorImmutable(\Generator $generator): self
     {
@@ -1200,6 +1230,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+     *
+     * @psalm-param \Traversable<TKey,T> $object
      */
     public static function createFromObject(\Traversable $object): self
     {
@@ -1280,6 +1312,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+     *
+     * @psalm-param \Traversable<TKey,T> $traversable
      */
     public static function createFromTraversableImmutable(\Traversable $traversable): self
     {
@@ -1323,12 +1357,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      */
-    public function customSortKeys($function): self
+    public function customSortKeys(callable $function): self
     {
-        if (\is_callable($function) === false) {
-            throw new \InvalidArgumentException('Passed function must be callable');
-        }
-
         $this->generatorToArray();
 
         \uksort($this->array, $function);
@@ -1384,6 +1414,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> ...$array
      */
     public function diff(...$array): self
     {
@@ -1401,6 +1433,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> ...$array
      */
     public function diffKey(...$array): self
     {
@@ -1418,6 +1452,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function diffKeyAndValue(array $array = []): self
     {
@@ -1436,6 +1472,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
+     * @psalm-param null|array<TKey,T> $helperVariableForRecursion
      */
     public function diffRecursive(array $array = [], $helperVariableForRecursion = null): self
     {
@@ -1480,6 +1519,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function diffReverse(array $array = []): self
     {
@@ -1898,6 +1939,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                        class.</p>
      *
      * @return mixed|static
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function get($key, $fallback = null, array $array = null)
     {
@@ -1997,7 +2040,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @see Arrayy::getArray()
+     * @see          Arrayy::getArray()
+     *
+     * @psalm-return array<mixed,mixed>|array<TKey,T>
      */
     public function getAll(): array
     {
@@ -2010,6 +2055,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param bool $convertAllArrayyElements
      *
      * @return array
+     *
+     * @psalm-return array<mixed,mixed>|array<TKey,T>
      */
     public function getArray($convertAllArrayyElements = false): array
     {
@@ -2059,6 +2106,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Get the current array from the "Arrayy"-object as generator.
      *
      * @return \Generator
+     *
+     * @psalm-return \Generator<mixed,T>|\Generator<TKey,T>
      */
     public function getGenerator(): \Generator
     {
@@ -2185,6 +2234,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return \Generator
      *                    <p>The values of all elements in this array, in the order they
      *                    appear in the array as Generator.</p>
+     *
+     * @psalm-return \Generator<TKey,T>
      */
     public function getValuesYield(): \Generator
     {
@@ -2362,6 +2413,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $search
      */
     public function intersection(array $search, bool $keepKeys = false): self
     {
@@ -2393,6 +2446,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> ...$array
      */
     public function intersectionMulti(...$array): self
     {
@@ -2409,6 +2464,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param array $search
      *
      * @return bool
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $search
      */
     public function intersects(array $search): bool
     {
@@ -2505,6 +2562,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param array $array
      *
      * @return bool
+     *
+     * @psalm-param array<mixed,mixed> $array
      */
     public function isEqual(array $array): bool
     {
@@ -2573,6 +2632,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * @return array
+     *
+     * @psalm-return array<TKey,T>
      */
     public function jsonSerialize(): array
     {
@@ -2957,6 +3018,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function mergeAppendKeepIndex(array $array = [], bool $recursive = false): self
     {
@@ -2984,6 +3047,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function mergeAppendNewIndex(array $array = [], bool $recursive = false): self
     {
@@ -3010,6 +3075,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function mergePrependKeepIndex(array $array = [], bool $recursive = false): self
     {
@@ -3037,6 +3104,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function mergePrependNewIndex(array $array = [], bool $recursive = false): self
     {
@@ -3467,6 +3536,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                <p>(Mutable) Return this Arrayy object, with pushed elements to the end of array.</p>
      *
      * @noinspection ReturnTypeCanBeDeclaredInspection
+     *
+     * @psalm-param  array<mixed,mixed>|array<TKey,T> ...$args
      */
     public function push(...$args)
     {
@@ -3661,6 +3732,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function randomWeighted(array $array, int $number = null): self
     {
@@ -3945,6 +4018,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable) Arrayy object with keys from the other array.</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<mixed,TKey> $keys
      */
     public function replaceAllKeys(array $keys): self
     {
@@ -3962,6 +4037,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable) Arrayy object with values from the other array.</p>
+     *
+     * @psalm-param array<mixed,T> $array
      */
     public function replaceAllValues(array $array): self
     {
@@ -3979,6 +4056,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<mixed,TKey> $keys
      */
     public function replaceKeys(array $keys): self
     {
@@ -4210,6 +4289,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
      */
     public function shuffle(bool $secure = false, array $array = null): self
     {
@@ -4558,6 +4639,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Immutable)</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<mixed,T> $replacement
      */
     public function splice(int $offset, int $length = null, $replacement = []): self
     {
@@ -4654,7 +4737,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @see Arrayy::getArray()
+     * @see          Arrayy::getArray()
+     *
+     * @psalm-return array<array-key,mixed>
      */
     public function toArray(bool $convertAllArrayyElements = false): array
     {
@@ -4813,6 +4898,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with prepended elements to the beginning of array.</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T> ...$args
      */
     public function unshift(...$args): self
     {
@@ -4913,9 +5000,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Convert an array into a object.
      *
-     * @param array $array PHP array
+     * @param array $array
      *
      * @return \stdClass
+     *
+     * @psalm-param array<mixed,mixed> $array
      */
     final protected static function arrayToObject(array $array = []): \stdClass
     {
@@ -4951,6 +5040,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *               <p>an array of all the keys in input</p>
+     *
+     * @psalm-param  array<mixed,mixed>|\Generator<TKey,T>|null $input
+     * @psalm-return array<TKey|mixed>
      */
     protected function array_keys_recursive(
         $input = null,
@@ -5020,6 +5112,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param array|null $currentOffset
      *
      * @return void
+     *
+     * @psalm-param array<mixed,mixed>|array<TKey,T>|null $currentOffset
      */
     protected function callAtPath($path, $callable, &$currentOffset = null)
     {
@@ -5054,14 +5148,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Extracts the value of the given property or method from the object.
      *
-     * @param \Arrayy\Arrayy $object                <p>The object to extract the value from.</p>
-     * @param string         $keyOrPropertyOrMethod <p>The property or method for which the
-     *                                              value should be extracted.</p>
+     * @param static $object                <p>The object to extract the value from.</p>
+     * @param string $keyOrPropertyOrMethod <p>The property or method for which the
+     *                                      value should be extracted.</p>
      *
      * @throws \InvalidArgumentException if the method or property is not defined
      *
      * @return mixed
      *               <p>The value extracted from the specified property or method.</p>
+     *
+     * @psalm-param self<TKey,T> $object
      */
     final protected function extractValue(self $object, string $keyOrPropertyOrMethod)
     {
@@ -5102,6 +5198,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @throws \InvalidArgumentException
      *
      * @return array
+     *
+     * @psalm-return array<mixed,mixed>|array<TKey,T>
      */
     protected function fallbackForArray(&$data): array
     {
@@ -5250,6 +5348,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *              <p>true if needle is found in the array, false otherwise</p>
+     *
+     * @psalm-param array<mixed,mixed>|\Generator<TKey,T>|null $haystack
      */
     protected function in_array_recursive($needle, $haystack = null, $strict = true): bool
     {
@@ -5281,6 +5381,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param mixed $data
      *
      * @return array|null
+     *
+     * @psalm-return array<mixed,mixed>|array<TKey,T>|null
      */
     protected function internalGetArray(&$data)
     {
@@ -5453,6 +5555,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param bool  $checkPropertiesInConstructor
      *
      * @return void
+     *
+     * @psalm-param array<mixed,T> $data
      */
     protected function setInitialValuesAndProperties(array &$data, bool $checkPropertiesInConstructor)
     {
@@ -5507,6 +5611,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
+     *
+     * @psalm-param array<mixed,mixed>|array<mixed|TKey,T> $elements
      */
     protected function sorterKeys(array &$elements, $direction = \SORT_ASC, int $strategy = \SORT_REGULAR): self
     {
@@ -5536,6 +5642,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
+     *
+     * @psalm-param array<mixed> $elements
      */
     protected function sorting(array &$elements, $direction = \SORT_ASC, int $strategy = \SORT_REGULAR, bool $keepKeys = false): self
     {

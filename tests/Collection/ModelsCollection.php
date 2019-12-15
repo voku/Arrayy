@@ -1,7 +1,8 @@
 <?php
 
-namespace Arrayy\tests;
+namespace Arrayy\tests\Collection;
 
+use Arrayy\tests\ModelInterface;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckInterface;
 

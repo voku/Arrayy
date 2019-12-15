@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Arrayy\tests\Collection;
+
 use Arrayy\Collection\Collection;
 use PHPUnit\Framework\TestCase;
 
@@ -22,9 +24,9 @@ final class TypeTypeTest extends TestCase
 
     public function testWrongValue()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         /** @noinspection PhpStrictTypeCheckingInspection */
-        new Collection(stdClass::class, [new stdClass(), 'A']);
+        new Collection(\stdClass::class, [new \stdClass(), 'A']);
     }
 }

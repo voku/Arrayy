@@ -64,8 +64,9 @@ use Arrayy\TypeCheck\TypeCheckInterface;
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
  *
+ * @template TKey of array-key
  * @template T
- * @extends  AbstractCollection<T>
+ * @extends  AbstractCollection<TKey,T>
  */
 class Collection extends AbstractCollection
 {
@@ -94,7 +95,7 @@ class Collection extends AbstractCollection
      *                                                         </p>
      * @param TypeInterface|null $type
      *
-     * @psalm-param array<T> $data
+     * @psalm-param array<TKey,T>|\Arrayy\Arrayy<TKey,T> $data
      * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
@@ -129,7 +130,7 @@ class Collection extends AbstractCollection
      *
      * @return static
      *
-     * @psalm-param  class-string<T>|string|TypeCheckArray<T>|array<TypeCheckInterface> $type
+     * @psalm-param  string|class-string|class-string<T>|TypeInterface|TypeCheckArray<TKey,T>|array<TypeCheckInterface> $type
      * @psalm-param  array<T> $data
      * @psalm-return static<T>
      */
@@ -168,7 +169,7 @@ class Collection extends AbstractCollection
      *
      * @return string|TypeCheckArray|TypeCheckInterface[]
      *
-     * @psalm-return class-string<T>|string|TypeCheckArray<T>|array<TypeCheckInterface>
+     * @psalm-return string|class-string|class-string<T>|TypeInterface|TypeCheckArray<TKey,T>|TypeCheckArray<int|string,mixed>|array<TypeCheckInterface>|array<array-key,TypeCheckInterface>
      */
     public function getType()
     {
@@ -180,7 +181,7 @@ class Collection extends AbstractCollection
      *
      * @return self
      *
-     * @psalm-return self<T>
+     * @psalm-return self<TKey,T>
      */
     public function toBase(): self
     {

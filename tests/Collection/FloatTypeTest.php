@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Arrayy\tests\Collection;
+
 use Arrayy\Type\FloatCollection;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +34,7 @@ final class FloatTypeTest extends TestCase
 
     public function testWrongValue()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         new FloatCollection([1.0, 1.1, 1.2, '2']);
     }

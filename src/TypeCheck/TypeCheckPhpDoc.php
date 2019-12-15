@@ -86,7 +86,13 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         if ($type instanceof \phpDocumentor\Reflection\Types\Compound) {
             $types = [];
             foreach ($type as $subType) {
-                $types[] = self::parseDocTypeObject($subType);
+                $typeTmp = self::parseDocTypeObject($subType);
+
+                /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
+                /** @var string $typeTmp */
+                $typeTmp = $typeTmp;
+
+                $types[] = $typeTmp;
             }
 
             return $types;

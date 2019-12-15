@@ -70,7 +70,7 @@ class StaticArrayy
      * @param int|null $stop The stopping point
      * @param int      $step How many to increment of
      *
-     * @return Arrayy<int>
+     * @return Arrayy<int,int>
      */
     public static function range(int $base, int $stop = null, int $step = 1): Arrayy
     {
@@ -90,7 +90,7 @@ class StaticArrayy
      * @param float|int|string|null $data
      * @param int                   $times
      *
-     * @return Arrayy<float|int|string|null>
+     * @return Arrayy<int,float|int|string|null>
      */
     public static function repeat($data, int $times): Arrayy
     {

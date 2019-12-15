@@ -6,8 +6,9 @@ use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
 
 /**
+ * @template TKey of array-key
  * @template T
- * @extends  \Arrayy\ArrayyStrict<T>
+ * @extends  \Arrayy\ArrayyStrict<TKey,T>
  */
 class TypeCheckArray extends \Arrayy\ArrayyStrict
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Arrayy\tests;
+namespace Arrayy\tests\Collection;
 
 use Arrayy\Collection\AbstractCollection;
 

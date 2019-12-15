@@ -7,7 +7,7 @@ namespace Arrayy\Type;
 use Arrayy\Collection\Collection;
 
 /**
- * @extends Collection<float|int>
+ * @extends Collection<array-key,float|int>
  */
 final class FloatCollection extends Collection implements TypeInterface
 {

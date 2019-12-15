@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Arrayy\tests\Collection;
+
 use Arrayy\Type\BoolCollection;
 use PHPUnit\Framework\TestCase;
 
@@ -32,14 +34,14 @@ final class BoolTypeTest extends TestCase
 
     public function testWrongValue()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         new BoolCollection([true, true, false, 1]);
     }
 
     public function testBoolArrayWrongValue()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         new BoolCollection([[true, true], false, [true]]);
     }

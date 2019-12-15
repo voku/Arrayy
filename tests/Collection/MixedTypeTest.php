@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Arrayy\tests\Collection;
+
 use Arrayy\Type\MixedCollection;
 use PHPUnit\Framework\TestCase;
 

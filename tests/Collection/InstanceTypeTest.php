@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Arrayy\tests\Collection;
+
 use Arrayy\Type\BoolCollection;
 use Arrayy\Type\InstanceCollection;
 use Arrayy\Type\TypeInterface;
@@ -41,11 +43,11 @@ final class InstanceTypeTest extends TestCase
 
     public function testWrongValue()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         \Arrayy\Type\InstancesCollection::construct(
             TypeInterface::class,
-            [new BoolCollection(), new stdClass()]
+            [new BoolCollection(), new \stdClass()]
         );
     }
 }

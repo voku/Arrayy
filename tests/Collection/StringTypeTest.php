@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Arrayy\tests\Collection;
+
 use Arrayy\Type\StringCollection;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +24,7 @@ final class StringTypeTest extends TestCase
 
     public function testWrongValue()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         new StringCollection(['A', 'B', 'C', 1]);
     }

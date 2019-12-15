@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Arrayy\tests\Collection;
+
 use Arrayy\Type\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
@@ -12,22 +14,22 @@ final class ArrayTypeTest extends TestCase
 {
     public function testArray()
     {
-        $set = new ArrayCollection([['a', 1, 1.4], [], [true, new stdClass()], []]);
+        $set = new ArrayCollection([['a', 1, 1.4], [], [true, new \stdClass()], []]);
 
         static::assertEquals(
-            [['a', 1, 1.4], [], [true, new stdClass()], []],
+            [['a', 1, 1.4], [], [true, new \stdClass()], []],
             $set->toArray()
         );
     }
 
     public function testStringArrayFalse()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
-        $set = new \Arrayy\Type\StringArrayCollection([['a', 1, 1.4], [], [true, new stdClass()], []]);
+        $set = new \Arrayy\Type\StringArrayCollection([['a', 1, 1.4], [], [true, new \stdClass()], []]);
 
         static::assertEquals(
-            [['a', 1, 1.4], [], [true, new stdClass()], []],
+            [['a', 1, 1.4], [], [true, new \stdClass()], []],
             $set->toArray()
         );
     }
@@ -44,8 +46,8 @@ final class ArrayTypeTest extends TestCase
 
     public function testWrongValue()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
-        new ArrayCollection([['a', 1, 1.4], [], [true, new stdClass()], '[]']);
+        new ArrayCollection([['a', 1, 1.4], [], [true, new \stdClass()], '[]']);
     }
 }

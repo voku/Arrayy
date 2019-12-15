@@ -10,8 +10,9 @@ use Arrayy\ArrayyIterator;
 use Arrayy\Collection\Collection;
 
 /**
+ * @template TKey of array-key
  * @template T
- * @extends Collection<T>
+ * @extends Collection<TKey,T>
  */
 final class DetectFirstValueTypeCollection extends Collection implements TypeInterface
 {

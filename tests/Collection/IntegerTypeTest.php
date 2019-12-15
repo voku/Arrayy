@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Arrayy\tests\Collection;
+
 use Arrayy\Type\IntCollection;
 use PHPUnit\Framework\TestCase;
 
@@ -32,14 +34,14 @@ final class IntegerTypeTest extends TestCase
 
     public function testWrongValue()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         new IntCollection([1, 2, 3, 4.0]);
     }
 
     public function testIntArrayWrongValue()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         new IntCollection([[1, 2], 4.0]);
     }

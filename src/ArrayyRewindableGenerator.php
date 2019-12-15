@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Arrayy;
 
 /**
+ * @template   XKey of array-key
+ * @template   X
+ * @implements \Iterator<XKey,X>
+ *
  * @internal
  */
 final class ArrayyRewindableGenerator implements \Iterator
@@ -16,6 +20,8 @@ final class ArrayyRewindableGenerator implements \Iterator
 
     /**
      * @var \Generator
+     *
+     * @psalm-var \Generator<XKey,X>
      */
     private $generator;
 
@@ -45,6 +51,8 @@ final class ArrayyRewindableGenerator implements \Iterator
      *
      * @see  http://php.net/manual/en/iterator.current.php
      * @see  Iterator::current
+     *
+     * @psalm-return X
      */
     public function current()
     {
@@ -58,6 +66,8 @@ final class ArrayyRewindableGenerator implements \Iterator
      *
      * @see  http://php.net/manual/en/iterator.key.php
      * @see  Iterator::key
+     *
+     * @psalm-return XKey
      */
     public function key()
     {

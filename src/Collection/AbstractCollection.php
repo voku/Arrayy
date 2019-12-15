@@ -22,9 +22,10 @@ use Arrayy\TypeCheck\TypeCheckSimple;
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
  *
+ * @template   TKey of array-key
  * @template   T
- * @extends    Arrayy<T>
- * @implements CollectionInterface<T>
+ * @extends    Arrayy<TKey,T>
+ * @implements CollectionInterface<TKey,T>
  */
 abstract class AbstractCollection extends Arrayy implements CollectionInterface
 {
@@ -36,7 +37,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
 
     /**
      * @var ArrayyRewindableGenerator|null
-     * @psalm-var \Arrayy\ArrayyRewindableGenerator<T>|null
+     * @psalm-var \Arrayy\ArrayyRewindableGenerator<TKey,T>|null
      */
     protected $generator;
 
@@ -74,7 +75,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
      *
-     * @psalm-param array<T> $data
+     * @psalm-param array<TKey,T>|\Arrayy\Arrayy<TKey,T>|\Closure():array<TKey,T>|mixed $data
      * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
@@ -209,8 +210,8 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return $this
      *
-     * @psalm-param  array<CollectionInterface<T>> ...$collections
-     * @psalm-return $this<T>
+     * @psalm-param  array<CollectionInterface<TKey,T>> ...$collections
+     * @psalm-return $this<TKey,T>
      */
     public function merge(CollectionInterface ...$collections): self
     {
@@ -237,7 +238,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @psalm-param  array<T> $data
      * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
-     * @psalm-return static<T>
+     * @psalm-return static<TKey,T>
      */
     public static function create(
         $data = [],
@@ -287,7 +288,8 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return TypeCheckArray
      *
-     * @psalm-param null|string|class-string|string[]|array<class-string>|TypeCheckArray|array<TypeCheckInterface>|mixed $type
+     * @psalm-param null|string|string[]|class-string|class-string[]|TypeCheckArray<TypeCheckInterface>|array<TypeCheckInterface>|mixed $type
+     * @psalm-return TypeCheckArray<int,TypeCheckInterface>
      */
     protected static function convertIntoTypeCheckArray($type): TypeCheckArray
     {

@@ -8,7 +8,9 @@ use Arrayy\ArrayyIterator;
 use Arrayy\Collection\Collection;
 
 /**
+ * @template TKey of array-key
  * @template T
+ * @extends  Collection<TKey,T>
  */
 final class InstancesCollection extends Collection implements TypeInterface
 {

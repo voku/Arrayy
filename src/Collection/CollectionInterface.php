@@ -14,9 +14,12 @@ use Arrayy\TypeCheck\TypeCheckInterface;
  *
  * INFO: this collection thingy is inspired by https://github.com/ramsey/collection/
  *
+ * @template TKey of array-key
  * @template T
+ * @template-extends \IteratorAggregate<TKey,T>
+ * @template-extends \ArrayAccess<TKey|null,T>
  */
-interface CollectionInterface
+interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Serializable, \JsonSerializable, \Countable
 {
     /**
      * Assigns a value to the specified element.
@@ -26,6 +29,7 @@ interface CollectionInterface
      *
      * @return void
      *
+     * @psalm-param TKey $key
      * @psalm-param T $value
      */
     public function __set($key, $value);
@@ -41,7 +45,7 @@ interface CollectionInterface
      * @see          CollectionInterface::append()
      *
      * @psalm-param  T $value
-     * @psalm-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function add($value);
 
@@ -54,8 +58,9 @@ interface CollectionInterface
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @psalm-param  T|array<T> $value
-     * @psalm-return CollectionInterface<T>
+     * @psalm-param T|array<T> $value
+     * @psalm-param TKey|null $key
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function append($value, $key = null);
 
@@ -68,8 +73,9 @@ interface CollectionInterface
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @psalm-param  array<T> $values
-     * @psalm-return CollectionInterface<T>
+     * @psalm-param array<T> $values
+     * @psalm-param TKey|null $key
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function appendArrayValues(array $values, $key = null);
 
@@ -113,6 +119,8 @@ interface CollectionInterface
      * @return bool
      *              <p>TRUE if the collection contains an element with the specified key/index,
      *              FALSE otherwise.</p>
+     *
+     * @psalm-param TKey $key
      */
     public function containsKey($key): bool;
 
@@ -154,7 +162,7 @@ interface CollectionInterface
      *
      * @psalm-param  array<T> $data
      * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
-     * @psalm-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public static function create(
         $data = [],
@@ -178,6 +186,8 @@ interface CollectionInterface
      *
      * @return bool
      *              <p>TRUE if the predicate is TRUE for at least one element, FALSE otherwise.</p>
+     *
+     * @psalm-param \Closure(T=,TKey=):bool $closure
      */
     public function exists(\Closure $closure): bool;
 
@@ -191,7 +201,8 @@ interface CollectionInterface
      * @return CollectionInterface
      *                             <p>A collection with the results of the filter operation.</p>
      *
-     * @psalm-return CollectionInterface<T>
+     * @psalm-param \Closure(T=,TKey=):bool $closure
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH);
 
@@ -210,6 +221,8 @@ interface CollectionInterface
      * @param \Closure $closure the predicate
      *
      * @return bool TRUE, if the predicate yields TRUE for all elements, FALSE otherwise
+     *
+     * @psalm-param \Closure(T=,TKey=):bool $closure
      */
     public function validate(\Closure $closure): bool;
 
@@ -221,6 +234,7 @@ interface CollectionInterface
      *
      * @return mixed
      *
+     * @psalm-param TKey $key
      * @psalm-return T|null
      */
     public function get($key);
@@ -246,7 +260,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @psalm-return CollectionInterface<array-key>
+     * @psalm-return TKey[]
      */
     public function getKeys();
 
@@ -254,6 +268,8 @@ interface CollectionInterface
      * The type (FQCN) associated with this collection.
      *
      * @return string|string[]|TypeCheckArray<mixed>|TypeCheckInterface[]
+     *
+     * @psalm-return string|string[]|class-string|class-string[]|TypeCheckArray<TKey,T>|TypeCheckInterface[]
      */
     public function getType();
 
@@ -289,6 +305,7 @@ interface CollectionInterface
      * @return false|mixed the key/index of the element or FALSE if the element was not found
      *
      * @psalm-param T $element
+     * @psalm-return TKey|false
      */
     public function indexOf($element);
 
@@ -299,6 +316,8 @@ interface CollectionInterface
      *
      * @return bool
      *              <p>TRUE if the collection is empty, FALSE otherwise.</p>
+     *
+     * @psalm-param TKey|TKey[]|null $keys
      */
     public function isEmpty($keys = null): bool;
 
@@ -306,6 +325,8 @@ interface CollectionInterface
      * Gets the key/index of the element at the current iterator position.
      *
      * @return int|string|null
+     *
+     * @psalm-return TKey|null
      */
     public function key();
 
@@ -328,7 +349,8 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @psalm-return CollectionInterface<T>
+     * @psalm-param callable(T=,TKey=,...mixed):mixed $callable
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments);
 
@@ -341,8 +363,8 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @psalm-param  array<CollectionInterface<T>> ...$collections
-     * @psalm-return CollectionInterface<T>
+     * @psalm-param  array<CollectionInterface<TKey,T>> ...$collections
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function merge(self ...$collections);
 
@@ -363,6 +385,7 @@ interface CollectionInterface
      *
      * @return void
      *
+     * @psalm-param TKey $offset
      * @psalm-param T $value
      */
     public function offsetSet($offset, $value);
@@ -377,7 +400,8 @@ interface CollectionInterface
      *                    of elements where the predicate returned TRUE, the second element
      *                    contains the collection of elements where the predicate returned FALSE.
      *
-     * @psalm-return array{0: CollectionInterface<T>, 1: CollectionInterface<T>}
+     * @psalm-param \Closure(T=,TKey=):bool $p
+     * @psalm-return array{0: CollectionInterface<TKey,T>, 1: CollectionInterface<TKey,T>}
      */
     public function partition(\Closure $p): array;
 
@@ -391,7 +415,7 @@ interface CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
      * @psalm-param  T $value
-     * @psalm-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function prepend($value, $key = null);
 
@@ -404,7 +428,8 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @psalm-return CollectionInterface<T>
+     * @psalm-param TKey $key
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function remove($key);
 
@@ -417,7 +442,7 @@ interface CollectionInterface
      * @return CollectionInterface
      *
      * @psalm-param  T $element
-     * @psalm-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function removeElement($element);
 
@@ -430,7 +455,7 @@ interface CollectionInterface
      *                             <p>(Immutable)</p>
      *
      * @psalm-param T $value
-     * @psalm-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function removeValue($value);
 
@@ -444,8 +469,9 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @psalm-param  T $value
-     * @psalm-return CollectionInterface<T>
+     * @psalm-param TKey $key
+     * @psalm-param T $value
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function set($key, $value);
 
@@ -462,7 +488,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @psalm-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<mixed|TKey,T>
      */
     public function slice(int $offset, int $length = null, bool $preserveKeys = false);
 
@@ -471,7 +497,7 @@ interface CollectionInterface
      *
      * @return array
      *
-     * @psalm-return array<T>
+     * @psalm-return array<TKey,T>
      */
     public function toArray(): array;
 
@@ -485,7 +511,7 @@ interface CollectionInterface
      *
      * @return CollectionInterface
      *
-     * @psalm-return CollectionInterface<T>
+     * @psalm-return CollectionInterface<TKey,T>
      */
     public function where(string $keyOrPropertyOrMethod, $value);
 }

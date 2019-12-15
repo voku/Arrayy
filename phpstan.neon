@@ -1,46 +1,24 @@
 parameters:
-    reportUnmatchedIgnoredErrors: false
     level: max
-    checkGenericClassInNonGenericObjectType: false
+    reportUnmatchedIgnoredErrors: true
+    checkGenericClassInNonGenericObjectType: true
     paths:
         - %currentWorkingDirectory%/src/
     ignoreErrors:
         # not supported by phpstan?
-        - '/between mixed and ResourceBundle/'
-        - '/between mixed and SimpleXMLElement/'
-        - '/call_user_func_array/'
-        - '/Parameter #[1-2] \$function of.*callable.*/'
-        - '/Parameter #[1-2] \$callback of.*callable.*/'
+        - '/PHPDoc tag @template .Key for .* with bound type \(int\|string\) is not supported\./'
         # false-positive?
         - '/createFromObject\(\) should return static/'
         - '/comparison using === between true and false/'
-        - '/has parameter \$iteratorClass with no value type specified/'
+        - '/return static\(Arrayy\\Arrayy\) but returns Arrayy\\Arrayy/'
+        - '/function call_user_func expects callable.*array\(.*\) given/'
+        - '/function call_user_func_array expects callable.*array\(.*\) given/'
+        - '/array_map expects \(callable\(\):/'
+        - '/Property Arrayy\\Arrayy<TKey,T>::\$iteratorClass/'
         # ignore gernal errors
         - '/Unsafe usage of new static/'
-        - '/getIterator\(\) should be compatible/'
-        - '/getIterator\(\) should return Iterator/'
         # ignore not specific types
-        - '/iteratorClass \(class-string<ArrayIterator>\) does not accept class-string/'
-        - '/parseDocTypeObject\(\) should return array<string>\|string/'
-        - '/Collection::getType\(\) should return/'
-        -
-            message: '/\$iteratorClass \(class-string<Arrayy\\ArrayyIterator>\) does not accept class-string/'
-            path: %currentWorkingDirectory%/src/Arrayy.php
-        -
-            message: '/should return static\(Arrayy\\Arrayy\) but returns Arrayy\\Arrayy/'
-            path: %currentWorkingDirectory%/src/Arrayy.php
-        -
-            message: '/expects array, array/'
-            path: %currentWorkingDirectory%/src/Type/DetectFirstValueTypeCollection.php
-        -
-            message: ~Result of \&\& is always false~
-            path: %currentWorkingDirectory%/src/Collection/AbstractCollection.php
-        -
-            message: ~Instanceof between \*NEVER\*~
-            path: %currentWorkingDirectory%/src/Collection/AbstractCollection.php
-        -
-            message: ~no value type specified in iterable~
-            path: %currentWorkingDirectory%/src/Arrayy.php
-        -
-            message: ~no value type specified in iterable~
-            path: %currentWorkingDirectory%/src/ArrayyRewindableGenerator.php
+        - '/__construct\(\) has parameter \$iteratorClass with generic/'
+        - '/create\(\) has parameter \$iteratorClass with generic/'
+        - '/parameter \$iteratorClass with generic class Arrayy\\ArrayyIterator/'
+        - '/generic class Arrayy\\ArrayyIterator does not specify its types/'

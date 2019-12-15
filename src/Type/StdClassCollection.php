@@ -8,7 +8,7 @@ use Arrayy\Collection\Collection;
 
 /**
  * @template T of \stdClass
- * @extends Collection<T>
+ * @extends Collection<array-key,T>
  */
 class StdClassCollection extends Collection implements TypeInterface
 {
@@ -17,7 +17,7 @@ class StdClassCollection extends Collection implements TypeInterface
      *
      * @return string
      *
-     * @psalm-return class-string<T>
+     * @psalm-return class-string<\stdClass>
      */
     public function getType()
     {

@@ -1,9 +1,15 @@
 <?php
 
-namespace Arrayy\tests;
+namespace Arrayy\tests\Collection;
 
 use function Arrayy\collection;
 use Arrayy\Collection\Collection;
+use Arrayy\tests\CityData;
+use Arrayy\tests\ModelA;
+use Arrayy\tests\ModelB;
+use Arrayy\tests\ModelC;
+use Arrayy\tests\ModelD;
+use Arrayy\tests\ModelInterface;
 
 /**
  * @internal
@@ -82,8 +88,20 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $stdClassCollection = new StdClassCollection([123 => $pets, 555 => $colors]);
 
         static::assertSame([123 => $pets, 555 => $colors], $stdClassCollection->getCollection());
-        static::assertSame([999 => $colors, 123 => $pets, 555 => $colors], $stdClassCollection->prepend($colors, 999)->getCollection());
-        static::assertSame([999 => $colors, 123 => $pets, 555 => $colors, 1000 => $colors], $stdClassCollection->append(new StdClassCollection($colors))->getCollection());
+        static::assertSame(
+            [999 => $colors, 123 => $pets, 555 => $colors],
+            $stdClassCollection->prepend($colors, 999)
+                ->getCollection()
+        );
+        static::assertSame(
+            [
+                999  => $colors,
+                123  => $pets,
+                555  => $colors,
+                1000 => $colors,
+            ],
+            $stdClassCollection->append(new StdClassCollection([$colors]))->getCollection()
+        );
     }
 
     public function testModelCollection()

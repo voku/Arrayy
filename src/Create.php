@@ -62,7 +62,7 @@ namespace Arrayy {
          *
          * @param mixed $data
          *
-         * @return Arrayy<mixed>
+         * @return Arrayy<int|string,mixed>
          */
         function create($data): Arrayy
         {
@@ -78,7 +78,8 @@ namespace Arrayy {
          * @return Collection
          *
          * @template T
-         * @psalm-return Collection<T>
+         * @psalm-param T $type
+         * @psalm-return Collection<int|string,T>
          */
         function collection($type, $data = []): Collection
         {

@@ -10,8 +10,9 @@ namespace Arrayy;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
+ * @template TKey of array-key
  * @template T
- * @extends  \Arrayy\Arrayy<T>
+ * @extends  \Arrayy\Arrayy<TKey,T>
  */
 class ArrayyStrict extends Arrayy implements \Arrayy\Type\TypeInterface
 {
