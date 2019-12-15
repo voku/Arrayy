@@ -208,9 +208,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @throws \InvalidArgumentException if any of the given collections are not of the same type
      *
-     * @return $this
+     * @return static
      *
-     * @psalm-param  array<CollectionInterface<TKey,T>> ...$collections
+     * @psalm-param array<CollectionInterface<TKey,T>> ...$collections
      * @psalm-return $this<TKey,T>
      */
     public function merge(CollectionInterface ...$collections): self

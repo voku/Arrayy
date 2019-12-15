@@ -349,7 +349,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-param callable(T=,TKey=,...mixed):mixed $callable
+     * @psalm-param callable(T=,TKey=,mixed):mixed $callable
      * @psalm-return CollectionInterface<TKey,T>
      */
     public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments);
@@ -363,7 +363,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-param  array<CollectionInterface<TKey,T>> ...$collections
+     * @psalm-param array<CollectionInterface<TKey,T>> ...$collections
      * @psalm-return CollectionInterface<TKey,T>
      */
     public function merge(self ...$collections);
