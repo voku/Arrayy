@@ -131,7 +131,7 @@ class Collection extends AbstractCollection
      * @return static
      *
      * @psalm-param  string|class-string|class-string<T>|TypeInterface|TypeCheckArray<TKey,T>|array<TypeCheckInterface> $type
-     * @psalm-param  array<T> $data
+     * @psalm-param  array<TKey,T> $data
      * @psalm-return static<T>
      */
     public static function construct(

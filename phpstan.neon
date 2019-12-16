@@ -8,9 +8,7 @@ parameters:
         # not supported by phpstan?
         - '/PHPDoc tag @template .Key for .* with bound type \(int\|string\) is not supported\./'
         # false-positive?
-        - '/createFromObject\(\) should return static/'
         - '/comparison using === between true and false/'
-        - '/return static\(Arrayy\\Arrayy\) but returns Arrayy\\Arrayy/'
         - '/function call_user_func expects callable.*array\(.*\) given/'
         - '/function call_user_func_array expects callable.*array\(.*\) given/'
         - '/array_map expects \(callable\(\):/'

@@ -108,7 +108,17 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Append a (key) + value to the current array.
+     *
+     * @param mixed $value
+     * @param mixed $key
+     *
+     * @return static
+     *                <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
+     *
+     * @psalm-param T|array<T>|static<T>|TypeInterface $value
+     * @psalm-param TKey|null $key
+     * @psalm-return static<TKey,T><
      */
     public function append($value, $key = null): Arrayy
     {
@@ -151,7 +161,16 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Prepend a (key) + value to the current array.
+     *
+     * @param mixed $value
+     * @param mixed $key
+     *
+     * @return static
+     *                <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
+     *
+     * @psalm-param  T $value
+     * @psalm-return static<TKey,T>
      */
     public function prepend($value, $key = null): Arrayy
     {
@@ -236,7 +255,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return static
      *                <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
-     * @psalm-param  array<T> $data
+     * @psalm-param  array<TKey,T> $data
      * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
      * @psalm-return static<TKey,T>
      */
