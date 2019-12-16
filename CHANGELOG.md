@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.0.1 (2019-12-16)
+
+- more generics support - via phpstan (>= 0.12)
+
+
 ### 7.0.0 (2019-12-13)
 
 - normalize $closure (value => key instead of key => value) for "forAll()"
