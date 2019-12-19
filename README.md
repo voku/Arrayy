@@ -333,7 +333,7 @@ $YOURcollection->add($YOURobject2); // add one more object
 // Or, if you don't want to create new classes ... 
 // ... and you don't need typehints and autocompletion via classes.
 //
-// $YOURcollection = \Arrayy\Collection(YOURInterface::class, [$YOURobject1]);
+// $YOURcollection = \Arrayy\Collection::construct(YOURInterface::class, [$YOURobject1]);
 // $YOURcollection->add($YOURobject2); // add one more object
 
 // Or, if you don't like classes at all. ;-)
@@ -472,7 +472,7 @@ $arrayy = A::createFromGeneratorImmutable($generator); // Arrayy[2, 3, 4]
 
 ##### createFromGeneratorFunction() : Arrayy (Immutable)
 
-Create an new instance from a callable function which will return an Generator.
+Create an new instance from a callable function which will return a Generator.
 
 ```php
 $generatorFunction = static function() {
