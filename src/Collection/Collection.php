@@ -132,7 +132,7 @@ class Collection extends AbstractCollection
      *
      * @psalm-param  string|class-string|class-string<T>|TypeInterface|TypeCheckArray<TKey,T>|array<TypeCheckInterface> $type
      * @psalm-param  array<TKey,T> $data
-     * @psalm-return static<T>
+     * @psalm-return static<TKey,T>
      */
     public static function construct(
         $type,
@@ -181,7 +181,7 @@ class Collection extends AbstractCollection
      *
      * @return self
      *
-     * @psalm-return self<TKey,T>
+     * @psalm-return self<array-key,T>
      */
     public function toBase(): self
     {

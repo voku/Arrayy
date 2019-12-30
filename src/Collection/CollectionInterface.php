@@ -45,7 +45,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @see          CollectionInterface::append()
      *
      * @psalm-param  T $value
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function add($value);
 
@@ -60,7 +60,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @psalm-param T|array<T> $value
      * @psalm-param TKey|null $key
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function append($value, $key = null);
 
@@ -75,7 +75,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @psalm-param array<T> $values
      * @psalm-param TKey|null $key
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function appendArrayValues(array $values, $key = null);
 
@@ -162,7 +162,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @psalm-param  array<TKey,T> $data
      * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
+     * @psalm-mutation-free
      */
     public static function create(
         $data = [],
@@ -202,7 +203,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *                             <p>A collection with the results of the filter operation.</p>
      *
      * @psalm-param \Closure(T=,TKey=):bool $closure
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH);
 
@@ -350,7 +351,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *
      * @psalm-param callable(T=,TKey=,mixed):mixed $callable
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments);
 
@@ -363,8 +364,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-param array<CollectionInterface<TKey,T>> ...$collections
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-param CollectionInterface<TKey,T> ...$collections
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function merge(self ...$collections);
 
@@ -415,7 +416,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *                             <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
      * @psalm-param  T $value
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function prepend($value, $key = null);
 
@@ -429,7 +430,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *
      * @psalm-param TKey $key
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function remove($key);
 
@@ -442,7 +443,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *
      * @psalm-param  T $element
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function removeElement($element);
 
@@ -455,7 +456,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *                             <p>(Immutable)</p>
      *
      * @psalm-param T $value
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function removeValue($value);
 
@@ -471,7 +472,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @psalm-param TKey $key
      * @psalm-param T $value
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function set($key, $value);
 
@@ -488,7 +489,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-return CollectionInterface<mixed|TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<array-key|TKey,T>
      */
     public function slice(int $offset, int $length = null, bool $preserveKeys = false);
 
@@ -511,7 +512,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-return CollectionInterface<TKey,T>
+     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      */
     public function where(string $keyOrPropertyOrMethod, $value);
 }

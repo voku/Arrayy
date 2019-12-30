@@ -1,5 +1,9 @@
 # Changelog
 
+- add "@psalm-mutation-free" - via psalm
+- fix more phpdocs
+
+
 ### 7.0.1 (2019-12-16)
 
 - more generics support - via phpstan (>= 0.12)

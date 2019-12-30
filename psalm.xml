@@ -12,4 +12,12 @@
         </ignoreFiles>
     </projectFiles>
 
+    <issueHandlers>
+        <LessSpecificImplementedReturnType errorLevel="suppress" />
+
+        <MoreSpecificImplementedParamType errorLevel="suppress" />
+
+        <ImplementedReturnTypeMismatch errorLevel="suppress" />
+    </issueHandlers>
+
 </psalm>

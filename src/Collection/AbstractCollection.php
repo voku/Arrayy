@@ -113,12 +113,12 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @param mixed $value
      * @param mixed $key
      *
-     * @return static
-     *                <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
+     * @return $this
+     *               <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
      * @psalm-param T|array<T>|static<T>|TypeInterface $value
      * @psalm-param TKey|null $key
-     * @psalm-return static<TKey,T><
+     * @psalm-return $this<TKey,T>
      */
     public function append($value, $key = null): Arrayy
     {
@@ -166,11 +166,11 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @param mixed $value
      * @param mixed $key
      *
-     * @return static
-     *                <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
+     * @return $this
+     *               <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
      * @psalm-param  T $value
-     * @psalm-return static<TKey,T>
+     * @psalm-return $this<TKey,T>
      */
     public function prepend($value, $key = null): Arrayy
     {
@@ -223,11 +223,12 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     /**
      * Merge current items and items of given collections into a new one.
      *
-     * @param CollectionInterface|static ...$collections The collections to merge.
+     * @param CollectionInterface|static ...$collections
+     *                                                   <p>The collections to merge.</p>
      *
-     * @throws \InvalidArgumentException if any of the given collections are not of the same type
+     *@throws \InvalidArgumentException if any of the given collections are not of the same type
      *
-     * @return static
+     * @return $this
      *
      * @psalm-param array<CollectionInterface<TKey,T>> ...$collections
      * @psalm-return $this<TKey,T>
@@ -258,6 +259,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @psalm-param  array<TKey,T> $data
      * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
      * @psalm-return static<TKey,T>
+     * @psalm-mutation-free
      */
     public static function create(
         $data = [],
@@ -272,7 +274,13 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Internal mechanic of set method.
+     *
+     * @param int|string|null $key
+     * @param mixed           $value
+     * @param bool            $checkProperties
+     *
+     * @return bool
      */
     protected function internalSet(
         $key,
@@ -307,7 +315,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return TypeCheckArray
      *
-     * @psalm-param null|string|string[]|class-string|class-string[]|TypeCheckArray<TypeCheckInterface>|array<TypeCheckInterface>|mixed $type
+     * @psalm-param null|string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|array<array-key,TypeCheckInterface>|mixed $type
      * @psalm-return TypeCheckArray<int,TypeCheckInterface>
      */
     protected static function convertIntoTypeCheckArray($type): TypeCheckArray

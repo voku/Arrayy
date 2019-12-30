@@ -16,6 +16,7 @@ parameters:
         # ignore gernal errors
         - '/Unsafe usage of new static/'
         # ignore not specific types
+        - '#Arrayy\\Arrayy::randomMutable\(\) should return#'
         - '/__construct\(\) has parameter \$iteratorClass with generic/'
         - '/create\(\) has parameter \$iteratorClass with generic/'
         - '/parameter \$iteratorClass with generic class Arrayy\\ArrayyIterator/'
