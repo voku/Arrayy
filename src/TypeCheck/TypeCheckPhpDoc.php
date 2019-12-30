@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Arrayy\TypeCheck;
 
+use phpDocumentor\Reflection\Type;
+
 /**
  * inspired by https://github.com/spatie/value-object
  *
@@ -46,6 +48,10 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         $tmpReflection = new self((new \ReflectionProperty($tmpObject, $tmpProperty))->getName());
 
         $type = $phpDocumentorReflectionProperty->getType();
+
+        /** @noinspection PhpSillyAssignmentInspection */
+        /** @var Type|null $type */
+        $type = $type;
 
         if ($type) {
             $tmpReflection->hasTypeDeclaration = true;

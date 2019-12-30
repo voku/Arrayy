@@ -13,6 +13,8 @@ parameters:
         - '/function call_user_func_array expects callable.*array\(.*\) given/'
         - '/array_map expects \(callable\(\):/'
         - '/Property Arrayy\\Arrayy<TKey,T>::\$iteratorClass/'
+        - '#Function array_key_first\(\) has parameter#'
+        - '#Function array_key_last\(\) has parameter#'
         # ignore gernal errors
         - '/Unsafe usage of new static/'
         # ignore not specific types

@@ -26,6 +26,11 @@ namespace {
         }
 
         if (!\function_exists('array_key_first')) {
+            /**
+             * @param array<mixed> $array
+             *
+             * @return int|string|null
+             */
             function array_key_first(array $array)
             {
                 foreach ($array as $key => $value) {
@@ -37,6 +42,11 @@ namespace {
         }
 
         if (!\function_exists('array_key_last')) {
+            /**
+             * @param array<mixed> $array
+             *
+             * @return int|string|null
+             */
             function array_key_last(array $array)
             {
                 if (\count($array) === 0) {
