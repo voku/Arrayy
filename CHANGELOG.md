@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.0.3 (2019-12-30)
+
+- fix more phpdocs
+
+
 ### 7.0.2 (2019-12-30)
 
 - add "@psalm-mutation-free" - via psalm
