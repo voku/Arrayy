@@ -20,6 +20,7 @@ final class InstanceCollection extends Collection implements TypeInterface
      * @param bool|null     $checkPropertiesInConstructor
      * @param string|null   $className
      *
+     * @psalm-param array<TKey,T> $data
      * @psalm-param class-string<\Arrayy\ArrayyIterator>|null $iteratorClass
      * @psalm-param class-string<T>|null $className
      */

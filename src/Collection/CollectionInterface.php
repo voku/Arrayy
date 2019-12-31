@@ -160,9 +160,6 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
-     * @psalm-param  array<TKey,T> $data
-     * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
-     * @psalm-return \Arrayy\Collection\CollectionInterface<TKey,T>
      * @psalm-mutation-free
      */
     public static function create(

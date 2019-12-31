@@ -26,7 +26,7 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
      * @param string             $iteratorClass
      * @param bool               $checkPropertiesInConstructor
      *
-     * @psalm-param array<T>|Arrayy|mixed $data
+     * @psalm-param array<TKey,T>|Arrayy<TKey,T>|mixed $data
      * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(

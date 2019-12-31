@@ -181,7 +181,7 @@ class Collection extends AbstractCollection
      *
      * @return self
      *
-     * @psalm-return self<array-key,T>
+     * @psalm-return self<TKey,T>
      */
     public function toBase(): self
     {
