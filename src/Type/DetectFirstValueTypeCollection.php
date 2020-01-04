@@ -26,7 +26,7 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
      * @param string             $iteratorClass
      * @param bool               $checkPropertiesInConstructor
      *
-     * @psalm-param array<TKey,T>|Arrayy<TKey,T>|mixed $data
+     * @psalm-param array<TKey,T>|Arrayy<TKey,T> $data
      * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
@@ -34,6 +34,10 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
         string $iteratorClass = ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
+        /**
+         * @psalm-suppress RedundantConditionGivenDocblockType - We also allow other types here,
+         * but I don't know how to tell psalm about that. :/
+         */
         if ($data instanceof Arrayy) {
             $firstValue = $data->first();
         } elseif (\is_array($data)) {

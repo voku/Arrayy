@@ -65,6 +65,8 @@ namespace {
 namespace Arrayy {
 
     use Arrayy\Collection\Collection;
+    use Arrayy\TypeCheck\TypeCheckArray;
+    use Arrayy\TypeCheck\TypeCheckInterface;
 
     if (!\function_exists('Arrayy\create')) {
         /**
@@ -82,8 +84,8 @@ namespace Arrayy {
         /**
          * Creates a Collection object.
          *
-         * @param string $type
-         * @param mixed  $data
+         * @param string|TypeCheckArray|TypeCheckInterface[] $type
+         * @param array<mixed>                               $data
          *
          * @return Collection
          *

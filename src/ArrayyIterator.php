@@ -17,9 +17,11 @@ class ArrayyIterator extends \ArrayIterator
     private $class;
 
     /**
-     * @param array<mixed> $array
-     * @param int          $flags
-     * @param string       $class
+     * @param array<mixed,mixed> $array
+     * @param int                $flags
+     * @param string             $class
+     *
+     * @psalm-param array<TKey,T> $array
      */
     public function __construct(array $array = [], int $flags = 0, string $class = '')
     {
@@ -45,7 +47,11 @@ class ArrayyIterator extends \ArrayIterator
     /**
      * @param string $offset
      *
-     * @return Arrayy|mixed will return a "Arrayy"-object instead of an array
+     * @return Arrayy|mixed
+     *                      <p>Will return a "Arrayy"-object instead of an array.</p>
+     *
+     * @psalm-param TKey $offset
+     * @param-return Arrayy<TKey,T>|mixed
      */
     public function offsetGet($offset)
     {

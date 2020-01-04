@@ -71,6 +71,9 @@ class StaticArrayy
      * @param int      $step How many to increment of
      *
      * @return Arrayy<int,int>
+     *
+     * @psalm-suppress InvalidReturnStatement - why?
+     * @psalm-suppress InvalidReturnType - why?
      */
     public static function range(int $base, int $stop = null, int $step = 1): Arrayy
     {
@@ -91,6 +94,9 @@ class StaticArrayy
      * @param int                   $times
      *
      * @return Arrayy<int,float|int|string|null>
+     *
+     * @psalm-suppress InvalidReturnStatement - why?
+     * @psalm-suppress InvalidReturnType - why?
      */
     public static function repeat($data, int $times): Arrayy
     {

@@ -18,6 +18,8 @@
         <MoreSpecificImplementedParamType errorLevel="suppress" />
 
         <ImplementedReturnTypeMismatch errorLevel="suppress" />
+
+        <PossiblyUndefinedMethod errorLevel="suppress" />
     </issueHandlers>
 
 </psalm>

@@ -917,6 +917,32 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame([2, 3, 4], $arrayy->getArray());
     }
 
+    public function testGetArrayViaGenerator()
+    {
+        $generator = static function () {
+            yield 1 => 2;
+            yield 1 => 3;
+        };
+        $arrayy = A::createFromGeneratorFunction($generator);
+
+        static::assertSame([1 => 3], $arrayy->getArray());
+
+        static::assertSame([2, 3], $arrayy->getArray(false, false));
+    }
+
+    public function testGetListViaGenerator()
+    {
+        $generator = static function () {
+            yield 1 => 2;
+            yield 1 => 3;
+        };
+        $arrayy = A::createFromGeneratorFunction($generator);
+
+        static::assertSame([2, 3], $arrayy->getList(false));
+
+        static::assertSame([2, 3], $arrayy->getList(true));
+    }
+
     /**
      * @dataProvider simpleArrayProvider
      *

@@ -2561,6 +2561,29 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
+    public function testCustomSortImmutable(array $array)
+    {
+        $callable = static function ($a, $b) {
+            if ($a === $b) {
+                return 0;
+            }
+
+            return ($a < $b) ? -1 : 1;
+        };
+
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->customSortValuesImmutable($callable);
+        $resultArray = $array;
+        \usort($resultArray, $callable);
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
     public function testCustomSortKeys(array $array)
     {
         $callable = static function ($a, $b) {
@@ -2627,6 +2650,23 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             'two'   => 2,
         ];
         static::assertSame($expected, $arrayy->getArray());
+
+        // ---
+
+        $input = [
+            'three' => 3,
+            'one'   => 1,
+            'two'   => 2,
+        ];
+        $arrayy = new A($input);
+        $resultArrayy = $arrayy->uksortImmutable($callable);
+        $expected = [
+            'one'   => 1,
+            'three' => 3,
+            'two'   => 2,
+        ];
+        static::assertSame($expected, $resultArrayy->getArray());
+        self::assertImmutable($arrayy, $resultArrayy, $input, $resultArrayy->getArray());
     }
 
     public function testCustomSortValuesByDateTimeObject()
@@ -2660,8 +2700,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
          * @return int
          */
         $closureSort = static function ($a, $b) use ($format) {
-            /* @var $aDate \DateTime */
-            /* @var $bDate \DateTime */
+            /* @var \DateTime $aDate  */
+            /* @var \DateTime $bDate */
             $aDate = $a[1];
             $bDate = $b[1];
 
@@ -5388,6 +5428,15 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayV2 = $arrayV2->asort();
 
         self::assertMutable($arrayy, $resultArrayy, $resultArrayV2->getArray());
+
+        // ---
+
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->sortImmutable(\SORT_ASC, \SORT_REGULAR, true);
+        $arrayV2 = new A($array);
+        $resultArrayV2 = $arrayV2->asortImmutable();
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
     }
 
     /**
@@ -5443,6 +5492,30 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
+    public function testSortImmutableDescWithPreserveKeys(array $array)
+    {
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->sortImmutable(\SORT_DESC, \SORT_REGULAR, true);
+        $resultArray = $array;
+        \arsort($resultArray, \SORT_REGULAR);
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
+
+        // ---
+
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->sortImmutable(\SORT_DESC, \SORT_REGULAR, true);
+        $arrayV2 = new A($array);
+        $resultArrayV2 = $arrayV2->arsortImmutable();
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
     public function testSortDescWithoutPreserveKeys(array $array)
     {
         $arrayy = new A($array);
@@ -5460,6 +5533,15 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayV2 = $arrayV2->rsort();
 
         self::assertMutable($arrayy, $resultArrayy, $resultArrayV2->getArray());
+
+        // ---
+
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->sortImmutable(\SORT_DESC, \SORT_REGULAR, false);
+        $arrayV2 = new A($array);
+        $resultArrayV2 = $arrayV2->rsortImmutable();
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
     }
 
     /**
@@ -5498,6 +5580,125 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayV2 = $arrayV2->ksort();
 
         self::assertMutable($arrayy, $resultArrayy, $resultArrayV2->getArray());
+
+        // ---
+
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->sortKeysImmutable(\SORT_ASC, \SORT_REGULAR);
+        $arrayV2 = new A($array);
+        $resultArrayV2 = $arrayV2->ksortImmutable();
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testNatcasesort(array $array)
+    {
+        \natcasesort($array);
+        $arrayy = new A($array);
+        $arrayyResult = $arrayy->natcasesort();
+        $arrayResult = $arrayyResult->getArray();
+
+        static::assertSame($array, $arrayResult);
+        self::assertMutable($arrayy, $arrayyResult, $arrayResult);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testNatsortImmutable(array $array)
+    {
+        \natsort($array);
+        $arrayy = new A($array);
+        $arrayyResult = $arrayy->natsortImmutable();
+        $arrayResult = $arrayyResult->getArray();
+
+        static::assertSame($array, $arrayResult);
+        self::assertImmutable($arrayy, $arrayyResult, $array, $arrayResult);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testNatsort(array $array)
+    {
+        \natsort($array);
+        $arrayy = new A($array);
+        $arrayyResult = $arrayy->natsort();
+        $arrayResult = $arrayyResult->getArray();
+
+        static::assertSame($array, $arrayResult);
+        self::assertMutable($arrayy, $arrayyResult, $arrayResult);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testNatcasesortImmutable(array $array)
+    {
+        \natcasesort($array);
+        $arrayy = new A($array);
+        $arrayyResult = $arrayy->natcasesortImmutable();
+        $arrayResult = $arrayyResult->getArray();
+
+        static::assertSame($array, $arrayResult);
+        self::assertImmutable($arrayy, $arrayyResult, $array, $arrayResult);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testUasort(array $array)
+    {
+        $function = static function ($a, $b) {
+            if ($a == $b) {
+                return 0;
+            }
+
+            return ($a < $b) ? -1 : 1;
+        };
+        \uasort($array, $function);
+        $arrayy = new A($array);
+        $arrayyResult = $arrayy->uasort($function);
+        $arrayResult = $arrayyResult->getArray();
+
+        static::assertSame($array, $arrayResult);
+        self::assertMutable($arrayy, $arrayyResult, $arrayResult);
+    }
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testUasortImmutable(array $array)
+    {
+        $function = static function ($a, $b) {
+            if ($a == $b) {
+                return 0;
+            }
+
+            return ($a < $b) ? -1 : 1;
+        };
+        \uasort($array, $function);
+        $arrayy = new A($array);
+        $arrayyResult = $arrayy->uasortImmutable($function);
+        $arrayResult = $arrayyResult->getArray();
+
+        static::assertSame($array, $arrayResult);
+        self::assertImmutable($arrayy, $arrayyResult, $array, $arrayResult);
     }
 
     /**
@@ -5522,6 +5723,15 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayV2 = $arrayV2->krsort();
 
         self::assertMutable($arrayy, $resultArrayy, $resultArrayV2->getArray());
+
+        // ---
+
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->sortKeysImmutable(\SORT_DESC, \SORT_REGULAR);
+        $arrayV2 = new A($array);
+        $resultArrayV2 = $arrayV2->krsortImmutable();
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
     }
 
     public function testSortV2()

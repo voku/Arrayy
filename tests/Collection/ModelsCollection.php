@@ -12,6 +12,8 @@ class ModelsCollection extends \Arrayy\Collection\AbstractCollection
      * The type (FQCN) associated with this collection.
      *
      * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
+     *
+     * @psalm-return string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|TypeCheckInterface[]
      */
     public function getType()
     {

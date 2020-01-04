@@ -37,7 +37,6 @@ class TypeCheckArray extends \Arrayy\ArrayyStrict
         string $iteratorClass = ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
-        /** @psalm-suppress PossiblyUndefinedMethod - we don't allow only the interface here */
         $this->properties[Arrayy::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES] = new TypeCheckSimple(TypeCheckInterface::class);
 
         parent::__construct($data, $iteratorClass, $checkPropertiesInConstructor);

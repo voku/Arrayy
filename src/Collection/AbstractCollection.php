@@ -116,9 +116,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return $this
      *               <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @psalm-param T|array<T>|static<T>|TypeInterface $value
+     * @psalm-param T|array<TKey,T>|static<TKey,T> $value
      * @psalm-param TKey|null $key
-     * @psalm-return $this<TKey,T>
+     * @psalm-return static<TKey,T>
      */
     public function append($value, $key = null): Arrayy
     {
@@ -169,8 +169,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return $this
      *               <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
-     * @psalm-param  T $value
-     * @psalm-return $this<TKey,T>
+     * @psalm-param T|array<TKey,T>|static<TKey,T> $value
+     * @psalm-param TKey|null $key
+     * @psalm-return static<TKey,T>
      */
     public function prepend($value, $key = null): Arrayy
     {
@@ -230,16 +231,14 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return $this
      *
-     * @psalm-param array<CollectionInterface<TKey,T>> ...$collections
-     * @psalm-return $this<TKey,T>
+     * @psalm-param CollectionInterface<TKey,T> ...$collections
+     * @psalm-return static<TKey,T>
      */
     public function merge(CollectionInterface ...$collections): self
     {
         foreach ($collections as $collection) {
-            if ($collection instanceof Arrayy) {
-                foreach ($collection as $item) {
-                    $this->append($item);
-                }
+            foreach ($collection as $item) {
+                $this->append($item);
             }
         }
 
@@ -256,9 +255,11 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return static
      *                <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
-     * @psalm-param  array<TKey,T> $data
+     * @template     TKeyCreate as int|string
+     * @template     TCreate
+     * @psalm-param  array<TKeyCreate,TCreate> $data
      * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
-     * @psalm-return static<TKey,T>
+     * @psalm-return static<TKeyCreate,TCreate>
      * @psalm-mutation-free
      */
     public static function create(
@@ -316,7 +317,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return TypeCheckArray
      *
      * @psalm-param null|string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|array<array-key,TypeCheckInterface>|mixed $type
-     * @psalm-return TypeCheckArray<int,TypeCheckInterface>
+     * @psalm-return TypeCheckArray<array-key,TypeCheckInterface>
      */
     protected static function convertIntoTypeCheckArray($type): TypeCheckArray
     {

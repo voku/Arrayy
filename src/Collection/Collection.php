@@ -130,9 +130,11 @@ class Collection extends AbstractCollection
      *
      * @return static
      *
-     * @psalm-param  string|class-string|class-string<T>|TypeInterface|TypeCheckArray<TKey,T>|array<TypeCheckInterface> $type
-     * @psalm-param  array<TKey,T> $data
-     * @psalm-return static<TKey,T>
+     * @template     TKeyConstruct of array-key
+     * @template     TConstruct
+     * @psalm-param  string|class-string|class-string<TConstruct>|TypeInterface|TypeCheckArray<array-key,TypeCheckInterface>|array<TypeCheckInterface> $type
+     * @psalm-param  array<TKeyConstruct,TConstruct> $data
+     * @psalm-return static<TKeyConstruct,TConstruct>
      */
     public static function construct(
         $type,
@@ -182,9 +184,15 @@ class Collection extends AbstractCollection
      * @return self
      *
      * @psalm-return self<TKey,T>
+     *
+     * @psalm-suppress InvalidReturnStatement - why?
+     * @psalm-suppress InvalidReturnType - why?
      */
     public function toBase(): self
     {
-        return self::construct($this->getType(), $this->getArray());
+        return self::construct(
+            $this->getType(),
+            $this->getArray()
+        );
     }
 }

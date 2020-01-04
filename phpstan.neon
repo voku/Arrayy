@@ -6,7 +6,7 @@ parameters:
         - %currentWorkingDirectory%/src/
     ignoreErrors:
         # not supported by phpstan?
-        - '/PHPDoc tag @template .Key for .* with bound type \(int\|string\) is not supported\./'
+        - '/PHPDoc tag @template .Key.* for .* with bound type .* is not supported\./'
         # false-positive?
         - '/comparison using === between true and false/'
         - '/function call_user_func expects callable.*array\(.*\) given/'
