@@ -1,5 +1,12 @@
 # Changelog
 
+### 7.1.0 (20120-01-04)
+
+- more generics support - via psalm + phpstan
+- add some more "Immutable" versions of sort methods
+- fix "createFromObject()" -> will return static instead of self
+
+
 ### 7.0.3 (2019-12-30)
 
 - fix more phpdocs
