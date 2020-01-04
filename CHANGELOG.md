@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.1.1 (20120-01-04)
+
+- fix generics support - via psalm
+
+
 ### 7.1.0 (20120-01-04)
 
 - more generics support - via psalm + phpstan

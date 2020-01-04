@@ -2,6 +2,7 @@ parameters:
     level: max
     reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: true
+    checkMissingIterableValueType: false
     paths:
         - %currentWorkingDirectory%/src/
     ignoreErrors:
@@ -13,13 +14,11 @@ parameters:
         - '/function call_user_func_array expects callable.*array\(.*\) given/'
         - '/array_map expects \(callable\(\):/'
         - '/Property Arrayy\\Arrayy<TKey,T>::\$iteratorClass/'
-        - '#Function array_key_first\(\) has parameter#'
-        - '#Function array_key_last\(\) has parameter#'
         # ignore gernal errors
         - '/Unsafe usage of new static/'
-        # ignore not specific types
-        - '#Arrayy\\Arrayy::randomMutable\(\) should return#'
+        # ignore Iterator stuff
         - '/__construct\(\) has parameter \$iteratorClass with generic/'
         - '/create\(\) has parameter \$iteratorClass with generic/'
         - '/parameter \$iteratorClass with generic class Arrayy\\ArrayyIterator/'
         - '/generic class Arrayy\\ArrayyIterator does not specify its types/'
+        - '#Arrayy::getIterator\(\) should be compatible with return type#'

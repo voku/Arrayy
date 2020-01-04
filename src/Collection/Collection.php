@@ -95,7 +95,7 @@ class Collection extends AbstractCollection
      *                                                         </p>
      * @param TypeInterface|null $type
      *
-     * @psalm-param array<TKey,T>|\Arrayy\Arrayy<TKey,T> $data
+     * @psalm-param array<array-key,T>|array<TKey,T>|\Arrayy\Arrayy<TKey,T> $data
      * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(

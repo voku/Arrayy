@@ -107,6 +107,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $data = $this->fallbackForArray($data);
 
         // used only for serialize + unserialize, all other methods are overwritten
+        /**
+         * @psalm-suppress InvalidArgument - why?
+         */
         parent::__construct([], 0, $iteratorClass);
 
         $this->setInitialValuesAndProperties($data, $checkPropertiesInConstructor);
@@ -307,6 +310,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $that = clone $this;
 
+        /**
+         * @psalm-suppress ImpureMethodCall - object is already cloned
+         */
         $that->asort($sort_flags);
 
         return $that;
@@ -397,7 +403,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Returns a new iterator, thus implementing the \Iterator interface.
      *
      * @return \Iterator<mixed, mixed>
-     *                          <p>An iterator for the values in the array.</p>
+     *                                 <p>An iterator for the values in the array.</p>
+     * @psalm-return \Iterator<array-key|TKey, mixed|T>
      */
     public function getIterator(): \Iterator
     {
@@ -411,7 +418,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return new $iterator($this->toArray(), 0, static::class);
         }
 
-        return new $iterator($this->toArray());
+        $return = new $iterator($this->toArray());
+        \assert($return instanceof \Iterator);
+
+        return $return;
     }
 
     /**
@@ -505,6 +515,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $that = clone $this;
 
+        /**
+         * @psalm-suppress ImpureMethodCall - object is already cloned
+         */
         $that->natcasesort();
 
         return $that;
@@ -540,6 +553,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $that = clone $this;
 
+        /**
+         * @psalm-suppress ImpureMethodCall - object is already cloned
+         */
         $that->natsort();
 
         return $that;
@@ -577,17 +593,19 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if (
             $tmpReturn === true
             ||
-            (
-                $tmpReturn === false
-                &&
-                \strpos((string) $offset, $this->pathSeparator) === false
-            )
+            \strpos((string) $offset, $this->pathSeparator) === false
         ) {
             return $tmpReturn;
         }
 
         $offsetExists = false;
 
+        /**
+         * https://github.com/vimeo/psalm/issues/2536
+         *
+         * @psalm-suppress PossiblyInvalidArgument
+         * @psalm-suppress InvalidScalarArgument
+         */
         if (
             $this->pathSeparator
             &&
@@ -597,17 +615,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         ) {
             $explodedPath = \explode($this->pathSeparator, (string) $offset);
             if ($explodedPath !== false) {
+                /** @var string $lastOffset - helper for phpstan */
                 $lastOffset = \array_pop($explodedPath);
-                if ($lastOffset !== null) {
-                    $containerPath = \implode($this->pathSeparator, $explodedPath);
+                $containerPath = \implode($this->pathSeparator, $explodedPath);
 
-                    $this->callAtPath(
-                        $containerPath,
-                        static function ($container) use ($lastOffset, &$offsetExists) {
-                            $offsetExists = \array_key_exists($lastOffset, $container);
-                        }
-                    );
-                }
+                /**
+                 * @psalm-suppress MissingClosureReturnType
+                 * @psalm-suppress MissingClosureParamType
+                 */
+                $this->callAtPath(
+                    $containerPath,
+                    static function ($container) use ($lastOffset, &$offsetExists) {
+                        $offsetExists = \array_key_exists($lastOffset, $container);
+                    }
+                );
             }
         }
 
@@ -675,6 +696,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return;
         }
 
+        /**
+         * https://github.com/vimeo/psalm/issues/2536
+         *
+         * @psalm-suppress PossiblyInvalidArgument
+         * @psalm-suppress InvalidScalarArgument
+         */
         if (
             $this->pathSeparator
             &&
@@ -687,6 +714,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if ($path !== false) {
                 $pathToUnset = \array_pop($path);
 
+                /**
+                 * @psalm-suppress MissingClosureReturnType
+                 * @psalm-suppress MissingClosureParamType
+                 */
                 $this->callAtPath(
                     \implode($this->pathSeparator, $path),
                     static function (&$offset) use ($pathToUnset) {
@@ -737,6 +768,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if (\strpos($iteratorClass, '\\') === 0) {
             $iteratorClass = '\\' . $iteratorClass;
             if (\class_exists($iteratorClass)) {
+                /**
+                 * @psalm-suppress PropertyTypeCoercion
+                 */
                 $this->iteratorClass = $iteratorClass;
 
                 return;
@@ -788,6 +822,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $that = clone $this;
 
+        /**
+         * @psalm-suppress ImpureMethodCall - object is already cloned
+         */
         $that->uasort($function);
 
         return $that;
@@ -1186,14 +1223,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Check if an (case-insensitive) string is in the current array.
      *
-     * @param string $value
-     * @param bool   $recursive
+     * @param mixed $value
+     * @param bool  $recursive
      *
      * @return bool
      * @psalm-mutation-free
+     *
+     * @psalm-suppress InvalidCast - hack for int|float|bool support
      */
     public function containsCaseInsensitive($value, $recursive = false): bool
     {
+        if ($value === null) {
+            return false;
+        }
+
         if ($recursive === true) {
             foreach ($this->getGenerator() as $key => $valueTmp) {
                 if (\is_array($valueTmp) === true) {
@@ -1476,6 +1519,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         foreach ($objectArray as $key => $value) {
+            /**
+             * @psalm-suppress ImpureMethodCall - object is already re-created
+             */
             $arrayy->internalSet($key, $value);
         }
 
@@ -3064,6 +3110,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param int|string $key the key to look for
      *
      * @return bool
+     * @psalm-mutation-free
      */
     public function keyExists($key): bool
     {
@@ -5881,6 +5928,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return void
      *
      * @psalm-param array<mixed,mixed>|array<TKey,T>|null $currentOffset
+     * @psalm-mutation-free
      */
     protected function callAtPath($path, $callable, &$currentOffset = null)
     {
@@ -6124,6 +6172,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *              <p>true if needle is found in the array, false otherwise</p>
      *
      * @psalm-param array<mixed,mixed>|\Generator<TKey,T>|null $haystack
+     * @psalm-mutation-free
      */
     protected function in_array_recursive($needle, $haystack = null, $strict = true): bool
     {
