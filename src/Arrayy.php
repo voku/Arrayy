@@ -403,7 +403,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Returns a new iterator, thus implementing the \Iterator interface.
      *
      * @return \Iterator<mixed, mixed>
-     *                                 <p>An iterator for the values in the array.</p>
+     *                          <p>An iterator for the values in the array.</p>
      * @psalm-return \Iterator<array-key|TKey, mixed|T>
      */
     public function getIterator(): \Iterator
@@ -2763,6 +2763,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param string $glue
      *
      * @return string
+     * @psalm-mutation-free
      */
     public function implode(string $glue = ''): string
     {
@@ -2775,6 +2776,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param string $glue
      *
      * @return string
+     * @psalm-mutation-free
      */
     public function implodeKeys(string $glue = ''): string
     {
@@ -6118,9 +6120,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param bool  $useKeys
      *
      * @return string
+     * @psalm-mutation-free
      */
-    protected function implode_recursive($glue = '', $pieces = [], bool $useKeys = false): string
-    {
+    protected function implode_recursive(
+        $glue = '',
+        $pieces = [],
+        bool $useKeys = false
+    ): string {
         if ($pieces instanceof self) {
             $pieces = $pieces->toArray();
         }
