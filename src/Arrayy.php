@@ -31,7 +31,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @var array
      *
-     * @psalm-var array<mixed|TKey,T>
+     * @psalm-var array<mixed,mixed>|array<TKey,T>
      */
     protected $array = [];
 
@@ -376,7 +376,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return array
      *
      * @psalm-param  array<TKey,T>|self<TKey,T> $data
-     * @psalm-return array<TKey,T>
+     * @psalm-return array<mixed,mixed>|array<TKey,T>
      */
     public function exchangeArray($data): array
     {
@@ -390,7 +390,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @psalm-return array<TKey,T>
+     * @psalm-return array<mixed,mixed>|array<TKey,T>
      */
     public function getArrayCopy(): array
     {
@@ -3086,7 +3086,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @return array
      *
-     * @psalm-return array<TKey,T>
+     * @psalm-return array<mixed,mixed>|array<TKey,T>
      */
     public function jsonSerialize(): array
     {
