@@ -5563,12 +5563,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * @param string[]|null $items
-     * @param string[]      $helper
+     * @param string[]|null $items  [optional]
+     * @param string[]      $helper [optional]
      *
-     * @return static
+     * @return static[]|static
      *
-     * @psalm-return static<TKey,T>
+     * @psalm-return static<int, static<TKey,T>>
      */
     public function toPermutation(array $items = null, array $helper = []): self
     {
