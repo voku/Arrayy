@@ -1,14 +1,18 @@
 # Changelog
 
-### 7.1.2 (20120-01-04)
+### 7.1.3 (2010-01-06)
+
+- fix phpdoc from "toPermutation()"
+
+### 7.1.2 (2020-01-04)
 
 - fix "@psalm-mutation-free" - via psalm
 
-### 7.1.1 (20120-01-04)
+### 7.1.1 (2020-01-04)
 
 - fix generics support - via psalm
 
-### 7.1.0 (20120-01-04)
+### 7.1.0 (2020-01-04)
 
 - more generics support - via psalm + phpstan
 - add some more "Immutable" versions of sort methods
