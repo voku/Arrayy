@@ -15,7 +15,7 @@ parameters:
         - '/array_map expects \(callable\(\):/'
         - '/Property Arrayy\\Arrayy<TKey,T>::\$iteratorClass/'
         - '/should return TLast\|TLastFallback but returns TLastFallback\|null/'
-        - '/should return TLast\|TFirstFallback but returns TFirstFallback\|null/'
+        - '/should return TFirst\|TFirstFallback but returns TFirstFallback\|null/'
         # ignore gernal errors
         - '/Unsafe usage of new static/'
         # ignore Iterator stuff
