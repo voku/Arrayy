@@ -80,7 +80,9 @@ namespace Arrayy {
         {
             return new Arrayy($data);
         }
+    }
 
+    if (!\function_exists('Arrayy\collection')) {
         /**
          * Creates a Collection object.
          *
