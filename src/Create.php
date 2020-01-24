@@ -101,14 +101,21 @@ namespace Arrayy {
 
     /**
      * @param array<mixed> $array
+     * @param mixed $fallback     <p>This fallback will be used, if the array is empty.</p>
      *
      * @return mixed|null
+     *
+     * @template TLast
+     * @template TLastFallback
+     * @psalm-param TLast[] $array
+     * @psalm-param TLastFallback $fallback
+     * @psalm-return TLast|TLastFallback
      */
-    function array_last(array $array)
+    function array_last(array $array, $fallback = null)
     {
         $key_last = \array_key_last($array);
         if ($key_last === null) {
-            return null;
+            return $fallback;
         }
 
         return $array[$key_last];
@@ -116,14 +123,21 @@ namespace Arrayy {
 
     /**
      * @param array<mixed> $array
+     * @param mixed $fallback     <p>This fallback will be used, if the array is empty.</p>
      *
      * @return mixed|null
+     *
+     * @template TFirst
+     * @template TFirstFallback
+     * @psalm-param TFirst[] $array
+     * @psalm-param TFirstFallback $fallback
+     * @psalm-return TFirst|TFirstFallback
      */
-    function array_first(array $array)
+    function array_first(array $array, $fallback = null)
     {
         $key_first = array_key_first($array);
         if ($key_first === null) {
-            return null;
+            return $fallback;
         }
 
         return $array[$key_first];

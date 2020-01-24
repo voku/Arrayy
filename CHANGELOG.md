@@ -1,6 +1,10 @@
 # Changelog
 
-### 7.1.3 (2010-01-06)
+### 7.1.4 (2020-01-24)
+
+- use generics for "\Arrayy\array_first()" & "\Arrayy\array_last()"
+
+### 7.1.3 (2020-01-06)
 
 - fix phpdoc from "toPermutation()"
 

@@ -1677,6 +1677,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $that->generatorToArray();
 
+        /**
+         * @psalm-suppress ImpureFunctionCall - object is already cloned
+         */
         \uksort($that->array, $function);
 
         return $that;
