@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.1.5 (2020-01-24)
+
+- fix check for "\Arrayy\collection()"
+
 ### 7.1.4 (2020-01-24)
 
 - use generics for "\Arrayy\array_first()" & "\Arrayy\array_last()"
