@@ -1,5 +1,14 @@
 # Changelog
 
+### 7.2.0 (2020-01-31)
+
+- fix "Arrayy->offsetUnset()" -> unset of non array values + fix phpdoc
+- fix "Arrayy->merge*" -> now accepts also Arrayy elements in the array
+- update "Arrayy->has()" -> now you can check multiple keys
+- add "$key" for "Arrayy->clear()"
+- add "Arrayy->flatten()"
+- add "Arrayy->createFromArray()"
+
 ### 7.1.5 (2020-01-24)
 
 - fix check for "\Arrayy\collection()"
