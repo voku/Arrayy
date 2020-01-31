@@ -103,7 +103,7 @@ namespace Arrayy {
 
     /**
      * @param array<mixed> $array
-     * @param mixed $fallback     <p>This fallback will be used, if the array is empty.</p>
+     * @param mixed        $fallback <p>This fallback will be used, if the array is empty.</p>
      *
      * @return mixed|null
      *
@@ -125,7 +125,7 @@ namespace Arrayy {
 
     /**
      * @param array<mixed> $array
-     * @param mixed $fallback     <p>This fallback will be used, if the array is empty.</p>
+     * @param mixed        $fallback <p>This fallback will be used, if the array is empty.</p>
      *
      * @return mixed|null
      *

@@ -681,6 +681,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param int|string $offset
      *
      * @return void
+     *              <p>(Mutable) Return nothing.</p>
      */
     public function offsetUnset($offset)
     {
@@ -721,7 +722,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $this->callAtPath(
                     \implode($this->pathSeparator, $path),
                     static function (&$offset) use ($pathToUnset) {
-                        unset($offset[$pathToUnset]);
+                        if (\is_array($offset)) {
+                            unset($offset[$pathToUnset]);
+                        } else {
+                            $offset = null;
+                        }
                     }
                 );
             }
@@ -1173,15 +1178,29 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * WARNING!!! -> Clear the current array.
+     * WARNING!!! -> Clear the current full array or a $key of it.
+     *
+     * @param int|int[]|string|string[]|null $key
      *
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with an empty array.</p>
      *
      * @psalm-return static<TKey,T>
      */
-    public function clear(): self
+    public function clear($key = null): self
     {
+        if ($key !== null) {
+            if (\is_array($key)) {
+                foreach ($key as $keyTmp) {
+                    $this->offsetUnset($keyTmp);
+                }
+            } else {
+                $this->offsetUnset($key);
+            }
+
+            return $this;
+        }
+
         $this->array = [];
         $this->generator = null;
 
@@ -1428,6 +1447,39 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Flatten an array with the given character as a key delimiter
+     *
+     * @param string     $delimiter
+     * @param string     $prepend
+     * @param array|null $items
+     *
+     * @return array
+     */
+    public function flatten($delimiter = '.', $prepend = '', $items = null)
+    {
+        // init
+        $flatten = [];
+
+        if ($items === null) {
+            $items = $this->array;
+        }
+
+        foreach ($items as $key => $value) {
+            if (\is_array($value) && !empty($value)) {
+                $flatten[] = $this->flatten($delimiter, $prepend . $key . $delimiter, $value);
+            } else {
+                $flatten[] = [$prepend . $key => $value];
+            }
+        }
+
+        if (\count($flatten) === 0) {
+            return [];
+        }
+
+        return \array_merge_recursive([], ...$flatten);
+    }
+
+    /**
      * WARNING: Creates an Arrayy object by reference.
      *
      * @param array $array
@@ -1493,6 +1545,21 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public static function createFromJson(string $json): self
     {
         return static::create(\json_decode($json, true));
+    }
+
+    /**
+     * Create an new Arrayy object via JSON.
+     *
+     * @param array $array
+     *
+     * @return static
+     *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
+     *
+     * @psalm-mutation-free
+     */
+    public static function createFromArray(array $array): self
+    {
+        return static::create($array);
     }
 
     /**
@@ -2743,6 +2810,21 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $UN_FOUND = \uniqid('arrayy', true);
         }
 
+        if (\is_array($key)) {
+            if ($key === []) {
+                return false;
+            }
+
+            foreach ($key as $keyTmp) {
+                $found = ($this->get($keyTmp, $UN_FOUND) !== $UN_FOUND);
+                if ($found === false) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         return $this->get($key, $UN_FOUND) !== $UN_FOUND;
     }
 
@@ -3533,6 +3615,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function mergeAppendKeepIndex(array $array = [], bool $recursive = false): self
     {
         if ($recursive === true) {
+            $array = $this->getArrayRecursiveHelperArrayy($array);
             $result = \array_replace_recursive($this->toArray(), $array);
         } else {
             $result = \array_replace($this->toArray(), $array);
@@ -3564,6 +3647,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function mergeAppendNewIndex(array $array = [], bool $recursive = false): self
     {
         if ($recursive === true) {
+            $array = $this->getArrayRecursiveHelperArrayy($array);
             $result = \array_merge_recursive($this->toArray(), $array);
         } else {
             $result = \array_merge($this->toArray(), $array);
@@ -3594,6 +3678,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function mergePrependKeepIndex(array $array = [], bool $recursive = false): self
     {
         if ($recursive === true) {
+            $array = $this->getArrayRecursiveHelperArrayy($array);
             $result = \array_replace_recursive($array, $this->toArray());
         } else {
             $result = \array_replace($array, $this->toArray());
@@ -3625,6 +3710,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function mergePrependNewIndex(array $array = [], bool $recursive = false): self
     {
         if ($recursive === true) {
+            $array = $this->getArrayRecursiveHelperArrayy($array);
             $result = \array_merge_recursive($array, $this->toArray());
         } else {
             $result = \array_merge($array, $this->toArray());
@@ -4592,9 +4678,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Replace a key with a new key/value pair.
      *
-     * @param mixed $replace
-     * @param mixed $key
-     * @param mixed $value
+     * @param mixed $oldKey
+     * @param mixed $newKey
+     * @param mixed $newValue
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -4602,15 +4688,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function replace($replace, $key, $value): self
+    public function replace($oldKey, $newKey, $newValue): self
     {
         $that = clone $this;
 
         /**
          * @psalm-suppress ImpureMethodCall - object is already cloned
          */
-        return $that->remove($replace)
-            ->set($key, $value);
+        return $that->remove($oldKey)
+            ->set($newKey, $newValue);
     }
 
     /**
@@ -5569,7 +5655,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param string[]|null $items  [optional]
      * @param string[]      $helper [optional]
      *
-     * @return static[]|static
+     * @return static|static[]
      *
      * @psalm-return static<int, static<TKey,T>>
      */
@@ -5779,10 +5865,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        if ($recursive === true) {
-            \array_walk_recursive($this->array, $callable);
-        } else {
-            \array_walk($this->array, $callable);
+        if ($this->array !== []) {
+            if ($recursive === true) {
+                \array_walk_recursive($this->array, $callable);
+            } else {
+                \array_walk($this->array, $callable);
+            }
         }
 
         return $this;
@@ -6527,6 +6615,36 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $this;
+    }
+
+    /**
+     * @param array $array
+     *
+     * @return array
+     *
+     * @psalm-mutation-free
+     */
+    private function getArrayRecursiveHelperArrayy(array $array)
+    {
+        if ($array === []) {
+            return [];
+        }
+
+        \array_walk_recursive(
+            $array,
+            /**
+             * @param array|self $item
+             *
+             * @return void
+             */
+            static function (&$item) {
+                if ($item instanceof self) {
+                    $item = $item->getArray();
+                }
+            }
+        );
+
+        return $array;
     }
 
     /**

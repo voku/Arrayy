@@ -9,6 +9,8 @@ parameters:
         # not supported by phpstan?
         - '/PHPDoc tag @template .Key.* for .* with bound type .* is not supported\./'
         # false-positive?
+        - '/Cannot access offset int\|string on array<int\|string/'
+        - "/Cannot access offset '!!!!Arrayy_Helper…' on array<int\\|string/"
         - '/comparison using === between true and false/'
         - '/function call_user_func expects callable.*array\(.*\) given/'
         - '/function call_user_func_array expects callable.*array\(.*\) given/'

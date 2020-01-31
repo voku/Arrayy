@@ -4155,6 +4155,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy->offsetUnset($offset);
         unset($array['b'][1]);
 
+        static::assertSame([0 => 'a', 'b' => []], $array);
         static::assertSame($array, $arrayy->toArray());
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
