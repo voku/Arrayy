@@ -215,20 +215,30 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * alias: for "Arrayy->append()"
+     * Add new values (optional using dot-notation).
      *
      * @param mixed $value
+     * @param int|string|null $key
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      *
-     * @see          Arrayy::append()
-     *
      * @psalm-param  T $value
      * @psalm-return static<TKey,T>
      */
-    public function add($value)
+    public function add($value, $key = null)
     {
+        if ($key !== null) {
+            $value = !\is_array($value) ? [$value] : $value;
+            $get = $this[$key];
+            $get = !$get instanceof self ? [$get] : $get->getArray();
+            $values = \array_merge_recursive($get, $value);
+
+            $this->internalSet($key, $values);
+
+            return $this;
+        }
+
         return $this->append($value);
     }
 
@@ -6453,6 +6463,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
                 $key = \array_shift($path);
             }
+        }
+
+        if ($array === null) {
+            $array = [];
+        } elseif (!\is_array($array)) {
+            throw new \RuntimeException('Can not set value at this path "' . $key . '" because (' . \gettype($array) . ')"' . \print_r($array, true) . '" is not an array.');
         }
 
         $array[$key] = $value;
