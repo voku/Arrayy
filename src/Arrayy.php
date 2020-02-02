@@ -229,12 +229,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function add($value, $key = null)
     {
         if ($key !== null) {
-            $value = !\is_array($value) ? [$value] : $value;
             $get = $this[$key];
-            $get = !$get instanceof self ? [$get] : $get->getArray();
-            $values = \array_merge_recursive($get, $value);
+            if ($get !== null) {
+                $value = \array_merge_recursive(
+                    !$get instanceof self ? [$get] : $get->getArray(),
+                    !\is_array($value) ? [$value] : $value
+                );
+            }
 
-            $this->internalSet($key, $values);
+            $this->internalSet($key, $value);
 
             return $this;
         }

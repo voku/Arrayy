@@ -89,5 +89,31 @@ final class DotNotationCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($dn->get('foo.bar.0'), 123);
         static::assertEquals($dn->get('foo.bar.test'), 456);
         static::assertEquals($dn->get('foo.bar.last'), 789);
+
+        $dn->add(123, 'foo.llllll');
+
+        static::assertTrue($dn->has('foo.bar.test'));
+        static::assertTrue($dn->has('foo.bar.0'));
+        static::assertTrue($dn->has('foo.bar.last'));
+
+        static::assertEquals($dn->get('foo.bar.0'), 123);
+        static::assertEquals($dn->get('foo.bar.test'), 456);
+        static::assertEquals($dn->get('foo.bar.last'), 789);
+
+        static::assertEquals($dn->get('foo.llllll'), 123);
+
+        $dn->add([123456, 789, 'foo' => 'lall'], 'foo.llllll');
+
+        static::assertTrue($dn->has('foo.bar.test'));
+        static::assertTrue($dn->has('foo.bar.0'));
+        static::assertTrue($dn->has('foo.bar.last'));
+
+        static::assertEquals($dn->get('foo.bar.0'), 123);
+        static::assertEquals($dn->get('foo.bar.test'), 456);
+        static::assertEquals($dn->get('foo.bar.last'), 789);
+
+        static::assertEquals($dn->get('foo.llllll.0'), 123);
+        static::assertEquals($dn->get('foo.llllll.1'), 123456);
+        static::assertEquals($dn->get('foo.llllll.foo'), 'lall');
     }
 }
