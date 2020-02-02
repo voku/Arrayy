@@ -439,6 +439,70 @@ final class TypesTest extends TestCase
         );
     }
 
+    public function testInstanceError()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected to be of type {stdClass}, instead got value `Arrayy\\Arrayy Object');
+
+        $testArray = [new \stdClass(), new \stdClass(), new \Arrayy\Arrayy()];
+
+        new \Arrayy\Type\InstanceCollection(
+            $testArray,
+            null,
+            null,
+            \stdClass::class
+        );
+    }
+
+    public function testInstance()
+    {
+        $testArray = [new \stdClass(), new \stdClass()];
+
+        $set = new \Arrayy\Type\InstanceCollection(
+            $testArray,
+            null,
+            null,
+            \stdClass::class
+        );
+
+        static::assertSame(
+            $testArray,
+            $set->toArray()
+        );
+    }
+
+    public function testInstancesError()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected to be of type {stdClass}, instead got value `Arrayy\\Arrayy Object');
+
+        $testArray = [new \stdClass(), new \stdClass(), new \Arrayy\Arrayy()];
+
+        new \Arrayy\Type\InstancesCollection(
+            $testArray,
+            null,
+            null,
+            [\stdClass::class]
+        );
+    }
+
+    public function testInstances()
+    {
+        $testArray = [new \stdClass(), new \stdClass(), new \Arrayy\Arrayy()];
+
+        $set = new \Arrayy\Type\InstancesCollection(
+            $testArray,
+            null,
+            null,
+            [\stdClass::class, \Arrayy\Arrayy::class]
+        );
+
+        static::assertSame(
+            $testArray,
+            $set->toArray()
+        );
+    }
+
     /**
      * @noinspection PhpUnusedParameterInspection
      */

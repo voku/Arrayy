@@ -217,7 +217,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Add new values (optional using dot-notation).
      *
-     * @param mixed $value
+     * @param mixed           $value
      * @param int|string|null $key
      *
      * @return static

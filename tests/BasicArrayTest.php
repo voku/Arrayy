@@ -745,6 +745,20 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame($first, $result);
     }
 
+    public function testArrayyIterator()
+    {
+        $iterator = new ArrayyIterator(['foo' => 'bar']);
+
+        $i = 0;
+        foreach ($iterator as $key => $element) {
+            ++$i;
+            static::assertSame('foo', $key);
+            static::assertSame('bar', $element);
+        }
+
+        static::assertSame(1, $i);
+    }
+
     /**
      * @dataProvider simpleArrayProvider
      *

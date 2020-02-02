@@ -50,7 +50,7 @@ final class DotNotationCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame('path', $jade['test']['of']);
 
         $dn->add('test');
-        static::assertSame( 'test', $dn[0]);
+        static::assertSame('test', $dn[0]);
     }
 
     public function testSetException()
