@@ -75,7 +75,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected $checkPropertiesMismatch = true;
 
     /**
-     * @var mixed|array<int|string,TypeCheckInterface>|TypeCheckArray<int|string,TypeCheckInterface>|TypeInterface
+     * @var array<int|string,TypeCheckInterface>|mixed|TypeCheckArray<int|string,TypeCheckInterface>|TypeInterface
      */
     protected $properties = [];
 
@@ -1116,7 +1116,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $return = [];
         foreach ($this->getGenerator() as $key => $value) {
-            assert(\is_string($key) || is_int($key) || \is_float($key));
+            \assert(\is_string($key) || \is_int($key) || \is_float($key));
 
             if ($case === \CASE_LOWER) {
                 $key = \mb_strtolower((string) $key);
