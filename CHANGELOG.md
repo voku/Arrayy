@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.3.0 (2020-03-23)
+
+- add & use "Arrayy->getGeneratorByReference()"
+- update "phpdocumentor/reflection-docblock"
+
 ### 7.2.0 (2020-01-31)
 
 - fix "Arrayy->offsetUnset()" -> unset of non array values + fix phpdoc
