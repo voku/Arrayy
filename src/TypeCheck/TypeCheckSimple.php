@@ -32,7 +32,7 @@ class TypeCheckSimple extends AbstractTypeCheck implements TypeCheckInterface
     }
 
     /**
-     * @param mixed $type
+     * @param string|string[] $type
      *
      * @return void
      */

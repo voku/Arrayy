@@ -9,6 +9,7 @@ parameters:
         # not supported by phpstan?
         - '/PHPDoc tag @template .Key.* for .* with bound type .* is not supported\./'
         # false-positive?
+        - '/between mixed and .* will always evaluate to false/'
         - '/Cannot access offset int\|string on array<int\|string/'
         - "/Cannot access offset '!!!!Arrayy_Helper…' on array<int\\|string/"
         - '/comparison using === between true and false/'

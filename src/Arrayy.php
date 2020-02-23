@@ -75,7 +75,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected $checkPropertiesMismatch = true;
 
     /**
-     * @var array<int|string,TypeCheckInterface>|TypeCheckArray<int|string,TypeCheckInterface>|TypeInterface
+     * @var mixed|array<int|string,TypeCheckInterface>|TypeCheckArray<int|string,TypeCheckInterface>|TypeInterface
      */
     protected $properties = [];
 
@@ -1116,6 +1116,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $return = [];
         foreach ($this->getGenerator() as $key => $value) {
+            assert(\is_string($key) || is_int($key) || \is_float($key));
+
             if ($case === \CASE_LOWER) {
                 $key = \mb_strtolower((string) $key);
             } else {
@@ -1236,7 +1238,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $this->in_array_recursive($value, $this->toArray(), $strict);
         }
 
-        foreach ($this->getGenerator() as $valueFromArray) {
+        foreach ($this->getGeneratorByReference() as &$valueFromArray) {
             if ($strict) {
                 if ($value === $valueFromArray) {
                     return true;
@@ -1270,7 +1272,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($recursive === true) {
-            foreach ($this->getGenerator() as $key => $valueTmp) {
+            foreach ($this->getGeneratorByReference() as $key => &$valueTmp) {
                 if (\is_array($valueTmp) === true) {
                     $return = (new self($valueTmp))->containsCaseInsensitive($value, $recursive);
                     if ($return === true) {
@@ -1284,7 +1286,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return false;
         }
 
-        foreach ($this->getGenerator() as $key => $valueTmp) {
+        foreach ($this->getGeneratorByReference() as $key => &$valueTmp) {
             if (\mb_strtoupper((string) $valueTmp) === \mb_strtoupper((string) $value)) {
                 return true;
             }
@@ -2602,6 +2604,32 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Get the current array from the "Arrayy"-object as generator by reference.
+     *
+     * @return \Generator
+     *
+     * @psalm-return \Generator<mixed,T>|\Generator<TKey,T>
+     */
+    public function &getGeneratorByReference(): \Generator
+    {
+        if ($this->generator instanceof ArrayyRewindableGenerator) {
+            // -> false-positive -> see "&" from method
+            /** @noinspection YieldFromCanBeUsedInspection */
+            foreach ($this->generator as $key => $value) {
+                yield $key => $value;
+            }
+
+            return;
+        }
+
+        // -> false-positive -> see "&$value"
+        /** @noinspection YieldFromCanBeUsedInspection */
+        foreach ($this->array as $key => &$value) {
+            yield $key => $value;
+        }
+    }
+
+    /**
      * Get the current array from the "Arrayy"-object as generator.
      *
      * @return \Generator
@@ -2613,6 +2641,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         if ($this->generator instanceof ArrayyRewindableGenerator) {
             yield from $this->generator;
+
+            return;
         }
 
         yield from $this->array;
@@ -3069,7 +3099,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return false;
         }
 
-        foreach ($this->keys($recursive)->getGenerator() as $key) {
+        foreach ($this->keys($recursive)->getGeneratorByReference() as &$key) {
             if ((string) $key !== $key) {
                 return false;
             }
@@ -3146,7 +3176,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return false;
         }
 
-        foreach ($this->keys()->getGenerator() as $key) {
+        foreach ($this->keys()->getGeneratorByReference() as &$key) {
             if ((int) $key !== $key) {
                 return false;
             }
@@ -3270,7 +3300,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $arrayFunction = function () use ($search_values, $strict): \Generator {
                 $is_array_tmp = \is_array($search_values);
 
-                foreach ($this->getGenerator() as $key => $value) {
+                foreach ($this->getGeneratorByReference() as $key => &$value) {
                     if (
                         (
                             $is_array_tmp === false
@@ -3597,7 +3627,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         $max = false;
-        foreach ($this->getGenerator() as $value) {
+        foreach ($this->getGeneratorByReference() as &$value) {
             if (
                 $max === false
                 ||
@@ -3757,7 +3787,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         $min = false;
-        foreach ($this->getGenerator() as $value) {
+        foreach ($this->getGeneratorByReference() as &$value) {
             if (
                 $min === false
                 ||
@@ -5119,7 +5149,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         // init
         $itemsTempCount = 0;
 
-        foreach ($this->getGenerator() as $key => $value) {
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        foreach ($this->getGeneratorByReference() as &$value) {
             ++$itemsTempCount;
             if ($itemsTempCount > $size) {
                 return false;
@@ -5635,7 +5666,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @psalm-return array<int,mixed>|array<int,T>
+     * @psalm-return list<array<TKey,T>>
      * @psalm-mutation-free
      */
     public function toList(bool $convertAllArrayyElements = false): array
@@ -6188,7 +6219,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * @return TypeCheckPhpDoc[]
+     * @return TypeCheckInterface[]
      *
      * @noinspection ReturnTypeCanBeDeclaredInspection
      */
@@ -6211,7 +6242,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $docblock = $factory->create($docComment);
             /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
             foreach ($docblock->getTagsByName('property') as $tag) {
-                $properties[$tag->getVariableName()] = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag);
+                $typeName = $tag->getVariableName();
+                if ($typeName !== null) {
+                    $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
+                    if ($typeCheckPhpDoc !== null) {
+                        $properties[$typeName] = $typeCheckPhpDoc;
+                    }
+                }
             }
         }
 
