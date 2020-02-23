@@ -44,6 +44,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
     {
         if (!$property) {
             $propertyTmp = $phpDocumentorReflectionProperty->getVariableName();
+            \assert(\is_null($propertyTmp) || \is_string($propertyTmp));
             if ($propertyTmp === null) {
                 return null;
             }
