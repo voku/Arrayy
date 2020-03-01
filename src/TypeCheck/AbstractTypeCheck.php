@@ -79,7 +79,35 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
 
         return $value instanceof $type
                ||
-               \gettype($value) === (self::$typeMapping[$type] ?? $type);
+               \gettype($value) === (self::$typeMapping[$type] ?? $type)
+               ||
+               (
+                   $type === 'scalar'
+                    &&
+                    \is_scalar($value)
+               )
+               ||
+               (
+                   $type === 'callable'
+                   &&
+                   \is_callable($value)
+               )
+               ||
+               (
+                   $type === 'numeric'
+                   &&
+                   (
+                       \is_float($value)
+                       ||
+                       \is_int($value)
+                   )
+               )
+               ||
+               (
+                   $type === 'resource'
+                   &&
+                   \is_resource($value)
+               );
     }
 
     /**
