@@ -1,6 +1,13 @@
 # Changelog
 
-### 7.3.0 (2020-03-23)
+### 7.3.1 (20202-03-01)
+
+- add "Callable"-Collections
+- add "Object"-Collections
+- add "Resource"-Collections
+- add "Scalar"-Collections
+
+### 7.3.0 (2020-02-23)
 
 - add & use "Arrayy->getGeneratorByReference()"
 - update "phpdocumentor/reflection-docblock"
