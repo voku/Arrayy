@@ -1,6 +1,10 @@
 # Changelog
 
-### 7.3.1 (20202-03-01)
+### 7.3.2 (2020-03-10)
+
+- add "JsonSerializable"-Collection
+
+### 7.3.1 (2020-03-01)
 
 - add "Callable"-Collections
 - add "Object"-Collections
