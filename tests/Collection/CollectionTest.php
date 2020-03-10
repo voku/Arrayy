@@ -77,6 +77,23 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame('fooooo', $stdClassCollection->get('123.foo'));
     }
 
+    public function testJsonSerializableCollection()
+    {
+        $pets = new \Arrayy\Arrayy();
+        $pets->foo = 'fooooo';
+
+        $colors = new \Arrayy\Arrayy();
+        $colors->color = 'red';
+
+        $jsonSerializableCollection = new \Arrayy\Type\JsonSerializableCollection([$pets, $colors]);
+
+        static::assertSame(\JsonSerializable::class, $jsonSerializableCollection->getType());
+
+        static::assertSame([$pets, $colors], $jsonSerializableCollection->getCollection());
+
+        static::assertSame('fooooo', $jsonSerializableCollection->first()->get('foo'));
+    }
+
     public function testBasic()
     {
         $pets = new \stdClass();
