@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.4.0 (2020-03-22)
+
+- add support for JSON-Mappings
+
 ### 7.3.2 (2020-03-10)
 
 - add "JsonSerializable"-Collection
