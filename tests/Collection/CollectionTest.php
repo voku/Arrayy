@@ -60,6 +60,47 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         collection(ModelInterface::class, $pets);
     }
 
+    public function testUserDataCollectionFromJsonWithNotMatchedFields()
+    {
+        $this->expectException(\TypeError::class);
+
+        $json = '{"id":1,"fooName":"Lars","barName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
+        UserDataCollection::createFromJsonMapper($json);
+    }
+
+    public function testUserDataCollectionFromJson()
+    {
+        $json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
+        $userDataCollection = UserDataCollection::createFromJsonMapper($json);
+
+        /** @var \Arrayy\tests\UserData $userData */
+        $userData = $userDataCollection->getAll()[0];
+
+        static::assertInstanceOf(\Arrayy\tests\UserData::class, $userData);
+        static::assertSame('Lars', $userData->firstName);
+        static::assertInstanceOf(\Arrayy\tests\CityData::class, $userData->city);
+        static::assertSame('Düsseldorf', $userData->city->name);
+    }
+
+    public function testUserDataCollectionFromJsonMulti()
+    {
+        $json = '[{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}, {"id":1,"firstName":"Sven","lastName":"Moelleken","city":{"name":"Köln","plz":null,"infos":["foo"]}}]';
+        $userDataCollection = UserDataCollection::createFromJsonMapper($json);
+
+        /** @var \Arrayy\tests\UserData[] $userDatas */
+        $userDataCollection->getAll();
+
+        $userData0 = $userDataCollection[0];
+        static::assertSame('Lars', $userData0->firstName);
+        static::assertInstanceOf(CityData::class, $userData0->city);
+        static::assertSame('Düsseldorf', $userData0->city->name);
+
+        $userData1 = $userDataCollection[1];
+        static::assertSame('Sven', $userData1->firstName);
+        static::assertInstanceOf(CityData::class, $userData1->city);
+        static::assertSame('Köln', $userData1->city->name);
+    }
+
     public function testSimpleCollection()
     {
         $pets = new \stdClass();

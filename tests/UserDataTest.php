@@ -35,6 +35,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
         );
 
         static::assertInstanceOf(Arrayy::class, $model);
+        static::assertSame('{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}', $model->toJson(\JSON_UNESCAPED_UNICODE));
         static::assertSame('Moelleken', $model['lastName']);
         static::assertSame('Moelleken', $model[$modelMeta->lastName]);
         static::assertSame('Moelleken', $model->lastName);
@@ -44,6 +45,17 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Düsseldorf', $model->city->name);
 
         static::assertNull($model[3]);
+    }
+
+    public function testByJsonMapper()
+    {
+        $json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
+        $userData = UserData::createFromJsonMapper($json);
+
+        static::assertInstanceOf(\Arrayy\tests\UserData::class, $userData);
+        static::assertSame('Lars', $userData->firstName);
+        static::assertInstanceOf(\Arrayy\tests\CityData::class, $userData->city);
+        static::assertSame('Düsseldorf', $userData->city->name);
     }
 
     /**

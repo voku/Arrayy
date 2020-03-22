@@ -90,6 +90,20 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertNull($model[3]);
     }
 
+    public function testDataFromJsonMapper()
+    {
+        $jsonData = '{"name":"D\u00fcsseldorf","plz":null,"infos":["foo","bar","lall"]}';
+
+        $model = CityData::createFromJsonMapper($jsonData);
+        $modelMeta = $model::meta();
+
+        static::assertInstanceOf(Arrayy::class, $model);
+        static::assertSame('Düsseldorf', $model['name']);
+        static::assertSame('Düsseldorf', $model->name);
+        static::assertSame('Düsseldorf', $model[$modelMeta->name]);
+        static::assertNull($model[3]);
+    }
+
     /**
      * @depends testSetAndGet
      */

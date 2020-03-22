@@ -260,7 +260,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        if ($this->properties !== []) {
+        if (
+            $this->checkPropertyTypes
+            &&
+            $this->properties !== []
+        ) {
             $this->checkType($key, $value);
         }
 
@@ -674,7 +678,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray();
 
         if ($offset === null) {
-            if ($this->properties !== []) {
+            if (
+                $this->checkPropertyTypes
+                &&
+                $this->properties !== []
+            ) {
                 $this->checkType(null, $value);
             }
 
@@ -2558,6 +2566,40 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * @param string $json
+     *
+     * @return $this
+     */
+    public static function createFromJsonMapper(string $json)
+    {
+        // init
+        $class = static::create();
+
+        $jsonObject = \json_decode($json, false);
+
+        $mapper = new \Arrayy\Mapper\Json();
+        $mapper->undefinedPropertyHandler = static function ($object, $key, $jsonValue) use ($class) {
+            if ($class->checkPropertiesMismatchInConstructor) {
+                throw new \TypeError('Property mismatch - input: ' . \print_r(['key' => $key, 'jsonValue' => $jsonValue], true) . ' for object: ' . \get_class($object));
+            }
+        };
+
+        return $mapper->map($jsonObject, $class);
+    }
+
+    /**
+     * @return array<int|string,TypeCheckInterface>|mixed|TypeCheckArray<int|string,TypeCheckInterface>|TypeInterface
+     */
+    public function getPhpDocPropertiesFromClass()
+    {
+        if ($this->properties === []) {
+            $this->properties = $this->getPropertiesFromPhpDoc();
+        }
+
+        return $this->properties;
+    }
+
+    /**
      * Get the current array from the "Arrayy"-object as list.
      *
      * alias for "toList()"
@@ -4083,7 +4125,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        if ($this->properties !== []) {
+        if (
+            $this->checkPropertyTypes
+            &&
+            $this->properties !== []
+        ) {
             $this->checkType($key, $value);
         }
 
@@ -6553,7 +6599,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                                         &&
                                         $checkPropertiesInConstructor === true;
 
-        if ($this->properties !== []) {
+        if (
+            $this->checkPropertyTypes
+            &&
+            $this->properties !== []
+        ) {
             foreach ($data as $key => &$valueInner) {
                 $this->internalSet(
                     $key,

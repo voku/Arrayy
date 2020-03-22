@@ -275,6 +275,53 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
+     * @param string $json
+     *
+     * @return static
+     *                <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
+     *
+     * @psalm-return static<mixed,T>
+     *
+     * @psalm-mutation-free
+     */
+    public static function createFromJsonMapper(string $json)
+    {
+        // init
+        $return = static::create();
+        $jsonObject = \json_decode($json, false);
+        $mapper = new \Arrayy\Mapper\Json();
+        $mapper->undefinedPropertyHandler = static function ($object, $key, $jsonValue) use ($return) {
+            if ($return->checkForMissingPropertiesInConstructor) {
+                throw new \TypeError('Property mismatch - input: ' . \print_r(['key' => $key, 'jsonValue' => $jsonValue], true) . ' for object: ' . \get_class($object));
+            }
+        };
+
+        $type = $return->getType();
+
+        if (
+            \is_string($type)
+            &&
+            \class_exists($type)
+        ) {
+            if (\is_array($jsonObject)) {
+                foreach ($jsonObject as $jsonObjectSingle) {
+                    $collectionData = $mapper->map($jsonObjectSingle, $type);
+                    $return->add($collectionData);
+                }
+            } else {
+                $collectionData = $mapper->map($jsonObject, $type);
+                $return->add($collectionData);
+            }
+        } else {
+            foreach ($jsonObject as $key => $jsonValue) {
+                $return->add($jsonValue, $key);
+            }
+        }
+
+        return $return;
+    }
+
+    /**
      * Internal mechanic of set method.
      *
      * @param int|string|null $key
@@ -327,6 +374,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             ||
             $is_array = \is_array($type)
         ) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $type = TypeCheckArray::create(
                 [
                     Arrayy::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES => new TypeCheckSimple($is_array ? $type : (string) $type),

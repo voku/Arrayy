@@ -27,3 +27,6 @@ parameters:
         - '/parameter \$iteratorClass with generic class Arrayy\\ArrayyIterator/'
         - '/generic class Arrayy\\ArrayyIterator does not specify its types/'
         - '#Arrayy::getIterator\(\) should be compatible with return type#'
+        # ignore JsonMapper stuff
+        - '#createByJsonMapper\(\) should be compatible with return type#'
+        - '#Json::map\(\) expects class-string#'

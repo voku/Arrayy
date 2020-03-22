@@ -28,6 +28,7 @@ A PHP array manipulation library. Compatible with PHP 7+
     * [create](#createarray-array--arrayy-immutable)
     * [createByReference](#createbyreferencearray-array--arrayy-mutable)
     * [createFromJson](#createfromjsonstring-json--arrayy-immutable)
+    * [createFromJsonMapper](#createfromjsonmapperstring-json--arrayy-immutable)
     * [createFromObject](#createfromobjectarrayaccess-object--arrayy-immutable)
     * [createFromObjectVars](#createfromobjectvarsobject-object--arrayy-immutable)
     * [createWithRange](#createwithrange--arrayy-immutable)
@@ -361,7 +362,44 @@ This will throw a "TypeError"-Exception.
 use Arrayy\Type\StringCollection;
 
 $collection = new StringCollection(['A', 'B', 'C', 1]);
+```
 
+## Convert JSON-Data into Objects (Collection)
+
+```php
+
+namespace Arrayy\tests\Collection;
+
+use Arrayy\Collection\AbstractCollection;
+
+class UserDataCollection extends AbstractCollection
+{
+    /**
+     * The type (FQCN) associated with this collection.
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return \Arrayy\tests\UserData::class;
+    }
+}
+
+$json = '[{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}, {"id":1,"firstName":"Sven","lastName":"Moelleken","city":{"name":"Köln","plz":null,"infos":["foo"]}}]';
+$userDataCollection = UserDataCollection::createFromJsonMapper($json);
+
+/** @var \Arrayy\tests\UserData[] $userDatas */
+$userDataCollection->getAll();
+
+$userData0 = $userDataCollection[0];
+echo $userData0->firstName; // 'Lars'
+$userData0->city; // CityData::class
+echo $userData0->city->name; // 'Düsseldorf'
+
+$userData1 = $userDataCollection[1];
+echo $userData1->firstName; // 'Sven'
+$userData1->city; // CityData::class
+echo $userData1->city->name; // 'Köln'
 ```
 
 ### complex example
@@ -429,6 +467,53 @@ Create an new Arrayy object via JSON.
 ```php
 $str = '{"firstName":"John", "lastName":"Doe"}';
 $arrayy = A::createFromJson($str); // Arrayy['firstName' => 'John', 'lastName' => 'Doe']
+```
+
+##### createFromJsonMapper(string $json) : Arrayy (Immutable)
+
+Create an new Arrayy object via JSON and fill sub-objects is possible.
+
+```php
+<?php
+
+namespace Arrayy\tests;
+
+/**
+ * @property int                         $id
+ * @property int|string                  $firstName
+ * @property string                      $lastName
+ * @property \Arrayy\tests\CityData|null $city
+ */
+class UserData extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected $checkForMissingPropertiesInConstructor = true;
+}
+
+/**
+ * @property string|null $plz
+ * @property string      $name
+ * @property string[]    $infos
+ */
+class CityData extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected $checkPropertiesMismatchInConstructor = true;
+
+    protected $checkForMissingPropertiesInConstructor = true;
+
+    protected $checkPropertiesMismatch = true;
+}
+
+$json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
+$userData = UserData::createFromJsonMapper($json);
+
+$userData; // => \Arrayy\tests\UserData::class
+echo $userData->firstName; // 'Lars' 
+$userData->city; // => \Arrayy\tests\CityData::class
+echo $userData->city->name; // 'Düsseldorf'
 ```
 
 ##### createFromObject(ArrayAccess $object) : Arrayy (Immutable)

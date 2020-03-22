@@ -38,4 +38,19 @@ final class ModelTest extends \PHPUnit\Framework\TestCase
 
         $colors->natsort();
     }
+
+    public function testJsonMapper()
+    {
+        $colors = ModelB::createFromJsonMapper('["red","yellow","green","white"]');
+
+        foreach ($colors as $key => $color) {
+            if ($key === 0) {
+                static::assertSame('red', $color);
+
+                break;
+            }
+        }
+
+        $colors->natsort();
+    }
 }
