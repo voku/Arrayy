@@ -365,6 +365,24 @@ use Arrayy\Type\StringCollection;
 $collection = new StringCollection(['A', 'B', 'C', 1]);
 ```
 
+### complex example
+
+This will NOT throw a "TypeError"-Exception. 
+
+```php
+use Arrayy\Type\IntCollection;
+use Arrayy\Type\StringCollection;
+use Arrayy\Type\InstancesCollection;
+use Arrayy\Type\TypeInterface;
+
+$collection = InstancesCollection::construct(
+    TypeInterface::class,
+    [new StringCollection(['A', 'B', 'C']), new IntCollection([1])]
+);
+
+$collection->toArray(true); // [['A', 'B', 'C'], [1]]
+```
+
 ## Convert JSON-Data into Objects (Collection)
 
 ```php
@@ -401,24 +419,6 @@ $userData1 = $userDataCollection[1];
 echo $userData1->firstName; // 'Sven'
 $userData1->city; // CityData::class
 echo $userData1->city->name; // 'Köln'
-```
-
-### complex example
-
-This will NOT throw a "TypeError"-Exception. 
-
-```php
-use Arrayy\Type\IntCollection;
-use Arrayy\Type\StringCollection;
-use Arrayy\Type\InstancesCollection;
-use Arrayy\Type\TypeInterface;
-
-$collection = InstancesCollection::construct(
-    TypeInterface::class,
-    [new StringCollection(['A', 'B', 'C']), new IntCollection([1])]
-);
-
-$collection->toArray(true); // [['A', 'B', 'C'], [1]]
 ```
 
 ## StaticArrayy
