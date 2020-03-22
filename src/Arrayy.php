@@ -260,11 +260,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        if (
-            $this->checkPropertyTypes
-            &&
-            $this->properties !== []
-        ) {
+        if ($this->properties !== []) {
             $this->checkType($key, $value);
         }
 
@@ -678,11 +674,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray();
 
         if ($offset === null) {
-            if (
-                $this->checkPropertyTypes
-                &&
-                $this->properties !== []
-            ) {
+            if ($this->properties !== []) {
                 $this->checkType(null, $value);
             }
 
@@ -2589,6 +2581,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * @return array<int|string,TypeCheckInterface>|mixed|TypeCheckArray<int|string,TypeCheckInterface>|TypeInterface
+     *
+     * @internal
      */
     public function getPhpDocPropertiesFromClass()
     {
@@ -4125,11 +4119,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        if (
-            $this->checkPropertyTypes
-            &&
-            $this->properties !== []
-        ) {
+        if ($this->properties !== []) {
             $this->checkType($key, $value);
         }
 
@@ -6599,11 +6589,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                                         &&
                                         $checkPropertiesInConstructor === true;
 
-        if (
-            $this->checkPropertyTypes
-            &&
-            $this->properties !== []
-        ) {
+        if ($this->properties !== []) {
             foreach ($data as $key => &$valueInner) {
                 $this->internalSet(
                     $key,
