@@ -5880,6 +5880,37 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
+    public function testCreateFromObjectAndDot()
+    {
+        $s = new \stdClass();
+        $s->foo = 'bar';
+
+        $a = new \stdClass();
+        $a->number = 22;
+        $a->protocol = 'tcp';
+        $a->service = $s;
+
+        $b = new \stdClass();
+        $b->number = 8080;
+        $b->protocol = 'udp';
+        $b->service = $s;
+
+        $arrayy = new A();
+        $arrayy->add($a);
+        $arrayy->add($b);
+        $arrayy->add($a);
+
+        $services = $arrayy->get('*.service');
+
+        $expected = [
+            $s,
+            $s,
+            $s,
+        ];
+
+        static::assertSame($expected, $services->getArray());
+    }
+
     public function testStaticCreateFromObjectVars()
     {
         $a = new \stdClass();

@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.5.0 (2020-04-06)
+
+- add support for "A->get('*.key)"
+
 ### 7.4.0 (2020-03-22)
 
 - add support for JSON-Mappings

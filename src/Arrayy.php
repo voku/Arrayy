@@ -2493,6 +2493,53 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                         continue;
                     }
 
+                    if (isset($segments[0]) && $segments[0] === '*') {
+                        $segmentsTmp = $segments;
+                        unset($segmentsTmp[0]);
+                        $keyTmp = \implode('.', $segmentsTmp);
+                        $returnTmp = static::create(
+                            [],
+                            $this->iteratorClass,
+                            false
+                        );
+                        foreach ($this->getAll() as $dataTmp) {
+                            if ($dataTmp instanceof self) {
+                                $returnTmp->add($dataTmp->get($keyTmp));
+
+                                continue;
+                            }
+
+                            if (
+                                (
+                                    \is_array($dataTmp) === true
+                                    ||
+                                    $dataTmp instanceof \ArrayAccess
+                                )
+                                &&
+                                isset($dataTmp[$keyTmp])
+                            ) {
+                                $returnTmp->add($dataTmp[$keyTmp]);
+
+                                continue;
+                            }
+
+                            if (
+                                \is_object($dataTmp) === true
+                                &&
+                                \property_exists($dataTmp, $keyTmp)
+                            ) {
+                                $returnTmp->add($dataTmp->{$keyTmp});
+
+                                /** @noinspection UnnecessaryContinueInspection */
+                                continue;
+                            }
+                        }
+
+                        if ($returnTmp->count() > 0) {
+                            return $returnTmp;
+                        }
+                    }
+
                     return $fallback instanceof \Closure ? $fallback() : $fallback;
                 }
             }
