@@ -2667,15 +2667,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $fallback instanceof \Closure ? $fallback() : $fallback;
         }
 
-        if (\is_array($usedArray) === true) {
-            return static::create(
-                [],
-                $this->iteratorClass,
-                false
-            )->createByReference($usedArray);
-        }
-
-        return $usedArray;
+        return static::create(
+            [],
+            $this->iteratorClass,
+            false
+        )->createByReference($usedArray);
     }
 
     /**
