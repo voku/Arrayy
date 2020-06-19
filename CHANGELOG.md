@@ -1,5 +1,11 @@
 # Changelog
 
+### 8.0.0 (2020-06-19)
+
+- fix "offsetGet()" usage
+  -> now e.g. $a['foo'] will return a reference instead of a new variable,
+  so that we can overwrite the key of an array like this $a['foo']['counter'] += 1 
+
 ### 7.5.0 (2020-04-06)
 
 - add support for "A->get('*.key)"
