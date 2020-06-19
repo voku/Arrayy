@@ -2567,28 +2567,29 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $segments = \explode($this->pathSeparator, (string) $key);
             if ($segments !== false) {
                 $usePath = true;
+                $usedArrayTmp = $usedArray; // do not use the reference for dot-annotations
 
                 foreach ($segments as $segment) {
                     if (
                         (
-                            \is_array($usedArray) === true
+                            \is_array($usedArrayTmp) === true
                             ||
-                            $usedArray instanceof \ArrayAccess
+                            $usedArrayTmp instanceof \ArrayAccess
                         )
                         &&
-                        isset($usedArray[$segment])
+                        isset($usedArrayTmp[$segment])
                     ) {
-                        $usedArray = $usedArray[$segment];
+                        $usedArrayTmp = $usedArrayTmp[$segment];
 
                         continue;
                     }
 
                     if (
-                        \is_object($usedArray) === true
+                        \is_object($usedArrayTmp) === true
                         &&
-                        \property_exists($usedArray, $segment)
+                        \property_exists($usedArrayTmp, $segment)
                     ) {
-                        $usedArray = $usedArray->{$segment};
+                        $usedArrayTmp = $usedArrayTmp->{$segment};
 
                         continue;
                     }
@@ -2643,6 +2644,23 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     return $fallback instanceof \Closure ? $fallback() : $fallback;
                 }
             }
+        }
+
+        if (isset($usedArrayTmp)) {
+            if (!$usePath && !isset($usedArrayTmp[$key])) {
+                return $fallback instanceof \Closure ? $fallback() : $fallback;
+            }
+
+            if (\is_array($usedArrayTmp) === true) {
+                return static::create(
+                    [],
+                    $this->iteratorClass,
+                    false
+                )->createByReference($usedArrayTmp);
+            }
+
+            return $usedArrayTmp;
+
         }
 
         if (!$usePath && !isset($usedArray[$key])) {

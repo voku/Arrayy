@@ -1,6 +1,6 @@
 # Changelog
 
-### 8.0.0 (2020-06-19)
+### 7.6.0 (2020-06-19)
 
 - fix "offsetGet()" usage
   -> now e.g. $a['foo'] will return a reference instead of a new variable,

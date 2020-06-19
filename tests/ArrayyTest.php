@@ -1931,6 +1931,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $this->expectOutputString($result);
     }
 
+    public function testGetValue()
+    {
+        $arrayy = (['bàř' => 'bàř']);
+
+        static::assertSame('bàř', $arrayy['bàř']);
+        static::assertSame('bàř', $arrayy['bàř']);
+    }
+
     public function testCanGetIntersectionOfTwoArrays()
     {
         $a = ['foo', 'bar'];
