@@ -6682,8 +6682,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         /** @psalm-var array<int|string,mixed> $array */
         $array = &$this->array;
 
-        \var_dump($array);
-
         /**
          * https://github.com/vimeo/psalm/issues/2536
          *
