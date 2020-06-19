@@ -3,9 +3,10 @@ vendor/
 composer.lock
 
 # php (phpunit)
-build/
+build/logs/
 
 # php (infection)
+build/infection/
 infection-log.txt
 
 # php (phpcs fixer)

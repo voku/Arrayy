@@ -5880,6 +5880,33 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
+    public function testCustomMerge()
+    {
+        $arr = [
+            0 => ['title' => 'A', 'quantity' => 2],
+            1 => ['title' => 'B', 'quantity' => 3],
+            2 => ['title' => 'A', 'quantity' => 4],
+        ];
+
+        $resultArrayy = A::create();
+        $callable = static function ($value) use (&$resultArrayy) {
+            if (!isset($resultArrayy[$value['title']])) {
+                $resultArrayy[$value['title']] = $value;
+            } else {
+                $resultArrayy[$value['title']]['quantity'] += $value['quantity'];
+            }
+        };
+        (new Arrayy($arr))->at($callable);
+
+        static::assertSame(
+            [
+                0 => ['title' => 'A', 'quantity' => 6],
+                1 => ['title' => 'B', 'quantity' => 3],
+            ],
+            \array_values($resultArrayy->getArray())
+        );
+    }
+
     public function testCreateFromObjectAndDot()
     {
         $s = new \stdClass();
