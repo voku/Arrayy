@@ -231,7 +231,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function add($value, $key = null)
     {
         if ($key !== null) {
-            $get = $this[$key];
+            $get = $this->get($key);
             if ($get !== null) {
                 $value = \array_merge_recursive(
                     !$get instanceof self ? [$get] : $get->getArray(),
@@ -6681,6 +6681,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         /** @psalm-var array<int|string,mixed> $array */
         $array = &$this->array;
+
+        \var_dump($array);
 
         /**
          * https://github.com/vimeo/psalm/issues/2536

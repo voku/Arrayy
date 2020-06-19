@@ -16,7 +16,7 @@ final class ModelTest extends \PHPUnit\Framework\TestCase
 
         static::assertInstanceOf(Arrayy::class, $model);
         static::assertSame('foo', $model[0]);
-        static::assertTrue($model['bar^config^lall']); // the separator was changed in the "ModelA"-class
+        static::assertTrue($model->get('bar^config^lall')); // the separator was changed in the "ModelA"-class
         static::assertNull($model[3]);
         static::assertCount(2, $model);
         static::assertSame(2, $model->count());
