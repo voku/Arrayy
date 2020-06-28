@@ -2482,13 +2482,19 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @psalm-return static<array-key,TKey>
      * @psalm-mutation-free
      */
     public function flip(): self
     {
+        $generator = function (): \Generator {
+            foreach ($this->getGenerator() as $key => $value) {
+                yield (string)$value => $key;
+            }
+        };
+
         return static::create(
-            \array_flip($this->toArray()),
+            $generator,
             $this->iteratorClass,
             false
         );
@@ -4185,20 +4191,29 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get a subset of the items from the given array.
      *
-     * @param mixed[] $keys
+     * @param string[]|int[] $keys
      *
      * @return static
      *                <p>(Immutable)</p>
      *
+     * @psalm-param array-key[] $keys
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function only(array $keys): self
     {
-        $array = $this->toArray();
+        $keys = \array_flip($keys);
+
+        $generator = function () use ($keys): \Generator {
+            foreach ($this->getGenerator() as $key => $value) {
+                if (isset($keys[$key])) {
+                    yield $key => $value;
+                }
+            }
+        };
 
         return static::create(
-            \array_intersect_key($array, \array_flip($keys)),
+            $generator,
             $this->iteratorClass,
             false
         );
@@ -6127,6 +6142,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     \array_walk_recursive($this->array, $callable);
                 }
             } else {
+                /** @noinspection NestedPositiveIfStatementsInspection */
                 if ($userData !== self::ARRAYY_HELPER_WALK) {
                     \array_walk($this->array, $callable, $userData);
                 } else {
@@ -6461,6 +6477,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
             foreach ($docblock->getTagsByName('property') as $tag) {
                 $typeName = $tag->getVariableName();
+                /** @var null|string $typeName */
                 if ($typeName !== null) {
                     $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
                     if ($typeCheckPhpDoc !== null) {
