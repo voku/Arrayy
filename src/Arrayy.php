@@ -2666,7 +2666,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
 
             return $usedArrayTmp;
-
         }
 
         if (!$usePath && !isset($usedArray[$key])) {
