@@ -223,10 +223,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param int|string|null $key
      *
      * @return static
-     *                <p>(Mutable) Return this Arrayy object, with the appended values.</p>
+     *                <p>(Immutable) Return this Arrayy object, with the appended values.</p>
      *
      * @psalm-param  T $value
      * @psalm-return static<TKey,T>
+     *
+     * @psalm-mutation-free
      */
     public function add($value, $key = null)
     {
@@ -285,6 +287,48 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $this;
+    }
+
+    /**
+     * Append a (key) + value to the current array.
+     *
+     * EXAMPLE: <code>
+     * a(['fòô' => 'bàř'])->appendImmutable('foo')->getArray(); // ['fòô' => 'bàř', 0 => 'foo']
+     * </code>
+     *
+     * @param mixed $value
+     * @param mixed $key
+     *
+     * @return $this
+     *               <p>(Immutable) Return this Arrayy object, with the appended values.</p>
+     *
+     * @psalm-return static<TKey,T>
+     * @psalm-mutation-free
+     */
+    public function appendImmutable($value, $key = null): self
+    {
+        $generator = function () use ($key, $value): \Generator {
+            if ($this->properties !== []) {
+                $this->checkType($key, $value);
+            }
+
+            /** @noinspection YieldFromCanBeUsedInspection - FP */
+            foreach ($this->getGenerator() as $keyOld => $itemOld) {
+                yield $keyOld => $itemOld;
+            }
+
+            if ($key !== null) {
+                yield $key => $value;
+            } else {
+                yield $value;
+            }
+        };
+
+        return static::create(
+            $generator,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -1404,11 +1448,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             \array_intersect($needles, $this->keys()->toArray()),
             \COUNT_NORMAL
         )
-               ===
-               \count(
-                   $needles,
-                   \COUNT_NORMAL
-               );
+                ===
+                \count(
+                    $needles,
+                    \COUNT_NORMAL
+                );
     }
 
     /**
@@ -1474,9 +1518,18 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function containsValues(array $needles): bool
     {
-        return \count(\array_intersect($needles, $this->toArray()), \COUNT_NORMAL)
+        return \count(
+            \array_intersect(
+                $needles,
+                $this->toArray()
+            ),
+            \COUNT_NORMAL
+        )
                ===
-               \count($needles, \COUNT_NORMAL);
+               \count(
+                   $needles,
+                   \COUNT_NORMAL
+               );
     }
 
     /**
@@ -2489,7 +2542,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $generator = function (): \Generator {
             foreach ($this->getGenerator() as $key => $value) {
-                yield (string)$value => $key;
+                yield (string) $value => $key;
             }
         };
 
@@ -4191,7 +4244,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get a subset of the items from the given array.
      *
-     * @param string[]|int[] $keys
+     * @param int[]|string[] $keys
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -4260,7 +4313,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $matches = [];
         $noMatches = [];
 
-        foreach ($this->array as $key => $value) {
+        foreach ($this->getGenerator() as $key => $value) {
             if ($closure($value, $key)) {
                 $matches[$key] = $value;
             } else {
@@ -4314,6 +4367,48 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $this;
+    }
+
+    /**
+     * Prepend a (key) + value to the current array.
+     *
+     * EXAMPLE: <code>
+     * a(['fòô' => 'bàř'])->prependImmutable('foo')->getArray(); // [0 => 'foo', 'fòô' => 'bàř']
+     * </code>
+     *
+     * @param mixed $value
+     * @param mixed $key
+     *
+     * @return $this
+     *               <p>(Immutable) Return this Arrayy object, with the prepended value.</p>
+     *
+     * @psalm-return static<TKey,T>
+     * @psalm-mutation-free
+     */
+    public function prependImmutable($value, $key = null)
+    {
+        $generator = function () use ($key, $value): \Generator {
+            if ($this->properties !== []) {
+                $this->checkType($key, $value);
+            }
+
+            if ($key !== null) {
+                yield $key => $value;
+            } else {
+                yield $value;
+            }
+
+            /** @noinspection YieldFromCanBeUsedInspection - FP */
+            foreach ($this->getGenerator() as $keyOld => $itemOld) {
+                yield $keyOld => $itemOld;
+            }
+        };
+
+        return static::create(
+            $generator,
+            $this->iteratorClass,
+            false
+        );
     }
 
     /**
@@ -5862,7 +5957,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ($convertAllArrayyElements) {
             foreach ($this->getGenerator() as $key => $value) {
                 if ($value instanceof self) {
-                    $value = $value->toArray(true);
+                    $value = $value->toArray(
+                        $convertAllArrayyElements,
+                        $preserveKeys
+                    );
                 }
 
                 if ($preserveKeys) {
@@ -6477,7 +6575,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
             foreach ($docblock->getTagsByName('property') as $tag) {
                 $typeName = $tag->getVariableName();
-                /** @var null|string $typeName */
+                /** @var string|null $typeName */
                 if ($typeName !== null) {
                     $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
                     if ($typeCheckPhpDoc !== null) {

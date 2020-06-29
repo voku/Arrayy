@@ -1864,6 +1864,27 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertMutable($arrayy, $resultArrayy, $array);
     }
 
+    public function testAppendImmutableYield()
+    {
+        $array = [1, 2];
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->appendImmutable(3);
+        $arrayResult = $array;
+        $arrayResult[] = 3;
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $arrayResult);
+    }
+
+    public function testPrependImmutableYield()
+    {
+        $array = [3 => 1, 2];
+        $arrayy = new A($array);
+        $resultArrayy = $arrayy->prependImmutable(3);
+        $arrayResult = [3, 3 => 1, 2];
+
+        self::assertImmutable($arrayy, $resultArrayy, $array, $arrayResult);
+    }
+
     /**
      * @dataProvider appendProvider()
      *
@@ -2879,6 +2900,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame(
             (new A([2 => [2 => 2]]))->getArray(),
+            A::create($testArray1)->diffRecursive($testArray2)->getArray()
+        );
+
+        $testArray1 = [1 => [1 => 1], 2 => new A([2 => [2 => 2]])];
+        $testArray2 = [1 => [1 => 1], 2 => [2 => [2 => 2]]];
+
+        static::assertSame(
+            (new A([]))->getArray(),
             A::create($testArray1)->diffRecursive($testArray2)->getArray()
         );
     }
