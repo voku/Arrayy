@@ -3092,13 +3092,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Implodes the values of this array.
      *
      * @param string $glue
+     * @param string $prefix
      *
      * @return string
      * @psalm-mutation-free
      */
-    public function implode(string $glue = ''): string
+    public function implode(string $glue = '', string $prefix = ''): string
     {
-        return $this->implode_recursive($glue, $this->toArray(), false);
+        return $prefix . $this->implode_recursive($glue, $this->toArray(), false);
     }
 
     /**

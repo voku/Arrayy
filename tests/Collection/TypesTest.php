@@ -151,6 +151,11 @@ final class TypesTest extends TestCase
             'A_B_C_D',
             $set->implode('_')
         );
+
+        static::assertSame(
+            '#A #B #C #D',
+            $set->implode(' #', '#')
+        );
     }
 
     public function testIntersect()
