@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arrayy\tests\Collection;
 
 use Arrayy\Type\StringCollection;
+use Arrayy\Type\StringCollection as PhpString;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -12,6 +13,18 @@ use PHPUnit\Framework\TestCase;
  */
 final class StringTypeTest extends TestCase
 {
+    public function testArraySimple()
+    {
+        $this->expectException(\TypeError::class);
+
+        $strings = PhpString::create();
+
+        $strings[] = 'A';
+        $strings[] = 'B';
+        $strings[] = 'C';
+        $strings[] = 1.0;
+    }
+
     public function testArray()
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
