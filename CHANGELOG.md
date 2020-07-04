@@ -1,5 +1,13 @@
 # Changelog
 
+### 7.7.0 (2020-07-05)
+
+- add "prependImmutable()"
+- add "appendImmutable()"
+- add prefix for "implode()"
+- use more Generators
+- add more tests
+
 ### 7.6.0 (2020-06-19)
 
 - fix "offsetGet()" usage
