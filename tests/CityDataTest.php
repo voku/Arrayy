@@ -146,6 +146,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
 
     public function testExtendedClassV2()
     {
+        $this->expectException(\TypeError::class);
         $this->expectExceptionMessageRegExp('#Invalid type: expected "plz" to be of type {string}, instead got value "NULL"#');
 
         $modelMeta = BigCityData::meta();
