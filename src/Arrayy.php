@@ -6585,6 +6585,25 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
+        /** @noinspection PhpAssignmentInConditionInspection */
+        while ($reflector = $reflector->getParentClass()) {
+            $docComment = $reflector->getDocComment();
+            if ($docComment) {
+                $docblock = $factory->create($docComment);
+                /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
+                foreach ($docblock->getTagsByName('property') as $tag) {
+                    $typeName = $tag->getVariableName();
+                    /** @var string|null $typeName */
+                    if ($typeName !== null) {
+                        $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
+                        if ($typeCheckPhpDoc !== null) {
+                            $properties[$typeName] = $typeCheckPhpDoc;
+                        }
+                    }
+                }
+            }
+        }
+
         return $PROPERTY_CACHE[$cacheKey] = $properties;
     }
 
@@ -7051,7 +7070,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             &&
             $this->checkPropertiesMismatch === true
         ) {
-            throw new \TypeError('The key ' . $key . ' does not exists in "properties". Maybe because @property was not used for the class (' . \get_class($this) . ').');
+            throw new \TypeError('The key "' . $key . '" does not exists as "@property" phpdoc. (' . \get_class($this) . ').');
         }
 
         if (isset($this->properties[self::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES])) {

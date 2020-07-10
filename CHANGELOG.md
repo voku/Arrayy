@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.8.0 (2020-07-11)
+
+- search for PhpDoc @property in parent classes
+  -> this is working for "Arrayy" classes and "ArrayyMeta" classes
+
 ### 7.7.0 (2020-07-05)
 
 - add "prependImmutable()"

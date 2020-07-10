@@ -124,4 +124,23 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Düsseldorf', $model[$modelMeta->name]);
         static::assertNull($model[3]);
     }
+
+    public function testExtendedClass()
+    {
+        $modelMeta = BigCityData::meta();
+
+        $model = new BigCityData(
+            [
+                $modelMeta->name       => 'Düsseldorf',
+                $modelMeta->plz        => null,
+                $modelMeta->infos      => ['foo'],
+                $modelMeta->extra_info => 'lall',
+            ]
+        );
+
+        static::assertInstanceOf(Arrayy::class, $model);
+        static::assertSame('lall', $model->extra_info);
+        static::assertSame('lall', $model['extra_info']);
+        static::assertSame('lall', $model[$modelMeta->extra_info]);
+    }
 }
