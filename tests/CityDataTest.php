@@ -132,7 +132,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         $model = new BigCityData(
             [
                 $modelMeta->name       => 'Düsseldorf',
-                $modelMeta->plz        => null,
+                $modelMeta->plz        => '000000',
                 $modelMeta->infos      => ['foo'],
                 $modelMeta->extra_info => 'lall',
             ]
@@ -142,5 +142,21 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertSame('lall', $model->extra_info);
         static::assertSame('lall', $model['extra_info']);
         static::assertSame('lall', $model[$modelMeta->extra_info]);
+    }
+
+    public function testExtendedClassV2()
+    {
+        $this->expectExceptionMessageRegExp('#Invalid type: expected "plz" to be of type {string}, instead got value "NULL"#');
+
+        $modelMeta = BigCityData::meta();
+
+        new BigCityData(
+            [
+                $modelMeta->name       => 'Düsseldorf',
+                $modelMeta->plz        => null,
+                $modelMeta->infos      => ['foo'],
+                $modelMeta->extra_info => 'lall',
+            ]
+        );
     }
 }

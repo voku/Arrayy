@@ -6595,6 +6595,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     $typeName = $tag->getVariableName();
                     /** @var string|null $typeName */
                     if ($typeName !== null) {
+                        if (isset($properties[$typeName])) {
+                            continue;
+                        }
+
                         $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
                         if ($typeCheckPhpDoc !== null) {
                             $properties[$typeName] = $typeCheckPhpDoc;
