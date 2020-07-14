@@ -2304,19 +2304,19 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                               </p>
      *                               <ul>
      *                               <li>
-     *                                  <b>ARRAY_FILTER_USE_KEY</b> (1) - pass key as the only argument
-     *                                  to <i>callback</i> instead of the value
+     *                               <b>ARRAY_FILTER_USE_KEY</b> (1) - pass key as the only argument
+     *                               to <i>callback</i> instead of the value
      *                               </li>
      *                               <li>
-     *                                  <b>ARRAY_FILTER_USE_BOTH</b> (2) - pass both value and key as
-     *                                  arguments to <i>callback</i> instead of the value
+     *                               <b>ARRAY_FILTER_USE_BOTH</b> (2) - pass both value and key as
+     *                               arguments to <i>callback</i> instead of the value
      *                               </li>
      *                               </ul>
      *
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param \Closure(T=,TKey=):bool|\Closure(T=):bool $closure
+     * @psalm-param null|\Closure(T=,TKey=):bool|\Closure(T=):bool||\Closure(TKey=):bool $closure
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -4317,7 +4317,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * $newArr2 = $arr2->moveElement('D', 1); // Arrayy['A' => 'a', 'D' => 'd', 'B' => 'b', 'C' => 'c', 'E' => 'e']
      * </code>
      *
-     *
      * @param int|string $from
      * @param int        $to
      *
@@ -6192,7 +6191,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
              * @psalm-suppress MissingClosureParamType
              */
             $results = $arrayy->each(
-                function ($value) use ($sorter) {
+                static function ($value) use ($sorter) {
                     if (\is_callable($sorter) === true) {
                         return $sorter($value);
                     }
@@ -6283,7 +6282,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     $i = 1;
                 }
 
-                if ([] !== $carry) {
+                if ($carry !== []) {
                     yield $carry;
                 }
             };
@@ -6306,7 +6305,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     $i = 1;
                 }
 
-                if ([] !== $carry) {
+                if ($carry !== []) {
                     yield $carry;
                 }
             };
@@ -6701,8 +6700,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $callable,
         bool $recursive = false,
         $userData = self::ARRAYY_HELPER_WALK
-    ): self
-    {
+    ): self {
         $this->generatorToArray();
 
         if ($this->array !== []) {
@@ -7476,8 +7474,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $direction = \SORT_ASC,
         int $strategy = \SORT_REGULAR,
         bool $keepKeys = false
-    ): self
-    {
+    ): self {
         $direction = $this->getDirection($direction);
 
         if (!$strategy) {

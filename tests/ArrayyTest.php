@@ -3064,11 +3064,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
             static function ($value) {
-                return ($value % 2 !== 0);
+                return $value % 2 !== 0;
             },
             0
         );
-        static::assertSame([ 0 => 1, 2 => 3, 7 => 7], $under->getArray());
+        static::assertSame([0 => 1, 2 => 3, 7 => 7], $under->getArray());
     }
 
     public function testFilterBy()
@@ -5498,7 +5498,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $testArray = ['foo' => 5, 'bar' => 3, 'lll' => 1, 2, 4];
         $under = A::create($testArray)->sorter(3, 'asc');
-        static::assertSame(['lll' => 1, 0 => 2, 1 => 4, 'foo' => 5, 'bar' => 3,], $under->getArray());
+        static::assertSame(['lll' => 1, 0 => 2, 1 => 4, 'foo' => 5, 'bar' => 3], $under->getArray());
 
         // ---
 
