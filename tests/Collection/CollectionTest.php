@@ -249,9 +249,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $newCollection = $modelCollection->where('pet', ['cat']);
 
         $modelCollectionExpected = new ModelsCollection([$pet1]);
-        /** @noinspection PhpNonStrictObjectEqualityInspection */
-        /** @noinspection PhpUnitTestsInspection */
-        static::assertTrue($modelCollectionExpected == $newCollection);
+        static::assertEquals($modelCollectionExpected, $newCollection);
     }
 
     public function testClear()

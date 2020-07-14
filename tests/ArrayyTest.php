@@ -1592,6 +1592,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             [[false], 1, [false]],
             [[true], 0, []],
             [[-9, 1, 0, false], 1, [0 => -9, 2 => 0, 3 => false]],
+            [[-9, 1, 0, false], [1, 2, 99], [0 => -9, 3 => false]],
             [[1.18], 0, []],
             [[' string  ', 'foo'], 'foo', [' string  ', 'foo']],
             [[' string  ', 'foo' => 'foo'], 'foo', [' string  ']],
@@ -3058,6 +3059,16 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             \ARRAY_FILTER_USE_BOTH
         );
         static::assertSame([7 => 7], $under->getArray());
+
+        // ---
+
+        $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
+            static function ($value) {
+                return ($value % 2 !== 0);
+            },
+            0
+        );
+        static::assertSame([ 0 => 1, 2 => 3, 7 => 7], $under->getArray());
     }
 
     public function testFilterBy()
@@ -3523,6 +3534,49 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testIsSequentialRecursive()
+    {
+        $testArrays = [
+            [1 => [1]],
+            [0, 1, 2, 3, 4],
+            [
+                1 => 1,
+                2 => 2,
+            ],
+            [
+                1 => [1],
+                2 => [2],
+            ],
+            false,
+            '',
+            ' ',
+            [],
+            [0, 1, 2, 3, [4 => 3, 5 => 4]],
+            [0, 1, 2, 3, [0 => 3, 1 => 4]],
+        ];
+
+        $expectedArrays = [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            true,
+        ];
+
+        foreach ($testArrays as $key => $testArray) {
+            static::assertSame(
+                $expectedArrays[$key],
+                A::create($testArray)->isSequential(true),
+                'tested:' . \print_r($testArray, true)
+            );
+        }
+    }
+
     public function testIsSequential()
     {
         $testArrays = [
@@ -3556,8 +3610,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         foreach ($testArrays as $key => $testArray) {
             static::assertSame(
                 $expectedArrays[$key],
-                A::create($testArray)
-                    ->isSequential(),
+                A::create($testArray)->isSequential(),
                 'tested:' . \print_r($testArray, true)
             );
         }
@@ -5425,9 +5478,27 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
+        $testArray = [5, 3, 1, 2, 4];
+        $under = A::create($testArray)->sorter(null, 'asc');
+        static::assertSame([1, 2, 3, 4, 5], $under->getArray());
+
+        // ---
+
         $testArray = ['foo' => 5, 'bar' => 3, 'lll' => 1, 2, 4];
         $under = A::create($testArray)->sorter('lll', 'desc');
         static::assertSame(['lll' => 1, 0 => 2, 'bar' => 3, 1 => 4, 'foo' => 5], $under->getArray());
+
+        // ---
+
+        $testArray = ['foo' => 5, 'bar' => 3, 'lll' => 1, 2, 4];
+        $under = A::create($testArray)->sorter(3, 'desc');
+        static::assertSame(['bar' => 3, 'lll' => 1, 0 => 2, 1 => 4, 'foo' => 5], $under->getArray());
+
+        // ---
+
+        $testArray = ['foo' => 5, 'bar' => 3, 'lll' => 1, 2, 4];
+        $under = A::create($testArray)->sorter(3, 'asc');
+        static::assertSame(['lll' => 1, 0 => 2, 1 => 4, 'foo' => 5, 'bar' => 3,], $under->getArray());
 
         // ---
 

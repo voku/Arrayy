@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.8.1 (2020-07-15)
+
+- use more Generators
+- auto-generate the README
+
 ### 7.8.0 (2020-07-11)
 
 - search for PhpDoc @property in parent classes
