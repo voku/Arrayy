@@ -46,6 +46,7 @@ A PHP array manipulation library. Compatible with PHP 7+
     * ["delete an array value"](#delete-an-array-value)
     * ["check if an array value is-set"](#check-if-an-array-value-is-set)
     * ["simple loop with an Arrayy-object"](#simple-loop-with-an-arrayy-object)
+    * [overview](#arrayy-methods)
 * [Tests](#tests)
 * [License](#license)
 
@@ -552,7 +553,7 @@ foreach ($arrayy) as $key => $value) {
 
 ## Arrayy methods
 
-<p id="voku-php-readme-class-methods"></p><tr><td><a href="#addmixed-value-intstringnull-key-static">add</a>
+<p id="voku-php-readme-class-methods"></p><table><tr><td><a href="#addmixed-value-intstringnull-key-static">add</a>
 </td><td><a href="#appendmixed-value-mixed-key-this">append</a>
 </td><td><a href="#appendarrayvaluesarray-values-mixed-key-this">appendArrayValues</a>
 </td><td><a href="#appendimmutablemixed-value-mixed-key-this">appendImmutable</a>
@@ -776,7 +777,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#values-static">values</a>
 </td><td><a href="#walkcallable-callable-bool-recursive-mixed-userdata-this">walk</a>
 </td><td><a href="#wherestring-keyorpropertyormethod-mixed-value-static">where</a>
-</td></tr>
+</td></tr></table>
 
 ## add(mixed $value, int|string|null $key): static
 <a href="#voku-php-readme-class-methods">↑</a>
@@ -1638,7 +1639,7 @@ a([1, 2, 3, 4])->filter($closure); // Arrayy[0 => 1, 2 => 3]
 </code>
 
 **Parameters:**
-- `Closure(T=):bool|Closure(T=, TKey=):bool $closure [optional] <p>
+- `Closure|null $closure [optional] <p>
 The callback function to use
 </p>
 <p>
@@ -1652,12 +1653,12 @@ Flag determining what arguments are sent to <i>callback</i>:
 </p>
 <ul>
 <li>
-   <b>ARRAY_FILTER_USE_KEY</b> (1) - pass key as the only argument
-   to <i>callback</i> instead of the value
+<b>ARRAY_FILTER_USE_KEY</b> (1) - pass key as the only argument
+to <i>callback</i> instead of the value
 </li>
 <li>
-   <b>ARRAY_FILTER_USE_BOTH</b> (2) - pass both value and key as
-   arguments to <i>callback</i> instead of the value
+<b>ARRAY_FILTER_USE_BOTH</b> (2) - pass both value and key as
+arguments to <i>callback</i> instead of the value
 </li>
 </ul>`
 
@@ -4260,6 +4261,7 @@ Returns a collection of matching items.
 - `static`
 
 --------
+
 
 
 ## Support
