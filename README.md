@@ -785,7 +785,7 @@ Add new values (optional using dot-notation).
 
 **Parameters:**
 - `T $value`
-- `int|null|string $key`
+- `int|string|null $key`
 
 **Return:**
 - `static <p>(Immutable) Return this Arrayy object, with the appended values.</p>`
@@ -818,7 +818,7 @@ a(['fòô' => ['bàř']])->appendArrayValues(['foo1', 'foo2'], 'fòô'); // Arra
 </code>
 
 **Parameters:**
-- `array<array-key, T> $values`
+- `array<mixed, T> $values`
 - `TKey|null $key`
 
 **Return:**
@@ -936,7 +936,7 @@ a(['foo', 'bar' => 'bis'])->at($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 </code>
 
 **Parameters:**
-- `Closure $closure`
+- `\Closure $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1028,7 +1028,7 @@ a([-8 => -9, 1, 2 => false])->clear(); // Arrayy[]
 </code>
 
 **Parameters:**
-- `array<array-key, int|string>|int|null|string $key`
+- `int|int[]|string|string[]|null $key`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object, with an empty array.</p>`
@@ -1095,7 +1095,7 @@ a([1 => true])->containsKeys(array(1 => 0)); // true
 </code>
 
 **Parameters:**
-- `array<array-key, TKey|mixed> $needles <p>The keys you are searching for.</p>`
+- `array<mixed, mixed>|array<TKey> $needles <p>The keys you are searching for.</p>`
 - `bool $recursive`
 
 **Return:**
@@ -1108,7 +1108,7 @@ a([1 => true])->containsKeys(array(1 => 0)); // true
 Check if all given needles are present in the array as key/index.
 
 **Parameters:**
-- `array<array-key, TKey|mixed> $needles <p>The keys you are searching for.</p>`
+- `array<mixed, mixed>|array<TKey> $needles <p>The keys you are searching for.</p>`
 
 **Return:**
 - `bool <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>`
@@ -1148,7 +1148,7 @@ a([1, true])->containsValues(array(1, true)); // true
 </code>
 
 **Parameters:**
-- `array<array-key, T|mixed> $needles`
+- `array<mixed>|array<T> $needles`
 
 **Return:**
 - `bool <p>Returns true if all the given values exists in the array, false otherwise.</p>`
@@ -1219,7 +1219,7 @@ Creates an Arrayy object.
 
 **Parameters:**
 - `mixed $data`
-- `class-string<Arrayy\ArrayyIterator> $iteratorClass`
+- `class-string<\Arrayy\ArrayyIterator> $iteratorClass`
 - `bool $checkPropertiesInConstructor`
 
 **Return:**
@@ -1232,7 +1232,7 @@ Creates an Arrayy object.
 WARNING: Creates an Arrayy object by reference.
 
 **Parameters:**
-- `array<array-key, mixed> $array`
+- `array<mixed, mixed>|array<array-key, mixed> $array`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
@@ -1244,7 +1244,7 @@ WARNING: Creates an Arrayy object by reference.
 Create an new Arrayy object via JSON.
 
 **Parameters:**
-- `array<array-key, mixed> $array`
+- `array $array`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1256,7 +1256,7 @@ Create an new Arrayy object via JSON.
 Create an new instance from a callable function which will return an Generator.
 
 **Parameters:**
-- `callable():Generator<array-key, mixed> $generatorFunction`
+- `callable(): \Generator<array-key, mixed> $generatorFunction`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1268,7 +1268,7 @@ Create an new instance from a callable function which will return an Generator.
 Create an new instance filled with a copy of values from a "Generator"-object.
 
 **Parameters:**
-- `Generator<array-key, mixed> $generator`
+- `\Generator<array-key, mixed> $generator`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1304,7 +1304,7 @@ Create an new Arrayy object via JSON.
 Create an new instance filled with values from an object that is iterable.
 
 **Parameters:**
-- `Traversable<array-key, mixed> $object <p>iterable object</p>`
+- `\Traversable<array-key, mixed> $object <p>iterable object</p>`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1329,8 +1329,8 @@ Create an new Arrayy object via string.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `null|string $delimiter <p>The boundary string.</p>`
-- `null|string $regEx <p>Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be
+- `string|null $delimiter <p>The boundary string.</p>`
+- `string|null $regEx <p>Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be
 used.</p>`
 
 **Return:**
@@ -1343,7 +1343,7 @@ used.</p>`
 Create an new instance filled with a copy of values from a "Traversable"-object.
 
 **Parameters:**
-- `Traversable<array-key, mixed> $traversable`
+- `\Traversable<array-key, mixed> $traversable`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1451,7 +1451,7 @@ Custom sort by value via "usort".
 Delete the given key or keys.
 
 **Parameters:**
-- `array<array-key, int|string>|int|string $keyOrKeys`
+- `int|int[]|string|string[] $keyOrKeys`
 
 **Return:**
 - `void`
@@ -1467,7 +1467,7 @@ a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
 </code>
 
 **Parameters:**
-- `array<array-key, mixed> ...$array`
+- `array<mixed, mixed>|array<TKey, T> ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1479,7 +1479,7 @@ a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
 Return values that are only in the current array.
 
 **Parameters:**
-- `array<array-key, mixed> ...$array`
+- `array<mixed, mixed>|array<TKey, T> ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1491,7 +1491,7 @@ Return values that are only in the current array.
 Return values and Keys that are only in the current array.
 
 **Parameters:**
-- `array<TKey|array-key, T|mixed> $array`
+- `array<mixed, mixed>|array<TKey, T> $array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1507,8 +1507,8 @@ a([1 => [1 => 1], 2 => [2 => 2]])->diffRecursive([1 => [1 => 1]]); // Arrayy[2 =
 </code>
 
 **Parameters:**
-- `array<TKey|array-key, T|mixed> $array`
-- `Generator<TKey, T>|array<TKey, T>|null $helperVariableForRecursion <p>(only for internal usage)</p>`
+- `array<mixed, mixed>|array<TKey, T> $array`
+- `null|array<TKey, T>|\Generator<TKey, T> $helperVariableForRecursion <p>(only for internal usage)</p>`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1524,7 +1524,7 @@ a([1 => 1])->diffReverse([1 => 1, 2 => 2]); // Arrayy[2 => 2]
 </code>
 
 **Parameters:**
-- `array<TKey|array-key, T|mixed> $array`
+- `array<mixed, mixed>|array<TKey, T> $array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1560,7 +1560,7 @@ a(['foo', 'bar' => 'bis'])->each($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 </code>
 
 **Parameters:**
-- `Closure $closure`
+- `\Closure $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1603,7 +1603,7 @@ a(['foo', 2 => 'two'])->exists($callable); // true
 </code>
 
 **Parameters:**
-- `Closure $closure`
+- `\Closure $closure`
 
 **Return:**
 - `bool <p>Returns true if the given value is found, false otherwise.</p>`
@@ -1639,7 +1639,7 @@ a([1, 2, 3, 4])->filter($closure); // Arrayy[0 => 1, 2 => 3]
 </code>
 
 **Parameters:**
-- `Closure|null $closure [optional] <p>
+- `\Closure|null $closure [optional] <p>
 The callback function to use
 </p>
 <p>
@@ -1674,7 +1674,7 @@ property within that.
 
 **Parameters:**
 - `string $property`
-- `array<array-key, string>|string $value`
+- `string|string[] $value`
 - `string $comparisonOp <p>
 'eq' (equals),<br />
 'gt' (greater),<br />
@@ -1706,7 +1706,7 @@ a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
 </code>
 
 **Parameters:**
-- `Closure $closure`
+- `\Closure $closure`
 
 **Return:**
 - `false|mixed <p>Return false if we did not find the value.</p>`
@@ -1729,7 +1729,7 @@ a($array)->filterBy('name', 'foo'); // Arrayy[0 => ['id' => 123, 'name' => 'foo'
 
 **Parameters:**
 - `string $property`
-- `array<array-key, string>|string $value`
+- `string|string[] $value`
 - `string $comparisonOp`
 
 **Return:**
@@ -1822,7 +1822,7 @@ Flatten an array with the given character as a key delimiter
 **Parameters:**
 - `string $delimiter`
 - `string $prepend`
-- `array<array-key, mixed>|null $items`
+- `array|null $items`
 
 **Return:**
 - `array`
@@ -1864,7 +1864,7 @@ $arrayy['user.firstname']; // Lars
 **Parameters:**
 - `mixed $key <p>The key to look for.</p>`
 - `mixed $fallback <p>Value to fallback to.</p>`
-- `array<TKey|array-key, T|mixed> $array <p>The array to get from, if it's set to "null" we use the current array from the
+- `array<mixed, mixed>|array<TKey, T> $array <p>The array to get from, if it's set to "null" we use the current array from the
 class.</p>`
 - `bool $useByReference`
 
@@ -2249,7 +2249,7 @@ a(['foo', 'bar'])->intersection(['bar', 'baz']); // Arrayy['bar']
 </code>
 
 **Parameters:**
-- `array<TKey|array-key, T|mixed> $search`
+- `array<mixed, mixed>|array<TKey, T> $search`
 - `bool $keepKeys`
 
 **Return:**
@@ -2262,7 +2262,7 @@ a(['foo', 'bar'])->intersection(['bar', 'baz']); // Arrayy['bar']
 Return an array with all elements found in input array.
 
 **Parameters:**
-- `array<array-key, mixed> ...$array`
+- `array<mixed, mixed>|array<TKey, T> ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -2278,7 +2278,7 @@ a(['foo', 'bar'])->intersects(['föö', 'bär']); // false
 </code>
 
 **Parameters:**
-- `array<TKey|array-key, T|mixed> $search`
+- `array<mixed, mixed>|array<TKey, T> $search`
 
 **Return:**
 - `bool`
@@ -2290,7 +2290,7 @@ a(['foo', 'bar'])->intersects(['föö', 'bär']); // false
 Invoke a function on all of an array's values.
 
 **Parameters:**
-- `callable(T=, mixed):mixed $callable`
+- `callable(T  = default, mixed ): mixed $callable`
 - `mixed $arguments`
 
 **Return:**
@@ -2319,7 +2319,7 @@ a(['foo' => 'bar', 2, 3])->isAssoc(); // true
 Check if a given key or keys are empty.
 
 **Parameters:**
-- `array<array-key, int|string>|int|null|string $keys`
+- `int|int[]|string|string[]|null $keys`
 
 **Return:**
 - `bool <p>Returns true if empty, false otherwise.</p>`
@@ -2335,7 +2335,7 @@ a(['💩'])->isEqual(['💩']); // true
 </code>
 
 **Parameters:**
-- `array<array-key, mixed> $array`
+- `array<mixed, mixed> $array`
 
 **Return:**
 - `bool`
@@ -2597,7 +2597,7 @@ Apply the given function to the every element of the array,
 collecting the results.
 
 **Parameters:**
-- `callable(T, TKey=, mixed=):mixed $callable`
+- `callable(T , TKey  = default, mixed  = default): mixed $callable`
 - `bool $useKeyAsSecondParameter`
 - `mixed ...$arguments`
 
@@ -2618,7 +2618,7 @@ a([2, 4, 8])->matches($closure); // true
 </code>
 
 **Parameters:**
-- `Closure $closure`
+- `\Closure $closure`
 
 **Return:**
 - `bool`
@@ -2637,7 +2637,7 @@ a([1, 4, 7])->matches($closure); // true
 </code>
 
 **Parameters:**
-- `Closure $closure`
+- `\Closure $closure`
 
 **Return:**
 - `bool`
@@ -2670,10 +2670,14 @@ EXAMPLE: <code>
 $array1 = [1 => 'one', 'foo' => 'bar1'];
 $array2 = ['foo' => 'bar2', 3 => 'three'];
 a($array1)->mergeAppendKeepIndex($array2); // Arrayy[1 => 'one', 'foo' => 'bar2', 3 => 'three']
+// ---
+$array1 = [0 => 'one', 1 => 'foo'];
+$array2 = [0 => 'foo', 1 => 'bar2'];
+a($array1)->mergeAppendKeepIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2']
 </code>
 
 **Parameters:**
-- `array<TKey|array-key, T|mixed> $array`
+- `array<mixed, mixed>|array<TKey, T> $array`
 - `bool $recursive`
 
 **Return:**
@@ -2691,11 +2695,15 @@ Merge the new $array into the current array.
 EXAMPLE: <code>
 $array1 = [1 => 'one', 'foo' => 'bar1'];
 $array2 = ['foo' => 'bar2', 3 => 'three'];
-a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 'foo' => 'bar2', 1 => three']
+a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 'foo' => 'bar2', 1 => 'three']
+// ---
+$array1 = [0 => 'one', 1 => 'foo'];
+$array2 = [0 => 'foo', 1 => 'bar2'];
+a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 1 => 'foo', 2 => 'foo', 3 => 'bar2']
 </code>
 
 **Parameters:**
-- `array<TKey|array-key, T|mixed> $array`
+- `array<mixed, mixed>|array<TKey, T> $array`
 - `bool $recursive`
 
 **Return:**
@@ -2713,10 +2721,14 @@ EXAMPLE: <code>
 $array1 = [1 => 'one', 'foo' => 'bar1'];
 $array2 = ['foo' => 'bar2', 3 => 'three'];
 a($array1)->mergePrependKeepIndex($array2); // Arrayy['foo' => 'bar1', 3 => 'three', 1 => 'one']
+// ---
+$array1 = [0 => 'one', 1 => 'foo'];
+$array2 = [0 => 'foo', 1 => 'bar2'];
+a($array1)->mergePrependKeepIndex($array2); // Arrayy[0 => 'one', 1 => 'foo']
 </code>
 
 **Parameters:**
-- `array<TKey|array-key, T|mixed> $array`
+- `array<mixed, mixed>|array<TKey, T> $array`
 - `bool $recursive`
 
 **Return:**
@@ -2735,10 +2747,14 @@ EXAMPLE: <code>
 $array1 = [1 => 'one', 'foo' => 'bar1'];
 $array2 = ['foo' => 'bar2', 3 => 'three'];
 a($array1)->mergePrependNewIndex($array2); // Arrayy['foo' => 'bar1', 0 => 'three', 1 => 'one']
+// ---
+$array1 = [0 => 'one', 1 => 'foo'];
+$array2 = [0 => 'foo', 1 => 'bar2'];
+a($array1)->mergePrependNewIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2', 2 => 'one', 3 => 'foo']
 </code>
 
 **Parameters:**
-- `array<TKey|array-key, T|mixed> $array`
+- `array<mixed, mixed>|array<TKey, T> $array`
 - `bool $recursive`
 
 **Return:**
@@ -2948,7 +2964,7 @@ Returns the value at specified offset.
 Assigns a value to the specified offset + check the type.
 
 **Parameters:**
-- `int|null|string $offset`
+- `int|string|null $offset`
 - `mixed $value`
 
 **Return:**
@@ -2973,7 +2989,7 @@ Unset an offset.
 Get a subset of the items from the given array.
 
 **Parameters:**
-- `array<array-key, array-key> $keys`
+- `array-key[] $keys`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3000,7 +3016,7 @@ Partitions this array in two array according to a predicate.
 Keys are preserved in the resulting array.
 
 **Parameters:**
-- `Closure $closure <p>The predicate on which to partition.</p>`
+- `\Closure $closure <p>The predicate on which to partition.</p>`
 
 **Return:**
 - `array<int,static> <p>An array with two elements. The first element contains the array
@@ -3085,7 +3101,7 @@ Return the value of a given key and
 delete the key.
 
 **Parameters:**
-- `array<array-key, int|string>|int|null|string $keyOrKeys`
+- `int|int[]|string|string[]|null $keyOrKeys`
 - `mixed $fallback`
 
 **Return:**
@@ -3098,7 +3114,7 @@ delete the key.
 Push one or more values onto the end of array at once.
 
 **Parameters:**
-- `array<array-key, mixed> ...$args`
+- `array<mixed, mixed>|array<TKey, T> ...$args`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object, with pushed elements to the end of array.</p>`
@@ -3278,7 +3294,7 @@ a([1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
 </code>
 
 **Parameters:**
-- `Closure $closure`
+- `\Closure $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3412,7 +3428,7 @@ $arrayy->replaceAllKeys($secondArray); // Arrayy[1 => "one", 'one' => "two", 2 =
 </code>
 
 **Parameters:**
-- `array<array-key, TKey|mixed> $keys <p>An array of keys.</p>`
+- `array<mixed, mixed>|array<mixed, TKey> $keys <p>An array of keys.</p>`
 
 **Return:**
 - `static <p>(Immutable) Arrayy object with keys from the other array.</p>`
@@ -3439,7 +3455,7 @@ $arrayy->replaceAllValues($secondArray); // Arrayy['one' => 1, 'two' => 'one', '
 </code>
 
 **Parameters:**
-- `array<array-key, T> $array <p>An array of values.</p>`
+- `array<mixed, T> $array <p>An array of values.</p>`
 
 **Return:**
 - `static <p>(Immutable) Arrayy object with values from the other array.</p>`
@@ -3455,7 +3471,7 @@ a([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']); // 
 </code>
 
 **Parameters:**
-- `array<array-key, TKey|mixed> $keys <p>An array of keys matching the array's size</p>`
+- `array<mixed, mixed>|array<mixed, TKey> $keys <p>An array of keys matching the array's size</p>`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3654,7 +3670,7 @@ $arrayy->setAndGet(0, 4); // 4
 Sets the iterator classname for the current "Arrayy"-object.
 
 **Parameters:**
-- `class-string<Arrayy\ArrayyIterator> $iteratorClass`
+- `class-string<\Arrayy\ArrayyIterator> $iteratorClass`
 
 **Return:**
 - `void`
@@ -3683,7 +3699,7 @@ a([1 => 'bar', 'foo' => 'foo'])->shuffle(); // e.g.: Arrayy[['foo' => 'foo', 1 =
 
 **Parameters:**
 - `bool $secure <p>using a CSPRNG | @link https://paragonie.com/b/JvICXzh_jhLyt4y3</p>`
-- `array<TKey|array-key, T|mixed> $array [optional]`
+- `array<mixed, mixed>|array<TKey, T> $array [optional]`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3923,7 +3939,7 @@ var_dump($under); // Arrayy[1, 3, 5, 2, 4]
 </code>
 
 **Parameters:**
-- `callable|null|string $sorter`
+- `callable|string|null $sorter`
 - `int|string $direction <p>use <strong>SORT_ASC</strong> (default) or
 <strong>SORT_DESC</strong></p>`
 - `int $strategy <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
@@ -3941,7 +3957,7 @@ var_dump($under); // Arrayy[1, 3, 5, 2, 4]
 **Parameters:**
 - `int $offset`
 - `int|null $length`
-- `array<array-key, T|mixed> $replacement`
+- `array<mixed, mixed>|array<mixed, T> $replacement`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -4054,8 +4070,8 @@ Convert all Child-"Arrayy" objects also to arrays.
 
 
 **Parameters:**
-- `array<array-key, string>|null $items [optional]`
-- `array<array-key, string> $helper [optional]`
+- `string[]|null $items [optional]`
+- `string[] $helper [optional]`
 
 **Return:**
 - `static|static[]`
@@ -4188,7 +4204,7 @@ a()->unserialize($serialized);
 Prepends one or more values to the beginning of array at once.
 
 **Parameters:**
-- `array<array-key, mixed> ...$args`
+- `array<mixed, mixed>|array<TKey, T> ...$args`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object, with prepended elements to the beginning of array.</p>`
@@ -4200,7 +4216,7 @@ Prepends one or more values to the beginning of array at once.
 Tests whether the given closure return something valid for all elements of this array.
 
 **Parameters:**
-- `Closure $closure the predicate`
+- `\Closure $closure the predicate`
 
 **Return:**
 - `bool <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>`

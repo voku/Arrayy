@@ -4101,6 +4101,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * $array1 = [1 => 'one', 'foo' => 'bar1'];
      * $array2 = ['foo' => 'bar2', 3 => 'three'];
      * a($array1)->mergeAppendKeepIndex($array2); // Arrayy[1 => 'one', 'foo' => 'bar2', 3 => 'three']
+     * // ---
+     * $array1 = [0 => 'one', 1 => 'foo'];
+     * $array2 = [0 => 'foo', 1 => 'bar2'];
+     * a($array1)->mergeAppendKeepIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2']
      * </code>
      *
      * @param array $array
@@ -4138,7 +4142,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * EXAMPLE: <code>
      * $array1 = [1 => 'one', 'foo' => 'bar1'];
      * $array2 = ['foo' => 'bar2', 3 => 'three'];
-     * a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 'foo' => 'bar2', 1 => three']
+     * a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 'foo' => 'bar2', 1 => 'three']
+     * // ---
+     * $array1 = [0 => 'one', 1 => 'foo'];
+     * $array2 = [0 => 'foo', 1 => 'bar2'];
+     * a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 1 => 'foo', 2 => 'foo', 3 => 'bar2']
      * </code>
      *
      * @param array $array
@@ -4176,6 +4184,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * $array1 = [1 => 'one', 'foo' => 'bar1'];
      * $array2 = ['foo' => 'bar2', 3 => 'three'];
      * a($array1)->mergePrependKeepIndex($array2); // Arrayy['foo' => 'bar1', 3 => 'three', 1 => 'one']
+     * // ---
+     * $array1 = [0 => 'one', 1 => 'foo'];
+     * $array2 = [0 => 'foo', 1 => 'bar2'];
+     * a($array1)->mergePrependKeepIndex($array2); // Arrayy[0 => 'one', 1 => 'foo']
      * </code>
      *
      * @param array $array
@@ -4214,6 +4226,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * $array1 = [1 => 'one', 'foo' => 'bar1'];
      * $array2 = ['foo' => 'bar2', 3 => 'three'];
      * a($array1)->mergePrependNewIndex($array2); // Arrayy['foo' => 'bar1', 0 => 'three', 1 => 'one']
+     * // ---
+     * $array1 = [0 => 'one', 1 => 'foo'];
+     * $array2 = [0 => 'foo', 1 => 'bar2'];
+     * a($array1)->mergePrependNewIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2', 2 => 'one', 3 => 'foo']
      * </code>
      *
      * @param array $array
