@@ -184,6 +184,12 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         $flatten = $dot->flatten();
         static::assertSame('xyz', $flatten['foo.abc']);
         static::assertSame('baz', $flatten['foo.bar.0']);
+
+        // ---
+
+        $dot = new Arrayy([0 => ['foo' => 'var'], 1 => ['lall' => 1, 'foo' => 'lall']]);
+        $flatten = $dot->flatten();
+        static::assertSame('lall', $flatten['1.foo']);
     }
 
     public function testFlattenWithCustomDelimiter()

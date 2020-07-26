@@ -1596,7 +1596,18 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Flatten an array with the given character as a key delimiter
+     * Flatten an array with the given character as a key delimiter.
+     *
+     * EXAMPLE: <code>
+     * $callable = function ($a, $b) {
+     *     if ($a == $b) {
+     *         return 0;
+     *     }
+     *     return ($a > $b) ? 1 : -1;
+     * };
+     * $arrayy = a(['three' => 3, 'one' => 1, 'two' => 2]);
+     * $resultArrayy = $arrayy->customSortKeys($callable); // Arrayy['one' => 1, 'three' => 3, 'two' => 2]
+     * </code>
      *
      * @param string     $delimiter
      * @param string     $prepend
@@ -1614,7 +1625,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         foreach ($items as $key => $value) {
-            if (\is_array($value) && !empty($value)) {
+            if (\is_array($value) && $value !== []) {
                 $flatten[] = $this->flatten($delimiter, $prepend . $key . $delimiter, $value);
             } else {
                 $flatten[] = [$prepend . $key => $value];
