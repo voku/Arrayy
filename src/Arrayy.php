@@ -1261,8 +1261,50 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function chunk($size, $preserveKeys = false): self
     {
+        if ($preserveKeys) {
+            $generator = function () use ($size) {
+                $values = [];
+                $tmpCounter = 0;
+                foreach ($this->getGenerator() as $key => $value) {
+                    ++$tmpCounter;
+
+                    $values[$key] = $value;
+                    if ($tmpCounter === $size) {
+                        yield $values;
+
+                        $values = [];
+                        $tmpCounter = 0;
+                    }
+                }
+
+                if ($values !== []) {
+                    yield $values;
+                }
+            };
+        } else {
+            $generator = function () use ($size) {
+                $values = [];
+                $tmpCounter = 0;
+                foreach ($this->getGenerator() as $key => $value) {
+                    ++$tmpCounter;
+
+                    $values[] = $value;
+                    if ($tmpCounter === $size) {
+                        yield $values;
+
+                        $values = [];
+                        $tmpCounter = 0;
+                    }
+                }
+
+                if ($values !== []) {
+                    yield $values;
+                }
+            };
+        }
+
         return static::create(
-            \array_chunk($this->toArray(), $size, $preserveKeys),
+            $generator,
             $this->iteratorClass,
             false
         );
@@ -2980,8 +3022,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * INFO: Optionally, you may provide an $indexKey to index the values in the returned
      *       array by the values from the $indexKey column in the input array.
      *
-     * @param mixed $columnKey
-     * @param mixed $indexKey
+     * @param int|string|null $columnKey
+     * @param int|string|null $indexKey
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -2991,8 +3033,60 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function getColumn($columnKey = null, $indexKey = null): self
     {
+        if ($columnKey === null && $indexKey === null) {
+            $generator = function () {
+                foreach ($this->getGenerator() as $key => $value) {
+                    yield $value;
+                }
+            };
+        } else {
+            $generator = function () use ($columnKey, $indexKey) {
+                foreach ($this->getGenerator() as $key => $value) {
+                    // reset
+                    $newKey = null;
+                    $newValue = null;
+                    $newValueFound = false;
+
+                    if ($indexKey !== null) {
+                        foreach ($value as $keyInner => $valueInner) {
+                            if ($indexKey === $keyInner) {
+                                $newKey = $valueInner;
+                            }
+
+                            if ($columnKey === $keyInner) {
+                                $newValue = $valueInner;
+                                $newValueFound = true;
+                            }
+                        }
+                    } else {
+                        foreach ($value as $keyInner => $valueInner) {
+                            if ($columnKey === $keyInner) {
+                                $newValue = $valueInner;
+                                $newValueFound = true;
+                            }
+                        }
+                    }
+
+                    if ($newValueFound === false) {
+                        if ($newKey !== null) {
+                            yield $newKey => $value;
+                        } else {
+                            yield $value;
+                        }
+                    } else {
+                        /** @noinspection NestedPositiveIfStatementsInspection */
+                        if ($newKey !== null) {
+                            yield $newKey => $newValue;
+                        } else {
+                            yield $newValue;
+                        }
+                    }
+                }
+            };
+        }
+
         return static::create(
-            \array_column($this->toArray(), $columnKey, $indexKey),
+            $generator,
             $this->iteratorClass,
             false
         );

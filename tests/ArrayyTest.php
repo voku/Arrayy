@@ -3894,44 +3894,44 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $array1 = [1 => 'one', 'foo' => 'bar1'];
         $array2 = ['foo' => 'bar2', 3 => 'three'];
         $array3 = Arrayy::create($array1)->mergePrependNewIndex($array2); // Arrayy['foo' => 'bar1', 0 => 'three', 1 => 'one']
-        self::assertSame(['foo' => 'bar1', 0 => 'three', 1 => 'one'], $array3->toArray());
+        static::assertSame(['foo' => 'bar1', 0 => 'three', 1 => 'one'], $array3->toArray());
 
         $array1 = [1 => 'one', 'foo' => 'bar1'];
         $array2 = ['foo' => 'bar2', 3 => 'three'];
         $array3 = Arrayy::create($array1)->mergePrependKeepIndex($array2); // Arrayy['foo' => 'bar1', 3 => 'three', 1 => 'one']
-        self::assertSame(['foo' => 'bar1', 3 => 'three', 1 => 'one'], $array3->toArray());
+        static::assertSame(['foo' => 'bar1', 3 => 'three', 1 => 'one'], $array3->toArray());
 
         $array1 = [1 => 'one', 'foo' => 'bar1'];
         $array2 = ['foo' => 'bar2', 3 => 'three'];
         $array3 = Arrayy::create($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 'foo' => 'bar2', 1 => 'three']
-        self::assertSame([0 => 'one', 'foo' => 'bar2', 1 => 'three'], $array3->toArray());
+        static::assertSame([0 => 'one', 'foo' => 'bar2', 1 => 'three'], $array3->toArray());
 
         $array1 = [1 => 'one', 'foo' => 'bar1'];
         $array2 = ['foo' => 'bar2', 3 => 'three'];
         $array3 = Arrayy::create($array1)->mergeAppendKeepIndex($array2); // Arrayy[1 => 'one', 'foo' => 'bar2', 3 => 'three']
-        self::assertSame([1 => 'one', 'foo' => 'bar2', 3 => 'three'], $array3->toArray());
+        static::assertSame([1 => 'one', 'foo' => 'bar2', 3 => 'three'], $array3->toArray());
 
         // ---
 
         $array1 = [0 => 'one', 1 => 'foo'];
         $array2 = [0 => 'foo', 1 => 'bar2'];
         $array3 = Arrayy::create($array1)->mergePrependNewIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2', 2 => 'one', 3 => 'foo']
-        self::assertSame([0 => 'foo', 1 => 'bar2', 2 => 'one', 3 => 'foo'], $array3->toArray());
+        static::assertSame([0 => 'foo', 1 => 'bar2', 2 => 'one', 3 => 'foo'], $array3->toArray());
 
         $array1 = [0 => 'one', 1 => 'foo'];
         $array2 = [0 => 'foo', 1 => 'bar2'];
         $array3 = Arrayy::create($array1)->mergePrependKeepIndex($array2); // Arrayy[0 => 'one', 1 => 'foo']
-        self::assertSame([0 => 'one', 1 => 'foo'], $array3->toArray());
+        static::assertSame([0 => 'one', 1 => 'foo'], $array3->toArray());
 
         $array1 = [0 => 'one', 1 => 'foo'];
         $array2 = [0 => 'foo', 1 => 'bar2'];
         $array3 = Arrayy::create($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 1 => 'foo', 2 => 'foo', 3 => 'bar2']
-        self::assertSame([0 => 'one', 1 => 'foo', 2 => 'foo', 3 => 'bar2'], $array3->toArray());
+        static::assertSame([0 => 'one', 1 => 'foo', 2 => 'foo', 3 => 'bar2'], $array3->toArray());
 
         $array1 = [0 => 'one', 1 => 'foo'];
         $array2 = [0 => 'foo', 1 => 'bar2'];
         $array3 = Arrayy::create($array1)->mergeAppendKeepIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2']
-        self::assertSame([0 => 'foo', 1 => 'bar2'], $array3->toArray());
+        static::assertSame([0 => 'foo', 1 => 'bar2'], $array3->toArray());
     }
 
     /**
