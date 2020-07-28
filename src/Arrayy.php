@@ -5131,13 +5131,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Reduce the current array via callable e.g. anonymous-function and return the end result.
      *
      * EXAMPLE: <code>
-     * function myReducer($resultArray, $value) {
-     *     if ($value == 'foo') {
-     *         $resultArray[] = $value;
-     *     }
-     *     return $resultArray;
-     * };
-     * a(['foo', 'bar'])->reduce('myReducer'); // Arrayy['foo']
+     * a([1, 2, 3, 4])->reduce(
+     *     function ($carry, $item) {
+     *         return $carry * $item;
+     *     },
+     *     1
+     * ); // Arrayy[24]
      * </code>
      *
      * @param callable $callable
