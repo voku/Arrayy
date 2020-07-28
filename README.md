@@ -624,7 +624,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#getall-array">getAll</a>
 </td><td><a href="#getarraybool-convertallarrayyelements-bool-preservekeys-array">getArray</a>
 </td><td><a href="#getarraycopy-array">getArrayCopy</a>
-</td><td><a href="#getcolumnmixed-columnkey-mixed-indexkey-static">getColumn</a>
+</td><td><a href="#getcolumnintstringnull-columnkey-intstringnull-indexkey-static">getColumn</a>
 </td></tr><tr><td><a href="#getgenerator-generator">getGenerator</a>
 </td><td><a href="#getgeneratorbyreference-generator">getGeneratorByReference</a>
 </td><td><a href="#getiterator-iteratormixedmixed">getIterator</a>
@@ -713,7 +713,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#randomvalue-mixed">randomValue</a>
 </td><td><a href="#randomvaluesint-number-static">randomValues</a>
 </td><td><a href="#randomweightedarray-array-int-number">randomWeighted</a>
-</td></tr><tr><td><a href="#reducecallable-callable-mixed-init-static">reduce</a>
+</td></tr><tr><td><a href="#reducecallable-callable-mixed-initial-static">reduce</a>
 </td><td><a href="#reduce_dimensionbool-unique-static">reduce_dimension</a>
 </td><td><a href="#reindex-this">reindex</a>
 </td><td><a href="#rejectclosure-closure-static">reject</a>
@@ -1817,7 +1817,18 @@ a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->firstsMutable(); // 'foo'
 
 ## flatten(string $delimiter, string $prepend, array|null $items): array
 <a href="#voku-php-readme-class-methods">↑</a>
-Flatten an array with the given character as a key delimiter
+Flatten an array with the given character as a key delimiter.
+
+EXAMPLE: <code>
+$callable = function ($a, $b) {
+    if ($a == $b) {
+        return 0;
+    }
+    return ($a > $b) ? 1 : -1;
+};
+$arrayy = a(['three' => 3, 'one' => 1, 'two' => 2]);
+$resultArrayy = $arrayy->customSortKeys($callable); // Arrayy['one' => 1, 'three' => 3, 'two' => 2]
+</code>
 
 **Parameters:**
 - `string $delimiter`
@@ -1917,7 +1928,7 @@ __nothing__
 
 --------
 
-## getColumn(mixed $columnKey, mixed $indexKey): static
+## getColumn(int|string|null $columnKey, int|string|null $indexKey): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns the values from a single column of the input array, identified by
 the $columnKey, can be used to extract data-columns from multi-arrays.
@@ -1930,8 +1941,8 @@ INFO: Optionally, you may provide an $indexKey to index the values in the return
       array by the values from the $indexKey column in the input array.
 
 **Parameters:**
-- `mixed $columnKey`
-- `mixed $indexKey`
+- `int|string|null $columnKey`
+- `int|string|null $indexKey`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3231,9 +3242,9 @@ a([1 => 'one', 2 => 'two'])->randomValues(); // e.g. Arrayy['one', 'two']
 
 --------
 
-## reduce(callable $callable, mixed $init): static
+## reduce(callable $callable, mixed $initial): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Reduce the current array via callable e.g. anonymous-function.
+Reduce the current array via callable e.g. anonymous-function and return the end result.
 
 EXAMPLE: <code>
 function myReducer($resultArray, $value) {
@@ -3243,11 +3254,11 @@ function myReducer($resultArray, $value) {
     return $resultArray;
 };
 a(['foo', 'bar'])->reduce('myReducer'); // Arrayy['foo']
-</cdde>
+</code>
 
 **Parameters:**
 - `callable $callable`
-- `mixed $init`
+- `mixed $initial`
 
 **Return:**
 - `static <p>(Immutable)</p>`

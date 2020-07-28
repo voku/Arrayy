@@ -5128,7 +5128,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Reduce the current array via callable e.g. anonymous-function.
+     * Reduce the current array via callable e.g. anonymous-function and return the end result.
      *
      * EXAMPLE: <code>
      * function myReducer($resultArray, $value) {
@@ -5138,10 +5138,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *     return $resultArray;
      * };
      * a(['foo', 'bar'])->reduce('myReducer'); // Arrayy['foo']
-     * </cdde>
+     * </code>
      *
      * @param callable $callable
-     * @param mixed    $init
+     * @param mixed    $initial
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -5149,32 +5149,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function reduce($callable, $init = []): self
+    public function reduce($callable, $initial = []): self
     {
-        if ($this->generator) {
-            $result = $init;
-
-            foreach ($this->getGenerator() as $value) {
-                $result = $callable($result, $value);
-            }
-
-            return static::create(
-                $result,
-                $this->iteratorClass,
-                false
-            );
-        }
-
-        $result = \array_reduce($this->array, $callable, $init);
-
-        if ($result === null) {
-            $this->array = [];
-        } else {
-            $this->array = (array) $result;
+        foreach ($this->getGenerator() as $key => $value) {
+            $initial = $callable($initial, $value, $key);
         }
 
         return static::create(
-            $this->array,
+            $initial,
             $this->iteratorClass,
             false
         );
@@ -5885,7 +5867,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @psalm-return static<TKey,T>
      *
      * @noinspection BadExceptionsProcessingInspection
-     * @noinspection RandomApiMigrationInspection
      * @noinspection NonSecureShuffleUsageInspection
      */
     public function shuffle(bool $secure = false, array $array = null): self
@@ -6610,7 +6591,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 /** @var string[] $new_items */
                 $new_items = $new_items;
                 \array_unshift($new_helper, $tmp_helper);
-                /** @noinspection SlowArrayOperationsInLoopInspection */
                 $return = \array_merge(
                     $return,
                     $this->toPermutation($new_items, $new_helper)->toArray()
