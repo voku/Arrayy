@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.8.2 (2020-07-28)
+
+- use more Generators v2
+- auto-generate the README
+
 ### 7.8.1 (2020-07-15)
 
 - use more Generators
