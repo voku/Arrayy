@@ -3790,6 +3790,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
+    public function testMapSimpleExample()
+    {
+        $arrayy = new A(['foo', 'Foo']);
+        $resultArrayy = $arrayy->map('strtoupper');
+        self::assertSame(['FOO', 'FOO'], $resultArrayy->getArray());
+    }
+
     /**
      * @dataProvider matchesProvider()
      *

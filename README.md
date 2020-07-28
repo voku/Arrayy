@@ -2607,6 +2607,10 @@ alias: for "Arrayy->count()"
 Apply the given function to the every element of the array,
 collecting the results.
 
+EXAMPLE: <code>
+a(['foo', 'Foo'])->map('mb_strtoupper'); // Arrayy['FOO', 'FOO']
+</code>
+
 **Parameters:**
 - `callable(T , TKey  = default, mixed  = default): mixed $callable`
 - `bool $useKeyAsSecondParameter`
