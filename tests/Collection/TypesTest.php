@@ -17,7 +17,8 @@ final class TypesTest extends TestCase
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
-        static::assertIsArray($set->toArray());
+        /** @noinspection PhpUnitTestsInspection */
+        static::assertTrue(\is_array($set->toArray()));
     }
 
     public function testChunk()
