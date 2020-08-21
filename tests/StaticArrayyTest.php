@@ -16,7 +16,6 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
 
         /** @noinspection PhpUndefinedMethodInspection */
         /** @noinspection PhpUnusedLocalVariableInspection */
-        /** @noinspection OnlyWritesOnParameterInspection */
         $result = A::invalidMethod('foo');
     }
 
@@ -38,7 +37,6 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $result = A::replaceOneValue(['foo', 'bar'], 'foo');
-        /** @noinspection PhpUndefinedMethodInspection */
         static::assertSame(['', 'bar'], $result->getArray());
     }
 
@@ -46,7 +44,6 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $result = A::replaceOneValue(['foo', 'bar'], 'foo', 'test');
-        /** @noinspection PhpUndefinedMethodInspection */
         static::assertSame(['test', 'bar'], $result->getArray());
     }
 

@@ -9,7 +9,7 @@ use Arrayy\Collection\Collection;
 
 /**
  * @template TKey of array-key
- * @template T
+ * @template T of object
  * @extends Collection<TKey,T>
  */
 final class InstanceCollection extends Collection implements TypeInterface

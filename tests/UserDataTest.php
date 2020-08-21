@@ -42,6 +42,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame('Düsseldorf', $model['city']['name']);
         static::assertSame('Düsseldorf', $model[$modelMeta->city][$cityMeta->name]);
+        \assert($model->city instanceof \Arrayy\tests\CityData);
         static::assertSame('Düsseldorf', $model->city->name);
 
         static::assertNull($model[3]);
@@ -54,6 +55,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
 
         static::assertInstanceOf(\Arrayy\tests\UserData::class, $userData);
         static::assertSame('Lars', $userData->firstName);
+        \assert($userData->city instanceof \Arrayy\tests\CityData);
         static::assertInstanceOf(\Arrayy\tests\CityData::class, $userData->city);
         static::assertSame('Düsseldorf', $userData->city->name);
     }
@@ -115,6 +117,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Moelleken', $model->lastName);
         static::assertSame('Moelleken', $model[$modelMeta->lastName]);
         static::assertSame('Moelleken', $model::meta()->lastName);
+        \assert($model->city instanceof \Arrayy\tests\CityData);
         static::assertSame('Düsseldorf', $model->city->name);
         static::assertSame('Düsseldorf', $model->city::meta()->name);
         static::assertNull($model[3]);

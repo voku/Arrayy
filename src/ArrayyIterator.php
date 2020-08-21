@@ -13,6 +13,8 @@ class ArrayyIterator extends \ArrayIterator
 {
     /**
      * @var string
+     *
+     * @psalm-var string|class-string<\Arrayy\Arrayy<TKey,T>>
      */
     private $class;
 
@@ -38,7 +40,7 @@ class ArrayyIterator extends \ArrayIterator
         $value = parent::current();
 
         if (\is_array($value)) {
-            return \call_user_func([$this->class, 'create'], $value);
+            $value = \call_user_func([$this->class, 'create'], $value, static::class, false);
         }
 
         return $value;
@@ -58,7 +60,7 @@ class ArrayyIterator extends \ArrayIterator
         $value = parent::offsetGet($offset);
 
         if (\is_array($value)) {
-            $value = \call_user_func([$this->class, 'create'], $value);
+            $value = \call_user_func([$this->class, 'create'], $value, static::class, false);
         }
 
         return $value;

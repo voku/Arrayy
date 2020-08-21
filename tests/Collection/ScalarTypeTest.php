@@ -59,6 +59,7 @@ final class ScalarTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
+        /** @phpstan-ignore-next-line */
         new \Arrayy\Type\ScalarCollection([new \stdClass(), 1]);
     }
 

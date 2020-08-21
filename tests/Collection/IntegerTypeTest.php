@@ -36,6 +36,7 @@ final class IntegerTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
+        /** @phpstan-ignore-next-line */
         new IntCollection([1, 2, 3, 4.0]);
     }
 
@@ -43,6 +44,7 @@ final class IntegerTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
+        /** @phpstan-ignore-next-line */
         new IntCollection([[1, 2], 4.0]);
     }
 }

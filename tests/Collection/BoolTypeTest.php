@@ -30,12 +30,27 @@ final class BoolTypeTest extends TestCase
             [[true, true], [false, false]],
             $set->toArray()
         );
+
+        $test = null;
+        foreach ($set->getIterator() as $foo) {
+            /** @phpstan-ignore-next-line */
+            if ($foo === '1') {
+                $test = false;
+            }
+
+            if ($foo[0] === true) {
+                $test = true;
+            }
+        }
+
+        static::assertTrue($test);
     }
 
     public function testWrongValue()
     {
         $this->expectException(\TypeError::class);
 
+        /** @phpstan-ignore-next-line */
         new BoolCollection([true, true, false, 1]);
     }
 
@@ -43,6 +58,7 @@ final class BoolTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
+        /** @phpstan-ignore-next-line */
         new BoolCollection([[true, true], false, [true]]);
     }
 }

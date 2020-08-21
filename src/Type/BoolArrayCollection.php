@@ -7,7 +7,7 @@ namespace Arrayy\Type;
 use Arrayy\Collection\Collection;
 
 /**
- * @extends Collection<array-key,array<bool>>
+ * @extends Collection<array-key,bool[]>
  */
 final class BoolArrayCollection extends Collection implements TypeInterface
 {

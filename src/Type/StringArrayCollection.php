@@ -7,7 +7,7 @@ namespace Arrayy\Type;
 use Arrayy\Collection\Collection;
 
 /**
- * @extends Collection<array-key,array<string>>
+ * @extends Collection<array-key,string[]>
  */
 final class StringArrayCollection extends Collection implements TypeInterface
 {

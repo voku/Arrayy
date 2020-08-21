@@ -5,6 +5,9 @@ namespace Arrayy\tests;
 use Arrayy\ArrayyIterator;
 use Arrayy\TypeCheck\TypeCheckSimple;
 
+/**
+ * @extends    \Arrayy\ArrayyStrict<array-key,mixed>
+ */
 class ModelD extends \Arrayy\ArrayyStrict implements ModelInterface
 {
     /**

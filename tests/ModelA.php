@@ -4,6 +4,9 @@ namespace Arrayy\tests;
 
 use Arrayy\ArrayyIterator;
 
+/**
+ * @extends    \Arrayy\Arrayy<array-key,mixed>
+ */
 class ModelA extends \Arrayy\Arrayy implements ModelInterface
 {
     /**
@@ -11,6 +14,8 @@ class ModelA extends \Arrayy\Arrayy implements ModelInterface
      *
      * @param array  $array
      * @param string $iteratorClass
+     *
+     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct($array = [], $iteratorClass = ArrayyIterator::class)
     {

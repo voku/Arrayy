@@ -5,13 +5,21 @@ parameters:
     checkMissingIterableValueType: false
     paths:
         - %currentWorkingDirectory%/src/
+        - %currentWorkingDirectory%/tests/
     ignoreErrors:
+        -
+            message: ~typehint specified~
+            path: %currentWorkingDirectory%/tests/*
+        -
+            message: ~Call to an undefined static method~
+            path: %currentWorkingDirectory%/tests/StaticArrayyTest.php
+        -
+            message: ~Cannot call method format~
+            path: %currentWorkingDirectory%/tests/ArrayyTest.php
         # not supported by phpstan?
         - '/PHPDoc tag @template .Key.* for .* with bound type .* is not supported\./'
         # false-positive?
         - '/between mixed and .* will always evaluate to false/'
-        - '/Cannot access offset int\|string on array<int\|string/'
-        - "/Cannot access offset '!!!!Arrayy_Helper…' on array<int\\|string/"
         - '/comparison using === between true and false/'
         - '/function call_user_func expects callable.*array\(.*\) given/'
         - '/function call_user_func_array expects callable.*array\(.*\) given/'
@@ -27,6 +35,3 @@ parameters:
         - '/parameter \$iteratorClass with generic class Arrayy\\ArrayyIterator/'
         - '/generic class Arrayy\\ArrayyIterator does not specify its types/'
         - '#Arrayy::getIterator\(\) should be compatible with return type#'
-        # ignore JsonMapper stuff
-        - '#createByJsonMapper\(\) should be compatible with return type#'
-        - '#Json::map\(\) expects class-string#'

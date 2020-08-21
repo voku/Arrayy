@@ -57,6 +57,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $pets = new \stdClass();
         $pets->foo = 1;
 
+        /** @phpstan-ignore-next-line */
         collection(ModelInterface::class, $pets);
     }
 
@@ -73,7 +74,6 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);
 
-        /** @var \Arrayy\tests\UserData $userData */
         $userData = $userDataCollection->getAll()[0];
 
         static::assertInstanceOf(\Arrayy\tests\UserData::class, $userData);
@@ -85,9 +85,10 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testUserDataCollectionFromJsonMulti()
     {
         $json = '[{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}, {"id":1,"firstName":"Sven","lastName":"Moelleken","city":{"name":"Köln","plz":null,"infos":["foo"]}}]';
+        /** @var \Arrayy\Arrayy|\Arrayy\tests\UserData[] $userDataCollection */
+        /** @psalm-var \Arrayy\Arrayy<int, \Arrayy\tests\UserData> $userDataCollection */
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);
 
-        /** @var \Arrayy\tests\UserData[] $userDatas */
         $userDataCollection->getAll();
 
         $userData0 = $userDataCollection[0];
@@ -121,9 +122,11 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testJsonSerializableCollection()
     {
         $pets = new \Arrayy\Arrayy();
+        /** @phpstan-ignore-next-line */
         $pets->foo = 'fooooo';
 
         $colors = new \Arrayy\Arrayy();
+        /** @phpstan-ignore-next-line */
         $colors->color = 'red';
 
         $jsonSerializableCollection = new \Arrayy\Type\JsonSerializableCollection([$pets, $colors]);
@@ -160,6 +163,13 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
             ],
             $stdClassCollection->append(new StdClassCollection([$colors]))->getCollection()
         );
+    }
+
+    public function testBasicFail()
+    {
+        $this->expectException(\TypeError::class);
+
+        new StdClassCollection([123, 'test']);
     }
 
     public function testModelCollection()
@@ -232,6 +242,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
 
+        /** @phpstan-ignore-next-line */
         $modelCollection->add($cityData);
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
@@ -321,6 +332,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
 
+        /** @phpstan-ignore-next-line */
         $modelCollection->prepend($cityData);
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
@@ -346,6 +358,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $rand = $modelCollection->randomImmutable(1);
         static::assertInstanceOf(ModelInterface::class, $rand->first());
 
+        /** @phpstan-ignore-next-line */
         $modelCollection->prepend($cityData, 0);
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());

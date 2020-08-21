@@ -26,6 +26,7 @@ final class ArrayTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
+        /** @phpstan-ignore-next-line */
         $set = new \Arrayy\Type\StringArrayCollection([['a', 1, 1.4], [], [true, new \stdClass()], []]);
 
         static::assertEquals(
@@ -48,6 +49,7 @@ final class ArrayTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
+        /** @phpstan-ignore-next-line */
         new ArrayCollection([['a', 1, 1.4], [], [true, new \stdClass()], '[]']);
     }
 }

@@ -122,6 +122,8 @@ The library offers a type checking for @property phpdoc-class-comments, as seen 
  * @property int|string $firstName
  * @property string     $lastName
  * @property null|City  $city
+ *
+ * @extends  \Arrayy\Arrayy<array-key,mixed>
  */
 class User extends \Arrayy\Arrayy
 {
@@ -134,6 +136,8 @@ class User extends \Arrayy\Arrayy
  * @property string|null $plz
  * @property string      $name
  * @property string[]    $infos
+ *
+ * @extends  \Arrayy\Arrayy<array-key,mixed>
  */
 class City extends \Arrayy\Arrayy
 {
@@ -231,6 +235,9 @@ e.g.: "YOURCollection.php" (see example ```/tests/CollectionTest.php``` on githu
 ```php
 use Arrayy\Collection\AbstractCollection;
 
+/**
+ * @extends  AbstractCollection<array-key,YOURInterface>
+ */
 class YOURCollection extends AbstractCollection
 {
     /**
@@ -313,6 +320,9 @@ namespace Arrayy\tests\Collection;
 
 use Arrayy\Collection\AbstractCollection;
 
+/**
+ * @extends  AbstractCollection<array-key,\Arrayy\tests\UserData>
+ */
 class UserDataCollection extends AbstractCollection
 {
     /**
@@ -341,19 +351,6 @@ $userData1 = $userDataCollection[1];
 echo $userData1->firstName; // 'Sven'
 $userData1->city; // CityData::class
 echo $userData1->city->name; // 'Köln'
-```
-
-## StaticArrayy
-
-All methods listed under "Instance methods" are available as part of a static
-wrapper.
-
-```php
-use Arrayy\Arrayy as a;
-
-// Translates to Arrayy::create(['fòô', 'bàř'])->reverse();
-// Returns an Arrayy object with the array
-A::reverse(['fòô', 'bàř']);
 ```
 
 ## Class methods
@@ -406,6 +403,8 @@ namespace Arrayy\tests;
  * @property int|string                  $firstName
  * @property string                      $lastName
  * @property \Arrayy\tests\CityData|null $city
+ *
+ * @extends  \Arrayy\Arrayy<array-key,mixed>
  */
 class UserData extends \Arrayy\Arrayy
 {
@@ -418,6 +417,8 @@ class UserData extends \Arrayy\Arrayy
  * @property string|null $plz
  * @property string      $name
  * @property string[]    $infos
+ *
+ * @extends  \Arrayy\Arrayy<array-key,mixed>
  */
 class CityData extends \Arrayy\Arrayy
 {

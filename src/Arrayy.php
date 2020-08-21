@@ -438,11 +438,19 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Exchange the array for another one.
      *
-     * @param array|static $data
+     * @param array|mixed|static $data
+     *
+     * 1. use the current array, if it's a array
+     * 2. fallback to empty array, if there is nothing
+     * 3. call "getArray()" on object, if there is a "Arrayy"-object
+     * 4. call "createFromObject()" on object, if there is a "\Traversable"-object
+     * 5. call "__toArray()" on object, if the method exists
+     * 6. cast a string or object with "__toString()" into an array
+     * 7. throw a "InvalidArgumentException"-Exception
      *
      * @return array
      *
-     * @psalm-param  array<TKey,T>|self<TKey,T> $data
+     * @psalm-param  T,array<TKey,T>|self<TKey,T> $data
      * @psalm-return array<mixed,mixed>|array<TKey,T>
      */
     public function exchangeArray($data): array
@@ -2416,25 +2424,26 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Filters an array of objects (or a numeric array of associative arrays) based on the value of a particular
      * property within that.
      *
-     * @param string          $property
-     * @param string|string[] $value
-     * @param string          $comparisonOp
-     *                                      <p>
-     *                                      'eq' (equals),<br />
-     *                                      'gt' (greater),<br />
-     *                                      'gte' || 'ge' (greater or equals),<br />
-     *                                      'lt' (less),<br />
-     *                                      'lte' || 'le' (less or equals),<br />
-     *                                      'ne' (not equals),<br />
-     *                                      'contains',<br />
-     *                                      'notContains',<br />
-     *                                      'newer' (via strtotime),<br />
-     *                                      'older' (via strtotime),<br />
-     *                                      </p>
+     * @param string $property
+     * @param mixed  $value
+     * @param string $comparisonOp
+     *                             <p>
+     *                             'eq' (equals),<br />
+     *                             'gt' (greater),<br />
+     *                             'gte' || 'ge' (greater or equals),<br />
+     *                             'lt' (less),<br />
+     *                             'lte' || 'le' (less or equals),<br />
+     *                             'ne' (not equals),<br />
+     *                             'contains',<br />
+     *                             'notContains',<br />
+     *                             'newer' (via strtotime),<br />
+     *                             'older' (via strtotime),<br />
+     *                             </p>
      *
      * @return static
      *                <p>(Immutable)</p>
      *
+     * @psalm-param mixed|T $value
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      *
@@ -2552,13 +2561,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a($array)->filterBy('name', 'foo'); // Arrayy[0 => ['id' => 123, 'name' => 'foo', 'group' => 'primary', 'value' => 123456, 'when' => '2014-01-01']]
      * </code>
      *
-     * @param string          $property
-     * @param string|string[] $value
-     * @param string          $comparisonOp
+     * @param string $property
+     * @param mixed  $value
+     * @param string $comparisonOp
      *
      * @return static
      *                <p>(Immutable)</p>
      *
+     * @psalm-param mixed|T $value
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -3340,7 +3350,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($UN_FOUND === null) {
             // Generate unique string to use as marker.
-            $UN_FOUND = \uniqid('arrayy', true);
+            $UN_FOUND = 'arrayy--' . \uniqid('arrayy', true);
         }
 
         if (\is_array($key)) {
@@ -4368,7 +4378,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * @return ArrayyMeta|static
+     * @return ArrayyMeta|mixed|static
      */
     public static function meta()
     {
@@ -4873,7 +4883,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Push one or more values onto the end of array at once.
      *
-     * @param array ...$args
+     * @param mixed ...$args
      *
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with pushed elements to the end of array.</p>
@@ -6266,15 +6276,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * var_dump($under); // Arrayy[1, 3, 5, 2, 4]
      * </code>
      *
-     * @param callable|string|null $sorter
-     * @param int|string           $direction <p>use <strong>SORT_ASC</strong> (default) or
-     *                                        <strong>SORT_DESC</strong></p>
-     * @param int                  $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
-     *                                        <strong>SORT_NATURAL</strong></p>
+     * @param callable|mixed|null $sorter
+     * @param int|string          $direction <p>use <strong>SORT_ASC</strong> (default) or
+     *                                       <strong>SORT_DESC</strong></p>
+     * @param int                 $strategy  <p>use e.g.: <strong>SORT_REGULAR</strong> (default) or
+     *                                       <strong>SORT_NATURAL</strong></p>
      *
      * @return static
      *                <p>(Immutable)</p>
      *
+     * @pslam-param callable|T|null $sorter
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -6713,7 +6724,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Prepends one or more values to the beginning of array at once.
      *
-     * @param array ...$args
+     * @param mixed ...$args
      *
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with prepended elements to the beginning of array.</p>
@@ -6837,7 +6848,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *
-     * @psalm-param  T $value
      * @psalm-return static<TKey,T>
      */
     public function where(string $keyOrPropertyOrMethod, $value): self
@@ -7570,7 +7580,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<mixed|TKey,T> $elements
+     * @psalm-param array<mixed,mixed>|array<mixed|TKey,T> $elements
      * @psalm-return static<TKey,T>
      */
     protected function sorting(

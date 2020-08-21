@@ -5,6 +5,9 @@ namespace Arrayy\tests;
 use Arrayy\ArrayyIterator;
 use Arrayy\TypeCheck\TypeCheckSimple;
 
+/**
+ * @extends    \Arrayy\ArrayyStrict<array-key,mixed>
+ */
 class ModelC extends \Arrayy\ArrayyStrict implements ModelInterface
 {
     public function __construct($data = [], string $iteratorClass = ArrayyIterator::class, bool $checkPropertiesInConstructor = true)

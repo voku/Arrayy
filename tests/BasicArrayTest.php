@@ -373,11 +373,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
 
         if (\count($value) > 0) {
             static::assertNotNull($value[0]);
-
-            if (!$value instanceof \Arrayy\Arrayy) {
-                /** @noinspection TypeUnsafeArraySearchInspection */
-                static::assertContains($value[0], $arrayy->toArray());
-            }
+            static::assertContains($value[0], $arrayy->toArray());
         } else {
             static::assertInternalType('array', $value);
         }
@@ -500,7 +496,6 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertCount(2, $values);
         foreach ($values as $value) {
             if (!$value instanceof \Arrayy\Arrayy) {
-                /** @noinspection TypeUnsafeArraySearchInspection */
                 static::assertContains($value, $array);
             }
         }
@@ -527,7 +522,6 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertInternalType('array', $values);
         foreach ($values as $value) {
             if (!$value instanceof \Arrayy\Arrayy) {
-                /** @noinspection TypeUnsafeArraySearchInspection */
                 static::assertContains($value, $array);
             }
         }
@@ -964,7 +958,6 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      */
     public function testToJson(array $array)
     {
-        /** @noinspection PhpComposerExtensionStubsInspection */
         $json = \json_encode($array);
 
         $arrayy = $this->createArrayy($array);
@@ -981,6 +974,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     public function testToString($string, $separator)
     {
         $array = \explode($separator, $string);
+        \assert(\is_array($array));
 
         $arrayy = $this->createArrayy($array);
         $resultString = \implode(',', $array);
@@ -990,10 +984,10 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param A     $arrayy
-     * @param A     $resultArrayy
-     * @param array $array
-     * @param array $resultArray
+     * @param A<array-key,mixed> $arrayy
+     * @param A<array-key,mixed> $resultArrayy
+     * @param array              $array
+     * @param array              $resultArray
      */
     protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray)
     {
@@ -1003,9 +997,9 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param A     $arrayy
-     * @param A     $resultArrayy
-     * @param array $resultArray
+     * @param A<array-key,mixed> $arrayy
+     * @param A<array-key,mixed> $resultArrayy
+     * @param array              $resultArray
      */
     protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray)
     {
@@ -1019,7 +1013,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $array
      *
-     * @return A
+     * @return A<array-key, mixed>
      */
     protected function createArrayy(array $array = []): A
     {

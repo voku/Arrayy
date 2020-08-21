@@ -10,7 +10,7 @@ use Arrayy\Collection\Collection;
 /**
  * @template TKey of array-key
  * @template T of object
- * @extends  Collection<TKey,T>
+ * @extends Collection<TKey,T>
  */
 final class InstancesCollection extends Collection implements TypeInterface
 {

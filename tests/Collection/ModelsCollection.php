@@ -6,6 +6,11 @@ use Arrayy\tests\ModelInterface;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckInterface;
 
+/**
+ * @template TKey of array-key
+ * @template T
+ * @extends  \Arrayy\Collection\AbstractCollection<TKey,\Arrayy\tests\ModelInterface>
+ */
 class ModelsCollection extends \Arrayy\Collection\AbstractCollection
 {
     /**

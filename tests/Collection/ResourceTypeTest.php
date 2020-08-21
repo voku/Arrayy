@@ -17,6 +17,7 @@ final class ResourceTypeTest extends TestCase
         $f2 = \tmpfile();
         $f3 = \tmpfile();
 
+        /** @phpstan-ignore-next-line // resource|false */
         $set = new \Arrayy\Type\ResourceCollection(
             [
                 $f1,
@@ -39,6 +40,7 @@ final class ResourceTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
+        /** @phpstan-ignore-next-line */
         new \Arrayy\Type\ResourceCollection([
             new \stdClass(),
             \tmpfile(),

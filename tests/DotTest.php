@@ -652,7 +652,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         $dot = new Arrayy(['foo' => 'bar']);
 
         static::assertJsonStringEqualsJsonString(
-            \json_encode(['foo' => 'bar']),
+            (string) \json_encode(['foo' => 'bar']),
             $dot->toJson()
         );
     }
@@ -662,7 +662,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         $dot = new Arrayy(['foo' => "'bar'"]);
 
         static::assertJsonStringEqualsJsonString(
-            \json_encode(['foo' => "'bar'"], \JSON_HEX_APOS),
+            (string) \json_encode(['foo' => "'bar'"], \JSON_HEX_APOS),
             $dot->toJson(\JSON_HEX_APOS)
         );
     }
@@ -672,7 +672,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         $dot = new Arrayy(['foo' => ['bar' => 'value']]);
 
         static::assertJsonStringEqualsJsonString(
-            \json_encode(['bar' => 'value']),
+            (string) \json_encode(['bar' => 'value']),
             $dot->get('foo')->toJson()
         );
     }
@@ -724,6 +724,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
     {
         $dot = new Arrayy([1, 2, 3]);
 
+        $items = [];
         foreach ($dot as $item) {
             $items[] = $item;
         }
@@ -742,8 +743,8 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         $dot = new Arrayy(['foo' => 'bar']);
 
         static::assertJsonStringEqualsJsonString(
-            \json_encode(['foo' => 'bar']),
-            \json_encode($dot)
+            (string) \json_encode(['foo' => 'bar']),
+            (string) \json_encode($dot)
         );
     }
 }

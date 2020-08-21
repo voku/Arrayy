@@ -7,6 +7,8 @@ namespace Arrayy\tests;
  * @property int|string                  $firstName
  * @property string                      $lastName
  * @property \Arrayy\tests\CityData|null $city
+ *
+ * @extends    \Arrayy\Arrayy<array-key,mixed>
  */
 class UserData extends \Arrayy\Arrayy
 {

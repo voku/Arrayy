@@ -4,6 +4,11 @@ namespace Arrayy\tests\Collection;
 
 use Arrayy\Collection\AbstractCollection;
 
+/**
+ * @template TKey of array-key
+ * @template T
+ * @extends  \Arrayy\Collection\AbstractCollection<TKey,\stdClass>
+ */
 class StdClassCollection extends AbstractCollection
 {
     /**
