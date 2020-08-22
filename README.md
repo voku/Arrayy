@@ -1461,7 +1461,7 @@ Delete the given key or keys.
 
 ## diff(array $array): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Return values that are only in the current array.
+Return elements where the values that are only in the current array.
 
 EXAMPLE: <code>
 a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
@@ -1477,7 +1477,7 @@ a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
 
 ## diffKey(array $array): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Return values that are only in the current array.
+Return elements where the keys are only in the current array.
 
 **Parameters:**
 - `array<mixed, mixed>|array<TKey, T> ...$array`
@@ -1489,10 +1489,10 @@ Return values that are only in the current array.
 
 ## diffKeyAndValue(array $array): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Return values and Keys that are only in the current array.
+Return elements where the values and keys are only in the current array.
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> $array`
+- `array<mixed, mixed>|array<TKey, T> ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1501,7 +1501,7 @@ Return values and Keys that are only in the current array.
 
 ## diffRecursive(array $array, array|\Generator|null $helperVariableForRecursion): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Return values that are only in the current multi-dimensional array.
+Return elements where the values are only in the current multi-dimensional array.
 
 EXAMPLE: <code>
 a([1 => [1 => 1], 2 => [2 => 2]])->diffRecursive([1 => [1 => 1]]); // Arrayy[2 => [2 => 2]]
@@ -1518,7 +1518,7 @@ a([1 => [1 => 1], 2 => [2 => 2]])->diffRecursive([1 => [1 => 1]]); // Arrayy[2 =
 
 ## diffReverse(array $array): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Return values that are only in the new $array.
+Return elements where the values that are only in the new $array.
 
 EXAMPLE: <code>
 a([1 => 1])->diffReverse([1 => 1, 2 => 2]); // Arrayy[2 => 2]
@@ -1827,14 +1827,10 @@ a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->firstsMutable(); // 'foo'
 Flatten an array with the given character as a key delimiter.
 
 EXAMPLE: <code>
-$callable = function ($a, $b) {
-    if ($a == $b) {
-        return 0;
-    }
-    return ($a > $b) ? 1 : -1;
-};
-$arrayy = a(['three' => 3, 'one' => 1, 'two' => 2]);
-$resultArrayy = $arrayy->customSortKeys($callable); // Arrayy['one' => 1, 'three' => 3, 'two' => 2]
+$dot = a(['foo' => ['abc' => 'xyz', 'bar' => ['baz']]]);
+$flatten = $dot->flatten();
+$flatten['foo.abc']; // 'xyz'
+$flatten['foo.bar.0']; // 'baz'
 </code>
 
 **Parameters:**

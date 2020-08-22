@@ -13,12 +13,41 @@ use PHPUnit\Framework\TestCase;
  */
 final class TypesTest extends TestCase
 {
-    public function shuffle()
+    public function testShuffleSimple()
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
-        /** @noinspection PhpUnitTestsInspection */
-        static::assertTrue(\is_array($set->toArray()));
+        static::assertContains('A', $set->toArray());
+        static::assertContains('B', $set->toArray());
+        static::assertContains('C', $set->toArray());
+        static::assertContains('D', $set->toArray());
+        static::assertNotContains('E', $set->toArray());
+    }
+
+    public function testTypeCheck()
+    {
+        $set = new StringCollection(['A', 'B', 'C']);
+
+        static::assertSame(['A', 'B', 'C', 'D', 'E'], $set->push(...['D', 'E'])->getArray());
+        static::assertSame(['0', '1', 'A', 'B', 'C', 'D', 'E'], $set->unshift(...['0', '1'])->getArray());
+        static::assertSame('0', $set->pull(0));
+        static::assertSame([1 => '1', 'A', 'B', 'C', 'D', 'E'], $set->toArray());
+    }
+
+    public function testPushTypeCheckError()
+    {
+        $set = new StringCollection(['A', 'B', 'C']);
+
+        $this->expectException(\TypeError::class);
+        static::assertSame(['A', 'B', 'C', 'D', 'E'], $set->push(5)->getArray());
+    }
+
+    public function testUnshiftTypeCheckError()
+    {
+        $set = new StringCollection(['A', 'B', 'C']);
+
+        $this->expectException(\TypeError::class);
+        static::assertSame(['A', 'B', 'C', 'D', 'E'], $set->unshift(5)->getArray());
     }
 
     public function testChunk()
@@ -61,6 +90,16 @@ final class TypesTest extends TestCase
         static::assertSame(
             [1 => 'B'],
             $set->diff($set1->toArray(), $set2->toArray())->toArray()
+        );
+
+        static::assertSame(
+            [2 => 'C', 3 => 'D'],
+            $set->diffKey($set1->toArray(), $set2->toArray())->toArray()
+        );
+
+        static::assertSame(
+            [1 => 'B', 2 => 'C', 3 => 'D'],
+            $set->diffKeyAndValue($set1->toArray(), $set2->toArray())->toArray()
         );
     }
 

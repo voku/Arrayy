@@ -653,31 +653,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function offsetExists($offset): bool
     {
-        $this->generatorToArray();
-
-        if ($this->array === []) {
-            return false;
-        }
-
         // php cast "bool"-index into "int"-index
         if ((bool) $offset === $offset) {
             $offset = (int) $offset;
         }
+        \assert(\is_int($offset) || \is_string($offset));
 
-        /** @var int|string $offset - hint for phpstan */
-        $offset = $offset;
-
-        $tmpReturn = $this->keyExists($offset);
-
-        if (
-            $tmpReturn === true
-            ||
-            \strpos((string) $offset, $this->pathSeparator) === false
-        ) {
-            return $tmpReturn;
+        $offsetExists = $this->keyExists($offset);
+        if ($offsetExists === true) {
+            return true;
         }
-
-        $offsetExists = false;
 
         /**
          * https://github.com/vimeo/psalm/issues/2536
@@ -1649,14 +1634,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Flatten an array with the given character as a key delimiter.
      *
      * EXAMPLE: <code>
-     * $callable = function ($a, $b) {
-     *     if ($a == $b) {
-     *         return 0;
-     *     }
-     *     return ($a > $b) ? 1 : -1;
-     * };
-     * $arrayy = a(['three' => 3, 'one' => 1, 'two' => 2]);
-     * $resultArrayy = $arrayy->customSortKeys($callable); // Arrayy['one' => 1, 'three' => 3, 'two' => 2]
+     * $dot = a(['foo' => ['abc' => 'xyz', 'bar' => ['baz']]]);
+     * $flatten = $dot->flatten();
+     * $flatten['foo.abc']; // 'xyz'
+     * $flatten['foo.bar.0']; // 'baz'
      * </code>
      *
      * @param string     $delimiter
@@ -2055,7 +2036,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Return values that are only in the current array.
+     * Return elements where the values that are only in the current array.
      *
      * EXAMPLE: <code>
      * a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
@@ -2070,17 +2051,31 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function diff(...$array): self
+    public function diff(array ...$array): self
     {
+        if (\count($array) > 1) {
+            $array = \array_merge([], ...$array);
+        } else {
+            $array = $array[0];
+        }
+
+        $generator = function () use ($array): \Generator {
+            foreach ($this->getGenerator() as $key => $value) {
+                if (\in_array($value, $array, true) === false) {
+                    yield $key => $value;
+                }
+            }
+        };
+
         return static::create(
-            \array_diff($this->toArray(), ...$array),
+            $generator,
             $this->iteratorClass,
             false
         );
     }
 
     /**
-     * Return values that are only in the current array.
+     * Return elements where the keys are only in the current array.
      *
      * @param array ...$array
      *
@@ -2091,19 +2086,33 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function diffKey(...$array): self
+    public function diffKey(array ...$array): self
     {
+        if (\count($array) > 1) {
+            $array = \array_replace([], ...$array);
+        } else {
+            $array = $array[0];
+        }
+
+        $generator = function () use ($array): \Generator {
+            foreach ($this->getGenerator() as $key => $value) {
+                if (\array_key_exists($key, $array) === false) {
+                    yield $key => $value;
+                }
+            }
+        };
+
         return static::create(
-            \array_diff_key($this->toArray(), ...$array),
+            $generator,
             $this->iteratorClass,
             false
         );
     }
 
     /**
-     * Return values and Keys that are only in the current array.
+     * Return elements where the values and keys are only in the current array.
      *
-     * @param array $array
+     * @param array ...$array
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -2112,17 +2121,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @psalm-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function diffKeyAndValue(array $array = []): self
+    public function diffKeyAndValue(array ...$array): self
     {
         return static::create(
-            \array_diff_assoc($this->toArray(), $array),
+            \array_diff_assoc($this->toArray(), ...$array),
             $this->iteratorClass,
             false
         );
     }
 
     /**
-     * Return values that are only in the current multi-dimensional array.
+     * Return elements where the values are only in the current multi-dimensional array.
      *
      * EXAMPLE: <code>
      * a([1 => [1 => 1], 2 => [2 => 2]])->diffRecursive([1 => [1 => 1]]); // Arrayy[2 => [2 => 2]]
@@ -2176,7 +2185,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Return values that are only in the new $array.
+     * Return elements where the values that are only in the new $array.
      *
      * EXAMPLE: <code>
      * a([1 => 1])->diffReverse([1 => 1, 2 => 2]); // Arrayy[2 => 2]
@@ -3736,10 +3745,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $i = 0;
         foreach ($this->getGenerator() as $key => $value) {
+            /** @noinspection IsIterableCanBeUsedInspection */
+            /** @phpstan-ignore-next-line */
             if (
                 $recursive
                 &&
-                (\is_array($value) || $value instanceof self)
+                (\is_array($value) || $value instanceof \Traversable)
                 &&
                 self::create($value)->isSequential() === false
             ) {
@@ -3794,7 +3805,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function keyExists($key): bool
     {
-        return \array_key_exists($key, $this->array);
+        foreach ($this->getGenerator() as $keyTmp => $value) {
+            if ($key === $keyTmp) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -6735,6 +6752,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function unshift(...$args): self
     {
         $this->generatorToArray();
+
+        if (
+            $this->checkPropertyTypes
+            &&
+            $this->properties !== []
+        ) {
+            foreach ($args as $key => $value) {
+                $this->checkType($key, $value);
+            }
+        }
 
         \array_unshift($this->array, ...$args);
 
