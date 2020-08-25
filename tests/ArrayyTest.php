@@ -2401,7 +2401,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy = new A($array);
 
         /** @noinspection PhpUnitTestsInspection */
-        static::assertSame($expected, \count($arrayy));
+        static::assertCount($expected, $arrayy);
         static::assertSame($expected, $arrayy->count());
         static::assertSame($expected, $arrayy->size());
         static::assertSame($expected, $arrayy->length());
