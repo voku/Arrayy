@@ -1017,7 +1017,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Add a suffix to each key.
      *
-     * @param mixed $prefix
+     * @param int|string $prefix
      *
      * @return static
      *                <p>(Immutable) Return an Arrayy object, with the prefixed keys.</p>
