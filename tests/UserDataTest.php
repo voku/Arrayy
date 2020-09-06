@@ -116,7 +116,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Moelleken', $model['lastName']);
         static::assertSame('Moelleken', $model->lastName);
         static::assertSame('Moelleken', $model[$modelMeta->lastName]);
-        static::assertSame('Moelleken', $model::meta()->lastName);
+        static::assertSame('lastName', $model::meta()->lastName);
         \assert($model->city instanceof \Arrayy\tests\CityData);
         static::assertSame('Düsseldorf', $model->city->name);
         static::assertSame('Düsseldorf', $model->city::meta()->name);

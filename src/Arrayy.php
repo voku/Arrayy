@@ -456,6 +456,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function exchangeArray($data): array
     {
         $this->array = $this->fallbackForArray($data);
+        $this->generator = null;
 
         return $this->array;
     }
@@ -488,6 +489,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function getIterator(): \Iterator
     {
         if ($this->generator instanceof ArrayyRewindableGenerator) {
+            $generator = clone $this->generator;
+            $this->generator = new ArrayyRewindableExtendedGenerator(
+                static function () use ($generator): \Generator {
+                    yield from $generator;
+                },
+                null,
+                static::class
+            );
+
             return $this->generator;
         }
 
@@ -1652,7 +1662,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $flatten = [];
 
         if ($items === null) {
-            $items = $this->array;
+            $items = $this->getArray();
         }
 
         foreach ($items as $key => $value) {
@@ -1678,13 +1688,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<array-key,mixed> $array
+     * @psalm-param  array<TKey,T> $array
+     *
+     * @internal This will not check any types because it's set directly as reference.
      */
     public function createByReference(array &$array = []): self
     {
-        $array = $this->fallbackForArray($array);
-
         $this->array = &$array;
+        $this->generator = null;
 
         return $this;
     }
@@ -1697,7 +1708,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-param callable():\Generator<array-key,mixed> $generatorFunction
+     * @psalm-param callable():\Generator<TKey,T> $generatorFunction
      *
      * @psalm-mutation-free
      */
@@ -1714,7 +1725,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-param \Generator<array-key,mixed> $generator
+     * @psalm-param \Generator<TKey,T> $generator
      *
      * @psalm-mutation-free
      */
@@ -2765,11 +2776,19 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @psalm-mutation-free
      */
     public function get(
-        $key,
+        $key = null,
         $fallback = null,
         array $array = null,
         bool $useByReference = false
     ) {
+        if ($array === null && $key === null) {
+            if ($useByReference) {
+                return $this;
+            }
+
+            return clone $this;
+        }
+
         if ($array !== null) {
             if ($useByReference) {
                 $usedArray = &$array;
@@ -5549,7 +5568,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function replaceAllValues(array $array): self
     {
         return static::create(
-            \array_combine($this->array, $array),
+            \array_combine($this->getArray(), $array),
             $this->iteratorClass,
             false
         );

@@ -3226,6 +3226,12 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy = new A(['Lars' => ['lastname' => null]]);
         $result = $arrayy->get('Lars.lastname');
         static::assertNull($result);
+
+        // ---
+
+        $arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
+        $result = $arrayy->get();
+        static::assertSame($arrayy->getArray(), $result->getArray());
     }
 
     /**

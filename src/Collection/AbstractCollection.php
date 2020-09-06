@@ -213,7 +213,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      */
     public function getCollection(): array
     {
-        return $this->array;
+        return $this->getArray();
     }
 
     /**

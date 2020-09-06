@@ -11,34 +11,46 @@ namespace Arrayy;
  *
  * @internal
  */
-final class ArrayyRewindableGenerator implements \Iterator
+class ArrayyRewindableGenerator implements \Iterator
 {
+    /**
+     * @var string
+     *
+     * @psalm-var string|class-string<\Arrayy\Arrayy<TKey,T>>
+     */
+    protected $class;
+
     /**
      * @var callable
      */
-    private $generatorFunction;
+    protected $generatorFunction;
 
     /**
      * @var \Generator
      *
      * @psalm-var \Generator<XKey,X>
      */
-    private $generator;
+    protected $generator;
 
     /**
      * @var callable|null
      */
-    private $onRewind;
+    protected $onRewind;
 
     /**
-     * @param callable $generatorConstructionFunction A callable that should return a Generator
-     * @param callable $onRewind                      callable that gets invoked with 0 arguments after the iterator
-     *                                                was rewinded
+     * @param callable $generatorConstructionFunction A callable that should return a Generator.
+     * @param callable $onRewind                      Callable that gets invoked with 0 arguments after the iterator
+     *                                                was rewinded.
+     * @param string $class
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(callable $generatorConstructionFunction, callable $onRewind = null)
-    {
+    public function __construct(
+        callable $generatorConstructionFunction,
+        callable $onRewind = null,
+        string $class = ''
+    ) {
+        $this->class = $class;
         $this->generatorFunction = $generatorConstructionFunction;
         $this->onRewind = $onRewind;
         $this->generateGenerator();
