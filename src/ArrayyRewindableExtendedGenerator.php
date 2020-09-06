@@ -7,24 +7,23 @@ namespace Arrayy;
 /**
  * @template   XKey of array-key
  * @template   X
- * @extends   \ArrayyRewindableGenerator<XKey,X>
+ * @extends    ArrayyRewindableGenerator<XKey,X>
  *
  * @internal
  */
-final class ArrayyRewindableExtendedGenerator extends ArrayyRewindableGenerator
+class ArrayyRewindableExtendedGenerator extends ArrayyRewindableGenerator
 {
-   public function __construct(
-       callable $generatorConstructionFunction,
-       callable $onRewind = null,
-       string $class = ''
-   ) {
-       parent::__construct(
-           $generatorConstructionFunction,
-           $onRewind,
-           $class
-       );
-   }
-
+    public function __construct(
+        callable $generatorConstructionFunction,
+        callable $onRewind = null,
+        string $class = ''
+    ) {
+        parent::__construct(
+            $generatorConstructionFunction,
+            $onRewind,
+            $class
+        );
+    }
 
     /**
      * Return the current element.

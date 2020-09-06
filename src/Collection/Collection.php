@@ -36,7 +36,6 @@ use Arrayy\TypeCheck\TypeCheckInterface;
  *
  * ``` php
  * namespace My;
- *
  * /**
  *  * @extends \Arrayy\Collection\AbstractCollection<array-key,FooInterface>
  *  *\/

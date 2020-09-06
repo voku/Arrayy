@@ -3320,9 +3320,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertTrue(A::create($a)->intersects($b));
 
         $a = 'bar';
+        /** @phpstan-ignore-next-line */
         static::assertTrue(A::create($a)->intersects($b));
 
         $a = 'foo';
+        /** @phpstan-ignore-next-line */
         static::assertFalse(A::create($a)->intersects($b));
     }
 
@@ -3373,8 +3375,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse(A::create($array0)->isAssoc());
         static::assertFalse(A::create($array1)->isAssoc());
         static::assertFalse(A::create($array2)->isAssoc());
+        /** @phpstan-ignore-next-line */
         static::assertFalse(A::create($array3)->isAssoc());
+        /** @phpstan-ignore-next-line */
         static::assertFalse(A::create($array4)->isAssoc());
+        /** @phpstan-ignore-next-line */
         static::assertFalse(A::create($array5)->isAssoc());
         static::assertFalse(A::create($array6)->isAssoc());
         static::assertFalse(A::create($array7)->isAssoc());
@@ -3442,6 +3447,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         foreach ($testArrays as $key => $testArray) {
             static::assertSame(
                 $expectedArrays[$key],
+                /** @phpstan-ignore-next-line */
                 A::create($testArray)
                     ->isMultiArray(),
                 'tested:' . \print_r($testArray, true)
@@ -3495,6 +3501,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         foreach ($testArrays as $key => $testArray) {
             static::assertSame(
                 $expectedArrays[$key],
+                /** @phpstan-ignore-next-line */
                 A::create($testArray)
                     ->isEmpty(),
                 'tested:' . \print_r($testArray, true)
@@ -3535,6 +3542,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         foreach ($testArrays as $key => $testArray) {
             static::assertSame(
                 $expectedArrays[$key],
+                /** @phpstan-ignore-next-line */
                 A::create($testArray)
                     ->isNumeric(),
                 'tested:' . \print_r($testArray, true)
@@ -3579,6 +3587,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         foreach ($testArrays as $key => $testArray) {
             static::assertSame(
                 $expectedArrays[$key],
+                /** @phpstan-ignore-next-line */
                 A::create($testArray)->isSequential(true),
                 'tested:' . \print_r($testArray, true)
             );
@@ -3618,6 +3627,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         foreach ($testArrays as $key => $testArray) {
             static::assertSame(
                 $expectedArrays[$key],
+                /** @phpstan-ignore-next-line */
                 A::create($testArray)->isSequential(),
                 'tested:' . \print_r($testArray, true)
             );
@@ -6481,10 +6491,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param A<array-key,mixed> $arrayzy
-     * @param A<array-key,mixed> $resultArrayzy
-     * @param array              $array
-     * @param array              $resultArray
+     * @param A<mixed,mixed> $arrayzy
+     * @param A<mixed,mixed> $resultArrayzy
+     * @param array          $array
+     * @param array          $resultArray
      */
     protected static function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray)
     {

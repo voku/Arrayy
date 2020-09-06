@@ -17,7 +17,7 @@ use Arrayy\TypeCheck\TypeCheckInterface;
  * @template TKey of array-key
  * @template T
  * @template-extends \IteratorAggregate<TKey,T>
- * @template-extends \ArrayAccess<TKey|null,T>
+ * @template-extends \ArrayAccess<TKey,T>
  */
 interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Serializable, \JsonSerializable, \Countable
 {
@@ -58,6 +58,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
+     * @psalm-param T $value
+     * @psalm-param TKey|null $key
      * @psalm-return CollectionInterface<TKey,T>
      */
     public function append($value, $key = null);
@@ -72,7 +74,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
      * @psalm-param array<T> $values
-     * @psalm-param TKey|null $key
+     * @psalm-param TKey $key
      * @psalm-return CollectionInterface<TKey,T>
      */
     public function appendArrayValues(array $values, $key = null);
@@ -411,6 +413,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
+     * @psalm-param T $value
+     * @psalm-param TKey|null $key
      * @psalm-return CollectionInterface<TKey,T>
      */
     public function prepend($value, $key = null);

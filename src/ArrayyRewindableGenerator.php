@@ -38,10 +38,10 @@ class ArrayyRewindableGenerator implements \Iterator
     protected $onRewind;
 
     /**
-     * @param callable $generatorConstructionFunction A callable that should return a Generator.
-     * @param callable $onRewind                      Callable that gets invoked with 0 arguments after the iterator
-     *                                                was rewinded.
-     * @param string $class
+     * @param callable $generatorConstructionFunction a callable that should return a Generator
+     * @param callable $onRewind                      callable that gets invoked with 0 arguments after the iterator
+     *                                                was rewinded
+     * @param string   $class
      *
      * @throws \InvalidArgumentException
      */

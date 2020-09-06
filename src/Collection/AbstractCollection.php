@@ -116,7 +116,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return $this
      *               <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @psalm-param T|array<TKey,T>|static<TKey,T> $value
+     * @psalm-param T|static $value
      * @psalm-param TKey|null $key
      * @psalm-return static<TKey,T>
      */
@@ -136,6 +136,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
 
         $return = parent::append($value, $key);
         $this->array = $return->array;
+        $this->generator = null;
 
         return $this;
     }
@@ -169,7 +170,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return $this
      *               <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
-     * @psalm-param T|array<TKey,T>|static<TKey,T> $value
+     * @psalm-param T|static $value
      * @psalm-param TKey|null $key
      * @psalm-return static<TKey,T>
      */
@@ -189,6 +190,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
 
         $return = parent::prepend($value, $key);
         $this->array = $return->array;
+        $this->generator = null;
 
         return $this;
     }
@@ -280,7 +282,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return static
      *                <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
-     * @psalm-return static<mixed,T>
+     * @psalm-return static<int,T>
      *
      * @psalm-mutation-free
      */

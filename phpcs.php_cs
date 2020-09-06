@@ -43,7 +43,7 @@ return PhpCsFixer\Config::create()
                                 'escape_implicit_backslashes'                   => false,
                                 'explicit_indirect_variable'                    => true,
                                 'explicit_string_variable'                      => true,
-                                'final_internal_class'                          => true,
+                                'final_internal_class'                          => false,
                                 'fopen_flag_order'                              => true,
                                 'fopen_flags'                                   => true,
                                 'full_opening_tag'                              => true,
