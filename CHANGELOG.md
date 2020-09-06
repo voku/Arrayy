@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.8.4 (2020-09-06)
+
+- fix some internal Generator usage
+
 ### 7.8.3 (2020-08-22)
 
 - use more Generators v3
