@@ -3,6 +3,7 @@
 ### 7.8.4 (2020-09-06)
 
 - fix some internal Generator usage
+- add more support for Generics + phpstan checks
 
 ### 7.8.3 (2020-08-22)
 
