@@ -6352,7 +6352,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $direction = \SORT_ASC,
         int $strategy = \SORT_REGULAR
     ): self {
-        /** @psalm-var static<TKey,T> $return */
         return $this->sort($direction, $strategy, true);
     }
 
@@ -6374,7 +6373,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function sortValueNewIndex($direction = \SORT_ASC, int $strategy = \SORT_REGULAR): self
     {
-        /** @psalm-var static<int,T> $return */
         return $this->sort($direction, $strategy, false);
     }
 

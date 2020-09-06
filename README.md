@@ -558,7 +558,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#appendmixed-value-mixed-key-this">append</a>
 </td><td><a href="#appendarrayvaluesarray-values-mixed-key-this">appendArrayValues</a>
 </td><td><a href="#appendimmutablemixed-value-mixed-key-this">appendImmutable</a>
-</td></tr><tr><td><a href="#appendtoeachkeymixed-prefix-static">appendToEachKey</a>
+</td></tr><tr><td><a href="#appendtoeachkeyintstring-prefix-static">appendToEachKey</a>
 </td><td><a href="#appendtoeachvaluemixed-prefix-static">appendToEachValue</a>
 </td><td><a href="#arsort-this">arsort</a>
 </td><td><a href="#arsortimmutable-this">arsortImmutable</a>
@@ -581,7 +581,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#containsvaluesarray-needles-bool">containsValues</a>
 </td><td><a href="#countint-mode-int">count</a>
 </td><td><a href="#countvalues-static">countValues</a>
-</td><td><a href="#createmixed-data-string-iteratorclass-bool-checkpropertiesinconstructor-static">create</a>
+</td><td><a href="#createarrayarray-keyttraversablearray-keytcallablegeneratortkeytttraversable-data-arrayarray-keyttraversablearray-keytcallablegeneratortkeytttraversable-iteratorclass-arrayarray-keyttraversablearray-keytcallablegeneratortkeytttraversable-checkpropertiesinconstructor-static">create</a>
 </td></tr><tr><td><a href="#createbyreferencearray-array-this">createByReference</a>
 </td><td><a href="#createfromarrayarray-array-static">createFromArray</a>
 </td><td><a href="#createfromgeneratorfunctioncallable-generatorfunction-static">createFromGeneratorFunction</a>
@@ -591,7 +591,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#createfromobjecttraversable-object-static">createFromObject</a>
 </td><td><a href="#createfromobjectvarsobject-object-static">createFromObjectVars</a>
 </td></tr><tr><td><a href="#createfromstringstring-str-stringnull-delimiter-stringnull-regex-static">createFromString</a>
-</td><td><a href="#createfromtraversableimmutabletraversable-traversable-static">createFromTraversableImmutable</a>
+</td><td><a href="#createfromtraversableimmutabletraversable-traversable-bool-use_keys-static">createFromTraversableImmutable</a>
 </td><td><a href="#createwithrangefloatintstring-low-floatintstring-high-floatint-step-static">createWithRange</a>
 </td><td><a href="#current-falsemixed">current</a>
 </td></tr><tr><td><a href="#customsortkeyscallable-function-this">customSortKeys</a>
@@ -606,7 +606,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#diffreversearray-array-static">diffReverse</a>
 </td><td><a href="#divide-static">divide</a>
 </td><td><a href="#eachclosure-closure-static">each</a>
-</td></tr><tr><td><a href="#end-mixed">end</a>
+</td></tr><tr><td><a href="#end-falsemixed">end</a>
 </td><td><a href="#exchangearrayarraymixedstatic-data-array">exchangeArray</a>
 </td><td><a href="#existsclosure-closure-bool">exists</a>
 </td><td><a href="#fillwithdefaultsint-num-mixed-default-static">fillWithDefaults</a>
@@ -725,7 +725,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#removevaluemixed-value-static">removeValue</a>
 </td><td><a href="#repeatint-times-static">repeat</a>
 </td><td><a href="#replacemixed-oldkey-mixed-newkey-mixed-newvalue-static">replace</a>
-</td><td><a href="#replaceallkeysarray-keys-static">replaceAllKeys</a>
+</td><td><a href="#replaceallkeysintstring-keys-static">replaceAllKeys</a>
 </td></tr><tr><td><a href="#replaceallvaluesarray-array-static">replaceAllValues</a>
 </td><td><a href="#replacekeysarray-keys-static">replaceKeys</a>
 </td><td><a href="#replaceonevaluemixed-search-mixed-replacement-static">replaceOneValue</a>
@@ -786,7 +786,7 @@ Add new values (optional using dot-notation).
 
 **Parameters:**
 - `T $value`
-- `int|string|null $key`
+- `TKey $key`
 
 **Return:**
 - `static <p>(Immutable) Return this Arrayy object, with the appended values.</p>`
@@ -802,8 +802,8 @@ a(['fòô' => 'bàř'])->append('foo'); // Arrayy['fòô' => 'bàř', 0 => 'foo'
 </code>
 
 **Parameters:**
-- `mixed $value`
-- `mixed $key`
+- `T $value`
+- `TKey|null $key`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object, with the appended values.</p>`
@@ -819,7 +819,7 @@ a(['fòô' => ['bàř']])->appendArrayValues(['foo1', 'foo2'], 'fòô'); // Arra
 </code>
 
 **Parameters:**
-- `array<mixed, T> $values`
+- `array<array-key, T> $values`
 - `TKey|null $key`
 
 **Return:**
@@ -836,20 +836,20 @@ a(['fòô' => 'bàř'])->appendImmutable('foo')->getArray(); // ['fòô' => 'bà
 </code>
 
 **Parameters:**
-- `mixed $value`
-- `mixed $key`
+- `T $value`
+- `TKey $key`
 
 **Return:**
 - `$this <p>(Immutable) Return this Arrayy object, with the appended values.</p>`
 
 --------
 
-## appendToEachKey(mixed $prefix): static
+## appendToEachKey(int|string $prefix): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Add a suffix to each key.
 
 **Parameters:**
-- `mixed $prefix`
+- `int|string $prefix`
 
 **Return:**
 - `static <p>(Immutable) Return an Arrayy object, with the prefixed keys.</p>`
@@ -1096,7 +1096,7 @@ a([1 => true])->containsKeys(array(1 => 0)); // true
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey> $needles <p>The keys you are searching for.</p>`
+- `array<array-key>|array<TKey> $needles <p>The keys you are searching for.</p>`
 - `bool $recursive`
 
 **Return:**
@@ -1109,7 +1109,7 @@ a([1 => true])->containsKeys(array(1 => 0)); // true
 Check if all given needles are present in the array as key/index.
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey> $needles <p>The keys you are searching for.</p>`
+- `array<array-key>|array<TKey> $needles <p>The keys you are searching for.</p>`
 
 **Return:**
 - `bool <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>`
@@ -1214,14 +1214,14 @@ keys and their count as value.
 
 --------
 
-## create(mixed $data, string $iteratorClass, bool $checkPropertiesInConstructor): static
+## create(array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T|\Traversable) $data, array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T|\Traversable) $iteratorClass, array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T|\Traversable) $checkPropertiesInConstructor): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Creates an Arrayy object.
 
 **Parameters:**
-- `mixed $data`
-- `class-string<\Arrayy\ArrayyIterator> $iteratorClass`
-- `bool $checkPropertiesInConstructor`
+- `array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T&\Traversable)array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T&\Traversable) $data`
+- `array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T&\Traversable)array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T&\Traversable) $data`
+- `array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T&\Traversable)array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T&\Traversable) $data`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1233,7 +1233,7 @@ Creates an Arrayy object.
 WARNING: Creates an Arrayy object by reference.
 
 **Parameters:**
-- `array<mixed, mixed>|array<array-key, mixed> $array`
+- `array<TKey, T> $array`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
@@ -1245,7 +1245,7 @@ WARNING: Creates an Arrayy object by reference.
 Create an new Arrayy object via JSON.
 
 **Parameters:**
-- `array $array`
+- `array<TKey, T> $array`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1257,7 +1257,7 @@ Create an new Arrayy object via JSON.
 Create an new instance from a callable function which will return an Generator.
 
 **Parameters:**
-- `callable(): \Generator<array-key, mixed> $generatorFunction`
+- `callable(): \Generator<TKey, T> $generatorFunction`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1269,7 +1269,7 @@ Create an new instance from a callable function which will return an Generator.
 Create an new instance filled with a copy of values from a "Generator"-object.
 
 **Parameters:**
-- `\Generator<array-key, mixed> $generator`
+- `\Generator<TKey, T> $generator`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1305,7 +1305,7 @@ Create an new Arrayy object via JSON.
 Create an new instance filled with values from an object that is iterable.
 
 **Parameters:**
-- `\Traversable<array-key, mixed> $object <p>iterable object</p>`
+- `\Traversable<array-key, T> $object <p>iterable object</p>`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1339,12 +1339,15 @@ used.</p>`
 
 --------
 
-## createFromTraversableImmutable(\Traversable $traversable): static
+## createFromTraversableImmutable(\Traversable $traversable, bool $use_keys): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Create an new instance filled with a copy of values from a "Traversable"-object.
 
 **Parameters:**
-- `\Traversable<array-key, mixed> $traversable`
+- `\Traversable<(array-key|TKey), T> $traversable`
+- `bool $use_keys [optional] <p>
+Whether to use the iterator element keys as index.
+</p>`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1568,7 +1571,7 @@ a(['foo', 'bar' => 'bis'])->each($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 
 --------
 
-## end(): mixed
+## end(): false|mixed
 <a href="#voku-php-readme-class-methods">↑</a>
 Sets the internal iterator to the last element in the array and returns this element.
 
@@ -1576,7 +1579,7 @@ Sets the internal iterator to the last element in the array and returns this ele
 __nothing__
 
 **Return:**
-- `mixed`
+- `false|mixed`
 
 --------
 
@@ -3064,8 +3067,8 @@ a(['fòô' => 'bàř'])->prepend('foo'); // Arrayy[0 => 'foo', 'fòô' => 'bàř
 </code>
 
 **Parameters:**
-- `mixed $value`
-- `mixed $key`
+- `T $value`
+- `TKey|null $key`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object, with the prepended value.</p>`
@@ -3081,8 +3084,8 @@ a(['fòô' => 'bàř'])->prependImmutable('foo')->getArray(); // [0 => 'foo', 'f
 </code>
 
 **Parameters:**
-- `mixed $value`
-- `mixed $key`
+- `T $value`
+- `TKey $key`
 
 **Return:**
 - `$this <p>(Immutable) Return this Arrayy object, with the prepended value.</p>`
@@ -3425,7 +3428,7 @@ $arrayy->replace(2, 'notfoo', 'notbar'); // Arrayy[1 => 'foo', 'notfoo' => 'notb
 
 --------
 
-## replaceAllKeys(array $keys): static
+## replaceAllKeys(int[]|string[] $keys): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Create an array using the current array as values and the other array as keys.
 
@@ -3445,10 +3448,12 @@ $arrayy->replaceAllKeys($secondArray); // Arrayy[1 => "one", 'one' => "two", 2 =
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<mixed, TKey> $keys <p>An array of keys.</p>`
+- `array<array-key, TKey> $keys <p>An array of keys.</p>`
 
 **Return:**
-- `static <p>(Immutable) Arrayy object with keys from the other array.</p>`
+- `static <p>(Immutable) Arrayy object with keys from the other array, empty Arrayy object if the number of elements
+for each array isn't equal or if the arrays are empty.
+</p>`
 
 --------
 
@@ -3472,10 +3477,12 @@ $arrayy->replaceAllValues($secondArray); // Arrayy['one' => 1, 'two' => 'one', '
 </code>
 
 **Parameters:**
-- `array<mixed, T> $array <p>An array of values.</p>`
+- `array<array-key, T> $array <p>An array of values.</p>`
 
 **Return:**
-- `static <p>(Immutable) Arrayy object with values from the other array.</p>`
+- `static <p>(Immutable) Arrayy object with values from the other array, empty Arrayy object if the number of elements
+for each array isn't equal or if the arrays are empty.
+</p>`
 
 --------
 
@@ -3488,7 +3495,7 @@ a([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']); // 
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<mixed, TKey> $keys <p>An array of keys matching the array's size</p>`
+- `array<array-key, TKey> $keys <p>An array of keys matching the array's size</p>`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -4221,7 +4228,7 @@ a()->unserialize($serialized);
 Prepends one or more values to the beginning of array at once.
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> ...$args`
+- `array<TKey, T> ...$args`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object, with prepended elements to the beginning of array.</p>`
