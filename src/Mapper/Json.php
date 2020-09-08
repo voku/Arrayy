@@ -351,7 +351,7 @@ final class Json
         $accessor = null;
 
         /** @var \Arrayy\Arrayy[] $ARRAYY_CACHE */
-        /** @psalm-var array<string, \Arrayy\Arrayy<mixed, mixed> $ARRAYY_CACHE */
+        /** @psalm-var array<string, \Arrayy\Arrayy<mixed, mixed>> $ARRAYY_CACHE */
         static $ARRAYY_CACHE = [];
 
         if (\is_subclass_of($class->name, \Arrayy\Arrayy::class)) {

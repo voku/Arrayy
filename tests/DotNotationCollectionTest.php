@@ -46,7 +46,12 @@ final class DotNotationCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($dn->get('foo.bar'), 123);
 
         $jade = $dn->get('foo.jade.profile.new');
-        static::assertInternalType('array', $jade->getArray());
+        if (\method_exists(__CLASS__, 'assertIsArray')) {
+            static::assertIsArray($jade->getArray());
+        } else {
+            /** @noinspection PhpUndefinedMethodInspection */
+            static::assertInternalType('array', $jade->getArray());
+        }
         static::assertSame('path', $jade['test']['of']);
 
         $dn->add('test');

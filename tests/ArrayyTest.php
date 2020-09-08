@@ -5188,8 +5188,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy = A::create($testArray);
         $result = $arrayy->serialize();
 
-        static::assertContains('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
-        static::assertContains($result, \serialize($arrayy));
+
+        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+            static::assertStringContainsString('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
+            static::assertStringContainsString($result, \serialize($arrayy));
+        } else {
+            static::assertContains('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
+            static::assertContains($result, \serialize($arrayy));
+        }
         static::assertSame($arrayy->getArray(), \unserialize(\serialize($arrayy))->getArray());
 
         // create a object with an "arrayy"-property
@@ -5204,7 +5210,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
             static::assertNotSame($object, \unserialize(\serialize($object)));
         } else {
-            static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";O:13:"Arrayy\\Arrayy":', \serialize($object));
+            if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+                static::assertStringContainsString('O:8:"stdClass":1:{s:6:"arrayy";O:13:"Arrayy\\Arrayy":', \serialize($object));
+            } else {
+                static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";O:13:"Arrayy\\Arrayy":', \serialize($object));
+            }
             static::assertNotSame($object, \unserialize(\serialize($object)));
         }
 
@@ -5234,7 +5244,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             static::assertInstanceOf(CityData::class, $model);
         } else {
             static::assertInstanceOf(CityData::class, $model);
-            static::assertContains('O:21:"Arrayy\tests\CityData":', \serialize($model));
+            if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+                static::assertStringContainsString('O:21:"Arrayy\tests\CityData":', \serialize($model));
+            } else {
+                static::assertContains('O:21:"Arrayy\tests\CityData":', \serialize($model));
+            }
             static::assertNotSame($model, \unserialize(\serialize($model)));
             static::assertInstanceOf(CityData::class, $model);
         }

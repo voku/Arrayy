@@ -23,10 +23,10 @@
     "php": ">=7.0.0",
     "ext-json": "*",
     "symfony/polyfill-mbstring": "~1.0",
-    "phpdocumentor/reflection-docblock": "~4.3|~5.0"
+    "phpdocumentor/reflection-docblock": "~4.3 || ~5.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~6.0 || ~7.0"
+    "phpunit/phpunit": "~6.0 || ~7.0 || ~9.0"
   },
   "support": {
     "docs": "http://voku.github.io/Arrayy/index.html",

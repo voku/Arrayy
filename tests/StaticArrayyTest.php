@@ -79,7 +79,11 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $result = A::repeat('foobar', 3);
 
-        static::assertContains('foobar,foobar,foobar', (string) $result);
+        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+            static::assertStringContainsString('foobar,foobar,foobar', (string) $result);
+        } else {
+            static::assertContains('foobar,foobar,foobar', (string) $result);
+        }
 
         $result = A::repeat('', 3);
 
@@ -90,7 +94,11 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $result = A::repeat(3, 2);
 
-        static::assertContains('3,3', (string) $result);
+        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+            static::assertStringContainsString('3,3', (string) $result);
+        } else {
+            static::assertContains('3,3', (string) $result);
+        }
     }
 
     /**

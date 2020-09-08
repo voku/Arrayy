@@ -375,7 +375,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             static::assertNotNull($value[0]);
             static::assertContains($value[0], $arrayy->toArray());
         } else {
-            static::assertInternalType('array', $value);
+            if (\method_exists(__CLASS__, 'assertIsArray')) {
+                static::assertIsArray($value);
+            } else {
+                /** @noinspection PhpUndefinedMethodInspection */
+                static::assertInternalType('array', $value);
+            }
         }
     }
 
@@ -394,7 +399,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             static::assertNotNull($key);
             static::assertArrayHasKey($key, $arrayy->toArray());
         } else {
-            static::assertInternalType('array', $arrayy->getArray());
+            if (\method_exists(__CLASS__, 'assertIsArray')) {
+                static::assertIsArray($arrayy->getArray());
+            } else {
+                /** @noinspection PhpUndefinedMethodInspection */
+                static::assertInternalType('array', $arrayy->getArray());
+            }
         }
     }
 
@@ -408,7 +418,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) < 2) {
-            static::assertInternalType('array', $arrayy->getArray());
+            if (\method_exists(__CLASS__, 'assertIsArray')) {
+                static::assertIsArray($arrayy->getArray());
+            } else {
+                /** @noinspection PhpUndefinedMethodInspection */
+                static::assertInternalType('array', $arrayy->getArray());
+            }
         } else {
             $keys = $arrayy->getRandomKeys(2);
 
@@ -445,11 +460,21 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) === 0) {
-            static::assertInternalType('array', $arrayy->getArray());
+            if (\method_exists(__CLASS__, 'assertIsArray')) {
+                static::assertIsArray($arrayy->getArray());
+            } else {
+                /** @noinspection PhpUndefinedMethodInspection */
+                static::assertInternalType('array', $arrayy->getArray());
+            }
         } else {
             $keys = $arrayy->getRandomKeys(\count($array))->getArray();
 
-            static::assertInternalType('array', $keys);
+            if (\method_exists(__CLASS__, 'assertIsArray')) {
+                static::assertIsArray($keys);
+            } else {
+                /** @noinspection PhpUndefinedMethodInspection */
+                static::assertInternalType('array', $keys);
+            }
         }
     }
 
@@ -463,7 +488,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) === 0) {
-            static::assertInternalType('array', $arrayy->getArray());
+            if (\method_exists(__CLASS__, 'assertIsArray')) {
+                static::assertIsArray($arrayy->getArray());
+            } else {
+                /** @noinspection PhpUndefinedMethodInspection */
+                static::assertInternalType('array', $arrayy->getArray());
+            }
         } else {
             $value = $arrayy->getRandomValue();
 
@@ -486,7 +516,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) < 2) {
-            static::assertInternalType('array', $arrayy->getArray());
+            if (\method_exists(__CLASS__, 'assertIsArray')) {
+                static::assertIsArray($arrayy->getArray());
+            } else {
+                /** @noinspection PhpUndefinedMethodInspection */
+                static::assertInternalType('array', $arrayy->getArray());
+            }
 
             return;
         }
@@ -511,7 +546,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) === 0) {
-            static::assertInternalType('array', $arrayy->getArray());
+            if (\method_exists(__CLASS__, 'assertIsArray')) {
+                static::assertIsArray($arrayy->getArray());
+            } else {
+                /** @noinspection PhpUndefinedMethodInspection */
+                static::assertInternalType('array', $arrayy->getArray());
+            }
 
             return;
         }
@@ -519,7 +559,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $values = $arrayy->getRandomValues(1)->getArray();
 
         static::assertCount(1, $values);
-        static::assertInternalType('array', $values);
+        if (\method_exists(__CLASS__, 'assertIsArray')) {
+            static::assertIsArray($arrayy->getArray());
+        } else {
+            /** @noinspection PhpUndefinedMethodInspection */
+            static::assertInternalType('array', $arrayy->getArray());
+        }
         foreach ($values as $value) {
             if (!$value instanceof \Arrayy\Arrayy) {
                 static::assertContains($value, $array);
