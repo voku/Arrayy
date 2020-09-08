@@ -5207,7 +5207,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         // serialize + tests
         if (\PHP_VERSION_ID < 70400) {
-            static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
+            if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+                static::assertStringContainsString('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
+            } else {
+                static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
+            }
             static::assertNotSame($object, \unserialize(\serialize($object)));
         } else {
             if (\method_exists(__CLASS__, 'assertStringContainsString')) {
