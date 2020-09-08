@@ -5243,7 +5243,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         // serialize + tests
         if (\PHP_VERSION_ID < 70400) {
             static::assertInstanceOf(CityData::class, $model);
-            static::assertContains('C:21:"Arrayy\tests\CityData":', \serialize($model));
+            if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+                static::assertStringContainsString('C:21:"Arrayy\tests\CityData":', \serialize($model));
+            } else {
+                static::assertContains('C:21:"Arrayy\tests\CityData":', \serialize($model));
+            }
             static::assertNotSame($model, \unserialize(\serialize($model)));
             static::assertInstanceOf(CityData::class, $model);
         } else {
