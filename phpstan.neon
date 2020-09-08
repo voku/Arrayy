@@ -11,7 +11,7 @@ parameters:
             message: ~typehint specified~
             path: %currentWorkingDirectory%/tests/*
         -
-            message: '/assertContains|assertInternalType|assertStringContainsString|assertIsArray|expectExceptionMessage/'
+            message: "/assertContains|assertInternalType|assertStringContainsString|assertIsArray|expectExceptionMessage/"
             path: %currentWorkingDirectory%/tests/*
         -
             message: ~Call to an undefined static method~
