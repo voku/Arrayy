@@ -14,6 +14,9 @@ parameters:
             message: '#assertContains|assertInternalType|assertStringContainsString|assertIsArray|expectExceptionMessage#'
             path: %currentWorkingDirectory%/tests/*
         -
+            message: '#Call to function method_exists#'
+            path: %currentWorkingDirectory%/tests/*
+        -
             message: ~Call to an undefined static method~
             path: %currentWorkingDirectory%/tests/StaticArrayyTest.php
         -
