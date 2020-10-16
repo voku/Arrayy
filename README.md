@@ -101,7 +101,7 @@ $arrayy->get('Lars.lastname'); // 'Moelleken'
 $arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
 
 $arrayy['Lars'] = array('lastname' => 'Müller');
-$arrayy['Lars']['lastname]; // 'Müller'
+$arrayy['Lars']['lastname']; // 'Müller'
 ```
 
 ### Set values via "object"-syntax:
