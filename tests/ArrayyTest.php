@@ -2500,7 +2500,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $resultArrayy = A::createFromString($string, $separator);
 
-        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
@@ -4038,7 +4037,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergePrependNewIndex($secondArray);
         $resultArray = \array_merge($secondArray, $array);
 
-        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -4059,7 +4057,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergePrependNewIndex($secondArray, true);
         $resultArray = \array_merge_recursive($secondArray, $array);
 
-        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -4080,7 +4077,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray);
         $resultArray = \array_merge($array, $secondArray);
 
-        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -4101,7 +4097,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray, true);
         $resultArray = \array_merge_recursive($array, $secondArray);
 
-        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -6181,7 +6176,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy = A::create($array);
         $resultArrayy = A::createFromString($string, $separator);
 
-        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
@@ -6520,7 +6514,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param A<int|string,mixed> $arrayzy
-     * @param A<int|string,mixed> $resultArrayzy
+     * @param A<int,string>|A<int,mixed>|A<int|string,mixed> $resultArrayzy
      * @param array               $array
      * @param array               $resultArray
      */

@@ -47,7 +47,6 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
             $data = [$data];
         }
 
-        \assert($firstValue !== null);
         $this->getTypeHelper = $this->getTypeFromFirstValue($firstValue);
 
         parent::__construct(
@@ -71,8 +70,6 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
      * @param mixed $value
      *
      * @return string
-     *
-     * @phpstan-param T $value
      */
     private function getTypeFromFirstValue($value): string
     {
