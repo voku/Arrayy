@@ -11,6 +11,9 @@ parameters:
             message: ~typehint specified~
             path: %currentWorkingDirectory%/tests/*
         -
+            message: '/Call to function method_exists\(\)/'
+            path: %currentWorkingDirectory%/tests/*
+        -
             message: '#assertContains|assertInternalType|assertStringContainsString|assertIsArray|expectExceptionMessage#'
             path: %currentWorkingDirectory%/tests/*
         -
