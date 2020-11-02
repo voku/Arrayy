@@ -217,6 +217,20 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function cleanProvider(): array
     {
+        // breaking-change from PHP8
+        // -> Implement the negative_array_index RFC: https://github.com/php/php-src/commit/6732028273b109cb342387ab5580c367f629d0ac
+        if (\PHP_VERSION_ID >= 80000) {
+            return [
+                [[], []],
+                [[null, false], []],
+                [[0 => true], [0 => true]],
+                [[0 => -9, 0], [0 => -9]],
+                [[-8 => -9, 1, 2 => false], [-8 => -9, -7 => 1]],
+                [[0 => 1.18, 1 => false], [0 => 1.18]],
+                [['foo' => false, 'foo', 'lall'], ['foo', 'lall']],
+            ];
+        }
+
         return [
             [[], []],
             [[null, false], []],
