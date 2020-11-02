@@ -24,7 +24,7 @@ final class ArrayyMeta
      *
      * @return $this
      *
-     * @psalm-param class-string<\Arrayy\Arrayy<int|string,mixed>> $className
+     * @phpstan-param class-string<\Arrayy\Arrayy<int|string,mixed>> $className
      */
     public function getMetaObject(string $className): self
     {

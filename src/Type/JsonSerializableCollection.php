@@ -17,7 +17,7 @@ class JsonSerializableCollection extends Collection implements TypeInterface
      *
      * @return string
      *
-     * @psalm-return class-string<\JsonSerializable>
+     * @phpstan-return class-string<\JsonSerializable>
      */
     public function getType()
     {

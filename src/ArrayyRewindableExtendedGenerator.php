@@ -33,7 +33,7 @@ class ArrayyRewindableExtendedGenerator extends ArrayyRewindableGenerator
      * @see  http://php.net/manual/en/iterator.current.php
      * @see  Iterator::current
      *
-     * @psalm-return X
+     * @phpstan-return X
      */
     public function current()
     {

@@ -97,8 +97,8 @@ class Collection extends AbstractCollection
      *                                                         </p>
      * @param TypeInterface|null $type
      *
-     * @psalm-param array<array-key,T>|array<TKey,T>|\Arrayy\Arrayy<TKey,T> $data
-     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param array<array-key,T>|array<TKey,T>|\Arrayy\Arrayy<TKey,T> $data
+     * @phpstan-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -132,11 +132,10 @@ class Collection extends AbstractCollection
      *
      * @return static
      *
-     * @template     TKeyConstruct of array-key
-     * @template     TConstruct
-     * @psalm-param  string|class-string|class-string<TConstruct>|TypeInterface|TypeCheckArray<array-key,TypeCheckInterface>|array<TypeCheckInterface> $type
-     * @psalm-param  array<TKeyConstruct,TConstruct> $data
-     * @psalm-return static<TKeyConstruct,TConstruct>
+     * @template       TConstruct
+     * @phpstan-param  string|class-string|class-string<TConstruct>|TypeInterface|TypeCheckArray<array-key,TypeCheckInterface>|array<TypeCheckInterface> $type
+     * @phpstan-param  array<array-key,TConstruct> $data
+     * @phpstan-return static<array-key,TConstruct>
      */
     public static function construct(
         $type,
@@ -159,7 +158,7 @@ class Collection extends AbstractCollection
      * @return \Iterator
      *                   <p>An iterator for the values in the array.</p>
      *
-     * @psalm-return \Iterator<T>
+     * @phpstan-return \Iterator<T>
      *
      * @noinspection SenselessProxyMethodInspection
      */
@@ -173,7 +172,7 @@ class Collection extends AbstractCollection
      *
      * @return string|TypeCheckArray|TypeCheckInterface[]
      *
-     * @psalm-return string|class-string|class-string<T>|TypeInterface|TypeCheckArray<TKey,T>|TypeCheckArray<int|string,mixed>|array<TypeCheckInterface>|array<array-key,TypeCheckInterface>
+     * @phpstan-return string|class-string|class-string<T>|TypeInterface|TypeCheckArray<TKey,T>|TypeCheckArray<int|string,mixed>|array<TypeCheckInterface>|array<array-key,TypeCheckInterface>
      */
     public function getType()
     {
@@ -185,10 +184,7 @@ class Collection extends AbstractCollection
      *
      * @return self
      *
-     * @psalm-return self<TKey,T>
-     *
-     * @psalm-suppress InvalidReturnStatement - why?
-     * @psalm-suppress InvalidReturnType - why?
+     * @phpstan-return self<array-key,mixed>
      */
     public function toBase(): self
     {

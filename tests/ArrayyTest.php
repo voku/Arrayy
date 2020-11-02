@@ -2500,6 +2500,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $resultArrayy = A::createFromString($string, $separator);
 
+        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
@@ -3054,8 +3055,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
+        /** @phpstan-ignore-next-line | FP from phpstan -> \Closure(T=,TKey=):bool|\Closure(T=):bool|\Closure(TKey=):bool  */
         $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
-            static function ($key, $value) {
+            static function ($key, $value): bool {
                 return ($value % 2 !== 0) && ($key & 2 !== 0);
             },
             \ARRAY_FILTER_USE_BOTH
@@ -4036,6 +4038,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergePrependNewIndex($secondArray);
         $resultArray = \array_merge($secondArray, $array);
 
+        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -4056,6 +4059,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergePrependNewIndex($secondArray, true);
         $resultArray = \array_merge_recursive($secondArray, $array);
 
+        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -4076,6 +4080,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray);
         $resultArray = \array_merge($array, $secondArray);
 
+        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -4096,6 +4101,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray, true);
         $resultArray = \array_merge_recursive($array, $secondArray);
 
+        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -5188,7 +5194,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy = A::create($testArray);
         $result = $arrayy->serialize();
 
-
         if (\method_exists(__CLASS__, 'assertStringContainsString')) {
             static::assertStringContainsString('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
             static::assertStringContainsString($result, \serialize($arrayy));
@@ -6090,7 +6095,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         ];
 
         $resultArrayy = A::create();
-        $callable = static function ($value) use (&$resultArrayy) {
+        $callable = static function ($value, $key) use (&$resultArrayy) {
             if (!isset($resultArrayy[$value['title']])) {
                 $resultArrayy[$value['title']] = $value;
             } else {
@@ -6176,6 +6181,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy = A::create($array);
         $resultArrayy = A::createFromString($string, $separator);
 
+        /** @phpstan-ignore-next-line | https://github.com/phpstan/phpstan/issues/4038 */
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
@@ -6513,10 +6519,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param A<mixed,mixed> $arrayzy
-     * @param A<mixed,mixed> $resultArrayzy
-     * @param array          $array
-     * @param array          $resultArray
+     * @param A<int|string,mixed> $arrayzy
+     * @param A<int|string,mixed> $resultArrayzy
+     * @param array               $array
+     * @param array               $resultArray
      */
     protected static function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray)
     {

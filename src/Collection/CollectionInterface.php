@@ -29,8 +29,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return void
      *
-     * @psalm-param TKey $key
-     * @psalm-param T $value
+     * @phpstan-param TKey $key
+     * @phpstan-param T $value
      */
     public function __set($key, $value);
 
@@ -44,8 +44,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @see          CollectionInterface::append()
      *
-     * @psalm-param  T $value
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param  T $value
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function add($value);
 
@@ -58,9 +58,9 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @psalm-param T $value
-     * @psalm-param TKey|null $key
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param T $value
+     * @phpstan-param TKey|null $key
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function append($value, $key = null);
 
@@ -73,9 +73,9 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @psalm-param array<T> $values
-     * @psalm-param TKey $key
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param array<T> $values
+     * @phpstan-param TKey $key
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function appendArrayValues(array $values, $key = null);
 
@@ -106,7 +106,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return bool
      *
-     * @psalm-param T $value
+     * @phpstan-param T $value
      */
     public function contains($value, bool $recursive = false, bool $strict = true): bool;
 
@@ -120,7 +120,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *              <p>TRUE if the collection contains an element with the specified key/index,
      *              FALSE otherwise.</p>
      *
-     * @psalm-param TKey $key
+     * @phpstan-param TKey $key
      */
     public function containsKey($key): bool;
 
@@ -133,7 +133,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @see         CollectionInterface::contains()
      *
-     * @psalm-param T $value
+     * @phpstan-param T $value
      */
     public function containsValue($value): bool;
 
@@ -146,7 +146,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @see         CollectionInterface::contains()
      *
-     * @psalm-param T $value
+     * @phpstan-param T $value
      */
     public function containsValueRecursive($value): bool;
 
@@ -160,7 +160,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
-     * @psalm-return CollectionInterface<array-key,mixed>
+     * @phpstan-return CollectionInterface<array-key,mixed>
      * @psalm-mutation-free
      */
     public static function create(
@@ -174,7 +174,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return false|mixed
      *
-     * @psalm-return T|false
+     * @phpstan-return T|false
      */
     public function current();
 
@@ -186,7 +186,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return bool
      *              <p>TRUE if the predicate is TRUE for at least one element, FALSE otherwise.</p>
      *
-     * @psalm-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T=,TKey=):bool $closure
      */
     public function exists(\Closure $closure): bool;
 
@@ -200,8 +200,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>A collection with the results of the filter operation.</p>
      *
-     * @psalm-param \Closure(T=,TKey=):bool $closure
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH);
 
@@ -210,7 +210,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return mixed
      *
-     * @psalm-return T|false
+     * @phpstan-return T|false
      */
     public function first();
 
@@ -221,7 +221,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return bool TRUE, if the predicate yields TRUE for all elements, FALSE otherwise
      *
-     * @psalm-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T=,TKey=):bool $closure
      */
     public function validate(\Closure $closure): bool;
 
@@ -233,8 +233,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return mixed
      *
-     * @psalm-param TKey $key
-     * @psalm-return T|null
+     * @phpstan-param TKey $key
+     * @phpstan-return T|null
      */
     public function get($key);
 
@@ -243,14 +243,14 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return array
      *
-     * @psalm-return array<T>
+     * @phpstan-return array<T>
      */
     public function getArrayCopy(): array;
 
     /**
      * @return array
      *
-     * @psalm-return array<T>
+     * @phpstan-return array<T>
      */
     public function getCollection(): array;
 
@@ -259,7 +259,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-return TKey[]
+     * @phpstan-return TKey[]
      */
     public function getKeys();
 
@@ -268,7 +268,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
      *
-     * @psalm-return string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|TypeCheckInterface[]
+     * @phpstan-return string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|TypeCheckInterface[]
      */
     public function getType();
 
@@ -277,7 +277,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-return T[]
+     * @phpstan-return T[]
      */
     public function getValues();
 
@@ -290,7 +290,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return bool
      *
-     * @psalm-param T $value
+     * @phpstan-param T $value
      */
     public function hasValue($value): bool;
 
@@ -303,8 +303,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return false|mixed the key/index of the element or FALSE if the element was not found
      *
-     * @psalm-param T $element
-     * @psalm-return TKey|false
+     * @phpstan-param T $element
+     * @phpstan-return TKey|false
      */
     public function indexOf($element);
 
@@ -316,7 +316,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return bool
      *              <p>TRUE if the collection is empty, FALSE otherwise.</p>
      *
-     * @psalm-param TKey|TKey[]|null $keys
+     * @phpstan-param TKey|TKey[]|null $keys
      */
     public function isEmpty($keys = null): bool;
 
@@ -325,7 +325,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return int|string|null
      *
-     * @psalm-return TKey|null
+     * @phpstan-return TKey|null
      */
     public function key();
 
@@ -334,7 +334,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return mixed
      *
-     * @psalm-return T|false
+     * @phpstan-return T|false
      */
     public function last();
 
@@ -348,8 +348,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-param callable(T=,TKey=,mixed):mixed $callable
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param callable(T=,TKey=,mixed):mixed $callable
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments);
 
@@ -362,8 +362,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-param CollectionInterface<TKey,T> ...$collections
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param CollectionInterface<TKey,T> ...$collections
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function merge(self ...$collections);
 
@@ -372,7 +372,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return mixed
      *
-     * @psalm-return T|false
+     * @phpstan-return T|false
      */
     public function next();
 
@@ -384,8 +384,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return void
      *
-     * @psalm-param TKey $offset
-     * @psalm-param T $value
+     * @phpstan-param TKey $offset
+     * @phpstan-param T $value
      */
     public function offsetSet($offset, $value);
 
@@ -399,8 +399,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *                    of elements where the predicate returned TRUE, the second element
      *                    contains the collection of elements where the predicate returned FALSE.
      *
-     * @psalm-param \Closure(T=,TKey=):bool $p
-     * @psalm-return array{0: CollectionInterface<TKey,T>, 1: CollectionInterface<TKey,T>}
+     * @phpstan-param \Closure(T=,TKey=):bool $p
+     * @phpstan-return array{0: CollectionInterface<TKey,T>, 1: CollectionInterface<TKey,T>}
      */
     public function partition(\Closure $p): array;
 
@@ -413,9 +413,9 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
-     * @psalm-param T $value
-     * @psalm-param TKey|null $key
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param T $value
+     * @phpstan-param TKey|null $key
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function prepend($value, $key = null);
 
@@ -428,8 +428,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-param TKey $key
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param TKey $key
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function remove($key);
 
@@ -441,8 +441,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-param  T $element
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param  T $element
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function removeElement($element);
 
@@ -454,8 +454,8 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>(Immutable)</p>
      *
-     * @psalm-param T $value
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param T $value
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function removeValue($value);
 
@@ -469,9 +469,9 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-param TKey $key
-     * @psalm-param T $value
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-param TKey $key
+     * @phpstan-param T $value
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function set($key, $value);
 
@@ -488,7 +488,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-return CollectionInterface<array-key|TKey,T>
+     * @phpstan-return CollectionInterface<array-key|TKey,T>
      */
     public function slice(int $offset, int $length = null, bool $preserveKeys = false);
 
@@ -497,7 +497,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return array
      *
-     * @psalm-return array<TKey,T>
+     * @phpstan-return array<TKey,T>
      */
     public function toArray(): array;
 
@@ -511,7 +511,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @psalm-return CollectionInterface<TKey,T>
+     * @phpstan-return CollectionInterface<TKey,T>
      */
     public function where(string $keyOrPropertyOrMethod, $value);
 }

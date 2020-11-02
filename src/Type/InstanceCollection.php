@@ -20,9 +20,9 @@ final class InstanceCollection extends Collection implements TypeInterface
      * @param bool|null     $checkPropertiesInConstructor
      * @param string|null   $className
      *
-     * @psalm-param array<TKey,T> $data
-     * @psalm-param class-string<\Arrayy\ArrayyIterator>|null $iteratorClass
-     * @psalm-param class-string<T>|null $className
+     * @phpstan-param array<TKey,T> $data
+     * @phpstan-param class-string<\Arrayy\ArrayyIterator>|null $iteratorClass
+     * @phpstan-param class-string<T>|null $className
      */
     public function __construct(
         array $data = [],

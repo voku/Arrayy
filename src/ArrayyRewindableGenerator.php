@@ -16,7 +16,7 @@ class ArrayyRewindableGenerator implements \Iterator
     /**
      * @var string
      *
-     * @psalm-var string|class-string<\Arrayy\Arrayy<TKey,T>>
+     * @phpstan-var string|class-string<\Arrayy\Arrayy<TKey,T>>
      */
     protected $class;
 
@@ -28,7 +28,7 @@ class ArrayyRewindableGenerator implements \Iterator
     /**
      * @var \Generator
      *
-     * @psalm-var \Generator<XKey,X>
+     * @phpstan-var \Generator<XKey,X>
      */
     protected $generator;
 
@@ -64,7 +64,7 @@ class ArrayyRewindableGenerator implements \Iterator
      * @see  http://php.net/manual/en/iterator.current.php
      * @see  Iterator::current
      *
-     * @psalm-return X
+     * @phpstan-return X
      */
     public function current()
     {
@@ -79,7 +79,7 @@ class ArrayyRewindableGenerator implements \Iterator
      * @see  http://php.net/manual/en/iterator.key.php
      * @see  Iterator::key
      *
-     * @psalm-return XKey
+     * @phpstan-return XKey
      */
     public function key()
     {

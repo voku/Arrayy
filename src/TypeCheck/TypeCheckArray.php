@@ -30,7 +30,7 @@ class TypeCheckArray extends \Arrayy\ArrayyStrict
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
      *
-     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
         $data = [],

@@ -14,9 +14,6 @@ parameters:
             message: '#assertContains|assertInternalType|assertStringContainsString|assertIsArray|expectExceptionMessage#'
             path: %currentWorkingDirectory%/tests/*
         -
-            message: '#Call to function method_exists#'
-            path: %currentWorkingDirectory%/tests/*
-        -
             message: ~Call to an undefined static method~
             path: %currentWorkingDirectory%/tests/StaticArrayyTest.php
         -
@@ -25,16 +22,9 @@ parameters:
         # not supported by phpstan?
         - '/PHPDoc tag @template .Key.* for .* with bound type .* is not supported\./'
         # false-positive?
-        - '/sortValueKeepIndex\(\) should return/'
-        - '/sortValueNewIndex\(\) should return/'
-        - '/append\(\) should be compatible/'
-        - '/prepend\(\) should be compatible/'
-        - '/between mixed and .* will always evaluate to false/'
-        - '/comparison using === between true and false/'
         - '/function call_user_func expects callable.*array\(.*\) given/'
         - '/function call_user_func_array expects callable.*array\(.*\) given/'
         - '/array_map expects \(callable\(\):/'
-        - '/Property Arrayy\\Arrayy<TKey,T>::\$iteratorClass/'
         - '/should return TLast\|TLastFallback but returns TLastFallback\|null/'
         - '/should return TFirst\|TFirstFallback but returns TFirstFallback\|null/'
         # ignore gernal errors
@@ -44,4 +34,3 @@ parameters:
         - '/create\(\) has parameter \$iteratorClass with generic/'
         - '/parameter \$iteratorClass with generic class Arrayy\\ArrayyIterator/'
         - '/generic class Arrayy\\ArrayyIterator does not specify its types/'
-        - '#Arrayy::getIterator\(\) should be compatible with return type#'

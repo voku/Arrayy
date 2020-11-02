@@ -15,7 +15,7 @@ class ModelA extends \Arrayy\Arrayy implements ModelInterface
      * @param array  $array
      * @param string $iteratorClass
      *
-     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct($array = [], $iteratorClass = ArrayyIterator::class)
     {

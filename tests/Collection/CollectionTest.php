@@ -74,11 +74,13 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);
 
+        /** @var \Arrayy\tests\UserData $userData */
         $userData = $userDataCollection->getAll()[0];
 
         static::assertInstanceOf(\Arrayy\tests\UserData::class, $userData);
         static::assertSame('Lars', $userData->firstName);
         static::assertInstanceOf(\Arrayy\tests\CityData::class, $userData->city);
+        /** @phpstan-ignore-next-line */
         static::assertSame('Düsseldorf', $userData->city->name);
     }
 
@@ -86,7 +88,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
     {
         $json = '[{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}, {"id":1,"firstName":"Sven","lastName":"Moelleken","city":{"name":"Köln","plz":null,"infos":["foo"]}}]';
         /** @var \Arrayy\Arrayy|\Arrayy\tests\UserData[] $userDataCollection */
-        /** @psalm-var \Arrayy\Arrayy<int, \Arrayy\tests\UserData> $userDataCollection */
+        /** @phpstan-var \Arrayy\Arrayy<int, \Arrayy\tests\UserData> $userDataCollection */
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);
 
         $userDataCollection->getAll();
@@ -135,7 +137,11 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame([$pets, $colors], $jsonSerializableCollection->getCollection());
 
-        static::assertSame('fooooo', $jsonSerializableCollection->first()->get('foo'));
+        $first = $jsonSerializableCollection->first();
+        if ($first) {
+            \assert($first instanceof \Arrayy\Arrayy);
+            static::assertSame('fooooo', $first->get('foo'));
+        }
     }
 
     public function testBasic()

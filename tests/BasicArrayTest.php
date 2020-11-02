@@ -745,10 +745,6 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             $first = null;
         }
 
-        if ($result instanceof Arrayy) {
-            $result = $result->getArray();
-        }
-
         static::assertSame($first, $result);
     }
 

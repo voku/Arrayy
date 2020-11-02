@@ -17,7 +17,7 @@ class StdClassCollection extends Collection implements TypeInterface
      *
      * @return string
      *
-     * @psalm-return class-string<\stdClass>
+     * @phpstan-return class-string<\stdClass>
      */
     public function getType()
     {

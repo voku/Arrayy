@@ -1,8 +1,5 @@
 <?php
 
-/** @noinspection ReturnTypeCanBeDeclaredInspection */
-/** @noinspection ClassReImplementsParentInterfaceInspection */
-
 declare(strict_types=1);
 
 namespace Arrayy;
@@ -33,21 +30,21 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @var array
      *
-     * @psalm-var array<mixed,mixed>|array<TKey,T>
+     * @phpstan-var array<int|string|TKey,T>
      */
     protected $array = [];
 
     /**
      * @var \Arrayy\ArrayyRewindableGenerator|null
      *
-     * @psalm-var \Arrayy\ArrayyRewindableGenerator<TKey,T>|null
+     * @phpstan-var \Arrayy\ArrayyRewindableGenerator<TKey,T>|null
      */
     protected $generator;
 
     /**
      * @var string
      *
-     * @psalm-var class-string<\Arrayy\ArrayyIterator>
+     * @phpstan-var class-string<\Arrayy\ArrayyIterator>
      */
     protected $iteratorClass = ArrayyIterator::class;
 
@@ -99,7 +96,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
      *
-     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -229,11 +226,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Return this Arrayy object, with the appended values.</p>
      *
-     * @psalm-param  T $value
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  T $value
+     * @phpstan-return static<TKey,T>
      *
-     * @psalm-param T $value
-     * @psalm-param TKey $key
+     * @phpstan-param T $value
+     * @phpstan-param TKey $key
      * @psalm-mutation-free
      */
     public function add($value, $key = null)
@@ -268,9 +265,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      *
-     * @psalm-param T $value
-     * @psalm-param TKey|null $key
-     * @psalm-return static<TKey,T>
+     * @phpstan-param T $value
+     * @phpstan-param TKey|null $key
+     * @phpstan-return static<TKey,T>
      */
     public function append($value, $key = null): self
     {
@@ -310,9 +307,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object, with the appended values.</p>
      *
-     * @psalm-param T $value
-     * @psalm-param TKey $key
-     * @psalm-return static<TKey,T>
+     * @phpstan-param T $value
+     * @phpstan-param TKey $key
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function appendImmutable($value, $key = null): self
@@ -353,7 +350,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function asort(int $sort_flags = 0): self
     {
@@ -376,7 +373,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function asortImmutable(int $sort_flags = 0): self
@@ -460,12 +457,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @psalm-param  T,array<TKey,T>|self<TKey,T> $data
-     * @psalm-return array<mixed,mixed>|array<TKey,T>
+     * @phpstan-param  T|array<TKey,T>|self<TKey,T> $data
+     * @phpstan-return array<TKey,T>
      */
     public function exchangeArray($data): array
     {
-        $this->array = $this->fallbackForArray($data);
+        /** @phpstan-var array<TKey,T> array */
+        $array = $this->fallbackForArray($data);
+
+        $this->array = $array;
         $this->generator = null;
 
         return $this->array;
@@ -476,7 +476,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @psalm-return array<mixed,mixed>|array<TKey,T>
+     * @phpstan-return array<int|string|TKey,T>
      */
     public function getArrayCopy(): array
     {
@@ -494,7 +494,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return \Iterator<mixed, mixed>
      *                          <p>An iterator for the values in the array.</p>
-     * @psalm-return \Iterator<array-key|TKey, mixed|T>
+     * @phpstan-return \Iterator<array-key|TKey, mixed|T>
      */
     public function getIterator(): \Iterator
     {
@@ -528,7 +528,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return string
      *
-     * @psalm-return class-string
+     * @phpstan-return class-string
      */
     public function getIteratorClass(): string
     {
@@ -547,7 +547,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function ksort(int $sort_flags = 0): self
     {
@@ -570,7 +570,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function ksortImmutable(int $sort_flags = 0): self
     {
@@ -590,7 +590,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function natcasesort(): self
     {
@@ -607,7 +607,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function natcasesortImmutable(): self
@@ -628,7 +628,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function natsort(): self
     {
@@ -645,7 +645,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function natsortImmutable(): self
@@ -855,7 +855,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return void
      *
-     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function setIteratorClass($iteratorClass)
     {
@@ -866,6 +866,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if (\strpos($iteratorClass, '\\') === 0) {
+            /** @var class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass */
             $iteratorClass = '\\' . $iteratorClass;
             if (\class_exists($iteratorClass)) {
                 /**
@@ -890,7 +891,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function uasort($function): self
     {
@@ -915,7 +916,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function uasortImmutable($function): self
@@ -940,7 +941,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function uksort($function): self
     {
@@ -957,7 +958,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function uksortImmutable($function): self
@@ -977,7 +978,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return $this
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function unserialize($string): self
     {
@@ -1003,9 +1004,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      *
-     * @psalm-param  array<array-key,T> $values
-     * @psalm-param  TKey|null $key
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<array-key,T> $values
+     * @phpstan-param  TKey|null $key
+     * @phpstan-return static<TKey,T>
      */
     public function appendArrayValues(array $values, $key = null)
     {
@@ -1042,7 +1043,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Return an Arrayy object, with the prefixed keys.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function appendToEachKey($prefix): self
@@ -1072,12 +1073,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Add a prefix to each value.
      *
-     * @param mixed $prefix
+     * @param float|int|string $prefix
      *
      * @return static
      *                <p>(Immutable) Return an Arrayy object, with the prefixed values.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function appendToEachValue($prefix): self
@@ -1106,7 +1107,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function arsort(): self
     {
@@ -1123,7 +1124,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function arsortImmutable(): self
@@ -1153,7 +1154,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-param \Closure(T=,TKey=):mixed $closure <p>INFO: \Closure result is not used, but void is not supported in PHP 7.0</p>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function at(\Closure $closure): self
@@ -1208,7 +1210,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function changeKeyCase(int $case = \CASE_LOWER): self
@@ -1251,7 +1253,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function changeSeparator($separator): self
     {
@@ -1273,7 +1275,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) A new array of chunks from the original array.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function chunk($size, $preserveKeys = false): self
@@ -1337,7 +1339,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function clean(): self
@@ -1361,7 +1363,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with an empty array.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function clear($key = null): self
     {
@@ -1499,7 +1501,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>
      *
-     * @psalm-param array<array-key>|array<TKey> $needles
+     * @phpstan-param array<array-key>|array<TKey> $needles
      * @psalm-mutation-free
      */
     public function containsKeys(array $needles, $recursive = false): bool
@@ -1539,7 +1541,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>
      *
-     * @psalm-param array<array-key>|array<TKey> $needles
+     * @phpstan-param array<array-key>|array<TKey> $needles
      * @psalm-mutation-free
      */
     public function containsKeysRecursive(array $needles): bool
@@ -1589,7 +1591,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>Returns true if all the given values exists in the array, false otherwise.</p>
      *
-     * @psalm-param array<mixed>|array<T> $needles
+     * @phpstan-param array<mixed>|array<T> $needles
      * @psalm-mutation-free
      */
     public function containsValues(array $needles): bool
@@ -1620,7 +1622,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                keys and their count as value.
      *                </p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function countValues(): self
@@ -1638,9 +1640,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-param  array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T&\Traversable) $data
-     * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<array-key,T>|\Traversable<array-key,T>|callable():\Generator<TKey,T>|(T&\Traversable) $data
+     * @phpstan-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public static function create(
@@ -1703,8 +1705,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-param  array<TKey,T> $array
-     * @psalm-return $this<TKey,T>
+     * @phpstan-param  array<TKey,T> $array
+     * @phpstan-return $this<TKey,T>
      *
      * @internal this will not check any types because it's set directly as reference
      */
@@ -1724,8 +1726,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-param callable():\Generator<TKey,T> $generatorFunction
-     * @psalm-return static<TKey,T>
+     * @phpstan-param callable():\Generator<TKey,T> $generatorFunction
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public static function createFromGeneratorFunction(callable $generatorFunction): self
@@ -1741,8 +1743,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-param \Generator<TKey,T> $generator
-     * @psalm-return static<TKey,T>
+     * @phpstan-param \Generator<TKey,T> $generator
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public static function createFromGeneratorImmutable(\Generator $generator): self
@@ -1758,7 +1760,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-return static<mixed,mixed>
+     * @phpstan-return static<int|string,mixed>
      * @psalm-mutation-free
      */
     public static function createFromJson(string $json): self
@@ -1774,8 +1776,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-param array<TKey,T> $array
-     * @psalm-return static<TKey,T>
+     * @phpstan-param array<TKey,T> $array
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public static function createFromArray(array $array): self
@@ -1791,8 +1793,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-param \Traversable<array-key,T> $object
-     * @psalm-return static<array-key,T>
+     * @phpstan-param \Traversable<array-key,T> $object
+     * @phpstan-return static<array-key,T>
      * @psalm-mutation-free
      */
     public static function createFromObject(\Traversable $object): self
@@ -1824,7 +1826,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-return static<array-key,mixed>
+     * @phpstan-return static<array-key,mixed>
      * @psalm-mutation-free
      */
     public static function createFromObjectVars($object): self
@@ -1843,7 +1845,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-return static<int,string>
+     * @phpstan-return static<int,string>
      * @psalm-mutation-free
      */
     public static function createFromString(string $str, string $delimiter = null, string $regEx = null): self
@@ -1890,8 +1892,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-param \Traversable<array-key|TKey,T> $traversable
-     * @psalm-return static<int|TKey,T>
+     * @phpstan-param \Traversable<array-key|TKey,T> $traversable
+     * @phpstan-return static<int|TKey,T>
      * @psalm-mutation-free
      */
     public static function createFromTraversableImmutable(\Traversable $traversable, bool $use_keys = true): self
@@ -1909,7 +1911,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @psalm-return static<int,int|string>
+     * @phpstan-return static<int,int|string>
      * @psalm-mutation-free
      */
     public static function createWithRange($low, $high, $step = 1): self
@@ -1922,7 +1924,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return false|mixed
      *
-     * @psalm-return false|T
+     * @phpstan-return false|T
      */
     public function current()
     {
@@ -1956,7 +1958,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function customSortKeys(callable $function): self
     {
@@ -1979,7 +1981,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function customSortKeysImmutable(callable $function): self
@@ -2014,19 +2016,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param callable $function
      *
-     * @throws \InvalidArgumentException
-     *
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
-    public function customSortValues($function): self
+    public function customSortValues(callable $function): self
     {
-        if (\is_callable($function) === false) {
-            throw new \InvalidArgumentException('Passed function must be callable');
-        }
-
         $this->generatorToArray();
 
         \usort($this->array, $function);
@@ -2046,7 +2042,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function customSortValuesImmutable($function): self
@@ -2089,8 +2085,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> ...$array
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> ...$array
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function diff(array ...$array): self
@@ -2124,8 +2120,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> ...$array
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> ...$array
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function diffKey(array ...$array): self
@@ -2159,8 +2155,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> $array
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> $array
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function diffKeyAndValue(array ...$array): self
@@ -2185,9 +2181,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> $array
-     * @psalm-param  null|array<TKey,T>|\Generator<TKey,T> $helperVariableForRecursion
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> $array
+     * @phpstan-param  null|array<TKey,T>|\Generator<TKey,T> $helperVariableForRecursion
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function diffRecursive(array $array = [], $helperVariableForRecursion = null): self
@@ -2238,8 +2234,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> $array
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> $array
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function diffReverse(array $array = []): self
@@ -2261,7 +2257,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function divide(): self
@@ -2292,7 +2288,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-param \Closure(T=):T|\Closure(T=,TKey=):T $closure
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function each(\Closure $closure): self
@@ -2316,7 +2313,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return false|mixed
      *
-     * @psalm-return T|false
+     * @phpstan-return T|false
      */
     public function end()
     {
@@ -2351,6 +2348,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *              <p>Returns true if the given value is found, false otherwise.</p>
+     *
+     * @phpstan-param \Closure(T=,TKey=):bool $closure
      */
     public function exists(\Closure $closure): bool
     {
@@ -2381,7 +2380,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-param T $default
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function fillWithDefaults(int $num, $default = null): self
@@ -2444,8 +2444,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param null|\Closure(T=,TKey=):bool|\Closure(T=):bool||\Closure(TKey=):bool $closure
-     * @psalm-return static<TKey,T>
+     * @phpstan-param null|\Closure(T=,TKey=):bool|\Closure(T=):bool|\Closure(TKey=):bool $closure
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH)
@@ -2455,6 +2455,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($flag === \ARRAY_FILTER_USE_KEY) {
+            /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
+            /** @phpstan-var \Closure(TKey=):bool $closure */
+            $closure = $closure;
+
             $generator = function () use ($closure) {
                 foreach ($this->getGenerator() as $key => $value) {
                     if ($closure($key) === true) {
@@ -2463,6 +2467,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 }
             };
         } elseif ($flag === \ARRAY_FILTER_USE_BOTH) {
+            /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
+            /** @phpstan-var \Closure(T=,TKey=):bool $closure */
+            $closure = $closure;
+
             $generator = function () use ($closure) {
                 foreach ($this->getGenerator() as $key => $value) {
                     if ($closure($value, $key) === true) {
@@ -2471,6 +2479,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 }
             };
         } else {
+            /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
+            /** @phpstan-var \Closure(T=):bool $closure */
+            $closure = $closure;
+
             $generator = function () use ($closure) {
                 foreach ($this->getGenerator() as $key => $value) {
                     if ($closure($value) === true) {
@@ -2510,8 +2522,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param mixed|T $value
-     * @psalm-return static<TKey,T>
+     * @phpstan-param mixed|T $value
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      *
      * @psalm-suppress MissingClosureReturnType
@@ -2605,6 +2617,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return false|mixed
      *                     <p>Return false if we did not find the value.</p>
+     *
+     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-return T|false
      */
     public function find(\Closure $closure)
     {
@@ -2635,8 +2650,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param mixed|T $value
-     * @psalm-return static<TKey,T>
+     * @phpstan-param mixed|T $value
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function findBy(string $property, $value, string $comparisonOp = 'eq'): self
@@ -2651,8 +2666,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
      * </code>
      *
-     * @return mixed
-     *               <p>Return null if there wasn't a element.</p>
+     * @return mixed|null
+     *                    <p>Return null if there wasn't a element.</p>
+     *
+     * @phpstan-return T|null
+     * @psalm-mutation-free
      */
     public function first()
     {
@@ -2667,8 +2685,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the first key from the current array.
      *
-     * @return mixed
-     *               <p>Return null if there wasn't a element.</p>
+     * @return mixed|null
+     *                    <p>Return null if there wasn't a element.</p>
+     *
      * @psalm-mutation-free
      */
     public function firstKey()
@@ -2691,7 +2710,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function firstsImmutable(int $number = null): self
@@ -2720,7 +2739,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function firstsKeys(int $number = null): self
@@ -2753,7 +2772,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function firstsMutable(int $number = null): self
     {
@@ -2778,7 +2797,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<array-key,TKey>
+     * @phpstan-return static<array-key,TKey>
      * @psalm-mutation-free
      */
     public function flip(): self
@@ -2811,15 +2830,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * $arrayy['user.firstname']; // Lars
      * </code>
      *
-     * @param mixed $key            <p>The key to look for.</p>
-     * @param mixed $fallback       <p>Value to fallback to.</p>
-     * @param array $array          <p>The array to get from, if it's set to "null" we use the current array from the
-     *                              class.</p>
-     * @param bool  $useByReference
+     * @param int|string $key            <p>The key to look for.</p>
+     * @param mixed      $fallback       <p>Value to fallback to.</p>
+     * @param array      $array          <p>The array to get from, if it's set to "null" we use the current array from the
+     *                                   class.</p>
+     * @param bool       $useByReference
      *
      * @return mixed|static
      *
-     * @psalm-param array<mixed,mixed>|array<TKey,T> $array
+     * @phpstan-param array-key $key
+     * @phpstan-param array<array-key,mixed>|array<TKey,T> $array
      * @psalm-mutation-free
      */
     public function get(
@@ -2861,6 +2881,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         // php cast "bool"-index into "int"-index
+        /** @phpstan-ignore-next-line | this is only a fallback */
         if ((bool) $key === $key) {
             $key = (int) $key;
         }
@@ -3002,7 +3023,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see          Arrayy::getArray()
      *
-     * @psalm-return array<mixed,mixed>|array<TKey,T>
+     * @phpstan-return array<TKey,T>
      */
     public function getAll(): array
     {
@@ -3024,7 +3045,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @psalm-return array<mixed,mixed>|array<TKey,T>
+     * @phpstan-return array<TKey,T>
      * @psalm-mutation-free
      *
      * @see Arrayy::toArray()
@@ -3086,7 +3107,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @psalm-return array<int,mixed>|array<int,T>
+     * @phpstan-return list<mixed>|list<T>
      * @psalm-mutation-free
      *
      * @see Arrayy::toList()
@@ -3113,7 +3134,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function getColumn($columnKey = null, $indexKey = null): self
@@ -3182,7 +3203,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return \Generator
      *
-     * @psalm-return \Generator<mixed,T>|\Generator<TKey,T>
+     * @phpstan-return \Generator<mixed,T>|\Generator<TKey,T>
      */
     public function &getGeneratorByReference(): \Generator
     {
@@ -3209,7 +3230,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return \Generator
      *
-     * @psalm-return \Generator<mixed,T>|\Generator<TKey,T>
+     * @phpstan-return \Generator<mixed,T>|\Generator<TKey,T>
      * @psalm-mutation-free
      */
     public function getGenerator(): \Generator
@@ -3231,7 +3252,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see          Arrayy::keys()
      *
-     * @psalm-return static<int,TKey>
+     * @phpstan-return static<int,TKey>
      * @psalm-mutation-free
      */
     public function getKeys()
@@ -3257,7 +3278,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see          Arrayy::randomImmutable()
      *
-     * @psalm-return static<int|array-key,T>
+     * @phpstan-return static<int|array-key,T>
      */
     public function getRandom(): self
     {
@@ -3287,7 +3308,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see          Arrayy::randomKeys()
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function getRandomKeys(int $number): self
     {
@@ -3317,7 +3338,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see          Arrayy::randomValues()
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function getRandomValues(int $number): self
     {
@@ -3331,7 +3352,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                <p>The values of all elements in this array, in the order they
      *                appear in the array.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function getValues()
     {
@@ -3351,7 +3372,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                    <p>The values of all elements in this array, in the order they
      *                    appear in the array as Generator.</p>
      *
-     * @psalm-return \Generator<TKey,T>
+     * @phpstan-return \Generator<TKey,T>
      */
     public function getValuesYield(): \Generator
     {
@@ -3367,7 +3388,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function group($grouper, bool $saveKeys = false): self
@@ -3501,7 +3522,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function indexBy($key): self
@@ -3548,7 +3569,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function initial(int $to = 1): self
@@ -3569,8 +3590,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> $search
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> $search
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function intersection(array $search, bool $keepKeys = false): self
@@ -3608,8 +3629,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> ...$array
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<array<TKey,T>> ...$array
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function intersectionMulti(...$array): self
@@ -3632,7 +3653,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *
-     * @psalm-param array<mixed,mixed>|array<TKey,T> $search
+     * @phpstan-param array<TKey,T> $search
      */
     public function intersects(array $search): bool
     {
@@ -3648,8 +3669,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  callable(T=,mixed):mixed $callable
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  callable(T=,mixed):mixed $callable
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function invoke($callable, $arguments = []): self
@@ -3744,7 +3765,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *
-     * @psalm-param array<mixed,mixed> $array
+     * @phpstan-param array<int|string,mixed> $array
      */
     public function isEqual(array $array): bool
     {
@@ -3840,7 +3861,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @return array
      *
-     * @psalm-return array<mixed,mixed>|array<TKey,T>
+     * @phpstan-return array<TKey,T>
      */
     public function jsonSerialize(): array
     {
@@ -3851,7 +3872,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Gets the key/index of the element at the current internal iterator position.
      *
      * @return int|string|null
-     * @psalm-return array-key|null
+     * @phpstan-return array-key|null
      */
     public function key()
     {
@@ -3904,7 +3925,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) An array of all the keys in input.</p>
      *
-     * @psalm-return static<int,TKey>
+     * @phpstan-return static<int,TKey>
      * @psalm-mutation-free
      */
     public function keys(
@@ -3991,7 +4012,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function krsort(int $sort_flags = 0): self
     {
@@ -4014,7 +4035,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function krsortImmutable(int $sort_flags = 0): self
@@ -4038,6 +4059,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return mixed|null
      *                    <p>Return null if there wasn't a element.</p>
+     *
+     * @phpstan-return T|null
      * @psalm-mutation-free
      */
     public function last()
@@ -4076,7 +4099,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function lastsImmutable(int $number = null): self
@@ -4122,7 +4145,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function lastsMutable(int $number = null): self
     {
@@ -4167,8 +4190,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Arrayy object with modified elements.</p>
      *
-     * @psalm-param  callable(T,TKey=,mixed=):mixed $callable
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  callable(T,TKey=,mixed=):mixed $callable
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function map(
@@ -4218,6 +4241,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param \Closure $closure
      *
      * @return bool
+     *
+     * @phpstan-param \Closure(T=,TKey=):bool $closure
      */
     public function matches(\Closure $closure): bool
     {
@@ -4249,6 +4274,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param \Closure $closure
      *
      * @return bool
+     *
+     * @phpstan-param \Closure(T=,TKey=):bool $closure
      */
     public function matchesAny(\Closure $closure): bool
     {
@@ -4274,8 +4301,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([-9, -8, -7, 1.32])->max(); // 1.32
      * </code>
      *
-     * @return false|mixed
-     *                     <p>Will return false if there are no values.</p>
+     * @return false|float|int|string
+     *                                <p>Will return false if there are no values.</p>
      */
     public function max()
     {
@@ -4319,8 +4346,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> $array
-     * @psalm-return static<int|TKey,T>
+     * @phpstan-param  array<int|TKey,T> $array
+     * @phpstan-return static<int|TKey,T>
      * @psalm-mutation-free
      */
     public function mergeAppendKeepIndex(array $array = [], bool $recursive = false): self
@@ -4361,8 +4388,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> $array
-     * @psalm-return static<int,T>
+     * @phpstan-param  array<TKey,T> $array
+     * @phpstan-return static<int,T>
      * @psalm-mutation-free
      */
     public function mergeAppendNewIndex(array $array = [], bool $recursive = false): self
@@ -4402,8 +4429,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> $array
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> $array
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function mergePrependKeepIndex(array $array = [], bool $recursive = false): self
@@ -4444,8 +4471,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> $array
-     * @psalm-return static<int,T>
+     * @phpstan-param  array<TKey,T> $array
+     * @phpstan-return static<int,T>
      * @psalm-mutation-free
      */
     public function mergePrependNewIndex(array $array = [], bool $recursive = false): self
@@ -4508,6 +4535,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return mixed|null
      *                    <p>(Immutable) Return null if there wasn't a element.</p>
+     *
+     * @phpstan-return T|null
      * @psalm-mutation-free
      */
     public function mostUsedValue()
@@ -4523,7 +4552,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function mostUsedValues(int $number = null): self
@@ -4545,7 +4574,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function moveElement($from, $to): self
@@ -4593,7 +4622,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function moveElementToFirstPlace($key): self
@@ -4624,7 +4653,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function moveElementToLastPlace($key): self
@@ -4650,7 +4679,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return false|mixed
      *                     <p>(Mutable) Will return false if there are no values.</p>
      *
-     * @psalm-return false|T
+     * @phpstan-return false|T
      */
     public function next()
     {
@@ -4672,7 +4701,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function nth(int $step, int $offset = 0): self
@@ -4703,8 +4732,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param array-key[] $keys
-     * @psalm-return static<TKey,T>
+     * @phpstan-param array-key[] $keys
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function only(array $keys): self
@@ -4735,7 +4764,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Arrayy object padded to $size with $value.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function pad(int $size, $value): self
@@ -4759,7 +4788,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                    of elements where the predicate returned TRUE, the second element
      *                    contains the array of elements where the predicate returned FALSE.</p>
      *
-     * @psalm-return array<int, static<TKey,T>>
+     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-return array<int, static<TKey,T>>
      */
     public function partition(\Closure $closure): array
     {
@@ -4783,6 +4813,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return mixed|null
      *                    <p>(Mutable) The popped element from the current array or null if the array is e.g. empty.</p>
+     *
+     * @phpstan-return T|null
      */
     public function pop()
     {
@@ -4804,9 +4836,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with the prepended value.</p>
      *
-     * @psalm-param T $value
-     * @psalm-param TKey|null $key
-     * @psalm-return static<TKey,T>
+     * @phpstan-param T $value
+     * @phpstan-param TKey|null $key
+     * @phpstan-return static<TKey,T>
      */
     public function prepend($value, $key = null)
     {
@@ -4838,9 +4870,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object, with the prepended value.</p>
      *
-     * @psalm-param T $value
-     * @psalm-param TKey $key
-     * @psalm-return static<TKey,T>
+     * @phpstan-param T $value
+     * @phpstan-param TKey $key
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function prependImmutable($value, $key = null)
@@ -4872,12 +4904,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Add a suffix to each key.
      *
-     * @param mixed $suffix
+     * @param float|int|string $suffix
      *
      * @return static
      *                <p>(Immutable) Return an Arrayy object, with the prepended keys.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function prependToEachKey($suffix): self
@@ -4910,12 +4942,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Add a suffix to each value.
      *
-     * @param mixed $suffix
+     * @param float|int|string $suffix
      *
      * @return static
      *                <p>(Immutable) Return an Arrayy object, with the prepended values.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function prependToEachValue($suffix): self
@@ -4989,8 +5021,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @noinspection ReturnTypeCanBeDeclaredInspection
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> ...$args
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> ...$args
+     * @phpstan-return static<TKey,T>
      */
     public function push(...$args)
     {
@@ -5023,7 +5055,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<int|array-key,T>
+     * @phpstan-return static<int|array-key,T>
      */
     public function randomImmutable(int $number = null): self
     {
@@ -5097,7 +5129,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function randomKeys(int $number): self
     {
@@ -5140,7 +5172,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function randomMutable(int $number = null): self
     {
@@ -5201,7 +5233,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function randomValues(int $number): self
     {
@@ -5221,8 +5253,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static<int,mixed>
      *                           <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed> $array
-     * @psalm-return static<int|array-key,T>
+     * @phpstan-param  array<T,int> $array
+     * @phpstan-return static<(int|string),T>
      */
     public function randomWeighted(array $array, int $number = null): self
     {
@@ -5258,7 +5290,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function reduce($callable, $initial = []): self
@@ -5280,7 +5312,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<int,mixed>
+     * @phpstan-return static<int,mixed>
      * @psalm-mutation-free
      */
     public function reduce_dimension(bool $unique = true): self
@@ -5317,7 +5349,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with re-indexed array-elements.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function reindex(): self
     {
@@ -5343,7 +5375,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-param \Closure(T=,TKey=):bool  $closure
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function reject(\Closure $closure): self
@@ -5376,8 +5409,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      *
-     * @psalm-param  TKey $key
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  TKey $key
+     * @phpstan-return static<TKey,T>
      */
     public function remove($key)
     {
@@ -5411,8 +5444,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  T $element
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  T $element
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function removeElement($element)
@@ -5430,7 +5463,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function removeFirst(): self
@@ -5456,7 +5489,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function removeLast(): self
@@ -5484,8 +5517,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  T $value
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  T $value
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function removeValue($value): self
@@ -5497,6 +5530,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         foreach ($this->array as $key => $item) {
             if ($item === $value) {
+                /** @phpstan-ignore-next-line | "Possibly invalid array key type int|string|TKey.", is this a bug in phpstan? */
                 unset($this->array[$key]);
             }
         }
@@ -5520,7 +5554,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function repeat($times): self
@@ -5551,7 +5585,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function replace($oldKey, $newKey, $newValue): self
@@ -5590,8 +5624,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                for each array isn't equal or if the arrays are empty.
      *                </p>
      *
-     * @psalm-param  array<array-key,TKey> $keys
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<array-key,TKey> $keys
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function replaceAllKeys(array $keys): self
@@ -5633,8 +5667,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                for each array isn't equal or if the arrays are empty.
      *                </p>
      *
-     * @psalm-param  array<array-key,T> $array
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<array-key,T> $array
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function replaceAllValues(array $array): self
@@ -5658,13 +5692,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']); // Arrayy[2 => 'bar', 'replaced' => 'foo']
      * </code>
      *
-     * @param array $keys <p>An array of keys matching the array's size</p>
+     * @param array $keys <p>An array of keys matching the array's size.</p>
      *
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<array-key,TKey> $keys
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<array-key,TKey> $keys
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function replaceKeys(array $keys): self
@@ -5696,7 +5730,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function replaceOneValue($search, $replacement = ''): self
@@ -5723,26 +5757,23 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a($testArray)->replaceValues('foo', 'replaced'); // Arrayy['bar', 'foo' => 'replaced', 'foobar' => 'replacedbar']
      * </code>
      *
-     * @param mixed $search      <p>The value to replace.</p>
-     * @param mixed $replacement <p>What to replace it with.</p>
+     * @param string $search      <p>The value to replace.</p>
+     * @param string $replacement <p>What to replace it with.</p>
      *
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function replaceValues($search, $replacement = ''): self
     {
-        /**
-         * @psalm-suppress MissingClosureReturnType
-         * @psalm-suppress MissingClosureParamType
-         */
-        return $this->each(
-            static function ($value) use ($search, $replacement) {
-                return \str_replace($search, $replacement, $value);
-            }
-        );
+        $function = static function ($value) use ($search, $replacement) {
+            return \str_replace($search, $replacement, $value);
+        };
+
+        /** @phpstan-ignore-next-line | ignore Closure with one or two parameters, is this a bug in phpstan? */
+        return $this->each($function);
     }
 
     /**
@@ -5757,7 +5788,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function rest(int $from = 1): self
@@ -5781,7 +5812,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function reverse(): self
     {
@@ -5804,7 +5835,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function rsort(int $sort_flags = 0): self
     {
@@ -5827,7 +5858,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function rsortImmutable(int $sort_flags = 0): self
@@ -5878,7 +5909,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Will return a empty Arrayy if the value wasn't found.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function searchValue($index): self
@@ -5926,9 +5957,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-param  TKey $key
-     * @psalm-param  T $value
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  TKey $key
+     * @phpstan-param  T $value
+     * @phpstan-return static<TKey,T>
      */
     public function set($key, $value): self
     {
@@ -5992,8 +6023,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<TKey,T> $array
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> $array
+     * @phpstan-return static<TKey,T>
      *
      * @noinspection BadExceptionsProcessingInspection
      * @noinspection NonSecureShuffleUsageInspection
@@ -6026,6 +6057,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         foreach ($array as $key => $value) {
             // check if recursive is needed
             if (\is_array($value)) {
+                /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
+                /** @phpstan-var array<TKey,T> $value */
+                $value = $value;
+
                 $array[$key] = $this->shuffle($secure, $value);
             }
         }
@@ -6193,7 +6228,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) A slice of the original array with length $length.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function slice(int $offset, int $length = null, bool $preserveKeys = false)
@@ -6225,7 +6260,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<int|TKey,T>
+     * @phpstan-return static<int|TKey,T>
      */
     public function sort(
         $direction = \SORT_ASC,
@@ -6253,7 +6288,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<int|TKey,T>
+     * @phpstan-return static<int|TKey,T>
      */
     public function sortImmutable(
         $direction = \SORT_ASC,
@@ -6289,7 +6324,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function sortKeys(
         $direction = \SORT_ASC,
@@ -6315,7 +6350,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function sortKeysImmutable(
@@ -6346,7 +6381,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<int|TKey,T>
      */
     public function sortValueKeepIndex(
         $direction = \SORT_ASC,
@@ -6369,7 +6404,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      *
-     * @psalm-return static<int,T>
+     * @phpstan-return static<int|TKey,T>
      */
     public function sortValueNewIndex($direction = \SORT_ASC, int $strategy = \SORT_REGULAR): self
     {
@@ -6402,7 +6437,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                <p>(Immutable)</p>
      *
      * @pslam-param callable|T|null $sorter
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function sorter($sorter = null, $direction = \SORT_ASC, int $strategy = \SORT_REGULAR): self
@@ -6455,8 +6490,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<mixed,T> $replacement
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<mixed,T> $replacement
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function splice(int $offset, int $length = null, $replacement = []): self
@@ -6490,7 +6525,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function split(int $numberOfPieces = 2, bool $keepKeys = false): self
@@ -6560,7 +6595,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function stripEmpty(): self
@@ -6589,7 +6624,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function swap($swapA, $swapB): self
@@ -6619,7 +6654,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @psalm-return array<mixed,mixed>|array<TKey,T>
+     * @phpstan-return array<TKey,T>
      * @psalm-mutation-free
      */
     public function toArray(
@@ -6648,6 +6683,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $array = \iterator_to_array($this->getGenerator(), $preserveKeys);
         }
 
+        /** @phpstan-ignore-next-line - depends on the $convertAllArrayyElements parameter :/ */
         return $array;
     }
 
@@ -6660,7 +6696,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @psalm-return list<array<TKey,T>>
+     * @phpstan-return list<mixed>|list<T>
      * @psalm-mutation-free
      */
     public function toList(bool $convertAllArrayyElements = false): array
@@ -6699,7 +6735,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static|static[]
      *
-     * @psalm-return static<int, static<TKey,T>>
+     * @phpstan-return static<int, static<TKey,T>>
      */
     public function toPermutation(array $items = null, array $helper = []): self
     {
@@ -6758,7 +6794,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable)</p>
      *
-     * @psalm-return static<int,T>
+     * @phpstan-return static<int,T>
      */
     public function uniqueNewIndex(): self
     {
@@ -6793,7 +6829,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function uniqueKeepIndex(): self
     {
@@ -6830,7 +6866,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see          Arrayy::unique()
      *
-     * @psalm-return static<int,T>
+     * @phpstan-return static<int,T>
      */
     public function unique(): self
     {
@@ -6845,8 +6881,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with prepended elements to the beginning of array.</p>
      *
-     * @psalm-param  array<TKey,T> ...$args
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<TKey,T> ...$args
+     * @phpstan-return static<TKey,T>
      */
     public function unshift(...$args): self
     {
@@ -6874,6 +6910,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *              <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>
+     *
+     * @phpstan-param \Closure(T=,TKey=):bool $closure
      */
     public function validate(\Closure $closure): bool
     {
@@ -6897,7 +6935,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
     public function values(): self
@@ -6935,7 +6973,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with modified elements.</p>
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function walk(
         $callable,
@@ -6974,7 +7012,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return static
      *
-     * @psalm-return static<TKey,T>
+     * @phpstan-return static<TKey,T>
      */
     public function where(string $keyOrPropertyOrMethod, $value): self
     {
@@ -6997,7 +7035,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return \stdClass
      *
-     * @psalm-param array<mixed,mixed> $array
+     * @phpstan-param array<int|string,mixed> $array
      */
     final protected static function arrayToObject(array $array = []): \stdClass
     {
@@ -7032,10 +7070,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                             </p>
      *
      * @return array
-     *               <p>an array of all the keys in input</p>
+     *               <p>An array of all the keys in input.</p>
      *
-     * @psalm-param  array<mixed,mixed>|\Generator<TKey,T>|null $input
-     * @psalm-return array<TKey|mixed>
+     * @phpstan-param  array<mixed>|null $input
+     * @phpstan-return array<mixed>
      * @psalm-mutation-free
      */
     protected function array_keys_recursive(
@@ -7107,7 +7145,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return void
      *
-     * @psalm-param array<mixed,mixed>|array<TKey,T>|null $currentOffset
+     * @phpstan-param array<TKey,T>|null $currentOffset
      * @psalm-mutation-free
      */
     protected function callAtPath($path, $callable, &$currentOffset = null)
@@ -7152,7 +7190,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *               <p>The value extracted from the specified property or method.</p>
      *
-     * @psalm-param self<TKey,T> $object
+     * @phpstan-param self<TKey,T> $object
      */
     final protected function extractValue(self $object, string $keyOrPropertyOrMethod)
     {
@@ -7194,7 +7232,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return array
      *
-     * @psalm-return array<mixed,mixed>|array<TKey,T>
+     * @phpstan-return array<mixed>|array<TKey,T>
      */
     protected function fallbackForArray(&$data): array
     {
@@ -7328,6 +7366,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param bool  $useKeys
      *
      * @return string
+     *
+     * @phpstan-param scalar|object|self<TKey|T>|array<TKey,T> $pieces
      * @psalm-mutation-free
      */
     protected function implode_recursive(
@@ -7340,6 +7380,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if (\is_array($pieces)) {
+            /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
+            /** @phpstan-var array<TKey,T> $pieces */
+            $pieces = $pieces;
+
             $pieces_count = \count($pieces, \COUNT_NORMAL);
             $pieces_count_not_zero = $pieces_count > 0;
 
@@ -7385,7 +7429,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>true if needle is found in the array, false otherwise</p>
      *
-     * @psalm-param array<mixed,mixed>|\Generator<TKey,T>|null $haystack
+     * @phpstan-param (array&T)|array<TKey,T>|\Generator<TKey,T>|null $haystack
      * @psalm-mutation-free
      */
     protected function in_array_recursive($needle, $haystack = null, $strict = true): bool
@@ -7417,9 +7461,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @param mixed $data
      *
-     * @return array|null
-     *
-     * @psalm-return array<mixed,mixed>|array<TKey,T>|null
+     * @return array<mixed>|null
      */
     protected function internalGetArray(&$data)
     {
@@ -7542,7 +7584,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $this->generatorToArray();
 
-        /** @psalm-var array<int|string,mixed> $array */
+        /** @phpstan-var array<int|string,mixed> $array */
         $array = &$this->array;
 
         /**
@@ -7612,7 +7654,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return void
      *
-     * @psalm-param array<mixed,T> $data
+     * @phpstan-param array<mixed,T> $data
      */
     protected function setInitialValuesAndProperties(array &$data, bool $checkPropertiesInConstructor)
     {
@@ -7671,8 +7713,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-param  array<mixed,mixed>|array<mixed|TKey,T> $elements
-     * @psalm-return static<TKey,T>
+     * @phpstan-param  array<mixed|TKey,T> $elements
+     * @phpstan-return static<TKey,T>
      */
     protected function sorterKeys(
         array &$elements,
@@ -7706,8 +7748,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @psalm-param array<mixed,mixed>|array<mixed|TKey,T> $elements
-     * @psalm-return static<int|TKey,T>
+     * @phpstan-param array<mixed|TKey,T> $elements
+     * @phpstan-return static<int|TKey,T>
      */
     protected function sorting(
         array &$elements,

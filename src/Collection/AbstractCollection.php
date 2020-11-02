@@ -31,13 +31,13 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
 {
     /**
      * @var array
-     * @psalm-var array<T>
+     * @phpstan-var array<T>
      */
     protected $array = [];
 
     /**
      * @var ArrayyRewindableGenerator|null
-     * @psalm-var \Arrayy\ArrayyRewindableGenerator<TKey,T>|null
+     * @phpstan-var \Arrayy\ArrayyRewindableGenerator<TKey,T>|null
      */
     protected $generator;
 
@@ -75,8 +75,8 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
      *
-     * @psalm-param array<TKey,T>|\Arrayy\Arrayy<TKey,T>|\Closure():array<TKey,T>|mixed $data
-     * @psalm-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param array<TKey,T>|\Arrayy\Arrayy<TKey,T>|\Closure():array<TKey,T>|mixed $data
+     * @phpstan-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -116,9 +116,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return $this
      *               <p>(Mutable) Return this CollectionInterface object, with the appended values.</p>
      *
-     * @psalm-param T|static $value
-     * @psalm-param TKey|null $key
-     * @psalm-return static<TKey,T>
+     * @phpstan-param T|static $value
+     * @phpstan-param TKey|null $key
+     * @phpstan-return static<TKey,T>
      */
     public function append($value, $key = null): Arrayy
     {
@@ -170,9 +170,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return $this
      *               <p>(Mutable) Return this CollectionInterface object, with the prepended value.</p>
      *
-     * @psalm-param T|static $value
-     * @psalm-param TKey|null $key
-     * @psalm-return static<TKey,T>
+     * @phpstan-param T|static $value
+     * @phpstan-param TKey|null $key
+     * @phpstan-return static<TKey,T>
      */
     public function prepend($value, $key = null): Arrayy
     {
@@ -233,8 +233,8 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return $this
      *
-     * @psalm-param CollectionInterface<TKey,T> ...$collections
-     * @psalm-return static<TKey,T>
+     * @phpstan-param CollectionInterface<TKey,T> ...$collections
+     * @phpstan-return static<TKey,T>
      */
     public function merge(CollectionInterface ...$collections): self
     {
@@ -259,9 +259,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @template     TKeyCreate as int|string
      * @template     TCreate
-     * @psalm-param  array<TKeyCreate,TCreate> $data
-     * @psalm-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
-     * @psalm-return static<TKeyCreate,TCreate>
+     * @phpstan-param  array<TKeyCreate,TCreate> $data
+     * @phpstan-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-return static<TKeyCreate,TCreate>
      * @psalm-mutation-free
      */
     public static function create(
@@ -282,7 +282,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return static
      *                <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
-     * @psalm-return static<int,T>
+     * @phpstan-return static<int,T>
      *
      * @psalm-mutation-free
      */
@@ -365,8 +365,8 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return TypeCheckArray
      *
-     * @psalm-param null|string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|array<array-key,TypeCheckInterface>|mixed $type
-     * @psalm-return TypeCheckArray<array-key,TypeCheckInterface>
+     * @phpstan-param null|string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|array<array-key,TypeCheckInterface>|mixed $type
+     * @phpstan-return TypeCheckArray<array-key,TypeCheckInterface>
      */
     protected static function convertIntoTypeCheckArray($type): TypeCheckArray
     {

@@ -10,18 +10,16 @@ namespace {
              * @param mixed $var
              *
              * @return bool
-             *
-             * @noinspection PhpComposerExtensionStubsInspection
              */
             function is_countable($var)
             {
                 return \is_array($var)
                        ||
+                       $var instanceof SimpleXMLElement
+                       ||
                        $var instanceof Countable
                        ||
-                       $var instanceof ResourceBundle
-                       ||
-                       $var instanceof SimpleXMLElement;
+                       $var instanceof ResourceBundle;
             }
         }
 
@@ -92,8 +90,8 @@ namespace Arrayy {
          * @return Collection
          *
          * @template T
-         * @psalm-param T $type
-         * @psalm-return Collection<int|string,T>
+         * @phpstan-param T $type
+         * @phpstan-return Collection<int|string,T>
          */
         function collection($type, $data = []): Collection
         {
@@ -109,9 +107,9 @@ namespace Arrayy {
      *
      * @template TLast
      * @template TLastFallback
-     * @psalm-param TLast[] $array
-     * @psalm-param TLastFallback $fallback
-     * @psalm-return TLast|TLastFallback
+     * @phpstan-param TLast[] $array
+     * @phpstan-param TLastFallback $fallback
+     * @phpstan-return TLast|TLastFallback
      */
     function array_last(array $array, $fallback = null)
     {
@@ -131,13 +129,13 @@ namespace Arrayy {
      *
      * @template TFirst
      * @template TFirstFallback
-     * @psalm-param TFirst[] $array
-     * @psalm-param TFirstFallback $fallback
-     * @psalm-return TFirst|TFirstFallback
+     * @phpstan-param TFirst[] $array
+     * @phpstan-param TFirstFallback $fallback
+     * @phpstan-return TFirst|TFirstFallback
      */
     function array_first(array $array, $fallback = null)
     {
-        $key_first = array_key_first($array);
+        $key_first = \array_key_first($array);
         if ($key_first === null) {
             return $fallback;
         }

@@ -43,7 +43,6 @@ final class BoolTypeTest extends TestCase
             }
         }
 
-        /** @phpstan-ignore-next-line */
         static::assertTrue($test);
     }
 

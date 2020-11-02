@@ -18,7 +18,7 @@ class ModelsCollection extends \Arrayy\Collection\AbstractCollection
      *
      * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
      *
-     * @psalm-return string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|TypeCheckInterface[]
+     * @phpstan-return string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|TypeCheckInterface[]
      */
     public function getType()
     {

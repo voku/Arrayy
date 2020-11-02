@@ -51,7 +51,7 @@ final class Json
      * @param iterable      $json   JSON object structure from json_decode()
      * @param object|string $object Object to map $json data into
      *
-     * @psalm-param object|class-string $object Object to map $json data into
+     * @phpstan-param object|class-string $object Object to map $json data into
      *
      * @return mixed mapped object is returned
      *
@@ -177,13 +177,13 @@ final class Json
                     $array = [];
                 } else {
                     /** @noinspection PhpSillyAssignmentInspection - phpstan helper */
-                    /** @psalm-var class-string $proptype */
+                    /** @phpstan-var class-string $proptype */
                     $proptype = $proptype;
                     $array = self::createInstance($proptype, false, $jsonValue);
                 }
             } elseif (\is_a($type, \ArrayObject::class, true)) {
                 /** @noinspection PhpSillyAssignmentInspection - phpstan helper */
-                /** @psalm-var \ArrayObject<mixed, mixed> $type */
+                /** @phpstan-var \ArrayObject<mixed, mixed> $type */
                 $type = $type;
                 $array = self::createInstance($type, false, $jsonValue);
             }
@@ -206,12 +206,12 @@ final class Json
             } elseif ($this->isScalarType(\gettype($jsonValue))) {
                 // use constructor parameter if we have a class, but only a flat type (i.e. string, int)
                 /** @noinspection PhpSillyAssignmentInspection - phpstan helper */
-                /** @psalm-var object $type */
+                /** @phpstan-var object $type */
                 $type = $type;
                 $child = self::createInstance($type, true, $jsonValue);
             } else {
                 /** @noinspection PhpSillyAssignmentInspection - phpstan helper */
-                /** @psalm-var object $type */
+                /** @phpstan-var object $type */
                 $type = $type;
                 $child = self::createInstance($type, false, $jsonValue);
                 $this->map($jsonValue, $child);
@@ -263,7 +263,7 @@ final class Json
                     $array[$key] = $jsonValue;
                 } else {
                     /** @noinspection PhpSillyAssignmentInspection - phpstan helper */
-                    /** @psalm-var class-string $class */
+                    /** @phpstan-var class-string $class */
                     $class = $class;
                     $array[$key] = self::createInstance(
                         $class,
@@ -277,7 +277,7 @@ final class Json
                 );
             } elseif (\is_a($class, \ArrayObject::class, true)) {
                 /** @noinspection PhpSillyAssignmentInspection - phpstan helper */
-                /** @psalm-var \ArrayObject<mixed, mixed> $class */
+                /** @phpstan-var \ArrayObject<mixed, mixed> $class */
                 $class = $class;
                 $array[$key] = $this->mapArray(
                     $jsonValue,
@@ -285,7 +285,7 @@ final class Json
                 );
             } else {
                 /** @noinspection PhpSillyAssignmentInspection - phpstan helper */
-                /** @psalm-var class-string $class */
+                /** @phpstan-var class-string $class */
                 $class = $class;
                 $array[$key] = $this->map(
                     $jsonValue,
@@ -351,7 +351,7 @@ final class Json
         $accessor = null;
 
         /** @var \Arrayy\Arrayy[] $ARRAYY_CACHE */
-        /** @psalm-var array<string, \Arrayy\Arrayy<mixed, mixed>> $ARRAYY_CACHE */
+        /** @phpstan-var array<string, \Arrayy\Arrayy<mixed, mixed>> $ARRAYY_CACHE */
         static $ARRAYY_CACHE = [];
 
         if (\is_subclass_of($class->name, \Arrayy\Arrayy::class)) {
@@ -516,7 +516,7 @@ final class Json
      *
      * @return string|null The mapped type/class name
      *
-     * @psalm-return class-string|string|null
+     * @phpstan-return class-string|string|null
      */
     private function getMappedType($type, $jsonValue = null)
     {
@@ -666,7 +666,7 @@ final class Json
      * @param bool          $useParameter Pass $parameter to the constructor or not
      * @param mixed         $jsonValue    Constructor parameter (the json value)
      *
-     * @psalm-param object|class-string $class
+     * @phpstan-param object|class-string $class
      *
      * @return object Freshly created object
      *
