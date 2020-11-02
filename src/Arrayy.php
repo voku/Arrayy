@@ -2161,8 +2161,28 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function diffKeyAndValue(array ...$array): self
     {
+        if (\count($array) > 1) {
+            $array = \array_merge([], ...$array);
+        } else {
+            $array = $array[0];
+        }
+
+        $generator = function () use ($array): \Generator {
+            foreach ($this->getGenerator() as $key => $value) {
+                $isset = isset($array[$key]);
+
+                if (
+                    !$isset
+                    ||
+                    $array[$key] !== $value
+                ) {
+                    yield $key => $value;
+                }
+            }
+        };
+
         return static::create(
-            \array_diff_assoc($this->toArray(), ...$array),
+            $generator,
             $this->iteratorClass,
             false
         );
