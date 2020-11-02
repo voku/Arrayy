@@ -559,7 +559,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#appendarrayvaluesarray-values-mixed-key-this">appendArrayValues</a>
 </td><td><a href="#appendimmutablemixed-value-mixed-key-this">appendImmutable</a>
 </td></tr><tr><td><a href="#appendtoeachkeyintstring-prefix-static">appendToEachKey</a>
-</td><td><a href="#appendtoeachvaluemixed-prefix-static">appendToEachValue</a>
+</td><td><a href="#appendtoeachvaluefloatintstring-prefix-static">appendToEachValue</a>
 </td><td><a href="#arsort-this">arsort</a>
 </td><td><a href="#arsortimmutable-this">arsortImmutable</a>
 </td></tr><tr><td><a href="#asortint-sort_flags-this">asort</a>
@@ -614,14 +614,14 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#filterbystring-property-mixed-value-string-comparisonop-static">filterBy</a>
 </td><td><a href="#findclosure-closure-falsemixed">find</a>
 </td><td><a href="#findbystring-property-mixed-value-string-comparisonop-static">findBy</a>
-</td></tr><tr><td><a href="#first-mixed">first</a>
-</td><td><a href="#firstkey-mixed">firstKey</a>
+</td></tr><tr><td><a href="#first-mixednull">first</a>
+</td><td><a href="#firstkey-mixednull">firstKey</a>
 </td><td><a href="#firstsimmutableintnull-number-static">firstsImmutable</a>
 </td><td><a href="#firstskeysintnull-number-static">firstsKeys</a>
 </td></tr><tr><td><a href="#firstsmutableintnull-number-this">firstsMutable</a>
 </td><td><a href="#flattenstring-delimiter-string-prepend-arraynull-items-array">flatten</a>
 </td><td><a href="#flip-static">flip</a>
-</td><td><a href="#getmixed-key-mixed-fallback-array-array-bool-usebyreference-mixedstatic">get</a>
+</td><td><a href="#getintstring-key-mixed-fallback-array-array-bool-usebyreference-mixedstatic">get</a>
 </td></tr><tr><td><a href="#getall-array">getAll</a>
 </td><td><a href="#getarraybool-convertallarrayyelements-bool-preservekeys-array">getArray</a>
 </td><td><a href="#getarraycopy-array">getArrayCopy</a>
@@ -675,7 +675,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#mapcallable-callable-bool-usekeyassecondparameter-mixed-arguments-static">map</a>
 </td><td><a href="#matchesclosure-closure-bool">matches</a>
 </td></tr><tr><td><a href="#matchesanyclosure-closure-bool">matchesAny</a>
-</td><td><a href="#max-falsemixed">max</a>
+</td><td><a href="#max-falsefloatintstring">max</a>
 </td><td><a href="#mergeappendkeepindexarray-array-bool-recursive-static">mergeAppendKeepIndex</a>
 </td><td><a href="#mergeappendnewindexarray-array-bool-recursive-static">mergeAppendNewIndex</a>
 </td></tr><tr><td><a href="#mergeprependkeepindexarray-array-bool-recursive-static">mergePrependKeepIndex</a>
@@ -703,8 +703,8 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#pop-mixednull">pop</a>
 </td><td><a href="#prependmixed-value-mixed-key-this">prepend</a>
 </td></tr><tr><td><a href="#prependimmutablemixed-value-mixed-key-this">prependImmutable</a>
-</td><td><a href="#prependtoeachkeymixed-suffix-static">prependToEachKey</a>
-</td><td><a href="#prependtoeachvaluemixed-suffix-static">prependToEachValue</a>
+</td><td><a href="#prependtoeachkeyfloatintstring-suffix-static">prependToEachKey</a>
+</td><td><a href="#prependtoeachvaluefloatintstring-suffix-static">prependToEachValue</a>
 </td><td><a href="#pullintintstringstringnull-keyorkeys-mixed-fallback-mixed">pull</a>
 </td></tr><tr><td><a href="#pushmixed-args-this">push</a>
 </td><td><a href="#randomimmutableintnull-number-static">randomImmutable</a>
@@ -729,7 +729,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#replaceallvaluesarray-array-static">replaceAllValues</a>
 </td><td><a href="#replacekeysarray-keys-static">replaceKeys</a>
 </td><td><a href="#replaceonevaluemixed-search-mixed-replacement-static">replaceOneValue</a>
-</td><td><a href="#replacevaluesmixed-search-mixed-replacement-static">replaceValues</a>
+</td><td><a href="#replacevaluesstring-search-string-replacement-static">replaceValues</a>
 </td></tr><tr><td><a href="#restint-from-static">rest</a>
 </td><td><a href="#reverse-this">reverse</a>
 </td><td><a href="#rsortint-sort_flags-this">rsort</a>
@@ -856,12 +856,12 @@ Add a suffix to each key.
 
 --------
 
-## appendToEachValue(mixed $prefix): static
+## appendToEachValue(float|int|string $prefix): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Add a prefix to each value.
 
 **Parameters:**
-- `mixed $prefix`
+- `float|int|string $prefix`
 
 **Return:**
 - `static <p>(Immutable) Return an Arrayy object, with the prefixed values.</p>`
@@ -1471,7 +1471,7 @@ a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> ...$array`
+- `array<TKey, T> ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1483,7 +1483,7 @@ a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
 Return elements where the keys are only in the current array.
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> ...$array`
+- `array<TKey, T> ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1495,7 +1495,7 @@ Return elements where the keys are only in the current array.
 Return elements where the values and keys are only in the current array.
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> ...$array`
+- `array<TKey, T> ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1511,7 +1511,7 @@ a([1 => [1 => 1], 2 => [2 => 2]])->diffRecursive([1 => [1 => 1]]); // Arrayy[2 =
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> $array`
+- `array<TKey, T> $array`
 - `null|array<TKey, T>|\Generator<TKey, T> $helperVariableForRecursion <p>(only for internal usage)</p>`
 
 **Return:**
@@ -1528,7 +1528,7 @@ a([1 => 1])->diffReverse([1 => 1, 2 => 2]); // Arrayy[2 => 2]
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> $array`
+- `array<TKey, T> $array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1564,7 +1564,7 @@ a(['foo', 'bar' => 'bis'])->each($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(T  = default): T|\Closure(T  = default, TKey  = default): T $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1588,7 +1588,7 @@ __nothing__
 Exchange the array for another one.
 
 **Parameters:**
-- `T $data 1. use the current array, if it's a array
+- `T|array<TKey, T>|self<TKey, T> $data 1. use the current array, if it's a array
 2. fallback to empty array, if there is nothing
 3. call "getArray()" on object, if there is a "Arrayy"-object
 4. call "createFromObject()" on object, if there is a "\Traversable"-object
@@ -1613,7 +1613,7 @@ a(['foo', 2 => 'two'])->exists($callable); // true
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(T  = default, TKey  = default): bool $closure`
 
 **Return:**
 - `bool <p>Returns true if the given value is found, false otherwise.</p>`
@@ -1630,7 +1630,7 @@ a(['bar'])->fillWithDefaults(3, 'foo'); // Arrayy['bar', 'foo', 'foo']
 
 **Parameters:**
 - `int $num`
-- `mixed $default`
+- `T $default`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1649,7 +1649,7 @@ a([1, 2, 3, 4])->filter($closure); // Arrayy[0 => 1, 2 => 3]
 </code>
 
 **Parameters:**
-- `\Closure|null $closure [optional] <p>
+- `null|\Closure(T  = default, TKey  = default): bool|\Closure(T  = default): bool|\Closure(TKey  = default): bool $closure [optional] <p>
 The callback function to use
 </p>
 <p>
@@ -1716,7 +1716,7 @@ a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(T  = default, TKey  = default): bool $closure`
 
 **Return:**
 - `false|mixed <p>Return false if we did not find the value.</p>`
@@ -1747,7 +1747,7 @@ a($array)->filterBy('name', 'foo'); // Arrayy[0 => ['id' => 123, 'name' => 'foo'
 
 --------
 
-## first(): mixed
+## first(): mixed|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the first value from the current array.
 
@@ -1759,11 +1759,11 @@ a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
 __nothing__
 
 **Return:**
-- `mixed <p>Return null if there wasn't a element.</p>`
+- `mixed|null <p>Return null if there wasn't a element.</p>`
 
 --------
 
-## firstKey(): mixed
+## firstKey(): mixed|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the first key from the current array.
 
@@ -1771,7 +1771,7 @@ Get the first key from the current array.
 __nothing__
 
 **Return:**
-- `mixed <p>Return null if there wasn't a element.</p>`
+- `mixed|null <p>Return null if there wasn't a element.</p>`
 
 --------
 
@@ -1862,7 +1862,7 @@ __nothing__
 
 --------
 
-## get(mixed $key, mixed $fallback, array $array, bool $useByReference): mixed|static
+## get(int|string $key, mixed $fallback, array $array, bool $useByReference): mixed|static
 <a href="#voku-php-readme-class-methods">↑</a>
 Get a value from an array (optional using dot-notation).
 
@@ -1879,9 +1879,9 @@ $arrayy['user.firstname']; // Lars
 </code>
 
 **Parameters:**
-- `mixed $key <p>The key to look for.</p>`
+- `array-key $key <p>The key to look for.</p>`
 - `mixed $fallback <p>Value to fallback to.</p>`
-- `array<mixed, mixed>|array<TKey, T> $array <p>The array to get from, if it's set to "null" we use the current array from the
+- `array<array-key, mixed>|array<TKey, T> $array <p>The array to get from, if it's set to "null" we use the current array from the
 class.</p>`
 - `bool $useByReference`
 
@@ -2266,7 +2266,7 @@ a(['foo', 'bar'])->intersection(['bar', 'baz']); // Arrayy['bar']
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> $search`
+- `array<TKey, T> $search`
 - `bool $keepKeys`
 
 **Return:**
@@ -2279,7 +2279,7 @@ a(['foo', 'bar'])->intersection(['bar', 'baz']); // Arrayy['bar']
 Return an array with all elements found in input array.
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> ...$array`
+- `array<array<TKey, T>> ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -2295,7 +2295,7 @@ a(['foo', 'bar'])->intersects(['föö', 'bär']); // false
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> $search`
+- `array<TKey, T> $search`
 
 **Return:**
 - `bool`
@@ -2352,7 +2352,7 @@ a(['💩'])->isEqual(['💩']); // true
 </code>
 
 **Parameters:**
-- `array<mixed, mixed> $array`
+- `array<(int|string), mixed> $array`
 
 **Return:**
 - `bool`
@@ -2639,7 +2639,7 @@ a([2, 4, 8])->matches($closure); // true
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(T  = default, TKey  = default): bool $closure`
 
 **Return:**
 - `bool`
@@ -2658,14 +2658,14 @@ a([1, 4, 7])->matches($closure); // true
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(T  = default, TKey  = default): bool $closure`
 
 **Return:**
 - `bool`
 
 --------
 
-## max(): false|mixed
+## max(): false|float|int|string
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the max value from an array.
 
@@ -2677,7 +2677,7 @@ a([-9, -8, -7, 1.32])->max(); // 1.32
 __nothing__
 
 **Return:**
-- `false|mixed <p>Will return false if there are no values.</p>`
+- `false|float|int|string <p>Will return false if there are no values.</p>`
 
 --------
 
@@ -2698,7 +2698,7 @@ a($array1)->mergeAppendKeepIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2']
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> $array`
+- `array<(int|TKey), T> $array`
 - `bool $recursive`
 
 **Return:**
@@ -2724,7 +2724,7 @@ a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 1 => 'foo', 2 =>
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> $array`
+- `array<TKey, T> $array`
 - `bool $recursive`
 
 **Return:**
@@ -2749,7 +2749,7 @@ a($array1)->mergePrependKeepIndex($array2); // Arrayy[0 => 'one', 1 => 'foo']
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> $array`
+- `array<TKey, T> $array`
 - `bool $recursive`
 
 **Return:**
@@ -2775,7 +2775,7 @@ a($array1)->mergePrependNewIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2', 2 
 </code>
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> $array`
+- `array<TKey, T> $array`
 - `bool $recursive`
 
 **Return:**
@@ -3037,7 +3037,7 @@ Partitions this array in two array according to a predicate.
 Keys are preserved in the resulting array.
 
 **Parameters:**
-- `\Closure $closure <p>The predicate on which to partition.</p>`
+- `\Closure(T  = default, TKey  = default): bool $closure <p>The predicate on which to partition.</p>`
 
 **Return:**
 - `array<int,static> <p>An array with two elements. The first element contains the array
@@ -3092,24 +3092,24 @@ a(['fòô' => 'bàř'])->prependImmutable('foo')->getArray(); // [0 => 'foo', 'f
 
 --------
 
-## prependToEachKey(mixed $suffix): static
+## prependToEachKey(float|int|string $suffix): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Add a suffix to each key.
 
 **Parameters:**
-- `mixed $suffix`
+- `float|int|string $suffix`
 
 **Return:**
 - `static <p>(Immutable) Return an Arrayy object, with the prepended keys.</p>`
 
 --------
 
-## prependToEachValue(mixed $suffix): static
+## prependToEachValue(float|int|string $suffix): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Add a suffix to each value.
 
 **Parameters:**
-- `mixed $suffix`
+- `float|int|string $suffix`
 
 **Return:**
 - `static <p>(Immutable) Return an Arrayy object, with the prepended values.</p>`
@@ -3135,7 +3135,7 @@ delete the key.
 Push one or more values onto the end of array at once.
 
 **Parameters:**
-- `array<mixed, mixed>|array<TKey, T> ...$args`
+- `array<TKey, T> ...$args`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object, with pushed elements to the end of array.</p>`
@@ -3314,7 +3314,7 @@ a([1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(T  = default, TKey  = default): bool $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3495,7 +3495,7 @@ a([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']); // 
 </code>
 
 **Parameters:**
-- `array<array-key, TKey> $keys <p>An array of keys matching the array's size</p>`
+- `array<array-key, TKey> $keys <p>An array of keys matching the array's size.</p>`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3520,7 +3520,7 @@ a($testArray)->replaceOneValue('foo', 'replaced'); // Arrayy['bar', 'foo' => 're
 
 --------
 
-## replaceValues(mixed $search, mixed $replacement): static
+## replaceValues(string $search, string $replacement): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Replace values in the current array.
 
@@ -3530,8 +3530,8 @@ a($testArray)->replaceValues('foo', 'replaced'); // Arrayy['bar', 'foo' => 'repl
 </code>
 
 **Parameters:**
-- `mixed $search <p>The value to replace.</p>`
-- `mixed $replacement <p>What to replace it with.</p>`
+- `string $search <p>The value to replace.</p>`
+- `string $replacement <p>What to replace it with.</p>`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3723,7 +3723,7 @@ a([1 => 'bar', 'foo' => 'foo'])->shuffle(); // e.g.: Arrayy[['foo' => 'foo', 1 =
 
 **Parameters:**
 - `bool $secure <p>using a CSPRNG | @link https://paragonie.com/b/JvICXzh_jhLyt4y3</p>`
-- `array<mixed, mixed>|array<TKey, T> $array [optional]`
+- `array<TKey, T> $array [optional]`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3981,7 +3981,7 @@ var_dump($under); // Arrayy[1, 3, 5, 2, 4]
 **Parameters:**
 - `int $offset`
 - `int|null $length`
-- `array<mixed, mixed>|array<mixed, T> $replacement`
+- `array<mixed, T> $replacement`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -4240,7 +4240,7 @@ Prepends one or more values to the beginning of array at once.
 Tests whether the given closure return something valid for all elements of this array.
 
 **Parameters:**
-- `\Closure $closure the predicate`
+- `\Closure(T  = default, TKey  = default): bool $closure the predicate`
 
 **Return:**
 - `bool <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>`
