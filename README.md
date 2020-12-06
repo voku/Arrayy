@@ -10,7 +10,7 @@
 
 # 🗃 Arrayy
 
-A PHP array manipulation library. Compatible with PHP 7+
+A PHP array manipulation library. Compatible with PHP 7+ & PHP 8+
 
 
 ``` php
