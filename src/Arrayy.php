@@ -667,8 +667,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *
-     * @noinspection PhpSillyAssignmentInspection
-     *
      * @psalm-mutation-free
      */
     public function offsetExists($offset): bool
@@ -2523,21 +2521,21 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Filters an array of objects (or a numeric array of associative arrays) based on the value of a particular
      * property within that.
      *
-     * @param string $property
-     * @param mixed  $value
-     * @param string $comparisonOp
-     *                             <p>
-     *                             'eq' (equals),<br />
-     *                             'gt' (greater),<br />
-     *                             'gte' || 'ge' (greater or equals),<br />
-     *                             'lt' (less),<br />
-     *                             'lte' || 'le' (less or equals),<br />
-     *                             'ne' (not equals),<br />
-     *                             'contains',<br />
-     *                             'notContains',<br />
-     *                             'newer' (via strtotime),<br />
-     *                             'older' (via strtotime),<br />
-     *                             </p>
+     * @param string      $property
+     * @param mixed       $value
+     * @param string|null $comparisonOp
+     *                                  <p>
+     *                                  'eq' (equals),<br />
+     *                                  'gt' (greater),<br />
+     *                                  'gte' || 'ge' (greater or equals),<br />
+     *                                  'lt' (less),<br />
+     *                                  'lte' || 'le' (less or equals),<br />
+     *                                  'ne' (not equals),<br />
+     *                                  'contains',<br />
+     *                                  'notContains',<br />
+     *                                  'newer' (via strtotime),<br />
+     *                                  'older' (via strtotime),<br />
+     *                                  </p>
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -2852,7 +2850,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param int|string $key            <p>The key to look for.</p>
      * @param mixed      $fallback       <p>Value to fallback to.</p>
-     * @param array      $array          <p>The array to get from, if it's set to "null" we use the current array from the
+     * @param array|null $array          <p>The array to get from, if it's set to "null" we use the current array from the
      *                                   class.</p>
      * @param bool       $useByReference
      *
@@ -4210,8 +4208,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Arrayy object with modified elements.</p>
      *
-     * @phpstan-param  callable(T,TKey=,mixed=):mixed $callable
-     * @phpstan-return static<TKey,T>
+     * @template T2
+     *              <p>The output value type.</p>
+     *
+     * @phpstan-param callable(T,TKey=,mixed=):T2 $callable
+     * @phpstan-return static<TKey,T2>
      * @psalm-mutation-free
      */
     public function map(
@@ -5310,7 +5311,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-return static<TKey,T>
+     * @template T2
+     *              <p>The output value type.</p>
+     *
+     * @phpstan-param callable(T2, T, TKey): T2 $callable
+     * @phpstan-param T2                  $initial
+     *
+     * @phpstan-return static<TKey,T2>
      * @psalm-mutation-free
      */
     public function reduce($callable, $initial = []): self
@@ -6037,8 +6044,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([1 => 'bar', 'foo' => 'foo'])->shuffle(); // e.g.: Arrayy[['foo' => 'foo', 1 => 'bar']]
      * </code>
      *
-     * @param bool  $secure <p>using a CSPRNG | @link https://paragonie.com/b/JvICXzh_jhLyt4y3</p>
-     * @param array $array  [optional]
+     * @param bool       $secure <p>using a CSPRNG | @link https://paragonie.com/b/JvICXzh_jhLyt4y3</p>
+     * @param array|null $array  [optional]
      *
      * @return static
      *                <p>(Immutable)</p>
@@ -6820,12 +6827,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         // INFO: \array_unique() can't handle e.g. "stdClass"-values in an array
 
-        /**
-         * @psalm-suppress MissingClosureReturnType
-         * @psalm-suppress MissingClosureParamType
-         */
         $this->array = $this->reduce(
-            static function ($resultArray, $value) {
+            static function ($resultArray, $value, $key) {
                 if (!\in_array($value, $resultArray, true)) {
                     $resultArray[] = $value;
                 }

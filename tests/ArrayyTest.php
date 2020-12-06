@@ -3070,7 +3070,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         /** @phpstan-ignore-next-line | FP from phpstan -> \Closure(T=,TKey=):bool|\Closure(T=):bool|\Closure(TKey=):bool  */
         $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
-            static function ($key, $value): bool {
+            /** @phpstan-ignore-next-line | FP from phpstan -> \Closure(T=,TKey=):bool|\Closure(T=):bool|\Closure(TKey=):bool  */
+        static function ($key, $value): bool {
                 return ($value % 2 !== 0) && ($key & 2 !== 0);
             },
             \ARRAY_FILTER_USE_BOTH
@@ -6527,10 +6528,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param A<int|string,mixed> $arrayzy
-     * @param A<int,string>|A<int,mixed>|A<int|string,mixed> $resultArrayzy
-     * @param array               $array
-     * @param array               $resultArray
+     * @param A<int|string,mixed>                            $arrayzy
+     * @param A<int,mixed>|A<int,string>|A<int|string,mixed> $resultArrayzy
+     * @param array                                          $array
+     * @param array                                          $resultArray
      */
     protected static function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray)
     {

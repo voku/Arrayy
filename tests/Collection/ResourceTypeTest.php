@@ -19,6 +19,7 @@ final class ResourceTypeTest extends TestCase
 
         /** @phpstan-ignore-next-line // resource|false */
         $set = new \Arrayy\Type\ResourceCollection(
+            /** @phpstan-ignore-next-line // resource|false */
             [
                 $f1,
                 $f2,
