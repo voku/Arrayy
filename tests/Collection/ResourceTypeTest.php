@@ -13,13 +13,14 @@ final class ResourceTypeTest extends TestCase
 {
     public function testArray()
     {
+        /** @var resource $f1 */
         $f1 = \tmpfile();
+        /** @var resource $f2 */
         $f2 = \tmpfile();
+        /** @var resource $f3 */
         $f3 = \tmpfile();
 
-        /** @phpstan-ignore-next-line // resource|false */
         $set = new \Arrayy\Type\ResourceCollection(
-            /** @phpstan-ignore-next-line // resource|false */
             [
                 $f1,
                 $f2,

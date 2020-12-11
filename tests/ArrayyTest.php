@@ -3068,9 +3068,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         // ---
 
-        /** @phpstan-ignore-next-line | FP from phpstan -> \Closure(T=,TKey=):bool|\Closure(T=):bool|\Closure(TKey=):bool  */
         $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
-            /** @phpstan-ignore-next-line | FP from phpstan -> \Closure(T=,TKey=):bool|\Closure(T=):bool|\Closure(TKey=):bool  */
+        /** @phpstan-ignore-next-line | FP from phpstan?  */
         static function ($key, $value): bool {
                 return ($value % 2 !== 0) && ($key & 2 !== 0);
             },

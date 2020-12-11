@@ -2462,7 +2462,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param null|\Closure(T=,TKey=):bool|\Closure(T=):bool|\Closure(TKey=):bool $closure
+     * @phpstan-param null|(\Closure(T=,TKey=):bool)|(\Closure(T=):bool)|(\Closure(TKey=):bool) $closure
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -2473,10 +2473,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($flag === \ARRAY_FILTER_USE_KEY) {
-            /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
-            /** @phpstan-var \Closure(TKey=):bool $closure */
-            $closure = $closure;
-
             $generator = function () use ($closure) {
                 foreach ($this->getGenerator() as $key => $value) {
                     if ($closure($key) === true) {
@@ -2485,7 +2481,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 }
             };
         } elseif ($flag === \ARRAY_FILTER_USE_BOTH) {
-            /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
+            /** @noinspection PhpSillyAssignmentInspection - hack for phpstan - https://github.com/phpstan/phpstan/issues/4192 */
             /** @phpstan-var \Closure(T=,TKey=):bool $closure */
             $closure = $closure;
 
@@ -2497,10 +2493,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 }
             };
         } else {
-            /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
-            /** @phpstan-var \Closure(T=):bool $closure */
-            $closure = $closure;
-
             $generator = function () use ($closure) {
                 foreach ($this->getGenerator() as $key => $value) {
                     if ($closure($value) === true) {
