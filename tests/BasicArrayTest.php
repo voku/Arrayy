@@ -322,6 +322,29 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame('bar', $result->current());
     }
 
+    public function testRecursiveIterator()
+    {
+        $arrayy = Arrayy::create(['1', '1', Arrayy::create(['2', '2', '2', Arrayy::create(['3', 3])]), 1]);
+
+        $result = $arrayy->getArray(true);
+        $expected = [
+            0 => '1',
+            1 => '1',
+            2 => [
+                0 => '2',
+                1 => '2',
+                2 => '2',
+                3 => [
+                    0 => '3',
+                    1 => 3,
+                ],
+            ],
+            3 => 1,
+        ];
+
+        static::assertSame($expected, $result);
+    }
+
     public function testGetIteratorWithSubArray()
     {
         $arrayy = $this->createArrayy(['foo' => [3, 2, 1], 'bar' => [1, 2, 3], 1, null]);

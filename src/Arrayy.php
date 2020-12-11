@@ -6036,7 +6036,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([1 => 'bar', 'foo' => 'foo'])->shuffle(); // e.g.: Arrayy[['foo' => 'foo', 1 => 'bar']]
      * </code>
      *
-     * @param bool       $secure <p>using a CSPRNG | @link https://paragonie.com/b/JvICXzh_jhLyt4y3</p>
+     * @param bool       $secure <p>using a CSPRNG | @see https://paragonie.com/b/JvICXzh_jhLyt4y3</p>
      * @param array|null $array  [optional]
      *
      * @return static
