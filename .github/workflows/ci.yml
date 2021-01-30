@@ -75,6 +75,9 @@ jobs:
 
       - name: scrutinizer-ci.com
         run: |
+          export TRAVIS=$CI
+          export TRAVIS_JOB_ID=$GITHUB_RUN_ID
+
           wget -q https://scrutinizer-ci.com/ocular.phar
           php vendor/bin/php-coveralls -v
           php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
