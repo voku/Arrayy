@@ -30,8 +30,8 @@ jobs:
         uses: shivammathur/setup-php@2.9.0
         with:
           php-version: ${{ matrix.php }}
-          coverage: none
-          extensions: zip, xdebug
+          coverage: xdebug
+          extensions: zip
           tools: composer
 
       - name: Determine composer cache directory
