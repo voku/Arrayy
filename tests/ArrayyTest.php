@@ -2457,6 +2457,41 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($testArray, $arrayy->toArray());
     }
 
+    public function testCreateFromJsonApiResponse()
+    {
+        $str = '
+        {
+            "type": "person",
+            "location": {
+                "primary": { 
+                    "city":"bakersfield",
+                    "state":"ca"
+                }
+            }
+        }';
+
+        $arrayy = A::createFromJson($str);
+
+        $expected = [
+            'type'     => 'person',
+            'location' => [
+                'primary' => [
+                    'city'  => 'bakersfield',
+                    'state' => 'ca',
+                ],
+            ],
+        ];
+
+        // test JSON -> Array
+        static::assertSame($expected, $arrayy->getArray());
+
+        // test Array -> JSON
+        static::assertSame(
+            \str_replace([' ', "\n", "\n\r", "\r"], '', $str),
+            $arrayy->toJson()
+        );
+    }
+
     public function testCreateFromJson()
     {
         $str = '
