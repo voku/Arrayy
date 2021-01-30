@@ -69,11 +69,13 @@ jobs:
           php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
 
       - name: Run phpstan
+        continue-on-error: true
         if: ${{ matrix.php == '7.3' }}
         run: |
           php vendor/bin/phpstan analyse
 
-      - name: scrutinizer-ci.com
+      - name: scrutinizer-ci
+        continue-on-error: true
         run: |
           export TRAVIS=$CI
           export TRAVIS_JOB_ID=$GITHUB_RUN_ID
