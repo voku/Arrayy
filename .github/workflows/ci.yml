@@ -31,7 +31,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: none
-          extensions: zip, xdebug
+          extensions: zip, :xdebug
           tools: composer
 
       - name: Determine composer cache directory
@@ -66,7 +66,7 @@ jobs:
       - name: Run tests
         run: |
           mkdir -p build/logs
-          php vendor/bin/phpunit -c phpunit.xml.dist --debug
+          php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
 
       - name: Run phpstan
         if: ${{ matrix.php == '7.3' }}
