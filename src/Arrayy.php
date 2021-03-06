@@ -6696,7 +6696,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $array = $this->toArray();
 
-        [$array[$swapA], $array[$swapB]] = [$array[$swapB], $array[$swapA]];
+        list($array[$swapA], $array[$swapB]) = [$array[$swapB], $array[$swapA]];
 
         return static::create(
             $array,
@@ -6817,7 +6817,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             for ($i = \count($items) - 1; $i >= 0; --$i) {
                 $new_items = $items;
                 $new_helper = $helper;
-                [$tmp_helper] = \array_splice($new_items, $i, 1);
+                list($tmp_helper) = \array_splice($new_items, $i, 1);
                 /** @noinspection PhpSillyAssignmentInspection */
                 /** @var string[] $new_items */
                 $new_items = $new_items;
