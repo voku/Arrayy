@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arrayy;
 
-use Arrayy\Type\TypeInterface;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckInterface;
 use Arrayy\TypeCheck\TypeCheckPhpDoc;
