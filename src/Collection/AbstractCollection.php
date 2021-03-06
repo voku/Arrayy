@@ -259,9 +259,11 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @template     TKeyCreate as int|string
      * @template     TCreate
+     *
      * @phpstan-param  array<TKeyCreate,TCreate> $data
      * @phpstan-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
      * @phpstan-return static<TKeyCreate,TCreate>
+     *
      * @psalm-mutation-free
      */
     public static function create(
@@ -320,6 +322,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             }
         }
 
+        /** @phpstan-var static<int,T> */
         return $return;
     }
 

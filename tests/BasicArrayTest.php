@@ -417,6 +417,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $arrayy = $this->createArrayy($array);
 
         if ($arrayy->count() > 0) {
+            /** @var array-key $key */
             $key = $arrayy->getRandomKey();
 
             static::assertNotNull($key);

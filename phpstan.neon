@@ -22,8 +22,6 @@ parameters:
         -
             message: ~Cannot call method format~
             path: %currentWorkingDirectory%/tests/ArrayyTest.php
-        # not supported by phpstan?
-        - '/PHPDoc tag @template .Key.* for .* with bound type .* is not supported\./'
         # false-positive?
         - '/function call_user_func expects callable.*array\(.*\) given/'
         - '/function call_user_func_array expects callable.*array\(.*\) given/'

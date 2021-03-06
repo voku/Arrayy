@@ -81,7 +81,7 @@ class Collection extends AbstractCollection
      *                                                         The initial items to store in the
      *                                                         collection.
      *                                                         </p>
-     * @param string             $iteratorClass                optional <p>
+     * @param null|string        $iteratorClass                optional <p>
      *                                                         You can overwrite the
      *                                                         ArrayyIterator, but mostly you
      *                                                         don't need this option.
@@ -115,6 +115,7 @@ class Collection extends AbstractCollection
         }
 
         if ($type !== null) {
+            /** @phpstan-ignore-next-line - we use the "TypeInterface" only as base */
             $this->properties = $type;
         }
 

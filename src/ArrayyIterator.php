@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Arrayy;
 
 /**
- * @template TKey of array-key
+ * @template TKey
  * @template T
  * @template-extends \ArrayIterator<TKey,T>
  */

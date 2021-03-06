@@ -91,10 +91,11 @@ namespace Arrayy {
          *
          * @template T
          * @phpstan-param T $type
-         * @phpstan-return Collection<int|string,T>
+         * @phpstan-return Collection<array-key,T>
          */
         function collection($type, $data = []): Collection
         {
+            /** @phpstan-var Collection<array-key,T> */
             return Collection::construct($type, $data);
         }
     }

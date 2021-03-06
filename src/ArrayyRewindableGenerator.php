@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Arrayy;
 
 /**
- * @template   XKey of array-key
+ * @template   XKey
  * @template   X
  * @implements \Iterator<XKey,X>
  *
@@ -16,7 +16,7 @@ class ArrayyRewindableGenerator implements \Iterator
     /**
      * @var string
      *
-     * @phpstan-var string|class-string<\Arrayy\Arrayy<TKey,T>>
+     * @phpstan-var string|class-string<\Arrayy\Arrayy<XKey,X>>
      */
     protected $class;
 
@@ -38,9 +38,11 @@ class ArrayyRewindableGenerator implements \Iterator
     protected $onRewind;
 
     /**
-     * @param callable $generatorConstructionFunction a callable that should return a Generator
-     * @param callable $onRewind                      callable that gets invoked with 0 arguments after the iterator
-     *                                                was rewinded
+     * @param callable $generatorConstructionFunction
+     *                                                <p>A callable that should return a Generator.</p>
+     * @param null|callable $onRewind
+     *                                                <p>Callable that gets invoked with 0 arguments after the iterator
+     *                                                was rewinded.</p>
      * @param string   $class
      *
      * @throws \InvalidArgumentException
