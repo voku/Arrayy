@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/voku/Arrayy.svg?branch=master)](https://travis-ci.org/voku/Arrayy)
+[![Build Status](https://github.com/voku/Arrayy/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/voku/Arrayy/actions)
 [![codecov.io](https://codecov.io/github/voku/Arrayy/coverage.svg?branch=master)](https://codecov.io/github/voku/Arrayy?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/b8c4c88a063545d787e2a4f1f5dfdf23)](https://www.codacy.com/app/voku/Arrayy)
 [![Latest Stable Version](https://poser.pugx.org/voku/arrayy/v/stable)](https://packagist.org/packages/voku/arrayy) 
@@ -9,7 +9,7 @@
 
 # 🗃 Arrayy
 
-A PHP array manipulation library. Compatible with PHP 7+
+A PHP array manipulation library. Compatible with PHP 7+ & PHP 8+
 
 
 ``` php
@@ -100,7 +100,7 @@ $arrayy->get('Lars.lastname'); // 'Moelleken'
 $arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
 
 $arrayy['Lars'] = array('lastname' => 'Müller');
-$arrayy['Lars']['lastname]; // 'Müller'
+$arrayy['Lars']['lastname']; // 'Müller'
 ```
 
 ### Set values via "object"-syntax:
