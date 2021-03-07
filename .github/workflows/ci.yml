@@ -16,7 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ 7.0, 7.1, 7.2, 7.3, 7.4 ]
+        php: [
+            7.0,
+            7.1,
+            7.2,
+            7.3,
+            7.4,
+            8.0
+        ]
         composer: [basic]
         include:
           - php: 7.3
@@ -49,7 +56,7 @@ jobs:
         run: |
           composer require satooshi/php-coveralls --no-update
 
-          if [[ "${{ matrix.php }}" == "7.3" ]]; then
+          if [[ "${{ matrix.php }}" == "7.4" ]]; then
             composer require phpstan/phpstan --no-update
           fi;
 
@@ -70,12 +77,14 @@ jobs:
 
       - name: Run phpstan
         continue-on-error: true
-        if: ${{ matrix.php == '7.3' }}
+        if: ${{ matrix.php == '7.4' }}
         run: |
           php vendor/bin/phpstan analyse
 
       - name: scrutinizer-ci
         continue-on-error: true
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: |
           export TRAVIS=$CI
           export TRAVIS_JOB_ID=$GITHUB_RUN_ID
