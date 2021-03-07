@@ -54,7 +54,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require satooshi/php-coveralls --no-update
+          composer require php-coveralls/php-coveralls --no-update
 
           if [[ "${{ matrix.php }}" == "7.4" ]]; then
             composer require phpstan/phpstan --no-update
