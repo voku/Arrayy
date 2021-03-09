@@ -14,7 +14,7 @@ use Arrayy\TypeCheck\TypeCheckPhpDoc;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @template TKey
+ * @template TKey of array-key
  * @template T
  * @template-extends \ArrayObject<TKey,T>
  * @template-implements \IteratorAggregate<TKey,T>
@@ -1639,7 +1639,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                keys and their count as value.
      *                </p>
      *
-     * @phpstan-return static<T,int>
+     * @phpstan-return static<array-key,int>
      * @psalm-mutation-free
      */
     public function countValues(): self
@@ -3477,7 +3477,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *
-     * @phpstan-param null|TKey|array-key $key
+     * @phpstan-param null|TKey|TKey[] $key
      */
     public function has($key): bool
     {
@@ -4593,6 +4593,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function mostUsedValue()
     {
+        /** @phpstan-ignore-next-line | false-positive? maybe because we switch key-value via "countValues"? */
         return $this->countValues()->arsortImmutable()->firstKey();
     }
 
@@ -5466,7 +5467,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Mutable)</p>
      *
-     * @phpstan-param  TKey $key
+     * @phpstan-param  TKey|TKey[] $key
      * @phpstan-return static<TKey,T>
      */
     public function remove($key)
@@ -6765,6 +6766,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function toList(bool $convertAllArrayyElements = false): array
     {
+        /** @var list<T> - currently phpstan can't return different types depending on the phpdocs params */
         return $this->toArray(
             $convertAllArrayyElements,
             false

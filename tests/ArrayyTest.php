@@ -4599,6 +4599,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $array = [1 => 'one', 2 => 'two'];
         $arrayy = A::create($array);
         $result = $arrayy->randomKey();
+        assert($result !== null);
 
         static::assertArrayHasKey($result, $array);
     }
