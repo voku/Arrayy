@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.8.8 (2021-03-09)
+
+- add more support for Generics + phpstan checks
+
 ### 7.8.7 (20201-01-30)
 
 - optimize Json Mapper with nested Arrayy elements
