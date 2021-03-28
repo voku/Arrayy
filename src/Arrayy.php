@@ -2866,7 +2866,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param int|string $key
      *                                   <p>The key to look for.</p>
-     * @param mixed $fallback
+     * @param mixed      $fallback
      *                                   <p>Value to fallback to.</p>
      * @param array|null $array
      *                                   <p>The array to get from, if it's set to "null" we use the current array from the
@@ -3321,8 +3321,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomKey()"
      *
-     * @return null|mixed
-     *               <p>Get a key/index or null if there wasn't a key/index.</p>
+     * @return mixed|null
+     *                    <p>Get a key/index or null if there wasn't a key/index.</p>
      *
      * @phpstan-return null|TKey
      *
@@ -3353,8 +3353,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomValue()"
      *
-     * @return null|mixed
-     *               <p>Get a random value or null if there wasn't a value.</p>
+     * @return mixed|null
+     *                    <p>Get a random value or null if there wasn't a value.</p>
      *
      * @phpstan-return null|T
      *
@@ -3956,7 +3956,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([1 => 'foo', 2 => 'foo2', 3 => 'bar'])->keys(); // Arrayy[1, 2, 3]
      * </code>
      *
-     * @param bool $recursive
+     * @param bool       $recursive
      *                                  [optional] <p>
      *                                  Get all keys, also from all sub-arrays from an multi-dimensional array.
      *                                  </p>
@@ -3964,7 +3964,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                  [optional] <p>
      *                                  If specified, then only keys containing these values are returned.
      *                                  </p>
-     * @param bool $strict
+     * @param bool       $strict
      *                                  [optional] <p>
      *                                  Determines if strict comparison (===) should be used during the search.
      *                                  </p>
@@ -5151,8 +5151,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @throws \RangeException If array is empty
      *
-     * @return null|mixed
-     *               <p>Get a key/index or null if there wasn't a key/index.</p>
+     * @return mixed|null
+     *                    <p>Get a key/index or null if there wasn't a key/index.</p>
      *
      * @phpstan-return null|TKey
      */
@@ -5941,7 +5941,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param mixed $value
      *
      * @return false|int|string
-     *                                <p>Will return <b>FALSE</b> if the value can't be found.</p>
+     *                          <p>Will return <b>FALSE</b> if the value can't be found.</p>
      *
      * @phpstan-param T $value
      * @phpstan-return false|TKey
@@ -6087,7 +6087,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-param  array<TKey,T> $array
      * @phpstan-return static<TKey,T>
-     *
      */
     public function shuffle(bool $secure = false, array $array = null): self
     {
@@ -6317,7 +6316,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param int|string $direction
      *                              <p>use <strong>SORT_ASC</strong> (default) or <strong>SORT_DESC</strong></p>
-     * @param int $strategy
+     * @param int        $strategy
      *                              <p>sort_flags => use e.g.: <strong>SORT_REGULAR</strong> (default) or
      *                              <strong>SORT_NATURAL</strong></p>
      * @param bool       $keepKeys
@@ -7025,9 +7024,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * </code>
      *
      * @param callable $callable
-     * @param bool $recursive
+     * @param bool     $recursive
      *                            [optional] <p>Whether array will be walked recursively or no</p>
-     * @param mixed $userData
+     * @param mixed    $userData
      *                            [optional] <p>
      *                            If the optional $userData parameter is supplied,
      *                            it will be passed as the third parameter to the $callable.
@@ -7070,14 +7069,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param string $keyOrPropertyOrMethod
      *                                      <p>The property or method to evaluate.</p>
-     * @param mixed $value
+     * @param mixed  $value
      *                                      <p>The value to match.</p>
+     *
+     * @throws \InvalidArgumentException if property or method is not defined
      *
      * @return static
      *
      * @phpstan-return static<TKey,T>
-     *
-     * @throws \InvalidArgumentException if property or method is not defined
      */
     public function where(string $keyOrPropertyOrMethod, $value): self
     {
@@ -7250,17 +7249,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Extracts the value of the given property or method from the object.
      *
      * @param static<T> $object
-     *                                      <p>The object to extract the value from.</p>
-     * @param string $keyOrPropertyOrMethod
-     *                                      <p>The property or method for which the
-     *                                      value should be extracted.</p>
+     *                                         <p>The object to extract the value from.</p>
+     * @param string    $keyOrPropertyOrMethod
+     *                                         <p>The property or method for which the
+     *                                         value should be extracted.</p>
+     *
+     * @throws \InvalidArgumentException if the method or property is not defined
      *
      * @return mixed
      *               <p>The value extracted from the specified property or method.</p>
      *
      * @phpstan-param self<TKey,T> $object
-     *
-     * @throws \InvalidArgumentException if the method or property is not defined
      */
     final protected function extractValue(self $object, string $keyOrPropertyOrMethod)
     {
@@ -7432,8 +7431,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * @param string $glue
-     * @param mixed $pieces
-     * @param bool  $useKeys
+     * @param mixed  $pieces
+     * @param bool   $useKeys
      *
      * @return string
      *
@@ -7589,7 +7588,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Internal mechanics of remove method.
      *
-     * @param int|string|float $key
+     * @param float|int|string $key
      *
      * @return bool
      */

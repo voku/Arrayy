@@ -42,7 +42,7 @@ final class BoolTypeTest extends TestCase
                 $test = true;
             }
         }
-        assert(is_bool($test));
+        \assert(\is_bool($test));
 
         static::assertTrue($test);
     }

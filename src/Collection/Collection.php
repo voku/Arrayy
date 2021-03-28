@@ -81,7 +81,7 @@ class Collection extends AbstractCollection
      *                                                         The initial items to store in the
      *                                                         collection.
      *                                                         </p>
-     * @param null|string        $iteratorClass                optional <p>
+     * @param string|null        $iteratorClass                optional <p>
      *                                                         You can overwrite the
      *                                                         ArrayyIterator, but mostly you
      *                                                         don't need this option.
