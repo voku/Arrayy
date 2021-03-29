@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.8.9 (2021-03-29)
+
+- fix code style
+- use Github Actions
+
 ### 7.8.8 (2021-03-09)
 
 - add more support for Generics + phpstan checks
