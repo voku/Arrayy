@@ -183,8 +183,36 @@ var_dump($user->city->name); // Düsseldorf
 
 The library also offers OO method chaining, as seen below:
 
+simple example:
 ```php
 echo a(['fòô', 'bàř', 'bàř'])->unique()->reverse()->implode(','); // 'bàř,fòô'
+```
+
+complex example:
+```php
+$m = UserData::meta();
+
+$data = static function () use ($m) {
+    yield new UserData([$m->id => 40, $m->firstName => 'Foo', $m->lastName => 'Moelleken']);
+    yield new UserData([$m->id => 30, $m->firstName => 'Sven', $m->lastName => 'Moelleken']);
+    yield new UserData([$m->id => 20, $m->firstName => 'Lars', $m->lastName => 'Moelleken']);
+    yield new UserData([$m->id => 10, $m->firstName => 'Lea', $m->lastName => 'Moelleken']);
+};
+
+$users = UserDataCollection::createFromGeneratorFunction($data);
+$names = $users
+    ->filter(static function (UserData $person): bool {
+        return $person->id <= 30;
+    })
+    ->customSortValuesImmutable(static function (UserData $a, UserData $b): int {
+        return $a->firstName <=> $b->firstName;
+    })
+    ->map(static function (UserData $person): string {
+        return (string)$person->firstName;
+    })
+    ->implode(';');
+
+static::assertSame('Lars;Lea;Sven', $names);
 ```
 
 ## Implemented Interfaces

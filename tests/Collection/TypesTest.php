@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arrayy\tests\Collection;
 
+use Arrayy\tests\UserData;
 use Arrayy\Type\IntCollection;
 use Arrayy\Type\StringCollection;
 use PHPUnit\Framework\TestCase;
@@ -41,6 +42,34 @@ final class TypesTest extends TestCase
         $this->expectException(\TypeError::class);
         /** @phpstan-ignore-next-line */
         static::assertSame(['A', 'B', 'C', 'D', 'E'], $set->push(5)->getArray());
+    }
+
+    public function testChainMethods()
+    {
+        $m = UserData::meta();
+        $mCity = \Arrayy\tests\CityData::meta();
+
+        $city = \Arrayy\tests\CityData::create([$mCity->name => 'Voerde', $mCity->plz => '46562', $mCity->infos => ['home']]);
+        $data = static function () use ($city, $m) {
+            yield new UserData([$m->id => 1, $m->city => clone $city, $m->firstName => 'Sven', $m->lastName => 'Moelleken']);
+            yield new UserData([$m->id => 2, $m->city => clone $city, $m->firstName => 'Lars', $m->lastName => 'Moelleken']);
+            yield new UserData([$m->id => 2, $m->city => clone $city, $m->firstName => 'Lea', $m->lastName => 'Moelleken']);
+        };
+
+        $users = UserDataCollection::createFromGeneratorFunction($data);
+        $names = $users
+            ->filter(static function (UserData $person): bool {
+                return $person->id <= 30;
+            })
+            ->customSortValuesImmutable(static function (UserData $a, UserData $b): int {
+                return $a->firstName <=> $b->firstName;
+            })
+            ->map(static function (UserData $person): string {
+                return (string)$person->firstName;
+            })
+            ->implode(';');
+
+        static::assertSame('Lars;Lea;Sven', $names);
     }
 
     public function testUnshiftTypeCheckError()

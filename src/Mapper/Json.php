@@ -183,7 +183,7 @@ final class Json
                 }
             } elseif (\is_a($type, \ArrayObject::class, true)) {
                 /** @noinspection PhpSillyAssignmentInspection - phpstan helper */
-                /** @phpstan-var \ArrayObject<mixed, mixed> $type */
+                /** @phpstan-var \ArrayObject<array-key, mixed> $type */
                 $type = $type;
                 $array = self::createInstance($type, false, $jsonValue);
             }
@@ -296,7 +296,7 @@ final class Json
                 );
             } elseif (\is_a($class, \ArrayObject::class, true)) {
                 /** @noinspection PhpSillyAssignmentInspection - phpstan helper */
-                /** @phpstan-var \ArrayObject<mixed, mixed> $class */
+                /** @phpstan-var \ArrayObject<array-key, mixed> $class */
                 $class = $class;
                 $array[$key] = $this->mapArray(
                     $jsonValue,

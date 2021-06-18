@@ -901,24 +901,25 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Sort the entries with a user-defined comparison function and maintain key association.
      *
-     * @param callable $function
+     * @param callable $callable
      *
-     * @throws \InvalidArgumentException
+     *@throws \InvalidArgumentException
      *
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
+     * @phpstan-param  callable(T,T):int $callable
      * @phpstan-return static<TKey,T>
      */
-    public function uasort($function): self
+    public function uasort($callable): self
     {
-        if (!\is_callable($function)) {
+        if (!\is_callable($callable)) {
             throw new \InvalidArgumentException('Passed function must be callable');
         }
 
         $this->generatorToArray();
 
-        \uasort($this->array, $function);
+        \uasort($this->array, $callable);
 
         return $this;
     }
@@ -926,24 +927,25 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Sort the entries with a user-defined comparison function and maintain key association.
      *
-     * @param callable $function
+     * @param callable $callable
      *
-     * @throws \InvalidArgumentException
+     *@throws \InvalidArgumentException
      *
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
+     * @phpstan-param  callable(T,T):int $callable
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function uasortImmutable($function): self
+    public function uasortImmutable($callable): self
     {
         $that = clone $this;
 
         /**
          * @psalm-suppress ImpureMethodCall - object is already cloned
          */
-        $that->uasort($function);
+        $that->uasort($callable);
 
         return $that;
     }
@@ -951,36 +953,38 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Sort the entries by keys using a user-defined comparison function.
      *
-     * @param callable $function
+     * @param callable $callable
      *
      * @throws \InvalidArgumentException
      *
      * @return static
      *                <p>(Mutable) Return this Arrayy object.</p>
      *
+     * @phpstan-param  callable(TKey,TKey):int $callable
      * @phpstan-return static<TKey,T>
      */
-    public function uksort($function): self
+    public function uksort($callable): self
     {
-        return $this->customSortKeys($function);
+        return $this->customSortKeys($callable);
     }
 
     /**
      * Sort the entries by keys using a user-defined comparison function.
      *
-     * @param callable $function
+     * @param callable $callable
      *
      * @throws \InvalidArgumentException
      *
      * @return static
      *                <p>(Immutable) Return this Arrayy object.</p>
      *
+     * @phpstan-param  callable(TKey,TKey):int $callable
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function uksortImmutable($function): self
+    public function uksortImmutable($callable): self
     {
-        return $this->customSortKeysImmutable($function);
+        return $this->customSortKeysImmutable($callable);
     }
 
     /**
@@ -1644,7 +1648,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function countValues(): self
     {
-        return self::create(\array_count_values($this->toArray()), $this->iteratorClass);
+        /** @phpstan-var static<array-key,int> $return - help for phpstan */
+        $return = self::create(\array_count_values($this->toArray()), $this->iteratorClass);
+
+        return $return;
     }
 
     /**
@@ -1894,7 +1901,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         );
 
-        return static::create($array);
+        /** @var static<int,string> $return - help for phpstan */
+        $return = static::create($array);
+
+        return $return;
     }
 
     /**
@@ -1932,7 +1942,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createWithRange($low, $high, $step = 1): self
     {
-        return static::create(\range($low, $high, $step));
+        /** @phpstan-var static<int,int|string> $return - help for phpstan */
+        $return = static::create(\range($low, $high, $step));
+
+        return $return;
     }
 
     /**
@@ -1967,20 +1980,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see          http://php.net/manual/en/function.uksort.php
      *
-     * @param callable $function
+     * @param callable $callable
      *
      * @throws \InvalidArgumentException
      *
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
+     * @phpstan-param  callable(TKey,TKey):int $callable
      * @phpstan-return static<TKey,T>
      */
-    public function customSortKeys(callable $function): self
+    public function customSortKeys(callable $callable): self
     {
         $this->generatorToArray();
 
-        \uksort($this->array, $function);
+        /* @phpstan-ignore-next-line | false-positive for "callable((int|string), (int|string)): int" vs. "callable(TKey of (int|string), TKey of (int|string)): int" */
+        \uksort($this->array, $callable);
 
         return $this;
     }
@@ -1990,17 +2005,18 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see          http://php.net/manual/en/function.uksort.php
      *
-     * @param callable $function
+     * @param callable $callable
      *
      * @throws \InvalidArgumentException
      *
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
+     * @phpstan-param  callable(TKey,TKey):int $callable
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function customSortKeysImmutable(callable $function): self
+    public function customSortKeysImmutable(callable $callable): self
     {
         $that = clone $this;
 
@@ -2008,8 +2024,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         /**
          * @psalm-suppress ImpureFunctionCall - object is already cloned
+         * @phpstan-ignore-next-line | false-positive for "callable((int|string), (int|string)): int" vs. "callable(TKey of (int|string), TKey of (int|string)): int"
          */
-        \uksort($that->array, $function);
+        \uksort($that->array, $callable);
 
         return $that;
     }
@@ -2025,23 +2042,24 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *     return ($a > $b) ? 1 : -1;
      * };
      * $arrayy = a(['three' => 3, 'one' => 1, 'two' => 2]);
-     * $resultArrayy = $arrayy->customSortValues($callable); // Arrayy['one' => 1, 'two' => 2, 'three' => 3]
+     * $resultArrayy = $arrayy->customSortValues($callable); // Arrayy[1, 2, 3]
      * </code>
      *
      * @see          http://php.net/manual/en/function.usort.php
      *
-     * @param callable $function
+     * @param callable $callable
      *
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @phpstan-return static<TKey,T>
+     * @phpstan-param  callable(T,T):int $callable
+     * @phpstan-return static<int,T>
      */
-    public function customSortValues(callable $function): self
+    public function customSortValues(callable $callable): self
     {
         $this->generatorToArray();
 
-        \usort($this->array, $function);
+        \usort($this->array, $callable);
 
         return $this;
     }
@@ -2051,24 +2069,25 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @see          http://php.net/manual/en/function.usort.php
      *
-     * @param callable $function
+     * @param callable $callable
      *
      * @throws \InvalidArgumentException
      *
      * @return $this
      *               <p>(Immutable) Return this Arrayy object.</p>
      *
-     * @phpstan-return static<TKey,T>
+     * @phpstan-param  callable(T,T):int $callable
+     * @phpstan-return static<int,T>
      * @psalm-mutation-free
      */
-    public function customSortValuesImmutable($function): self
+    public function customSortValuesImmutable($callable): self
     {
         $that = clone $this;
 
         /**
          * @psalm-suppress ImpureMethodCall - object is already cloned
          */
-        $that->customSortValues($function);
+        $that->customSortValues($callable);
 
         return $that;
     }
@@ -2324,7 +2343,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param \Closure(T=):T|\Closure(T=,TKey=):T $closure
+     * @phpstan-param \Closure(T=,?TKey=):T $closure
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -2725,7 +2744,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        /** @phpstan-var TKey|null $return */
+        /** @phpstan-var TKey|null $return - help for phpstan */
         $return = \array_key_first($this->array);
 
         return $return;
@@ -2999,6 +3018,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                                 &&
                                 isset($dataTmp[$keyTmp])
                             ) {
+                                /** @phpstan-ignore-next-line | special? */
                                 $returnTmp->add($dataTmp[$keyTmp]);
 
                                 continue;
@@ -4082,7 +4102,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                        </p>
      *
      * @return $this
-     *               <p>(Immutable) Return this Arrayy object.</p>
+     *               <p>(Immutable)</p>
      *
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
@@ -4586,7 +4606,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Get the most used value from the array.
      *
      * @return mixed|null
-     *                    <p>(Immutable) Return null if there wasn't a element.</p>
+     *                    <p>(Immutable) Return null if there wasn't an element.</p>
      *
      * @phpstan-return T|null
      * @psalm-mutation-free
@@ -5357,11 +5377,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $initial = $callable($initial, $value, $key);
         }
 
-        return static::create(
+        /** @var static<TKey,T2> $return  - help for phpstan */
+        $return = static::create(
             $initial,
             $this->iteratorClass,
             false
         );
+
+        return $return;
     }
 
     /**
@@ -5826,12 +5849,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function replaceValues($search, $replacement = ''): self
     {
-        $function = static function ($value) use ($search, $replacement) {
+        $callable = static function ($value) use ($search, $replacement) {
             return \str_replace($search, $replacement, $value);
         };
 
         /** @phpstan-ignore-next-line | ignore Closure with one or two parameters, is this a bug in phpstan? */
-        return $this->each($function);
+        return $this->each($callable);
     }
 
     /**
@@ -6829,11 +6852,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        return static::create(
+        /** @var static<int, static<TKey,T>> $return  - help for phpstan */
+        $return = static::create(
             $return,
             $this->iteratorClass,
             false
         );
+
+        return $return;
     }
 
     /**
@@ -7035,6 +7061,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with modified elements.</p>
      *
+     * @template TExtra
+     *              <p>The extra input value type.</p>
+     *
+     * @phostan-param TExtra $userData
+     * @phpstan-param  callable(T,TKey,?TExtra):void $callable
      * @phpstan-return static<TKey,T>
      */
     public function walk(
