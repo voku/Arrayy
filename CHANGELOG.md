@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.8.10 (2021-06-19)
+
+- add more support for Generics + phpstan checks
+
 ### 7.8.9 (2021-03-29)
 
 - fix code style
