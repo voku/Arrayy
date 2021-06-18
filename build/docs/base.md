@@ -182,8 +182,68 @@ var_dump($user->city->name); // Düsseldorf
 
 The library also offers OO method chaining, as seen below:
 
+simple example:
 ```php
 echo a(['fòô', 'bàř', 'bàř'])->unique()->reverse()->implode(','); // 'bàř,fòô'
+```
+
+complex example:
+```php
+/**
+ * @property int    $id
+ * @property string $firstName
+ * @property string $lastName
+ *
+ * @extends  \Arrayy\Arrayy<array-key,mixed>
+ */
+class User extends \Arrayy\Arrayy
+{
+  protected $checkPropertyTypes = true;
+
+  protected $checkPropertiesMismatchInConstructor = true;
+}
+
+/**
+ * @template TKey of array-key
+ * @extends  AbstractCollection<TKey,User>
+ */
+class UserCollection extends \Arrayy\Collection\AbstractCollection
+{
+    /**
+     * The type (FQCN) associated with this collection.
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return User::class;
+    }
+}
+
+
+$m = User::meta();
+
+$data = static function () use ($m) {
+    yield new User([$m->id => 40, $m->firstName => 'Foo', $m->lastName => 'Moelleken']);
+    yield new User([$m->id => 30, $m->firstName => 'Sven', $m->lastName => 'Moelleken']);
+    yield new User([$m->id => 20, $m->firstName => 'Lars', $m->lastName => 'Moelleken']);
+    yield new User([$m->id => 10, $m->firstName => 'Lea', $m->lastName => 'Moelleken']);
+};
+
+$users = UserCollection::createFromGeneratorFunction($data);
+$names = $users
+    ->filter(static function (User $user): bool {
+        return $user->id <= 30;
+    })
+    ->customSortValuesImmutable(static function (User $a, User $b): int {
+        return $a->firstName <=> $b->firstName;
+    })
+    ->map(static function (User $user): string {
+        return $user->firstName;
+    })
+    ->implode(';');
+
+static::assertSame('Lars;Lea;Sven', $names);
 ```
 
 ## Implemented Interfaces
