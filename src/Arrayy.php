@@ -1246,7 +1246,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $return = [];
         foreach ($this->getGenerator() as $key => $value) {
-            \assert(\is_string($key) || \is_int($key) || \is_float($key));
 
             if ($case === \CASE_LOWER) {
                 $key = \mb_strtolower((string) $key);
@@ -1612,7 +1611,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>Returns true if all the given values exists in the array, false otherwise.</p>
      *
-     * @phpstan-param array<mixed>|array<T> $needles
+     * @phpstan-param array<T> $needles
      * @psalm-mutation-free
      */
     public function containsValues(array $needles): bool
@@ -2894,7 +2893,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return mixed|static
      *
-     * @phpstan-param array-key $key
+     * @phpstan-param TKey $key
      * @phpstan-param array<array-key,mixed>|array<TKey,T> $array
      * @psalm-mutation-free
      */
@@ -3439,12 +3438,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Group values from a array according to the results of a closure.
      *
-     * @param callable|string $grouper  <p>A callable function name.</p>
+     * @param callable|string|int $grouper  <p>A callable function name.</p>
      * @param bool            $saveKeys
      *
      * @return static
      *                <p>(Immutable)</p>
      *
+     * @phpstan-param \Closure(T=,TKey=):TKey|TKey $grouper
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -3475,9 +3475,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if ($groupKey !== null) {
                 if ($saveKeys) {
                     $result[$groupKey] = $newValue;
+                    /** @phpstan-ignore-next-line | offset error? */
                     $result[$groupKey][$key] = $value;
                 } else {
                     $result[$groupKey] = $newValue;
+                    /** @phpstan-ignore-next-line | offset error? */
                     $result[$groupKey][] = $value;
                 }
             }
@@ -3831,7 +3833,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *
-     * @phpstan-param array<array-key,mixed> $array
+     * @phpstan-param array<TKey,T> $array
      */
     public function isEqual(array $array): bool
     {
@@ -4139,7 +4141,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return null;
         }
 
-        return $this->get($key_last);
+        /** @var T $value_last */
+        $value_last = $this->get($key_last);
+
+        return $value_last;
     }
 
     /**
@@ -4147,6 +4152,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return mixed|null
      *                    <p>Return null if there wasn't a element.</p>
+     *
+     * @phpstan-return null|TKey
      * @psalm-mutation-free
      */
     public function lastKey()
@@ -4580,6 +4587,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return false|mixed
      *                     <p>Will return false if there are no values.</p>
+     *
+     * @phpstan-return false|T
      */
     public function min()
     {
@@ -5059,6 +5068,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param mixed                          $fallback
      *
      * @return mixed
+     *
+     * @template TFallback $fallback
+     * @phpstan-return TFallback|T|T[]
      */
     public function pull($keyOrKeys = null, $fallback = null)
     {
@@ -5080,6 +5092,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $this->offsetUnset($keyOrKeys);
         }
 
+        /** @var TFallback|T|T[] $valueOrValues */
         return $valueOrValues;
     }
 
@@ -5366,7 +5379,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *              <p>The output value type.</p>
      *
      * @phpstan-param callable(T2, T, TKey): T2 $callable
-     * @phpstan-param T2                  $initial
+     * @phpstan-param T2                        $initial
      *
      * @phpstan-return static<TKey,T2>
      * @psalm-mutation-free
@@ -5377,7 +5390,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $initial = $callable($initial, $value, $key);
         }
 
-        /** @var static<TKey,T2> $return  - help for phpstan */
+        /** @var static<TKey,T2> $return - help for phpstan */
         $return = static::create(
             $initial,
             $this->iteratorClass,
@@ -5666,6 +5679,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
+     * @phpstan-param TKey $oldKey
+     * @phpstan-param TKey $newKey
+     * @phpstan-param T $newValue
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -5811,6 +5827,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
+     * @phpstan-param T $search
+     * @phpstan-param T $replacement
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -5994,6 +6012,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Will return a empty Arrayy if the value wasn't found.</p>
      *
+     * @phpstan-param TKey $index
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -6013,6 +6032,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         // php cast "bool"-index into "int"-index
+        /** @phpstan-ignore-next-line | array-key helper */
         if ((bool) $index === $index) {
             $index = (int) $index;
         }
@@ -6069,6 +6089,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return mixed
      *               <p>(Mutable)</p>
+     *
+     * @phpstan-param TKey $key
+     * @phpstan-param T $fallback
      */
     public function setAndGet($key, $fallback = null)
     {
@@ -6085,8 +6108,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Shifts a specified value off the beginning of array.
      *
-     * @return mixed
-     *               <p>(Mutable) A shifted element from the current array.</p>
+     * @return mixed|null
+     *                    <p>(Mutable) A shifted element from the current array.</p>
+     *
+     * @phpstan-return T|null
      */
     public function shift()
     {
@@ -7124,7 +7149,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Convert an array into a object.
+     * Convert an array into an object.
      *
      * @param array $array
      *
@@ -7170,6 +7195,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @template TInput
      *
      * @phpstan-param  array<array-key,TInput>|\Generator<array-key,TInput>|null $input
+     * @phpstan-param TKey|TKey[]|null $search_values
      * @phpstan-return array<array-key>|array<TKey>
      *
      * @psalm-mutation-free
@@ -7220,6 +7246,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     (
                         $is_array_tmp === true
                         &&
+                        /** @phpstan-ignore-next-line | is already checked via "$is_array_tmp" */
                         \in_array($value, $search_values, $strict)
                     )
                 ) {
@@ -7665,6 +7692,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param bool            $checkProperties
      *
      * @return bool
+     *
+     * @phpstan-param TKey|null $key
+     * @phpstan-param T $value
      */
     protected function internalSet(
         $key,

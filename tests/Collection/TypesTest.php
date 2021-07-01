@@ -65,7 +65,7 @@ final class TypesTest extends TestCase
                 return $a->firstName <=> $b->firstName;
             })
             ->map(static function (UserData $person): string {
-                return (string)$person->firstName;
+                return (string) $person->firstName;
             })
             ->implode(';');
 

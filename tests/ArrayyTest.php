@@ -1994,8 +1994,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     public function testCanGroupValues()
     {
         $under = A::create(\range(1, 5))->group(
-            static function ($value) {
-                return $value % 2 === 0;
+            static function ($value, $key) {
+                return (int)($value % 2 === 0);
             }
         );
         $matcher = [
@@ -2015,8 +2015,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testCanGroupValuesWithSavingKeys()
     {
-        $grouper = static function ($value) {
-            return $value % 2 === 0;
+        $grouper = static function ($value, $key) {
+            return (int)($value % 2 === 0);
         };
         $under = A::create(\range(1, 5))->group($grouper, true);
         $matcher = [
@@ -2028,8 +2028,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
     public function testCanGroupValuesWithSavingKeysViaYield()
     {
-        $grouper = static function ($value) {
-            return $value % 2 === 0;
+        $grouper = static function ($value, $key) {
+            return (int)($value % 2 === 0);
         };
         $under = A::create(\range(1, 5))->group($grouper, true);
         $matcher = [

@@ -703,6 +703,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             $last = null;
         }
 
+        /** @phpstan-ignore-next-line */
         if ($result instanceof Arrayy) {
             $result = $result->getArray();
         }
