@@ -1521,10 +1521,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>
      *
-     * @phpstan-param array<array-key>|array<TKey> $needles
+     * @phpstan-param array<TKey> $needles
      * @psalm-mutation-free
      */
-    public function containsKeys(array $needles, $recursive = false): bool
+    public function containsKeys(array $needles, bool $recursive = false): bool
     {
         if ($recursive === true) {
             return
@@ -1561,7 +1561,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>
      *
-     * @phpstan-param array<array-key>|array<TKey> $needles
+     * @phpstan-param array<TKey> $needles
      * @psalm-mutation-free
      */
     public function containsKeysRecursive(array $needles): bool
@@ -2831,9 +2831,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray();
 
         if ($number === null) {
-            $this->array = (array) \array_shift($this->array);
+            $shift = \array_shift($this->array);
+            $this->array = $shift !== null ? [$shift] : [];
         } else {
-            $this->array = \array_splice($this->array, 0, $number);
+            /** @var array<TKey,T> $splice - hack for phpstan */
+            $splice = \array_splice($this->array, 0, $number);
+            $this->array = $splice;
         }
 
         return $this;
@@ -3917,11 +3920,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             ++$i;
         }
 
-        if ($i === 0) {
-            return false;
-        }
-
-        return true;
+        return !($i === 0);
     }
 
     /**
@@ -5155,6 +5154,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($number === null) {
+            /** @noinspection NonSecureArrayRandUsageInspection */
             $arrayRandValue = [$this->array[\array_rand($this->array)]];
 
             return static::create(
@@ -5165,6 +5165,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         $arrayTmp = $this->array;
+        /** @noinspection NonSecureShuffleUsageInspection */
         \shuffle($arrayTmp);
 
         return static::create(
@@ -5272,12 +5273,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($number === null) {
+            /** @noinspection NonSecureArrayRandUsageInspection */
             $arrayRandValue = [$this->array[\array_rand($this->array)]];
             $this->array = $arrayRandValue;
 
             return $this;
         }
 
+        /** @noinspection NonSecureShuffleUsageInspection */
         \shuffle($this->array);
 
         return $this->firstsMutable($number);
@@ -6143,6 +6146,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($secure !== true) {
+            /** @noinspection NonSecureShuffleUsageInspection */
             \shuffle($array);
         } else {
             $size = \count($array, \COUNT_NORMAL);
@@ -6151,6 +6155,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 try {
                     $r = \random_int(0, $i);
                 } catch (\Exception $e) {
+                    /** @noinspection RandomApiMigrationInspection - "random_int" is already in use */
                     $r = \mt_rand(0, $i);
                 }
                 if ($r !== $i) {
@@ -7195,8 +7200,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @template TInput
      *
      * @phpstan-param  array<array-key,TInput>|\Generator<array-key,TInput>|null $input
-     * @phpstan-param TKey|TKey[]|null $search_values
-     * @phpstan-return array<array-key>|array<TKey>
+     * @phpstan-param T|T[]|null $search_values
+     * @phpstan-return array<int, TKey>
      *
      * @psalm-mutation-free
      */
@@ -7665,6 +7670,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
             if ($path !== false) {
                 // crawl though the keys
+                /** @noinspection SlowArrayOperationsInLoopInspection */
                 while (\count($path, \COUNT_NORMAL) > 1) {
                     $key = \array_shift($path);
 
@@ -7734,6 +7740,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
             if ($path !== false) {
                 // crawl through the keys
+                /** @noinspection SlowArrayOperationsInLoopInspection */
                 while (\count($path, \COUNT_NORMAL) > 1) {
                     $key = \array_shift($path);
 
