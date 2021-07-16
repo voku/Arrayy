@@ -7052,7 +7052,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-return static<TKey,T>
+     * @phpstan-return static<int,T>
      * @psalm-mutation-free
      */
     public function values(): self
