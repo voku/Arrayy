@@ -1246,7 +1246,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $return = [];
         foreach ($this->getGenerator() as $key => $value) {
-
             if ($case === \CASE_LOWER) {
                 $key = \mb_strtolower((string) $key);
             } else {
