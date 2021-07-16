@@ -187,7 +187,7 @@ return PhpCsFixer\Config::create()
                                 'pow_to_exponentiation'                         => true,
                                 'pre_increment'                                 => true,
                                 'protected_to_private'                          => true,
-                                'return_assignment'                             => true,
+                                'return_assignment'                             => false, // not working as expected
                                 'return_type_declaration'                       => true,
                                 'self_accessor'                                 => false, // not working as expected
                                 'semicolon_after_instruction'                   => true,

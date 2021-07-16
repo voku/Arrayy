@@ -26,6 +26,7 @@ parameters:
         - '/\(array<TKey of \(int\|string\), T>\) does not accept key int\|string/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept array<int, T>/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept array<int\|string, T>/'
+        - '/\(array<TKey of \(int\|string\), T>\) does not accept array<T>/'
         - '/array_map expects \(callable\(\):/'
         # ignore gernal errors
         - '/Unsafe usage of new static/'

@@ -1995,7 +1995,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $under = A::create(\range(1, 5))->group(
             static function ($value, $key) {
-                return (int)($value % 2 === 0);
+                return (int) ($value % 2 === 0);
             }
         );
         $matcher = [
@@ -2016,7 +2016,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     public function testCanGroupValuesWithSavingKeys()
     {
         $grouper = static function ($value, $key) {
-            return (int)($value % 2 === 0);
+            return (int) ($value % 2 === 0);
         };
         $under = A::create(\range(1, 5))->group($grouper, true);
         $matcher = [
@@ -2029,7 +2029,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     public function testCanGroupValuesWithSavingKeysViaYield()
     {
         $grouper = static function ($value, $key) {
-            return (int)($value % 2 === 0);
+            return (int) ($value % 2 === 0);
         };
         $under = A::create(\range(1, 5))->group($grouper, true);
         $matcher = [
@@ -3389,6 +3389,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $array = ['_____foo  ', '__bar   '];
         $arrayy = A::create($array)->invoke('trim', ['_', ' ']);
         static::assertSame(['foo  ', '__bar'], $arrayy->getArray());
+
+        $array = [1 => '_____foo  ', 2 => '__bar   '];
+        $arrayy = A::create($array)->invoke('trim', ['_', ' ']);
+        static::assertSame([0 => 'foo  ', 1 => '__bar'], $arrayy->getArray());
+
+        $array = [1 => '_____foo  ', 2 => '__bar   '];
+        $arrayy = A::create($array)->invoke('trim');
+        static::assertSame([1 => '_____foo', 2 => '__bar'], $arrayy->getArray());
     }
 
     public function testIsArrayAssoc()

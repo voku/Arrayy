@@ -16,6 +16,8 @@ final class BoolTypeTest extends TestCase
     {
         $set = new BoolCollection([true, true, false, false]);
 
+        $a = $set->toArray();
+
         static::assertSame(
             [true, true, false, false],
             $set->toArray()
