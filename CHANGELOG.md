@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.8.11 (2021-08-08)
+
+- fix fatal error from "ArrayyRewindableExtendedGenerator"
+
 ### 7.8.10 (2021-06-19)
 
 - add more support for Generics + phpstan checks
