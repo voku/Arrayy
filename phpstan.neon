@@ -23,7 +23,6 @@ parameters:
         - '/function call_user_func expects callable.*array\(.*\) given/'
         - '/function call_user_func_array expects callable.*array\(.*\) given/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept key int/'
-        - '/\(array<TKey of \(int\|string\), T>\) does not accept key int\|string/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept array<int, T>/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept array<int\|string, T>/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept array<T>/'

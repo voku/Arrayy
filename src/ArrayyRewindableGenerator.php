@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Arrayy;
 
 /**
- * @template   XKey
+ * @template   XKey as array-key
  * @template   X
- * @implements \Iterator<XKey,X>
+ * @extends  \ArrayIterator<XKey,X>
  *
  * @internal
  */
-class ArrayyRewindableGenerator implements \Iterator
+class ArrayyRewindableGenerator extends \ArrayIterator
 {
     /**
      * @var string

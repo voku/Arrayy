@@ -48,14 +48,21 @@ final class Json
     /**
      * Map data all data in $json into the given $object instance.
      *
-     * @param iterable      $json   JSON object structure from json_decode()
-     * @param object|string $object Object to map $json data into
+     * @param iterable $json
+     *                                                      <p>JSON object structure from json_decode()</p>
+     * @param object|string $object
+     *                                                      <p>Object to map $json data into</p>
      *
-     * @phpstan-param object|class-string $object Object to map $json data into
+     * @return mixed
+     *               <p>mapped object is returned</p>
      *
-     * @return mixed mapped object is returned
+     * @see mapArray()
      *
-     * @see    mapArray()
+     * @template TObject
+     * @phpstan-param TObject|class-string<TObject> $object
+     *                                                      <p>Object to map $json data into.</p>
+     * @phpstan-return TObject
+     *
      */
     public function map($json, $object)
     {
@@ -219,6 +226,10 @@ final class Json
 
             $this->setProperty($object, $accessor, $child);
         }
+
+        /** @noinspection PhpSillyAssignmentInspection */
+        /** @phpstan-var TObject $object */
+        $object = $object;
 
         return $object;
     }
@@ -681,23 +692,32 @@ final class Json
      * This method exists to be overwritten in child classes,
      * so you can do dependency injection or so.
      *
-     * @param object|string $class        Class name to instantiate
-     * @param bool          $useParameter Pass $parameter to the constructor or not
-     * @param mixed         $jsonValue    Constructor parameter (the json value)
+     * @param object|string $class
+     *                            <p>Class name to instantiate</p>
+     * @param bool $useParameter
+     *                            <p>Pass $parameter to the constructor or not</p>
+     * @param mixed $jsonValue
+     *                            <p>Constructor parameter (the json value)</p>
      *
-     * @phpstan-param object|class-string $class
-     *
-     * @return object Freshly created object
+     * @return object
+     *               <p>Freshly created object</p>
      *
      * @internal
+     *
+     * @template TClass
+     * @phpstan-param TClass|class-string<TClass> $class
+     * @phpstan-return TClass
      */
     private static function createInstance(
         $class,
-        $useParameter = false,
+        bool $useParameter = false,
         $jsonValue = null
     ) {
         if ($useParameter) {
-            return new $class($jsonValue);
+            /** @phpstan-var TClass $return */
+            $return = new $class($jsonValue);
+
+            return $return;
         }
 
         $reflectClass = new \ReflectionClass($class);
@@ -707,9 +727,13 @@ final class Json
             ||
             $constructor->getNumberOfRequiredParameters() > 0
         ) {
-            return $reflectClass->newInstanceWithoutConstructor();
+            /** @phpstan-var TClass $return */
+            $return =  $reflectClass->newInstanceWithoutConstructor();
+        } else {
+            /** @phpstan-var TClass $return */
+            $return = $reflectClass->newInstance();
         }
 
-        return $reflectClass->newInstance();
+        return $return;
     }
 }

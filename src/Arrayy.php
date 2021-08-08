@@ -3128,7 +3128,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * @param string $json
      *
-     * @return $this
+     * @return static
+     *                <p>(Immutable)</p>
      */
     public static function createFromJsonMapper(string $json)
     {
@@ -3144,7 +3145,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         };
 
-        return $mapper->map($jsonObject, $class);
+        /** @var static $return - hack for phpstan */
+        $return = $mapper->map($jsonObject, $class);
+
+        return $return;
     }
 
     /**
@@ -3485,11 +3489,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if ($groupKey !== null) {
                 if ($saveKeys) {
                     $result[$groupKey] = $newValue;
-                    /** @phpstan-ignore-next-line | offset error? */
                     $result[$groupKey][$key] = $value;
                 } else {
                     $result[$groupKey] = $newValue;
-                    /** @phpstan-ignore-next-line | offset error? */
                     $result[$groupKey][] = $value;
                 }
             }
@@ -5637,7 +5639,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         foreach ($this->array as $key => $item) {
             if ($item === $value) {
-                /** @phpstan-ignore-next-line | "Possibly invalid array key type int|string|TKey.", is this a bug in phpstan? */
                 unset($this->array[$key]);
             }
         }
@@ -7262,7 +7263,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     (
                         $is_array_tmp === true
                         &&
-                        /** @phpstan-ignore-next-line | is already checked via "$is_array_tmp" */
                         \in_array($value, $search_values, $strict)
                     )
                 ) {

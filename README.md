@@ -647,7 +647,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#createfromgeneratorfunctioncallable-generatorfunction-static">createFromGeneratorFunction</a>
 </td><td><a href="#createfromgeneratorimmutablegenerator-generator-static">createFromGeneratorImmutable</a>
 </td></tr><tr><td><a href="#createfromjsonstring-json-static">createFromJson</a>
-</td><td><a href="#createfromjsonmapperstring-json-this">createFromJsonMapper</a>
+</td><td><a href="#createfromjsonmapperstring-json-static">createFromJsonMapper</a>
 </td><td><a href="#createfromobjecttraversable-object-static">createFromObject</a>
 </td><td><a href="#createfromobjectvarsobject-object-static">createFromObjectVars</a>
 </td></tr><tr><td><a href="#createfromstringstring-str-stringnull-delimiter-stringnull-regex-static">createFromString</a>
@@ -701,7 +701,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#getrandomvaluesint-number-static">getRandomValues</a>
 </td><td><a href="#getvalues-static">getValues</a>
 </td><td><a href="#getvaluesyield-generator">getValuesYield</a>
-</td><td><a href="#groupcallablestring-grouper-bool-savekeys-static">group</a>
+</td><td><a href="#groupcallableintstring-grouper-bool-savekeys-static">group</a>
 </td></tr><tr><td><a href="#hasmixed-key-bool">has</a>
 </td><td><a href="#hasvaluemixed-value-bool">hasValue</a>
 </td><td><a href="#implodestring-glue-string-prefix-string">implode</a>
@@ -800,7 +800,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#setstring-key-mixed-value-this">set</a>
 </td></tr><tr><td><a href="#setandgetmixed-key-mixed-fallback-mixed">setAndGet</a>
 </td><td><a href="#setiteratorclassstring-iteratorclass-void">setIteratorClass</a>
-</td><td><a href="#shift-mixed">shift</a>
+</td><td><a href="#shift-mixednull">shift</a>
 </td><td><a href="#shufflebool-secure-arraynull-array-static">shuffle</a>
 </td></tr><tr><td><a href="#sizeint-mode-int">size</a>
 </td><td><a href="#sizeisint-size-bool">sizeIs</a>
@@ -879,7 +879,7 @@ a(['fòô' => ['bàř']])->appendArrayValues(['foo1', 'foo2'], 'fòô'); // Arra
 </code>
 
 **Parameters:**
-- `array<array-key, T> $values`
+- `array<T> $values`
 - `TKey|null $key`
 
 **Return:**
@@ -1156,7 +1156,7 @@ a([1 => true])->containsKeys(array(1 => 0)); // true
 </code>
 
 **Parameters:**
-- `array<array-key>|array<TKey> $needles <p>The keys you are searching for.</p>`
+- `array<TKey> $needles <p>The keys you are searching for.</p>`
 - `bool $recursive`
 
 **Return:**
@@ -1169,7 +1169,7 @@ a([1 => true])->containsKeys(array(1 => 0)); // true
 Check if all given needles are present in the array as key/index.
 
 **Parameters:**
-- `array<array-key>|array<TKey> $needles <p>The keys you are searching for.</p>`
+- `array<TKey> $needles <p>The keys you are searching for.</p>`
 
 **Return:**
 - `bool <p>Returns true if all the given keys/indexes exists in the array, false otherwise.</p>`
@@ -1209,7 +1209,7 @@ a([1, true])->containsValues(array(1, true)); // true
 </code>
 
 **Parameters:**
-- `array<mixed>|array<T> $needles`
+- `array<T> $needles`
 
 **Return:**
 - `bool <p>Returns true if all the given values exists in the array, false otherwise.</p>`
@@ -1348,7 +1348,7 @@ Create an new Arrayy object via JSON.
 
 --------
 
-## createFromJsonMapper(string $json): $this
+## createFromJsonMapper(string $json): static
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
@@ -1356,7 +1356,7 @@ Create an new Arrayy object via JSON.
 - `string $json`
 
 **Return:**
-- `$this`
+- `static <p>(Immutable)</p>`
 
 --------
 
@@ -1939,7 +1939,7 @@ $arrayy['user.firstname']; // Lars
 </code>
 
 **Parameters:**
-- `array-key $key <p>The key to look for.</p>`
+- `TKey $key <p>The key to look for.</p>`
 - `mixed $fallback <p>Value to fallback to.</p>`
 - `array<array-key, mixed>|array<TKey, T> $array <p>The array to get from, if it's set to "null" we use the current array from the
 class.</p>`
@@ -2205,12 +2205,12 @@ appear in the array as Generator.</p>`
 
 --------
 
-## group(callable|string $grouper, bool $saveKeys): static
+## group(callable|int|string $grouper, bool $saveKeys): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Group values from a array according to the results of a closure.
 
 **Parameters:**
-- `callable|string $grouper <p>A callable function name.</p>`
+- `\Closure(T  = default, TKey  = default): TKey|TKey $grouper <p>A callable function name.</p>`
 - `bool $saveKeys`
 
 **Return:**
@@ -2412,7 +2412,7 @@ a(['💩'])->isEqual(['💩']); // true
 </code>
 
 **Parameters:**
-- `array<array-key, mixed> $array`
+- `array<TKey, T> $array`
 
 **Return:**
 - `bool`
@@ -3479,9 +3479,9 @@ $arrayy->replace(2, 'notfoo', 'notbar'); // Arrayy[1 => 'foo', 'notfoo' => 'notb
 </code>
 
 **Parameters:**
-- `mixed $oldKey`
-- `mixed $newKey`
-- `mixed $newValue`
+- `TKey $oldKey`
+- `TKey $newKey`
+- `T $newValue`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3508,7 +3508,7 @@ $arrayy->replaceAllKeys($secondArray); // Arrayy[1 => "one", 'one' => "two", 2 =
 </code>
 
 **Parameters:**
-- `array<array-key, TKey> $keys <p>An array of keys.</p>`
+- `array<TKey> $keys <p>An array of keys.</p>`
 
 **Return:**
 - `static <p>(Immutable) Arrayy object with keys from the other array, empty Arrayy object if the number of elements
@@ -3537,7 +3537,7 @@ $arrayy->replaceAllValues($secondArray); // Arrayy['one' => 1, 'two' => 'one', '
 </code>
 
 **Parameters:**
-- `array<array-key, T> $array <p>An array of values.</p>`
+- `array<T> $array <p>An array of values.</p>`
 
 **Return:**
 - `static <p>(Immutable) Arrayy object with values from the other array, empty Arrayy object if the number of elements
@@ -3555,7 +3555,7 @@ a([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']); // 
 </code>
 
 **Parameters:**
-- `array<array-key, TKey> $keys <p>An array of keys matching the array's size.</p>`
+- `array<TKey> $keys <p>An array of keys matching the array's size.</p>`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3572,8 +3572,8 @@ a($testArray)->replaceOneValue('foo', 'replaced'); // Arrayy['bar', 'foo' => 're
 </code>
 
 **Parameters:**
-- `mixed $search <p>The value to replace.</p>`
-- `mixed $replacement <p>The value to replace.</p>`
+- `T $search <p>The value to replace.</p>`
+- `T $replacement <p>The value to replace.</p>`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3687,7 +3687,7 @@ a(['fòô' => 'bàř'])->searchValue('fòô'); // Arrayy[0 => 'bàř']
 </code>
 
 **Parameters:**
-- `mixed $index`
+- `TKey $index`
 
 **Return:**
 - `static <p>(Immutable) Will return a empty Arrayy if the value wasn't found.</p>`
@@ -3741,8 +3741,8 @@ $arrayy->setAndGet(0, 4); // 4
 </code>
 
 **Parameters:**
-- `mixed $key <p>The key</p>`
-- `mixed $fallback <p>The default value to set if it isn't.</p>`
+- `TKey $key <p>The key</p>`
+- `T $fallback <p>The default value to set if it isn't.</p>`
 
 **Return:**
 - `mixed <p>(Mutable)</p>`
@@ -3761,7 +3761,7 @@ Sets the iterator classname for the current "Arrayy"-object.
 
 --------
 
-## shift(): mixed
+## shift(): mixed|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Shifts a specified value off the beginning of array.
 
@@ -3769,7 +3769,7 @@ Shifts a specified value off the beginning of array.
 __nothing__
 
 **Return:**
-- `mixed <p>(Mutable) A shifted element from the current array.</p>`
+- `mixed|null <p>(Mutable) A shifted element from the current array.</p>`
 
 --------
 
@@ -4041,7 +4041,7 @@ var_dump($under); // Arrayy[1, 3, 5, 2, 4]
 **Parameters:**
 - `int $offset`
 - `int|null $length`
-- `array<array-key, T> $replacement`
+- `array<T> $replacement`
 
 **Return:**
 - `static <p>(Immutable)</p>`
