@@ -5,9 +5,7 @@ namespace Arrayy\tests\Collection;
 use Arrayy\Collection\AbstractCollection;
 
 /**
- * @template TKey of array-key
- * @template T
- * @extends  \Arrayy\Collection\AbstractCollection<TKey,\stdClass>
+ * @extends  \Arrayy\Collection\AbstractCollection<array-key,\stdClass>
  */
 class StdClassCollection extends AbstractCollection
 {

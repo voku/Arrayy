@@ -7,9 +7,9 @@ namespace Arrayy\Type;
 use Arrayy\Collection\Collection;
 
 /**
- * @extends Collection<array-key,float>
+ * @extends Collection<array-key,float|int>
  */
-final class FloatCollection extends Collection implements TypeInterface
+final class FloatIntCollection extends Collection implements TypeInterface
 {
     /**
      * The type (FQCN) associated with this collection.
@@ -18,6 +18,6 @@ final class FloatCollection extends Collection implements TypeInterface
      */
     public function getType()
     {
-        return 'float';
+        return 'float|int';
     }
 }

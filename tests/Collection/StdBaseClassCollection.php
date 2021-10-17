@@ -7,9 +7,7 @@ use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckSimple;
 
 /**
- * @template TKey of array-key
- * @template T
- * @extends  Collection<TKey,\stdClass::class>
+ * @extends Collection<array-key,\stdClass::class>
  */
 class StdBaseClassCollection extends Collection
 {
