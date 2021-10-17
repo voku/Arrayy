@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.8.12 (2021-10-18)
+
+- fix "Float"-Collections (only accepts "float" now)
+- add "FloatInt"-Collections (accepts "float" and "int")
+
 ### 7.8.11 (2021-08-08)
 
 - fix fatal error from "ArrayyRewindableExtendedGenerator"
