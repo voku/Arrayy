@@ -3,8 +3,6 @@
 namespace Arrayy\tests\Collection;
 
 use Arrayy\tests\ModelInterface;
-use Arrayy\TypeCheck\TypeCheckArray;
-use Arrayy\TypeCheck\TypeCheckInterface;
 
 /**
  * @extends  \Arrayy\Collection\AbstractCollection<array-key,\Arrayy\tests\ModelInterface>
