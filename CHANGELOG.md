@@ -1,5 +1,11 @@
 # Changelog
 
+### 7.8.13 (2021-10-23)
+
+- add "NonEmptyString"-Collections (accepts "non-empty-string")
+- add "Numeric"-Collections (accepts "numeric" e.g.: 1, '1', 1.1, '1.1')
+- add "NumericString"-Collections (accepts "numeric" e.g.: '1', '1.1')
+
 ### 7.8.12 (2021-10-18)
 
 - fix "Float"-Collections (only accepts "float" now)
