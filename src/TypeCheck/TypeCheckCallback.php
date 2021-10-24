@@ -67,6 +67,6 @@ class TypeCheckCallback implements TypeCheckInterface
      */
     public function throwException($expectedTypes, $value, $type): \Throwable
     {
-        throw new \TypeError("Invalid type: callable failed, got value `" . \print_r($value, true) . "` with type {{$type}}.");
+        throw new \TypeError('Invalid type: callable failed, got value `' . \print_r($value, true) . "` with type {{$type}}.");
     }
 }
