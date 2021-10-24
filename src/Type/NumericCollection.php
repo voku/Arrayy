@@ -24,7 +24,7 @@ final class NumericCollection extends Collection implements TypeInterface
         $return = TypeCheckArray::create(
             [
                 Arrayy::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES => new TypeCheckCallback(
-                    static function($value) {
+                    static function ($value) {
                         return \is_numeric($value);
                     }
                 ),
