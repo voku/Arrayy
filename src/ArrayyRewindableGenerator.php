@@ -68,6 +68,7 @@ class ArrayyRewindableGenerator extends \ArrayIterator
      *
      * @phpstan-return X
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->generator->current();
@@ -83,6 +84,7 @@ class ArrayyRewindableGenerator extends \ArrayIterator
      *
      * @phpstan-return XKey
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->generator->key();
@@ -96,6 +98,7 @@ class ArrayyRewindableGenerator extends \ArrayIterator
      * @see  http://php.net/manual/en/iterator.next.php
      * @see  Iterator::next
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->generator->next();
@@ -109,6 +112,7 @@ class ArrayyRewindableGenerator extends \ArrayIterator
      * @see  http://php.net/manual/en/iterator.rewind.php
      * @see  Iterator::rewind
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->generateGenerator();

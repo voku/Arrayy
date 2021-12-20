@@ -284,6 +284,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-param TKey|null $key
      * @phpstan-return static<TKey,T>
      */
+    #[\ReturnTypeWillChange]
     public function append($value, $key = null): self
     {
         $this->generatorToArray();
@@ -369,6 +370,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return static<TKey,T>
      */
+    #[\ReturnTypeWillChange]
     public function asort(int $sort_flags = 0): self
     {
         $this->generatorToArray();
@@ -570,6 +572,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return static<TKey,T>
      */
+    #[\ReturnTypeWillChange]
     public function ksort(int $sort_flags = 0): self
     {
         $this->generatorToArray();
@@ -613,6 +616,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return static<TKey,T>
      */
+    #[\ReturnTypeWillChange]
     public function natcasesort(): self
     {
         $this->generatorToArray();
@@ -651,6 +655,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return static<TKey,T>
      */
+    #[\ReturnTypeWillChange]
     public function natsort(): self
     {
         $this->generatorToArray();
@@ -690,6 +695,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @psalm-mutation-free
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset): bool
     {
         // php cast "bool"-index into "int"-index
@@ -748,6 +754,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-param TKey $offset
      */
+    #[\ReturnTypeWillChange]
     public function &offsetGet($offset)
     {
         // init
@@ -768,6 +775,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->generatorToArray();
@@ -795,6 +803,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return void
      *              <p>(Mutable) Return nothing.</p>
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->generatorToArray();
@@ -878,6 +887,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
      */
+    #[\ReturnTypeWillChange]
     public function setIteratorClass($iteratorClass)
     {
         if (\class_exists($iteratorClass)) {
@@ -915,6 +925,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-param  callable(T,T):int $callable
      * @phpstan-return static<TKey,T>
      */
+    #[\ReturnTypeWillChange]
     public function uasort($callable): self
     {
         if (!\is_callable($callable)) {
@@ -967,6 +978,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-param  callable(TKey,TKey):int $callable
      * @phpstan-return static<TKey,T>
      */
+    #[\ReturnTypeWillChange]
     public function uksort($callable): self
     {
         return $this->customSortKeys($callable);
@@ -1005,6 +1017,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return static<TKey,T>
      */
+    #[\ReturnTypeWillChange]
     public function unserialize($string): self
     {
         if (\PHP_VERSION_ID < 70400) {
