@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.8.14 (2021-12-21)
+
+- add more support for Generics + phpstan checks
+- fix PHP 8.1 compatibility -> thanks @frenchcomp
+
 ### 7.8.13 (2021-10-23)
 
 - add "NonEmptyString"-Collections (accepts "non-empty-string")
