@@ -1,5 +1,5 @@
 parameters:
-    level: max
+    level: 8
     reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: true
     checkMissingIterableValueType: false
@@ -8,7 +8,7 @@ parameters:
         - %currentWorkingDirectory%/tests/
     ignoreErrors:
         -
-            message: ~typehint specified~
+            message: ~has no return type specified~
             path: %currentWorkingDirectory%/tests/*
         -
             message: '#assertContains|assertInternalType|assertStringContainsString|assertIsArray|expectExceptionMessage#'
@@ -20,15 +20,16 @@ parameters:
             message: ~Cannot call method format~
             path: %currentWorkingDirectory%/tests/ArrayyTest.php
         # false-positive?
-        - '/function call_user_func expects callable.*array\(.*\) given/'
-        - '/function call_user_func_array expects callable.*array\(.*\) given/'
+        - '/function call_user_func expects callable.*array\{.*\} given/'
+        - '/function call_user_func_array expects callable.*array\{.*\} given/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept key int/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept array<int, T>/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept array<int\|string, T>/'
         - '/\(array<TKey of \(int\|string\), T>\) does not accept array<T>/'
-        - '/array_map expects \(callable\(\):/'
+        - '/array_map expects \(callable\(mixed\):/'
         # ignore gernal errors
         - '/Unsafe usage of new static/'
+        - '/should be compatible with return type \(bool\) of method ArrayObject/'
         # ignore Iterator stuff
         - '/__construct\(\) has parameter \$iteratorClass with generic/'
         - '/create\(\) has parameter \$iteratorClass with generic/'

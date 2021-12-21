@@ -10,7 +10,6 @@ namespace Arrayy\Collection;
 
 use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
-use Arrayy\ArrayyRewindableGenerator;
 use Arrayy\Type\TypeInterface;
 use Arrayy\TypeCheck\TypeCheckArray;
 use Arrayy\TypeCheck\TypeCheckInterface;
@@ -29,18 +28,6 @@ use Arrayy\TypeCheck\TypeCheckSimple;
  */
 abstract class AbstractCollection extends Arrayy implements CollectionInterface
 {
-    /**
-     * @var array
-     * @phpstan-var array<T>
-     */
-    protected $array = [];
-
-    /**
-     * @var ArrayyRewindableGenerator|null
-     * @phpstan-var \Arrayy\ArrayyRewindableGenerator<TKey,T>|null
-     */
-    protected $generator;
-
     /**
      * @var bool
      */

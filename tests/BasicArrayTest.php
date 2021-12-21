@@ -24,7 +24,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     const TYPE_NUMERIC = 'numeric';
 
     /**
-     * @var string
+     * @var class-string<\Arrayy\Arrayy<array-key, mixed>>
      */
     protected $arrayyClassName = A::class;
 

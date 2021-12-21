@@ -5094,6 +5094,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *
      * @template TFallback $fallback
+     * @phpstan-param TFallback $fallback
      * @phpstan-return TFallback|T|T[]
      */
     public function pull($keyOrKeys = null, $fallback = null)
@@ -5366,7 +5367,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static<int,mixed>
      *                           <p>(Immutable)</p>
      *
-     * @phpstan-param  array<T,int> $array
+     * @phpstan-param  array<(int&T)|(string&T),int> $array
      * @phpstan-return static<array-key,T>
      */
     public function randomWeighted(array $array, int $number = null): self
@@ -5375,6 +5376,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $options = [];
 
         foreach ($array as $option => $weight) {
+            /** @phpstan-var T $option - hack: we protect this method via (int&T)|(string&T) */
             if ($this->searchIndex($option) !== false) {
                 for ($i = 0; $i < $weight; ++$i) {
                     $options[] = $option;
@@ -6863,6 +6865,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function toJson(int $options = 0, int $depth = 512): string
     {
+        if ($depth < 1) {
+            $depth = 1;
+        }
+
         $return = \json_encode($this->toArray(), $options, $depth);
         if ($return === false) {
             return '';

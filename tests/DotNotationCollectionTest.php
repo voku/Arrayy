@@ -11,6 +11,9 @@ use Arrayy\Arrayy;
  */
 final class DotNotationCollectionTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var array{foo: array{bar: int, deep: array<string,string>}}
+     */
     private $_array_test_1 = [
         'foo' => [
             'bar'  => 123,

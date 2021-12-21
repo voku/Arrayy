@@ -4347,6 +4347,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         unset($array['b'][0]);
 
         static::assertSame($array, $arrayy->toArray());
+        /** @phpstan-ignore-next-line */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
 
@@ -4361,6 +4362,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame([0 => 'a', 'b' => []], $array);
         static::assertSame($array, $arrayy->toArray());
+        /** @phpstan-ignore-next-line */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
     }
@@ -5448,7 +5450,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultTmp = $arrayy->get('Lars.lastname');
         static::assertSame('Mueller', $resultTmp);
 
-        // set an new value, again - via object-syntax
+        // set a new value, again - via object-syntax
         /** @phpstan-ignore-next-line */
         $arrayy->Lars = ['lastname' => 'Mueller2'];
 
