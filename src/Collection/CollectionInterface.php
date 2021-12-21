@@ -387,6 +387,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @phpstan-param TKey $offset
      * @phpstan-param T $value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value);
 
     /**
