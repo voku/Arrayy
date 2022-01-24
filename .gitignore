@@ -13,13 +13,5 @@ infection-log.txt
 # php (phpcs fixer)
 .php_cs.cache
 
-# gitbook
-_book/
-
-# node
-node_modules/
-npm-debug.log
-package-lock.json
-
-# ide
+# phpstorm
 .idea/
