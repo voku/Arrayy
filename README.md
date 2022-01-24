@@ -16,7 +16,6 @@ A PHP array manipulation library. Compatible with PHP 7+ & PHP 8+
 ``` php
 \Arrayy\Type\StringCollection::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 ```
-[documentation via gitbooks.io](https://voku.gitbooks.io/arrayy/content/)
 
 * [Installation](#installation-via-composer-require)
 * [Multidimensional ArrayAccess](#multidimensional-arrayaccess)
@@ -693,7 +692,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#getkeys-static">getKeys</a>
 </td><td><a href="#getlistbool-convertallarrayyelements-array">getList</a>
 </td><td><a href="#getobject-stdclass">getObject</a>
-</td><td><a href="#getphpdocpropertiesfromclass">getPhpDocPropertiesFromClass</a>
+</td><td><a href="#getphpdocpropertiesfromclass-arrayarray-keytypecheckinterfacetypecheckarrayarray-keytypecheckinterface">getPhpDocPropertiesFromClass</a>
 </td></tr><tr><td><a href="#getrandom-static">getRandom</a>
 </td><td><a href="#getrandomkey-mixednull">getRandomKey</a>
 </td><td><a href="#getrandomkeysint-number-static">getRandomKeys</a>
@@ -773,7 +772,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#randommutableintnull-number-this">randomMutable</a>
 </td><td><a href="#randomvalue-mixed">randomValue</a>
 </td><td><a href="#randomvaluesint-number-static">randomValues</a>
-</td><td><a href="#randomweightedarray-array-int-number">randomWeighted</a>
+</td><td><a href="#randomweightedarrayinttstringtint-array-arrayinttstringtint-number">randomWeighted</a>
 </td></tr><tr><td><a href="#reducecallable-callable-mixed-initial-static">reduce</a>
 </td><td><a href="#reduce_dimensionbool-unique-static">reduce_dimension</a>
 </td><td><a href="#reindex-this">reindex</a>
@@ -1785,9 +1784,7 @@ a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
 
 ## findBy(string $property, mixed $value, string $comparisonOp): static
 <a href="#voku-php-readme-class-methods">↑</a>
-find by .
-
-..
+find by ...
 
 EXAMPLE: <code>
 $array = [
@@ -2107,7 +2104,7 @@ __nothing__
 
 --------
 
-## getPhpDocPropertiesFromClass(): 
+## getPhpDocPropertiesFromClass(): array<array-key,\TypeCheckInterface>|\TypeCheckArray<array-key,\TypeCheckInterface>
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
@@ -2115,7 +2112,7 @@ __nothing__
 __nothing__
 
 **Return:**
-- `TODO: __not_detected__`
+- `array<array-key,\TypeCheckInterface>|\TypeCheckArray<array-key,\TypeCheckInterface>`
 
 --------
 
@@ -2301,9 +2298,7 @@ alias: for "Arrayy->searchIndex()"
 
 ## initial(int $to): static
 <a href="#voku-php-readme-class-methods">↑</a>
-Get everything but the last.
-
-.$to items.
+Get everything but the last..$to items.
 
 EXAMPLE: <code>
 a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->initial(2); // Arrayy[0 => 'foo']
@@ -2449,9 +2444,7 @@ __nothing__
 
 ## isSequential(bool $recursive): bool
 <a href="#voku-php-readme-class-methods">↑</a>
-Check if the current array is sequential [0, 1, 2, 3, 4, 5 .
-
-..] or not.
+Check if the current array is sequential [0, 1, 2, 3, 4, 5 ...] or not.
 
 EXAMPLE: <code>
 a([0 => 'foo', 1 => 'lall', 2 => 'foobar'])->isSequential(); // true
@@ -3183,7 +3176,7 @@ delete the key.
 
 **Parameters:**
 - `int|int[]|string|string[]|null $keyOrKeys`
-- `mixed $fallback`
+- `TFallback $fallback`
 
 **Return:**
 - `mixed`
@@ -3299,13 +3292,13 @@ a([1 => 'one', 2 => 'two'])->randomValues(); // e.g. Arrayy['one', 'two']
 
 --------
 
-## randomWeighted(array $array, int $number): 
+## randomWeighted(array<(int&T)|(string|T),int> $array, array<(int&T)|(string|T),int> $number): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `array $array`
-- `int $number`
+- `array<(int&T)|(string&T),int>array<(int&T)|(string&T),int> $array`
+- `array<(int&T)|(string&T),int>array<(int&T)|(string&T),int> $array`
 
 **Return:**
 - `self`

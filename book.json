@@ -1,9 +1,0 @@
-{
-  "gitbook": "2.5.x",
-  "structure": {
-    "readme": "README.md",
-    "summary": "SUMMARY.md"
-  },
-  "title": "Arrayy",
-  "description": "Array manipulation library for PHP, called Arrayy"
-}
