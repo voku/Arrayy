@@ -1,8 +1,9 @@
 # Changelog
 
-### unreleased
+### 7.9.0 (unreleased)
 
 - remove "gitbook" from "dev-dependencies"
+- add "containsOnly"
 
 ### 7.8.14 (2021-12-21)
 

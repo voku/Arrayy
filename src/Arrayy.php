@@ -1425,6 +1425,46 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Check if an item is in the current array.
      *
      * EXAMPLE: <code>
+     * a([1, true])->containsOnly(true); // false
+     * </code>
+     *
+     * @param float|int|string $value
+     * @param bool             $recursive
+     * @param bool             $strict
+     *
+     * @return bool
+     * @psalm-mutation-free
+     */
+    public function containsOnly($value, bool $recursive = false, bool $strict = true): bool
+    {
+        if ($recursive === true) {
+            return $this->in_array_recursive($value, $this->toArray(), $strict);
+        }
+
+        /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection */
+        $tmpCount = 0;
+        foreach ($this->getGeneratorByReference() as &$valueFromArray) {
+            $tmpCount++;
+
+            if ($strict) {
+                if ($value !== $valueFromArray) {
+                    return false;
+                }
+            } else {
+                /** @noinspection NestedPositiveIfStatementsInspection */
+                if ($value != $valueFromArray) {
+                    return false;
+                }
+            }
+        }
+
+        return $tmpCount !== 0;
+    }
+
+    /**
+     * Check if an item is in the current array.
+     *
+     * EXAMPLE: <code>
      * a([1, true])->contains(true); // true
      * </code>
      *

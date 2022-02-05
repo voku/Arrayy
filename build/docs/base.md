@@ -616,6 +616,12 @@ foreach ($arrayy) as $key => $value) {
 
 %__functions_list__Arrayy\Arrayy__%
 
+---
+
+%__functions_index__ArrayObject__%
+
+%__functions_list__ArrayObject__%
+
 
 ## Support
 

@@ -289,6 +289,25 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
+    public function containsOnlyProvider(): array
+    {
+        return [
+            [[], null, false],
+            [[], false, false],
+            [[0 => false], false, true],
+            [[0 => true], true, true],
+            [[0 => -9], -9, true],
+            [[1.18], 1.18, true],
+            [[1.18], 1.17, false],
+            [['string', 'foo'], 'foo', false],
+            [['foo', 'foo'], 'foo', true],
+            [['string', 'foo123'], 'foo', false],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function containsProvider(): array
     {
         return [
@@ -2274,6 +2293,20 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         new A(new \stdClass());
         static::fail('Expecting exception when the constructor is passed an array');
+    }
+
+    /**
+     * @dataProvider containsOnlyProvider()
+     *
+     * @param array $array
+     * @param mixed $value
+     * @param bool  $expected
+     */
+    public function testContainsOnly($array, $value, $expected)
+    {
+        $arrayy = new A($array);
+
+        static::assertSame($expected, $arrayy->containsOnly($value));
     }
 
     /**

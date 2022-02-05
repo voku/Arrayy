@@ -635,206 +635,209 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#containskeyintstring-key-bool">containsKey</a>
 </td></tr><tr><td><a href="#containskeysarray-needles-bool-recursive-bool">containsKeys</a>
 </td><td><a href="#containskeysrecursivearray-needles-bool">containsKeysRecursive</a>
+</td><td><a href="#containsonlyfloatintstring-value-bool-recursive-bool-strict-bool">containsOnly</a>
 </td><td><a href="#containsvaluefloatintstring-value-bool">containsValue</a>
-</td><td><a href="#containsvaluerecursivefloatintstring-value-bool">containsValueRecursive</a>
-</td></tr><tr><td><a href="#containsvaluesarray-needles-bool">containsValues</a>
+</td></tr><tr><td><a href="#containsvaluerecursivefloatintstring-value-bool">containsValueRecursive</a>
+</td><td><a href="#containsvaluesarray-needles-bool">containsValues</a>
 </td><td><a href="#countint-mode-int">count</a>
 </td><td><a href="#countvalues-static">countValues</a>
-</td><td><a href="#createmixed-data-string-iteratorclass-bool-checkpropertiesinconstructor-static">create</a>
-</td></tr><tr><td><a href="#createbyreferencearray-array-this">createByReference</a>
+</td></tr><tr><td><a href="#createmixed-data-string-iteratorclass-bool-checkpropertiesinconstructor-static">create</a>
+</td><td><a href="#createbyreferencearray-array-this">createByReference</a>
 </td><td><a href="#createfromarrayarray-array-static">createFromArray</a>
 </td><td><a href="#createfromgeneratorfunctioncallable-generatorfunction-static">createFromGeneratorFunction</a>
-</td><td><a href="#createfromgeneratorimmutablegenerator-generator-static">createFromGeneratorImmutable</a>
-</td></tr><tr><td><a href="#createfromjsonstring-json-static">createFromJson</a>
+</td></tr><tr><td><a href="#createfromgeneratorimmutablegenerator-generator-static">createFromGeneratorImmutable</a>
+</td><td><a href="#createfromjsonstring-json-static">createFromJson</a>
 </td><td><a href="#createfromjsonmapperstring-json-static">createFromJsonMapper</a>
 </td><td><a href="#createfromobjecttraversable-object-static">createFromObject</a>
-</td><td><a href="#createfromobjectvarsobject-object-static">createFromObjectVars</a>
-</td></tr><tr><td><a href="#createfromstringstring-str-stringnull-delimiter-stringnull-regex-static">createFromString</a>
+</td></tr><tr><td><a href="#createfromobjectvarsobject-object-static">createFromObjectVars</a>
+</td><td><a href="#createfromstringstring-str-stringnull-delimiter-stringnull-regex-static">createFromString</a>
 </td><td><a href="#createfromtraversableimmutabletraversable-traversable-bool-use_keys-static">createFromTraversableImmutable</a>
 </td><td><a href="#createwithrangefloatintstring-low-floatintstring-high-floatint-step-static">createWithRange</a>
-</td><td><a href="#current-falsemixed">current</a>
-</td></tr><tr><td><a href="#customsortkeyscallable-callable-this">customSortKeys</a>
+</td></tr><tr><td><a href="#current-falsemixed">current</a>
+</td><td><a href="#customsortkeyscallable-callable-this">customSortKeys</a>
 </td><td><a href="#customsortkeysimmutablecallable-callable-this">customSortKeysImmutable</a>
 </td><td><a href="#customsortvaluescallable-callable-this">customSortValues</a>
-</td><td><a href="#customsortvaluesimmutablecallable-callable-this">customSortValuesImmutable</a>
-</td></tr><tr><td><a href="#deleteintintstringstring-keyorkeys-void">delete</a>
+</td></tr><tr><td><a href="#customsortvaluesimmutablecallable-callable-this">customSortValuesImmutable</a>
+</td><td><a href="#deleteintintstringstring-keyorkeys-void">delete</a>
 </td><td><a href="#diffarray-array-static">diff</a>
 </td><td><a href="#diffkeyarray-array-static">diffKey</a>
-</td><td><a href="#diffkeyandvaluearray-array-static">diffKeyAndValue</a>
-</td></tr><tr><td><a href="#diffrecursivearray-array-arraygeneratornull-helpervariableforrecursion-static">diffRecursive</a>
+</td></tr><tr><td><a href="#diffkeyandvaluearray-array-static">diffKeyAndValue</a>
+</td><td><a href="#diffrecursivearray-array-arraygeneratornull-helpervariableforrecursion-static">diffRecursive</a>
 </td><td><a href="#diffreversearray-array-static">diffReverse</a>
 </td><td><a href="#divide-static">divide</a>
-</td><td><a href="#eachclosure-closure-static">each</a>
-</td></tr><tr><td><a href="#end-falsemixed">end</a>
+</td></tr><tr><td><a href="#eachclosure-closure-static">each</a>
+</td><td><a href="#end-falsemixed">end</a>
 </td><td><a href="#exchangearrayarraymixedstatic-data-array">exchangeArray</a>
 </td><td><a href="#existsclosure-closure-bool">exists</a>
-</td><td><a href="#fillwithdefaultsint-num-mixed-default-static">fillWithDefaults</a>
-</td></tr><tr><td><a href="#filterclosurenull-closure-int-flag-static">filter</a>
+</td></tr><tr><td><a href="#fillwithdefaultsint-num-mixed-default-static">fillWithDefaults</a>
+</td><td><a href="#filterclosurenull-closure-int-flag-static">filter</a>
 </td><td><a href="#filterbystring-property-mixed-value-stringnull-comparisonop-static">filterBy</a>
 </td><td><a href="#findclosure-closure-falsemixed">find</a>
-</td><td><a href="#findbystring-property-mixed-value-string-comparisonop-static">findBy</a>
-</td></tr><tr><td><a href="#first-mixednull">first</a>
+</td></tr><tr><td><a href="#findbystring-property-mixed-value-string-comparisonop-static">findBy</a>
+</td><td><a href="#first-mixednull">first</a>
 </td><td><a href="#firstkey-mixednull">firstKey</a>
 </td><td><a href="#firstsimmutableintnull-number-static">firstsImmutable</a>
-</td><td><a href="#firstskeysintnull-number-static">firstsKeys</a>
-</td></tr><tr><td><a href="#firstsmutableintnull-number-this">firstsMutable</a>
+</td></tr><tr><td><a href="#firstskeysintnull-number-static">firstsKeys</a>
+</td><td><a href="#firstsmutableintnull-number-this">firstsMutable</a>
 </td><td><a href="#flattenstring-delimiter-string-prepend-arraynull-items-array">flatten</a>
 </td><td><a href="#flip-static">flip</a>
-</td><td><a href="#getintstring-key-mixed-fallback-arraynull-array-bool-usebyreference-mixedstatic">get</a>
-</td></tr><tr><td><a href="#getall-array">getAll</a>
+</td></tr><tr><td><a href="#getintstring-key-mixed-fallback-arraynull-array-bool-usebyreference-mixedstatic">get</a>
+</td><td><a href="#getall-array">getAll</a>
 </td><td><a href="#getarraybool-convertallarrayyelements-bool-preservekeys-array">getArray</a>
 </td><td><a href="#getarraycopy-array">getArrayCopy</a>
-</td><td><a href="#getcolumnintstringnull-columnkey-intstringnull-indexkey-static">getColumn</a>
-</td></tr><tr><td><a href="#getgenerator-generator">getGenerator</a>
+</td></tr><tr><td><a href="#getcolumnintstringnull-columnkey-intstringnull-indexkey-static">getColumn</a>
+</td><td><a href="#getflags">getFlags</a>
+</td><td><a href="#getgenerator-generator">getGenerator</a>
 </td><td><a href="#getgeneratorbyreference-generator">getGeneratorByReference</a>
-</td><td><a href="#getiterator-iteratormixedmixed">getIterator</a>
+</td></tr><tr><td><a href="#getiterator-iteratormixedmixed">getIterator</a>
 </td><td><a href="#getiteratorclass-string">getIteratorClass</a>
-</td></tr><tr><td><a href="#getkeys-static">getKeys</a>
+</td><td><a href="#getkeys-static">getKeys</a>
 </td><td><a href="#getlistbool-convertallarrayyelements-array">getList</a>
-</td><td><a href="#getobject-stdclass">getObject</a>
+</td></tr><tr><td><a href="#getobject-stdclass">getObject</a>
 </td><td><a href="#getphpdocpropertiesfromclass-arrayarray-keytypecheckinterfacetypecheckarrayarray-keytypecheckinterface">getPhpDocPropertiesFromClass</a>
-</td></tr><tr><td><a href="#getrandom-static">getRandom</a>
+</td><td><a href="#getrandom-static">getRandom</a>
 </td><td><a href="#getrandomkey-mixednull">getRandomKey</a>
-</td><td><a href="#getrandomkeysint-number-static">getRandomKeys</a>
+</td></tr><tr><td><a href="#getrandomkeysint-number-static">getRandomKeys</a>
 </td><td><a href="#getrandomvalue-mixednull">getRandomValue</a>
-</td></tr><tr><td><a href="#getrandomvaluesint-number-static">getRandomValues</a>
+</td><td><a href="#getrandomvaluesint-number-static">getRandomValues</a>
 </td><td><a href="#getvalues-static">getValues</a>
-</td><td><a href="#getvaluesyield-generator">getValuesYield</a>
+</td></tr><tr><td><a href="#getvaluesyield-generator">getValuesYield</a>
 </td><td><a href="#groupcallableintstring-grouper-bool-savekeys-static">group</a>
-</td></tr><tr><td><a href="#hasmixed-key-bool">has</a>
+</td><td><a href="#hasmixed-key-bool">has</a>
 </td><td><a href="#hasvaluemixed-value-bool">hasValue</a>
-</td><td><a href="#implodestring-glue-string-prefix-string">implode</a>
+</td></tr><tr><td><a href="#implodestring-glue-string-prefix-string">implode</a>
 </td><td><a href="#implodekeysstring-glue-string">implodeKeys</a>
-</td></tr><tr><td><a href="#indexbyintstring-key-static">indexBy</a>
+</td><td><a href="#indexbyintstring-key-static">indexBy</a>
 </td><td><a href="#indexofmixed-value-falseintstring">indexOf</a>
-</td><td><a href="#initialint-to-static">initial</a>
+</td></tr><tr><td><a href="#initialint-to-static">initial</a>
 </td><td><a href="#intersectionarray-search-bool-keepkeys-static">intersection</a>
-</td></tr><tr><td><a href="#intersectionmultiarray-array-static">intersectionMulti</a>
+</td><td><a href="#intersectionmultiarray-array-static">intersectionMulti</a>
 </td><td><a href="#intersectsarray-search-bool">intersects</a>
-</td><td><a href="#invokecallable-callable-mixed-arguments-static">invoke</a>
+</td></tr><tr><td><a href="#invokecallable-callable-mixed-arguments-static">invoke</a>
 </td><td><a href="#isassocbool-recursive-bool">isAssoc</a>
-</td></tr><tr><td><a href="#isemptyintintstringstringnull-keys-bool">isEmpty</a>
+</td><td><a href="#isemptyintintstringstringnull-keys-bool">isEmpty</a>
 </td><td><a href="#isequalarray-array-bool">isEqual</a>
-</td><td><a href="#ismultiarray-bool">isMultiArray</a>
+</td></tr><tr><td><a href="#ismultiarray-bool">isMultiArray</a>
 </td><td><a href="#isnumeric-bool">isNumeric</a>
-</td></tr><tr><td><a href="#issequentialbool-recursive-bool">isSequential</a>
+</td><td><a href="#issequentialbool-recursive-bool">isSequential</a>
 </td><td><a href="#jsonserialize-array">jsonSerialize</a>
-</td><td><a href="#key-intstringnull">key</a>
+</td></tr><tr><td><a href="#key-intstringnull">key</a>
 </td><td><a href="#keyexistsintstring-key-bool">keyExists</a>
-</td></tr><tr><td><a href="#keysbool-recursive-mixednull-search_values-bool-strict-static">keys</a>
+</td><td><a href="#keysbool-recursive-mixednull-search_values-bool-strict-static">keys</a>
 </td><td><a href="#krsortint-sort_flags-this">krsort</a>
-</td><td><a href="#krsortimmutableint-sort_flags-this">krsortImmutable</a>
+</td></tr><tr><td><a href="#krsortimmutableint-sort_flags-this">krsortImmutable</a>
 </td><td><a href="#ksortint-sort_flags-this">ksort</a>
-</td></tr><tr><td><a href="#ksortimmutableint-sort_flags-this">ksortImmutable</a>
+</td><td><a href="#ksortimmutableint-sort_flags-this">ksortImmutable</a>
 </td><td><a href="#last-mixednull">last</a>
-</td><td><a href="#lastkey-mixednull">lastKey</a>
+</td></tr><tr><td><a href="#lastkey-mixednull">lastKey</a>
 </td><td><a href="#lastsimmutableintnull-number-static">lastsImmutable</a>
-</td></tr><tr><td><a href="#lastsmutableintnull-number-this">lastsMutable</a>
+</td><td><a href="#lastsmutableintnull-number-this">lastsMutable</a>
 </td><td><a href="#lengthint-mode-int">length</a>
-</td><td><a href="#mapcallable-callable-bool-usekeyassecondparameter-mixed-arguments-static">map</a>
+</td></tr><tr><td><a href="#mapcallable-callable-bool-usekeyassecondparameter-mixed-arguments-static">map</a>
 </td><td><a href="#matchesclosure-closure-bool">matches</a>
-</td></tr><tr><td><a href="#matchesanyclosure-closure-bool">matchesAny</a>
+</td><td><a href="#matchesanyclosure-closure-bool">matchesAny</a>
 </td><td><a href="#max-falsefloatintstring">max</a>
-</td><td><a href="#mergeappendkeepindexarray-array-bool-recursive-static">mergeAppendKeepIndex</a>
+</td></tr><tr><td><a href="#mergeappendkeepindexarray-array-bool-recursive-static">mergeAppendKeepIndex</a>
 </td><td><a href="#mergeappendnewindexarray-array-bool-recursive-static">mergeAppendNewIndex</a>
-</td></tr><tr><td><a href="#mergeprependkeepindexarray-array-bool-recursive-static">mergePrependKeepIndex</a>
+</td><td><a href="#mergeprependkeepindexarray-array-bool-recursive-static">mergePrependKeepIndex</a>
 </td><td><a href="#mergeprependnewindexarray-array-bool-recursive-static">mergePrependNewIndex</a>
-</td><td><a href="#meta-arrayymetamixedstatic">meta</a>
+</td></tr><tr><td><a href="#meta-arrayymetamixedstatic">meta</a>
 </td><td><a href="#min-falsemixed">min</a>
-</td></tr><tr><td><a href="#mostusedvalue-mixednull">mostUsedValue</a>
+</td><td><a href="#mostusedvalue-mixednull">mostUsedValue</a>
 </td><td><a href="#mostusedvaluesintnull-number-static">mostUsedValues</a>
-</td><td><a href="#moveelementintstring-from-int-to-static">moveElement</a>
+</td></tr><tr><td><a href="#moveelementintstring-from-int-to-static">moveElement</a>
 </td><td><a href="#moveelementtofirstplaceintstring-key-static">moveElementToFirstPlace</a>
-</td></tr><tr><td><a href="#moveelementtolastplaceintstring-key-static">moveElementToLastPlace</a>
+</td><td><a href="#moveelementtolastplaceintstring-key-static">moveElementToLastPlace</a>
 </td><td><a href="#natcasesort-this">natcasesort</a>
-</td><td><a href="#natcasesortimmutable-this">natcasesortImmutable</a>
+</td></tr><tr><td><a href="#natcasesortimmutable-this">natcasesortImmutable</a>
 </td><td><a href="#natsort-this">natsort</a>
-</td></tr><tr><td><a href="#natsortimmutable-this">natsortImmutable</a>
+</td><td><a href="#natsortimmutable-this">natsortImmutable</a>
 </td><td><a href="#next-falsemixed">next</a>
-</td><td><a href="#nthint-step-int-offset-static">nth</a>
+</td></tr><tr><td><a href="#nthint-step-int-offset-static">nth</a>
 </td><td><a href="#offsetexistsboolintstring-offset-bool">offsetExists</a>
-</td></tr><tr><td><a href="#offsetgetintstring-offset-mixed">offsetGet</a>
+</td><td><a href="#offsetgetintstring-offset-mixed">offsetGet</a>
 </td><td><a href="#offsetsetintstringnull-offset-mixed-value-void">offsetSet</a>
-</td><td><a href="#offsetunsetintstring-offset-void">offsetUnset</a>
+</td></tr><tr><td><a href="#offsetunsetintstring-offset-void">offsetUnset</a>
 </td><td><a href="#onlyintstring-keys-static">only</a>
-</td></tr><tr><td><a href="#padint-size-mixed-value-static">pad</a>
+</td><td><a href="#padint-size-mixed-value-static">pad</a>
 </td><td><a href="#partitionclosure-closure-arrayintstatic">partition</a>
-</td><td><a href="#pop-mixednull">pop</a>
+</td></tr><tr><td><a href="#pop-mixednull">pop</a>
 </td><td><a href="#prependmixed-value-mixed-key-this">prepend</a>
-</td></tr><tr><td><a href="#prependimmutablemixed-value-mixed-key-this">prependImmutable</a>
+</td><td><a href="#prependimmutablemixed-value-mixed-key-this">prependImmutable</a>
 </td><td><a href="#prependtoeachkeyfloatintstring-suffix-static">prependToEachKey</a>
-</td><td><a href="#prependtoeachvaluefloatintstring-suffix-static">prependToEachValue</a>
+</td></tr><tr><td><a href="#prependtoeachvaluefloatintstring-suffix-static">prependToEachValue</a>
 </td><td><a href="#pullintintstringstringnull-keyorkeys-mixed-fallback-mixed">pull</a>
-</td></tr><tr><td><a href="#pushmixed-args-this">push</a>
+</td><td><a href="#pushmixed-args-this">push</a>
 </td><td><a href="#randomimmutableintnull-number-static">randomImmutable</a>
-</td><td><a href="#randomkey-mixednull">randomKey</a>
+</td></tr><tr><td><a href="#randomkey-mixednull">randomKey</a>
 </td><td><a href="#randomkeysint-number-static">randomKeys</a>
-</td></tr><tr><td><a href="#randommutableintnull-number-this">randomMutable</a>
+</td><td><a href="#randommutableintnull-number-this">randomMutable</a>
 </td><td><a href="#randomvalue-mixed">randomValue</a>
-</td><td><a href="#randomvaluesint-number-static">randomValues</a>
-</td><td><a href="#randomweightedarrayinttstringtint-array-arrayinttstringtint-number">randomWeighted</a>
-</td></tr><tr><td><a href="#reducecallable-callable-mixed-initial-static">reduce</a>
+</td></tr><tr><td><a href="#randomvaluesint-number-static">randomValues</a>
+</td><td><a href="#randomweightedarray-array-int-number">randomWeighted</a>
+</td><td><a href="#reducecallable-callable-mixed-initial-static">reduce</a>
 </td><td><a href="#reduce_dimensionbool-unique-static">reduce_dimension</a>
-</td><td><a href="#reindex-this">reindex</a>
+</td></tr><tr><td><a href="#reindex-this">reindex</a>
 </td><td><a href="#rejectclosure-closure-static">reject</a>
-</td></tr><tr><td><a href="#removemixed-key-static">remove</a>
+</td><td><a href="#removemixed-key-static">remove</a>
 </td><td><a href="#removeelementmixed-element-static">removeElement</a>
-</td><td><a href="#removefirst-static">removeFirst</a>
+</td></tr><tr><td><a href="#removefirst-static">removeFirst</a>
 </td><td><a href="#removelast-static">removeLast</a>
-</td></tr><tr><td><a href="#removevaluemixed-value-static">removeValue</a>
+</td><td><a href="#removevaluemixed-value-static">removeValue</a>
 </td><td><a href="#repeatint-times-static">repeat</a>
-</td><td><a href="#replacemixed-oldkey-mixed-newkey-mixed-newvalue-static">replace</a>
+</td></tr><tr><td><a href="#replacemixed-oldkey-mixed-newkey-mixed-newvalue-static">replace</a>
 </td><td><a href="#replaceallkeysintstring-keys-static">replaceAllKeys</a>
-</td></tr><tr><td><a href="#replaceallvaluesarray-array-static">replaceAllValues</a>
+</td><td><a href="#replaceallvaluesarray-array-static">replaceAllValues</a>
 </td><td><a href="#replacekeysarray-keys-static">replaceKeys</a>
-</td><td><a href="#replaceonevaluemixed-search-mixed-replacement-static">replaceOneValue</a>
+</td></tr><tr><td><a href="#replaceonevaluemixed-search-mixed-replacement-static">replaceOneValue</a>
 </td><td><a href="#replacevaluesstring-search-string-replacement-static">replaceValues</a>
-</td></tr><tr><td><a href="#restint-from-static">rest</a>
+</td><td><a href="#restint-from-static">rest</a>
 </td><td><a href="#reverse-this">reverse</a>
-</td><td><a href="#rsortint-sort_flags-this">rsort</a>
+</td></tr><tr><td><a href="#rsortint-sort_flags-this">rsort</a>
 </td><td><a href="#rsortimmutableint-sort_flags-this">rsortImmutable</a>
-</td></tr><tr><td><a href="#searchindexmixed-value-falseintstring">searchIndex</a>
+</td><td><a href="#searchindexmixed-value-falseintstring">searchIndex</a>
 </td><td><a href="#searchvaluemixed-index-static">searchValue</a>
-</td><td><a href="#serialize-string">serialize</a>
+</td></tr><tr><td><a href="#serialize-string">serialize</a>
 </td><td><a href="#setstring-key-mixed-value-this">set</a>
-</td></tr><tr><td><a href="#setandgetmixed-key-mixed-fallback-mixed">setAndGet</a>
-</td><td><a href="#setiteratorclassstring-iteratorclass-void">setIteratorClass</a>
+</td><td><a href="#setandgetmixed-key-mixed-fallback-mixed">setAndGet</a>
+</td><td><a href="#setflagstodo-__not_detected__-flags">setFlags</a>
+</td></tr><tr><td><a href="#setiteratorclassstring-iteratorclass-void">setIteratorClass</a>
 </td><td><a href="#shift-mixednull">shift</a>
 </td><td><a href="#shufflebool-secure-arraynull-array-static">shuffle</a>
-</td></tr><tr><td><a href="#sizeint-mode-int">size</a>
-</td><td><a href="#sizeisint-size-bool">sizeIs</a>
+</td><td><a href="#sizeint-mode-int">size</a>
+</td></tr><tr><td><a href="#sizeisint-size-bool">sizeIs</a>
 </td><td><a href="#sizeisbetweenint-fromsize-int-tosize-bool">sizeIsBetween</a>
 </td><td><a href="#sizeisgreaterthanint-size-bool">sizeIsGreaterThan</a>
-</td></tr><tr><td><a href="#sizeislessthanint-size-bool">sizeIsLessThan</a>
-</td><td><a href="#sizerecursive-int">sizeRecursive</a>
+</td><td><a href="#sizeislessthanint-size-bool">sizeIsLessThan</a>
+</td></tr><tr><td><a href="#sizerecursive-int">sizeRecursive</a>
 </td><td><a href="#sliceint-offset-intnull-length-bool-preservekeys-static">slice</a>
 </td><td><a href="#sortintstring-direction-int-strategy-bool-keepkeys-static">sort</a>
-</td></tr><tr><td><a href="#sortimmutableintstring-direction-int-strategy-bool-keepkeys-static">sortImmutable</a>
-</td><td><a href="#sortkeysintstring-direction-int-strategy-this">sortKeys</a>
+</td><td><a href="#sortimmutableintstring-direction-int-strategy-bool-keepkeys-static">sortImmutable</a>
+</td></tr><tr><td><a href="#sortkeysintstring-direction-int-strategy-this">sortKeys</a>
 </td><td><a href="#sortkeysimmutableintstring-direction-int-strategy-this">sortKeysImmutable</a>
 </td><td><a href="#sortvaluekeepindexintstring-direction-int-strategy-static">sortValueKeepIndex</a>
-</td></tr><tr><td><a href="#sortvaluenewindexintstring-direction-int-strategy-static">sortValueNewIndex</a>
-</td><td><a href="#sortercallablemixednull-sorter-intstring-direction-int-strategy-static">sorter</a>
+</td><td><a href="#sortvaluenewindexintstring-direction-int-strategy-static">sortValueNewIndex</a>
+</td></tr><tr><td><a href="#sortercallablemixednull-sorter-intstring-direction-int-strategy-static">sorter</a>
 </td><td><a href="#spliceint-offset-intnull-length-array-replacement-static">splice</a>
 </td><td><a href="#splitint-numberofpieces-bool-keepkeys-static">split</a>
-</td></tr><tr><td><a href="#stripempty-static">stripEmpty</a>
-</td><td><a href="#swapintstring-swapa-intstring-swapb-static">swap</a>
+</td><td><a href="#stripempty-static">stripEmpty</a>
+</td></tr><tr><td><a href="#swapintstring-swapa-intstring-swapb-static">swap</a>
 </td><td><a href="#toarraybool-convertallarrayyelements-bool-preservekeys-array">toArray</a>
 </td><td><a href="#tojsonint-options-int-depth-string">toJson</a>
-</td></tr><tr><td><a href="#tolistbool-convertallarrayyelements-array">toList</a>
-</td><td><a href="#topermutationstringnull-items-string-helper-staticstatic">toPermutation</a>
+</td><td><a href="#tolistbool-convertallarrayyelements-array">toList</a>
+</td></tr><tr><td><a href="#topermutationstringnull-items-string-helper-staticstatic">toPermutation</a>
 </td><td><a href="#tostringstring-separator-string">toString</a>
 </td><td><a href="#uasortcallable-callable-this">uasort</a>
-</td></tr><tr><td><a href="#uasortimmutablecallable-callable-this">uasortImmutable</a>
-</td><td><a href="#uksortcallable-callable-static">uksort</a>
+</td><td><a href="#uasortimmutablecallable-callable-this">uasortImmutable</a>
+</td></tr><tr><td><a href="#uksortcallable-callable-static">uksort</a>
 </td><td><a href="#uksortimmutablecallable-callable-static">uksortImmutable</a>
 </td><td><a href="#unique-static">unique</a>
-</td></tr><tr><td><a href="#uniquekeepindex-this">uniqueKeepIndex</a>
-</td><td><a href="#uniquenewindex-this">uniqueNewIndex</a>
+</td><td><a href="#uniquekeepindex-this">uniqueKeepIndex</a>
+</td></tr><tr><td><a href="#uniquenewindex-this">uniqueNewIndex</a>
 </td><td><a href="#unserializestring-string-this">unserialize</a>
 </td><td><a href="#unshiftmixed-args-this">unshift</a>
-</td></tr><tr><td><a href="#validateclosure-closure-bool">validate</a>
-</td><td><a href="#values-static">values</a>
+</td><td><a href="#validateclosure-closure-bool">validate</a>
+</td></tr><tr><td><a href="#values-static">values</a>
 </td><td><a href="#walkcallable-callable-bool-recursive-mixed-userdata-this">walk</a>
 </td><td><a href="#wherestring-keyorpropertyormethod-mixed-value-static">where</a>
 </td></tr></table>
@@ -996,7 +999,7 @@ a(['foo', 'bar' => 'bis'])->at($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(T  = default, TKey  = default): mixed $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1175,6 +1178,24 @@ Check if all given needles are present in the array as key/index.
 
 --------
 
+## containsOnly(float|int|string $value, bool $recursive, bool $strict): bool
+<a href="#voku-php-readme-class-methods">↑</a>
+Check if an item is in the current array.
+
+EXAMPLE: <code>
+a([1, true])->containsOnly(true); // false
+</code>
+
+**Parameters:**
+- `float|int|string $value`
+- `bool $recursive`
+- `bool $strict`
+
+**Return:**
+- `bool`
+
+--------
+
 ## containsValue(float|int|string $value): bool
 <a href="#voku-php-readme-class-methods">↑</a>
 alias: for "Arrayy->contains()"
@@ -1292,7 +1313,7 @@ Creates an Arrayy object.
 WARNING: Creates an Arrayy object by reference.
 
 **Parameters:**
-- `array<TKey, T> $array`
+- `array $array`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
@@ -1304,7 +1325,7 @@ WARNING: Creates an Arrayy object by reference.
 Create an new Arrayy object via JSON.
 
 **Parameters:**
-- `array<TKey, T> $array`
+- `array $array`
 
 **Return:**
 - `static <p>(Immutable) Returns an new instance of the Arrayy object.</p>`
@@ -1455,7 +1476,7 @@ $resultArrayy = $arrayy->customSortKeys($callable); // Arrayy['one' => 1, 'three
 </code>
 
 **Parameters:**
-- `callable(TKey , TKey ): int $callable`
+- `callable $callable`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
@@ -1467,7 +1488,7 @@ $resultArrayy = $arrayy->customSortKeys($callable); // Arrayy['one' => 1, 'three
 Custom sort by index via "uksort".
 
 **Parameters:**
-- `callable(TKey , TKey ): int $callable`
+- `callable $callable`
 
 **Return:**
 - `$this <p>(Immutable) Return this Arrayy object.</p>`
@@ -1490,7 +1511,7 @@ $resultArrayy = $arrayy->customSortValues($callable); // Arrayy[1, 2, 3]
 </code>
 
 **Parameters:**
-- `callable(T , T ): int $callable`
+- `callable $callable`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
@@ -1502,7 +1523,7 @@ $resultArrayy = $arrayy->customSortValues($callable); // Arrayy[1, 2, 3]
 Custom sort by value via "usort".
 
 **Parameters:**
-- `callable(T , T ): int $callable`
+- `callable $callable`
 
 **Return:**
 - `$this <p>(Immutable) Return this Arrayy object.</p>`
@@ -1530,7 +1551,7 @@ a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
 </code>
 
 **Parameters:**
-- `array<TKey, T> ...$array`
+- `array ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1542,7 +1563,7 @@ a([1 => 1, 2 => 2])->diff([1 => 1]); // Arrayy[2 => 2]
 Return elements where the keys are only in the current array.
 
 **Parameters:**
-- `array<TKey, T> ...$array`
+- `array ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1554,7 +1575,7 @@ Return elements where the keys are only in the current array.
 Return elements where the values and keys are only in the current array.
 
 **Parameters:**
-- `array<TKey, T> ...$array`
+- `array ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1570,7 +1591,7 @@ a([1 => [1 => 1], 2 => [2 => 2]])->diffRecursive([1 => [1 => 1]]); // Arrayy[2 =
 </code>
 
 **Parameters:**
-- `array<TKey, T> $array`
+- `array $array`
 - `null|array<TKey, T>|\Generator<TKey, T> $helperVariableForRecursion <p>(only for internal usage)</p>`
 
 **Return:**
@@ -1587,7 +1608,7 @@ a([1 => 1])->diffReverse([1 => 1, 2 => 2]); // Arrayy[2 => 2]
 </code>
 
 **Parameters:**
-- `array<TKey, T> $array`
+- `array $array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1938,7 +1959,7 @@ $arrayy['user.firstname']; // Lars
 **Parameters:**
 - `TKey $key <p>The key to look for.</p>`
 - `mixed $fallback <p>Value to fallback to.</p>`
-- `array<array-key, mixed>|array<TKey, T> $array <p>The array to get from, if it's set to "null" we use the current array from the
+- `array|null $array <p>The array to get from, if it's set to "null" we use the current array from the
 class.</p>`
 - `bool $useByReference`
 
@@ -2009,6 +2030,18 @@ INFO: Optionally, you may provide an $indexKey to index the values in the return
 
 **Return:**
 - `static <p>(Immutable)</p>`
+
+--------
+
+## getFlags(): 
+<a href="#voku-php-readme-class-methods">↑</a>
+
+
+**Parameters:**
+__nothing__
+
+**Return:**
+- `TODO: __not_detected__`
 
 --------
 
@@ -2277,7 +2310,7 @@ a key for each element in the list (or a property name),
 returns an object with an index of each item.
 
 **Parameters:**
-- `array-key $key`
+- `array- $key`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -2334,7 +2367,7 @@ a(['foo', 'bar'])->intersection(['bar', 'baz']); // Arrayy['bar']
 Return an array with all elements found in input array.
 
 **Parameters:**
-- `array<array<TKey, T>> ...$array`
+- `array ...$array`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -2362,7 +2395,7 @@ a(['foo', 'bar'])->intersects(['föö', 'bär']); // false
 Invoke a function on all of an array's values.
 
 **Parameters:**
-- `callable(T  = default, mixed ): mixed $callable`
+- `callable $callable`
 - `mixed $arguments`
 
 **Return:**
@@ -2407,7 +2440,7 @@ a(['💩'])->isEqual(['💩']); // true
 </code>
 
 **Parameters:**
-- `array<TKey, T> $array`
+- `array $array`
 
 **Return:**
 - `bool`
@@ -2671,7 +2704,7 @@ a(['foo', 'Foo'])->map('mb_strtoupper'); // Arrayy['FOO', 'FOO']
 </code>
 
 **Parameters:**
-- `callable(T , TKey  = default, mixed  = default): T2 $callable`
+- `callable $callable`
 - `bool $useKeyAsSecondParameter`
 - `mixed ...$arguments`
 
@@ -2751,7 +2784,7 @@ a($array1)->mergeAppendKeepIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2']
 </code>
 
 **Parameters:**
-- `array<(int|TKey), T> $array`
+- `array $array`
 - `bool $recursive`
 
 **Return:**
@@ -2777,7 +2810,7 @@ a($array1)->mergeAppendNewIndex($array2); // Arrayy[0 => 'one', 1 => 'foo', 2 =>
 </code>
 
 **Parameters:**
-- `array<TKey, T> $array`
+- `array $array`
 - `bool $recursive`
 
 **Return:**
@@ -2802,7 +2835,7 @@ a($array1)->mergePrependKeepIndex($array2); // Arrayy[0 => 'one', 1 => 'foo']
 </code>
 
 **Parameters:**
-- `array<TKey, T> $array`
+- `array $array`
 - `bool $recursive`
 
 **Return:**
@@ -2828,7 +2861,7 @@ a($array1)->mergePrependNewIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2', 2 
 </code>
 
 **Parameters:**
-- `array<TKey, T> $array`
+- `array $array`
 - `bool $recursive`
 
 **Return:**
@@ -3292,13 +3325,13 @@ a([1 => 'one', 2 => 'two'])->randomValues(); // e.g. Arrayy['one', 'two']
 
 --------
 
-## randomWeighted(array<(int&T)|(string|T),int> $array, array<(int&T)|(string|T),int> $number): 
+## randomWeighted(array $array, int $number): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `array<(int&T)|(string&T),int>array<(int&T)|(string&T),int> $array`
-- `array<(int&T)|(string&T),int>array<(int&T)|(string&T),int> $array`
+- `array $array`
+- `int $number`
 
 **Return:**
 - `self`
@@ -3319,7 +3352,7 @@ a([1, 2, 3, 4])->reduce(
 </code>
 
 **Parameters:**
-- `callable(T2 , T , TKey ): T2 $callable`
+- `callable $callable`
 - `T2 $initial`
 
 **Return:**
@@ -3530,7 +3563,7 @@ $arrayy->replaceAllValues($secondArray); // Arrayy['one' => 1, 'two' => 'one', '
 </code>
 
 **Parameters:**
-- `array<T> $array <p>An array of values.</p>`
+- `array $array <p>An array of values.</p>`
 
 **Return:**
 - `static <p>(Immutable) Arrayy object with values from the other array, empty Arrayy object if the number of elements
@@ -3742,6 +3775,18 @@ $arrayy->setAndGet(0, 4); // 4
 
 --------
 
+## setFlags(TODO: __not_detected__ $flags): 
+<a href="#voku-php-readme-class-methods">↑</a>
+
+
+**Parameters:**
+- `TODO: __not_detected__ $flags`
+
+**Return:**
+- `TODO: __not_detected__`
+
+--------
+
 ## setIteratorClass(string $iteratorClass): void
 <a href="#voku-php-readme-class-methods">↑</a>
 Sets the iterator classname for the current "Arrayy"-object.
@@ -3776,7 +3821,7 @@ a([1 => 'bar', 'foo' => 'foo'])->shuffle(); // e.g.: Arrayy[['foo' => 'foo', 1 =
 
 **Parameters:**
 - `bool $secure <p>using a CSPRNG | @see https://paragonie.com/b/JvICXzh_jhLyt4y3</p>`
-- `array<TKey, T> $array [optional]`
+- `array|null $array [optional]`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -4120,7 +4165,7 @@ a(['bar', ['foo']])->toJson(); // '["bar",{"1":"foo"}]'
 </code>
 
 **Parameters:**
-- `int $options [optional] <p>e.g. JSON_PRETTY_PRINT</p>`
+- `int $options [optional] <p>e.g. JSON_PRETTY_PRint`
 - `int $depth [optional] <p>Set the maximum depth. Must be greater than zero.</p>`
 
 **Return:**
@@ -4172,7 +4217,7 @@ Implodes array to a string with specified separator.
 Sort the entries with a user-defined comparison function and maintain key association.
 
 **Parameters:**
-- `callable(T , T ): int $callable`
+- `callable $callable`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
@@ -4184,7 +4229,7 @@ Sort the entries with a user-defined comparison function and maintain key associ
 Sort the entries with a user-defined comparison function and maintain key association.
 
 **Parameters:**
-- `callable(T , T ): int $callable`
+- `callable $callable`
 
 **Return:**
 - `$this <p>(Immutable) Return this Arrayy object.</p>`
@@ -4196,7 +4241,7 @@ Sort the entries with a user-defined comparison function and maintain key associ
 Sort the entries by keys using a user-defined comparison function.
 
 **Parameters:**
-- `callable(TKey , TKey ): int $callable`
+- `callable $callable`
 
 **Return:**
 - `static <p>(Mutable) Return this Arrayy object.</p>`
@@ -4208,7 +4253,7 @@ Sort the entries by keys using a user-defined comparison function.
 Sort the entries by keys using a user-defined comparison function.
 
 **Parameters:**
-- `callable(TKey , TKey ): int $callable`
+- `callable $callable`
 
 **Return:**
 - `static <p>(Immutable) Return this Arrayy object.</p>`
@@ -4330,7 +4375,7 @@ $arrayy->walk($callable); // Arrayy[0, 1, 2]
 </code>
 
 **Parameters:**
-- `callable(T , TKey , ?TExtra ): void $callable`
+- `callable $callable`
 - `bool $recursive [optional] <p>Whether array will be walked recursively or no</p>`
 - `mixed $userData [optional] <p>
 If the optional $userData parameter is supplied,
