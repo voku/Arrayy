@@ -22,7 +22,7 @@ A PHP array manipulation library. Compatible with PHP 7+ & PHP 8+
 * [PhpDoc @property checking](#phpdoc-property-checking)
 * [OO and Chaining](#oo-and-chaining)
 * [Collections](#collections)
-    * [Pre-Defined Typified Collections](#pre-defined-typified-collections])
+    * [Pre-Defined Typified Collections](#pre-defined-typified-collections)
     * [Convert JSON-Data into Collections](#convert-json-data-into-objects-collection)
 * [Class methods](#class-methods)
     * [use a "default object"](#use-a-default-object)
