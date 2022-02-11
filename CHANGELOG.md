@@ -3,7 +3,9 @@
 ### 7.9.0 (unreleased)
 
 - remove "gitbook" from "dev-dependencies"
-- add "containsOnly"
+- add "containsOnly()"
+- add "getBackwardsGenerator()"
+- add "reverseKeepIndex()"
 
 ### 7.8.14 (2021-12-21)
 
