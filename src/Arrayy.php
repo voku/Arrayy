@@ -147,7 +147,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $this->array[$key] ?? false;
         }
 
-        /** @noinspection PhpUnnecessaryLocalVariableInspection - hack for phpstan */
         /** @var array<TKey,T> $return */
         $return = $this->toArray();
 
@@ -2049,7 +2048,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        /* @phpstan-ignore-next-line | false-positive for "callable((int|string), (int|string)): int" vs. "callable(TKey of (int|string), TKey of (int|string)): int" */
         \uksort($this->array, $callable);
 
         return $this;
@@ -2079,7 +2077,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         /**
          * @psalm-suppress ImpureFunctionCall - object is already cloned
-         * @phpstan-ignore-next-line | false-positive for "callable((int|string), (int|string)): int" vs. "callable(TKey of (int|string), TKey of (int|string)): int"
          */
         \uksort($that->array, $callable);
 
@@ -3141,7 +3138,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function getAll(): array
     {
-        /** @noinspection PhpUnnecessaryLocalVariableInspection - hack for phpstan */
         /** @var array<TKey,T> $return */
         $return = $this->toArray();
 
@@ -3991,7 +3987,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-return array<TKey,T>
      */
     public function jsonSerialize(): array
-    {        /** @noinspection PhpUnnecessaryLocalVariableInspection - hack for phpstan */
+    {
         /** @var array<TKey,T> $return */
         $return = $this->toArray();
 
@@ -7740,7 +7736,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
             if ($path !== false) {
                 // crawl though the keys
-                /** @noinspection SlowArrayOperationsInLoopInspection */
                 while (\count($path, \COUNT_NORMAL) > 1) {
                     $key = \array_shift($path);
 
@@ -7810,7 +7805,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
             if ($path !== false) {
                 // crawl through the keys
-                /** @noinspection SlowArrayOperationsInLoopInspection */
                 while (\count($path, \COUNT_NORMAL) > 1) {
                     $key = \array_shift($path);
 

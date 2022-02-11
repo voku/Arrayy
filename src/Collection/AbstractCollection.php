@@ -368,7 +368,6 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             ||
             $is_array = \is_array($type)
         ) {
-            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
             $type = TypeCheckArray::create(
                 [
                     Arrayy::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES => new TypeCheckSimple($is_array ? $type : (string) $type),
