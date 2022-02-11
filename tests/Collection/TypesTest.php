@@ -360,11 +360,21 @@ final class TypesTest extends TestCase
 
     public function testReverse()
     {
-        $set = new StringCollection(['A', 'B', 'C', 'D']);
+        $set = new StringCollection([1 => 'A', 'B', 'C', 'D']);
 
         static::assertSame(
             ['D', 'C', 'B', 'A'],
             $set->reverse()->toArray()
+        );
+    }
+
+    public function testReverseKeepIndex()
+    {
+        $set = new StringCollection([1 => 'A', 'B', 'C', 'D']);
+
+        static::assertSame(
+            [4 => 'D', 3 => 'C', 2 => 'B', 1 => 'A'],
+            $set->reverseKeepIndex()->toArray()
         );
     }
 

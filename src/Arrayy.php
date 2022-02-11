@@ -3360,6 +3360,19 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Get the current array from the "Arrayy"-object as generator.
+     *
+     * @return \Generator
+     *
+     * @phpstan-return \Generator<mixed,T>|\Generator<TKey,T>
+     * @psalm-mutation-free
+     */
+    public function getBackwardsGenerator(): \Generator
+    {
+        yield from $this->reverseKeepIndex();
+    }
+
+    /**
      * alias: for "Arrayy->keys()"
      *
      * @return static
@@ -5970,7 +5983,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Return the array in the reverse order.
      *
      * EXAMPLE: <code>
-     * a([1, 2, 3])->reverse(); // self[3, 2, 1]
+     * a([1 => 1, 2 => 2, 3 => 3])->reverse(); // self[3, 2, 1]
      * </code>
      *
      * @return $this
@@ -5983,6 +5996,27 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray();
 
         $this->array = \array_reverse($this->array);
+
+        return $this;
+    }
+
+    /**
+     * Return the array with keys in the reverse order.
+     *
+     * EXAMPLE: <code>
+     * a([1 => 1, 2 => 2, 3 => 3])->reverse(); // self[3 => 3, 2 => 2, 1 => 1]
+     * </code>
+     *
+     * @return $this
+     *               <p>(Mutable) Return this Arrayy object.</p>
+     *
+     * @phpstan-return static<TKey,T>
+     */
+    public function reverseKeepIndex(): self
+    {
+        $this->generatorToArray();
+
+        $this->array = \array_reverse($this->array, true);
 
         return $this;
     }

@@ -4766,7 +4766,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testTestgetValuesYield(array $array)
+    public function testGetValuesYield(array $array)
     {
         $arrayy = new A($array);
         $resultGenerator = $arrayy->getValuesYield();
@@ -4776,6 +4776,26 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
         $resultArray = \array_values($array);
 
+        static::assertSame([], \array_diff($result, $resultArray));
+    }
+
+
+    /**
+     * @dataProvider simpleArrayProvider
+     *
+     * @param array $array
+     */
+    public function testGetGetBackwardsGenerator(array $array)
+    {
+        $arrayy = new A($array);
+        $resultGenerator = $arrayy->getBackwardsGenerator();
+        $result = [];
+        foreach ($resultGenerator as $key => $value) {
+            $result[$key] = $value;
+        }
+        $resultArray = \array_values($array);
+
+        static::assertSame(array_reverse($result, true), $array);
         static::assertSame([], \array_diff($result, $resultArray));
     }
 
