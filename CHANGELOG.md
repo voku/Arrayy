@@ -1,6 +1,6 @@
 # Changelog
 
-### 7.9.0 (unreleased)
+### 7.9.0 (2022-02-15)
 
 - remove "gitbook" from "dev-dependencies"
 - add "containsOnly()"
