@@ -10,6 +10,7 @@
 /.gitattributes export-ignore
 /.github export-ignore
 /.gitignore export-ignore
+/.phpUnitAndStanFix.php export-ignore
 /.travis.yml export-ignore
 /infection.json.dist export-ignore
 /phpcs.php_cs export-ignore

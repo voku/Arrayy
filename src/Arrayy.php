@@ -1307,10 +1307,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param int  $size         <p>Size of each chunk.</p>
      * @param bool $preserveKeys <p>Whether array keys are preserved or no.</p>
      *
-     * @return static
+     * @return static|static[]
      *                <p>(Immutable) A new array of chunks from the original array.</p>
      *
-     * @phpstan-return static<int, array<array-key,T>>
+     * @phpstan-return static<int, static<array-key,T>>
      * @psalm-mutation-free
      */
     public function chunk($size, $preserveKeys = false): self

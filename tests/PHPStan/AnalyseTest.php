@@ -1,9 +1,8 @@
 <?php
 
-/** @noinspection PhpUndefinedNamespaceInspection */
-/** @noinspection PhpUndefinedFunctionInspection */
-
 namespace Arrayy\tests\Collection;
+
+require_once __DIR__ . '/../../.phpUnitAndStanFix.php';
 
 use Arrayy\tests\UserData;
 
@@ -14,9 +13,12 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
 {
     public function testGenerics()
     {
-        $userCollection = new UserDataCollection();
+        $json = '[{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}, {"id":1,"firstName":"Sven","lastName":"Moelleken","city":{"name":"Köln","plz":null,"infos":["foo"]}}]';
+        /** @var \Arrayy\Arrayy|\Arrayy\tests\UserData[] $userDataCollection */
+        /** @phpstan-var \Arrayy\Arrayy<int, \Arrayy\tests\UserData> $userDataCollection */
+        $userDataCollection = UserDataCollection::createFromJsonMapper($json);
 
-        foreach ($userCollection as $user) {
+        foreach ($userDataCollection as $user) {
             \PHPStan\Testing\assertType(UserData::class, $user);
             static::assertInstanceOf(UserData::class, $user);
 
@@ -33,8 +35,8 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         $newSet = $set->chunk(2);
 
         foreach ($newSet as $chunk) {
-            \PHPStan\Testing\assertType('array<string>', $chunk);
-            static::assertTrue($chunk === ['A', 'B'] || $chunk === ['C', 'D'] || $chunk === ['E']);
+            \PHPStan\Testing\assertType('Arrayy\Arrayy<(int|string), string>', $chunk);
+            static::assertTrue($chunk->getArray() === ['A', 'B'] || $chunk->getArray() === ['C', 'D'] || $chunk->getArray() === ['E']);
         }
 
         // -------------------------------------------------------------------------
