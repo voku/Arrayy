@@ -84,7 +84,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
             return $value === $search;
         };
         \PHPStan\Testing\assertType('bool|float|int|string', $set->find($closure));
-        static::assertIsScalar($set->find($closure));
+        static::assertTrue(is_scalar($set->find($closure)));
 
         // -------------------------------------------------------------------------
     }
