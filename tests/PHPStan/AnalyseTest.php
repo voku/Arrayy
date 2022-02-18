@@ -12,7 +12,7 @@ use Arrayy\tests\UserData;
  */
 final class AnalyseTest extends \PHPUnit\Framework\TestCase
 {
-    public function genericsTest()
+    public function testGenerics()
     {
         $userCollection = new UserDataCollection();
 
