@@ -4,8 +4,6 @@ namespace Arrayy\tests\Collection;
 
 require_once __DIR__ . '/../../.phpUnitAndStanFix.php';
 
-use Arrayy\tests\UserData;
-
 /**
  * @internal
  */
@@ -17,8 +15,8 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);
 
         foreach ($userDataCollection as $user) {
-            \PHPStan\Testing\assertType(UserData::class, $user);
-            static::assertInstanceOf(UserData::class, $user);
+            \PHPStan\Testing\assertType(\Arrayy\tests\UserData::class, $user);
+            static::assertInstanceOf(\Arrayy\tests\UserData::class, $user);
 
             \PHPStan\Testing\assertType('Arrayy\tests\CityData|null', $user->city);
             static::assertTrue($user->city === null || $user->city instanceof \Arrayy\tests\CityData); /* @phpstan-ignore-line | always true */
