@@ -1310,7 +1310,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) A new array of chunks from the original array.</p>
      *
-     * @phpstan-return static<array-key,T>
+     * @phpstan-return static<int, array<array-key,T>>
      * @psalm-mutation-free
      */
     public function chunk($size, $preserveKeys = false): self

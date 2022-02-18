@@ -226,6 +226,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
 
+        /** @phpstan-ignore-next-line | offset on object */
         $modelCollection[] = $cityData;
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());

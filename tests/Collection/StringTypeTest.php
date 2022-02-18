@@ -19,9 +19,13 @@ final class StringTypeTest extends TestCase
 
         $strings = PhpString::create();
 
+        /** @phpstan-ignore-next-line | offset on object */
         $strings[] = 'A';
+        /** @phpstan-ignore-next-line | offset on object */
         $strings[] = 'B';
+        /** @phpstan-ignore-next-line | offset on object */
         $strings[] = 'C';
+        /** @phpstan-ignore-next-line | offset on object */
         $strings[] = 1.0;
     }
 
