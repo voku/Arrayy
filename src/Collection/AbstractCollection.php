@@ -130,8 +130,17 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Assigns a value to the specified offset + check the type.
+     *
+     * @param int|string|null $offset
+     * @param mixed           $value
+     *
+     * @return void
+     *
+     * @phpstan-param TKey $offset
+     * @phpstan-param T $value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (
@@ -200,7 +209,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
+     *
+     * @phpstan-return array<T>
      */
     public function getCollection(): array
     {
@@ -208,7 +219,11 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * The type (FQCN) associated with this collection.
+     *
+     * @return string|string[]|TypeCheckArray|TypeCheckInterface[]
+     *
+     * @phpstan-return string|string[]|class-string|class-string[]|TypeCheckArray<array-key,TypeCheckInterface>|TypeCheckInterface[]
      */
     abstract public function getType();
 
