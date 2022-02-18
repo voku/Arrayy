@@ -85,6 +85,5 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         static::assertIsScalar($set->find($closure));
 
         // -------------------------------------------------------------------------
-
     }
 }
