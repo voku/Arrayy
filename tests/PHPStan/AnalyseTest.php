@@ -14,8 +14,6 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
     public function testGenerics()
     {
         $json = '[{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}, {"id":1,"firstName":"Sven","lastName":"Moelleken","city":{"name":"Köln","plz":null,"infos":["foo"]}}]';
-        /** @var \Arrayy\Arrayy|\Arrayy\tests\UserData[] $userDataCollection */
-        /** @phpstan-var \Arrayy\Arrayy<int, \Arrayy\tests\UserData> $userDataCollection */
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);
 
         foreach ($userDataCollection as $user) {
