@@ -63,7 +63,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
 
         foreach ($set as $item) {
             \PHPStan\Testing\assertType('non-empty-string', $item);
-            static::assertTrue(strlen($item) > 0); /* @phpstan-ignore-line | always true */
+            static::assertTrue(strlen($item) > 0);/* @phpstan-ignore-line | always true */
         }
 
         // -------------------------------------------------------------------------
@@ -72,7 +72,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
 
         foreach ($set as $item) {
             \PHPStan\Testing\assertType('float|int|numeric-string', $item);
-            static::assertIsNumeric($item);
+            static::assertTrue($item === '1.0' || $item === 1.2 || $item === 4);
         }
 
         // -------------------------------------------------------------------------
