@@ -1,5 +1,11 @@
 # Changelog
 
+### 7.9.1 (2022-03-08)
+
+- "To people of Russia": There is a war in Ukraine right now. The forces of the Russian Federation are attacking civilians.
+- fix phpdocs for "chunk()"
+- try to optimize support for PhpStorm auto-completion
+
 ### 7.9.0 (2022-02-15)
 
 - remove "gitbook" from "dev-dependencies"
