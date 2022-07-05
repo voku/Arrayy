@@ -1,5 +1,10 @@
 # Changelog
 
+### 7.9.2 (2022-07-05)
+
+- optimize some phpdocs (phpstan)
+- simplify some code
+
 ### 7.9.1 (2022-03-08)
 
 - "To people of Russia": There is a war in Ukraine right now. The forces of the Russian Federation are attacking civilians.
