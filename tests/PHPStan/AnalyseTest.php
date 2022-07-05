@@ -22,7 +22,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
             static::assertTrue($user->city === null || $user->city instanceof \Arrayy\tests\CityData); /* @phpstan-ignore-line | always true */
 
             \PHPStan\Testing\assertType('string|null', $user->city->name ?? null);
-            static::assertTrue(($user->city->name ?? null) === null || is_string($user->city->name ?? null));
+            static::assertTrue(($user->city->name ?? null) === null || is_string($user->city->name ?? null)); /* @phpstan-ignore-line | always true */
         }
 
         // -------------------------------------------------------------------------

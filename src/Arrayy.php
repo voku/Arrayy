@@ -2893,7 +2893,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable)</p>
      *
-     * @phpstan-return static<TKey,T>
+     * @phpstan-return ($number is null ? static<int,T> : static<TKey,T>)
      */
     public function firstsMutable(int $number = null): self
     {
@@ -2901,6 +2901,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($number === null) {
             $shift = \array_shift($this->array);
+            /* @phpstan-ignore-next-line | I am not sure if "array<int, T of mixed>" is a error here */
             $this->array = $shift !== null ? [$shift] : [];
         } else {
             /** @var array<TKey,T> $splice - hack for phpstan */
@@ -3169,7 +3170,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       Convert all Child-"Arrayy" objects also to arrays.
      *                                       </p>
      * @param bool $preserveKeys             <p>
-     *                                       e.g.: A generator maybe return the same key more then once,
+     *                                       e.g.: A generator maybe return the same key more than once,
      *                                       so maybe you will ignore the keys.
      *                                       </p>
      *
@@ -3563,15 +3564,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $newValue = $newValue->toArray();
             }
 
-            // Add to results.
+            // Add to result.
             if ($groupKey !== null) {
-                if ($saveKeys) {
-                    $result[$groupKey] = $newValue;
-                    $result[$groupKey][$key] = $value;
-                } else {
-                    $result[$groupKey] = $newValue;
-                    $result[$groupKey][] = $value;
-                }
+              $result[$groupKey] = $newValue;
+
+              if ($saveKeys) {
+                $result[$groupKey][$key] = $value;
+              } else {
+                $result[$groupKey][] = $value;
+              }
             }
         }
 
@@ -5245,7 +5246,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($number === null) {
-            /** @noinspection NonSecureArrayRandUsageInspection */
             $arrayRandValue = [$this->array[\array_rand($this->array)]];
 
             return static::create(
@@ -5256,7 +5256,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         $arrayTmp = $this->array;
-        /** @noinspection NonSecureShuffleUsageInspection */
         \shuffle($arrayTmp);
 
         return static::create(
@@ -5364,14 +5363,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($number === null) {
-            /** @noinspection NonSecureArrayRandUsageInspection */
             $arrayRandValue = [$this->array[\array_rand($this->array)]];
             $this->array = $arrayRandValue;
 
             return $this;
         }
 
-        /** @noinspection NonSecureShuffleUsageInspection */
         \shuffle($this->array);
 
         return $this->firstsMutable($number);
@@ -6258,7 +6255,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($secure !== true) {
-            /** @noinspection NonSecureShuffleUsageInspection */
             \shuffle($array);
         } else {
             $size = \count($array, \COUNT_NORMAL);
@@ -6877,23 +6873,23 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       Convert all Child-"Arrayy" objects also to arrays.
      *                                       </p>
      * @param bool $preserveKeys             <p>
-     *                                       e.g.: A generator maybe return the same key more then once,
+     *                                       e.g.: A generator maybe return the same key more than once,
      *                                       so maybe you will ignore the keys.
      *                                       </p>
      *
      * @return array
      *
-     * @phpstan-return array<array-key,T>|array<TKey,T>
+     * @phpstan-return ($preserveKeys is true ? array<TKey,T> : T[])
      * @psalm-mutation-free
      */
     public function toArray(
         bool $convertAllArrayyElements = false,
         bool $preserveKeys = true
     ): array {
-        // init
-        $array = [];
-
         if ($convertAllArrayyElements) {
+            // init
+            $array = [];
+
             foreach ($this->getGenerator() as $key => $value) {
                 if ($value instanceof self) {
                     $value = $value->toArray(
@@ -6908,12 +6904,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     $array[] = $value;
                 }
             }
-        } else {
-            $array = \iterator_to_array($this->getGenerator(), $preserveKeys);
-        }
 
-        /** @phpstan-ignore-next-line - depends on the $convertAllArrayyElements parameter :/ */
-        return $array;
+            /** @phpstan-ignore-next-line - depends on the $convertAllArrayyElements parameter :/ */
+            return $array;
+         }
+
+        return \iterator_to_array($this->getGenerator(), $preserveKeys);
     }
 
     /**
@@ -7224,18 +7220,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($this->array !== []) {
             if ($recursive === true) {
+
                 if ($userData !== self::ARRAYY_HELPER_WALK) {
                     \array_walk_recursive($this->array, $callable, $userData);
                 } else {
                     \array_walk_recursive($this->array, $callable);
                 }
+
             } else {
-                /** @noinspection NestedPositiveIfStatementsInspection */
+
                 if ($userData !== self::ARRAYY_HELPER_WALK) {
                     \array_walk($this->array, $callable, $userData);
                 } else {
+                    /* @phpstan-ignore-next-line | callback with no arguments is ok here */
                     \array_walk($this->array, $callable);
                 }
+
             }
         }
 
@@ -7495,7 +7495,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
     /**
      * @param bool $preserveKeys <p>
-     *                           e.g.: A generator maybe return the same key more then once,
+     *                           e.g.: A generator maybe return the same key more than once,
      *                           so maybe you will ignore the keys.
      *                           </p>
      *
@@ -7913,15 +7913,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                                         &&
                                         $checkPropertiesInConstructor === true;
 
-        if ($this->properties !== []) {
-            foreach ($data as $key => &$valueInner) {
-                $this->internalSet(
-                    $key,
-                    $valueInner,
-                    $checkPropertiesInConstructor
-                );
-            }
-        } else {
+        if ($this->properties === []) {
             if (
                 $this->checkPropertyTypes === true
                 ||
@@ -7942,14 +7934,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             ) {
                 throw new \TypeError('Property mismatch - input: ' . \print_r(\array_keys($data), true) . ' | expected: ' . \print_r(\array_keys($properties), true));
             }
+        }
 
-            foreach ($data as $key => &$valueInner) {
-                $this->internalSet(
-                    $key,
-                    $valueInner,
-                    $checkPropertiesInConstructor
-                );
-            }
+        foreach ($data as $key => &$valueInner) {
+            $this->internalSet(
+                $key,
+                $valueInner,
+                $checkPropertiesInConstructor
+            );
         }
     }
 

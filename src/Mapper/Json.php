@@ -669,13 +669,13 @@ final class Json
     /**
      * Remove the 'null' section of a type
      *
-     * @param string|null $type type name from the phpdoc param
+     * @param false|string|null $type type name from the phpdoc param
      *
      * @return string|null The new type value
      */
     private function removeNullable($type)
     {
-        if ($type === null) {
+        if ($type === null || $type === false) {
             return null;
         }
 

@@ -115,7 +115,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         }
 
         if ($type instanceof \phpDocumentor\Reflection\Types\Array_) {
-            $valueTypeTmp = $type->getValueType() . '';
+            $valueTypeTmp = $type->getValueType()->__toString();
             if ($valueTypeTmp !== 'mixed') {
                 return $valueTypeTmp . '[]';
             }
@@ -163,7 +163,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             return 'resource';
         }
 
-        return $type . '';
+        return $type->__toString();
     }
 
     /**
