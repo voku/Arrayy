@@ -3566,13 +3566,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
             // Add to result.
             if ($groupKey !== null) {
-              $result[$groupKey] = $newValue;
+                $result[$groupKey] = $newValue;
 
-              if ($saveKeys) {
-                $result[$groupKey][$key] = $value;
-              } else {
-                $result[$groupKey][] = $value;
-              }
+                if ($saveKeys) {
+                    $result[$groupKey][$key] = $value;
+                } else {
+                    $result[$groupKey][] = $value;
+                }
             }
         }
 
@@ -6907,7 +6907,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
             /** @phpstan-ignore-next-line - depends on the $convertAllArrayyElements parameter :/ */
             return $array;
-         }
+        }
 
         return \iterator_to_array($this->getGenerator(), $preserveKeys);
     }
@@ -7220,22 +7220,18 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($this->array !== []) {
             if ($recursive === true) {
-
                 if ($userData !== self::ARRAYY_HELPER_WALK) {
                     \array_walk_recursive($this->array, $callable, $userData);
                 } else {
                     \array_walk_recursive($this->array, $callable);
                 }
-
             } else {
-
                 if ($userData !== self::ARRAYY_HELPER_WALK) {
                     \array_walk($this->array, $callable, $userData);
                 } else {
                     /* @phpstan-ignore-next-line | callback with no arguments is ok here */
                     \array_walk($this->array, $callable);
                 }
-
             }
         }
 
