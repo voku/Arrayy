@@ -37,6 +37,20 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
 
         // -------------------------------------------------------------------------
 
+        $set = new \Arrayy\Type\StringCollection(['A', 'B', 'C', 'D', 'E']);
+        $set[] = 'F';
+        $set[] = 'G';
+        /* @phpstan-ignore-next-line | not accept */
+        $set[] = 2;
+        /* @phpstan-ignore-next-line | not accept */
+        $set[] = 3;
+        /* @phpstan-ignore-next-line | not accept */
+        $set[] = false;
+
+        \PHPStan\Testing\assertType('Arrayy\Type\StringCollection', $set);
+
+        // -------------------------------------------------------------------------
+
         $set = new \Arrayy\Type\DetectFirstValueTypeCollection([1, 2, 3, 4]);
 
         foreach ($set as $item) {

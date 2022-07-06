@@ -137,7 +137,6 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @return void
      *
-     * @phpstan-param TKey $offset
      * @phpstan-param T $value
      */
     #[\ReturnTypeWillChange]
