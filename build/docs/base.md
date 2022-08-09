@@ -18,6 +18,8 @@ A PHP array manipulation library. Compatible with PHP 7+ & PHP 8+
 \Arrayy\Type\StringCollection::create(['Array', 'Array'])->unique()->append('y')->implode() // Arrayy
 ```
 
+![Ed8ypbzWAAIinwv-1](https://user-images.githubusercontent.com/264695/183588620-3f1c2c32-e4aa-4069-9d12-23265689ba0b.jpeg)
+
 * [Installation](#installation-via-composer-require)
 * [Multidimensional ArrayAccess](#multidimensional-arrayaccess)
 * [PhpDoc @property checking](#phpdoc-property-checking)
