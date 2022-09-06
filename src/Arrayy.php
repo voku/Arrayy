@@ -3089,7 +3089,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                                 &&
                                 isset($dataTmp[$keyTmp])
                             ) {
-                                /* @phpstan-ignore-next-line | special? */
                                 $returnTmp->add($dataTmp[$keyTmp]);
 
                                 continue;
@@ -7035,7 +7034,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         // INFO: \array_unique() can't handle e.g. "stdClass"-values in an array
 
-        /* @phpstan-ignore-next-line - reduce will return an array of T */
         $this->array = $this->reduce(
             static function ($resultArray, $value, $key) {
                 if (!\in_array($value, $resultArray, true)) {

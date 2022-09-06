@@ -4396,7 +4396,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame([0 => 'a', 'b' => []], $array);
         static::assertSame($array, $arrayy->toArray());
-        /* @phpstan-ignore-next-line */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
     }

@@ -16,9 +16,6 @@ parameters:
         -
             message: ~Call to an undefined static method~
             path: %currentWorkingDirectory%/tests/StaticArrayyTest.php
-        -
-            message: ~Cannot call method format~
-            path: %currentWorkingDirectory%/tests/ArrayyTest.php
         # false-positive?
         - '/function call_user_func expects callable.*array\{.*\} given/'
         - '/function call_user_func_array expects callable.*array\{.*\} given/'

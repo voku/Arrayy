@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.9.4 (2022-09-06)
+
+- try to fix phpstan (1.8.4) reported issues
+
 ### 7.9.3 (2022-07-06)
 
 - "Collection" -> fix phpstan check for offset

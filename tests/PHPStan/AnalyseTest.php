@@ -40,12 +40,24 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         $set = new \Arrayy\Type\StringCollection(['A', 'B', 'C', 'D', 'E']);
         $set[] = 'F';
         $set[] = 'G';
-        /* @phpstan-ignore-next-line | not accept */
-        $set[] = 2;
-        /* @phpstan-ignore-next-line | not accept */
-        $set[] = 3;
-        /* @phpstan-ignore-next-line | not accept */
-        $set[] = false;
+        try {
+            /* @phpstan-ignore-next-line | not accept */
+            $set[] = 2;
+        } catch (\TypeError $e) {
+            // nothing
+        }
+        try {
+            /* @phpstan-ignore-next-line | not accept */
+            $set[] = 3;
+        } catch (\TypeError $e) {
+            // nothing
+        }
+        try {
+            /* @phpstan-ignore-next-line | not accept */
+            $set[] = false;
+        } catch (\TypeError $e) {
+            // nothing
+        }
 
         \PHPStan\Testing\assertType('Arrayy\Type\StringCollection', $set);
 
