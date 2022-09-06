@@ -115,7 +115,7 @@ class Collection extends AbstractCollection
         }
 
         if ($type !== null) {
-            /** @phpstan-ignore-next-line - we use the "TypeInterface" only as base */
+            /* @phpstan-ignore-next-line - we use the "TypeInterface" only as base */
             $this->properties = $type;
         }
 

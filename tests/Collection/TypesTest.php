@@ -40,7 +40,7 @@ final class TypesTest extends TestCase
         $set = new StringCollection(['A', 'B', 'C']);
 
         $this->expectException(\TypeError::class);
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         static::assertSame(['A', 'B', 'C', 'D', 'E'], $set->push(5)->getArray());
     }
 
@@ -77,7 +77,7 @@ final class TypesTest extends TestCase
         $set = new StringCollection(['A', 'B', 'C']);
 
         $this->expectException(\TypeError::class);
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         static::assertSame(['A', 'B', 'C', 'D', 'E'], $set->unshift(5)->getArray());
     }
 
@@ -337,7 +337,7 @@ final class TypesTest extends TestCase
         );
 
         $this->expectException(\TypeError::class);
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $set->push(1);
     }
 

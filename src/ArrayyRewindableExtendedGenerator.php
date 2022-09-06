@@ -35,6 +35,7 @@ class ArrayyRewindableExtendedGenerator extends ArrayyRewindableGenerator
      *
      * @phpstan-return X
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $value = $this->generator->current();

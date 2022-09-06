@@ -806,7 +806,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#serialize-string">serialize</a>
 </td><td><a href="#setstring-key-mixed-value-this">set</a>
 </td></tr><tr><td><a href="#setandgetmixed-key-mixed-fallback-mixed">setAndGet</a>
-</td><td><a href="#setflagstodo-__not_detected__-flags">setFlags</a>
+</td><td><a href="#setflagsint-flags">setFlags</a>
 </td><td><a href="#setiteratorclassstring-iteratorclass-void">setIteratorClass</a>
 </td><td><a href="#shift-mixednull">shift</a>
 </td></tr><tr><td><a href="#shufflebool-secure-arraynull-array-static">shuffle</a>
@@ -1005,7 +1005,7 @@ a(['foo', 'bar' => 'bis'])->at($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 </code>
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): mixed $closure`
+- `\Closure(T , TKey ): mixed $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1048,7 +1048,7 @@ Change the path separator of the array wrapper.
 By default, the separator is: "."
 
 **Parameters:**
-- `string $separator <p>Separator to set.</p>`
+- `non-empty-string $separator <p>Separator to set.</p>`
 
 **Return:**
 - `$this <p>(Mutable) Return this Arrayy object.</p>`
@@ -1416,7 +1416,7 @@ Create an new Arrayy object via string.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `string|null $delimiter <p>The boundary string.</p>`
+- `non-empty-string|null $delimiter <p>The boundary string.</p>`
 - `string|null $regEx <p>Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be
 used.</p>`
 
@@ -1650,7 +1650,7 @@ a(['foo', 'bar' => 'bis'])->each($closure); // Arrayy[':foo:', 'bar' => ':bis:']
 </code>
 
 **Parameters:**
-- `\Closure(T  = default, ?TKey  = default): T $closure`
+- `\Closure(T , ?TKey ): T $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -1699,7 +1699,7 @@ a(['foo', 2 => 'two'])->exists($callable); // true
 </code>
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): bool $closure`
+- `\Closure(T , TKey ): bool $closure`
 
 **Return:**
 - `bool <p>Returns true if the given value is found, false otherwise.</p>`
@@ -1735,7 +1735,7 @@ a([1, 2, 3, 4])->filter($closure); // Arrayy[0 => 1, 2 => 3]
 </code>
 
 **Parameters:**
-- `null|\Closure(T  = default, TKey  = default): bool|\Closure(T  = default): bool|\Closure(TKey  = default): bool $closure [optional] <p>
+- `null|\Closure(T , TKey  = default): bool|\Closure(T ): bool|\Closure(TKey ): bool $closure [optional] <p>
 The callback function to use
 </p>
 <p>
@@ -1802,7 +1802,7 @@ a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
 </code>
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): bool $closure`
+- `\Closure(T , TKey ): bool $closure`
 
 **Return:**
 - `false|mixed <p>Return false if we did not find the value.</p>`
@@ -2258,7 +2258,7 @@ appear in the array as Generator.</p>`
 Group values from a array according to the results of a closure.
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): TKey|TKey $grouper <p>A callable function name.</p>`
+- `\Closure(T , TKey ): TKey|TKey $grouper <p>A callable function name.</p>`
 - `bool $saveKeys`
 
 **Return:**
@@ -2743,7 +2743,7 @@ a([2, 4, 8])->matches($closure); // true
 </code>
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): bool $closure`
+- `\Closure(T , TKey ): bool $closure`
 
 **Return:**
 - `bool`
@@ -2762,7 +2762,7 @@ a([1, 4, 7])->matches($closure); // true
 </code>
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): bool $closure`
+- `\Closure(T , TKey ): bool $closure`
 
 **Return:**
 - `bool`
@@ -3141,7 +3141,7 @@ Partitions this array in two array according to a predicate.
 Keys are preserved in the resulting array.
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): bool $closure <p>The predicate on which to partition.</p>`
+- `\Closure(T , TKey ): bool $closure <p>The predicate on which to partition.</p>`
 
 **Return:**
 - `array<int,static> <p>An array with two elements. The first element contains the array
@@ -3418,7 +3418,7 @@ a([1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
 </code>
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): bool $closure`
+- `\Closure(T , TKey ): bool $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3809,12 +3809,12 @@ $arrayy->setAndGet(0, 4); // 4
 
 --------
 
-## setFlags(TODO: __not_detected__ $flags): 
+## setFlags(int $flags): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $flags`
+- `int $flags`
 
 **Return:**
 - `TODO: __not_detected__`
@@ -4199,7 +4199,7 @@ a(['bar', ['foo']])->toJson(); // '["bar",{"1":"foo"}]'
 </code>
 
 **Parameters:**
-- `int $options [optional] <p>e.g. JSON_PRETTY_PRint`
+- `int $options [optional] <p>e.g. JSON_PRETTY_PRINT</p>`
 - `int $depth [optional] <p>Set the maximum depth. Must be greater than zero.</p>`
 
 **Return:**
@@ -4372,7 +4372,7 @@ Prepends one or more values to the beginning of array at once.
 Tests whether the given closure return something valid for all elements of this array.
 
 **Parameters:**
-- `\Closure(T  = default, TKey  = default): bool $closure the predicate`
+- `\Closure(T , TKey ): bool $closure the predicate`
 
 **Return:**
 - `bool <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>`
@@ -4437,47 +4437,47 @@ Returns a collection of matching items.
 
 ---
 
-<p id="voku-php-readme-class-methods"></p><table><tr><td><a href="#appendtodo-__not_detected__-value">append</a>
-</td><td><a href="#asort">asort</a>
+<p id="voku-php-readme-class-methods"></p><table><tr><td><a href="#appendnullmixed-value">append</a>
+</td><td><a href="#asortint-flags">asort</a>
 </td><td><a href="#count">count</a>
-</td><td><a href="#exchangearraytodo-__not_detected__-input">exchangeArray</a>
+</td><td><a href="#exchangearrayarrayobject-array">exchangeArray</a>
 </td></tr><tr><td><a href="#getarraycopy">getArrayCopy</a>
 </td><td><a href="#getflags">getFlags</a>
 </td><td><a href="#getiterator">getIterator</a>
 </td><td><a href="#getiteratorclass">getIteratorClass</a>
-</td></tr><tr><td><a href="#ksort">ksort</a>
+</td></tr><tr><td><a href="#ksortint-flags">ksort</a>
 </td><td><a href="#natcasesort">natcasesort</a>
 </td><td><a href="#natsort">natsort</a>
-</td><td><a href="#offsetexiststodo-__not_detected__-index">offsetExists</a>
-</td></tr><tr><td><a href="#offsetgettodo-__not_detected__-index">offsetGet</a>
-</td><td><a href="#offsetsettodo-__not_detected__-index-todo-__not_detected__-newval">offsetSet</a>
-</td><td><a href="#offsetunsettodo-__not_detected__-index">offsetUnset</a>
+</td><td><a href="#offsetexistsnullmixed-key">offsetExists</a>
+</td></tr><tr><td><a href="#offsetgetnullmixed-key">offsetGet</a>
+</td><td><a href="#offsetsetnullmixed-key-nullmixed-value">offsetSet</a>
+</td><td><a href="#offsetunsetnullmixed-key">offsetUnset</a>
 </td><td><a href="#serialize">serialize</a>
-</td></tr><tr><td><a href="#setflagstodo-__not_detected__-flags">setFlags</a>
-</td><td><a href="#setiteratorclasstodo-__not_detected__-iteratorclass">setIteratorClass</a>
-</td><td><a href="#uasorttodo-__not_detected__-cmp_function">uasort</a>
-</td><td><a href="#uksorttodo-__not_detected__-cmp_function">uksort</a>
-</td></tr><tr><td><a href="#unserializetodo-__not_detected__-serialized">unserialize</a>
+</td></tr><tr><td><a href="#setflagsint-flags">setFlags</a>
+</td><td><a href="#setiteratorclassstring-iteratorclass">setIteratorClass</a>
+</td><td><a href="#uasortcallable-callback">uasort</a>
+</td><td><a href="#uksortcallable-callback">uksort</a>
+</td></tr><tr><td><a href="#unserializestring-data">unserialize</a>
 </td></tr></table>
 
-## append(TODO: __not_detected__ $value): 
+## append(null|mixed $value): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $value`
+- `null|mixed $value`
 
 **Return:**
 - `TODO: __not_detected__`
 
 --------
 
-## asort(): 
+## asort(int $flags): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-__nothing__
+- `int $flags`
 
 **Return:**
 - `TODO: __not_detected__`
@@ -4496,12 +4496,12 @@ __nothing__
 
 --------
 
-## exchangeArray(TODO: __not_detected__ $input): 
+## exchangeArray(array|object $array): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $input`
+- `array|object $array`
 
 **Return:**
 - `TODO: __not_detected__`
@@ -4556,12 +4556,12 @@ __nothing__
 
 --------
 
-## ksort(): 
+## ksort(int $flags): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-__nothing__
+- `int $flags`
 
 **Return:**
 - `TODO: __not_detected__`
@@ -4592,49 +4592,49 @@ __nothing__
 
 --------
 
-## offsetExists(TODO: __not_detected__ $index): 
+## offsetExists(null|mixed $key): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $index`
+- `null|mixed $key`
 
 **Return:**
 - `TODO: __not_detected__`
 
 --------
 
-## offsetGet(TODO: __not_detected__ $index): 
+## offsetGet(null|mixed $key): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $index`
+- `null|mixed $key`
 
 **Return:**
 - `TODO: __not_detected__`
 
 --------
 
-## offsetSet(TODO: __not_detected__ $index, TODO: __not_detected__ $newval): 
+## offsetSet(null|mixed $key, null|mixed $value): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $index`
-- `TODO: __not_detected__ $newval`
+- `null|mixed $key`
+- `null|mixed $value`
 
 **Return:**
 - `TODO: __not_detected__`
 
 --------
 
-## offsetUnset(TODO: __not_detected__ $index): 
+## offsetUnset(null|mixed $key): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $index`
+- `null|mixed $key`
 
 **Return:**
 - `TODO: __not_detected__`
@@ -4653,60 +4653,60 @@ __nothing__
 
 --------
 
-## setFlags(TODO: __not_detected__ $flags): 
+## setFlags(int $flags): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $flags`
+- `int $flags`
 
 **Return:**
 - `TODO: __not_detected__`
 
 --------
 
-## setIteratorClass(TODO: __not_detected__ $iteratorClass): 
+## setIteratorClass(string $iteratorClass): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $iteratorClass`
+- `string $iteratorClass`
 
 **Return:**
 - `TODO: __not_detected__`
 
 --------
 
-## uasort(TODO: __not_detected__ $cmp_function): 
+## uasort(callable $callback): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $cmp_function`
+- `callable $callback`
 
 **Return:**
 - `TODO: __not_detected__`
 
 --------
 
-## uksort(TODO: __not_detected__ $cmp_function): 
+## uksort(callable $callback): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $cmp_function`
+- `callable $callback`
 
 **Return:**
 - `TODO: __not_detected__`
 
 --------
 
-## unserialize(TODO: __not_detected__ $serialized): 
+## unserialize(string $data): 
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `TODO: __not_detected__ $serialized`
+- `string $data`
 
 **Return:**
 - `TODO: __not_detected__`

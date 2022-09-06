@@ -36,7 +36,7 @@ final class FloatIntTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         new FloatIntCollection([1.0, 1.1, 1.2, '2']);
     }
 }

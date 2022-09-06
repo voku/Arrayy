@@ -57,7 +57,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $pets = new \stdClass();
         $pets->foo = 1;
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         collection(ModelInterface::class, $pets);
     }
 
@@ -80,7 +80,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf(\Arrayy\tests\UserData::class, $userData);
         static::assertSame('Lars', $userData->firstName);
         static::assertInstanceOf(\Arrayy\tests\CityData::class, $userData->city);
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         static::assertSame('Düsseldorf', $userData->city->name);
     }
 
@@ -124,11 +124,11 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testJsonSerializableCollection()
     {
         $pets = new \Arrayy\Arrayy();
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $pets->foo = 'fooooo';
 
         $colors = new \Arrayy\Arrayy();
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $colors->color = 'red';
 
         $jsonSerializableCollection = new \Arrayy\Type\JsonSerializableCollection([$pets, $colors]);
@@ -226,7 +226,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
 
-        /** @phpstan-ignore-next-line | offset on object */
+        /* @phpstan-ignore-next-line | offset on object */
         $modelCollection[] = $cityData;
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
@@ -249,7 +249,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $modelCollection->add($cityData);
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
@@ -339,7 +339,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $modelCollection->prepend($cityData);
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
@@ -365,7 +365,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $rand = $modelCollection->randomImmutable(1);
         static::assertInstanceOf(ModelInterface::class, $rand->first());
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         $modelCollection->prepend($cityData, 0);
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());

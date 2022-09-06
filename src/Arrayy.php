@@ -64,7 +64,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected $iteratorClass = ArrayyIterator::class;
 
     /**
-     * @var string
+     * @var non-empty-string
      */
     protected $pathSeparator = '.';
 
@@ -1207,7 +1207,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param \Closure(T=,TKey=):mixed $closure <p>INFO: \Closure result is not used, but void is not supported in PHP 7.0</p>
+     * @phpstan-param \Closure(T,TKey):mixed $closure <p>INFO: \Closure result is not used, but void is not supported in PHP 7.0</p>
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -1299,7 +1299,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * By default, the separator is: "."
      *
-     * @param string $separator <p>Separator to set.</p>
+     * @param non-empty-string $separator <p>Separator to set.</p>
      *
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
@@ -1930,10 +1930,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Create an new Arrayy object via string.
      *
-     * @param string      $str       <p>The input string.</p>
-     * @param string|null $delimiter <p>The boundary string.</p>
-     * @param string|null $regEx     <p>Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be
-     *                               used.</p>
+     * @param string                $str       <p>The input string.</p>
+     * @param non-empty-string|null $delimiter <p>The boundary string.</p>
+     * @param string|null           $regEx     <p>Use the $delimiter or the $regEx, so if $pattern is null, $delimiter will be
+     *                                         used.</p>
      *
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
@@ -2411,7 +2411,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param \Closure(T=,?TKey=):T $closure
+     * @phpstan-param \Closure(T,?TKey):T $closure
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -2473,7 +2473,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>Returns true if the given value is found, false otherwise.</p>
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      */
     public function exists(\Closure $closure): bool
     {
@@ -2568,7 +2568,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param null|(\Closure(T=,TKey=):bool)|(\Closure(T=):bool)|(\Closure(TKey=):bool) $closure
+     * @phpstan-param null|(\Closure(T,TKey=):bool)|(\Closure(T):bool)|(\Closure(TKey):bool) $closure
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -2588,7 +2588,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             };
         } elseif ($flag === \ARRAY_FILTER_USE_BOTH) {
             /** @noinspection PhpSillyAssignmentInspection - hack for phpstan - https://github.com/phpstan/phpstan/issues/4192 */
-            /** @phpstan-var \Closure(T=,TKey=):bool $closure */
+            /** @phpstan-var \Closure(T,TKey):bool $closure */
             $closure = $closure;
 
             $generator = function () use ($closure) {
@@ -2734,7 +2734,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return false|mixed
      *                     <p>Return false if we did not find the value.</p>
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      * @phpstan-return T|false
      */
     public function find(\Closure $closure)
@@ -2901,10 +2901,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($number === null) {
             $shift = \array_shift($this->array);
-            /* @phpstan-ignore-next-line | I am not sure if "array<int, T of mixed>" is a error here */
+            /* @phpstan-ignore-next-line | I am not sure if "array<int, T of mixed>" is an error here? */
             $this->array = $shift !== null ? [$shift] : [];
         } else {
-            /** @var array<TKey,T> $splice - hack for phpstan */
             $splice = \array_splice($this->array, 0, $number);
             $this->array = $splice;
         }
@@ -3009,7 +3008,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         // php cast "bool"-index into "int"-index
-        /** @phpstan-ignore-next-line | this is only a fallback */
+        /* @phpstan-ignore-next-line | this is only a fallback */
         if ((bool) $key === $key) {
             $key = (int) $key;
         }
@@ -3090,7 +3089,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                                 &&
                                 isset($dataTmp[$keyTmp])
                             ) {
-                                /** @phpstan-ignore-next-line | special? */
+                                /* @phpstan-ignore-next-line | special? */
                                 $returnTmp->add($dataTmp[$keyTmp]);
 
                                 continue;
@@ -3537,7 +3536,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param \Closure(T=,TKey=):TKey|TKey $grouper
+     * @phpstan-param \Closure(T,TKey):TKey|TKey $grouper
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -3828,7 +3827,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param  callable(T=,mixed):mixed $callable
+     * @phpstan-param  callable(T,mixed=):mixed $callable
      * @phpstan-return static<int, T>|static<TKey, T>
      * @psalm-mutation-free
      */
@@ -4411,7 +4410,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      */
     public function matches(\Closure $closure): bool
     {
@@ -4444,7 +4443,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      */
     public function matchesAny(\Closure $closure): bool
     {
@@ -4712,7 +4711,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function mostUsedValue()
     {
-        /** @phpstan-ignore-next-line | false-positive? maybe because we switch key-value via "countValues"? */
+        /* @phpstan-ignore-next-line | false-positive? maybe because we switch key-value via "countValues"? */
         return $this->countValues()->arsortImmutable()->firstKey();
     }
 
@@ -4960,7 +4959,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                    of elements where the predicate returned TRUE, the second element
      *                    contains the array of elements where the predicate returned FALSE.</p>
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      * @phpstan-return array<int, static<TKey,T>>
      */
     public function partition(\Closure $closure): array
@@ -5561,7 +5560,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param \Closure(T=,TKey=):bool  $closure
+     * @phpstan-param \Closure(T,TKey):bool  $closure
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
@@ -5819,6 +5818,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function replaceAllKeys(array $keys): self
     {
         $data = \array_combine($keys, $this->toArray());
+        /* @phpstan-ignore-next-line | change from PHP >= 8, but we still support old versions */
         if ($data === false) {
             $data = [];
         }
@@ -5862,6 +5862,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function replaceAllValues(array $array): self
     {
         $data = \array_combine($this->toArray(), $array);
+        /* @phpstan-ignore-next-line | change from PHP >= 8, but we still support old versions */
         if ($data === false) {
             $data = [];
         }
@@ -5893,6 +5894,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $values = \array_values($this->toArray());
         $result = \array_combine($keys, $values);
+        /* @phpstan-ignore-next-line | change from PHP >= 8, but we still support old versions */
         if ($result === false) {
             $result = [];
         }
@@ -5962,7 +5964,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return \str_replace($search, $replacement, $value);
         };
 
-        /** @phpstan-ignore-next-line | ignore Closure with one or two parameters, is this a bug in phpstan? */
+        /* @phpstan-ignore-next-line | ignore Closure with one or two parameters, is this a bug in phpstan? */
         return $this->each($callable);
     }
 
@@ -6144,7 +6146,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         // php cast "bool"-index into "int"-index
-        /** @phpstan-ignore-next-line | array-key helper */
+        /* @phpstan-ignore-next-line | array-key helper */
         if ((bool) $index === $index) {
             $index = (int) $index;
         }
@@ -6905,7 +6907,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 }
             }
 
-            /** @phpstan-ignore-next-line - depends on the $convertAllArrayyElements parameter :/ */
+            /* @phpstan-ignore-next-line - depends on the $convertAllArrayyElements parameter :/ */
             return $array;
         }
 
@@ -7033,7 +7035,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         // INFO: \array_unique() can't handle e.g. "stdClass"-values in an array
 
-        /** @phpstan-ignore-next-line - reduce will return an array of T */
+        /* @phpstan-ignore-next-line - reduce will return an array of T */
         $this->array = $this->reduce(
             static function ($resultArray, $value, $key) {
                 if (!\in_array($value, $resultArray, true)) {
@@ -7141,7 +7143,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      */
     public function validate(\Closure $closure): bool
     {
@@ -7399,17 +7401,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         $explodedPath = \explode($this->pathSeparator, $path);
+        /* @phpstan-ignore-next-line | change from PHP >= 8, but we still support old versions */
         if ($explodedPath === false) {
             return;
         }
 
         $nextPath = \array_shift($explodedPath);
-
         if (!isset($currentOffset[$nextPath])) {
             return;
         }
 
-        if (!empty($explodedPath)) {
+        if ($explodedPath !== []) {
             $this->callAtPath(
                 \implode($this->pathSeparator, $explodedPath),
                 $callable,

@@ -19,13 +19,13 @@ final class StringTypeTest extends TestCase
 
         $strings = PhpString::create();
 
-        /** @phpstan-ignore-next-line | offset on object */
+        /* @phpstan-ignore-next-line | offset on object */
         $strings[] = 'A';
-        /** @phpstan-ignore-next-line | offset on object */
+        /* @phpstan-ignore-next-line | offset on object */
         $strings[] = 'B';
-        /** @phpstan-ignore-next-line | offset on object */
+        /* @phpstan-ignore-next-line | offset on object */
         $strings[] = 'C';
-        /** @phpstan-ignore-next-line | offset on object */
+        /* @phpstan-ignore-next-line | offset on object */
         $strings[] = 1.0;
     }
 
@@ -55,7 +55,7 @@ final class StringTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         new StringCollection(['A', 'B', 'C', 1]);
     }
 

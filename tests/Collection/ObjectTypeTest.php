@@ -33,7 +33,7 @@ final class ObjectTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         new \Arrayy\Type\ObjectCollection(['strtolower', 1]);
     }
 }

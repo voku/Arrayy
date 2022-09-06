@@ -186,7 +186,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return bool
      *              <p>TRUE if the predicate is TRUE for at least one element, FALSE otherwise.</p>
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      */
     public function exists(\Closure $closure): bool;
 
@@ -200,7 +200,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>A collection with the results of the filter operation.</p>
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      * @phpstan-return CollectionInterface<TKey,T>
      */
     public function filter($closure = null, int $flag = \ARRAY_FILTER_USE_BOTH);
@@ -221,7 +221,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return bool TRUE, if the predicate yields TRUE for all elements, FALSE otherwise
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      */
     public function validate(\Closure $closure): bool;
 
@@ -348,7 +348,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @return CollectionInterface
      *
-     * @phpstan-param callable(T=,TKey=,mixed):mixed $callable
+     * @phpstan-param callable(T,TKey,mixed):mixed $callable
      * @phpstan-return CollectionInterface<TKey,T>
      */
     public function map(callable $callable, bool $useKeyAsSecondParameter = false, ...$arguments);
@@ -400,7 +400,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *                    of elements where the predicate returned TRUE, the second element
      *                    contains the collection of elements where the predicate returned FALSE.
      *
-     * @phpstan-param \Closure(T=,TKey=):bool $p
+     * @phpstan-param \Closure(T,TKey):bool $p
      * @phpstan-return array{0: CollectionInterface<TKey,T>, 1: CollectionInterface<TKey,T>}
      */
     public function partition(\Closure $p): array;

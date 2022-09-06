@@ -121,7 +121,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             return $this;
         }
 
-        /** @phpstan-ignore-next-line | special? */
+        /* @phpstan-ignore-next-line | special? */
         $return = parent::append($value, $key);
         $this->array = $return->array;
         $this->generator = null;
@@ -184,7 +184,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             return $this;
         }
 
-        /** @phpstan-ignore-next-line | special? */
+        /* @phpstan-ignore-next-line | special? */
         $return = parent::prepend($value, $key);
         $this->array = $return->array;
         $this->generator = null;

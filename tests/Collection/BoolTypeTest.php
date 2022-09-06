@@ -33,7 +33,7 @@ final class BoolTypeTest extends TestCase
 
         $test = null;
         foreach ($set->getIterator() as $foo) {
-            /** @phpstan-ignore-next-line */
+            /* @phpstan-ignore-next-line */
             if ($foo === '1') {
                 $test = false;
             }
@@ -51,7 +51,7 @@ final class BoolTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         new BoolCollection([true, true, false, 1]);
     }
 
@@ -59,7 +59,7 @@ final class BoolTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         new BoolCollection([[true, true], false, [true]]);
     }
 }

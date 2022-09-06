@@ -28,7 +28,7 @@ final class TypeTypeTest extends TestCase
 
         /** @noinspection PhpParamsInspection */
         /** @noinspection PhpStrictTypeCheckingInspection */
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         new Collection(\stdClass::class, [new \stdClass(), 'A']);
     }
 }

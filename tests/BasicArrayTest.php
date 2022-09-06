@@ -703,7 +703,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             $last = null;
         }
 
-        /** @phpstan-ignore-next-line */
+        /* @phpstan-ignore-next-line */
         if ($result instanceof Arrayy) {
             $result = $result->getArray();
         }
@@ -1034,8 +1034,8 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider stringWithSeparatorProvider
      *
-     * @param string $string
-     * @param string $separator
+     * @param string           $string
+     * @param non-empty-string $separator
      */
     public function testToString($string, $separator)
     {
