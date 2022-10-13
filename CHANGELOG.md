@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.9.5 (2022-10-13)
+
+- try to optimize autocompletion for PhpStorm
+
 ### 7.9.4 (2022-09-06)
 
 - try to fix phpstan (1.8.4) reported issues
