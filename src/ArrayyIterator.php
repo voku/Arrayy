@@ -7,7 +7,7 @@ namespace Arrayy;
 /**
  * @template TKey of array-key
  * @template T
- * @template-extends \ArrayIterator<TKey,T>
+ * @extends \ArrayIterator<TKey,T>
  */
 class ArrayyIterator extends \ArrayIterator
 {

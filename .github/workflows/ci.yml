@@ -55,7 +55,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [[ "${{ matrix.php }}" == "7.4" ]]; then
+          if [[ "${{ matrix.php }}" == "8.0" ]]; then
             composer require phpstan/phpstan --no-update
           fi;
 
@@ -76,7 +76,7 @@ jobs:
 
       - name: Run phpstan
         continue-on-error: true
-        if: ${{ matrix.php == '7.4' }}
+        if: ${{ matrix.php == '8.0' }}
         run: |
           php vendor/bin/phpstan analyse
 

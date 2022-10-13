@@ -32,9 +32,9 @@ use Arrayy\TypeCheck\TypeCheckPhpDoc;
  *
  * @template TKey of array-key
  * @template T
- * @template-extends \ArrayObject<TKey,T>
- * @template-implements \IteratorAggregate<TKey,T>
- * @template-implements \ArrayAccess<TKey,T>
+ * @extends \ArrayObject<TKey,T>
+ * @implements \IteratorAggregate<TKey,T>
+ * @implements \ArrayAccess<TKey,T>
  */
 class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \JsonSerializable, \Countable
 {

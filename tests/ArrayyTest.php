@@ -4344,6 +4344,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         unset($array[$offset]);
 
         static::assertSame($array, $arrayy->toArray());
+        /* @phpstan-ignore-next-line */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
     }
@@ -4362,6 +4363,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         unset($array[$offset]);
 
         static::assertSame($array, $arrayy->toArray());
+        /* @phpstan-ignore-next-line */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
     }

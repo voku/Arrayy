@@ -16,8 +16,8 @@ use Arrayy\TypeCheck\TypeCheckInterface;
  *
  * @template TKey of array-key
  * @template T
- * @template-extends \IteratorAggregate<TKey,T>
- * @template-extends \ArrayAccess<TKey,T>
+ * @extends \IteratorAggregate<TKey,T>
+ * @extends \ArrayAccess<TKey,T>
  */
 interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Serializable, \JsonSerializable, \Countable
 {
@@ -160,7 +160,12 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @return CollectionInterface
      *                             <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
-     * @phpstan-return CollectionInterface<array-key,mixed>
+     * @template TKeyCreate as TKey
+     * @template TCreate as T
+     * @phpstan-param array<TKeyCreate,TCreate> $data
+     * @phpstan-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-return static<TKeyCreate,TCreate>
+     *
      * @psalm-mutation-free
      */
     public static function create(
