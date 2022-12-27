@@ -13,9 +13,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
 {
     public function testParameterMatchEmpty()
     {
-        $model = new CityData(
-            []
-        );
+        $model = new CityData([]);
 
         static::assertInstanceOf(Arrayy::class, $model);
     }

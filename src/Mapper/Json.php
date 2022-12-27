@@ -48,7 +48,7 @@ final class Json
     /**
      * Map data all data in $json into the given $object instance.
      *
-     * @param iterable $json
+     * @param object|iterable $json
      *                                                      <p>JSON object structure from json_decode()</p>
      * @param object|string $object
      *                                                      <p>Object to map $json data into</p>
@@ -259,10 +259,15 @@ final class Json
             $class = $this->getMappedType($originalClass, $jsonValue);
             if ($class === null) {
                 $foundArrayy = false;
+
                 if ($array instanceof \Arrayy\Arrayy && $jsonValue instanceof \stdClass) {
                     foreach ($array->getPhpDocPropertiesFromClass() as $typesKey => $typesTmp) {
                         if (
-                            $typesKey === $key
+                            (
+                                $typesKey === $key
+                                ||
+                                $typesKey === \Arrayy\Arrayy::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES
+                            )
                             &&
                             \count($typesTmp->getTypes()) === 1
                             &&
@@ -276,7 +281,27 @@ final class Json
                     }
                 }
                 if ($foundArrayy === false) {
-                    $array[$key] = $jsonValue;
+                    if ($array instanceof \Arrayy\Arrayy && $jsonValue instanceof \stdClass) {
+                        foreach ($array->getPhpDocPropertiesFromClass() as $typesKey => $typesTmp) {
+                            if (
+                                (
+                                    $typesKey === $key
+                                    ||
+                                    $typesKey === \Arrayy\Arrayy::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES
+                                )
+                                &&
+                                \count($typesTmp->getTypes()) === 1
+                            ) {
+                                $array[$key] = $this->map($jsonValue, $typesTmp->getTypes()[0]);
+                                $foundArrayy = true;
+
+                                break;
+                            }
+                        }
+                    }
+                    if ($foundArrayy === false) {
+                        $array[$key] = $jsonValue;
+                    }
                 }
             } elseif ($this->isArrayOfType($class)) {
                 $array[$key] = $this->mapArray(

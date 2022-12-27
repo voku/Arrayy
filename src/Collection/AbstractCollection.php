@@ -294,7 +294,9 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
     {
         // init
         $return = static::create();
+
         $jsonObject = \json_decode($json, false);
+
         $mapper = new \Arrayy\Mapper\Json();
         $mapper->undefinedPropertyHandler = static function ($object, $key, $jsonValue) use ($return) {
             if ($return->checkForMissingPropertiesInConstructor) {
