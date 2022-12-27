@@ -1,5 +1,9 @@
 # Changelog
 
+### 7.9.6 (2022-12-27)
+
+- "Json"-Mapper: support objects in "Arrayy"-collections
+
 ### 7.9.5 (2022-10-13)
 
 - try to optimize autocompletion for PhpStorm
