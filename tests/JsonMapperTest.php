@@ -2,14 +2,13 @@
 
 namespace Arrayy\tests;
 
-use function PHPUnit\Framework\assertSame;
-
 /**
  * @internal
  */
 final class JsonMapperTest extends \PHPUnit\Framework\TestCase
 {
-    public function testJsonMappingV1() {
+    public function testJsonMappingV1()
+    {
         $data = ['accounts' => [new Account('Foo'), new Account('Bar')]];
         $json = json_encode($data);
 
