@@ -2,7 +2,6 @@
 
 namespace Arrayy\tests\Collection;
 
-use function Arrayy\collection;
 use Arrayy\Collection\Collection;
 use Arrayy\tests\CityData;
 use Arrayy\tests\ModelA;
@@ -10,6 +9,7 @@ use Arrayy\tests\ModelB;
 use Arrayy\tests\ModelC;
 use Arrayy\tests\ModelD;
 use Arrayy\tests\ModelInterface;
+use function Arrayy\collection;
 
 /**
  * @internal
