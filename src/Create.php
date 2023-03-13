@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 namespace {
-
     if (\PHP_VERSION_ID < 70300) {
         if (!\function_exists('is_countable')) {
             /**
@@ -57,11 +56,9 @@ namespace {
             }
         }
     }
-
 }
 
 namespace Arrayy {
-
     use Arrayy\Collection\Collection;
     use Arrayy\TypeCheck\TypeCheckArray;
     use Arrayy\TypeCheck\TypeCheckInterface;
@@ -143,5 +140,4 @@ namespace Arrayy {
 
         return $array[$key_first];
     }
-
 }

@@ -6,7 +6,6 @@ namespace Arrayy;
 
 final class ArrayyMeta
 {
-
     /** @noinspection MagicMethodsValidityInspection */
 
     /**

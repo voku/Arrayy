@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Arrayy\Type;
 
-use function Arrayy\array_first;
 use Arrayy\Arrayy;
 use Arrayy\ArrayyIterator;
 use Arrayy\Collection\Collection;
+use function Arrayy\array_first;
 
 /**
  * @template TKey of array-key
