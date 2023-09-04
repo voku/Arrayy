@@ -7,7 +7,7 @@
 [![Latest Stable Version](https://poser.pugx.org/voku/arrayy/v/stable)](https://packagist.org/packages/voku/arrayy) 
 [![Total Downloads](https://poser.pugx.org/voku/arrayy/downloads)](https://packagist.org/packages/voku/arrayy) 
 [![License](https://poser.pugx.org/voku/arrayy/license)](https://packagist.org/packages/voku/arrayy)
-[![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/moelleken)
+[![Financial Contributors on Open Collective](https://opencollective.com/Arrayy/all/badge.svg?label=financial+contributors)](https://opencollective.com/Arrayy) [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/moelleken)
 [![Donate to this project using Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/voku)
 
 # 🗃 Arrayy
@@ -4734,6 +4734,36 @@ For professional support please contact [me](https://about.me/voku).
 ## Tests
 
 From the project directory, tests can be ran using `phpunit`
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/voku/Arrayy/graphs/contributors"><img src="https://opencollective.com/Arrayy/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/Arrayy/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/Arrayy"><img src="https://opencollective.com/Arrayy/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/Arrayy/contribute)]
+
+<a href="https://opencollective.com/Arrayy/organization/0/website"><img src="https://opencollective.com/Arrayy/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/Arrayy/organization/1/website"><img src="https://opencollective.com/Arrayy/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/Arrayy/organization/2/website"><img src="https://opencollective.com/Arrayy/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/Arrayy/organization/3/website"><img src="https://opencollective.com/Arrayy/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/Arrayy/organization/4/website"><img src="https://opencollective.com/Arrayy/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/Arrayy/organization/5/website"><img src="https://opencollective.com/Arrayy/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/Arrayy/organization/6/website"><img src="https://opencollective.com/Arrayy/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/Arrayy/organization/7/website"><img src="https://opencollective.com/Arrayy/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/Arrayy/organization/8/website"><img src="https://opencollective.com/Arrayy/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/Arrayy/organization/9/website"><img src="https://opencollective.com/Arrayy/organization/9/avatar.svg"></a>
 
 ## License
 
