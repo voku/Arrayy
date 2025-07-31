@@ -1941,7 +1941,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-return static<int,string>
      * @psalm-mutation-free
      */
-    public static function createFromString(string $str, string $delimiter = null, string $regEx = null): self
+    public static function createFromString(string $str, ?string $delimiter = null, ?string $regEx = null): self
     {
         if ($regEx) {
             \preg_match_all($regEx, $str, $array);
@@ -2648,7 +2648,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function filterBy(
         string $property,
         $value,
-        string $comparisonOp = null
+        ?string $comparisonOp = null
     ): self {
         if (!$comparisonOp) {
             $comparisonOp = \is_array($value) ? 'contains' : 'eq';
@@ -2834,7 +2834,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function firstsImmutable(int $number = null): self
+    public function firstsImmutable(?int $number = null): self
     {
         $arrayTmp = $this->toArray();
 
@@ -2863,7 +2863,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-return static<array-key,TKey>
      * @psalm-mutation-free
      */
-    public function firstsKeys(int $number = null): self
+    public function firstsKeys(?int $number = null): self
     {
         $arrayTmp = $this->keys()->toArray();
 
@@ -2895,7 +2895,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return ($number is null ? static<int,T> : static<TKey,T>)
      */
-    public function firstsMutable(int $number = null): self
+    public function firstsMutable(?int $number = null): self
     {
         $this->generatorToArray();
 
@@ -2972,7 +2972,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function get(
         $key = null,
         $fallback = null,
-        array $array = null,
+        ?array $array = null,
         bool $useByReference = false
     ) {
         if ($array === null && $key === null) {
@@ -4265,7 +4265,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function lastsImmutable(int $number = null): self
+    public function lastsImmutable(?int $number = null): self
     {
         if ($this->isEmpty()) {
             return static::create(
@@ -4310,7 +4310,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return static<TKey,T>
      */
-    public function lastsMutable(int $number = null): self
+    public function lastsMutable(?int $number = null): self
     {
         if ($this->isEmpty()) {
             return $this;
@@ -4724,7 +4724,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-return static<array-key,T>
      * @psalm-mutation-free
      */
-    public function mostUsedValues(int $number = null): self
+    public function mostUsedValues(?int $number = null): self
     {
         return $this->countValues()->arsortImmutable()->firstsKeys($number);
     }
@@ -5230,7 +5230,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return static<array-key,T>
      */
-    public function randomImmutable(int $number = null): self
+    public function randomImmutable(?int $number = null): self
     {
         $this->generatorToArray();
 
@@ -5347,7 +5347,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return static<TKey,T>
      */
-    public function randomMutable(int $number = null): self
+    public function randomMutable(?int $number = null): self
     {
         $this->generatorToArray();
 
@@ -5429,7 +5429,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-param  array<(int&T)|(string&T),int> $array
      * @phpstan-return static<array-key,T>
      */
-    public function randomWeighted(array $array, int $number = null): self
+    public function randomWeighted(array $array, ?int $number = null): self
     {
         // init
         $options = [];
@@ -6248,7 +6248,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-param  array<TKey,T> $array
      * @phpstan-return static<TKey,T>
      */
-    public function shuffle(bool $secure = false, array $array = null): self
+    public function shuffle(bool $secure = false, ?array $array = null): self
     {
         if ($array === null) {
             $array = $this->toArray(false);
@@ -6454,7 +6454,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-return static<array-key,T>
      * @psalm-mutation-free
      */
-    public function slice(int $offset, int $length = null, bool $preserveKeys = false)
+    public function slice(int $offset, ?int $length = null, bool $preserveKeys = false)
     {
         return static::create(
             \array_slice(
@@ -6719,7 +6719,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @phpstan-return static<TKey,T>
      * @psalm-mutation-free
      */
-    public function splice(int $offset, int $length = null, $replacement = []): self
+    public function splice(int $offset, ?int $length = null, $replacement = []): self
     {
         $tmpArray = $this->toArray();
 
@@ -6967,7 +6967,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @phpstan-return static<int, static<TKey,T>>
      */
-    public function toPermutation(array $items = null, array $helper = []): self
+    public function toPermutation(?array $items = null, array $helper = []): self
     {
         // init
         $return = [];

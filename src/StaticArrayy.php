@@ -75,7 +75,7 @@ class StaticArrayy
      * @psalm-suppress InvalidReturnStatement - why?
      * @psalm-suppress InvalidReturnType - why?
      */
-    public static function range(int $base, int $stop = null, int $step = 1): Arrayy
+    public static function range(int $base, ?int $stop = null, int $step = 1): Arrayy
     {
         if ($stop !== null) {
             $start = $base;

@@ -26,9 +26,9 @@ final class InstancesCollection extends Collection implements TypeInterface
      */
     public function __construct(
         array $data = [],
-        string $iteratorClass = null,
-        bool $checkPropertiesInConstructor = null,
-        array $classNames = null
+        ?string $iteratorClass = null,
+        ?bool $checkPropertiesInConstructor = null,
+        ?array $classNames = null
     ) {
         // fallback
         if ($iteratorClass === null) {
