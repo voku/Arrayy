@@ -44,10 +44,10 @@ jobs:
 
       - name: Determine composer cache directory
         id: composer-cache
-        run: echo "::set-output name=directory::$(composer config cache-dir)"
+        run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.directory }}
           key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -94,7 +94,7 @@ jobs:
 
       - name: Archive logs artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: logs_composer-${{ matrix.composer }}_php-${{ matrix.php }}
           path: |
