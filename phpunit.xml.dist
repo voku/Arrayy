@@ -11,12 +11,15 @@
     <testsuite name="Arrayy Test Suite">
         <directory>tests</directory>
     </testsuite>
+    <logging>
+        <junit outputFile="build/logs/junit.xml"/>
+    </logging>
     <coverage processUncoveredFiles="true">
         <include>
             <directory suffix=".php">./src/</directory>
         </include>
+        <report>
+            <clover outputFile="build/logs/clover.xml"/>
+        </report>
     </coverage>
-    <logging>
-        <junit outputFile="build/logs/junit.xml"/>
-    </logging>
 </phpunit>
