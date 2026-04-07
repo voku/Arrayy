@@ -496,7 +496,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      *
      * @phpstan-return CollectionInterface<array-key|TKey,T>
      */
-    public function slice(int $offset, int $length = null, bool $preserveKeys = false);
+    public function slice(int $offset, ?int $length = null, bool $preserveKeys = false);
 
     /**
      * Gets a native PHP array representation of the collection.

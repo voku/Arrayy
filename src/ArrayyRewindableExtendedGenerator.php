@@ -15,7 +15,7 @@ class ArrayyRewindableExtendedGenerator extends ArrayyRewindableGenerator
 {
     public function __construct(
         callable $generatorConstructionFunction,
-        callable $onRewind = null,
+        ?callable $onRewind = null,
         string $class = ''
     ) {
         parent::__construct(
