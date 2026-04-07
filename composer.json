@@ -26,7 +26,8 @@
     "phpdocumentor/reflection-docblock": "~4.3 || ~5.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~6.0 || ~7.0 || ~9.0"
+    "phpunit/phpunit": "~6.0 || ~7.0 || ~9.0",
+    "phpstan/phpstan": "*"
   },
   "support": {
     "docs": "https://voku.github.io/Arrayy/",
