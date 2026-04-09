@@ -7891,7 +7891,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         /**
          * @psalm-suppress PossiblyInvalidArgument - the parameter is always some kind of array - false-positive from psalm?
          */
-        return \array_map(\Closure::fromCallable([static::class, 'objectToArray']), $object);
+        return \array_map([static::class, 'objectToArray'], $object);
     }
 
     /**
