@@ -3262,6 +3262,25 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $resultMatch, 'tested:' . \print_r($array, true));
     }
 
+    public function testFindKeyWithKeyParameter()
+    {
+        // Verify that the key parameter is correctly passed to the closure
+        $array = ['a' => 10, 'b' => 20, 'c' => 30];
+        $arrayy = A::create($array);
+
+        // Find the key of the element whose key is 'b'
+        $closure = static function ($value, $key) {
+            return $key === 'b';
+        };
+        static::assertSame('b', $arrayy->findKey($closure));
+
+        // Find no element when key doesn't match
+        $closureNoMatch = static function ($value, $key) {
+            return $key === 'z';
+        };
+        static::assertFalse($arrayy->findKey($closureNoMatch));
+    }
+
     /**
      * @dataProvider firstProvider()
      *
