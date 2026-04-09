@@ -17,14 +17,12 @@ jobs:
       fail-fast: false
       matrix:
         php: [
-            7.3,
-            7.4,
             8.0,
             8.1
         ]
         composer: [basic]
         include:
-          - php: 7.3
+          - php: 8.0
             composer: lowest
     timeout-minutes: 10
     steps:
