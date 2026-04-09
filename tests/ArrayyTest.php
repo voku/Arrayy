@@ -3224,6 +3224,45 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return array
+     */
+    public function findKeyProvider(): array
+    {
+        return [
+            [[], null, false],
+            [[false], false, 0],
+            [[true], true, 0],
+            [[-9, 1, 2], -9, 0],
+            [[-9, 1, 2], 1, 1],
+            [[-9, 1, 2], 2, 2],
+            [[-9, 1, 2], 99, false],
+            [[1.18], 1.18, 0],
+            [['string', 'foo', 'lall'], 'foo', 1],
+            [['a' => 'foo', 'b' => 'bar'], 'bar', 'b'],
+            [['a' => 'foo', 'b' => 'bar'], 'baz', false],
+        ];
+    }
+
+    /**
+     * @dataProvider findKeyProvider()
+     *
+     * @param array       $array
+     * @param mixed       $search
+     * @param false|mixed $result
+     */
+    public function testFindKey($array, $search, $result)
+    {
+        $closure = static function ($value) use ($search) {
+            return $value === $search;
+        };
+
+        $arrayy = A::create($array);
+        $resultMatch = $arrayy->findKey($closure);
+
+        static::assertSame($result, $resultMatch, 'tested:' . \print_r($array, true));
+    }
+
+    /**
      * @dataProvider firstProvider()
      *
      * @param array $array
