@@ -102,9 +102,9 @@ class Collection extends AbstractCollection
      */
     public function __construct(
         $data = [],
-        string $iteratorClass = null,
-        bool $checkPropertiesInConstructor = null,
-        TypeInterface $type = null
+        ?string $iteratorClass = null,
+        ?bool $checkPropertiesInConstructor = null,
+        ?TypeInterface $type = null
     ) {
         // fallback
         if ($iteratorClass === null) {

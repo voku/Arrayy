@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arrayy;
 
+#[\AllowDynamicProperties]
 final class ArrayyMeta
 {
     /** @noinspection MagicMethodsValidityInspection */

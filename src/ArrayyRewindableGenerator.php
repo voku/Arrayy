@@ -49,7 +49,7 @@ class ArrayyRewindableGenerator extends \ArrayIterator
      */
     public function __construct(
         callable $generatorConstructionFunction,
-        callable $onRewind = null,
+        ?callable $onRewind = null,
         string $class = ''
     ) {
         $this->class = $class;
