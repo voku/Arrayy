@@ -1732,7 +1732,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function getCpuCores(): int
     {
-        return (new \Fidry\CpuCoreCounter\CpuCoreCounter())->getCountWithFallback(1);
+        static $count = null;
+
+        if ($count === null) {
+            $count = (new \Fidry\CpuCoreCounter\CpuCoreCounter())->getCountWithFallback(1);
+        }
+
+        return $count;
     }
 
     /**
