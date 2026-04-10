@@ -22,6 +22,7 @@
   "require": {
     "php": ">=8.0.0",
     "ext-json": "*",
+    "fidry/cpu-core-counter": "^1.0",
     "symfony/polyfill-mbstring": "~1.0",
     "phpdocumentor/reflection-docblock": "~6.0"
   },

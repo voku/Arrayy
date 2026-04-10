@@ -1725,6 +1725,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Returns the number of CPU cores available on the current system.
+     *
+     * @return int
+     *             <p>The number of CPU cores (minimum 1).</p>
+     */
+    public static function getCpuCores(): int
+    {
+        return (new \Fidry\CpuCoreCounter\CpuCoreCounter())->getCountWithFallback(1);
+    }
+
+    /**
      * Creates an Arrayy object.
      *
      * @param mixed  $data
