@@ -2749,6 +2749,36 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Find the key of the first item in an array that passes the truth test, otherwise return false.
+     *
+     * EXAMPLE: <code>
+     * $search = 'foo';
+     * $closure = function ($value, $key) use ($search) {
+     *     return $value === $search;
+     * };
+     * a(['foo', 'bar', 'lall'])->findKey($closure); // 0
+     * </code>
+     *
+     * @param \Closure $closure
+     *
+     * @return false|int|string
+     *                          <p>Return false if we did not find the key.</p>
+     *
+     * @phpstan-param \Closure(T,TKey):bool $closure
+     * @phpstan-return TKey|false
+     */
+    public function findKey(\Closure $closure)
+    {
+        foreach ($this->getGenerator() as $key => $value) {
+            if ($closure($value, $key)) {
+                return $key;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * find by ...
      *
      * EXAMPLE: <code>

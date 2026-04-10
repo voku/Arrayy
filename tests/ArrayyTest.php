@@ -3224,6 +3224,64 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return array
+     */
+    public function findKeyProvider(): array
+    {
+        return [
+            [[], null, false],
+            [[false], false, 0],
+            [[true], true, 0],
+            [[-9, 1, 2], -9, 0],
+            [[-9, 1, 2], 1, 1],
+            [[-9, 1, 2], 2, 2],
+            [[-9, 1, 2], 99, false],
+            [[1.18], 1.18, 0],
+            [['string', 'foo', 'lall'], 'foo', 1],
+            [['a' => 'foo', 'b' => 'bar'], 'bar', 'b'],
+            [['a' => 'foo', 'b' => 'bar'], 'baz', false],
+        ];
+    }
+
+    /**
+     * @dataProvider findKeyProvider()
+     *
+     * @param array       $array
+     * @param mixed       $search
+     * @param false|mixed $result
+     */
+    public function testFindKey($array, $search, $result)
+    {
+        $closure = static function ($value) use ($search) {
+            return $value === $search;
+        };
+
+        $arrayy = A::create($array);
+        $resultMatch = $arrayy->findKey($closure);
+
+        static::assertSame($result, $resultMatch, 'tested:' . \print_r($array, true));
+    }
+
+    public function testFindKeyWithKeyParameter()
+    {
+        // Verify that the key parameter is correctly passed to the closure
+        $array = ['a' => 10, 'b' => 20, 'c' => 30];
+        $arrayy = A::create($array);
+
+        // Find the key of the element whose key is 'b'
+        $closure = static function ($value, $key) {
+            return $key === 'b';
+        };
+        static::assertSame('b', $arrayy->findKey($closure));
+
+        // Find no element when key doesn't match
+        $closureNoMatch = static function ($value, $key) {
+            return $key === 'z';
+        };
+        static::assertFalse($arrayy->findKey($closureNoMatch));
+    }
+
+    /**
      * @dataProvider firstProvider()
      *
      * @param array $array
