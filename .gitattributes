@@ -18,3 +18,4 @@
 /phpunit.xml.dist export-ignore
 /psalm.xml export-ignore
 /renovate.json export-ignore
+/AGENTS.md export-ignore
