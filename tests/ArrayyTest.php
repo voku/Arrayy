@@ -3281,6 +3281,27 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($arrayy->findKey($closureNoMatch));
     }
 
+    public function testFindKeyForMinAndMaxValues()
+    {
+        $arrayy = A::create([
+            3 => 10,
+            4 => -5,
+            8 => 99,
+            9 => -5,
+            10 => 99,
+        ]);
+
+        $min = $arrayy->min();
+        $max = $arrayy->max();
+
+        static::assertSame(4, $arrayy->findKey(static function ($value) use ($min) {
+            return $value === $min;
+        }));
+        static::assertSame(8, $arrayy->findKey(static function ($value) use ($max) {
+            return $value === $max;
+        }));
+    }
+
     /**
      * @dataProvider firstProvider()
      *
