@@ -16,34 +16,34 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
 
         /** @noinspection PhpUndefinedMethodInspection */
         /** @noinspection PhpUnusedLocalVariableInspection */
-        $result = A::invalidMethod('foo'); // @phpstan-ignore staticMethod.notFound
+        $result = A::invalidMethod('foo'); // @phpstan-ignore-line
     }
 
     public function testEmptyArgsInvocation()
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        $result = A::first(); // @phpstan-ignore staticMethod.notFound
+        $result = A::first(); // @phpstan-ignore-line
         static::assertNull($result);
     }
 
     public function testInvocation()
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        $result = A::first(['lall', 'FOOBAR'], 1); // @phpstan-ignore staticMethod.notFound
+        $result = A::first(['lall', 'FOOBAR'], 1); // @phpstan-ignore-line
         static::assertSame('lall', $result);
     }
 
     public function testPartialArgsInvocation()
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        $result = A::replaceOneValue(['foo', 'bar'], 'foo'); // @phpstan-ignore staticMethod.notFound
+        $result = A::replaceOneValue(['foo', 'bar'], 'foo'); // @phpstan-ignore-line
         static::assertSame(['', 'bar'], $result->getArray());
     }
 
     public function testFullArgsInvocation()
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        $result = A::replaceOneValue(['foo', 'bar'], 'foo', 'test'); // @phpstan-ignore staticMethod.notFound
+        $result = A::replaceOneValue(['foo', 'bar'], 'foo', 'test'); // @phpstan-ignore-line
         static::assertSame(['test', 'bar'], $result->getArray());
     }
 

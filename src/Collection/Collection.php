@@ -145,7 +145,8 @@ class Collection extends AbstractCollection
     ): self {
         $type = self::convertIntoTypeCheckArray($type);
 
-        return new static( // @phpstan-ignore new.static
+        // @phpstan-ignore-next-line
+        return new static(
             $data,
             ArrayyIterator::class,
             $checkPropertiesInConstructorAndType,

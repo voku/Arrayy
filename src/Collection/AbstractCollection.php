@@ -273,7 +273,8 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         string $iteratorClass = ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
-        return new static( // @phpstan-ignore new.static
+        // @phpstan-ignore-next-line
+        return new static(
             $data,
             $iteratorClass,
             $checkPropertiesInConstructor

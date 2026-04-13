@@ -314,7 +314,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 &&
                 \is_array($this->array[$key])
             ) {
-                $this->array[$key][] = $value; // @phpstan-ignore assign.propertyType
+                $this->array[$key][] = $value; // @phpstan-ignore-line
             } else {
                 $this->array[$key] = $value;
             }
@@ -1743,7 +1743,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         string $iteratorClass = ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
-        return new static( // @phpstan-ignore new.static
+        // @phpstan-ignore-next-line
+        return new static(
             $data,
             $iteratorClass,
             $checkPropertiesInConstructor
@@ -1893,7 +1894,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public static function createFromObject(\Traversable $object): self
     {
         // init
-        $arrayy = new static(); // @phpstan-ignore new.static
+        $arrayy = static::create();
 
         if ($object instanceof self) {
             $objectArray = $object->getGenerator();
@@ -5050,7 +5051,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ($key === null) {
             \array_unshift($this->array, $value);
         } else {
-            $this->array = [$key => $value] + $this->array; // @phpstan-ignore assign.propertyType
+            $this->array = [$key => $value] + $this->array; // @phpstan-ignore-line
         }
 
         return $this;
@@ -5241,7 +5242,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        \array_push($this->array, ...$args); // @phpstan-ignore assign.propertyType
+        \array_push($this->array, ...$args); // @phpstan-ignore-line
 
         return $this;
     }
@@ -5391,7 +5392,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($number === null) {
             $arrayRandValue = [$this->array[\array_rand($this->array)]];
-            $this->array = $arrayRandValue; // @phpstan-ignore assign.propertyType
+            $this->array = $arrayRandValue; // @phpstan-ignore-line
 
             return $this;
         }
@@ -5535,7 +5536,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         foreach ($this->getGenerator() as $val) {
             if (\is_array($val)) {
-                $result[] = (new static($val))->reduce_dimension($unique)->toArray(); // @phpstan-ignore new.static
+                $result[] = static::create($val)->reduce_dimension($unique)->toArray();
             } else {
                 $result[] = [$val];
             }
@@ -5543,7 +5544,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $result = $result === [] ? [] : \array_merge(...$result);
 
-        $resultArrayy = new static($result); // @phpstan-ignore new.static
+        $resultArrayy = static::create($result);
 
         /**
          * @psalm-suppress ImpureMethodCall - object is already re-created
@@ -7157,7 +7158,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        \array_unshift($this->array, ...$args); // @phpstan-ignore assign.propertyType
+        \array_unshift($this->array, ...$args); // @phpstan-ignore-line
 
         return $this;
     }
