@@ -98,7 +98,7 @@ class Collection extends AbstractCollection
      * @param TypeInterface|null $type
      *
      * @phpstan-param array<array-key,T>|array<TKey,T>|\Arrayy\Arrayy<TKey,T> $data
-     * @phpstan-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -145,7 +145,7 @@ class Collection extends AbstractCollection
     ): self {
         $type = self::convertIntoTypeCheckArray($type);
 
-        return new static(
+        return new static( // @phpstan-ignore new.static
             $data,
             ArrayyIterator::class,
             $checkPropertiesInConstructorAndType,

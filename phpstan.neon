@@ -1,31 +1,13 @@
 parameters:
     level: 8
-    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: true
     paths:
         - %currentWorkingDirectory%/src/
         - %currentWorkingDirectory%/tests/
     ignoreErrors:
         -
-            message: ~has no return type specified~
+            identifier: missingType.return
             path: %currentWorkingDirectory%/tests/*
         -
             message: '#assertContains|assertInternalType|assertStringContainsString|assertIsArray|expectExceptionMessage#'
             path: %currentWorkingDirectory%/tests/*
-        -
-            message: ~Call to an undefined static method~
-            path: %currentWorkingDirectory%/tests/StaticArrayyTest.php
-        # false-positive?
-        - '/function call_user_func expects callable.*array\{.*\} given/'
-        - '/function call_user_func_array expects callable.*array\{.*\} given/'
-        - '/\(array<TKey of \(int\|string\), T>\) does not accept array<TKey of \(int\|string\)/'
-        - '/\(array<TKey of \(int\|string\), T>\) does not accept array<int, T>/'
-        - '/\(array<TKey of \(int\|string\), T>\) does not accept array<int\|string, T>/'
-        - '/array_map expects \(callable\(mixed\):/'
-        # ignore gernal errors
-        - '/Unsafe usage of new static/'
-        - '/should be compatible with return type \(bool\) of method ArrayObject/'
-        # ignore Iterator stuff
-        - '/__construct\(\) has parameter \$iteratorClass with generic/'
-        - '/create\(\) has parameter \$iteratorClass with generic/'
-        - '/parameter \$iteratorClass with generic class Arrayy\\ArrayyIterator/'
-        - '/generic class Arrayy\\ArrayyIterator does not specify its types/'
