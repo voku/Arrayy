@@ -41,7 +41,8 @@ class ArrayyRewindableExtendedGenerator extends ArrayyRewindableGenerator
         $value = $this->generator->current();
 
         if (\is_array($value)) {
-            $value = \call_user_func([$this->class, 'create'], $value, static::class, false);
+            $class = $this->class;
+            $value = $class::create($value, static::class, false);
         }
 
         return $value;

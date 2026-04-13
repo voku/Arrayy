@@ -163,7 +163,7 @@ interface CollectionInterface extends \IteratorAggregate, \ArrayAccess, \Seriali
      * @template TKeyCreate as TKey
      * @template TCreate as T
      * @phpstan-param array<TKeyCreate,TCreate> $data
-     * @phpstan-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param  class-string<\Arrayy\ArrayyIterator<TKeyCreate,TCreate>> $iteratorClass
      * @phpstan-return static<TKeyCreate,TCreate>
      *
      * @psalm-mutation-free

@@ -63,7 +63,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *                                             </p>
      *
      * @phpstan-param array<TKey,T>|\Arrayy\Arrayy<TKey,T>|\Closure():array<TKey,T>|mixed $data
-     * @phpstan-param class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass
      */
     public function __construct(
         $data = [],
@@ -263,7 +263,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @template TKeyCreate as TKey
      * @template TCreate as T
      * @phpstan-param array<TKeyCreate,TCreate> $data
-     * @phpstan-param  class-string<\Arrayy\ArrayyIterator> $iteratorClass
+     * @phpstan-param  class-string<\Arrayy\ArrayyIterator<TKeyCreate,TCreate>> $iteratorClass
      * @phpstan-return static<TKeyCreate,TCreate>
      *
      * @psalm-mutation-free
@@ -273,7 +273,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         string $iteratorClass = ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
-        return new static(
+        return new static( // @phpstan-ignore new.static
             $data,
             $iteratorClass,
             $checkPropertiesInConstructor

@@ -41,7 +41,8 @@ class ArrayyIterator extends \ArrayIterator
         $value = parent::current();
 
         if (\is_array($value)) {
-            $value = \call_user_func([$this->class, 'create'], $value, static::class, false);
+            $class = $this->class;
+            $value = $class::create($value, static::class, false);
         }
 
         return $value;
@@ -62,7 +63,8 @@ class ArrayyIterator extends \ArrayIterator
         $value = parent::offsetGet($offset);
 
         if (\is_array($value)) {
-            $value = \call_user_func([$this->class, 'create'], $value, static::class, false);
+            $class = $this->class;
+            $value = $class::create($value, static::class, false);
         }
 
         return $value;
