@@ -83,8 +83,8 @@ This reads `src/Arrayy.php` docblocks and `build/docs/base.md`, then writes `REA
 
 - Rebuild the README with `php build/generate_docs.php`
 - That script requires both:
-  - `/home/runner/work/Arrayy/Arrayy/vendor/autoload.php`
-  - `/home/runner/work/Arrayy/Arrayy/build/vendor/autoload.php`
+  - `vendor/autoload.php`
+  - `build/vendor/autoload.php`
 - On this branch, rerunning the generator completed successfully and did not change `README.md`
 - `AGENTS.md` is manually maintained and should be updated separately after README regeneration when task-specific context needs to be preserved
 
