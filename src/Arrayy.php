@@ -314,7 +314,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 &&
                 \is_array($this->array[$key])
             ) {
-                $this->array[$key][] = $value; // @phpstan-ignore-line
+                $this->array[$key][] = $value; // @phpstan-ignore assign.propertyType
             } else {
                 $this->array[$key] = $value;
             }
@@ -1743,8 +1743,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         string $iteratorClass = ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
-        // @phpstan-ignore-next-line
-        return new static(
+        return new static( // @phpstan-ignore new.static
             $data,
             $iteratorClass,
             $checkPropertiesInConstructor
@@ -5051,7 +5050,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ($key === null) {
             \array_unshift($this->array, $value);
         } else {
-            $this->array = [$key => $value] + $this->array; // @phpstan-ignore-line
+            $this->array = [$key => $value] + $this->array; // @phpstan-ignore assign.propertyType
         }
 
         return $this;
@@ -5242,7 +5241,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        \array_push($this->array, ...$args); // @phpstan-ignore-line
+        \array_push($this->array, ...$args); // @phpstan-ignore assign.propertyType
 
         return $this;
     }
@@ -5392,7 +5391,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($number === null) {
             $arrayRandValue = [$this->array[\array_rand($this->array)]];
-            $this->array = $arrayRandValue; // @phpstan-ignore-line
+            $this->array = $arrayRandValue; // @phpstan-ignore assign.propertyType
 
             return $this;
         }
@@ -7158,7 +7157,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
-        \array_unshift($this->array, ...$args); // @phpstan-ignore-line
+        \array_unshift($this->array, ...$args); // @phpstan-ignore assign.propertyType
 
         return $this;
     }
