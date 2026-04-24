@@ -117,7 +117,7 @@ $arrayy->Lars->lastname; // 'Müller'
 
 ## PhpDoc @property checking
 
-The library offers a type checking for @property phpdoc-class-comments, as seen below:
+The library offers type checking for `@property` phpdoc-class-comments and native declared properties.
 
 ```php
 /**
@@ -177,9 +177,33 @@ var_dump($user[$userMeta->city][$cityMeta->name]); // 'Düsseldorf'
 var_dump($user->city->name); // Düsseldorf
 ```
 
-- "checkPropertyTypes": activate the type checking for all defined @property in the class-phpdoc
+Native typed properties also work with `meta()` and `createFromJsonMapper()`, e.g.:
+
+```php
+class NativeCity extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected ?string $plz;
+
+    protected string $name;
+
+    /** @var string[] */
+    protected array $infos;
+}
+
+$nativeMeta = NativeCity::meta();
+NativeCity::createFromJsonMapper(
+    '{"name":"Düsseldorf","plz":null,"infos":["foo","bar"]}'
+);
+
+var_dump($nativeMeta->infos); // 'infos'
+```
+
+- "checkPropertyTypes": activate the type checking for all defined `@property` tags and native declared properties
 - "checkPropertiesMismatchInConstructor": activate the property mismatch check, so you can only add an 
-                                          array with all needed properties (or an empty array) into the constructor
+                                           array with all needed properties (or an empty array) into the constructor
+- use a property-level `@var` annotation such as `/** @var string[] */` if a native `array` property needs element-type validation
 
 ## OO and Chaining
 

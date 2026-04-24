@@ -212,8 +212,6 @@ final class Json
                 if (
                     $object instanceof \Arrayy\Arrayy
                     &&
-                    \is_string($accessor)
-                    &&
                     $subtype !== null
                     &&
                     $this->isSimpleType($subtype)

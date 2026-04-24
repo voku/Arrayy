@@ -66,6 +66,15 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testNativeMetaIncludesPropertiesDeclaredNatively()
+    {
+        $cityMeta = NativeCityData::meta();
+
+        static::assertSame('name', $cityMeta->name);
+        static::assertSame('plz', $cityMeta->plz);
+        static::assertSame('infos', $cityMeta->infos);
+    }
+
     public function testNativeTypedPropertiesRejectUnknownKeysWhenMismatchCheckIsEnabled()
     {
         $this->expectException(\TypeError::class);
@@ -98,6 +107,14 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
 
         NativeCityData::createFromJsonMapper('{"name":"Düsseldorf","plz":null,"infos":[1,2,3]}');
+    }
+
+    public function testNativeTypedNestedJsonMapperRejectsInvalidArrayElementTypes()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
+
+        NativeUserData::createFromJsonMapper('{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":[1,2,3]}}');
     }
 
     public function testNativeTypedPropertiesAreMergedFromParentClasses()

@@ -234,7 +234,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
                 continue;
             }
 
-            /** @var Type|null $type */
+            /** @var \phpDocumentor\Reflection\Type|null $type */
             $type = $tag->getType();
             if ($type === null) {
                 continue;
