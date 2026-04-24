@@ -295,13 +295,12 @@ $arrayy = a(['fòô', 'foo']);
 count($arrayy);  // 2
 ```
 
-## PHP 5.6 Creation
+## Function import shortcut
 
-As of PHP 5.6, [`use function`](https://wiki.php.net/rfc/use_function) is
-available for importing functions. Arrayy exposes a namespaced function,
-`Arrayy\create`, which emits the same behaviour as `Arrayy\Arrayy::create()`.
-If running PHP 5.6, or another runtime that supports the `use function` syntax,
-you can take advantage of an even simpler API as seen below:
+On supported PHP 8.0+ versions, [`use function`](https://wiki.php.net/rfc/use_function)
+can be used to import helper functions. Arrayy exposes the namespaced function
+`Arrayy\create`, which behaves the same as `Arrayy\Arrayy::create()`.
+You can alias it to `a` for a shorter and more readable API:
 
 ``` php
 use function Arrayy\create as a;
@@ -587,10 +586,9 @@ $arrayy = A::createFromString(' foo, bar '); // Arrayy['foo', 'bar']
 
 ## Instance Methods
 
-Arrayy: All examples below make use of PHP 5.6
-function importing, and PHP 5.4 short array syntax. For further details,
-see the documentation for the create method above, as well as the notes
-on PHP 5.6 creation.
+Arrayy: All examples below use the helper-function import shown above together
+with short array syntax. For further details, see the documentation for the
+create method above and the notes on the function import shortcut.
 
 ##### "set an array value"
 
