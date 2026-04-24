@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Arrayy\tests;
 
-use Arrayy\TypeCheck\TypeCheckCallback;
 use Arrayy\TypeCheck\TypeCheckArray;
+use Arrayy\TypeCheck\TypeCheckCallback;
 use Arrayy\TypeCheck\TypeCheckPhpDoc;
 use Arrayy\TypeCheck\TypeCheckSimple;
-use PHPUnit\Framework\TestCase;
-use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
+use phpDocumentor\Reflection\DocBlockFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
