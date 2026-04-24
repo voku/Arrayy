@@ -50,6 +50,22 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testNativeTypedArrayPropertiesRejectInvalidElementTypes()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
+
+        $cityMeta = NativeCityData::meta();
+
+        new NativeCityData(
+            [
+                $cityMeta->name  => 'Düsseldorf',
+                $cityMeta->plz   => null,
+                $cityMeta->infos => [1, 2, 3],
+            ]
+        );
+    }
+
     public function testNativeTypedPropertiesWorkWithJsonMapper()
     {
         $json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
