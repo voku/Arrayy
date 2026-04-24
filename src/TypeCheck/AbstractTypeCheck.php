@@ -49,7 +49,7 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
             &&
             \count($this->types) > 1
             &&
-            \count(\array_filter($this->types, static fn (string $type): bool => \substr($type, -2) === '[]')) === \count($this->types)
+            $this->allTypesAreGenericArrays()
         ) {
             if ($this->assertTypeEquals(\implode('|', $this->types), $value)) {
                 return true;
@@ -198,7 +198,18 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
         $valueType = \str_replace('[]', '', $type);
 
         foreach ($collection as $value) {
-            if ($this->assertTypeEquals($valueType, $value) === false) {
+            if (!$this->assertTypeEquals($valueType, $value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function allTypesAreGenericArrays(): bool
+    {
+        foreach ($this->types as $type) {
+            if (\substr($type, -2) !== '[]') {
                 return false;
             }
         }
