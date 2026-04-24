@@ -50,10 +50,18 @@ class TypeCheckSimple extends AbstractTypeCheck implements TypeCheckInterface
             $typesTmp = \explode('|', $type);
 
             foreach ($typesTmp as $typeTmp) {
-                $this->types[] = $typeTmp;
+                $typeTmp = \trim($typeTmp);
+
+                if ($typeTmp !== '') {
+                    $this->types[] = $typeTmp;
+                }
             }
         } else {
-            $this->types[] = $type;
+            $type = \trim($type);
+
+            if ($type !== '') {
+                $this->types[] = $type;
+            }
         }
     }
 }

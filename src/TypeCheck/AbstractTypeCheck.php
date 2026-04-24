@@ -44,6 +44,18 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
             return true;
         }
 
+        if (
+            \is_array($value)
+            &&
+            \count($this->types) > 1
+            &&
+            \count(\array_filter($this->types, static fn (string $type): bool => \substr($type, -2) === '[]')) === \count($this->types)
+        ) {
+            if ($this->assertTypeEquals(\implode('|', $this->types), $value)) {
+                return true;
+            }
+        }
+
         foreach ($this->types as $currentType) {
             $isValidType = $this->assertTypeEquals($currentType, $value);
 
@@ -186,11 +198,11 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
         $valueType = \str_replace('[]', '', $type);
 
         foreach ($collection as $value) {
-            if ($this->assertTypeEquals($valueType, $value)) {
-                return true;
+            if ($this->assertTypeEquals($valueType, $value) === false) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }
