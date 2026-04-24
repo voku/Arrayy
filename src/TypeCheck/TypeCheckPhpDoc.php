@@ -120,6 +120,12 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         if (
             $type !== null
             &&
+            (
+                \class_exists(\ReflectionIntersectionType::class) === false
+                ||
+                !$type instanceof \ReflectionIntersectionType
+            )
+            &&
             $type->allowsNull()
             &&
             \in_array('null', $tmpReflection->types, true) === false
@@ -227,7 +233,11 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             return null;
         }
 
-        $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
+        /** @var \phpDocumentor\Reflection\DocBlockFactoryInterface|null $factory */
+        static $factory = null;
+        if ($factory === null) {
+            $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
+        }
         $docblock = $factory->create($docComment);
         foreach ($docblock->getTagsByName('var') as $tag) {
             if (!$tag instanceof \phpDocumentor\Reflection\DocBlock\Tags\Var_) {

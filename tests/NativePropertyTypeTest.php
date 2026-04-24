@@ -134,4 +134,19 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         static::assertSame('capital', $model[$modelMeta->extraInfo]);
         static::assertSame('40213', $model[$modelMeta->plz]);
     }
+
+    public function testNativeIntersectionTypedPropertiesWork()
+    {
+        $modelMeta = NativeIntersectionData::meta();
+        $items = new \ArrayObject(['foo']);
+
+        $model = new NativeIntersectionData(
+            [
+                $modelMeta->items => $items,
+            ]
+        );
+
+        static::assertSame('items', $modelMeta->items);
+        static::assertSame($items, $model[$modelMeta->items]);
+    }
 }
