@@ -152,18 +152,27 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
 
     public function testExtendedClassV2()
     {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageRegExp('#Invalid type: expected "plz" to be of type {string}, instead got value "NULL"#');
-
         $modelMeta = BigCityData::meta();
 
-        new BigCityData(
-            [
-                $modelMeta->name       => 'Düsseldorf',
-                $modelMeta->plz        => null,
-                $modelMeta->infos      => ['foo'],
-                $modelMeta->extra_info => 'lall',
-            ]
-        );
+        try {
+            new BigCityData(
+                [
+                    $modelMeta->name       => 'Düsseldorf',
+                    $modelMeta->plz        => null,
+                    $modelMeta->infos      => ['foo'],
+                    $modelMeta->extra_info => 'lall',
+                ]
+            );
+
+            static::fail('Expected TypeError was not thrown.');
+        } catch (\TypeError $exception) {
+            static::assertSame(
+                1,
+                \preg_match(
+                    '#Invalid type: expected "plz" to be of type {string}, instead got value "NULL"#',
+                    $exception->getMessage()
+                )
+            );
+        }
     }
 }
