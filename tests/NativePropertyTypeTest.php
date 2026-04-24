@@ -135,6 +135,11 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         static::assertSame('40213', $model[$modelMeta->plz]);
     }
 
+    /**
+     * Intersection type syntax `A&B` requires PHP 8.1+.
+     *
+     * @requires PHP 8.1
+     */
     public function testNativeIntersectionTypedPropertiesWork()
     {
         $modelMeta = NativeIntersectionData::meta();
