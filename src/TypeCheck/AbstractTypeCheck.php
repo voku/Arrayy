@@ -198,6 +198,7 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
         $valueType = \str_replace('[]', '', $type);
 
         foreach ($collection as $value) {
+            // A typed collection is only valid when every element matches the declared element type.
             if (!$this->assertTypeEquals($valueType, $value)) {
                 return false;
             }

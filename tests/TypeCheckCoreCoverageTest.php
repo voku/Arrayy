@@ -171,21 +171,22 @@ final class TypeCheckCoreCoverageTest extends TestCase
         );
 
         $resource = \fopen('php://memory', 'rb');
+        try {
+            static::assertSame(['string|int|float|bool'], $scalarTypeCheck->getTypes());
+            static::assertSame(['\\ArrayObject'], $objectTypeCheck->getTypes());
+            static::assertSame(['string[]'], $arrayTypeCheck->getTypes());
+            static::assertSame(['resource'], $resourceTypeCheck->getTypes());
+            $scalarValue = 'foo';
+            $arrayObject = new \ArrayObject();
+            $stringArray = ['foo', 'bar'];
 
-        static::assertSame(['string|int|float|bool'], $scalarTypeCheck->getTypes());
-        static::assertSame(['\\ArrayObject'], $objectTypeCheck->getTypes());
-        static::assertSame(['string[]'], $arrayTypeCheck->getTypes());
-        static::assertSame(['resource'], $resourceTypeCheck->getTypes());
-        $scalarValue = 'foo';
-        $arrayObject = new \ArrayObject();
-        $stringArray = ['foo', 'bar'];
-
-        static::assertTrue($scalarTypeCheck->checkType($scalarValue));
-        static::assertTrue($objectTypeCheck->checkType($arrayObject));
-        static::assertTrue($arrayTypeCheck->checkType($stringArray));
-        static::assertTrue($resourceTypeCheck->checkType($resource));
-
-        \fclose($resource);
+            static::assertTrue($scalarTypeCheck->checkType($scalarValue));
+            static::assertTrue($objectTypeCheck->checkType($arrayObject));
+            static::assertTrue($arrayTypeCheck->checkType($stringArray));
+            static::assertTrue($resourceTypeCheck->checkType($resource));
+        } finally {
+            \fclose($resource);
+        }
     }
 
     /**
