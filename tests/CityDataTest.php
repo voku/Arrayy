@@ -153,7 +153,6 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
     public function testExtendedClassV2()
     {
         $modelMeta = BigCityData::meta();
-        $thrown = false;
 
         try {
             new BigCityData(
@@ -165,8 +164,6 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         } catch (\TypeError $exception) {
-            $thrown = true;
-
             static::assertSame(
                 1,
                 \preg_match(
@@ -174,8 +171,10 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
                     $exception->getMessage()
                 )
             );
+
+            return;
         }
 
-        static::assertTrue($thrown);
+        static::fail('Expected TypeError was not thrown.');
     }
 }
