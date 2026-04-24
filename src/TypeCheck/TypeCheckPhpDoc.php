@@ -117,19 +117,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             }
         }
 
-        if (
-            $type !== null
-            &&
-            (
-                \class_exists(\ReflectionIntersectionType::class) === false
-                ||
-                !$type instanceof \ReflectionIntersectionType
-            )
-            &&
-            $type->allowsNull()
-            &&
-            \in_array('null', $tmpReflection->types, true) === false
-        ) {
+        if ($type !== null && self::typeAllowsNull($type) && \in_array('null', $tmpReflection->types, true) === false) {
             $tmpReflection->types[] = 'null';
         }
 
@@ -254,6 +242,19 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         }
 
         return null;
+    }
+
+    private static function typeAllowsNull(\ReflectionType $type): bool
+    {
+        if (
+            \class_exists(\ReflectionIntersectionType::class)
+            &&
+            $type instanceof \ReflectionIntersectionType
+        ) {
+            return false;
+        }
+
+        return $type->allowsNull();
     }
 
     /**
