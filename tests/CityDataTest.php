@@ -153,7 +153,11 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
     public function testExtendedClassV2()
     {
         $this->expectException(\TypeError::class);
-        if (\version_compare(\PHPUnit\Runner\Version::id(), '8.4.0', '>=')) {
+        if (
+            \class_exists(\Composer\InstalledVersions::class)
+            &&
+            \version_compare((string) \Composer\InstalledVersions::getPrettyVersion('phpunit/phpunit'), '8.4.0', '>=')
+        ) {
             $this->expectExceptionMessageMatches('#Invalid type: expected "plz" to be of type {string}, instead got value "NULL"#');
         } else {
             /** @noinspection PhpUndefinedMethodInspection */

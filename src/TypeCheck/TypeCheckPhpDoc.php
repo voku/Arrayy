@@ -244,7 +244,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             return null;
         }
 
-        /** @var \phpDocumentor\Reflection\DocBlockFactoryInterface|null $factory */
+        /** @var \phpDocumentor\Reflection\DocBlockFactoryInterface|null $factory cache factory to avoid recreating it per reflected property */
         static $factory = null;
         if ($factory === null) {
             $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
