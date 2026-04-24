@@ -7586,8 +7586,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $PROPERTY_CACHE[$cacheKey];
         }
 
-        // init
-        $properties = [];
+        $properties = $this->getPropertiesFromNativeDefinitions();
 
         $reflector = new \ReflectionClass($this);
         $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
@@ -7598,7 +7597,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             foreach ($docblock->getTagsByName('property') as $tag) {
                 $typeName = $tag->getVariableName();
                 /** @var string|null $typeName */
-                if ($typeName !== null) {
+                if (
+                    $typeName !== null
+                    &&
+                    isset($properties[$typeName]) === false
+                ) {
                     $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
                     if ($typeCheckPhpDoc !== null) {
                         $properties[$typeName] = $typeCheckPhpDoc;
@@ -7631,6 +7634,64 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $PROPERTY_CACHE[$cacheKey] = $properties;
+    }
+
+    /**
+     * @return TypeCheckInterface[]
+     */
+    protected function getPropertiesFromNativeDefinitions(): array
+    {
+        $properties = [];
+        $reflector = new \ReflectionClass($this);
+        $reservedProperties = self::getReservedPropertyNames();
+
+        do {
+            if ($reflector->getName() === self::class) {
+                break;
+            }
+
+            foreach ($reflector->getProperties() as $property) {
+                if (
+                    $property->getDeclaringClass()->getName() !== $reflector->getName()
+                    ||
+                    $property->isStatic()
+                    ||
+                    isset($reservedProperties[$property->getName()])
+                    ||
+                    isset($properties[$property->getName()])
+                ) {
+                    continue;
+                }
+
+                $properties[$property->getName()] = TypeCheckPhpDoc::fromReflectionProperty($property);
+            }
+        } while ($reflector = $reflector->getParentClass());
+
+        return $properties;
+    }
+
+    /**
+     * @return array<string, true>
+     */
+    private static function getReservedPropertyNames(): array
+    {
+        static $reservedProperties = null;
+
+        if ($reservedProperties !== null) {
+            return $reservedProperties;
+        }
+
+        $reservedProperties = [];
+        $reflector = new \ReflectionClass(self::class);
+        foreach ($reflector->getProperties() as $property) {
+            if ($property->getDeclaringClass()->getName() !== self::class) {
+                continue;
+            }
+
+            $reservedProperties[$property->getName()] = true;
+        }
+
+        return $reservedProperties;
     }
 
     /**

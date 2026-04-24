@@ -36,28 +36,10 @@ final class ArrayyMeta
         }
 
         $reflector = new \ReflectionClass($className);
-        $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
-        $docComment = $reflector->getDocComment();
-        if ($docComment) {
-            $docblock = $factory->create($docComment);
-            /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
-            foreach ($docblock->getTagsByName('property') as $tag) {
-                $PropertyName = $tag->getVariableName();
-                $this->{$PropertyName} = $PropertyName;
-            }
-        }
-
-        /** @noinspection PhpAssignmentInConditionInspection */
-        while ($reflector = $reflector->getParentClass()) {
-            $docComment = $reflector->getDocComment();
-            if ($docComment) {
-                $docblock = $factory->create($docComment);
-                /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
-                foreach ($docblock->getTagsByName('property') as $tag) {
-                    $PropertyName = $tag->getVariableName();
-                    $this->{$PropertyName} = $PropertyName;
-                }
-            }
+        /** @var Arrayy<int|string,mixed> $instance */
+        $instance = $reflector->newInstanceWithoutConstructor();
+        foreach ($instance->getPhpDocPropertiesFromClass() as $propertyName => $_) {
+            $this->{$propertyName} = $propertyName;
         }
 
         $STATIC_CACHE[$cacheKey] = $this;

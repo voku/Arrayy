@@ -73,6 +73,16 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
             return $this->isValidGenericCollection($type, $value);
         }
 
+        if (\strpos($type, '&') !== false) {
+            foreach (\explode('&', $type) as $subType) {
+                if ($this->assertTypeEquals($subType, $value) === false) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         if ($type === 'mixed' && $value !== null) {
             return true;
         }

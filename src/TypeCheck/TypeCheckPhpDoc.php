@@ -83,6 +83,40 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         return $tmpReflection;
     }
 
+    public static function fromReflectionProperty(\ReflectionProperty $reflectionProperty): self
+    {
+        $tmpReflection = new self($reflectionProperty->getName());
+        $type = $reflectionProperty->getType();
+
+        if ($type === null) {
+            $tmpReflection->types[] = 'mixed';
+            $tmpReflection->isNullable = true;
+
+            return $tmpReflection;
+        }
+
+        $tmpReflection->hasTypeDeclaration = true;
+
+        $docTypes = self::parseReflectionTypeObject($type);
+        if (\is_array($docTypes) === true) {
+            foreach ($docTypes as $docType) {
+                $tmpReflection->types[] = $docType;
+            }
+        } else {
+            $tmpReflection->types[] = $docTypes;
+        }
+
+        if ($type->allowsNull() && \in_array('null', $tmpReflection->types, true) === false) {
+            $tmpReflection->types[] = 'null';
+        }
+
+        if (\in_array('null', $tmpReflection->types, true)) {
+            $tmpReflection->isNullable = true;
+        }
+
+        return $tmpReflection;
+    }
+
     /**
      * @param \phpDocumentor\Reflection\Type $type
      *
@@ -131,7 +165,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             return 'mixed';
         }
 
-        if ($type instanceof \phpDocumentor\Reflection\Types\Scalar) {
+        if ($type instanceof \phpDocumentor\Reflection\PseudoTypes\Scalar) {
             return 'string|int|float|bool';
         }
 
@@ -164,6 +198,62 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         }
 
         return $type->__toString();
+    }
+
+    /**
+     * @param \ReflectionType $type
+     *
+     * @return string|string[]
+     */
+    public static function parseReflectionTypeObject(\ReflectionType $type)
+    {
+        if ($type instanceof \ReflectionNamedType) {
+            $typeName = $type->getName();
+
+            if ($type->isBuiltin()) {
+                return $typeName;
+            }
+
+            return '\\' . \ltrim($typeName, '\\');
+        }
+
+        if ($type instanceof \ReflectionUnionType) {
+            $types = [];
+            foreach ($type->getTypes() as $subType) {
+                $typeTmp = self::parseReflectionTypeObject($subType);
+                if (\is_array($typeTmp)) {
+                    foreach ($typeTmp as $typeTmpInner) {
+                        $types[] = $typeTmpInner;
+                    }
+                } else {
+                    $types[] = $typeTmp;
+                }
+            }
+
+            return $types;
+        }
+
+        if (
+            \class_exists(\ReflectionIntersectionType::class)
+            &&
+            $type instanceof \ReflectionIntersectionType
+        ) {
+            $types = [];
+            foreach ($type->getTypes() as $subType) {
+                $typeTmp = self::parseReflectionTypeObject($subType);
+                if (\is_array($typeTmp)) {
+                    foreach ($typeTmp as $typeTmpInner) {
+                        $types[] = $typeTmpInner;
+                    }
+                } else {
+                    $types[] = $typeTmp;
+                }
+            }
+
+            return \implode('&', $types);
+        }
+
+        return (string) $type;
     }
 
     /**
