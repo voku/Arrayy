@@ -7,9 +7,6 @@
 - update PHP requirement to `>=8.0.0` (drop PHP 7.x support)
 - update PHPStan to v2, migrate to inline `@phpstan-ignore` identifiers
 - update `phpdocumentor/reflection-docblock` to v6
-- update CI actions to latest versions (actions/checkout v6, actions/cache v5, codecov v6, upload-artifact v7)
-- fix duplicate IDs in text data
-- fix phpstan (StyleCI) code style issues
 
 ### 7.9.6 (2022-12-27)
 
