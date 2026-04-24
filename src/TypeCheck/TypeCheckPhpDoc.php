@@ -87,26 +87,43 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
     {
         $tmpReflection = new self($reflectionProperty->getName());
         $type = $reflectionProperty->getType();
+        $docTypes = self::getTypesFromReflectionPropertyDocBlock($reflectionProperty);
 
-        if ($type === null) {
+        if ($docTypes !== null) {
+            $tmpReflection->hasTypeDeclaration = true;
+
+            if (\is_array($docTypes) === true) {
+                foreach ($docTypes as $docType) {
+                    $tmpReflection->types[] = $docType;
+                }
+            } else {
+                $tmpReflection->types[] = $docTypes;
+            }
+        } elseif ($type === null) {
             $tmpReflection->types[] = 'mixed';
             $tmpReflection->isNullable = true;
 
             return $tmpReflection;
-        }
-
-        $tmpReflection->hasTypeDeclaration = true;
-
-        $docTypes = self::parseReflectionTypeObject($type);
-        if (\is_array($docTypes) === true) {
-            foreach ($docTypes as $docType) {
-                $tmpReflection->types[] = $docType;
-            }
         } else {
-            $tmpReflection->types[] = $docTypes;
+            $tmpReflection->hasTypeDeclaration = true;
+
+            $docTypes = self::parseReflectionTypeObject($type);
+            if (\is_array($docTypes) === true) {
+                foreach ($docTypes as $docType) {
+                    $tmpReflection->types[] = $docType;
+                }
+            } else {
+                $tmpReflection->types[] = $docTypes;
+            }
         }
 
-        if ($type->allowsNull() && \in_array('null', $tmpReflection->types, true) === false) {
+        if (
+            $type !== null
+            &&
+            $type->allowsNull()
+            &&
+            \in_array('null', $tmpReflection->types, true) === false
+        ) {
             $tmpReflection->types[] = 'null';
         }
 
@@ -198,6 +215,35 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         }
 
         return $type->__toString();
+    }
+
+    /**
+     * @return string|string[]|null
+     */
+    private static function getTypesFromReflectionPropertyDocBlock(\ReflectionProperty $reflectionProperty)
+    {
+        $docComment = $reflectionProperty->getDocComment();
+        if ($docComment === false) {
+            return null;
+        }
+
+        $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
+        $docblock = $factory->create($docComment);
+        foreach ($docblock->getTagsByName('var') as $tag) {
+            if (!$tag instanceof \phpDocumentor\Reflection\DocBlock\Tags\Var_) {
+                continue;
+            }
+
+            /** @var Type|null $type */
+            $type = $tag->getType();
+            if ($type === null) {
+                continue;
+            }
+
+            return self::parseDocTypeObject($type);
+        }
+
+        return null;
     }
 
     /**

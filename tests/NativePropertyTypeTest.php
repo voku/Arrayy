@@ -66,6 +66,21 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testNativeTypedPropertiesRejectUnknownKeysWhenMismatchCheckIsEnabled()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('The key "unknown" does not exists');
+
+        new NativeCityData(
+            [
+                'name' => 'Düsseldorf',
+                'plz' => null,
+                'infos' => ['foo'],
+                'unknown' => 'value',
+            ]
+        );
+    }
+
     public function testNativeTypedPropertiesWorkWithJsonMapper()
     {
         $json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
@@ -75,6 +90,14 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Lars', $userData[NativeUserData::meta()->firstName]);
         static::assertInstanceOf(NativeCityData::class, $userData[NativeUserData::meta()->city]);
         static::assertSame('Düsseldorf', $userData[NativeUserData::meta()->city][NativeCityData::meta()->name]);
+    }
+
+    public function testNativeTypedArrayPropertiesRejectInvalidJsonMapperElementTypes()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
+
+        NativeCityData::createFromJsonMapper('{"name":"Düsseldorf","plz":null,"infos":[1,2,3]}');
     }
 
     public function testNativeTypedPropertiesAreMergedFromParentClasses()

@@ -102,6 +102,14 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertNull($model[3]);
     }
 
+    public function testDataFromJsonMapperRejectsInvalidArrayElementTypes()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
+
+        CityData::createFromJsonMapper('{"name":"Düsseldorf","plz":null,"infos":[1,2,3]}');
+    }
+
     /**
      * @depends testSetAndGet
      */
