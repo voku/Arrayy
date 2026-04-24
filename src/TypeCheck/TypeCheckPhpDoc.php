@@ -176,8 +176,10 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             return 'mixed';
         }
 
-        if ($type instanceof \phpDocumentor\Reflection\PseudoTypes\Scalar) {
-            return 'string|int|float|bool';
+        foreach (self::getScalarPseudoTypeClasses() as $scalarTypeClass) {
+            if ($type instanceof $scalarTypeClass) {
+                return 'string|int|float|bool';
+            }
         }
 
         if ($type instanceof \phpDocumentor\Reflection\Types\Boolean) {
@@ -209,6 +211,27 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         }
 
         return $type->__toString();
+    }
+
+    /**
+     * @return list<class-string>
+     */
+    private static function getScalarPseudoTypeClasses(): array
+    {
+        $classes = [];
+
+        foreach (
+            [
+                '\phpDocumentor\Reflection\PseudoTypes\Scalar',
+                '\phpDocumentor\Reflection\Types\Scalar',
+            ] as $className
+        ) {
+            if (\class_exists($className)) {
+                $classes[] = $className;
+            }
+        }
+
+        return $classes;
     }
 
     /**
