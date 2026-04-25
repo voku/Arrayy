@@ -7724,6 +7724,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if (
                 $tag instanceof \phpDocumentor\Reflection\DocBlock\Tags\Template
                 &&
+                $tag->getTemplateName() === 'T'
+                &&
                 $tag->getBound() instanceof \phpDocumentor\Reflection\PseudoTypes\ArrayShape
             ) {
                 foreach ($tag->getBound()->getItems() as $item) {
@@ -7741,7 +7743,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if (
                 !$type instanceof \phpDocumentor\Reflection\PseudoTypes\Generic
                 ||
-                \in_array(\ltrim((string) $type->getFqsen(), '\\'), [self::class, ArrayyStrict::class], true) === false
+                !\in_array(\ltrim((string) $type->getFqsen(), '\\'), [self::class, ArrayyStrict::class], true)
             ) {
                 continue;
             }
