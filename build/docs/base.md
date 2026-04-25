@@ -117,12 +117,12 @@ $arrayy->Lars->lastname; // 'Müller'
 
 ## PhpDoc array-shape / property checking
 
-The library offers type checking for phpdoc array-shape annotations, legacy `@property` phpdoc-class-comments, and native declared properties. Prefer the array-shape form because it can reuse the `Arrayy` template for IDE autocompletion and static-analysis support. Do not combine array-shape annotations and `@property` tags on the same model.
+The library offers type checking for phpdoc array-shape annotations, legacy `@property` phpdoc-class-comments, and native declared properties. Prefer the array-shape form because it can reuse the `Arrayy` template for IDE autocompletion and static-analysis support. When you want PHPStan to check reads precisely, prefer array-like access with literal keys (for example `$user['lastName']`) on these array-shape-based models. Do not combine array-shape annotations and `@property` tags on the same model.
 
 ```php
 /**
  * @template T of array{id: int, firstName: int|string, lastName: string, city?: City|null}
- * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>>
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class User extends \Arrayy\Arrayy
 {
@@ -133,7 +133,7 @@ class User extends \Arrayy\Arrayy
 
 /**
  * @template T of array{plz: string|null, name: string, infos: string[]}
- * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>>
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class City extends \Arrayy\Arrayy
 {
@@ -161,7 +161,7 @@ $user = new User(
     ]
 );
 
-var_dump($user['lastName']); // 'Moelleken'
+var_dump($user['lastName']); // 'Moelleken' // preferred for PHPStan-checked reads
 var_dump($user[$userMeta->lastName]); // 'Moelleken'
 var_dump($user->lastName); // Moelleken
 
@@ -211,7 +211,7 @@ complex example:
 ```php
 /**
  * @template T of array{id: int, firstName: string, lastName: string}
- * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>>
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class User extends \Arrayy\Arrayy
 {
@@ -476,7 +476,7 @@ namespace Arrayy\tests;
 
 /**
  * @template T of array{id: int, firstName: int|string, lastName: string, city?: \Arrayy\tests\CityData|null}
- * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>>
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class UserData extends \Arrayy\Arrayy
 {
@@ -487,7 +487,7 @@ class UserData extends \Arrayy\Arrayy
 
 /**
  * @template T of array{plz: string|null, name: string, infos: string[]}
- * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>>
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class CityData extends \Arrayy\Arrayy
 {

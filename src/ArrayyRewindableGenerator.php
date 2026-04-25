@@ -16,7 +16,7 @@ class ArrayyRewindableGenerator extends \ArrayIterator
     /**
      * @var string
      *
-     * @phpstan-var string|class-string<\Arrayy\Arrayy<XKey,X>>
+     * @phpstan-var string|class-string<\Arrayy\Arrayy<XKey,X,array<XKey,X>>>
      */
     protected $class;
 

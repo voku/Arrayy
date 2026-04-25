@@ -416,7 +416,7 @@ final class Json
         $accessor = null;
 
         /** @var \Arrayy\Arrayy[] $ARRAYY_CACHE */
-        /** @phpstan-var array<string, \Arrayy\Arrayy<array-key, mixed>> $ARRAYY_CACHE */
+        /** @phpstan-var array<string, \Arrayy\Arrayy<array-key, mixed, array<array-key, mixed>>> $ARRAYY_CACHE */
         static $ARRAYY_CACHE = [];
 
         if (\is_subclass_of($class->name, \Arrayy\Arrayy::class)) {

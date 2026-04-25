@@ -12,7 +12,7 @@ namespace Arrayy;
  *
  * @template TKey of array-key
  * @template T
- * @extends  \Arrayy\Arrayy<TKey,T>
+ * @extends  \Arrayy\Arrayy<TKey,T,array<TKey,T>>
  */
 class ArrayyStrict extends Arrayy implements \Arrayy\Type\TypeInterface
 {

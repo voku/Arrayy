@@ -194,7 +194,7 @@ final class JsonMapperAccountHolderFixture
 
 /**
  * @property \Arrayy\tests\CityData $city
- * @extends \Arrayy\Arrayy<array-key, mixed>
+ * @extends \Arrayy\Arrayy<array-key, mixed, array<array-key, mixed>>
  */
 final class JsonMapperArrayyCityHolderFixture extends Arrayy
 {

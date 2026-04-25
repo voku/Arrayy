@@ -69,7 +69,7 @@ namespace Arrayy {
          *
          * @param mixed $data
          *
-         * @return Arrayy<int|string,mixed>
+         * @return Arrayy<int|string,mixed,array<int|string,mixed>>
          */
         function create($data): Arrayy
         {

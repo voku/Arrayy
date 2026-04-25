@@ -14,7 +14,7 @@ class ArrayyIterator extends \ArrayIterator
     /**
      * @var string
      *
-     * @phpstan-var string|class-string<\Arrayy\Arrayy<TKey,T>>
+     * @phpstan-var string|class-string<\Arrayy\Arrayy<TKey,T,array<TKey,T>>>
      */
     private $class;
 
@@ -55,7 +55,7 @@ class ArrayyIterator extends \ArrayIterator
      *                      <p>Will return a "Arrayy"-object instead of an array.</p>
      *
      * @phpstan-param TKey $offset
-     * @param-return Arrayy<TKey,T>|mixed
+     * @param-return Arrayy<TKey,T,array<TKey,T>>|mixed
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)

@@ -70,7 +70,7 @@ class StaticArrayy
      * @param int|null $stop The stopping point
      * @param int      $step How many to increment of
      *
-     * @return Arrayy<int,int>
+     * @return Arrayy<int,int,array<int,int>>
      *
      * @psalm-suppress InvalidReturnStatement - why?
      * @psalm-suppress InvalidReturnType - why?
@@ -93,7 +93,7 @@ class StaticArrayy
      * @param float|int|string|null $data
      * @param int                   $times
      *
-     * @return Arrayy<int,float|int|string|null>
+     * @return Arrayy<int,float|int|string|null,array<int,float|int|string|null>>
      *
      * @psalm-suppress InvalidReturnStatement - why?
      * @psalm-suppress InvalidReturnType - why?

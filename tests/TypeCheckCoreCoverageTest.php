@@ -763,7 +763,7 @@ final class TypeCheckDocOverridesNativeFixture
 
 /**
  * @template T of array{id: int, firstName: int|string, lastName: string, city?: \Arrayy\tests\CityData|null, infos: string[]}
- * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
+ * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>, T>
  */
 final class TypeCheckArrayShapeUserData extends \Arrayy\Arrayy
 {
@@ -777,7 +777,7 @@ final class TypeCheckArrayShapeUserData extends \Arrayy\Arrayy
 /**
  * @property int $legacyId
  * @template T of array{id: int}
- * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
+ * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>, T>
  */
 final class TypeCheckMixedPropertyAnnotationsData extends \Arrayy\Arrayy
 {
@@ -786,7 +786,7 @@ final class TypeCheckMixedPropertyAnnotationsData extends \Arrayy\Arrayy
 
 /**
  * @property int $legacyId
- * @extends \Arrayy\Arrayy<array-key, mixed>
+ * @extends \Arrayy\Arrayy<array-key, mixed, array<array-key, mixed>>
  */
 abstract class TypeCheckPropertyTagParentData extends \Arrayy\Arrayy
 {
@@ -805,7 +805,7 @@ final class TypeCheckMixedPropertyAnnotationsInheritanceData extends TypeCheckPr
  * may be absent; null must still be rejected when the key is present.
  *
  * @template T of array{score?: int}
- * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
+ * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>, T>
  */
 final class TypeCheckArrayShapeScoreData extends \Arrayy\Arrayy
 {
@@ -819,7 +819,7 @@ final class TypeCheckArrayShapeScoreData extends \Arrayy\Arrayy
  * to exercise the static-cache restore of $optionalProperties.
  *
  * @template T of array{name: string, tag?: string}
- * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
+ * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>, T>
  */
 final class TypeCheckArrayShapeCacheTestModel extends \Arrayy\Arrayy
 {
@@ -836,7 +836,7 @@ final class TypeCheckArrayShapeCacheTestModel extends \Arrayy\Arrayy
  * Uses the inline @extends form to define the shape, with no @template T preamble.
  * Both `@template T of array{…}` and `@extends Arrayy<array{…}, …>` must be supported.
  *
- * @extends \Arrayy\Arrayy<array{score: int}, mixed>
+ * @extends \Arrayy\Arrayy<key-of<array{score: int}>, value-of<array{score: int}>, array{score: int}>
  */
 final class TypeCheckArrayShapeExtendsOnlyData extends \Arrayy\Arrayy
 {
@@ -848,7 +848,7 @@ final class TypeCheckArrayShapeExtendsOnlyData extends \Arrayy\Arrayy
 /**
  * @template TShape
  * @template TValue
- * @extends \Arrayy\Arrayy<array-key, mixed>
+ * @extends \Arrayy\Arrayy<array-key, mixed, array<array-key, mixed>>
  */
 abstract class TypeCheckCustomArrayyBase extends \Arrayy\Arrayy
 {
@@ -871,7 +871,7 @@ final class TypeCheckArrayShapeViaIntermediateBaseData extends TypeCheckCustomAr
  * `getTemplateName() === 'T'` guard in getArrayShapeItemsFromDocBlock().
  *
  * @template Data of array{id: int}
- * @extends \Arrayy\Arrayy<array-key, mixed>
+ * @extends \Arrayy\Arrayy<array-key, mixed, array<array-key, mixed>>
  */
 final class TypeCheckArrayShapeWrongTemplateName extends \Arrayy\Arrayy
 {

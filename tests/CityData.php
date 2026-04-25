@@ -7,7 +7,7 @@ namespace Arrayy\tests;
  * @property string      $name
  * @property string[]    $infos
  *
- * @extends    \Arrayy\Arrayy<array-key,mixed>
+ * @extends    \Arrayy\Arrayy<array-key,mixed,array<array-key,mixed>>
  */
 class CityData extends \Arrayy\Arrayy
 {

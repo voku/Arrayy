@@ -5,7 +5,7 @@ namespace Arrayy\tests;
 use Arrayy\ArrayyIterator;
 
 /**
- * @extends    \Arrayy\Arrayy<array-key,mixed>
+ * @extends    \Arrayy\Arrayy<array-key,mixed,array<array-key,mixed>>
  */
 class ModelA extends \Arrayy\Arrayy implements ModelInterface
 {
