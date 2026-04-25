@@ -945,10 +945,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     #[\ReturnTypeWillChange]
     public function uasort($callable): self
     {
-        if (!\is_callable($callable)) {
-            throw new \InvalidArgumentException('Passed function must be callable');
-        }
-
         $this->generatorToArray();
 
         \uasort($this->array, $callable);
@@ -1788,6 +1784,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param array|null $items
      *
      * @return array
+     *
+     * @phpstan-param array<array-key, mixed>|null $items
+     * @phpstan-return array<array-key, mixed>
      */
     public function flatten($delimiter = '.', $prepend = '', $items = null)
     {
@@ -2661,7 +2660,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param array|T $value
+     * @phpstan-param array<array-key, mixed>|T $value
      * @phpstan-return static
      * @psalm-mutation-free
      *
@@ -2819,7 +2818,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param array|T $value
+     * @phpstan-param array<array-key, mixed>|T $value
      * @phpstan-return static
      * @psalm-mutation-free
      */
@@ -3080,6 +3079,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         // crawl through array, get key according to object or not
         $usePath = false;
+        $usedArrayTmp = null;
         if (
             $this->pathSeparator
             &&
@@ -3116,7 +3116,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     continue;
                 }
 
-                if (isset($segments[0]) && $segments[0] === '*') {
+                if ($segments[0] === '*') {
                     $segmentsTmp = $segments;
                     unset($segmentsTmp[0]);
                     $keyTmp = \implode('.', $segmentsTmp);
@@ -5496,7 +5496,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $options = [];
 
         foreach ($array as $option => $weight) {
-            /** @phpstan-var T $option - hack: we protect this method via (int&T)|(string&T) */
             if ($this->searchIndex($option) !== false) {
                 for ($i = 0; $i < $weight; ++$i) {
                     $options[] = $option;
@@ -6886,14 +6885,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function stripEmpty(): self
     {
-        return $this->filter(
-            static function ($item) {
+        $generator = function () {
+            foreach ($this->getGenerator() as $key => $item) {
                 if ($item === null) {
-                    return false;
+                    continue;
                 }
 
-                return (bool) \trim((string) $item);
+                if ((bool) \trim((string) $item)) {
+                    yield $key => $item;
+                }
             }
+        };
+
+        return static::create(
+            $generator(),
+            $this->iteratorClass,
+            false
         );
     }
 
@@ -7896,7 +7903,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if (
             \is_scalar($pieces) === true
             ||
-            (\is_object($pieces) && \method_exists($pieces, '__toString'))
+            $pieces instanceof \Stringable
         ) {
             return (string) $pieces;
         }
@@ -7925,7 +7932,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *              <p>true if needle is found in the array, false otherwise</p>
      *
-     * @phpstan-param (array&T)|array<TKey,T>|\Generator<TKey,T>|null $haystack
+     * @phpstan-param array<array-key, mixed>|array<TKey,T>|\Generator<TKey,T>|null $haystack
      *
      * @psalm-mutation-free
      */
@@ -8276,6 +8283,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param array $array
      *
      * @return array
+     *
+     * @phpstan-param array<array-key, mixed> $array
+     * @phpstan-return array<array-key, mixed>
      *
      * @psalm-mutation-free
      */

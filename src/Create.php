@@ -17,7 +17,7 @@ namespace Arrayy {
          */
         function create($data): Arrayy
         {
-            return new Arrayy($data);
+            return Arrayy::create($data);
         }
     }
 
