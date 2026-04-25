@@ -54,6 +54,8 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
     }
 
     /**
+     * Create a type checker from a phpDocumentor type object and an explicit property name.
+     *
      * @param string                              $property
      * @param \phpDocumentor\Reflection\Type|null $type
      *

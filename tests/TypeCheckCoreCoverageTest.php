@@ -494,7 +494,7 @@ DOC);
         new TypeCheckMixedPropertyAnnotationsData(['id' => 1]);
     }
 
-    public function testPropertyTagsAndArrayShapeAnnotationsCannotBeMixedAcrossInheritance(): void
+    public function testPropertyTagsInParentAndArrayShapeInChildCannotBeMixed(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Use either @property tags or array-shape annotations');

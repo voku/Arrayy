@@ -7656,6 +7656,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Merge property definitions from a docblock into the collected property map.
+     *
      * @param \phpDocumentor\Reflection\DocBlock $docblock
      * @param TypeCheckInterface[]               $properties
      * @param array<string, true>                $optionalProperties
@@ -7730,6 +7732,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Extract array-shape items from supported @template and @extends annotations.
+     *
      * @param \phpDocumentor\Reflection\DocBlock $docblock
      *
      * @return \phpDocumentor\Reflection\PseudoTypes\ArrayShapeItem[]
@@ -7781,6 +7785,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         return $items;
     }
 
+    /**
+     * Check whether a generic annotation target is Arrayy, ArrayyStrict, or an Arrayy subclass.
+     *
+     * @param string $fqcn
+     *
+     * @return bool
+     */
     private function isArrayyGenericTarget(string $fqcn): bool
     {
         $fqcn = \ltrim($fqcn, '\\');
