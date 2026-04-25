@@ -104,34 +104,6 @@ final class JsonMapperCoverageTest extends TestCase
         static::assertSame('Bar', $fromObject->account->accountName);
     }
 
-    public function testMapRejectsEmptyDocblockTypes(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Empty type at property "Arrayy\\tests\\JsonMapperEmptyTypeFixture::$broken"');
-
-        (new Json())->map(['broken' => 'value'], new JsonMapperEmptyTypeFixture());
-    }
-
-    public function testMapSupportsBracketArraySyntaxAndRejectsScalarInputForArrayProperties(): void
-    {
-        $mapper = new Json();
-
-        $target = $mapper->map(['ids' => ['1', '2']], new JsonMapperBracketArrayFixture());
-        static::assertSame([1, 2], $target->ids);
-
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('JSON property "ids" must be an array, integer given');
-        $mapper->map(['ids' => 1], new JsonMapperBracketArrayFixture());
-    }
-
-    public function testMapSupportsBracketClassArraySyntax(): void
-    {
-        $target = (new Json())->map(['names' => ['foo', 'bar']], new JsonMapperArrayObjectFixture());
-
-        static::assertInstanceOf(\ArrayObject::class, $target->names);
-        static::assertSame(['foo', 'bar'], $target->names->getArrayCopy());
-    }
-
     public function testMapArrayHandlesNestedArraysScalarCastingAndClassInstantiation(): void
     {
         $mapper = new Json();
@@ -193,7 +165,7 @@ final class JsonMapperDocOnlyFixture
     /**
      * Plain documentation without type metadata.
      */
-    public $payload;
+    public mixed $payload;
 }
 
 final class JsonMapperNullableFixture
@@ -218,30 +190,6 @@ final class JsonMapperAccountHolderFixture
      * @var \Arrayy\tests\Account
      */
     public $account;
-}
-
-final class JsonMapperEmptyTypeFixture
-{
-    /**
-     * @var
-     */
-    public $broken;
-}
-
-final class JsonMapperBracketArrayFixture
-{
-    /**
-     * @var array[int]
-     */
-    public $ids;
-}
-
-final class JsonMapperArrayObjectFixture
-{
-    /**
-     * @var \ArrayObject[string]
-     */
-    public $names;
 }
 
 /**

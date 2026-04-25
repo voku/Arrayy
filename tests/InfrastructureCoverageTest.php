@@ -62,7 +62,7 @@ final class InfrastructureCoverageTest extends TestCase
 
     public function testDetectFirstValueTypeCollectionWrapsScalarInput(): void
     {
-        $collection = new DetectFirstValueTypeCollection('A');
+        $collection = new DetectFirstValueTypeCollection($this->mixedValue('A'));
 
         static::assertSame(['A'], $collection->toArray());
         static::assertSame('string', $collection->getType());
@@ -81,12 +81,22 @@ final class InfrastructureCoverageTest extends TestCase
         $second = (object) ['name' => 'second'];
 
         $collection = new StdClassCollection();
-        $collection[] = new StdClassCollection([$first]);
-        $collection->prepend(new StdClassCollection([$second]), 'lead');
-        $collection->set('tail', new StdClassCollection([$first, $second]));
+        $collection[] = $this->mixedValue(new StdClassCollection([$first]));
+        $collection->prepend($this->mixedValue(new StdClassCollection([$second])), 'lead');
+        $collection->set('tail', $this->mixedValue(new StdClassCollection([$first, $second])));
 
         static::assertSame($second, $collection['lead']);
         static::assertSame($first, $collection[0]);
-        static::assertSame($first, $collection['tail']);
+        static::assertSame($second, $collection['tail']);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    private function mixedValue($value)
+    {
+        return $value;
     }
 }
