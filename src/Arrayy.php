@@ -3251,8 +3251,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Create an instance from JSON using the built-in mapper.
      *
-     * For Arrayy models with property checks enabled, both phpdoc `@property`
-     * definitions and native declared properties are used for metadata and type checks.
+     * For Arrayy models with property checks enabled, phpdoc array-shape annotations,
+     * legacy `@property` definitions, and native declared properties are used for metadata and type checks.
      * Add a property-level `@var` annotation if a native `array` property also needs
      * element-type validation.
      *
@@ -4724,8 +4724,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
-     * Return a meta object with property names from phpdoc `@property` tags and
-     * native declared properties.
+     * Return a meta object with property names from phpdoc array-shape annotations,
+     * `@property` tags, and native declared properties.
      *
      * @return ArrayyMeta|mixed|static
      */
