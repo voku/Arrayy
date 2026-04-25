@@ -295,6 +295,27 @@ DOC);
     }
 
     /**
+     * Risk: `city?: CityData|null` encodes two independent branches — the key may be omitted,
+     * and when present the value may be either a CityData instance or null. Coverage must prove
+     * explicit null is accepted, not only omission and object input.
+     */
+    public function testArrayShapeOptionalNullableKeyAcceptsExplicitNull(): void
+    {
+        $meta = TypeCheckArrayShapeUserData::meta();
+
+        $model = new TypeCheckArrayShapeUserData([
+            $meta->id        => 1,
+            $meta->firstName => 'Lars',
+            $meta->lastName  => 'Moelleken',
+            $meta->infos     => ['a'],
+            $meta->city      => null,
+        ]);
+
+        static::assertArrayHasKey($meta->city, $model->getArray());
+        static::assertNull($model[$meta->city]);
+    }
+
+    /**
      * Risk: these scalar/null/mixed docblock tokens are mapped manually; if any branch drifts,
      * `Arrayy` starts rejecting valid values or formatting the wrong expected type.
      */
