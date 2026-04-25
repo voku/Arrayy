@@ -7,7 +7,7 @@ use Arrayy\Arrayy;
 /**
  * @property \Arrayy\tests\AccountCollection $accounts
  *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @extends  \Arrayy\Arrayy<array-key,mixed,array<array-key,mixed>>
  */
 class GetAccountsResponse extends Arrayy
 {

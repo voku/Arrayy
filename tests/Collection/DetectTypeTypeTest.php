@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class DetectTypeTypeTest extends TestCase
 {
-    public function testArrayDetectString()
+    public function testArrayDetectString(): void
     {
         $set = new DetectFirstValueTypeCollection(['A', 'B', 'C', 'D']);
 
@@ -23,7 +23,7 @@ final class DetectTypeTypeTest extends TestCase
         );
     }
 
-    public function testArrayDetectInteger()
+    public function testArrayDetectInteger(): void
     {
         $set = new DetectFirstValueTypeCollection([1, 2, 3, 4]);
 
@@ -33,7 +33,7 @@ final class DetectTypeTypeTest extends TestCase
         );
     }
 
-    public function testArrayDetectClass()
+    public function testArrayDetectClass(): void
     {
         $set = new DetectFirstValueTypeCollection([new \stdClass(), new \stdClass()]);
 
@@ -43,7 +43,7 @@ final class DetectTypeTypeTest extends TestCase
         );
     }
 
-    public function testArrayDetectTraversable()
+    public function testArrayDetectTraversable(): void
     {
         $set = new DetectFirstValueTypeCollection(new MixedCollection(['A', 'B', 'C', 'D']));
 
@@ -53,28 +53,28 @@ final class DetectTypeTypeTest extends TestCase
         );
     }
 
-    public function testWrongValueDetectString()
+    public function testWrongValueDetectString(): void
     {
         $this->expectException(\TypeError::class);
 
         new DetectFirstValueTypeCollection(['A', 'B', 'C', 1]);
     }
 
-    public function testWrongValueDetectInteger()
+    public function testWrongValueDetectInteger(): void
     {
         $this->expectException(\TypeError::class);
 
         new DetectFirstValueTypeCollection([1, 2, 3, 4.0]);
     }
 
-    public function testWrongValueDetectClass()
+    public function testWrongValueDetectClass(): void
     {
         $this->expectException(\TypeError::class);
 
         new DetectFirstValueTypeCollection([new \stdClass(), new DetectFirstValueTypeCollection()]);
     }
 
-    public function testWrongValueDetectTraversable()
+    public function testWrongValueDetectTraversable(): void
     {
         $this->expectException(\TypeError::class);
 

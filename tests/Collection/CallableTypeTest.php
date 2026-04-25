@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class CallableTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new \Arrayy\Type\CallableCollection([
             static function () {
@@ -36,11 +36,11 @@ final class CallableTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new FloatCollection(['strtolower', 1]);
     }
 }

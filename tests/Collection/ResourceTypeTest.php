@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class ResourceTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         /** @var resource $f1 */
         $f1 = \tmpfile();
@@ -38,11 +38,11 @@ final class ResourceTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new \Arrayy\Type\ResourceCollection([
             new \stdClass(),
             \tmpfile(),

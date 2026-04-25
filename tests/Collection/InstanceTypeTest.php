@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class InstanceTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new InstanceCollection(
             [new BoolCollection(), new BoolCollection()],
@@ -41,7 +41,7 @@ final class InstanceTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 

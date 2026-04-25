@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../.phpUnitAndStanFix.php';
  */
 final class AnalyseTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGenerics()
+    public function testGenerics(): void
     {
         $json = '[{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}, {"id":2,"firstName":"Sven","lastName":"Moelleken","city":{"name":"Köln","plz":null,"infos":["foo"]}}]';
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);
@@ -19,7 +19,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
             static::assertInstanceOf(\Arrayy\tests\UserData::class, $user);
 
             \PHPStan\Testing\assertType('Arrayy\tests\CityData|null', $user->city);
-            static::assertTrue($user->city === null || $user->city instanceof \Arrayy\tests\CityData); /* @phpstan-ignore-line | always true */
+            static::assertTrue($user->city === null || $user->city instanceof \Arrayy\tests\CityData); /* @phpstan-ignore staticMethod.alreadyNarrowedType, instanceof.alwaysTrue, booleanOr.alwaysTrue */
 
             \PHPStan\Testing\assertType('string|null', $user->city->name ?? null);
             static::assertTrue(($user->city->name ?? null) === null || is_string($user->city->name ?? null));
@@ -41,19 +41,19 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         $set[] = 'F';
         $set[] = 'G';
         try {
-            /* @phpstan-ignore-next-line | not accept */
+            /* @phpstan-ignore offsetAssign.valueType */
             $set[] = 2;
         } catch (\TypeError $e) {
             // nothing
         }
         try {
-            /* @phpstan-ignore-next-line | not accept */
+            /* @phpstan-ignore offsetAssign.valueType */
             $set[] = 3;
         } catch (\TypeError $e) {
             // nothing
         }
         try {
-            /* @phpstan-ignore-next-line | not accept */
+            /* @phpstan-ignore offsetAssign.valueType */
             $set[] = false;
         } catch (\TypeError $e) {
             // nothing
@@ -85,7 +85,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
 
         foreach ($set as $item) {
             \PHPStan\Testing\assertType('non-empty-string', $item);
-            static::assertTrue(strlen($item) > 0);/* @phpstan-ignore-line | always true */
+            static::assertTrue(strlen($item) > 0); /* @phpstan-ignore staticMethod.alreadyNarrowedType, greater.alwaysTrue */
         }
 
         // -------------------------------------------------------------------------

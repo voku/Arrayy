@@ -187,7 +187,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param mixed $actual
      */
-    public static function assertArrayy($actual)
+    public static function assertArrayy($actual): void
     {
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         static::assertInstanceOf(\Arrayy\Arrayy::class, $actual);
@@ -1888,7 +1888,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $array = [1, 2];
         $arrayy = new A($array);
@@ -1898,7 +1898,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertMutable($arrayy, $resultArrayy, $array);
     }
 
-    public function testAppendImmutableYield()
+    public function testAppendImmutableYield(): void
     {
         $array = [1, 2];
         $arrayy = new A($array);
@@ -1909,7 +1909,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $arrayResult);
     }
 
-    public function testPrependImmutableYield()
+    public function testPrependImmutableYield(): void
     {
         $array = [3 => 1, 2];
         $arrayy = new A($array);
@@ -1926,7 +1926,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $result
      * @param mixed $value
      */
-    public function testAppend($array, $result, $value)
+    public function testAppend($array, $result, $value): void
     {
         $arrayy = A::create($array)->append($value);
 
@@ -1939,7 +1939,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testAppendToEachKey($array, $result)
+    public function testAppendToEachKey($array, $result): void
     {
         $resultTmp = A::create($array)->appendToEachKey('foo_');
 
@@ -1952,7 +1952,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testAppendToEachValue($array, $result)
+    public function testAppendToEachValue($array, $result): void
     {
         $resultTmp = A::create($array)->appendToEachValue('foo_');
 
@@ -1966,14 +1966,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed     $value
      * @param float|int $expected
      */
-    public function testAverage($array, $value, $expected)
+    public function testAverage($array, $value, $expected): void
     {
         $arrayy = new A($array);
 
         static::assertSame($expected, $arrayy->average($value), 'tested: ' . $value);
     }
 
-    public function testCanDoSomethingAtEachValue()
+    public function testCanDoSomethingAtEachValue(): void
     {
         $arrayy = A::create(['foo', 'bar' => 'bis']);
 
@@ -1986,7 +1986,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $this->expectOutputString($result);
     }
 
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $arrayy = (['bàř' => 'bàř']);
 
@@ -1994,7 +1994,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('bàř', $arrayy['bàř']);
     }
 
-    public function testCanGetIntersectionOfTwoArrays()
+    public function testCanGetIntersectionOfTwoArrays(): void
     {
         $a = ['foo', 'bar'];
         $b = ['bar', 'baz'];
@@ -2002,7 +2002,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([0 => 'bar'], $array->getArray());
     }
 
-    public function testCanGetIntersectionOfTwoArraysKeepKeys()
+    public function testCanGetIntersectionOfTwoArraysKeepKeys(): void
     {
         $a = ['foo', 'bar'];
         $b = ['bar', 'baz'];
@@ -2010,7 +2010,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([1 => 'bar'], $array->getArray());
     }
 
-    public function testCanGroupValues()
+    public function testCanGroupValues(): void
     {
         $under = A::create(\range(1, 5))->group(
             static function ($value, $key) {
@@ -2025,14 +2025,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($matcher, $under->getAll());
     }
 
-    public function testCanGroupValuesWithNonExistingKey()
+    public function testCanGroupValuesWithNonExistingKey(): void
     {
         static::assertSame([], A::create(\range(1, 5))->group('unknown', true)->getArray());
 
         static::assertSame([], A::create(\range(1, 5))->group('unknown', false)->getArray());
     }
 
-    public function testCanGroupValuesWithSavingKeys()
+    public function testCanGroupValuesWithSavingKeys(): void
     {
         $grouper = static function ($value, $key) {
             return (int) ($value % 2 === 0);
@@ -2045,7 +2045,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($matcher, $under->getArray());
     }
 
-    public function testCanGroupValuesWithSavingKeysViaYield()
+    public function testCanGroupValuesWithSavingKeysViaYield(): void
     {
         $grouper = static function ($value, $key) {
             return (int) ($value % 2 === 0);
@@ -2065,7 +2065,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($matcher, $result);
     }
 
-    public function testCanIndexBy()
+    public function testCanIndexBy(): void
     {
         $array = [
             ['name' => 'moe', 'age' => 40],
@@ -2080,7 +2080,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, A::create($array)->indexBy('age')->getArray());
     }
 
-    public function testCanIndexByViaYield()
+    public function testCanIndexByViaYield(): void
     {
         $array = [
             ['name' => 'moe', 'age' => 40],
@@ -2100,7 +2100,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
-    public function testChangeKeyCase()
+    public function testChangeKeyCase(): void
     {
         // upper
 
@@ -2158,7 +2158,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testChunk(array $array)
+    public function testChunk(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->chunk(2);
@@ -2180,7 +2180,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testClean($array, $result)
+    public function testClean($array, $result): void
     {
         $arrayy = A::create($array);
 
@@ -2192,7 +2192,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testClear(array $array)
+    public function testClear(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->clear();
@@ -2200,7 +2200,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertMutable($arrayy, $resultArrayy, []);
     }
 
-    public function testColumn()
+    public function testColumn(): void
     {
         $rows = [0 => ['id' => '3', 'title' => 'Foo', 'date' => '2013-03-25']];
 
@@ -2250,7 +2250,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(A::create($expected2)->getArray(), A::create($rows)->getColumn(null)->getArray());
     }
 
-    public function testCompareToPhpArray()
+    public function testCompareToPhpArray(): void
     {
         $initArray = [
             'fruit' => [
@@ -2279,7 +2279,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([0 => 'orange*', 1 => 'avocado*', 3 => 'pear*'], $arrayy->getArray());
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $testArray = ['foo bar', 'UTF-8'];
         $arrayy = new A($testArray);
@@ -2287,7 +2287,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('foo bar,UTF-8', (string) $arrayy);
     }
 
-    public function testConstructWithArray()
+    public function testConstructWithArray(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -2302,7 +2302,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $value
      * @param bool  $expected
      */
-    public function testContainsOnly($array, $value, $expected)
+    public function testContainsOnly($array, $value, $expected): void
     {
         $arrayy = new A($array);
 
@@ -2316,7 +2316,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $value
      * @param bool  $expected
      */
-    public function testContains($array, $value, $expected)
+    public function testContains($array, $value, $expected): void
     {
         $arrayy = new A($array);
 
@@ -2332,7 +2332,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $value
      * @param bool  $expected
      */
-    public function testContainsCaseInsensitive($array, $value, $expected)
+    public function testContainsCaseInsensitive($array, $value, $expected): void
     {
         $arrayy = new A($array);
 
@@ -2347,14 +2347,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $value
      * @param bool  $expected
      */
-    public function testContainsCaseInsensitiveRecursive($array, $value, $expected)
+    public function testContainsCaseInsensitiveRecursive($array, $value, $expected): void
     {
         $arrayy = new A($array);
 
         static::assertSame($expected, $arrayy->containsCaseInsensitive($value, true), 'tested: ' . \print_r($value, true));
     }
 
-    public function testContainsKeys()
+    public function testContainsKeys(): void
     {
         static::assertTrue(A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->containsKeys(['a', 'b', 'c'], true));
         static::assertFalse(A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->containsKeys(['a', 'b', 'c'], false));
@@ -2368,7 +2368,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse(A::create([])->containsKeys(['a', 'b', 'c']));
     }
 
-    public function testPull()
+    public function testPull(): void
     {
         static::assertSame([0, 1, null], A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->pull(['a', 'b', 'foo']));
         static::assertSame([0, 1], A::create(['a' => 0, 'b' => 1, 'd' => ['c' => 2]])->pull(['a', 'b']));
@@ -2384,7 +2384,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(['d' => ['c' => 2]], $test->getArray());
     }
 
-    public function testContainsKeysRecursive()
+    public function testContainsKeysRecursive(): void
     {
         static::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => 2]])->containsKeysRecursive(['a', 'b', 'c']));
         static::assertTrue(A::create(['a' => 0, 'b' => 1, ['c' => 2]])->containsKeysRecursive(['a', 'b']));
@@ -2420,7 +2420,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $value
      * @param bool  $expected
      */
-    public function testContainsRecursive($array, $value, $expected)
+    public function testContainsRecursive($array, $value, $expected): void
     {
         $arrayy = new A($array);
 
@@ -2428,7 +2428,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $arrayy->containsValueRecursive($value)); // alias
     }
 
-    public function testContainsValues()
+    public function testContainsValues(): void
     {
         static::assertTrue(A::create(['a', 'b', 'c'])->containsValues(['a', 'b']));
         static::assertFalse(A::create(['a', 'b', 'd'])->containsValues(['a', 'b', 'c']));
@@ -2443,7 +2443,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param int   $expected
      */
-    public function testCount($array, $expected)
+    public function testCount($array, $expected): void
     {
         $arrayy = new A($array);
 
@@ -2460,7 +2460,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param int   $expected
      */
-    public function testCountRecursive($array, $expected)
+    public function testCountRecursive($array, $expected): void
     {
         $arrayy = new A($array);
 
@@ -2470,7 +2470,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $arrayy->length(\COUNT_RECURSIVE));
     }
 
-    public function testCountValues()
+    public function testCountValues(): void
     {
         $array = ['foo', 'lall', 'bar', 'bar', 'foo', 'bar'];
         $arrayy = new A($array);
@@ -2479,7 +2479,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $arrayy->countValues()->getArray());
     }
 
-    public function testCreateByReference()
+    public function testCreateByReference(): void
     {
         $testArray = ['foo bar', 'UTF-8'];
         $arrayy = new A();
@@ -2490,7 +2490,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($testArray, $arrayy->toArray());
     }
 
-    public function testCreateFromJsonApiResponse()
+    public function testCreateFromJsonApiResponse(): void
     {
         $str = '
         {
@@ -2525,7 +2525,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testCreateFromJson()
+    public function testCreateFromJson(): void
     {
         $str = '
     {"employees":[
@@ -2569,7 +2569,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param string                $string
      * @param non-empty-string|null $separator
      */
-    public function testCreateFromString($string, $separator)
+    public function testCreateFromString($string, $separator): void
     {
         if ($separator !== null) {
             $array = \explode($separator, $string);
@@ -2585,7 +2585,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
-    public function testCreateFromTraversableImmutable()
+    public function testCreateFromTraversableImmutable(): void
     {
         $array = ['recipe' => 'pancakes', 'egg', 'milk', 'flour'];
         $iterator = new \ArrayIterator($array);
@@ -2596,7 +2596,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
-    public function testCreateFromStringRegEx()
+    public function testCreateFromStringRegEx(): void
     {
         $str = '
     [2016-03-02 02:37:39] WARN  main : router: error in file-name: jquery.min.map
@@ -2618,7 +2618,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $arrayy->getArray());
     }
 
-    public function testCreateFromStringSimple()
+    public function testCreateFromStringSimple(): void
     {
         $str = 'John, Doe, Anna, Smith';
 
@@ -2630,7 +2630,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $arrayy->getArray());
     }
 
-    public function testCreateWithRange()
+    public function testCreateWithRange(): void
     {
         $arrayy1 = A::createWithRange(2, 7);
         $array1 = \range(2, 7);
@@ -2652,7 +2652,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testCustomSort(array $array)
+    public function testCustomSort(array $array): void
     {
         $callable = static function ($a, $b) {
             if ($a === $b) {
@@ -2675,7 +2675,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testCustomSortImmutable(array $array)
+    public function testCustomSortImmutable(array $array): void
     {
         $callable = static function ($a, $b) {
             if ($a === $b) {
@@ -2698,7 +2698,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testCustomSortKeys(array $array)
+    public function testCustomSortKeys(array $array): void
     {
         $callable = static function ($a, $b) {
             if ($a === $b) {
@@ -2723,7 +2723,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertMutable($arrayy, $resultArrayy, $resultArrayV2->getArray());
     }
 
-    public function testCustomSortKeysSimple()
+    public function testCustomSortKeysSimple(): void
     {
         $callable = static function ($a, $b) {
             if ($a === $b) {
@@ -2783,7 +2783,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $input, $resultArrayy->getArray());
     }
 
-    public function testCustomSortValuesByDateTimeObject()
+    public function testCustomSortValuesByDateTimeObject(): void
     {
         $birthDates = [
             ['Lucienne Adkisson', \date_create('2017-10-17')],
@@ -2898,7 +2898,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $arrayNew
      * @param array $result
      */
-    public function testDiff($array, $arrayNew, $result)
+    public function testDiff($array, $arrayNew, $result): void
     {
         $arrayy = A::create($array)->diff($arrayNew);
 
@@ -2912,7 +2912,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $arrayNew
      * @param array $result
      */
-    public function testDiffKey($array, $arrayNew, $result)
+    public function testDiffKey($array, $arrayNew, $result): void
     {
         $arrayy = A::create($array)->diffKey($arrayNew);
 
@@ -2926,14 +2926,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $arrayNew
      * @param array $result
      */
-    public function testDiffKeyAndValue($array, $arrayNew, $result)
+    public function testDiffKeyAndValue($array, $arrayNew, $result): void
     {
         $arrayy = A::create($array)->diffKeyAndValue($arrayNew);
 
         static::assertSame($result, $arrayy->getArray(), 'tested: ' . \print_r($array, true));
     }
 
-    public function testDiffRecursive()
+    public function testDiffRecursive(): void
     {
         $testArray1 = [
             'test1' => ['lall'],
@@ -3002,7 +3002,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testDiffWith(array $array)
+    public function testDiffWith(array $array): void
     {
         $secondArray = [
             'one' => 1,
@@ -3017,7 +3017,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
-    public function testDivide()
+    public function testDivide(): void
     {
         $arrayy = new A(['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01']);
         $arrayyResult = new A(['id', 'name', 'group', 'value', 'when', 999, 'flux', '', 6868, '2015-01-01']);
@@ -3025,7 +3025,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($arrayyResult->toString(), $arrayy->divide()->toString());
     }
 
-    public function testEach()
+    public function testEach(): void
     {
         $array = [1 => 'bar', 'foo' => 'foo'];
         $arrayy = A::create($array);
@@ -3039,14 +3039,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $under->getArray(), 'tested: ' . \print_r($array, true));
     }
 
-    public function testEmptyConstruct()
+    public function testEmptyConstruct(): void
     {
         $arrayy = new A();
         self::assertArrayy($arrayy);
         static::assertSame('', (string) $arrayy);
     }
 
-    public function testExchangeArray()
+    public function testExchangeArray(): void
     {
         $input = [
             'three' => 3,
@@ -3068,7 +3068,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $default
      * @param array $expected
      */
-    public function testFillWithDefaults($array, $num, $default, $expected)
+    public function testFillWithDefaults($array, $num, $default, $expected): void
     {
         $arrayy = new A($array);
 
@@ -3081,7 +3081,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result->getArray());
     }
 
-    public function testFillWithDefaultsException()
+    public function testFillWithDefaultsException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -3090,7 +3090,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy->fillWithDefaults(-1);
     }
 
-    public function testIsEqual()
+    public function testIsEqual(): void
     {
         $arrayy = new A([1, 2, 3]);
 
@@ -3099,7 +3099,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($arrayy->isEqual([3, 2, 1]));
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         if (!\defined('ARRAY_FILTER_USE_BOTH')) {
             \define('ARRAY_FILTER_USE_BOTH', 1);
@@ -3137,7 +3137,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         // ---
 
         $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
-            /* @phpstan-ignore-next-line | FP from phpstan?  */
+            /* @phpstan-ignore argument.type */
             static function ($key, $value): bool {
                 return ($value % 2 !== 0) && ($key & 2 !== 0);
             },
@@ -3156,7 +3156,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([0 => 1, 2 => 3, 7 => 7], $under->getArray());
     }
 
-    public function testFilterBy()
+    public function testFilterBy(): void
     {
         $a = [
             ['id' => 123, 'name' => 'foo', 'group' => 'primary', 'value' => 123456, 'when' => '2014-01-01'],
@@ -3211,7 +3211,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed       $search
      * @param false|mixed $result
      */
-    public function testFind($array, $search, $result)
+    public function testFind($array, $search, $result): void
     {
         $closure = static function ($value) use ($search) {
             return $value === $search;
@@ -3250,7 +3250,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed       $search
      * @param false|mixed $result
      */
-    public function testFindKey($array, $search, $result)
+    public function testFindKey($array, $search, $result): void
     {
         $closure = static function ($value) use ($search) {
             return $value === $search;
@@ -3262,7 +3262,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $resultMatch, 'tested:' . \print_r($array, true));
     }
 
-    public function testFindKeyWithKeyParameter()
+    public function testFindKeyWithKeyParameter(): void
     {
         // Verify that the key parameter is correctly passed to the closure
         $array = ['a' => 10, 'b' => 20, 'c' => 30];
@@ -3281,7 +3281,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($arrayy->findKey($closureNoMatch));
     }
 
-    public function testFindKeyForMinAndMaxValues()
+    public function testFindKeyForMinAndMaxValues(): void
     {
         $arrayy = A::create([
             3 => 10,
@@ -3308,7 +3308,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testFirst($array, $result)
+    public function testFirst($array, $result): void
     {
         $arrayy = A::create($array);
 
@@ -3322,7 +3322,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $result
      * @param null  $take
      */
-    public function testFirsts($array, $result, $take = null)
+    public function testFirsts($array, $result, $take = null): void
     {
         $arrayy = A::create($array);
         $resultNew = $arrayy->firstsImmutable($take);
@@ -3335,7 +3335,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($arrayy, $resultNew);
     }
 
-    public function testFlip()
+    public function testFlip(): void
     {
         $testArray = [0 => 'foo', 2 => 'bar', 4 => 'lall'];
         $arrayy = A::create($testArray)->flip();
@@ -3344,7 +3344,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $arrayy->getArray());
     }
 
-    public function testForEach()
+    public function testForEach(): void
     {
         $arrayy = new A([1 => 'foo bar', 'öäü']);
 
@@ -3357,7 +3357,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $arrayy = new A(['foo bar', 'öäü']);
         self::assertArrayy($arrayy);
@@ -3371,13 +3371,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param mixed $key
      */
-    public function testGetV2($expected, $array, $key)
+    public function testGetV2($expected, $array, $key): void
     {
         $arrayy = new A($array);
         static::assertSame($expected, $arrayy->get($key), 'tested:' . \print_r($array, true));
     }
 
-    public function testGetViaDotNotation()
+    public function testGetViaDotNotation(): void
     {
         $arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
         $result = $arrayy->get('Lars.lastname');
@@ -3403,7 +3403,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param mixed $key
      */
-    public function testHas($expected, $array, $key)
+    public function testHas($expected, $array, $key): void
     {
         $arrayy = new A($array);
         static::assertSame($expected, $arrayy->has($key));
@@ -3416,7 +3416,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param string $result
      * @param string $with
      */
-    public function testImplode($array, $result, $with = ',')
+    public function testImplode($array, $result, $with = ','): void
     {
         $string = A::create($array)->implode($with);
 
@@ -3430,14 +3430,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param string $result
      * @param string $with
      */
-    public function testImplodeKeys($array, $result, $with = ',')
+    public function testImplodeKeys($array, $result, $with = ','): void
     {
         $string = A::create($array)->implodeKeys($with);
 
         static::assertSame($result, $string);
     }
 
-    public function testIndexByReturnEmpty()
+    public function testIndexByReturnEmpty(): void
     {
         $array = [
             ['name' => 'moe', 'age' => 40],
@@ -3447,7 +3447,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([], A::create($array)->indexBy('vaaaa')->getArray());
     }
 
-    public function testIndexByReturnSome()
+    public function testIndexByReturnSome(): void
     {
         $array = [
             ['name' => 'moe', 'age' => 40],
@@ -3468,14 +3468,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $result
      * @param int   $to
      */
-    public function testInitial($array, $result, $to = 1)
+    public function testInitial($array, $result, $to = 1): void
     {
         $arrayy = A::create($array);
 
         static::assertSame($result, $arrayy->initial($to)->getArray());
     }
 
-    public function testIntersectsBooleanFlag()
+    public function testIntersectsBooleanFlag(): void
     {
         $a = ['foo', 'bar'];
         $b = ['bar', 'baz'];
@@ -3488,7 +3488,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse(A::create($a)->intersects($b));
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $array = ['   foo  ', '   bar   '];
         $arrayy = A::create($array)->invoke('trim');
@@ -3511,7 +3511,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([1 => '_____foo', 2 => '__bar'], $arrayy->getArray());
     }
 
-    public function testIsArrayAssoc()
+    public function testIsArrayAssoc(): void
     {
         $array0 = [1 => [1]];
         $array1 = [
@@ -3579,7 +3579,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testIsArrayMultidim()
+    public function testIsArrayMultidim(): void
     {
         $testArrays = [
             [1 => [1]],
@@ -3625,14 +3625,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param bool  $result
      */
-    public function testIsAssoc($array, $result)
+    public function testIsAssoc($array, $result): void
     {
         $resultTmp = A::create($array)->isAssoc();
 
         static::assertSame($result, $resultTmp);
     }
 
-    public function testIsEmpty()
+    public function testIsEmpty(): void
     {
         $testArrays = [
             [1 => [1]],
@@ -3672,7 +3672,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testIsNumeric()
+    public function testIsNumeric(): void
     {
         $testArrays = [
             [1 => [1]],
@@ -3712,7 +3712,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testIsSequentialRecursive()
+    public function testIsSequentialRecursive(): void
     {
         $testArrays = [
             [1 => [1]],
@@ -3755,7 +3755,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testIsSequential()
+    public function testIsSequential(): void
     {
         $testArrays = [
             [1 => [1]],
@@ -3794,7 +3794,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testIsSet()
+    public function testIsSet(): void
     {
         $arrayy = new A(['foo bar', 'öäü']);
         self::assertArrayy($arrayy);
@@ -3804,11 +3804,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $arrayy = new A([true => 'foo bar', 'lall' => 'öäü']);
         self::assertArrayy($arrayy);
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore staticMethod.impossibleType, isset.offset */
         static::assertTrue(isset($arrayy[true]));
     }
 
-    public function testJsonSerializable()
+    public function testJsonSerializable(): void
     {
         $arrayy = new A();
         $arrayy['user'] = ['lastname' => 'Moelleken'];
@@ -3828,7 +3828,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testKeys()
+    public function testKeys(): void
     {
         $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
         $keys = $arrayyTmp->keys();
@@ -3883,7 +3883,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $result
      * @param null  $take
      */
-    public function testLast($array, $result, $take = null)
+    public function testLast($array, $result, $take = null): void
     {
         $arrayy = A::create($array);
         $resultNew = $arrayy->lastsImmutable($take);
@@ -3894,7 +3894,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $resultNew->getArray());
     }
 
-    public function testMagicGet()
+    public function testMagicGet(): void
     {
         $array = [
             'one'  => 1,
@@ -3905,13 +3905,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $arrayy = new Arrayy($array);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         static::assertSame(1, $arrayy->one);
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         static::assertSame(2, $arrayy->test);
     }
 
-    public function testMagicInvoke()
+    public function testMagicInvoke(): void
     {
         $array = [
             'one' => 1,
@@ -3925,7 +3925,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('one', $arrayy(1));
     }
 
-    public function testMagicSetViaDotNotation()
+    public function testMagicSetViaDotNotation(): void
     {
         $arrayy = new A();
         $arrayy['user'] = ['lastname' => 'Moelleken'];
@@ -3949,7 +3949,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testMap(array $array)
+    public function testMap(array $array): void
     {
         $callable = static function ($value) {
             return \str_repeat($value, 2);
@@ -3967,13 +3967,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
 
         $arrayy = new A($array);
-        /* @phpstan-ignore-next-line | old way of "callable" */
+        /* @phpstan-ignore argument.type */
         $resultArrayy = $arrayy->map('str_repeat', false, 2);
         $resultArray = \array_map($callable, $array);
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
-    public function testMapSimpleExample()
+    public function testMapSimpleExample(): void
     {
         $arrayy = new A(['foo', 'Foo']);
         $resultArrayy = $arrayy->map('strtoupper');
@@ -3987,7 +3987,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $search
      * @param bool  $result
      */
-    public function testMatches($array, $search, $result)
+    public function testMatches($array, $search, $result): void
     {
         $arrayy = A::create($array);
 
@@ -4011,7 +4011,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $search
      * @param bool  $result
      */
-    public function testMatchesAny($array, $search, $result)
+    public function testMatchesAny($array, $search, $result): void
     {
         $arrayy = A::create($array);
 
@@ -4024,7 +4024,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $resultMatch);
     }
 
-    public function testMatchesAnySimple()
+    public function testMatchesAnySimple(): void
     {
         /**
          * @param int   $value
@@ -4045,7 +4045,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($result);
     }
 
-    public function testMatchesSimple()
+    public function testMatchesSimple(): void
     {
         /**
          * @param int   $value
@@ -4072,14 +4072,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param mixed $expected
      */
-    public function testMax($array, $expected)
+    public function testMax($array, $expected): void
     {
         $arrayy = new A($array);
 
         static::assertSame($expected, $arrayy->max(), 'tested: ' . \print_r($array, true));
     }
 
-    public function testMergeMethods()
+    public function testMergeMethods(): void
     {
         $array1 = [1 => 'one', 'foo' => 'bar1'];
         $array2 = ['foo' => 'bar2', 3 => 'three'];
@@ -4131,7 +4131,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $arrayNew
      * @param array $result
      */
-    public function testMergeAppendKeepIndex($array, $arrayNew, $result)
+    public function testMergeAppendKeepIndex($array, $arrayNew, $result): void
     {
         $arrayy = A::create($array)->mergeAppendKeepIndex($arrayNew);
 
@@ -4145,7 +4145,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $arrayNew
      * @param array $result
      */
-    public function testMergeAppendNewIndex($array, $arrayNew, $result)
+    public function testMergeAppendNewIndex($array, $arrayNew, $result): void
     {
         $arrayy = A::create($array)->mergeAppendNewIndex($arrayNew);
 
@@ -4159,7 +4159,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $arrayNew
      * @param array $result
      */
-    public function testMergePrependKeepIndex($array, $arrayNew, $result)
+    public function testMergePrependKeepIndex($array, $arrayNew, $result): void
     {
         $arrayy = A::create($array)->mergePrependKeepIndex($arrayNew);
 
@@ -4173,7 +4173,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $arrayNew
      * @param array $result
      */
-    public function testMergePrependNewIndex($array, $arrayNew, $result)
+    public function testMergePrependNewIndex($array, $arrayNew, $result): void
     {
         $arrayy = A::create($array)->mergePrependNewIndex($arrayNew);
 
@@ -4185,7 +4185,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testMergePrependNewIndexV2(array $array)
+    public function testMergePrependNewIndexV2(array $array): void
     {
         $secondArray = [
             'one' => 1,
@@ -4205,7 +4205,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testMergeToRecursively(array $array)
+    public function testMergeToRecursively(array $array): void
     {
         $secondArray = [
             'one' => 1,
@@ -4225,7 +4225,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testMergeWith(array $array)
+    public function testMergeWith(array $array): void
     {
         $secondArray = [
             'one' => 1,
@@ -4245,7 +4245,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testMergeWithRecursively(array $array)
+    public function testMergeWithRecursively(array $array): void
     {
         $secondArray = [
             'one' => 1,
@@ -4266,14 +4266,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param mixed $expected
      */
-    public function testMin($array, $expected)
+    public function testMin($array, $expected): void
     {
         $arrayy = new A($array);
 
         static::assertSame($expected, $arrayy->min(), 'tested:' . \print_r($array, true));
     }
 
-    public function testMissingToString()
+    public function testMissingToString(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -4285,7 +4285,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testMoveElementToFirstPlace()
+    public function testMoveElementToFirstPlace(): void
     {
         $arr1 = new A(['a', 'b', 'c', 'd', 'e']);
         $expected = [3 => 'd', 0 => 'a', 1 => 'b', 2 => 'c', 4 => 'e'];
@@ -4302,7 +4302,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $newArr2->toArray());
     }
 
-    public function testMoveElementToLastPlace()
+    public function testMoveElementToLastPlace(): void
     {
         $arr1 = new A(['a', 'b', 'c', 'd', 'e']);
         $expected = [0 => 'a', 1 => 'b', 2 => 'c', 4 => 'e', 3 => 'd'];
@@ -4319,7 +4319,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $newArr2->toArray());
     }
 
-    public function testMoveElement()
+    public function testMoveElement(): void
     {
         $arr1 = new A(['a', 'b', 'c', 'd', 'e']);
         $expected = ['a', 'd', 'b', 'c', 'e'];
@@ -4336,7 +4336,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $newArr2->toArray());
     }
 
-    public function testNested()
+    public function testNested(): void
     {
         $array = [
             'one' => 'yes_one',
@@ -4380,7 +4380,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testOffsetNullSet(array $array)
+    public function testOffsetNullSet(array $array): void
     {
         $offset = null;
         $value = 'new';
@@ -4397,7 +4397,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testOffsetSet(array $array)
+    public function testOffsetSet(array $array): void
     {
         $offset = 1;
         $value = 'new';
@@ -4414,7 +4414,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testOffsetUnset(array $array)
+    public function testOffsetUnset(array $array): void
     {
         $arrayy = new A($array);
         $offset = 1;
@@ -4423,7 +4423,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         unset($array[$offset]);
 
         static::assertSame($array, $arrayy->toArray());
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore staticMethod.alreadyNarrowedType, isset.offset */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
     }
@@ -4433,7 +4433,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testDeleteKey(array $array)
+    public function testDeleteKey(array $array): void
     {
         $arrayy = new A($array);
         $offset = 1;
@@ -4442,12 +4442,12 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         unset($array[$offset]);
 
         static::assertSame($array, $arrayy->toArray());
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore staticMethod.alreadyNarrowedType, isset.offset */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
     }
 
-    public function testOffsetUnsetViaDotNotation()
+    public function testOffsetUnsetViaDotNotation(): void
     {
         $array = ['a', 'b' => [0 => 'c', 1 => null]];
         $arrayy = new A($array);
@@ -4462,7 +4462,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         unset($array['b'][0]);
 
         static::assertSame($array, $arrayy->toArray());
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore staticMethod.alreadyNarrowedType, isset.offset */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
 
@@ -4481,7 +4481,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($arrayy->offsetExists($offset));
     }
 
-    public function testOrderByKey()
+    public function testOrderByKey(): void
     {
         $array = [
             99  => 'aaa',
@@ -4528,7 +4528,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
-    public function testOrderByValueKeepIndex()
+    public function testOrderByValueKeepIndex(): void
     {
         $array = [
             100 => 'abc',
@@ -4552,7 +4552,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
-    public function testOrderByValueNewIndex()
+    public function testOrderByValueNewIndex(): void
     {
         $array = [
             1   => 'hcd',
@@ -4581,7 +4581,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testPad(array $array)
+    public function testPad(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->pad(10, 5);
@@ -4595,7 +4595,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testPop(array $array)
+    public function testPop(array $array): void
     {
         $arrayy = new A($array);
         $poppedValue = $arrayy->pop();
@@ -4613,14 +4613,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $result
      * @param mixed $value
      */
-    public function testPrepend($array, $result, $value)
+    public function testPrepend($array, $result, $value): void
     {
         $arrayy = A::create($array)->prepend($value);
 
         static::assertSame($result, $arrayy->getArray());
     }
 
-    public function testPrependKey()
+    public function testPrependKey(): void
     {
         $arrayy = new A(['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01']);
         $arrayyResult = new A(
@@ -4659,7 +4659,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testPrependToEachKey($array, $result)
+    public function testPrependToEachKey($array, $result): void
     {
         $resultTmp = A::create($array)->prependToEachKey('_foo');
 
@@ -4679,7 +4679,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testPrependToEachValue($array, $result)
+    public function testPrependToEachValue($array, $result): void
     {
         $resultTmp = A::create($array)->prependToEachValue('_foo');
 
@@ -4691,7 +4691,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testPush(array $array)
+    public function testPush(array $array): void
     {
         $newElement1 = 5;
         $newElement2 = 10;
@@ -4710,7 +4710,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array    $array
      * @param int|null $take
      */
-    public function testRandom($array, $take = null)
+    public function testRandom($array, $take = null): void
     {
         $arrayy = A::create($array);
         $result = $arrayy->randomMutable($take)->getArray();
@@ -4718,7 +4718,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertContains($result[0], $array);
     }
 
-    public function testRandomKey()
+    public function testRandomKey(): void
     {
         $array = [1 => 'one', 2 => 'two'];
         $arrayy = A::create($array);
@@ -4728,7 +4728,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertArrayHasKey($result, $array);
     }
 
-    public function testRandomKeys()
+    public function testRandomKeys(): void
     {
         $array = [1 => 'one', 2 => 'two'];
         $arrayy = A::create($array);
@@ -4738,7 +4738,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertArrayHasKey($result[1], $array);
     }
 
-    public function testRandomValue()
+    public function testRandomValue(): void
     {
         $array = [1 => 'one', 2 => 'two'];
         $arrayy = A::create($array);
@@ -4747,7 +4747,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertContains($result, $array);
     }
 
-    public function testRandomValues()
+    public function testRandomValues(): void
     {
         $array = [1 => 'one', 2 => 'two'];
         $arrayy = A::create($array);
@@ -4763,7 +4763,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array    $array
      * @param int|null $take
      */
-    public function testRandomWeighted($array, $take = null)
+    public function testRandomWeighted($array, $take = null): void
     {
         $arrayy = A::create($array);
         $result = $arrayy->randomWeighted([0], $take)->getArray();
@@ -4771,7 +4771,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertContains($result[0], $array);
     }
 
-    public function testReduce()
+    public function testReduce(): void
     {
         $testArray = ['foo', 2 => 'bar', 4 => 'lall'];
 
@@ -4789,7 +4789,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $arrayy->getArray());
     }
 
-    public function testReduceViaFunction()
+    public function testReduceViaFunction(): void
     {
         $testArray = ['foo', 2 => 'bar', 4 => 'lall'];
 
@@ -4820,7 +4820,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $expected
      * @param bool  $unique
      */
-    public function testReduceDimension(array $array, array $expected, bool $unique = false)
+    public function testReduceDimension(array $array, array $expected, bool $unique = false): void
     {
         $arrayy = new A($array);
         $result = $arrayy->reduce_dimension($unique)->getArray();
@@ -4833,7 +4833,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testTestgetValues(array $array)
+    public function testTestgetValues(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->getValues()->getArray();
@@ -4847,7 +4847,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetValuesYield(array $array)
+    public function testGetValuesYield(array $array): void
     {
         $arrayy = new A($array);
         $resultGenerator = $arrayy->getValuesYield();
@@ -4866,7 +4866,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetGetBackwardsGenerator(array $array)
+    public function testGetGetBackwardsGenerator(array $array): void
     {
         $arrayy = new A($array);
         $resultGenerator = $arrayy->getBackwardsGenerator();
@@ -4885,7 +4885,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testReindex(array $array)
+    public function testReindex(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->reindex()->getArray();
@@ -4894,7 +4894,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([], \array_diff($resultArrayy, $resultArray));
     }
 
-    public function testReindexSimple()
+    public function testReindexSimple(): void
     {
         $testArray = [2 => 1, 3 => 2];
         $arrayy = new A($testArray);
@@ -4905,7 +4905,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $arrayy->getArray());
     }
 
-    public function testPartition()
+    public function testPartition(): void
     {
         $array = [1, 2, 3, 4];
         $arrayy = A::create($array)->partition(
@@ -4928,7 +4928,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertEquals([2 => 'bar', 4 => '123'], $arrayy[1]->toArray());
     }
 
-    public function testReject()
+    public function testReject(): void
     {
         $array = [1, 2, 3, 4];
         $arrayy = A::create($array)->reject(
@@ -4949,7 +4949,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([2 => 'bar', 4 => '123'], $arrayy->getArray());
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $array = [2, 4];
         $result = A::create($array)->validate(
@@ -4987,7 +4987,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $key
      * @param array $result
      */
-    public function testRemove($array, $key, $result)
+    public function testRemove($array, $key, $result): void
     {
         $arrayy = new A($array);
         $resultTmp = $arrayy->remove($key)->getArray();
@@ -5000,7 +5000,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testRemoveFirst($array, $result)
+    public function testRemoveFirst($array, $result): void
     {
         $arrayy = A::create($array)->removeFirst();
 
@@ -5013,7 +5013,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testRemoveLast($array, $result)
+    public function testRemoveLast($array, $result): void
     {
         $arrayy = A::create($array)->removeLast();
 
@@ -5027,7 +5027,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $result
      * @param mixed $key
      */
-    public function testRemoveV2($array, $result, $key)
+    public function testRemoveV2($array, $result, $key): void
     {
         $arrayy = A::create($array)->remove($key);
 
@@ -5041,7 +5041,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $result
      * @param mixed $value
      */
-    public function testRemoveValue($array, $result, $value)
+    public function testRemoveValue($array, $result, $value): void
     {
         $arrayy = A::create($array)->removeValue($value);
 
@@ -5054,7 +5054,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $arrayy->getArray());
     }
 
-    public function testRepeat()
+    public function testRepeat(): void
     {
         $arrayTmp = ['lall'];
         $arrayExpected = [['lall'], ['lall'], ['lall']];
@@ -5082,7 +5082,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($arrayExpected, $arrayyResult->getArray());
     }
 
-    public function testReplace()
+    public function testReplace(): void
     {
         $arraySource = [1 => 'foo', 2 => 'foo2', 3 => 'bar'];
         $arrayyTmp = A::create($arraySource);
@@ -5097,7 +5097,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($arraySource, $arrayyTmp->getArray());
     }
 
-    public function testReplaceAllKeys()
+    public function testReplaceAllKeys(): void
     {
         $firstArray = [
             1 => 'one',
@@ -5117,7 +5117,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($resultArray, $resultArrayy);
     }
 
-    public function testReplaceAllKeysV2()
+    public function testReplaceAllKeysV2(): void
     {
         $firstArray = [
             1 => 'one',
@@ -5141,7 +5141,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $resultArrayy);
     }
 
-    public function testReplaceAllValues()
+    public function testReplaceAllValues(): void
     {
         $firstArray = [
             1 => 'one',
@@ -5161,7 +5161,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $firstArray, $resultArray);
     }
 
-    public function testReplaceAllValuesV2()
+    public function testReplaceAllValuesV2(): void
     {
         $firstArray = [
             1 => 'one',
@@ -5191,7 +5191,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testReplaceIn(array $array)
+    public function testReplaceIn(array $array): void
     {
         $secondArray = [
             'one' => 1,
@@ -5211,7 +5211,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testReplaceInRecursively(array $array)
+    public function testReplaceInRecursively(array $array): void
     {
         $secondArray = [
             'one' => 1,
@@ -5226,7 +5226,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([], \array_diff($resultArrayy, $resultArray));
     }
 
-    public function testReplaceKeys()
+    public function testReplaceKeys(): void
     {
         $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->replaceKeys([1 => 2, 'foo' => 'replaced']);
 
@@ -5239,7 +5239,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('foo', $arrayy['replaced']);
     }
 
-    public function testReplaceOneValue()
+    public function testReplaceOneValue(): void
     {
         $testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
         $arrayy = A::create($testArray)->replaceOneValue('foo', 'replaced');
@@ -5248,7 +5248,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('foobar', $arrayy['foobar']);
     }
 
-    public function testReplaceV2()
+    public function testReplaceV2(): void
     {
         $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
 
@@ -5263,7 +5263,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertNotSame($arrayyTmp, $arrayy);
     }
 
-    public function testReplaceValues()
+    public function testReplaceValues(): void
     {
         $testArray = ['bar', 'foo' => 'foo', 'foobar' => 'foobar'];
         $arrayy = A::create($testArray)->replaceValues('foo', 'replaced');
@@ -5277,7 +5277,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testReplaceWith(array $array)
+    public function testReplaceWith(array $array): void
     {
         $secondArray = [
             'one' => 1,
@@ -5297,7 +5297,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testReplaceWithRecursively(array $array)
+    public function testReplaceWithRecursively(array $array): void
     {
         $secondArray = [
             'one' => 1,
@@ -5319,7 +5319,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $result
      * @param int   $from
      */
-    public function testRest($array, $result, $from = 1)
+    public function testRest($array, $result, $from = 1): void
     {
         $arrayy = A::create($array);
 
@@ -5332,7 +5332,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testReverse($array, $result)
+    public function testReverse($array, $result): void
     {
         $arrayy = A::create($array)->reverse();
 
@@ -5346,7 +5346,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array            $array
      * @param mixed            $value
      */
-    public function testSearchIndex($expected, $array, $value)
+    public function testSearchIndex($expected, $array, $value): void
     {
         $arrayy = new A($array);
 
@@ -5360,26 +5360,21 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param mixed $value
      */
-    public function testSearchValue($expected, $array, $value)
+    public function testSearchValue($expected, $array, $value): void
     {
         $arrayy = new A($array);
 
         static::assertSame($expected, $arrayy->searchValue($value)->getArray());
     }
 
-    public function testSerialize()
+    public function testSerialize(): void
     {
         $testArray = [1, 4, 7];
         $arrayy = A::create($testArray);
         $result = $arrayy->serialize();
 
-        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-            static::assertStringContainsString('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
-            static::assertStringContainsString($result, \serialize($arrayy));
-        } else {
-            static::assertContains('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
-            static::assertContains($result, \serialize($arrayy));
-        }
+        static::assertStringContainsString('a:3:{i:0;i:1;i:1;i:4;i:2;i:7;}', $result);
+        static::assertStringContainsString($result, \serialize($arrayy));
         static::assertSame($arrayy->getArray(), \unserialize(\serialize($arrayy))->getArray());
 
         // create a object with an "arrayy"-property
@@ -5391,18 +5386,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         // serialize + tests
         if (\PHP_VERSION_ID < 70400) {
-            if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-                static::assertStringContainsString('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
-            } else {
-                static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
-            }
+            static::assertStringContainsString('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
             static::assertNotSame($object, \unserialize(\serialize($object)));
         } else {
-            if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-                static::assertStringContainsString('O:8:"stdClass":1:{s:6:"arrayy";O:13:"Arrayy\\Arrayy":', \serialize($object));
-            } else {
-                static::assertContains('O:8:"stdClass":1:{s:6:"arrayy";O:13:"Arrayy\\Arrayy":', \serialize($object));
-            }
+            static::assertStringContainsString('O:8:"stdClass":1:{s:6:"arrayy";O:13:"Arrayy\\Arrayy":', \serialize($object));
             static::assertNotSame($object, \unserialize(\serialize($object)));
         }
 
@@ -5427,26 +5414,18 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         // serialize + tests
         if (\PHP_VERSION_ID < 70400) {
             static::assertInstanceOf(CityData::class, $model);
-            if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-                static::assertStringContainsString('C:21:"Arrayy\tests\CityData":', \serialize($model));
-            } else {
-                static::assertContains('C:21:"Arrayy\tests\CityData":', \serialize($model));
-            }
+            static::assertStringContainsString('C:21:"Arrayy\tests\CityData":', \serialize($model));
             static::assertNotSame($model, \unserialize(\serialize($model)));
             static::assertInstanceOf(CityData::class, $model);
         } else {
             static::assertInstanceOf(CityData::class, $model);
-            if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-                static::assertStringContainsString('O:21:"Arrayy\tests\CityData":', \serialize($model));
-            } else {
-                static::assertContains('O:21:"Arrayy\tests\CityData":', \serialize($model));
-            }
+            static::assertStringContainsString('O:21:"Arrayy\tests\CityData":', \serialize($model));
             static::assertNotSame($model, \unserialize(\serialize($model)));
             static::assertInstanceOf(CityData::class, $model);
         }
     }
 
-    public function testSerializeSimple()
+    public function testSerializeSimple(): void
     {
         $arrayy = A::create([1, 'a', 4.4]);
 
@@ -5460,7 +5439,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $key
      * @param mixed $value
      */
-    public function testSet($array, $key, $value)
+    public function testSet($array, $key, $value): void
     {
         $arrayy = new A($array);
         $arrayy = $arrayy->set($key, $value)->getArray();
@@ -5474,14 +5453,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param mixed $key
      * @param mixed $value
      */
-    public function testSetAndGet($array, $key, $value)
+    public function testSetAndGet($array, $key, $value): void
     {
         $arrayy = new A($array);
         $result = $arrayy->setAndGet($key, $value);
         static::assertSame($value, $result);
     }
 
-    public function testSetAndGetSimple()
+    public function testSetAndGetSimple(): void
     {
         $arrayy = new A([1, 2, 3]);
         $result = $arrayy->setAndGet(0, 4);
@@ -5498,7 +5477,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
-    public function testSetV2()
+    public function testSetV2(): void
     {
         $arrayy = new A(['foo bar', 'UTF-8']);
         $arrayy[1] = 'öäü';
@@ -5506,15 +5485,15 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('foo bar,öäü', (string) $arrayy);
     }
 
-    public function testSetValueViaMagicSet()
+    public function testSetValueViaMagicSet(): void
     {
         $arrayy = new A(['Lars' => ['lastname' => 'Mueller2']]);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         $arrayy->Lars = ['lastname' => 'Moelleken'];
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         $arrayy->Sven = ['lastname' => 'Moelleken'];
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         $arrayy->foo = ['lastname' => null];
 
         $resultTmp = $arrayy->get('Lars');
@@ -5536,7 +5515,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertNull($resultTmp);
     }
 
-    public function testSetViaDotNotation()
+    public function testSetViaDotNotation(): void
     {
         $arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
 
@@ -5547,10 +5526,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame(['lastname' => 'Moelleken'], $arrayy['Lars']->getArray());
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         static::assertSame(['lastname' => 'Moelleken'], $arrayy->Lars->getArray());
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         static::assertSame('Moelleken', $arrayy->Lars->lastname);
 
         static::assertSame('Moelleken', $arrayy['Lars']['lastname']);
@@ -5585,7 +5564,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Mueller', $resultTmp);
 
         // set a new value, again - via object-syntax
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         $arrayy->Lars = ['lastname' => 'Mueller2'];
 
         $resultTmp = $arrayy->get('Lars');
@@ -5607,7 +5586,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testShift(array $array)
+    public function testShift(array $array): void
     {
         $arrayy = new A($array);
         $shiftedValue = $arrayy->shift();
@@ -5618,7 +5597,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($resultArray, $arrayy->toArray());
     }
 
-    public function testShuffle()
+    public function testShuffle(): void
     {
         $arrayy = A::create([1 => 'bar', 'foo' => 'foo'])->shuffle();
 
@@ -5633,7 +5612,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertContains('foo', $arrayy->getArray());
     }
 
-    public function testSimpleAt()
+    public function testSimpleAt(): void
     {
         $result = A::create();
         $closure = static function ($value, $key) use ($result) {
@@ -5644,7 +5623,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame(A::create([':foo:', 'bar' => ':bis:'])->getArray(), $result->getArray());
     }
 
-    public function testSizeIs()
+    public function testSizeIs(): void
     {
         $a = A::create([1, 2]);
 
@@ -5653,7 +5632,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($a->sizeIs(0));
     }
 
-    public function testSizeIsLessThen()
+    public function testSizeIsLessThen(): void
     {
         $a = A::create([1, 2]);
 
@@ -5662,7 +5641,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertTrue($a->sizeIsLessThan(3));
     }
 
-    public function testSizeIsGreaterThan()
+    public function testSizeIsGreaterThan(): void
     {
         $a = A::create([1, 2]);
 
@@ -5671,7 +5650,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertTrue($a->sizeIsGreaterThan(0));
     }
 
-    public function testSizeIsBetween()
+    public function testSizeIsBetween(): void
     {
         $a = A::create([1, 2]);
 
@@ -5681,7 +5660,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertTrue($a->sizeIsBetween(3, 1));
     }
 
-    public function testSimpleEach()
+    public function testSimpleEach(): void
     {
         $closure = static function ($value) {
             return ':' . $value . ':';
@@ -5691,7 +5670,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame([':foo:', 'bar' => ':bis:'], $result->getArray());
     }
 
-    public function testSimpleRandom()
+    public function testSimpleRandom(): void
     {
         $testArray = [-8 => -9, 1, 2 => false];
         $arrayy = A::create($testArray);
@@ -5722,7 +5701,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertCount(3, $result);
     }
 
-    public function testSimpleRandomWeighted()
+    public function testSimpleRandomWeighted(): void
     {
         $testArray = ['foo', 'bar'];
         $result = A::create($testArray)->randomWeighted(['bar' => 2]);
@@ -5738,7 +5717,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testSlice(array $array)
+    public function testSlice(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->slice(1, 1);
@@ -5747,7 +5726,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
-    public function testSort()
+    public function testSort(): void
     {
         $testArray = [5, 3, 1, 2, 4];
         $under = A::create($testArray)->sorter(null, 'desc');
@@ -5797,7 +5776,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testSortAscWithPreserveKeys(array $array)
+    public function testSortAscWithPreserveKeys(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->sort(\SORT_ASC, \SORT_REGULAR, true);
@@ -5830,7 +5809,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testSortAscWithoutPreserveKeys(array $array)
+    public function testSortAscWithoutPreserveKeys(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->sort(\SORT_ASC, \SORT_REGULAR, false);
@@ -5854,7 +5833,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testSortDescWithPreserveKeys(array $array)
+    public function testSortDescWithPreserveKeys(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->sort(\SORT_DESC, \SORT_REGULAR, true);
@@ -5878,7 +5857,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testSortImmutableDescWithPreserveKeys(array $array)
+    public function testSortImmutableDescWithPreserveKeys(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->sortImmutable(\SORT_DESC, \SORT_REGULAR, true);
@@ -5902,7 +5881,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testSortDescWithoutPreserveKeys(array $array)
+    public function testSortDescWithoutPreserveKeys(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->sort(\SORT_DESC, \SORT_REGULAR, false);
@@ -5937,7 +5916,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array  $result
      * @param string $direction
      */
-    public function testSortKeys($array, $result, $direction = 'ASC')
+    public function testSortKeys($array, $result, $direction = 'ASC'): void
     {
         $arrayy = A::create($array)->sortKeys($direction);
 
@@ -5949,7 +5928,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testSortKeysAsc(array $array)
+    public function testSortKeysAsc(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->sortKeys(\SORT_ASC, \SORT_REGULAR);
@@ -5982,7 +5961,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testNatcasesort(array $array)
+    public function testNatcasesort(array $array): void
     {
         \natcasesort($array);
         $arrayy = new A($array);
@@ -5998,7 +5977,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testNatsortImmutable(array $array)
+    public function testNatsortImmutable(array $array): void
     {
         \natsort($array);
         $arrayy = new A($array);
@@ -6014,7 +5993,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testNatsort(array $array)
+    public function testNatsort(array $array): void
     {
         \natsort($array);
         $arrayy = new A($array);
@@ -6030,7 +6009,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testNatcasesortImmutable(array $array)
+    public function testNatcasesortImmutable(array $array): void
     {
         \natcasesort($array);
         $arrayy = new A($array);
@@ -6046,7 +6025,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testUasort(array $array)
+    public function testUasort(array $array): void
     {
         $function = static function ($a, $b) {
             if ($a == $b) {
@@ -6069,7 +6048,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testUasortImmutable(array $array)
+    public function testUasortImmutable(array $array): void
     {
         $function = static function ($a, $b) {
             if ($a == $b) {
@@ -6092,7 +6071,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testSortKeysDesc(array $array)
+    public function testSortKeysDesc(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = $arrayy->sortKeys(\SORT_DESC, \SORT_REGULAR);
@@ -6120,7 +6099,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
     }
 
-    public function testSortV2()
+    public function testSortV2(): void
     {
         $array = [
             1   => 'hcd',
@@ -6144,7 +6123,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
-    public function testSplit()
+    public function testSplit(): void
     {
         self::assertArrayy(A::create()->split());
 
@@ -6195,7 +6174,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testStaticCreate(array $array)
+    public function testStaticCreate(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = A::create($array);
@@ -6208,7 +6187,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testStaticCreateFromGeneratorImmutableFromArray(array $array)
+    public function testStaticCreateFromGeneratorImmutableFromArray(array $array): void
     {
         $arrayy = A::create($array);
         $generator = $arrayy->getGenerator();
@@ -6223,7 +6202,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param int   $count
      */
-    public function testStaticCreateFromGeneratorFunctionFromArray(array $array, int $count)
+    public function testStaticCreateFromGeneratorFunctionFromArray(array $array, int $count): void
     {
         $arrayy = A::create($array);
         $resultArrayy = A::createFromGeneratorFunction(
@@ -6242,7 +6221,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testStaticCreateFromJson(array $array)
+    public function testStaticCreateFromJson(array $array): void
     {
         $json = (string) \json_encode($array);
 
@@ -6257,7 +6236,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testStaticCreateFromObject(array $array)
+    public function testStaticCreateFromObject(array $array): void
     {
         $arrayy = A::create($array);
         $resultArrayy = A::createFromObject($arrayy);
@@ -6265,7 +6244,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
-    public function testCustomMerge()
+    public function testCustomMerge(): void
     {
         $arr = [
             0 => ['title' => 'A', 'quantity' => 2],
@@ -6292,7 +6271,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testCreateFromObjectAndDot()
+    public function testCreateFromObjectAndDot(): void
     {
         $s = new \stdClass();
         $s->foo = 'bar';
@@ -6323,7 +6302,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $services->getArray());
     }
 
-    public function testStaticCreateFromObjectVars()
+    public function testStaticCreateFromObjectVars(): void
     {
         $a = new \stdClass();
         $a->x = 42;
@@ -6348,7 +6327,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param string                $string
      * @param non-empty-string|null $separator
      */
-    public function testStaticCreateFromString($string, $separator)
+    public function testStaticCreateFromString($string, $separator): void
     {
         if ($separator !== null) {
             $array = \explode($separator, $string);
@@ -6363,7 +6342,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
-    public function testStripEmpty()
+    public function testStripEmpty(): void
     {
         $arrayy = new A(['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01']);
         $arrayyResult = new A(['id' => 999, 'name' => 'flux', 'value' => 6868, 'when' => '2015-01-01']);
@@ -6371,7 +6350,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($arrayyResult->toString(), $arrayy->stripEmpty()->toString());
     }
 
-    public function testSwap()
+    public function testSwap(): void
     {
         $arrayy = new A(['id' => 999, 'name' => 'flux', 'group' => null, 'value' => 6868, 'when' => '2015-01-01']);
         $arrayyResult = new A(
@@ -6394,7 +6373,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $arrayNew
      * @param array $result
      */
-    public function testTestdiffReverse($array, $arrayNew, $result)
+    public function testTestdiffReverse($array, $arrayNew, $result): void
     {
         $arrayy = A::create($array)->diffReverse($arrayNew);
 
@@ -6407,7 +6386,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param bool  $result
      */
-    public function testTestisMultiArray($array, $result)
+    public function testTestisMultiArray($array, $result): void
     {
         $resultTmp = A::create($array)->isMultiArray();
 
@@ -6420,7 +6399,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param string $expected
      * @param array  $array
      */
-    public function testToString($expected, $array)
+    public function testToString($expected, $array): void
     {
         static::assertSame($expected, (string) new A($array));
     }
@@ -6431,7 +6410,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testUnique($array, $result)
+    public function testUnique($array, $result): void
     {
         $arrayy = A::create($array)->unique();
         static::assertSame($result, $arrayy->getArray());
@@ -6446,13 +6425,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @param array $array
      * @param array $result
      */
-    public function testUniqueKeepIndex($array, $result)
+    public function testUniqueKeepIndex($array, $result): void
     {
         $arrayy = A::create($array)->uniqueKeepIndex();
         static::assertSame($result, $arrayy->getArray());
     }
 
-    public function testUnset()
+    public function testUnset(): void
     {
         $arrayy = new A(['foo bar', 'öäü']);
         unset($arrayy[1]);
@@ -6461,7 +6440,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertNull($arrayy[1]);
     }
 
-    public function testUnsetSimple()
+    public function testUnsetSimple(): void
     {
         $arrayy = new A([1 => 1, 2 => 2, 3 => 3]);
         unset($arrayy[2]);
@@ -6479,7 +6458,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testUnshift(array $array)
+    public function testUnshift(array $array): void
     {
         $newElement1 = 5;
         $newElement2 = 10;
@@ -6492,7 +6471,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertMutable($arrayy, $resultArrayy, $resultArray);
     }
 
-    public function testValues()
+    public function testValues(): void
     {
         $arrayyTmp = A::create([1 => 'foo', 2 => 'foo2', 3 => 'bar']);
         $values = $arrayyTmp->values();
@@ -6506,7 +6485,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testWalk(array $array)
+    public function testWalk(array $array): void
     {
         $callable = static function (&$value, $key) {
             $value = $key;
@@ -6525,7 +6504,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testWalkRecursively(array $array)
+    public function testWalkRecursively(array $array): void
     {
         $callable = static function (&$value, $key) {
             $value = $key;
@@ -6539,7 +6518,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertMutable($arrayy, $resultArrayy, $resultArray);
     }
 
-    public function testWalkSimple()
+    public function testWalkSimple(): void
     {
         $callable = static function (&$value, $key) {
             $value = $key;
@@ -6553,7 +6532,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $resultArrayy->getArray());
     }
 
-    public function testWalkSimpleRecursively()
+    public function testWalkSimpleRecursively(): void
     {
         $callable = static function (&$value, $key) {
             $value = $key;
@@ -6697,12 +6676,12 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param A<int|string,mixed>                            $arrayzy
-     * @param A<int,mixed>|A<int,string>|A<int|string,mixed> $resultArrayzy
+     * @param A<int|string,mixed,array<int|string,mixed>>                            $arrayzy
+     * @param A<int,mixed,array<int,mixed>>|A<int,string,array<int,string>>|A<int|string,mixed,array<int|string,mixed>> $resultArrayzy
      * @param array                                          $array
      * @param array                                          $resultArray
      */
-    protected static function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray)
+    protected static function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray): void
     {
         static::assertNotSame($arrayzy, $resultArrayzy);
         static::assertSame($array, $arrayzy->toArray());
@@ -6710,11 +6689,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param A<array-key,mixed> $arrayzy
-     * @param A<array-key,mixed> $resultArrayzy
+     * @param A<array-key,mixed,array<array-key,mixed>> $arrayzy
+     * @param A<array-key,mixed,array<array-key,mixed>> $resultArrayzy
      * @param array              $resultArray
      */
-    protected static function assertMutable(A $arrayzy, A $resultArrayzy, array $resultArray)
+    protected static function assertMutable(A $arrayzy, A $resultArrayzy, array $resultArray): void
     {
         static::assertSame($arrayzy, $resultArrayzy);
         static::assertSame($resultArray, $arrayzy->toArray());

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class ObjectTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new \Arrayy\Type\ObjectCollection([
             new \stdClass(),
@@ -29,11 +29,11 @@ final class ObjectTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new \Arrayy\Type\ObjectCollection(['strtolower', 1]);
     }
 }

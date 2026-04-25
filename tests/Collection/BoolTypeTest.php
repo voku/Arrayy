@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class BoolTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new BoolCollection([true, true, false, false]);
 
@@ -22,7 +22,7 @@ final class BoolTypeTest extends TestCase
         );
     }
 
-    public function testBoolArray()
+    public function testBoolArray(): void
     {
         $set = new \Arrayy\Type\BoolArrayCollection([[true, true], [false, false]]);
 
@@ -33,7 +33,7 @@ final class BoolTypeTest extends TestCase
 
         $test = null;
         foreach ($set->getIterator() as $foo) {
-            /* @phpstan-ignore-next-line */
+            /* @phpstan-ignore identical.alwaysFalse */
             if ($foo === '1') {
                 $test = false;
             }
@@ -47,19 +47,19 @@ final class BoolTypeTest extends TestCase
         static::assertTrue($test);
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new BoolCollection([true, true, false, 1]);
     }
 
-    public function testBoolArrayWrongValue()
+    public function testBoolArrayWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new BoolCollection([[true, true], false, [true]]);
     }
 }

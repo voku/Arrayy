@@ -3,7 +3,7 @@
 namespace Arrayy\tests;
 
 /**
- * @extends \Arrayy\Arrayy<array-key,mixed>
+ * @extends \Arrayy\Arrayy<array-key,mixed,array<array-key,mixed>>
  */
 class NativeCityData extends \Arrayy\Arrayy
 {

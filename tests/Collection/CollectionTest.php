@@ -16,7 +16,7 @@ use function Arrayy\collection;
  */
 final class CollectionTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSimpleGenericCollection()
+    public function testSimpleGenericCollection(): void
     {
         $pets = new \stdClass();
         $pets->foo = 1;
@@ -29,7 +29,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame([$pets, $colors], $collection->getCollection());
     }
 
-    public function testSimpleBaseGenericCollection()
+    public function testSimpleBaseGenericCollection(): void
     {
         $pets = new \stdClass();
         $pets->foo = 1;
@@ -50,18 +50,18 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf(Collection::class, $baseCollection);
     }
 
-    public function testSimpleGenericFailCollection()
+    public function testSimpleGenericFailCollection(): void
     {
         $this->expectException(\TypeError::class);
 
         $pets = new \stdClass();
         $pets->foo = 1;
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         collection(ModelInterface::class, $pets);
     }
 
-    public function testUserDataCollectionFromJsonWithNotMatchedFields()
+    public function testUserDataCollectionFromJsonWithNotMatchedFields(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -69,7 +69,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         UserDataCollection::createFromJsonMapper($json);
     }
 
-    public function testUserDataCollectionFromJson()
+    public function testUserDataCollectionFromJson(): void
     {
         $json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);
@@ -80,15 +80,14 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf(\Arrayy\tests\UserData::class, $userData);
         static::assertSame('Lars', $userData->firstName);
         static::assertInstanceOf(\Arrayy\tests\CityData::class, $userData->city);
-        /* @phpstan-ignore-next-line */
         static::assertSame('Düsseldorf', $userData->city->name);
     }
 
-    public function testUserDataCollectionFromJsonMulti()
+    public function testUserDataCollectionFromJsonMulti(): void
     {
         $json = '[{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}, {"id":1,"firstName":"Sven","lastName":"Moelleken","city":{"name":"Köln","plz":null,"infos":["foo"]}}]';
         /** @var \Arrayy\Arrayy|\Arrayy\tests\UserData[] $userDataCollection */
-        /** @phpstan-var \Arrayy\Arrayy<int, \Arrayy\tests\UserData> $userDataCollection */
+        /** @phpstan-var \Arrayy\Arrayy<int, \Arrayy\tests\UserData, array<int, \Arrayy\tests\UserData>> $userDataCollection */
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);
 
         $userDataCollection->getAll();
@@ -104,7 +103,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Köln', $userData1->city->name);
     }
 
-    public function testSimpleCollection()
+    public function testSimpleCollection(): void
     {
         $pets = new \stdClass();
         $pets->foo = 'fooooo';
@@ -121,15 +120,13 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame('fooooo', $stdClassCollection->get('123.foo'));
     }
 
-    public function testJsonSerializableCollection()
+    public function testJsonSerializableCollection(): void
     {
         $pets = new \Arrayy\Arrayy();
-        /* @phpstan-ignore-next-line */
-        $pets->foo = 'fooooo';
+        $pets['foo'] = 'fooooo';
 
         $colors = new \Arrayy\Arrayy();
-        /* @phpstan-ignore-next-line */
-        $colors->color = 'red';
+        $colors['color'] = 'red';
 
         $jsonSerializableCollection = new \Arrayy\Type\JsonSerializableCollection([$pets, $colors]);
 
@@ -144,7 +141,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testBasic()
+    public function testBasic(): void
     {
         $pets = new \stdClass();
         $pets->foo = 'fooooo';
@@ -171,14 +168,14 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testBasicFail()
+    public function testBasicFail(): void
     {
         $this->expectException(\TypeError::class);
 
         new StdClassCollection([123, 'test']);
     }
 
-    public function testModelCollection()
+    public function testModelCollection(): void
     {
         $pets = new ModelA(['cat', 'dog', 'bird']);
         $colors = new ModelB(['red', 'yellow', 'green', 'white']);
@@ -192,7 +189,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame([$pets, $colors], $modelCollection->getCollection());
     }
 
-    public function testConstructorException()
+    public function testConstructorException(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -209,7 +206,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame(ModelInterface::class, $modelCollection->getType());
     }
 
-    public function testAddExceptionV1()
+    public function testAddExceptionV1(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -226,13 +223,13 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
 
-        /* @phpstan-ignore-next-line | offset on object */
+        /* @phpstan-ignore offsetAssign.valueType */
         $modelCollection[] = $cityData;
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
     }
 
-    public function testAddExceptionV2()
+    public function testAddExceptionV2(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -249,13 +246,13 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         $modelCollection->add($cityData);
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
     }
 
-    public function testWhere()
+    public function testWhere(): void
     {
         $pet1 = new ModelA(['pet' => ['cat']]);
         $pet2 = new ModelB(['pet' => ['dog', 'bird']]);
@@ -270,7 +267,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($modelCollectionExpected, $newCollection);
     }
 
-    public function testClear()
+    public function testClear(): void
     {
         $pet1 = new ModelA(['pet' => ['cat']]);
         $pet2 = new ModelB(['pet' => ['dog', 'bird']]);
@@ -285,14 +282,14 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame(0, $modelCollection->count());
     }
 
-    public function testTypesForAllProperties()
+    public function testTypesForAllProperties(): void
     {
         $model = new ModelC(['test', 'foo']);
 
         static::assertSame(['test', 'foo'], $model->getArray());
     }
 
-    public function testTypesForAllPropertiesFail()
+    public function testTypesForAllPropertiesFail(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected to be of type {string}, instead got value `1` with type {integer}.');
@@ -300,14 +297,14 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         new ModelC(['test', 1]);
     }
 
-    public function testTypesForOneProperties()
+    public function testTypesForOneProperties(): void
     {
         $model = new ModelC(['test', 'foo']);
 
         static::assertSame(['test', 'foo'], $model->getArray());
     }
 
-    public function testTypesForOnePropertiesFail()
+    public function testTypesForOnePropertiesFail(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected to be of type {int}, instead got value `a` with type {string}.');
@@ -315,14 +312,14 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         new ModelD(['foo' => 'a']);
     }
 
-    public function testTypesForOnePropertiesCorrect()
+    public function testTypesForOnePropertiesCorrect(): void
     {
         $d = new ModelD(['foo' => 1]);
 
         static::assertSame(['foo' => 1], $d->getArray());
     }
 
-    public function testPrependExceptionV1()
+    public function testPrependExceptionV1(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -339,13 +336,13 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $modelCollection = new ModelsCollection([$pets, $colors]);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         $modelCollection->prepend($cityData);
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
     }
 
-    public function testPrependExceptionV2()
+    public function testPrependExceptionV2(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -365,13 +362,13 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $rand = $modelCollection->randomImmutable(1);
         static::assertInstanceOf(ModelInterface::class, $rand->first());
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         $modelCollection->prepend($cityData, 0);
 
         static::assertSame(ModelInterface::class, $modelCollection->getType());
     }
 
-    public function testColumnByArrayKey()
+    public function testColumnByArrayKey(): void
     {
         $bar1 = new ModelA();
         $bar1['name'] = 'a';
@@ -397,7 +394,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testWithGeneratorsV1()
+    public function testWithGeneratorsV1(): void
     {
         $arrayyFunction = static function () {
             $bar1 = new ModelA();
@@ -427,7 +424,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
         $bar1 = new ModelA();
         $bar1['name'] = 'a';

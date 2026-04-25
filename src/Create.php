@@ -2,62 +2,6 @@
 
 declare(strict_types=1);
 
-namespace {
-    if (\PHP_VERSION_ID < 70300) {
-        if (!\function_exists('is_countable')) {
-            /**
-             * @param mixed $var
-             *
-             * @return bool
-             */
-            function is_countable($var)
-            {
-                return \is_array($var)
-                       ||
-                       $var instanceof SimpleXMLElement
-                       ||
-                       $var instanceof Countable
-                       ||
-                       $var instanceof ResourceBundle;
-            }
-        }
-
-        if (!\function_exists('array_key_first')) {
-            /**
-             * @param array<mixed> $array
-             *
-             * @return int|string|null
-             */
-            function array_key_first(array $array)
-            {
-                foreach ($array as $key => $value) {
-                    return $key;
-                }
-
-                return null;
-            }
-        }
-
-        if (!\function_exists('array_key_last')) {
-            /**
-             * @param array<mixed> $array
-             *
-             * @return int|string|null
-             */
-            function array_key_last(array $array)
-            {
-                if (\count($array) === 0) {
-                    return null;
-                }
-
-                return \array_keys(
-                    \array_slice($array, -1, 1, true)
-                )[0];
-            }
-        }
-    }
-}
-
 namespace Arrayy {
     use Arrayy\Collection\Collection;
     use Arrayy\TypeCheck\TypeCheckArray;
@@ -69,7 +13,7 @@ namespace Arrayy {
          *
          * @param mixed $data
          *
-         * @return Arrayy<int|string,mixed>
+         * @return Arrayy<int|string,mixed,array<int|string,mixed>>
          */
         function create($data): Arrayy
         {

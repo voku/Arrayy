@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class TypeTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = Collection::construct('string', ['A', 'B', 'C', 'D']);
 
@@ -22,13 +22,13 @@ final class TypeTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
         /** @noinspection PhpParamsInspection */
         /** @noinspection PhpStrictTypeCheckingInspection */
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new Collection(\stdClass::class, [new \stdClass(), 'A']);
     }
 }

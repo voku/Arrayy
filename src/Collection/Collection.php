@@ -97,7 +97,7 @@ class Collection extends AbstractCollection
      *                                                         </p>
      * @param TypeInterface|null $type
      *
-     * @phpstan-param array<array-key,T>|array<TKey,T>|\Arrayy\Arrayy<TKey,T> $data
+     * @phpstan-param array<array-key,T>|array<TKey,T>|\Arrayy\Arrayy<TKey,T,array<TKey,T>> $data
      * @phpstan-param class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass
      */
     public function __construct(
@@ -115,7 +115,7 @@ class Collection extends AbstractCollection
         }
 
         if ($type !== null) {
-            /* @phpstan-ignore-next-line - we use the "TypeInterface" only as base */
+            /* @phpstan-ignore assign.propertyType */
             $this->properties = $type;
         }
 
@@ -136,7 +136,7 @@ class Collection extends AbstractCollection
      * @template       TConstruct
      * @phpstan-param  string|class-string|class-string<TConstruct>|TypeInterface|TypeCheckArray<array-key,TypeCheckInterface>|array<TypeCheckInterface> $type
      * @phpstan-param  array<array-key,TConstruct> $data
-     * @phpstan-return static<array-key,TConstruct>
+     * @phpstan-return static
      */
     public static function construct(
         $type,

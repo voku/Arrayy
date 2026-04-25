@@ -23,7 +23,7 @@ use Arrayy\TypeCheck\TypeCheckSimple;
  *
  * @template   TKey of array-key
  * @template   T
- * @extends    Arrayy<TKey,T>
+ * @extends    Arrayy<TKey,T,array<TKey,T>>
  * @implements CollectionInterface<TKey,T>
  */
 abstract class AbstractCollection extends Arrayy implements CollectionInterface
@@ -62,7 +62,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
      *
-     * @phpstan-param array<TKey,T>|\Arrayy\Arrayy<TKey,T>|\Closure():array<TKey,T>|mixed $data
+     * @phpstan-param array<TKey,T>|\Arrayy\Arrayy<TKey,T,array<TKey,T>>|\Closure():array<TKey,T>|mixed $data
      * @phpstan-param class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass
      */
     public function __construct(
@@ -105,7 +105,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @phpstan-param T|static $value
      * @phpstan-param TKey|null $key
-     * @phpstan-return static<TKey,T>
+     * @phpstan-return static
      */
     public function append($value, $key = null): Arrayy
     {
@@ -121,7 +121,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             return $this;
         }
 
-        /* @phpstan-ignore-next-line | special? */
+        /* @phpstan-ignore argument.type */
         $return = parent::append($value, $key);
         $this->array = $return->array;
         $this->generator = null;
@@ -168,7 +168,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      *
      * @phpstan-param T|static $value
      * @phpstan-param TKey|null $key
-     * @phpstan-return static<TKey,T>
+     * @phpstan-return static
      */
     public function prepend($value, $key = null): Arrayy
     {
@@ -184,7 +184,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             return $this;
         }
 
-        /* @phpstan-ignore-next-line | special? */
+        /* @phpstan-ignore argument.type */
         $return = parent::prepend($value, $key);
         $this->array = $return->array;
         $this->generator = null;
@@ -237,7 +237,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return $this
      *
      * @phpstan-param CollectionInterface<TKey,T> ...$collections
-     * @phpstan-return static<TKey,T>
+     * @phpstan-return static
      */
     public function merge(CollectionInterface ...$collections): self
     {
@@ -264,7 +264,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @template TCreate as T
      * @phpstan-param array<TKeyCreate,TCreate> $data
      * @phpstan-param  class-string<\Arrayy\ArrayyIterator<TKeyCreate,TCreate>> $iteratorClass
-     * @phpstan-return static<TKeyCreate,TCreate>
+     * @phpstan-return static
      *
      * @psalm-mutation-free
      */
@@ -273,11 +273,14 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
         string $iteratorClass = ArrayyIterator::class,
         bool $checkPropertiesInConstructor = true
     ) {
-        return new static( // @phpstan-ignore new.static
+        /** @var static $instance */
+        $instance = new static( // @phpstan-ignore new.static
             $data,
             $iteratorClass,
             $checkPropertiesInConstructor
         );
+
+        return $instance;
     }
 
     /**
@@ -286,7 +289,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
      * @return static
      *                <p>(Immutable) Returns an new instance of the CollectionInterface object.</p>
      *
-     * @phpstan-return static<int,T>
+     * @phpstan-return static
      *
      * @psalm-mutation-free
      */
@@ -326,7 +329,7 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             }
         }
 
-        /** @phpstan-var static<int,T> */
+        /** @phpstan-var static */
         return $return;
     }
 

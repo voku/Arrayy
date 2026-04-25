@@ -23,7 +23,7 @@ A PHP array manipulation library. Compatible with PHP 8+
 
 * [Installation](#installation-via-composer-require)
 * [Multidimensional ArrayAccess](#multidimensional-arrayaccess)
-* [PhpDoc @property checking](#phpdoc-property-checking)
+* [PhpDoc array-shape / property checking](#phpdoc-array-shape--property-checking)
 * [OO and Chaining](#oo-and-chaining)
 * [Collections](#collections)
     * [Pre-Defined Typified Collections](#pre-defined-typified-collections)
@@ -116,18 +116,14 @@ $arrayy->Lars = array('lastname' => 'Müller');
 $arrayy->Lars->lastname; // 'Müller'
 ```
 
-## PhpDoc @property checking
+## PhpDoc array-shape / property checking
 
-The library offers type checking for `@property` phpdoc-class-comments and native declared properties.
+The library offers type checking for phpdoc array-shape annotations, legacy `@property` phpdoc-class-comments, and native declared properties. Prefer the array-shape form because it can reuse the `Arrayy` template for IDE autocompletion and static-analysis support. When you want PHPStan to check reads precisely, prefer array-like access with literal keys (for example `$user['lastName']`) on these array-shape-based models. Do not combine array-shape annotations and `@property` tags on the same model.
 
 ```php
 /**
- * @property int        $id
- * @property int|string $firstName
- * @property string     $lastName
- * @property null|City  $city
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{id: int, firstName: int|string, lastName: string, city?: City|null}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class User extends \Arrayy\Arrayy
 {
@@ -137,11 +133,8 @@ class User extends \Arrayy\Arrayy
 }
 
 /**
- * @property string|null $plz
- * @property string      $name
- * @property string[]    $infos
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{plz: string|null, name: string, infos: string[]}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class City extends \Arrayy\Arrayy
 {
@@ -169,7 +162,7 @@ $user = new User(
     ]
 );
 
-var_dump($user['lastName']); // 'Moelleken'
+var_dump($user['lastName']); // 'Moelleken' // preferred for PHPStan-checked reads
 var_dump($user[$userMeta->lastName]); // 'Moelleken'
 var_dump($user->lastName); // Moelleken
 
@@ -201,7 +194,7 @@ NativeCity::createFromJsonMapper(
 var_dump($nativeMeta->infos); // 'infos'
 ```
 
-- "checkPropertyTypes": activate the type checking for all defined `@property` tags and native declared properties
+- "checkPropertyTypes": activate the type checking for all defined array-shape keys, `@property` tags, and native declared properties
 - "checkPropertiesMismatchInConstructor": activate the property mismatch check, so you can only add an 
                                            array with all needed properties (or an empty array) into the constructor
 - use a property-level `@var` annotation such as `/** @var string[] */` if a native `array` property needs element-type validation
@@ -218,11 +211,8 @@ echo a(['fòô', 'bàř', 'bàř'])->unique()->reverse()->implode(','); // 'bà�
 complex example:
 ```php
 /**
- * @property int    $id
- * @property string $firstName
- * @property string $lastName
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{id: int, firstName: string, lastName: string}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class User extends \Arrayy\Arrayy
 {
@@ -486,12 +476,8 @@ Create an new Arrayy object via JSON and fill sub-objects is possible.
 namespace Arrayy\tests;
 
 /**
- * @property int                         $id
- * @property int|string                  $firstName
- * @property string                      $lastName
- * @property \Arrayy\tests\CityData|null $city
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{id: int, firstName: int|string, lastName: string, city?: \Arrayy\tests\CityData|null}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class UserData extends \Arrayy\Arrayy
 {
@@ -501,11 +487,8 @@ class UserData extends \Arrayy\Arrayy
 }
 
 /**
- * @property string|null $plz
- * @property string      $name
- * @property string[]    $infos
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{plz: string|null, name: string, infos: string[]}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class CityData extends \Arrayy\Arrayy
 {
@@ -802,7 +785,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#randommutableintnull-number-this">randomMutable</a>
 </td><td><a href="#randomvalue-mixed">randomValue</a>
 </td><td><a href="#randomvaluesint-number-static">randomValues</a>
-</td><td><a href="#randomweightedarray-array-intnull-number-staticint-mixed">randomWeighted</a>
+</td><td><a href="#randomweightedarray-array-intnull-number-static">randomWeighted</a>
 </td></tr><tr><td><a href="#reducecallable-callable-mixed-initial-static">reduce</a>
 </td><td><a href="#reduce_dimensionbool-unique-static">reduce_dimension</a>
 </td><td><a href="#reindex-this">reindex</a>
@@ -1369,8 +1352,8 @@ Create an new Arrayy object via JSON.
 <a href="#voku-php-readme-class-methods">↑</a>
 Create an instance from JSON using the built-in mapper.
 
-For Arrayy models with property checks enabled, both phpdoc `@property`
-definitions and native declared properties are used for metadata and type checks.
+For Arrayy models with property checks enabled, phpdoc array-shape annotations,
+legacy `@property` definitions, and native declared properties are used for metadata and type checks.
 Add a property-level `@var` annotation if a native `array` property also needs
 element-type validation.
 
@@ -2833,8 +2816,8 @@ a($array1)->mergePrependNewIndex($array2); // Arrayy[0 => 'foo', 1 => 'bar2', 2 
 
 ## static meta(): ArrayyMeta|mixed|static
 <a href="#voku-php-readme-class-methods">↑</a>
-Return a meta object with property names from phpdoc `@property` tags and
-native declared properties.
+Return a meta object with property names from phpdoc array-shape annotations,
+`@property` tags, and native declared properties.
 
 **Parameters:**
 __nothing__
@@ -3286,7 +3269,7 @@ a([1 => 'one', 2 => 'two'])->randomValues(); // e.g. Arrayy['one', 'two']
 
 --------
 
-## randomWeighted(array $array, int|null $number): static<int, mixed>
+## randomWeighted(array $array, int|null $number): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Get a random value from an array, with the ability to skew the results.
 
@@ -3299,7 +3282,7 @@ a([0 => 3, 1 => 4])->randomWeighted([1 => 4]); // e.g.: Arrayy[4] (has a 66% cha
 - `int|null $number <p>How many values you will take?</p>`
 
 **Return:**
-- `static<int, mixed> <p>(Immutable)</p>`
+- `static <p>(Immutable)</p>`
 
 --------
 

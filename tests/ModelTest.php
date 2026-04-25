@@ -9,7 +9,7 @@ use Arrayy\Arrayy;
  */
 final class ModelTest extends \PHPUnit\Framework\TestCase
 {
-    public function testDotNotation()
+    public function testDotNotation(): void
     {
         $model = new ModelA(['foo', 'bar' => ['config' => ['lall' => true]]]);
         $tmpModel = new ModelA(['foo']);
@@ -24,7 +24,7 @@ final class ModelTest extends \PHPUnit\Framework\TestCase
         static::assertTrue($tmpModel == $model->firstsImmutable(1));
     }
 
-    public function testForEach()
+    public function testForEach(): void
     {
         $colors = new ModelB(['red', 'yellow', 'green', 'white']);
 
@@ -39,7 +39,7 @@ final class ModelTest extends \PHPUnit\Framework\TestCase
         $colors->natsort();
     }
 
-    public function testJsonMapper()
+    public function testJsonMapper(): void
     {
         $colors = ModelB::createFromJsonMapper('["red","yellow","green","white"]');
 

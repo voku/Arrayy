@@ -9,7 +9,7 @@ use Arrayy\Arrayy;
  */
 final class UserDataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testSetAndGet()
+    public function testSetAndGet(): void
     {
         $cityMeta = CityData::meta();
 
@@ -48,7 +48,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
         static::assertNull($model[3]);
     }
 
-    public function testByJsonMapper()
+    public function testByJsonMapper(): void
     {
         $json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
         $userData = UserData::createFromJsonMapper($json);
@@ -63,7 +63,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testSetAndGet
      */
-    public function testSetAndGetAgain()
+    public function testSetAndGetAgain(): void
     {
         $modelMeta = UserData::meta();
 
@@ -81,7 +81,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
         static::assertNull($model[3]);
     }
 
-    public function testSetFail()
+    public function testSetFail(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type');
@@ -97,7 +97,7 @@ final class UserDataTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf(Arrayy::class, $model);
     }
 
-    public function testSetFailObject()
+    public function testSetFailObject(): void
     {
         $this->expectException(\TypeError::class);
 

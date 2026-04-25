@@ -13,23 +13,19 @@ use PHPUnit\Framework\TestCase;
  */
 final class StringTypeTest extends TestCase
 {
-    public function testArraySimple()
+    public function testArraySimple(): void
     {
         $this->expectException(\TypeError::class);
 
         $strings = PhpString::create();
 
-        /* @phpstan-ignore-next-line | offset on object */
         $strings[] = 'A';
-        /* @phpstan-ignore-next-line | offset on object */
         $strings[] = 'B';
-        /* @phpstan-ignore-next-line | offset on object */
         $strings[] = 'C';
-        /* @phpstan-ignore-next-line | offset on object */
         $strings[] = 1.0;
     }
 
-    public function testArray()
+    public function testArray(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -39,7 +35,7 @@ final class StringTypeTest extends TestCase
         );
     }
 
-    public function testArrayFromJsonMapper()
+    public function testArrayFromJsonMapper(): void
     {
         $json = '["A","B","C","D"]';
 
@@ -51,15 +47,15 @@ final class StringTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore offsetAssign.valueType */
         new StringCollection(['A', 'B', 'C', 1]);
     }
 
-    public function testWrongValueFromJsonMapper()
+    public function testWrongValueFromJsonMapper(): void
     {
         $this->expectException(\TypeError::class);
 

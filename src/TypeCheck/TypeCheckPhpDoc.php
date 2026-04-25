@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Arrayy\TypeCheck;
 
-use phpDocumentor\Reflection\Type;
-
 /**
  * inspired by https://github.com/spatie/value-object
  *
@@ -52,16 +50,22 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             $property = $propertyTmp;
         }
 
-        $tmpObject = new \stdClass();
-        $tmpObject->{$property} = null;
+        return self::fromDocTypeObject($property, $phpDocumentorReflectionProperty->getType());
+    }
 
-        $tmpReflection = new self((new \ReflectionProperty($tmpObject, $property))->getName());
-
-        $type = $phpDocumentorReflectionProperty->getType();
-
-        /** @noinspection PhpSillyAssignmentInspection */
-        /** @var Type|null $type */
-        $type = $type;
+    /**
+     * Create a type checker from a phpDocumentor type object and an explicit property name.
+     *
+     * @param string                              $property
+     * @param \phpDocumentor\Reflection\Type|null $type
+     *
+     * @phpstan-param \phpDocumentor\Reflection\Type|null $type
+     *
+     * @return self
+     */
+    public static function fromDocTypeObject(string $property, $type)
+    {
+        $tmpReflection = new self($property);
 
         if ($type) {
             $tmpReflection->hasTypeDeclaration = true;
@@ -157,6 +161,25 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             }
 
             return $types;
+        }
+
+        if ($type instanceof \phpDocumentor\Reflection\Types\Nullable) {
+            $typeTmp = self::parseDocTypeObject($type->getActualType());
+            if (\is_array($typeTmp) === true) {
+                $typeTmp[] = 'null';
+
+                return $typeTmp;
+            }
+
+            return [$typeTmp, 'null'];
+        }
+
+        if (
+            \class_exists('\phpDocumentor\Reflection\PseudoTypes\ArrayShape')
+            &&
+            $type instanceof \phpDocumentor\Reflection\PseudoTypes\ArrayShape
+        ) {
+            return 'array';
         }
 
         if ($type instanceof \phpDocumentor\Reflection\Types\Array_) {

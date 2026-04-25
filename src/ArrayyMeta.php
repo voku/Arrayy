@@ -24,7 +24,7 @@ final class ArrayyMeta
      *
      * @return $this
      *
-     * @phpstan-param class-string<\Arrayy\Arrayy<int|string,mixed>> $className
+     * @phpstan-param class-string<\Arrayy\Arrayy<int|string,mixed,array<int|string,mixed>>> $className
      */
     public function getMetaObject(string $className): self
     {
@@ -36,7 +36,7 @@ final class ArrayyMeta
         }
 
         $reflector = new \ReflectionClass($className);
-        /** @var Arrayy<int|string,mixed> $instance */
+        /** @var Arrayy<int|string,mixed,array<int|string,mixed>> $instance */
         $instance = $reflector->newInstanceWithoutConstructor();
         foreach ($instance->getPhpDocPropertiesFromClass() as $propertyName => $_) {
             $this->{$propertyName} = $propertyName;

@@ -22,7 +22,7 @@ A PHP array manipulation library. Compatible with PHP 8+
 
 * [Installation](#installation-via-composer-require)
 * [Multidimensional ArrayAccess](#multidimensional-arrayaccess)
-* [PhpDoc @property checking](#phpdoc-property-checking)
+* [PhpDoc array-shape / property checking](#phpdoc-array-shape--property-checking)
 * [OO and Chaining](#oo-and-chaining)
 * [Collections](#collections)
     * [Pre-Defined Typified Collections](#pre-defined-typified-collections)
@@ -115,18 +115,14 @@ $arrayy->Lars = array('lastname' => 'Müller');
 $arrayy->Lars->lastname; // 'Müller'
 ```
 
-## PhpDoc @property checking
+## PhpDoc array-shape / property checking
 
-The library offers type checking for `@property` phpdoc-class-comments and native declared properties.
+The library offers type checking for phpdoc array-shape annotations, legacy `@property` phpdoc-class-comments, and native declared properties. Prefer the array-shape form because it can reuse the `Arrayy` template for IDE autocompletion and static-analysis support. When you want PHPStan to check reads precisely, prefer array-like access with literal keys (for example `$user['lastName']`) on these array-shape-based models. Do not combine array-shape annotations and `@property` tags on the same model.
 
 ```php
 /**
- * @property int        $id
- * @property int|string $firstName
- * @property string     $lastName
- * @property null|City  $city
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{id: int, firstName: int|string, lastName: string, city?: City|null}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class User extends \Arrayy\Arrayy
 {
@@ -136,11 +132,8 @@ class User extends \Arrayy\Arrayy
 }
 
 /**
- * @property string|null $plz
- * @property string      $name
- * @property string[]    $infos
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{plz: string|null, name: string, infos: string[]}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class City extends \Arrayy\Arrayy
 {
@@ -168,7 +161,7 @@ $user = new User(
     ]
 );
 
-var_dump($user['lastName']); // 'Moelleken'
+var_dump($user['lastName']); // 'Moelleken' // preferred for PHPStan-checked reads
 var_dump($user[$userMeta->lastName]); // 'Moelleken'
 var_dump($user->lastName); // Moelleken
 
@@ -200,7 +193,7 @@ NativeCity::createFromJsonMapper(
 var_dump($nativeMeta->infos); // 'infos'
 ```
 
-- "checkPropertyTypes": activate the type checking for all defined `@property` tags and native declared properties
+- "checkPropertyTypes": activate the type checking for all defined array-shape keys, `@property` tags, and native declared properties
 - "checkPropertiesMismatchInConstructor": activate the property mismatch check, so you can only add an 
                                            array with all needed properties (or an empty array) into the constructor
 - use a property-level `@var` annotation such as `/** @var string[] */` if a native `array` property needs element-type validation
@@ -217,11 +210,8 @@ echo a(['fòô', 'bàř', 'bàř'])->unique()->reverse()->implode(','); // 'bà�
 complex example:
 ```php
 /**
- * @property int    $id
- * @property string $firstName
- * @property string $lastName
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{id: int, firstName: string, lastName: string}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class User extends \Arrayy\Arrayy
 {
@@ -485,12 +475,8 @@ Create an new Arrayy object via JSON and fill sub-objects is possible.
 namespace Arrayy\tests;
 
 /**
- * @property int                         $id
- * @property int|string                  $firstName
- * @property string                      $lastName
- * @property \Arrayy\tests\CityData|null $city
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{id: int, firstName: int|string, lastName: string, city?: \Arrayy\tests\CityData|null}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class UserData extends \Arrayy\Arrayy
 {
@@ -500,11 +486,8 @@ class UserData extends \Arrayy\Arrayy
 }
 
 /**
- * @property string|null $plz
- * @property string      $name
- * @property string[]    $infos
- *
- * @extends  \Arrayy\Arrayy<array-key,mixed>
+ * @template T of array{plz: string|null, name: string, infos: string[]}
+ * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
 class CityData extends \Arrayy\Arrayy
 {

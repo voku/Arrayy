@@ -11,14 +11,14 @@ require_once __DIR__ . '/CityData.php';
  */
 final class CityDataTest extends \PHPUnit\Framework\TestCase
 {
-    public function testParameterMatchEmpty()
+    public function testParameterMatchEmpty(): void
     {
         $model = new CityData([]);
 
         static::assertInstanceOf(Arrayy::class, $model);
     }
 
-    public function testParameterMatchFail()
+    public function testParameterMatchFail(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}, instead got value "foo" (foo) with type {string}.');
@@ -36,7 +36,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf(Arrayy::class, $model);
     }
 
-    public function testParameterMatchFailV2()
+    public function testParameterMatchFailV2(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -53,7 +53,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf(Arrayy::class, $model);
     }
 
-    public function testParameterMatchFailWithArray()
+    public function testParameterMatchFailWithArray(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Property mismatch');
@@ -69,7 +69,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertInstanceOf(Arrayy::class, $model);
     }
 
-    public function testSetAndGet()
+    public function testSetAndGet(): void
     {
         $modelMeta = CityData::meta();
 
@@ -88,7 +88,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertNull($model[3]);
     }
 
-    public function testDataFromJsonMapper()
+    public function testDataFromJsonMapper(): void
     {
         $jsonData = '{"name":"D\u00fcsseldorf","plz":null,"infos":["foo","bar","lall"]}';
 
@@ -102,7 +102,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertNull($model[3]);
     }
 
-    public function testDataFromJsonMapperRejectsInvalidArrayElementTypes()
+    public function testDataFromJsonMapperRejectsInvalidArrayElementTypes(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
@@ -113,7 +113,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testSetAndGet
      */
-    public function testSetAndGetAgain()
+    public function testSetAndGetAgain(): void
     {
         $modelMeta = CityData::meta();
 
@@ -131,7 +131,7 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertNull($model[3]);
     }
 
-    public function testExtendedClass()
+    public function testExtendedClass(): void
     {
         $modelMeta = BigCityData::meta();
 
@@ -150,19 +150,10 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertSame('lall', $model[$modelMeta->extra_info]);
     }
 
-    public function testExtendedClassV2()
+    public function testExtendedClassV2(): void
     {
         $this->expectException(\TypeError::class);
-        if (
-            \class_exists(\Composer\InstalledVersions::class)
-            &&
-            \version_compare((string) \Composer\InstalledVersions::getPrettyVersion('phpunit/phpunit'), '8.4.0', '>=')
-        ) {
-            $this->expectExceptionMessageMatches('#Invalid type: expected "plz" to be of type {string}, instead got value "NULL"#');
-        } else {
-            /** @noinspection PhpUndefinedMethodInspection */
-            $this->expectExceptionMessageRegExp('#Invalid type: expected "plz" to be of type {string}, instead got value "NULL"#');
-        }
+        $this->expectExceptionMessageMatches('#Invalid type: expected "plz" to be of type {string}, instead got value "NULL"#');
 
         $modelMeta = BigCityData::meta();
         new BigCityData(

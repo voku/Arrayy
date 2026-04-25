@@ -10,7 +10,7 @@ use Arrayy\StaticArrayy as A;
  */
 final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
 {
-    public function testBadMethodCall()
+    public function testBadMethodCall(): void
     {
         $this->expectException(\BadMethodCallException::class);
 
@@ -19,86 +19,78 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
         $result = A::invalidMethod('foo'); // @phpstan-ignore staticMethod.notFound
     }
 
-    public function testEmptyArgsInvocation()
+    public function testEmptyArgsInvocation(): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $result = A::first(); // @phpstan-ignore staticMethod.notFound
         static::assertNull($result);
     }
 
-    public function testInvocation()
+    public function testInvocation(): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $result = A::first(['lall', 'FOOBAR'], 1); // @phpstan-ignore staticMethod.notFound
         static::assertSame('lall', $result);
     }
 
-    public function testPartialArgsInvocation()
+    public function testPartialArgsInvocation(): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $result = A::replaceOneValue(['foo', 'bar'], 'foo'); // @phpstan-ignore staticMethod.notFound
         static::assertSame(['', 'bar'], $result->getArray());
     }
 
-    public function testFullArgsInvocation()
+    public function testFullArgsInvocation(): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
         $result = A::replaceOneValue(['foo', 'bar'], 'foo', 'test'); // @phpstan-ignore staticMethod.notFound
         static::assertSame(['test', 'bar'], $result->getArray());
     }
 
-    public function testArrayyRange()
+    public function testArrayyRange(): void
     {
         $result = A::range(1, null);
 
         static::assertSame([1], $result->getArray());
     }
 
-    public function testArrayyRange1()
+    public function testArrayyRange1(): void
     {
         $result = A::range(1, null, 10);
 
         static::assertSame([1], $result->getArray());
     }
 
-    public function testArrayyRange10()
+    public function testArrayyRange10(): void
     {
         $result = A::range(1, 10);
 
         static::assertSame([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], $result->getArray());
     }
 
-    public function testArrayyRange100()
+    public function testArrayyRange100(): void
     {
         $result = A::range(0, 100, 10);
 
         static::assertSame([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100], $result->getArray());
     }
 
-    public function testArrayyRepeat()
+    public function testArrayyRepeat(): void
     {
         $result = A::repeat('foobar', 3);
 
-        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-            static::assertStringContainsString('foobar,foobar,foobar', (string) $result);
-        } else {
-            static::assertContains('foobar,foobar,foobar', (string) $result);
-        }
+        static::assertStringContainsString('foobar,foobar,foobar', (string) $result);
 
         $result = A::repeat('', 3);
 
         static::assertSame('', (string) $result);
     }
 
-    public function testArrayyRepeatWithArray()
+    public function testArrayyRepeatWithArray(): void
     {
         $result = A::repeat(3, 2);
 
-        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-            static::assertStringContainsString('3,3', (string) $result);
-        } else {
-            static::assertContains('3,3', (string) $result);
-        }
+        static::assertStringContainsString('3,3', (string) $result);
     }
 
     /**
@@ -106,7 +98,7 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
      * static method should accept 2 more arguments than their Stringy
      * equivalent.
      */
-    public function testArgumentNumbers()
+    public function testArgumentNumbers(): void
     {
         $staticArrayyClass = new \ReflectionClass(A::class);
         $arrayyClass = new \ReflectionClass(Arrayy::class);

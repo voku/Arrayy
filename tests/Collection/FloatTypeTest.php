@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class FloatTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new FloatCollection([1.0, 1.1, 1.2, 1.3, 2.0]);
 
@@ -22,7 +22,7 @@ final class FloatTypeTest extends TestCase
         );
     }
 
-    public function testFloatArray()
+    public function testFloatArray(): void
     {
         $set = new \Arrayy\Type\FloatArrayCollection([[1.0, 1.1, 1.2], [2.3, 2.0]]);
 
@@ -32,11 +32,11 @@ final class FloatTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new FloatCollection([1.0, 1.1, 1.2, '2']);
     }
 }

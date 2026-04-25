@@ -4,10 +4,3 @@ parameters:
     paths:
         - %currentWorkingDirectory%/src/
         - %currentWorkingDirectory%/tests/
-    ignoreErrors:
-        -
-            identifier: missingType.return
-            path: %currentWorkingDirectory%/tests/*
-        -
-            message: '#assertContains|assertInternalType|assertStringContainsString|assertIsArray|expectExceptionMessage#'
-            path: %currentWorkingDirectory%/tests/*
