@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Arrayy\TypeCheck;
 
-use phpDocumentor\Reflection\Type;
-
 /**
  * inspired by https://github.com/spatie/value-object
  *

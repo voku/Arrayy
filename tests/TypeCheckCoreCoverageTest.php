@@ -626,11 +626,11 @@ DOC);
     {
         $meta = TypeCheckArrayShapeUserData::meta();
 
-        static::assertSame('id',        $meta->id);
+        static::assertSame('id', $meta->id);
         static::assertSame('firstName', $meta->firstName);
-        static::assertSame('lastName',  $meta->lastName);
-        static::assertSame('city',      $meta->city);   // optional key
-        static::assertSame('infos',     $meta->infos);
+        static::assertSame('lastName', $meta->lastName);
+        static::assertSame('city', $meta->city);   // optional key
+        static::assertSame('infos', $meta->infos);
     }
 
     /**
