@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class MixedTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new MixedCollection([[], true, 1, 1.2, 'A']);
 

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class TypesTest extends TestCase
 {
-    public function testShuffleSimple()
+    public function testShuffleSimple(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -25,7 +25,7 @@ final class TypesTest extends TestCase
         static::assertNotContains('E', $set->toArray());
     }
 
-    public function testTypeCheck()
+    public function testTypeCheck(): void
     {
         $set = new StringCollection(['A', 'B', 'C']);
 
@@ -35,7 +35,7 @@ final class TypesTest extends TestCase
         static::assertSame([1 => '1', 'A', 'B', 'C', 'D', 'E'], $set->toArray());
     }
 
-    public function testPushTypeCheckError()
+    public function testPushTypeCheckError(): void
     {
         $set = new StringCollection(['A', 'B', 'C']);
 
@@ -44,7 +44,7 @@ final class TypesTest extends TestCase
         static::assertSame(['A', 'B', 'C', 'D', 'E'], $set->push(5)->getArray());
     }
 
-    public function testChainMethods()
+    public function testChainMethods(): void
     {
         $m = UserData::meta();
         $mCity = \Arrayy\tests\CityData::meta();
@@ -72,7 +72,7 @@ final class TypesTest extends TestCase
         static::assertSame('Lars;Lea;Sven', $names);
     }
 
-    public function testUnshiftTypeCheckError()
+    public function testUnshiftTypeCheckError(): void
     {
         $set = new StringCollection(['A', 'B', 'C']);
 
@@ -81,7 +81,7 @@ final class TypesTest extends TestCase
         static::assertSame(['A', 'B', 'C', 'D', 'E'], $set->unshift(5)->getArray());
     }
 
-    public function testChunk()
+    public function testChunk(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D', 'E']);
 
@@ -97,7 +97,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testCount()
+    public function testCount(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -107,7 +107,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testDiff()
+    public function testDiff(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
         $set1 = new StringCollection(['A', 'C']);
@@ -134,7 +134,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testEach()
+    public function testEach(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -155,7 +155,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -176,7 +176,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testFirst()
+    public function testFirst(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -191,7 +191,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -201,7 +201,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -209,7 +209,7 @@ final class TypesTest extends TestCase
         static::assertFalse($set->hasValue('E'));
     }
 
-    public function testImplode()
+    public function testImplode(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -229,7 +229,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testIntersect()
+    public function testIntersect(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
         $set1 = new StringCollection(['A', 'C']);
@@ -246,7 +246,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testLast()
+    public function testLast(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -261,7 +261,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testNth()
+    public function testNth(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -281,7 +281,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testOnly()
+    public function testOnly(): void
     {
         $set = new StringCollection(['A', 'c' => 'B']);
 
@@ -296,7 +296,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testPad()
+    public function testPad(): void
     {
         $set = new StringCollection(['A', 'B']);
 
@@ -311,7 +311,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testPop()
+    public function testPop(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -326,7 +326,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testPush()
+    public function testPush(): void
     {
         $set = new StringCollection(['A', 'B', 'C']);
         $set->push('D');
@@ -341,7 +341,7 @@ final class TypesTest extends TestCase
         $set->push(1);
     }
 
-    public function testReduce()
+    public function testReduce(): void
     {
         $set = new IntCollection([1, 2, 3, 4]);
 
@@ -358,7 +358,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testReverse()
+    public function testReverse(): void
     {
         $set = new StringCollection([1 => 'A', 'B', 'C', 'D']);
 
@@ -368,7 +368,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testReverseKeepIndex()
+    public function testReverseKeepIndex(): void
     {
         $set = new StringCollection([1 => 'A', 'B', 'C', 'D']);
 
@@ -378,7 +378,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testSearch()
+    public function testSearch(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -388,7 +388,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testShift()
+    public function testShift(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -398,7 +398,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testShuffle()
+    public function testShuffle(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -425,7 +425,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testSlice()
+    public function testSlice(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -440,7 +440,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testSort()
+    public function testSort(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -454,7 +454,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testSplice()
+    public function testSplice(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
         $array = $set->splice(1, 2, ['E', 'F']);
@@ -465,7 +465,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testToJson()
+    public function testToJson(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 
@@ -475,7 +475,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testToPermutation()
+    public function testToPermutation(): void
     {
         $set = new StringCollection(['A', 'B', 'C']);
 
@@ -516,7 +516,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testUnique()
+    public function testUnique(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D', 'A']);
 
@@ -526,7 +526,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testInstanceError()
+    public function testInstanceError(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected to be of type {stdClass}, instead got value `Arrayy\\Arrayy Object');
@@ -541,7 +541,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testInstance()
+    public function testInstance(): void
     {
         $testArray = [new \stdClass(), new \stdClass()];
 
@@ -558,7 +558,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testInstancesError()
+    public function testInstancesError(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected to be of type {stdClass}, instead got value `Arrayy\\Arrayy Object');
@@ -573,7 +573,7 @@ final class TypesTest extends TestCase
         );
     }
 
-    public function testInstances()
+    public function testInstances(): void
     {
         $testArray = [new \stdClass(), new \stdClass(), new \Arrayy\Arrayy()];
 
@@ -593,7 +593,7 @@ final class TypesTest extends TestCase
     /**
      * @noinspection PhpUnusedParameterInspection
      */
-    public function testWalk()
+    public function testWalk(): void
     {
         $set = new StringCollection(['A', 'B', 'C', 'D']);
 

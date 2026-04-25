@@ -9,7 +9,7 @@ use Arrayy\Arrayy;
  */
 final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testNativeTypedPropertiesSetAndGet()
+    public function testNativeTypedPropertiesSetAndGet(): void
     {
         $cityMeta = NativeCityData::meta();
         $city = new NativeCityData(
@@ -36,7 +36,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         static::assertSame('city', $modelMeta->city);
     }
 
-    public function testNativeTypedPropertiesRejectInvalidValues()
+    public function testNativeTypedPropertiesRejectInvalidValues(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type');
@@ -50,7 +50,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testNativeTypedArrayPropertiesRejectInvalidElementTypes()
+    public function testNativeTypedArrayPropertiesRejectInvalidElementTypes(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
@@ -66,7 +66,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testNativeMetaIncludesPropertiesDeclaredNatively()
+    public function testNativeMetaIncludesPropertiesDeclaredNatively(): void
     {
         $cityMeta = NativeCityData::meta();
 
@@ -75,7 +75,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         static::assertSame('infos', $cityMeta->infos);
     }
 
-    public function testNativeTypedPropertiesRejectUnknownKeysWhenMismatchCheckIsEnabled()
+    public function testNativeTypedPropertiesRejectUnknownKeysWhenMismatchCheckIsEnabled(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('The key "unknown" does not exist');
@@ -90,7 +90,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testNativeTypedPropertiesWorkWithJsonMapper()
+    public function testNativeTypedPropertiesWorkWithJsonMapper(): void
     {
         $json = '{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}';
         $userData = NativeUserData::createFromJsonMapper($json);
@@ -101,7 +101,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Düsseldorf', $userData[NativeUserData::meta()->city][NativeCityData::meta()->name]);
     }
 
-    public function testNativeTypedArrayPropertiesRejectInvalidJsonMapperElementTypes()
+    public function testNativeTypedArrayPropertiesRejectInvalidJsonMapperElementTypes(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
@@ -109,7 +109,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         NativeCityData::createFromJsonMapper('{"name":"Düsseldorf","plz":null,"infos":[1,2,3]}');
     }
 
-    public function testNativeTypedNestedJsonMapperRejectsInvalidArrayElementTypes()
+    public function testNativeTypedNestedJsonMapperRejectsInvalidArrayElementTypes(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
@@ -117,7 +117,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
         NativeUserData::createFromJsonMapper('{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":[1,2,3]}}');
     }
 
-    public function testNativeTypedPropertiesAreMergedFromParentClasses()
+    public function testNativeTypedPropertiesAreMergedFromParentClasses(): void
     {
         $modelMeta = NativeBigCityData::meta();
         $model = new NativeBigCityData(
@@ -139,7 +139,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
      * Risk: if parseReflectionTypeObject's union-type branch silently accepts every value,
      * only tests that try all three cases (accept A, accept B, reject other) catch the breakage.
      */
-    public function testNativeUnionTypeAcceptsBothValidSubtypes()
+    public function testNativeUnionTypeAcceptsBothValidSubtypes(): void
     {
         $meta = NativeUserData::meta();
 
@@ -153,7 +153,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Risk: if parseReflectionTypeObject returns wrong types for a union, a float would slip through.
      */
-    public function testNativeUnionTypeRejectsInvalidType()
+    public function testNativeUnionTypeRejectsInvalidType(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessageMatches('#Invalid type: expected "firstName" to be of type \{(int\|string|string\|int)\}#');
@@ -166,7 +166,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
      * Risk: if typeAllowsNull mis-classifies ?string as non-nullable, null would be rejected;
      * if it mis-classifies as always-nullable, ints would be accepted.
      */
-    public function testNativeNullablePropertyRejectsWrongType()
+    public function testNativeNullablePropertyRejectsWrongType(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessageMatches('#Invalid type: expected "plz" to be of type \{string\|null\}#');
@@ -183,7 +183,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
      * Risk: if type checking were removed from offsetSet / internalSet, post-construction
      * assignments with wrong types would silently succeed.
      */
-    public function testNativePropertyTypeIsEnforcedAfterConstruction()
+    public function testNativePropertyTypeIsEnforcedAfterConstruction(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessageMatches('#Invalid type: expected "id" to be of type \{int\}#');
@@ -197,7 +197,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
      * Risk: if checkPropertiesMismatch were removed from checkType, assigning an unknown key
      * after construction on a mismatch-guarded class would silently succeed.
      */
-    public function testNativePropertyMismatchIsEnforcedAfterConstruction()
+    public function testNativePropertyMismatchIsEnforcedAfterConstruction(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('The key "unknown" does not exist');
@@ -215,7 +215,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
      * Risk: if the property-mismatch check in the constructor were bypassed for native classes,
      * omitting required properties would silently succeed.
      */
-    public function testNativeMissingRequiredPropertiesInConstructorThrows()
+    public function testNativeMissingRequiredPropertiesInConstructorThrows(): void
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Property mismatch');
@@ -228,7 +228,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
      * Risk: if the inheritance walk in getPropertiesFromNativeDefinitions stopped at the
      * concrete class, parent-declared properties would never be type-checked in a child.
      */
-    public function testNativeInheritedParentPropertyTypeConstraintIsEnforcedInChild()
+    public function testNativeInheritedParentPropertyTypeConstraintIsEnforcedInChild(): void
     {
         $this->expectException(\TypeError::class);
         // NativeBigCityData inherits `string $name` from NativeCityData
@@ -248,7 +248,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
      *
      * @requires PHP 8.1
      */
-    public function testNativeIntersectionTypedPropertiesWork()
+    public function testNativeIntersectionTypedPropertiesWork(): void
     {
         $modelMeta = NativeIntersectionData::meta();
         $items = new \ArrayObject(['foo']);

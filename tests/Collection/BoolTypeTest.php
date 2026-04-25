@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class BoolTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new BoolCollection([true, true, false, false]);
 
@@ -22,7 +22,7 @@ final class BoolTypeTest extends TestCase
         );
     }
 
-    public function testBoolArray()
+    public function testBoolArray(): void
     {
         $set = new \Arrayy\Type\BoolArrayCollection([[true, true], [false, false]]);
 
@@ -47,7 +47,7 @@ final class BoolTypeTest extends TestCase
         static::assertTrue($test);
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -55,7 +55,7 @@ final class BoolTypeTest extends TestCase
         new BoolCollection([true, true, false, 1]);
     }
 
-    public function testBoolArrayWrongValue()
+    public function testBoolArrayWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 

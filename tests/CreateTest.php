@@ -9,7 +9,7 @@ use Arrayy\Arrayy;
  */
 final class CreateTest extends \PHPUnit\Framework\TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $arrayy = \Arrayy\create(['foo bar', 'UTF-8']);
 

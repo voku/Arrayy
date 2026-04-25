@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class IntegerTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new IntCollection([1, 2, 3, 4]);
 
@@ -22,7 +22,7 @@ final class IntegerTypeTest extends TestCase
         );
     }
 
-    public function testIntArray()
+    public function testIntArray(): void
     {
         $set = new \Arrayy\Type\IntArrayCollection([[1, 2], [3, 4]]);
 
@@ -32,7 +32,7 @@ final class IntegerTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -40,7 +40,7 @@ final class IntegerTypeTest extends TestCase
         new IntCollection([1, 2, 3, 4.0]);
     }
 
-    public function testIntArrayWrongValue()
+    public function testIntArrayWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 

@@ -16,28 +16,28 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * Construct
      * --------------------------------------------------------------
      */
-    public function testConstructWithoutValues()
+    public function testConstructWithoutValues(): void
     {
         $dot = new Arrayy();
 
         static::assertSame([], $dot->getAll());
     }
 
-    public function testConstructWithArray()
+    public function testConstructWithArray(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
 
         static::assertSame('bar', $dot->get('foo'));
     }
 
-    public function testConstructWithString()
+    public function testConstructWithString(): void
     {
         $dot = new Arrayy('foobar');
 
         static::assertSame('foobar', $dot->get(0));
     }
 
-    public function testConstructWithDot()
+    public function testConstructWithDot(): void
     {
         $dot1 = new Arrayy(['foo' => 'bar']);
         $dot2 = new Arrayy($dot1);
@@ -45,7 +45,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('bar', $dot2->get('foo'));
     }
 
-    public function testConstructHelper()
+    public function testConstructHelper(): void
     {
         $dot = \Arrayy\create(['foo' => 'bar']);
 
@@ -59,7 +59,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testAddKeyValuePair()
+    public function testAddKeyValuePair(): void
     {
         $dot = new Arrayy();
         $dot->append('baz', 'foo.bar');
@@ -67,7 +67,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('baz', $dot->get('foo.bar'));
     }
 
-    public function testAddValueToExistingKey()
+    public function testAddValueToExistingKey(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
         $dot->append('baz', 'foo');
@@ -75,7 +75,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('baz', $dot->get('foo'));
     }
 
-    public function testAddArrayOfKeyValuePairs()
+    public function testAddArrayOfKeyValuePairs(): void
     {
         $dot = new Arrayy(['foobar' => 'baz']);
         $dot->add([
@@ -98,7 +98,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testAllReturnsAllItems()
+    public function testAllReturnsAllItems(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
 
@@ -111,7 +111,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testClearKey()
+    public function testClearKey(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot->clear('foo.bar');
@@ -119,7 +119,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertNull($dot->get('foo.bar'));
     }
 
-    public function testClearNonExistingKey()
+    public function testClearNonExistingKey(): void
     {
         $dot = new Arrayy();
         $dot->clear('foo');
@@ -127,7 +127,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertNull($dot->get('foo'));
     }
 
-    public function testClearArrayOfKeys()
+    public function testClearArrayOfKeys(): void
     {
         $dot = new Arrayy(['foo' => 'bar', 'baz' => 'qux', 'lall' => 'foo']);
         $dot->clear(['foo.bar', 'baz']);
@@ -135,7 +135,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame(['foo' => null, 'lall' => 'foo'], $dot->getAll());
     }
 
-    public function testClearAll()
+    public function testClearAll(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
         $dot->clear();
@@ -149,7 +149,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testDeleteKey()
+    public function testDeleteKey(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot->delete('foo.bar');
@@ -157,7 +157,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($dot->has('foo.bar'));
     }
 
-    public function testDeleteNonExistingKey()
+    public function testDeleteNonExistingKey(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
         $dot->delete('baz.qux');
@@ -165,7 +165,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame(['foo' => 'bar'], $dot->getAll());
     }
 
-    public function testDeleteArrayOfKeys()
+    public function testDeleteArrayOfKeys(): void
     {
         $dot = new Arrayy(['foo' => 'bar', 'baz' => 'qux']);
         $dot->delete(['foo', 'baz']);
@@ -178,7 +178,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * Flatten
      * --------------------------------------------------------------
      */
-    public function testFlatten()
+    public function testFlatten(): void
     {
         $dot = new Arrayy(['foo' => ['abc' => 'xyz', 'bar' => ['baz']]]);
         $flatten = $dot->flatten();
@@ -192,7 +192,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('lall', $flatten['1.foo']);
     }
 
-    public function testFlattenWithCustomDelimiter()
+    public function testFlattenWithCustomDelimiter(): void
     {
         $dot = new Arrayy(['foo' => ['abc' => 'xyz', 'bar' => ['baz']]]);
         $flatten = $dot->flatten('_');
@@ -206,21 +206,21 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testGetValueFromKey()
+    public function testGetValueFromKey(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
 
         static::assertSame('baz', $dot->get('foo.bar'));
     }
 
-    public function testGetValueFromNonExistingKey()
+    public function testGetValueFromNonExistingKey(): void
     {
         $dot = new Arrayy();
 
         static::assertNull($dot->get('foo'));
     }
 
-    public function testGetGivenDefaultValueFromNonExistingKey()
+    public function testGetGivenDefaultValueFromNonExistingKey(): void
     {
         $dot = new Arrayy();
 
@@ -233,7 +233,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testHasKey()
+    public function testHasKey(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
 
@@ -244,7 +244,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($dot->has('foo.bar'));
     }
 
-    public function testHasArrayOfKeys()
+    public function testHasArrayOfKeys(): void
     {
         $dot = new Arrayy(['foo' => 'bar', 'baz' => 'qux']);
 
@@ -255,7 +255,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($dot->has(['foo', 'baz']));
     }
 
-    public function testHasWithEmptyDot()
+    public function testHasWithEmptyDot(): void
     {
         $dot = new Arrayy();
 
@@ -268,7 +268,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testIsEmptyDot()
+    public function testIsEmptyDot(): void
     {
         $dot = new Arrayy();
 
@@ -279,7 +279,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($dot->isEmpty());
     }
 
-    public function testIsEmptyKey()
+    public function testIsEmptyKey(): void
     {
         $dot = new Arrayy();
 
@@ -290,7 +290,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($dot->isEmpty('foo.bar'));
     }
 
-    public function testIsEmptyArrayOfKeys()
+    public function testIsEmptyArrayOfKeys(): void
     {
         $dot = new Arrayy();
 
@@ -307,7 +307,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testMergeArrayWithDot()
+    public function testMergeArrayWithDot(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot = $dot->mergeAppendKeepIndex(['foo' => ['bar' => 'qux']]);
@@ -315,7 +315,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('qux', $dot->get('foo.bar'));
     }
 
-    public function testMergeArrayWithKey()
+    public function testMergeArrayWithKey(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot = $dot->mergeAppendKeepIndex(['foo' => ['bar' => 'qux']]);
@@ -323,7 +323,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('qux', $dot->get('foo.bar'));
     }
 
-    public function testMergeDotWithDot()
+    public function testMergeDotWithDot(): void
     {
         $dot1 = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot2 = new Arrayy(['foo' => ['bar' => 'qux']]);
@@ -332,7 +332,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('qux', $dot1->get('foo.bar'));
     }
 
-    public function testMergeDotObjectWithKey()
+    public function testMergeDotObjectWithKey(): void
     {
         $dot1 = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot2 = new Arrayy(['bar' => 'qux']);
@@ -347,7 +347,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testRecursiveMergeArrayWithDot()
+    public function testRecursiveMergeArrayWithDot(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot = $dot->mergeAppendNewIndex(['foo' => ['bar' => 'qux', 'quux' => 'quuz']], true);
@@ -364,7 +364,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('quuz', $dot->get('foo.quux'));
     }
 
-    public function testRecursiveMergeArrayWithKey()
+    public function testRecursiveMergeArrayWithKey(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot = $dot->mergePrependNewIndex(['foo' => ['bar' => 'qux', 'quux' => 'quuz']], true);
@@ -373,7 +373,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('quuz', $dot->get('foo.quux'));
     }
 
-    public function testRecursiveMergeDotWithDot()
+    public function testRecursiveMergeDotWithDot(): void
     {
         $dot1 = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot2 = new Arrayy(['foo' => ['bar' => 'qux', 'quux' => 'quuz']]);
@@ -383,7 +383,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('quuz', $dot1->get('foo.quux'));
     }
 
-    public function testRecursiveMergeDotObjectWithKey()
+    public function testRecursiveMergeDotObjectWithKey(): void
     {
         $dot1 = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot2 = new Arrayy(['foo' => ['bar' => 'qux', 'quux' => 'quuz']]);
@@ -399,7 +399,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testRecursiveDistinctMergeArrayWithDot()
+    public function testRecursiveDistinctMergeArrayWithDot(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot = $dot->mergeAppendKeepIndex(['foo' => ['bar' => 'qux', 'quux' => 'quuz']], true);
@@ -408,7 +408,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('quuz', $dot->get('foo.quux'));
     }
 
-    public function testRecursiveDistinctMergeArrayWithKey()
+    public function testRecursiveDistinctMergeArrayWithKey(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot = $dot->mergeAppendKeepIndex(['foo' => ['bar' => 'qux', 'quux' => 'quuz']], true);
@@ -417,7 +417,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('quuz', $dot->get('foo.quux'));
     }
 
-    public function testRecursiveDistinctMergeDotWithDot()
+    public function testRecursiveDistinctMergeDotWithDot(): void
     {
         $dot1 = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot2 = new Arrayy(['foo' => ['bar' => 'qux', 'quux' => 'quuz']]);
@@ -427,7 +427,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('quuz', $dot1->get('foo.quux'));
     }
 
-    public function testRecursiveDistinctMergeDotObjectWithKey()
+    public function testRecursiveDistinctMergeDotObjectWithKey(): void
     {
         $dot1 = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot2 = new Arrayy(['foo' => ['bar' => 'qux', 'quux' => 'quuz']]);
@@ -443,7 +443,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testPullKey()
+    public function testPullKey(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
 
@@ -451,21 +451,21 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($dot->has('foo'));
     }
 
-    public function testPullNonExistingKey()
+    public function testPullNonExistingKey(): void
     {
         $dot = new Arrayy();
 
         static::assertNull($dot->pull('foo'));
     }
 
-    public function testPullNonExistingKeyWithDefaultValue()
+    public function testPullNonExistingKeyWithDefaultValue(): void
     {
         $dot = new Arrayy();
 
         static::assertSame('bar', $dot->pull('foo', 'bar'));
     }
 
-    public function testPullAll()
+    public function testPullAll(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
 
@@ -479,7 +479,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testPushValue()
+    public function testPushValue(): void
     {
         $dot = new Arrayy();
         $dot->push('foo');
@@ -487,7 +487,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('foo', $dot->get(0));
     }
 
-    public function testPushValueToKey()
+    public function testPushValueToKey(): void
     {
         $dot = new Arrayy(['foo']);
         $dot->push('baz');
@@ -501,7 +501,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testReplaceWithArray()
+    public function testReplaceWithArray(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot = $dot->replace('foo', 'foo', ['qux' => 'quux']);
@@ -509,7 +509,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame(['qux' => 'quux'], $dot->get('foo')->getArray());
     }
 
-    public function testReplaceKeyWithArray()
+    public function testReplaceKeyWithArray(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'baz', 'qux' => 'quux']]);
         $dot = $dot->replace('foo', 'bar', ['qux' => 'corge']);
@@ -517,7 +517,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame(['qux' => 'corge'], $dot->get('bar')->getArray());
     }
 
-    public function testReplaceWithDot()
+    public function testReplaceWithDot(): void
     {
         $dot1 = new Arrayy(['foo' => ['bar' => 'baz']]);
         $dot2 = new Arrayy(['bar' => 'qux']);
@@ -526,7 +526,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame(['bar' => 'qux'], $dot1->get('foo')->getArray());
     }
 
-    public function testReplaceKeyWithDot()
+    public function testReplaceKeyWithDot(): void
     {
         $dot1 = new Arrayy(['foo' => ['bar' => 'baz', 'qux' => 'quux']]);
         $dot2 = new Arrayy(['qux' => 'corge']);
@@ -549,7 +549,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testSetKeyValuePair()
+    public function testSetKeyValuePair(): void
     {
         $dot = new Arrayy();
         $dot->set('foo.bar', 'baz');
@@ -557,7 +557,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('baz', $dot->get('foo.bar'));
     }
 
-    public function testSetArrayOfKeyValuePairs()
+    public function testSetArrayOfKeyValuePairs(): void
     {
         $dot = new Arrayy(['foo' => 'bar', 'baz' => 'qux']);
 
@@ -570,7 +570,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testSetArray()
+    public function testSetArray(): void
     {
         $dot = (new Arrayy())::createFromArray(['foo' => 'bar']);
 
@@ -583,7 +583,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testSetReference()
+    public function testSetReference(): void
     {
         $dot = new Arrayy();
         $items = ['foo' => 'bar'];
@@ -599,7 +599,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testOffsetExists()
+    public function testOffsetExists(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
 
@@ -610,14 +610,14 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertFalse(isset($dot['foo']));
     }
 
-    public function testOffsetGet()
+    public function testOffsetGet(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
 
         static::assertSame('bar', $dot['foo']);
     }
 
-    public function testOffsetSet()
+    public function testOffsetSet(): void
     {
         $dot = new Arrayy();
         $dot['foo.bar'] = 'baz';
@@ -625,7 +625,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('baz', $dot['foo.bar']);
     }
 
-    public function testOffsetSetWithoutKey()
+    public function testOffsetSetWithoutKey(): void
     {
         $dot = new Arrayy();
         $dot[] = 'foobar';
@@ -633,7 +633,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         static::assertSame('foobar', $dot->get(0));
     }
 
-    public function testOffsetUnset()
+    public function testOffsetUnset(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
         unset($dot['foo']);
@@ -647,7 +647,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testToJsonAll()
+    public function testToJsonAll(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
 
@@ -657,7 +657,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testToJsonAllWithOption()
+    public function testToJsonAllWithOption(): void
     {
         $dot = new Arrayy(['foo' => "'bar'"]);
 
@@ -667,7 +667,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testToJsonKey()
+    public function testToJsonKey(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => 'value']]);
 
@@ -677,7 +677,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testToJsonKeyWithOptions()
+    public function testToJsonKeyWithOptions(): void
     {
         $dot = new Arrayy(['foo' => ['bar' => "'value'"]]);
 
@@ -693,14 +693,14 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testCount()
+    public function testCount(): void
     {
         $dot = new Arrayy([1, 2, 3]);
 
         static::assertSame(3, $dot->count());
     }
 
-    public function testCountable()
+    public function testCountable(): void
     {
         $dot = new Arrayy([1, 2, 3]);
 
@@ -713,14 +713,14 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testGetIteratorReturnsArrayIterator()
+    public function testGetIteratorReturnsArrayIterator(): void
     {
         $dot = new Arrayy();
 
         static::assertInstanceOf(\Arrayy\ArrayyIterator::class, $dot->getIterator());
     }
 
-    public function testIterationReturnsOriginalValues()
+    public function testIterationReturnsOriginalValues(): void
     {
         $dot = new Arrayy([1, 2, 3]);
 
@@ -738,7 +738,7 @@ final class DotTest extends \PHPUnit\Framework\TestCase
      * --------------------------------------------------------------
      */
 
-    public function testJsonEncodingReturnsJson()
+    public function testJsonEncodingReturnsJson(): void
     {
         $dot = new Arrayy(['foo' => 'bar']);
 

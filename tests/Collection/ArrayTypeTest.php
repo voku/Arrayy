@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class ArrayTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new ArrayCollection([['a', 1, 1.4], [], [true, new \stdClass()], []]);
 
@@ -22,7 +22,7 @@ final class ArrayTypeTest extends TestCase
         );
     }
 
-    public function testStringArrayFalse()
+    public function testStringArrayFalse(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -35,7 +35,7 @@ final class ArrayTypeTest extends TestCase
         );
     }
 
-    public function testStringArray()
+    public function testStringArray(): void
     {
         $set = new \Arrayy\Type\StringArrayCollection([['a', 'foo']]);
 
@@ -45,7 +45,7 @@ final class ArrayTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 

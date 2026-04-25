@@ -92,7 +92,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testContains(array $array)
+    public function testContains(array $array): void
     {
         $element = 2;
 
@@ -107,7 +107,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testContainsKey(array $array)
+    public function testContainsKey(array $array): void
     {
         $key = 2;
 
@@ -122,7 +122,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testCount(array $array)
+    public function testCount(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $count = \count($array);
@@ -135,7 +135,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testCurrent(array $array)
+    public function testCurrent(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $current = \current($array);
@@ -149,7 +149,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testDebugReturn(array $array)
+    public function testDebugReturn(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $printed = \print_r($array, true);
@@ -162,7 +162,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testExists(array $array)
+    public function testExists(array $array): void
     {
         $callable = static function ($value, $key) {
             return $key === 2 && $value === 'two';
@@ -174,7 +174,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame($isExists, $arrayy->exists($callable));
     }
 
-    public function testFind()
+    public function testFind(): void
     {
         $callable = static function ($value, $key) {
             return $value === 'a' && $key > 2;
@@ -191,7 +191,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testFirstMutable(array $array)
+    public function testFirstMutable(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $first = \reset($array);
@@ -211,7 +211,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testFirstInLoop(array $array)
+    public function testFirstInLoop(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $first = \reset($array);
@@ -244,7 +244,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testFirstImmutable(array $array)
+    public function testFirstImmutable(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $first = \reset($array);
@@ -264,7 +264,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testFirstImmutableInLoop(array $array)
+    public function testFirstImmutableInLoop(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $first = \reset($array);
@@ -292,7 +292,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame($count, $tmpCount);
     }
 
-    public function testForEachWithInnerArrayy()
+    public function testForEachWithInnerArrayy(): void
     {
         $arrayy = $this->createArrayy(['foo' => [3 => [33, 34, 35], 2 => [22, 23, 24], 1 => [11, 12, 13]]]);
 
@@ -311,7 +311,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testGetIterator()
+    public function testGetIterator(): void
     {
         $arrayy = $this->createArrayy(['foo', 'bar', 1, null]);
 
@@ -322,7 +322,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame('bar', $result->current());
     }
 
-    public function testRecursiveIterator()
+    public function testRecursiveIterator(): void
     {
         $arrayy = Arrayy::create(['1', '1', Arrayy::create(['2', '2', '2', Arrayy::create(['3', 3])]), 1]);
 
@@ -345,7 +345,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
-    public function testGetIteratorWithSubArray()
+    public function testGetIteratorWithSubArray(): void
     {
         $arrayy = $this->createArrayy(['foo' => [3, 2, 1], 'bar' => [1, 2, 3], 1, null]);
 
@@ -363,7 +363,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetKeys(array $array)
+    public function testGetKeys(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $keys = \array_keys($array);
@@ -376,7 +376,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetObject(array $array)
+    public function testGetObject(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $result = \Arrayy\Arrayy::createFromObjectVars($arrayy->getObject())->toArray();
@@ -389,7 +389,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetRandom(array $array)
+    public function testGetRandom(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $value = $arrayy->getRandom()->getArray();
@@ -398,12 +398,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             static::assertNotNull($value[0]);
             static::assertContains($value[0], $arrayy->toArray());
         } else {
-            if (\method_exists(__CLASS__, 'assertIsArray')) {
-                static::assertIsArray($value);
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                static::assertInternalType('array', $value);
-            }
+            static::assertIsArray($value);
         }
     }
 
@@ -412,7 +407,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetRandomKey(array $array)
+    public function testGetRandomKey(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
@@ -423,12 +418,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             static::assertNotNull($key);
             static::assertArrayHasKey($key, $arrayy->toArray());
         } else {
-            if (\method_exists(__CLASS__, 'assertIsArray')) {
-                static::assertIsArray($arrayy->getArray());
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                static::assertInternalType('array', $arrayy->getArray());
-            }
+            static::assertIsArray($arrayy->getArray());
         }
     }
 
@@ -437,17 +427,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetRandomKeys(array $array)
+    public function testGetRandomKeys(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) < 2) {
-            if (\method_exists(__CLASS__, 'assertIsArray')) {
-                static::assertIsArray($arrayy->getArray());
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                static::assertInternalType('array', $arrayy->getArray());
-            }
+            static::assertIsArray($arrayy->getArray());
         } else {
             $keys = $arrayy->getRandomKeys(2);
 
@@ -458,7 +443,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testGetRandomKeysLogicExceptionGivenZero()
+    public function testGetRandomKeysLogicExceptionGivenZero(): void
     {
         $this->expectException(\RangeException::class);
 
@@ -466,7 +451,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $arrayy->getRandomKeys(0);
     }
 
-    public function testGetRandomKeysRangeException()
+    public function testGetRandomKeysRangeException(): void
     {
         $this->expectException(\RangeException::class);
 
@@ -479,26 +464,16 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetRandomKeysShouldReturnArray(array $array)
+    public function testGetRandomKeysShouldReturnArray(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) === 0) {
-            if (\method_exists(__CLASS__, 'assertIsArray')) {
-                static::assertIsArray($arrayy->getArray());
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                static::assertInternalType('array', $arrayy->getArray());
-            }
+            static::assertIsArray($arrayy->getArray());
         } else {
             $keys = $arrayy->getRandomKeys(\count($array))->getArray();
 
-            if (\method_exists(__CLASS__, 'assertIsArray')) {
-                static::assertIsArray($keys);
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                static::assertInternalType('array', $keys);
-            }
+            static::assertIsArray($keys);
         }
     }
 
@@ -507,17 +482,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetRandomValueSingle(array $array)
+    public function testGetRandomValueSingle(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) === 0) {
-            if (\method_exists(__CLASS__, 'assertIsArray')) {
-                static::assertIsArray($arrayy->getArray());
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                static::assertInternalType('array', $arrayy->getArray());
-            }
+            static::assertIsArray($arrayy->getArray());
         } else {
             $value = $arrayy->getRandomValue();
 
@@ -535,17 +505,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetRandomValues(array $array)
+    public function testGetRandomValues(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) < 2) {
-            if (\method_exists(__CLASS__, 'assertIsArray')) {
-                static::assertIsArray($arrayy->getArray());
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                static::assertInternalType('array', $arrayy->getArray());
-            }
+            static::assertIsArray($arrayy->getArray());
 
             return;
         }
@@ -565,17 +530,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testGetRandomValuesSingle(array $array)
+    public function testGetRandomValuesSingle(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) === 0) {
-            if (\method_exists(__CLASS__, 'assertIsArray')) {
-                static::assertIsArray($arrayy->getArray());
-            } else {
-                /** @noinspection PhpUndefinedMethodInspection */
-                static::assertInternalType('array', $arrayy->getArray());
-            }
+            static::assertIsArray($arrayy->getArray());
 
             return;
         }
@@ -583,12 +543,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $values = $arrayy->getRandomValues(1)->getArray();
 
         static::assertCount(1, $values);
-        if (\method_exists(__CLASS__, 'assertIsArray')) {
-            static::assertIsArray($arrayy->getArray());
-        } else {
-            /** @noinspection PhpUndefinedMethodInspection */
-            static::assertInternalType('array', $arrayy->getArray());
-        }
+        static::assertIsArray($arrayy->getArray());
         foreach ($values as $value) {
             if (!$value instanceof \Arrayy\Arrayy) {
                 static::assertContains($value, $array);
@@ -601,7 +556,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testIndexOf(array $array)
+    public function testIndexOf(array $array): void
     {
         $element = 2;
 
@@ -617,7 +572,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      * @param array  $array
      * @param string $type
      */
-    public function testIsAssoc(array $array, $type = null)
+    public function testIsAssoc(array $array, $type = null): void
     {
         $arrayy = $this->createArrayy($array);
         $isAssoc = static::TYPE_ASSOC === $type;
@@ -630,7 +585,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testIsEmpty(array $array)
+    public function testIsEmpty(array $array): void
     {
         $isEmpty = !$array;
         $arrayy = $this->createArrayy($array);
@@ -644,7 +599,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      * @param array  $array
      * @param string $type
      */
-    public function testIsNumeric(array $array, $type = null)
+    public function testIsNumeric(array $array, $type = null): void
     {
         $arrayy = $this->createArrayy($array);
         $isNumeric = static::TYPE_NUMERIC === $type;
@@ -657,7 +612,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testKey(array $array)
+    public function testKey(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $key = \key($array);
@@ -671,7 +626,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testLast(array $array)
+    public function testLast(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $last = \end($array);
@@ -693,7 +648,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testLastKey(array $array)
+    public function testLastKey(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $last = \array_key_last($array);
@@ -716,7 +671,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testArrayyFirst(array $array)
+    public function testArrayyFirst(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $first = array_first($array);
@@ -738,7 +693,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testArrayyLast(array $array)
+    public function testArrayyLast(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $first = array_last($array);
@@ -760,7 +715,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testFirstKey(array $array)
+    public function testFirstKey(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $first = \array_key_first($array);
@@ -778,7 +733,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testMostUsedValue(array $array)
+    public function testMostUsedValue(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         if ($arrayy->isMultiArray()) {
@@ -805,7 +760,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame($first, $result);
     }
 
-    public function testArrayyIterator()
+    public function testArrayyIterator(): void
     {
         $iterator = new ArrayyIterator(['foo' => 'bar']);
 
@@ -824,7 +779,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testMostUsedValues(array $array)
+    public function testMostUsedValues(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         if ($arrayy->isMultiArray()) {
@@ -856,7 +811,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testNext(array $array)
+    public function testNext(array $array): void
     {
         $arrayy = $this->createArrayy($array)->getArray();
         $next = \next($array);
@@ -869,7 +824,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testOffsetExists(array $array)
+    public function testOffsetExists(array $array): void
     {
         $offset = 1;
         $isOffsetExists = isset($array[$offset]);
@@ -884,7 +839,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testOffsetGet(array $array)
+    public function testOffsetGet(array $array): void
     {
         $offset = 1;
         $value = $array[$offset] ?? null;
@@ -899,7 +854,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testPrevious(array $array)
+    public function testPrevious(array $array): void
     {
         $arrayy = $this->createArrayy($array)->getArray();
         $prev = \prev($array);
@@ -912,7 +867,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testReIndex(array $array)
+    public function testReIndex(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         $values = \array_values($array);
@@ -920,7 +875,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame($values, $arrayy->reindex()->getArray());
     }
 
-    public function testReduce()
+    public function testReduce(): void
     {
         $func = static function ($resultArray, $value) {
             if ($value % 2 === 0) {
@@ -991,7 +946,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame([2, 3, 4], $arrayy->getArray());
     }
 
-    public function testGetArrayViaGenerator()
+    public function testGetArrayViaGenerator(): void
     {
         $generator = static function () {
             yield 1 => 2;
@@ -1004,7 +959,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         static::assertSame([2, 3], $arrayy->getArray(false, false));
     }
 
-    public function testGetListViaGenerator()
+    public function testGetListViaGenerator(): void
     {
         $generator = static function () {
             yield 1 => 2;
@@ -1022,7 +977,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $array
      */
-    public function testToJson(array $array)
+    public function testToJson(array $array): void
     {
         $json = \json_encode($array);
 
@@ -1037,7 +992,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      * @param string           $string
      * @param non-empty-string $separator
      */
-    public function testToString($string, $separator)
+    public function testToString($string, $separator): void
     {
         $array = \explode($separator, $string);
         \assert(\is_array($array));
@@ -1055,7 +1010,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      * @param array              $array
      * @param array              $resultArray
      */
-    protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray)
+    protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray): void
     {
         static::assertNotSame($arrayy, $resultArrayy);
         static::assertSame($array, $arrayy->toArray());
@@ -1067,7 +1022,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
      * @param A<array-key,mixed> $resultArrayy
      * @param array              $resultArray
      */
-    protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray)
+    protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray): void
     {
         static::assertSame($arrayy, $resultArrayy);
         static::assertSame($resultArray, $arrayy->toArray());

@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../.phpUnitAndStanFix.php';
  */
 final class AnalyseTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGenerics()
+    public function testGenerics(): void
     {
         $json = '[{"id":1,"firstName":"Lars","lastName":"Moelleken","city":{"name":"Düsseldorf","plz":null,"infos":["lall"]}}, {"id":2,"firstName":"Sven","lastName":"Moelleken","city":{"name":"Köln","plz":null,"infos":["foo"]}}]';
         $userDataCollection = UserDataCollection::createFromJsonMapper($json);

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class ScalarTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new \Arrayy\Type\ScalarCollection([
             '4',
@@ -37,7 +37,7 @@ final class ScalarTypeTest extends TestCase
         );
     }
 
-    public function testArrayFromJsonMapper()
+    public function testArrayFromJsonMapper(): void
     {
         $set = \Arrayy\Type\ScalarCollection::createFromJsonMapper('["4",5,7,true,false,"6","7"]');
 
@@ -55,7 +55,7 @@ final class ScalarTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -63,7 +63,7 @@ final class ScalarTypeTest extends TestCase
         new \Arrayy\Type\ScalarCollection([new \stdClass(), 1]);
     }
 
-    public function testWrongValueFromJsonMapper()
+    public function testWrongValueFromJsonMapper(): void
     {
         $this->expectException(\TypeError::class);
 

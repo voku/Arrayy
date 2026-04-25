@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class NumericTypeTest extends TestCase
 {
-    public function testArray()
+    public function testArray(): void
     {
         $set = new \Arrayy\Type\NumericCollection(
             [
@@ -31,7 +31,7 @@ final class NumericTypeTest extends TestCase
         );
     }
 
-    public function testWrongValue()
+    public function testWrongValue(): void
     {
         $this->expectException(\TypeError::class);
 

@@ -7,7 +7,7 @@ namespace Arrayy\tests;
  */
 final class JsonMapperTest extends \PHPUnit\Framework\TestCase
 {
-    public function testJsonMappingV1()
+    public function testJsonMappingV1(): void
     {
         $data = ['accounts' => [new Account('Foo'), new Account('Bar')]];
         $json = json_encode($data);

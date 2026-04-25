@@ -23,13 +23,13 @@ final class DotNotationCollectionTest extends \PHPUnit\Framework\TestCase
         ],
     ];
 
-    public function testCreateObject()
+    public function testCreateObject(): void
     {
         $dn = new Arrayy(['foo' => 'bar']);
         static::assertFalse($dn->isEmpty());
     }
 
-    public function testGetPath()
+    public function testGetPath(): void
     {
         $dn = new Arrayy($this->_array_test_1);
 
@@ -39,7 +39,7 @@ final class DotNotationCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertNull($dn->get('foo.test'));
     }
 
-    public function testSetPath()
+    public function testSetPath(): void
     {
         $dn = new Arrayy($this->_array_test_1);
 
@@ -49,19 +49,14 @@ final class DotNotationCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($dn->get('foo.bar'), 123);
 
         $jade = $dn->get('foo.jade.profile.new');
-        if (\method_exists(__CLASS__, 'assertIsArray')) {
-            static::assertIsArray($jade->getArray());
-        } else {
-            /** @noinspection PhpUndefinedMethodInspection */
-            static::assertInternalType('array', $jade->getArray());
-        }
+        static::assertIsArray($jade->getArray());
         static::assertSame('path', $jade['test']['of']);
 
         $dn->add('test');
         static::assertSame('test', $dn[0]);
     }
 
-    public function testSetException()
+    public function testSetException(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Can not set value at this path "test" because (integer)"123" is not an array.');
@@ -69,7 +64,7 @@ final class DotNotationCollectionTest extends \PHPUnit\Framework\TestCase
         $dn->set('foo.bar.test', ['bob']);
     }
 
-    public function testHavePath()
+    public function testHavePath(): void
     {
         $dn = new Arrayy($this->_array_test_1);
 
@@ -79,7 +74,7 @@ final class DotNotationCollectionTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($dn->has('bar.foo'));
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $dn = new Arrayy($this->_array_test_1);
 
