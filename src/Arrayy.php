@@ -472,7 +472,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function count(int $mode = \COUNT_NORMAL): int
     {
-        $mode = $mode === \COUNT_RECURSIVE ? \COUNT_RECURSIVE : \COUNT_NORMAL;
+        if ($mode !== \COUNT_NORMAL && $mode !== \COUNT_RECURSIVE) {
+            throw new \ValueError('count(): Argument #2 ($mode) must be either COUNT_NORMAL or COUNT_RECURSIVE');
+        }
 
         if (
             $this->generator
@@ -3079,7 +3081,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         // crawl through array, get key according to object or not
         $usePath = false;
-        $usedArrayTmp = null;
         if (
             $this->pathSeparator
             &&
@@ -3164,12 +3165,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
                 return $fallback instanceof \Closure ? $fallback() : $fallback;
             }
-        }
-
-        if (isset($usedArrayTmp)) {
-            if (!$usePath && !isset($usedArrayTmp[$key])) {
-                return $fallback instanceof \Closure ? $fallback() : $fallback;
-            }
 
             if (\is_array($usedArrayTmp)) {
                 return static::create(
@@ -3182,7 +3177,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $usedArrayTmp;
         }
 
-        if (!$usePath && !isset($usedArray[$key])) {
+        if (!isset($usedArray[$key])) {
             return $fallback instanceof \Closure ? $fallback() : $fallback;
         }
 
