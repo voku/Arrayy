@@ -472,6 +472,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function count(int $mode = \COUNT_NORMAL): int
     {
+        $mode = $mode === \COUNT_RECURSIVE ? \COUNT_RECURSIVE : \COUNT_NORMAL;
+
         if (
             $this->generator
             &&
@@ -745,22 +747,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             \strpos($offset, $this->pathSeparator) !== false
         ) {
             $explodedPath = \explode($this->pathSeparator, (string) $offset);
-            if ($explodedPath !== false) {
-                /** @var string $lastOffset - helper for phpstan */
-                $lastOffset = \array_pop($explodedPath);
-                $containerPath = \implode($this->pathSeparator, $explodedPath);
+            /** @var string $lastOffset - helper for phpstan */
+            $lastOffset = \array_pop($explodedPath);
+            $containerPath = \implode($this->pathSeparator, $explodedPath);
 
-                /**
-                 * @psalm-suppress MissingClosureReturnType
-                 * @psalm-suppress MissingClosureParamType
-                 */
-                $this->callAtPath(
-                    $containerPath,
-                    static function ($container) use ($lastOffset, &$offsetExists) {
-                        $offsetExists = \array_key_exists($lastOffset, $container);
-                    }
-                );
-            }
+            /**
+             * @psalm-suppress MissingClosureReturnType
+             * @psalm-suppress MissingClosureParamType
+             */
+            $this->callAtPath(
+                $containerPath,
+                static function ($container) use ($lastOffset, &$offsetExists) {
+                    $offsetExists = \array_key_exists($lastOffset, $container);
+                }
+            );
         }
 
         return $offsetExists;
@@ -856,25 +856,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             \strpos($offset, $this->pathSeparator) !== false
         ) {
             $path = \explode($this->pathSeparator, (string) $offset);
+            $pathToUnset = \array_pop($path);
 
-            if ($path !== false) {
-                $pathToUnset = \array_pop($path);
-
-                /**
-                 * @psalm-suppress MissingClosureReturnType
-                 * @psalm-suppress MissingClosureParamType
-                 */
-                $this->callAtPath(
-                    \implode($this->pathSeparator, $path),
-                    static function (&$offset) use ($pathToUnset) {
-                        if (\is_array($offset)) {
-                            unset($offset[$pathToUnset]);
-                        } else {
-                            $offset = null;
-                        }
+            /**
+             * @psalm-suppress MissingClosureReturnType
+             * @psalm-suppress MissingClosureParamType
+             */
+            $this->callAtPath(
+                \implode($this->pathSeparator, $path),
+                static function (&$offset) use ($pathToUnset) {
+                    if (\is_array($offset)) {
+                        unset($offset[$pathToUnset]);
+                    } else {
+                        $offset = null;
                     }
-                );
-            }
+                }
+            );
         }
 
         unset($this->array[$offset]);
@@ -892,10 +889,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function serialize(): string
     {
         $this->generatorToArray();
-
-        if (\PHP_VERSION_ID < 70400) {
-            return parent::serialize();
-        }
 
         return \serialize($this);
     }
@@ -1044,12 +1037,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     #[\ReturnTypeWillChange]
     public function unserialize($string): self
     {
-        if (\PHP_VERSION_ID < 70400) {
-            parent::unserialize($string);
-
-            return $this;
-        }
-
         return \unserialize($string, ['allowed_classes' => [__CLASS__, TypeCheckPhpDoc::class]]);
     }
 
@@ -3101,83 +3088,81 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             \strpos($key, $this->pathSeparator) !== false
         ) {
             $segments = \explode($this->pathSeparator, (string) $key);
-            if ($segments !== false) {
-                $usePath = true;
-                $usedArrayTmp = $usedArray; // do not use the reference for dot-annotations
+            $usePath = true;
+            $usedArrayTmp = $usedArray; // do not use the reference for dot-annotations
 
-                foreach ($segments as $segment) {
-                    if (
-                        (
-                            \is_array($usedArrayTmp)
-                            ||
-                            $usedArrayTmp instanceof \ArrayAccess
-                        )
-                        &&
-                        isset($usedArrayTmp[$segment])
-                    ) {
-                        $usedArrayTmp = $usedArrayTmp[$segment];
+            foreach ($segments as $segment) {
+                if (
+                    (
+                        \is_array($usedArrayTmp)
+                        ||
+                        $usedArrayTmp instanceof \ArrayAccess
+                    )
+                    &&
+                    isset($usedArrayTmp[$segment])
+                ) {
+                    $usedArrayTmp = $usedArrayTmp[$segment];
 
-                        continue;
-                    }
-
-                    if (
-                        \is_object($usedArrayTmp) === true
-                        &&
-                        \property_exists($usedArrayTmp, $segment)
-                    ) {
-                        $usedArrayTmp = $usedArrayTmp->{$segment};
-
-                        continue;
-                    }
-
-                    if (isset($segments[0]) && $segments[0] === '*') {
-                        $segmentsTmp = $segments;
-                        unset($segmentsTmp[0]);
-                        $keyTmp = \implode('.', $segmentsTmp);
-                        $returnTmp = static::create(
-                            [],
-                            $this->iteratorClass,
-                            false
-                        );
-                        foreach ($this->getAll() as $dataTmp) {
-                            if ($dataTmp instanceof self) {
-                                $returnTmp->add($dataTmp->get($keyTmp));
-
-                                continue;
-                            }
-
-                            if (
-                                (
-                                    \is_array($dataTmp)
-                                    ||
-                                    $dataTmp instanceof \ArrayAccess
-                                )
-                                &&
-                                isset($dataTmp[$keyTmp])
-                            ) {
-                                $returnTmp->add($dataTmp[$keyTmp]);
-
-                                continue;
-                            }
-
-                            if (
-                                \is_object($dataTmp) === true
-                                &&
-                                \property_exists($dataTmp, $keyTmp)
-                            ) {
-                                $returnTmp->add($dataTmp->{$keyTmp});
-
-                                continue;
-                            }
-                        }
-
-                        if ($returnTmp->count() > 0) {
-                            return $returnTmp;
-                        }
-                    }
-
-                    return $fallback instanceof \Closure ? $fallback() : $fallback;
+                    continue;
                 }
+
+                if (
+                    \is_object($usedArrayTmp) === true
+                    &&
+                    \property_exists($usedArrayTmp, $segment)
+                ) {
+                    $usedArrayTmp = $usedArrayTmp->{$segment};
+
+                    continue;
+                }
+
+                if (isset($segments[0]) && $segments[0] === '*') {
+                    $segmentsTmp = $segments;
+                    unset($segmentsTmp[0]);
+                    $keyTmp = \implode('.', $segmentsTmp);
+                    $returnTmp = static::create(
+                        [],
+                        $this->iteratorClass,
+                        false
+                    );
+                    foreach ($this->getAll() as $dataTmp) {
+                        if ($dataTmp instanceof self) {
+                            $returnTmp->add($dataTmp->get($keyTmp));
+
+                            continue;
+                        }
+
+                        if (
+                            (
+                                \is_array($dataTmp)
+                                ||
+                                $dataTmp instanceof \ArrayAccess
+                            )
+                            &&
+                            isset($dataTmp[$keyTmp])
+                        ) {
+                            $returnTmp->add($dataTmp[$keyTmp]);
+
+                            continue;
+                        }
+
+                        if (
+                            \is_object($dataTmp) === true
+                            &&
+                            \property_exists($dataTmp, $keyTmp)
+                        ) {
+                            $returnTmp->add($dataTmp->{$keyTmp});
+
+                            continue;
+                        }
+                    }
+
+                    if ($returnTmp->count() > 0) {
+                        return $returnTmp;
+                    }
+                }
+
+                return $fallback instanceof \Closure ? $fallback() : $fallback;
             }
         }
 
@@ -8046,21 +8031,18 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             \strpos($key, $this->pathSeparator) !== false
         ) {
             $path = \explode($this->pathSeparator, (string) $key);
+            // crawl though the keys
+            while (\count($path, \COUNT_NORMAL) > 1) {
+                $key = \array_shift($path);
 
-            if ($path !== false) {
-                // crawl though the keys
-                while (\count($path, \COUNT_NORMAL) > 1) {
-                    $key = \array_shift($path);
-
-                    if (!$this->has($key)) {
-                        return false;
-                    }
-
-                    $this->array = &$this->array[$key];
+                if (!$this->has($key)) {
+                    return false;
                 }
 
-                $key = \array_shift($path);
+                $this->array = &$this->array[$key];
             }
+
+            $key = \array_shift($path);
         }
 
         unset($this->array[$key]);
@@ -8115,17 +8097,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             \strpos($key, $this->pathSeparator) !== false
         ) {
             $path = \explode($this->pathSeparator, (string) $key);
-
-            if ($path !== false) {
-                // crawl through the keys
-                while (\count($path, \COUNT_NORMAL) > 1) {
-                    $key = \array_shift($path);
-
-                    $array = &$array[$key];
-                }
-
+            // crawl through the keys
+            while (\count($path, \COUNT_NORMAL) > 1) {
                 $key = \array_shift($path);
+
+                $array = &$array[$key];
             }
+
+            $key = \array_shift($path);
         }
 
         if ($array === null) {
