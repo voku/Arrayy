@@ -52,16 +52,21 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             $property = $propertyTmp;
         }
 
+        return self::fromDocTypeObject($property, $phpDocumentorReflectionProperty->getType());
+    }
+
+    /**
+     * @param string                              $property
+     * @param \phpDocumentor\Reflection\Type|null $type
+     *
+     * @return self|null
+     */
+    public static function fromDocTypeObject(string $property, $type)
+    {
         $tmpObject = new \stdClass();
         $tmpObject->{$property} = null;
 
         $tmpReflection = new self((new \ReflectionProperty($tmpObject, $property))->getName());
-
-        $type = $phpDocumentorReflectionProperty->getType();
-
-        /** @noinspection PhpSillyAssignmentInspection */
-        /** @var Type|null $type */
-        $type = $type;
 
         if ($type) {
             $tmpReflection->hasTypeDeclaration = true;
@@ -157,6 +162,25 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             }
 
             return $types;
+        }
+
+        if ($type instanceof \phpDocumentor\Reflection\Types\Nullable) {
+            $typeTmp = self::parseDocTypeObject($type->getActualType());
+            if (\is_array($typeTmp) === true) {
+                $typeTmp[] = 'null';
+
+                return $typeTmp;
+            }
+
+            return [$typeTmp, 'null'];
+        }
+
+        if (
+            \class_exists('\phpDocumentor\Reflection\PseudoTypes\ArrayShape')
+            &&
+            $type instanceof \phpDocumentor\Reflection\PseudoTypes\ArrayShape
+        ) {
+            return 'array';
         }
 
         if ($type instanceof \phpDocumentor\Reflection\Types\Array_) {

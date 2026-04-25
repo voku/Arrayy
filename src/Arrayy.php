@@ -94,6 +94,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected $properties = [];
 
     /**
+     * @var array<string, true>
+     */
+    protected $optionalProperties = [];
+
+    /**
      * Initializes
      *
      * @param mixed  $data                         <p>
@@ -7614,34 +7619,24 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected function getPropertiesFromPhpDoc()
     {
         static $PROPERTY_CACHE = [];
+        static $OPTIONAL_PROPERTY_CACHE = [];
         $cacheKey = 'Class::' . static::class;
 
         if (isset($PROPERTY_CACHE[$cacheKey])) {
+            $this->optionalProperties = $OPTIONAL_PROPERTY_CACHE[$cacheKey] ?? [];
+
             return $PROPERTY_CACHE[$cacheKey];
         }
 
         $properties = $this->getPropertiesFromNativeDefinitions();
+        $optionalProperties = [];
 
         $reflector = new \ReflectionClass($this);
         $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
         $docComment = $reflector->getDocComment();
         if ($docComment) {
             $docblock = $factory->create($docComment);
-            /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
-            foreach ($docblock->getTagsByName('property') as $tag) {
-                $typeName = $tag->getVariableName();
-                /** @var string|null $typeName */
-                if (
-                    $typeName !== null
-                    &&
-                    isset($properties[$typeName]) === false
-                ) {
-                    $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
-                    if ($typeCheckPhpDoc !== null) {
-                        $properties[$typeName] = $typeCheckPhpDoc;
-                    }
-                }
-            }
+            $this->addPropertiesFromDocBlock($docblock, $properties, $optionalProperties);
         }
 
         /** @noinspection PhpAssignmentInConditionInspection */
@@ -7649,25 +7644,120 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $docComment = $reflector->getDocComment();
             if ($docComment) {
                 $docblock = $factory->create($docComment);
-                /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
-                foreach ($docblock->getTagsByName('property') as $tag) {
-                    $typeName = $tag->getVariableName();
-                    /** @var string|null $typeName */
-                    if ($typeName !== null) {
-                        if (isset($properties[$typeName])) {
-                            continue;
-                        }
+                $this->addPropertiesFromDocBlock($docblock, $properties, $optionalProperties);
+            }
+        }
 
-                        $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
-                        if ($typeCheckPhpDoc !== null) {
-                            $properties[$typeName] = $typeCheckPhpDoc;
-                        }
+        $this->optionalProperties = $optionalProperties;
+        $OPTIONAL_PROPERTY_CACHE[$cacheKey] = $optionalProperties;
+
+        return $PROPERTY_CACHE[$cacheKey] = $properties;
+    }
+
+    /**
+     * @param \phpDocumentor\Reflection\DocBlock $docblock
+     * @param TypeCheckInterface[]               $properties
+     * @param array<string, true>                $optionalProperties
+     *
+     * @return void
+     */
+    private function addPropertiesFromDocBlock($docblock, array &$properties, array &$optionalProperties): void
+    {
+        $propertyTags = $docblock->getTagsByName('property');
+        $arrayShapeItems = $this->getArrayShapeItemsFromDocBlock($docblock);
+
+        if ($propertyTags !== [] && $arrayShapeItems !== []) {
+            throw new \TypeError('Use either @property tags or array-shape annotations for Arrayy property definitions, not both.');
+        }
+
+        /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
+        foreach ($propertyTags as $tag) {
+            $typeName = $tag->getVariableName();
+            /** @var string|null $typeName */
+            if (
+                $typeName !== null
+                &&
+                isset($properties[$typeName]) === false
+            ) {
+                $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
+                if ($typeCheckPhpDoc !== null) {
+                    $properties[$typeName] = $typeCheckPhpDoc;
+                    unset($optionalProperties[$typeName]);
+                }
+            }
+        }
+
+        foreach ($arrayShapeItems as $item) {
+            $typeName = (string) $item->getKey();
+            if ($typeName === '') {
+                continue;
+            }
+
+            $typeName = \trim($typeName, '\'"');
+            if (isset($properties[$typeName])) {
+                continue;
+            }
+
+            $typeCheckPhpDoc = TypeCheckPhpDoc::fromDocTypeObject($typeName, $item->getValue());
+            if ($typeCheckPhpDoc !== null) {
+                $properties[$typeName] = $typeCheckPhpDoc;
+                if ($item->isOptional()) {
+                    $optionalProperties[$typeName] = true;
+                } else {
+                    unset($optionalProperties[$typeName]);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param \phpDocumentor\Reflection\DocBlock $docblock
+     *
+     * @return \phpDocumentor\Reflection\PseudoTypes\ArrayShapeItem[]
+     */
+    private function getArrayShapeItemsFromDocBlock($docblock): array
+    {
+        if (!\class_exists('\phpDocumentor\Reflection\PseudoTypes\ArrayShape')) {
+            return [];
+        }
+
+        $items = [];
+        foreach ($docblock->getTagsByName('template') as $tag) {
+            if (
+                $tag instanceof \phpDocumentor\Reflection\DocBlock\Tags\Template
+                &&
+                $tag->getBound() instanceof \phpDocumentor\Reflection\PseudoTypes\ArrayShape
+            ) {
+                foreach ($tag->getBound()->getItems() as $item) {
+                    $items[] = $item;
+                }
+            }
+        }
+
+        foreach ($docblock->getTagsByName('extends') as $tag) {
+            if (!$tag instanceof \phpDocumentor\Reflection\DocBlock\Tags\Extends_) {
+                continue;
+            }
+
+            $type = $tag->getType();
+            if (
+                !$type instanceof \phpDocumentor\Reflection\PseudoTypes\Generic
+                ||
+                \in_array(\ltrim((string) $type->getFqsen(), '\\'), [self::class, ArrayyStrict::class], true) === false
+            ) {
+                continue;
+            }
+
+            foreach ($type->getTypes() as $genericType) {
+                if ($genericType instanceof \phpDocumentor\Reflection\PseudoTypes\ArrayShape) {
+                    foreach ($genericType->getItems() as $item) {
+                        $items[] = $item;
                     }
                 }
             }
         }
 
-        return $PROPERTY_CACHE[$cacheKey] = $properties;
+        return $items;
     }
 
     /**
@@ -8044,15 +8134,16 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
             /** @var TypeCheckInterface[] $properties */
             $properties = $this->properties;
+            $requiredProperties = \array_diff_key($properties, $this->optionalProperties);
 
             if (
                 $this->checkPropertiesMismatchInConstructor === true
                 &&
                 \count($data) !== 0
                 &&
-                \count(\array_diff_key($properties, $data)) > 0
+                \count(\array_diff_key($requiredProperties, $data)) > 0
             ) {
-                throw new \TypeError('Property mismatch - input: ' . \print_r(\array_keys($data), true) . ' | expected: ' . \print_r(\array_keys($properties), true));
+                throw new \TypeError('Property mismatch - input: ' . \print_r(\array_keys($data), true) . ' | expected: ' . \print_r(\array_keys($requiredProperties), true));
             }
         }
 
@@ -8194,7 +8285,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             &&
             $this->checkPropertiesMismatch === true
         ) {
-            throw new \TypeError('The key "' . $key . '" does not exists as "@property" phpdoc. (' . \get_class($this) . ').');
+            throw new \TypeError('The key "' . $key . '" does not exists as a property definition. (' . \get_class($this) . ').');
         }
 
         if (isset($this->properties[self::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES])) {

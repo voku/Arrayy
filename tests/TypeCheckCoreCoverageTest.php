@@ -346,6 +346,58 @@ DOC);
         $failingCheck->checkType($invalidValue);
     }
 
+    public function testArrayShapeTemplateProvidesPropertyDefinitions(): void
+    {
+        $meta = TypeCheckArrayShapeUserData::meta();
+        $model = new TypeCheckArrayShapeUserData([
+            $meta->id        => 1,
+            $meta->firstName => 'Lars',
+            $meta->lastName  => 'Moelleken',
+            $meta->infos     => ['foo'],
+        ]);
+
+        static::assertSame('id', $meta->id);
+        static::assertSame('city', $meta->city);
+        static::assertSame('Lars', $model[$meta->firstName]);
+    }
+
+    public function testArrayShapeTemplateRejectsInvalidPropertyTypes(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
+
+        $meta = TypeCheckArrayShapeUserData::meta();
+        new TypeCheckArrayShapeUserData([
+            $meta->id        => 1,
+            $meta->firstName => 'Lars',
+            $meta->lastName  => 'Moelleken',
+            $meta->infos     => [1],
+        ]);
+    }
+
+    public function testArrayShapeTemplateRejectsUnknownProperties(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('The key "unknown" does not exists');
+
+        $meta = TypeCheckArrayShapeUserData::meta();
+        new TypeCheckArrayShapeUserData([
+            $meta->id        => 1,
+            $meta->firstName => 'Lars',
+            $meta->lastName  => 'Moelleken',
+            $meta->infos     => ['foo'],
+            'unknown'        => 'value',
+        ]);
+    }
+
+    public function testPropertyTagsAndArrayShapeTemplateCannotBeMixed(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Use either @property tags or array-shape annotations');
+
+        new TypeCheckMixedPropertyAnnotationsData(['id' => 1]);
+    }
+
     /**
      * @return iterable<string, array{0: array<int, mixed>}>
      */
@@ -391,4 +443,27 @@ final class TypeCheckDocOverridesNativeFixture
      * @var int|string
      */
     public string $value = '';
+}
+
+/**
+ * @template T of array{id: int, firstName: int|string, lastName: string, city?: \Arrayy\tests\CityData|null, infos: string[]}
+ * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
+ */
+final class TypeCheckArrayShapeUserData extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected $checkForMissingPropertiesInConstructor = true;
+
+    protected $checkPropertiesMismatchInConstructor = true;
+}
+
+/**
+ * @property int $legacyId
+ * @template T of array{id: int}
+ * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
+ */
+final class TypeCheckMixedPropertyAnnotationsData extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
 }
