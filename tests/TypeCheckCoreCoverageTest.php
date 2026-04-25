@@ -494,6 +494,14 @@ DOC);
         new TypeCheckMixedPropertyAnnotationsData(['id' => 1]);
     }
 
+    public function testPropertyTagsAndArrayShapeAnnotationsCannotBeMixedAcrossInheritance(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Use either @property tags or array-shape annotations');
+
+        new TypeCheckMixedPropertyAnnotationsInheritanceData(['id' => 1]);
+    }
+
     /**
      * Risk: optional shape keys skip the constructor-mismatch check but must still go
      * through `checkType()` when a value is actually supplied; removing the per-key
@@ -578,6 +586,21 @@ DOC);
         static::assertSame(42, $model[$meta->score]);
     }
 
+    public function testIntermediateArrayyExtendsShapeIsExposedViaMeta(): void
+    {
+        $meta = TypeCheckArrayShapeViaIntermediateBaseData::meta();
+
+        static::assertSame('id', $meta->id);
+    }
+
+    public function testIntermediateArrayyExtendsShapeRejectsInvalidPropertyTypes(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageMatches('#Invalid type: expected "id" to be of type \{int\}#');
+
+        new TypeCheckArrayShapeViaIntermediateBaseData(['id' => 'not-an-int']);
+    }
+
     /**
      * Risk: the @extends FQCN guard (`in_array(…, [Arrayy::class, ArrayyStrict::class])`)
      * must prevent shapes on unrelated classes from being parsed as property metadata.
@@ -614,6 +637,24 @@ DOC);
         $this->expectExceptionMessage('expected "myProp" to be of type {}');
         $nullValue = null;
         $checker->checkType($nullValue);
+    }
+
+    public function testFromDocTypeObjectWithParsedTypeKeepsPropertyNameInErrors(): void
+    {
+        $docBlock = DocBlockFactory::createInstance()->create(<<<'DOC'
+/**
+ * @property int $myProp
+ */
+DOC);
+        $tag = $docBlock->getTagsByName('property')[0];
+
+        $checker = TypeCheckPhpDoc::fromDocTypeObject('myProp', $tag->getType());
+
+        static::assertSame(['int'], $checker->getTypes());
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('expected "myProp" to be of type {int}');
+        $checker->checkType('not-an-int');
     }
 
     /**
@@ -743,6 +784,22 @@ final class TypeCheckMixedPropertyAnnotationsData extends \Arrayy\Arrayy
 }
 
 /**
+ * @property int $legacyId
+ */
+abstract class TypeCheckPropertyTagParentData extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+}
+
+/**
+ * @template T of array{id: int}
+ * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
+ */
+final class TypeCheckMixedPropertyAnnotationsInheritanceData extends TypeCheckPropertyTagParentData
+{
+}
+
+/**
  * Optional key whose value type does NOT include null. "Optional" means the key
  * may be absent; null must still be rejected when the key is present.
  *
@@ -785,6 +842,20 @@ final class TypeCheckArrayShapeExtendsOnlyData extends \Arrayy\Arrayy
     protected $checkPropertyTypes = true;
 
     protected $checkPropertiesMismatch = true;
+}
+
+abstract class TypeCheckCustomArrayyBase extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected $checkPropertiesMismatch = true;
+}
+
+/**
+ * @extends \Arrayy\tests\TypeCheckCustomArrayyBase<array{id: int}, mixed>
+ */
+final class TypeCheckArrayShapeViaIntermediateBaseData extends TypeCheckCustomArrayyBase
+{
 }
 
 /**
