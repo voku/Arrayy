@@ -1262,8 +1262,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 \is_bool($value)
             ) {
                 $sum += $value;
-            }
-            elseif (\is_string($value) && \is_numeric($value)) {
+            } elseif (\is_string($value) && \is_numeric($value)) {
                 $sum += (float) $value;
             }
         }
