@@ -779,6 +779,10 @@ final class TypeCheckArrayShapeWrongTemplateName extends \Arrayy\Arrayy
 }
 
 /**
+ * Test fixture: the @extends annotation intentionally names a non-Arrayy class (stdClass)
+ * to verify that the FQCN guard in getArrayShapeItemsFromDocBlock() ignores the shape.
+ * The class itself still extends \Arrayy\Arrayy as normal.
+ *
  * @extends stdClass<array{id: int}, mixed>
  */
 final class TypeCheckNonArrayyExtendsData extends \Arrayy\Arrayy
