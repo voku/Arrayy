@@ -7630,13 +7630,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $properties = $this->getPropertiesFromNativeDefinitions();
         $optionalProperties = [];
+        $phpDocPropertyAnnotationStyle = null;
 
         $reflector = new \ReflectionClass($this);
         $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
         $docComment = $reflector->getDocComment();
         if ($docComment) {
             $docblock = $factory->create($docComment);
-            $this->addPropertiesFromDocBlock($docblock, $properties, $optionalProperties);
+            $this->addPropertiesFromDocBlock($docblock, $properties, $optionalProperties, $phpDocPropertyAnnotationStyle);
         }
 
         /** @noinspection PhpAssignmentInConditionInspection */
@@ -7644,7 +7645,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $docComment = $reflector->getDocComment();
             if ($docComment) {
                 $docblock = $factory->create($docComment);
-                $this->addPropertiesFromDocBlock($docblock, $properties, $optionalProperties);
+                $this->addPropertiesFromDocBlock($docblock, $properties, $optionalProperties, $phpDocPropertyAnnotationStyle);
             }
         }
 
@@ -7658,16 +7659,38 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param \phpDocumentor\Reflection\DocBlock $docblock
      * @param TypeCheckInterface[]               $properties
      * @param array<string, true>                $optionalProperties
+     * @param 'array-shape'|'property'|null      $phpDocPropertyAnnotationStyle
      *
      * @return void
      */
-    private function addPropertiesFromDocBlock($docblock, array &$properties, array &$optionalProperties): void
+    private function addPropertiesFromDocBlock($docblock, array &$properties, array &$optionalProperties, ?string &$phpDocPropertyAnnotationStyle): void
     {
         $propertyTags = $docblock->getTagsByName('property');
         $arrayShapeItems = $this->getArrayShapeItemsFromDocBlock($docblock);
 
         if ($propertyTags !== [] && $arrayShapeItems !== []) {
             throw new \TypeError('Use either @property tags or array-shape annotations for Arrayy property definitions, not both.');
+        }
+
+        $currentPhpDocPropertyAnnotationStyle = null;
+        if ($propertyTags !== []) {
+            $currentPhpDocPropertyAnnotationStyle = 'property';
+        } elseif ($arrayShapeItems !== []) {
+            $currentPhpDocPropertyAnnotationStyle = 'array-shape';
+        }
+
+        if (
+            $currentPhpDocPropertyAnnotationStyle !== null
+            &&
+            $phpDocPropertyAnnotationStyle !== null
+            &&
+            $phpDocPropertyAnnotationStyle !== $currentPhpDocPropertyAnnotationStyle
+        ) {
+            throw new \TypeError('Use either @property tags or array-shape annotations for Arrayy property definitions, not both.');
+        }
+
+        if ($currentPhpDocPropertyAnnotationStyle !== null) {
+            $phpDocPropertyAnnotationStyle = $currentPhpDocPropertyAnnotationStyle;
         }
 
         /** @var \phpDocumentor\Reflection\DocBlock\Tags\Property $tag */
@@ -7743,7 +7766,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if (
                 !$type instanceof \phpDocumentor\Reflection\PseudoTypes\Generic
                 ||
-                !\in_array(\ltrim((string) $type->getFqsen(), '\\'), [self::class, ArrayyStrict::class], true)
+                !$this->isArrayyGenericTarget((string) $type->getFqsen())
             ) {
                 continue;
             }
@@ -7758,6 +7781,20 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $items;
+    }
+
+    private function isArrayyGenericTarget(string $fqcn): bool
+    {
+        $fqcn = \ltrim($fqcn, '\\');
+        if ($fqcn === '') {
+            return false;
+        }
+
+        if (\in_array($fqcn, [self::class, ArrayyStrict::class], true)) {
+            return true;
+        }
+
+        return \class_exists($fqcn) && \is_a($fqcn, self::class, true);
     }
 
     /**

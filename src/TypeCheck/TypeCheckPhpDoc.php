@@ -63,10 +63,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
      */
     public static function fromDocTypeObject(string $property, $type)
     {
-        $tmpObject = new \stdClass();
-        $tmpObject->{$property} = null;
-
-        $tmpReflection = new self((new \ReflectionProperty($tmpObject, $property))->getName());
+        $tmpReflection = new self($property);
 
         if ($type) {
             $tmpReflection->hasTypeDeclaration = true;

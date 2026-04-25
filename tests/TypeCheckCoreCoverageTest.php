@@ -654,7 +654,8 @@ DOC);
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('expected "myProp" to be of type {int}');
-        $checker->checkType('not-an-int');
+        $value = 'not-an-int';
+        $checker->checkType($value);
     }
 
     /**
@@ -849,6 +850,8 @@ abstract class TypeCheckCustomArrayyBase extends \Arrayy\Arrayy
     protected $checkPropertyTypes = true;
 
     protected $checkPropertiesMismatch = true;
+
+    protected $checkForMissingPropertiesInConstructor = true;
 }
 
 /**
