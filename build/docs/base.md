@@ -117,7 +117,7 @@ $arrayy->Lars->lastname; // 'Müller'
 
 ## PhpDoc @property checking
 
-The library offers a type checking for @property phpdoc-class-comments, as seen below:
+The library offers type checking for `@property` phpdoc-class-comments and native declared properties.
 
 ```php
 /**
@@ -177,9 +177,33 @@ var_dump($user[$userMeta->city][$cityMeta->name]); // 'Düsseldorf'
 var_dump($user->city->name); // Düsseldorf
 ```
 
-- "checkPropertyTypes": activate the type checking for all defined @property in the class-phpdoc
+Native typed properties also work with `meta()` and `createFromJsonMapper()`, e.g.:
+
+```php
+class NativeCity extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected ?string $plz;
+
+    protected string $name;
+
+    /** @var string[] */
+    protected array $infos;
+}
+
+$nativeMeta = NativeCity::meta();
+NativeCity::createFromJsonMapper(
+    '{"name":"Düsseldorf","plz":null,"infos":["foo","bar"]}'
+);
+
+var_dump($nativeMeta->infos); // 'infos'
+```
+
+- "checkPropertyTypes": activate the type checking for all defined `@property` tags and native declared properties
 - "checkPropertiesMismatchInConstructor": activate the property mismatch check, so you can only add an 
-                                          array with all needed properties (or an empty array) into the constructor
+                                           array with all needed properties (or an empty array) into the constructor
+- use a property-level `@var` annotation such as `/** @var string[] */` if a native `array` property needs element-type validation
 
 ## OO and Chaining
 
@@ -271,13 +295,12 @@ $arrayy = a(['fòô', 'foo']);
 count($arrayy);  // 2
 ```
 
-## PHP 5.6 Creation
+## Function import shortcut
 
-As of PHP 5.6, [`use function`](https://wiki.php.net/rfc/use_function) is
-available for importing functions. Arrayy exposes a namespaced function,
-`Arrayy\create`, which emits the same behaviour as `Arrayy\Arrayy::create()`.
-If running PHP 5.6, or another runtime that supports the `use function` syntax,
-you can take advantage of an even simpler API as seen below:
+On supported PHP 8.0+ versions, [`use function`](https://wiki.php.net/rfc/use_function)
+can be used to import helper functions. Arrayy exposes the namespaced function
+`Arrayy\create`, which behaves the same as `Arrayy\Arrayy::create()`.
+You can alias it to `a` for a shorter and more readable API:
 
 ``` php
 use function Arrayy\create as a;
@@ -563,10 +586,9 @@ $arrayy = A::createFromString(' foo, bar '); // Arrayy['foo', 'bar']
 
 ## Instance Methods
 
-Arrayy: All examples below make use of PHP 5.6
-function importing, and PHP 5.4 short array syntax. For further details,
-see the documentation for the create method above, as well as the notes
-on PHP 5.6 creation.
+Arrayy: All examples below use the helper-function import shown above together
+with short array syntax. For further details, see the documentation for the
+create method above and the notes on the function import shortcut.
 
 ##### "set an array value"
 

@@ -44,6 +44,18 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
             return true;
         }
 
+        if (
+            \is_array($value)
+            &&
+            \count($this->types) > 1
+            &&
+            $this->allTypesAreGenericArrays()
+        ) {
+            if ($this->assertTypeEquals(\implode('|', $this->types), $value)) {
+                return true;
+            }
+        }
+
         foreach ($this->types as $currentType) {
             $isValidType = $this->assertTypeEquals($currentType, $value);
 
@@ -69,8 +81,30 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
      */
     protected function assertTypeEquals(string $type, &$value): bool
     {
+        $type = \trim($type);
+
         if (\strpos($type, '[]') !== false) {
             return $this->isValidGenericCollection($type, $value);
+        }
+
+        if (\strpos($type, '&') !== false) {
+            foreach (\explode('&', $type) as $subType) {
+                if ($this->assertTypeEquals(\trim($subType), $value) === false) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        if (\strpos($type, '|') !== false) {
+            foreach (\explode('|', $type) as $subType) {
+                if ($this->assertTypeEquals(\trim($subType), $value) === true) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         if ($type === 'mixed' && $value !== null) {
@@ -164,11 +198,23 @@ abstract class AbstractTypeCheck implements TypeCheckInterface
         $valueType = \str_replace('[]', '', $type);
 
         foreach ($collection as $value) {
-            if ($this->assertTypeEquals($valueType, $value)) {
-                return true;
+            // A typed collection is only valid when every element matches the declared element type.
+            if (!$this->assertTypeEquals($valueType, $value)) {
+                return false;
             }
         }
 
-        return false;
+        return true;
+    }
+
+    private function allTypesAreGenericArrays(): bool
+    {
+        foreach ($this->types as $type) {
+            if (\substr($type, -2) !== '[]') {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

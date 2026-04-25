@@ -1241,7 +1241,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function average($decimals = 0)
     {
-        $count = \count($this->toArray(), \COUNT_NORMAL);
+        $array = $this->toArray();
+        $count = \count($array, \COUNT_NORMAL);
 
         if (!$count) {
             return 0;
@@ -1251,7 +1252,22 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $decimals = 0;
         }
 
-        return \round(\array_sum($this->toArray()) / $count, $decimals);
+        $sum = 0;
+        foreach ($array as $value) {
+            if (
+                \is_int($value)
+                ||
+                \is_float($value)
+                ||
+                \is_bool($value)
+            ) {
+                $sum += $value;
+            } elseif (\is_string($value) && \is_numeric($value)) {
+                $sum += (float) $value;
+            }
+        }
+
+        return \round($sum / $count, $decimals);
     }
 
     /**
@@ -1279,9 +1295,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $return = [];
         foreach ($this->getGenerator() as $key => $value) {
             if ($case === \CASE_LOWER) {
-                $key = \mb_strtolower((string) $key);
+                $key = \mb_convert_case(
+                    (string) $key,
+                    \defined('MB_CASE_LOWER_SIMPLE') ? \MB_CASE_LOWER_SIMPLE : \MB_CASE_LOWER,
+                    'UTF-8'
+                );
             } else {
-                $key = \mb_strtoupper((string) $key);
+                $key = \mb_convert_case(
+                    (string) $key,
+                    \defined('MB_CASE_UPPER_SIMPLE') ? \MB_CASE_UPPER_SIMPLE : \MB_CASE_UPPER,
+                    'UTF-8'
+                );
             }
 
             $return[$key] = $value;
@@ -3220,6 +3244,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Create an instance from JSON using the built-in mapper.
+     *
+     * For Arrayy models with property checks enabled, both phpdoc `@property`
+     * definitions and native declared properties are used for metadata and type checks.
+     * Add a property-level `@var` annotation if a native `array` property also needs
+     * element-type validation.
+     *
      * @param string $json
      *
      * @return static
@@ -4688,6 +4719,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     }
 
     /**
+     * Return a meta object with property names from phpdoc `@property` tags and
+     * native declared properties.
+     *
      * @return ArrayyMeta|mixed|static
      */
     public static function meta()
@@ -7586,8 +7620,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $PROPERTY_CACHE[$cacheKey];
         }
 
-        // init
-        $properties = [];
+        $properties = $this->getPropertiesFromNativeDefinitions();
 
         $reflector = new \ReflectionClass($this);
         $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
@@ -7598,7 +7631,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             foreach ($docblock->getTagsByName('property') as $tag) {
                 $typeName = $tag->getVariableName();
                 /** @var string|null $typeName */
-                if ($typeName !== null) {
+                if (
+                    $typeName !== null
+                    &&
+                    isset($properties[$typeName]) === false
+                ) {
                     $typeCheckPhpDoc = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag, $typeName);
                     if ($typeCheckPhpDoc !== null) {
                         $properties[$typeName] = $typeCheckPhpDoc;
@@ -7631,6 +7668,64 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return $PROPERTY_CACHE[$cacheKey] = $properties;
+    }
+
+    /**
+     * @return TypeCheckInterface[]
+     */
+    protected function getPropertiesFromNativeDefinitions(): array
+    {
+        $properties = [];
+        $reflector = new \ReflectionClass($this);
+        $reservedProperties = self::getReservedPropertyNames();
+
+        do {
+            if ($reflector->getName() === self::class) {
+                break;
+            }
+
+            foreach ($reflector->getProperties() as $property) {
+                if (
+                    $property->getDeclaringClass()->getName() !== $reflector->getName()
+                    ||
+                    $property->isStatic()
+                    ||
+                    isset($reservedProperties[$property->getName()])
+                    ||
+                    isset($properties[$property->getName()])
+                ) {
+                    continue;
+                }
+
+                $properties[$property->getName()] = TypeCheckPhpDoc::fromReflectionProperty($property);
+            }
+        } while ($reflector = $reflector->getParentClass());
+
+        return $properties;
+    }
+
+    /**
+     * @return array<string, true>
+     */
+    private static function getReservedPropertyNames(): array
+    {
+        static $reservedProperties = null;
+
+        if ($reservedProperties !== null) {
+            return $reservedProperties;
+        }
+
+        $reservedProperties = [];
+        $reflector = new \ReflectionClass(self::class);
+        foreach ($reflector->getProperties() as $property) {
+            if ($property->getDeclaringClass()->getName() !== self::class) {
+                continue;
+            }
+
+            $reservedProperties[$property->getName()] = true;
+        }
+
+        return $reservedProperties;
     }
 
     /**

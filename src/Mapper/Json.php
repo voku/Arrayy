@@ -209,7 +209,17 @@ final class Json
 
                 $cleanSubtype = $this->removeNullable($subtype);
                 $subtype = $this->getFullNamespace($cleanSubtype, $strNs);
-                $child = $this->mapArray($jsonValue, $array, $subtype, $key);
+                if (
+                    $object instanceof \Arrayy\Arrayy
+                    &&
+                    $subtype !== null
+                    &&
+                    $this->isSimpleType($subtype)
+                ) {
+                    $child = $jsonValue;
+                } else {
+                    $child = $this->mapArray($jsonValue, $array, $subtype, $key);
+                }
             } elseif ($this->isScalarType(\gettype($jsonValue))) {
                 // use constructor parameter if we have a class, but only a flat type (i.e. string, int)
                 /** @noinspection PhpSillyAssignmentInspection - phpstan helper */

@@ -102,6 +102,14 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         static::assertNull($model[3]);
     }
 
+    public function testDataFromJsonMapperRejectsInvalidArrayElementTypes()
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
+
+        CityData::createFromJsonMapper('{"name":"Düsseldorf","plz":null,"infos":[1,2,3]}');
+    }
+
     /**
      * @depends testSetAndGet
      */
@@ -145,8 +153,11 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
     public function testExtendedClassV2()
     {
         $this->expectException(\TypeError::class);
-
-        if (\method_exists(__CLASS__, 'expectExceptionMessageMatches')) {
+        if (
+            \class_exists(\Composer\InstalledVersions::class)
+            &&
+            \version_compare((string) \Composer\InstalledVersions::getPrettyVersion('phpunit/phpunit'), '8.4.0', '>=')
+        ) {
             $this->expectExceptionMessageMatches('#Invalid type: expected "plz" to be of type {string}, instead got value "NULL"#');
         } else {
             /** @noinspection PhpUndefinedMethodInspection */
@@ -154,7 +165,6 @@ final class CityDataTest extends \PHPUnit\Framework\TestCase
         }
 
         $modelMeta = BigCityData::meta();
-
         new BigCityData(
             [
                 $modelMeta->name       => 'Düsseldorf',

@@ -83,6 +83,51 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         return $tmpReflection;
     }
 
+    public static function fromReflectionProperty(\ReflectionProperty $reflectionProperty): self
+    {
+        $tmpReflection = new self($reflectionProperty->getName());
+        $type = $reflectionProperty->getType();
+        $docTypes = self::getTypesFromReflectionPropertyDocBlock($reflectionProperty);
+
+        if ($docTypes !== null) {
+            $tmpReflection->hasTypeDeclaration = true;
+
+            if (\is_array($docTypes) === true) {
+                foreach ($docTypes as $docType) {
+                    $tmpReflection->types[] = $docType;
+                }
+            } else {
+                $tmpReflection->types[] = $docTypes;
+            }
+        } elseif ($type === null) {
+            $tmpReflection->types[] = 'mixed';
+            $tmpReflection->isNullable = true;
+
+            return $tmpReflection;
+        } else {
+            $tmpReflection->hasTypeDeclaration = true;
+
+            $docTypes = self::parseReflectionTypeObject($type);
+            if (\is_array($docTypes) === true) {
+                foreach ($docTypes as $docType) {
+                    $tmpReflection->types[] = $docType;
+                }
+            } else {
+                $tmpReflection->types[] = $docTypes;
+            }
+        }
+
+        if ($type !== null && self::typeAllowsNull($type) && \in_array('null', $tmpReflection->types, true) === false) {
+            $tmpReflection->types[] = 'null';
+        }
+
+        if (\in_array('null', $tmpReflection->types, true)) {
+            $tmpReflection->isNullable = true;
+        }
+
+        return $tmpReflection;
+    }
+
     /**
      * @param \phpDocumentor\Reflection\Type $type
      *
@@ -131,8 +176,10 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
             return 'mixed';
         }
 
-        if ($type instanceof \phpDocumentor\Reflection\Types\Scalar) {
-            return 'string|int|float|bool';
+        foreach (self::getScalarPseudoTypeClasses() as $scalarTypeClass) {
+            if ($type instanceof $scalarTypeClass) {
+                return 'string|int|float|bool';
+            }
         }
 
         if ($type instanceof \phpDocumentor\Reflection\Types\Boolean) {
@@ -164,6 +211,129 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         }
 
         return $type->__toString();
+    }
+
+    /**
+     * @return list<class-string>
+     */
+    private static function getScalarPseudoTypeClasses(): array
+    {
+        $classes = [];
+
+        foreach (
+            [
+                '\phpDocumentor\Reflection\PseudoTypes\Scalar',
+                '\phpDocumentor\Reflection\Types\Scalar',
+            ] as $className
+        ) {
+            if (\class_exists($className)) {
+                $classes[] = $className;
+            }
+        }
+
+        return $classes;
+    }
+
+    /**
+     * @return string|string[]|null
+     */
+    private static function getTypesFromReflectionPropertyDocBlock(\ReflectionProperty $reflectionProperty)
+    {
+        $docComment = $reflectionProperty->getDocComment();
+        if ($docComment === false) {
+            return null;
+        }
+
+        /** @var \phpDocumentor\Reflection\DocBlockFactoryInterface|null $factory cache factory to avoid recreating it per reflected property */
+        static $factory = null;
+        if ($factory === null) {
+            $factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
+        }
+        $docblock = $factory->create($docComment);
+        foreach ($docblock->getTagsByName('var') as $tag) {
+            if (!$tag instanceof \phpDocumentor\Reflection\DocBlock\Tags\Var_) {
+                continue;
+            }
+
+            /** @var \phpDocumentor\Reflection\Type|null $type */
+            $type = $tag->getType();
+            if ($type === null) {
+                continue;
+            }
+
+            return self::parseDocTypeObject($type);
+        }
+
+        return null;
+    }
+
+    private static function typeAllowsNull(\ReflectionType $type): bool
+    {
+        if (
+            \class_exists(\ReflectionIntersectionType::class)
+            &&
+            $type instanceof \ReflectionIntersectionType
+        ) {
+            return false;
+        }
+
+        return $type->allowsNull();
+    }
+
+    /**
+     * @param \ReflectionType $type
+     *
+     * @return string|string[]
+     */
+    public static function parseReflectionTypeObject(\ReflectionType $type)
+    {
+        if ($type instanceof \ReflectionNamedType) {
+            $typeName = $type->getName();
+
+            if ($type->isBuiltin()) {
+                return $typeName;
+            }
+
+            return '\\' . \ltrim($typeName, '\\');
+        }
+
+        if ($type instanceof \ReflectionUnionType) {
+            $types = [];
+            foreach ($type->getTypes() as $subType) {
+                $typeTmp = self::parseReflectionTypeObject($subType);
+                if (\is_array($typeTmp)) {
+                    foreach ($typeTmp as $typeTmpInner) {
+                        $types[] = $typeTmpInner;
+                    }
+                } else {
+                    $types[] = $typeTmp;
+                }
+            }
+
+            return $types;
+        }
+
+        if (
+            \class_exists(\ReflectionIntersectionType::class)
+            &&
+            $type instanceof \ReflectionIntersectionType
+        ) {
+            $types = [];
+            foreach ($type->getTypes() as $subType) {
+                $typeTmp = self::parseReflectionTypeObject($subType);
+                if (\is_array($typeTmp)) {
+                    foreach ($typeTmp as $typeTmpInner) {
+                        $types[] = $typeTmpInner;
+                    }
+                } else {
+                    $types[] = $typeTmp;
+                }
+            }
+
+            return \implode('&', $types);
+        }
+
+        return (string) $type;
     }
 
     /**
