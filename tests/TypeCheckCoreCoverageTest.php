@@ -220,6 +220,81 @@ DOC);
     }
 
     /**
+     * Risk: `parseDocTypeObject()` has a Nullable branch that wraps the inner type in
+     * ['innerType', 'null']. If this branch is removed or mis-ordered relative to
+     * Compound handling, nullable @property types (e.g. `?City`) stop being accepted.
+     */
+    public function testFromDocTypeObjectNullableProducesNullableChecker(): void
+    {
+        $docBlock = DocBlockFactory::createInstance()->create(<<<'DOC'
+/**
+ * @property ?\ArrayObject $city
+ */
+DOC);
+        $tag = $docBlock->getTagsByName('property')[0];
+
+        $checker = TypeCheckPhpDoc::fromDocTypeObject('city', $tag->getType());
+
+        static::assertSame(['\\ArrayObject', 'null'], $checker->getTypes());
+
+        $nullValue = null;
+        $objectValue = new \ArrayObject();
+        static::assertTrue($checker->checkType($nullValue));
+        static::assertTrue($checker->checkType($objectValue));
+    }
+
+    /**
+     * Risk: `parseDocTypeObject()` has an ArrayShape branch that returns 'array' when a
+     * shape value type is itself a nested array-shape. If this branch is removed, nesting
+     * a shape inside a shape raises a "no branch matched" case and the type is silently
+     * returned as the raw toString representation instead of 'array'.
+     */
+    public function testFromDocTypeObjectNestedArrayShapeYieldsArrayType(): void
+    {
+        $docBlock = DocBlockFactory::createInstance()->create(<<<'DOC'
+/**
+ * @template T of array{data: array{x: int}}
+ */
+DOC);
+        $bound = $docBlock->getTagsByName('template')[0]->getBound();
+        $nestedShapeType = $bound->getItems()[0]->getValue(); // array{x: int}
+
+        $checker = TypeCheckPhpDoc::fromDocTypeObject('data', $nestedShapeType);
+
+        // A nested array shape is collapsed to 'array'; only structural shape keys of
+        // the *model* are registered as properties.
+        static::assertSame(['array'], $checker->getTypes());
+        $anyArray = ['x' => 42, 'extra' => true];
+        static::assertTrue($checker->checkType($anyArray));
+    }
+
+    /**
+     * Risk: happy path for a valid nested model value in an optional shape key. This
+     * exercises the `Object_` branch of parseDocTypeObject for nullable class types and
+     * ensures that a correctly-typed value for the `city` key is accepted at construction.
+     */
+    public function testArrayShapeOptionalKeyAcceptsValidObjectValue(): void
+    {
+        $meta = TypeCheckArrayShapeUserData::meta();
+        $city = new \Arrayy\tests\CityData([
+            'plz'   => null,
+            'name'  => 'Düsseldorf',
+            'infos' => ['lall'],
+        ]);
+
+        $model = new TypeCheckArrayShapeUserData([
+            $meta->id        => 1,
+            $meta->firstName => 'Lars',
+            $meta->lastName  => 'Moelleken',
+            $meta->infos     => ['a'],
+            $meta->city      => $city,
+        ]);
+
+        static::assertInstanceOf(\Arrayy\tests\CityData::class, $model[$meta->city]);
+        static::assertSame('Düsseldorf', $model[$meta->city]['name']);
+    }
+
+    /**
      * Risk: these scalar/null/mixed docblock tokens are mapped manually; if any branch drifts,
      * `Arrayy` starts rejecting valid values or formatting the wrong expected type.
      */
