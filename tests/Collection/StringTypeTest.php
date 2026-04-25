@@ -51,7 +51,7 @@ final class StringTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore offsetAssign.valueType */
         new StringCollection(['A', 'B', 'C', 1]);
     }
 

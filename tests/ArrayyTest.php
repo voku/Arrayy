@@ -3137,7 +3137,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         // ---
 
         $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
-            /* @phpstan-ignore-next-line | FP from phpstan?  */
+            /* @phpstan-ignore argument.type */
             static function ($key, $value): bool {
                 return ($value % 2 !== 0) && ($key & 2 !== 0);
             },
@@ -3804,7 +3804,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $arrayy = new A([true => 'foo bar', 'lall' => 'öäü']);
         self::assertArrayy($arrayy);
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore staticMethod.impossibleType, isset.offset */
         static::assertTrue(isset($arrayy[true]));
     }
 
@@ -3905,9 +3905,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $arrayy = new Arrayy($array);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         static::assertSame(1, $arrayy->one);
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         static::assertSame(2, $arrayy->test);
     }
 
@@ -3967,7 +3967,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         }
 
         $arrayy = new A($array);
-        /* @phpstan-ignore-next-line | old way of "callable" */
+        /* @phpstan-ignore argument.type */
         $resultArrayy = $arrayy->map('str_repeat', false, 2);
         $resultArray = \array_map($callable, $array);
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
@@ -4423,7 +4423,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         unset($array[$offset]);
 
         static::assertSame($array, $arrayy->toArray());
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore staticMethod.alreadyNarrowedType, isset.offset */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
     }
@@ -4442,7 +4442,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         unset($array[$offset]);
 
         static::assertSame($array, $arrayy->toArray());
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore staticMethod.alreadyNarrowedType, isset.offset */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
     }
@@ -4462,7 +4462,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         unset($array['b'][0]);
 
         static::assertSame($array, $arrayy->toArray());
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore staticMethod.alreadyNarrowedType, isset.offset */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
 
@@ -5489,11 +5489,11 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $arrayy = new A(['Lars' => ['lastname' => 'Mueller2']]);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         $arrayy->Lars = ['lastname' => 'Moelleken'];
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         $arrayy->Sven = ['lastname' => 'Moelleken'];
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         $arrayy->foo = ['lastname' => null];
 
         $resultTmp = $arrayy->get('Lars');
@@ -5526,10 +5526,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame(['lastname' => 'Moelleken'], $arrayy['Lars']->getArray());
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         static::assertSame(['lastname' => 'Moelleken'], $arrayy->Lars->getArray());
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         static::assertSame('Moelleken', $arrayy->Lars->lastname);
 
         static::assertSame('Moelleken', $arrayy['Lars']['lastname']);
@@ -5564,7 +5564,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Mueller', $resultTmp);
 
         // set a new value, again - via object-syntax
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore property.notFound */
         $arrayy->Lars = ['lastname' => 'Mueller2'];
 
         $resultTmp = $arrayy->get('Lars');

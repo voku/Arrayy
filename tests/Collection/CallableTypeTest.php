@@ -40,7 +40,7 @@ final class CallableTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new FloatCollection(['strtolower', 1]);
     }
 }

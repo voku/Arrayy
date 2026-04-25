@@ -785,11 +785,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $value = null;
 
         if ($this->offsetExists($offset)) {
-            /** @phpstan-ignore-next-line */
             $value = &$this->__get($offset);
         }
 
-        /** @phpstan-ignore-next-line */
         return $value;
     }
 
@@ -2969,7 +2967,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($number === null) {
             $shift = \array_shift($this->array);
-            /* @phpstan-ignore-next-line | I am not sure if "array<int, T of mixed>" is an error here? */
+            /* @phpstan-ignore assign.propertyType */
             $this->array = $shift !== null ? [$shift] : [];
         } else {
             $splice = \array_splice($this->array, 0, $number);
@@ -3076,7 +3074,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         // php cast "bool"-index into "int"-index
-        /* @phpstan-ignore-next-line | this is only a fallback */
+        /* @phpstan-ignore identical.alwaysFalse */
         if ((bool) $key === $key) {
             $key = (int) $key;
         }
@@ -4787,7 +4785,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function mostUsedValue()
     {
-        /* @phpstan-ignore-next-line | false-positive? maybe because we switch key-value via "countValues"? */
+        /* @phpstan-ignore return.type */
         return $this->countValues()->arsortImmutable()->firstKey();
     }
 
@@ -5894,7 +5892,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function replaceAllKeys(array $keys): self
     {
         $data = \array_combine($keys, $this->toArray());
-        /* @phpstan-ignore-next-line | change from PHP >= 8, but we still support old versions */
+        /* @phpstan-ignore identical.alwaysFalse */
         if ($data === false) {
             $data = [];
         }
@@ -5938,7 +5936,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function replaceAllValues(array $array): self
     {
         $data = \array_combine($this->toArray(), $array);
-        /* @phpstan-ignore-next-line | change from PHP >= 8, but we still support old versions */
+        /* @phpstan-ignore identical.alwaysFalse */
         if ($data === false) {
             $data = [];
         }
@@ -5970,7 +5968,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $values = \array_values($this->toArray());
         $result = \array_combine($keys, $values);
-        /* @phpstan-ignore-next-line | change from PHP >= 8, but we still support old versions */
+        /* @phpstan-ignore identical.alwaysFalse */
         if ($result === false) {
             $result = [];
         }
@@ -6040,7 +6038,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return \str_replace($search, $replacement, $value);
         };
 
-        /* @phpstan-ignore-next-line | ignore Closure with one or two parameters, is this a bug in phpstan? */
+        /* @phpstan-ignore argument.type */
         return $this->each($callable);
     }
 
@@ -6222,7 +6220,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         // php cast "bool"-index into "int"-index
-        /* @phpstan-ignore-next-line | array-key helper */
+        /* @phpstan-ignore identical.alwaysFalse */
         if ((bool) $index === $index) {
             $index = (int) $index;
         }
@@ -6983,7 +6981,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 }
             }
 
-            /* @phpstan-ignore-next-line - depends on the $convertAllArrayyElements parameter :/ */
+            /* @phpstan-ignore return.type */
             return $array;
         }
 
@@ -7306,7 +7304,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 if ($userData !== self::ARRAYY_HELPER_WALK) {
                     \array_walk($this->array, $callable, $userData);
                 } else {
-                    /* @phpstan-ignore-next-line | callback with no arguments is ok here */
+                    /* @phpstan-ignore argument.type */
                     \array_walk($this->array, $callable);
                 }
             }
@@ -7476,7 +7474,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         $explodedPath = \explode($this->pathSeparator, $path);
-        /* @phpstan-ignore-next-line | change from PHP >= 8, but we still support old versions */
+        /* @phpstan-ignore identical.alwaysFalse */
         if ($explodedPath === false) {
             return;
         }

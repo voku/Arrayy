@@ -35,7 +35,7 @@ final class NonEmptyStringTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new \Arrayy\Type\NonEmptyStringCollection([
            'foo',
            '',

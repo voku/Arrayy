@@ -42,7 +42,7 @@ final class ResourceTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore-next-line */
+        /* @phpstan-ignore argument.type */
         new \Arrayy\Type\ResourceCollection([
             new \stdClass(),
             \tmpfile(),
