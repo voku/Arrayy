@@ -1241,7 +1241,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function average($decimals = 0)
     {
-        $count = \count($this->toArray(), \COUNT_NORMAL);
+        $array = $this->toArray();
+        $count = \count($array, \COUNT_NORMAL);
 
         if (!$count) {
             return 0;
@@ -1251,7 +1252,26 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $decimals = 0;
         }
 
-        return \round(\array_sum($this->toArray()) / $count, $decimals);
+        $sum = 0;
+        foreach ($array as $value) {
+            if (
+                \is_int($value)
+                ||
+                \is_float($value)
+                ||
+                \is_bool($value)
+            ) {
+                $sum += $value;
+
+                continue;
+            }
+
+            if (\is_string($value) && \is_numeric($value)) {
+                $sum += $value + 0;
+            }
+        }
+
+        return \round($sum / $count, $decimals);
     }
 
     /**
@@ -1279,9 +1299,17 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $return = [];
         foreach ($this->getGenerator() as $key => $value) {
             if ($case === \CASE_LOWER) {
-                $key = \mb_strtolower((string) $key);
+                $key = \mb_convert_case(
+                    (string) $key,
+                    \defined('MB_CASE_LOWER_SIMPLE') ? \MB_CASE_LOWER_SIMPLE : \MB_CASE_LOWER,
+                    'UTF-8'
+                );
             } else {
-                $key = \mb_strtoupper((string) $key);
+                $key = \mb_convert_case(
+                    (string) $key,
+                    \defined('MB_CASE_UPPER_SIMPLE') ? \MB_CASE_UPPER_SIMPLE : \MB_CASE_UPPER,
+                    'UTF-8'
+                );
             }
 
             $return[$key] = $value;
