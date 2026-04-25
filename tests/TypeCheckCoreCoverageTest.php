@@ -399,6 +399,184 @@ DOC);
     }
 
     /**
+     * Risk: optional shape keys skip the constructor-mismatch check but must still go
+     * through `checkType()` when a value is actually supplied; removing the per-key
+     * `$this->properties[$key]->checkType($value)` call would silently accept any value.
+     */
+    public function testArrayShapeOptionalKeyIsTypeCheckedWhenPresent(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Invalid type');
+
+        $meta = TypeCheckArrayShapeUserData::meta();
+        new TypeCheckArrayShapeUserData([
+            $meta->id        => 1,
+            $meta->firstName => 'Lars',
+            $meta->lastName  => 'Moelleken',
+            $meta->infos     => ['foo'],
+            $meta->city      => new \stdClass(), // wrong type – must throw
+        ]);
+    }
+
+    /**
+     * Risk: "optional" means the array key may be absent from the input, not that null
+     * is a valid value. If the `isOptional` flag were incorrectly widened to imply
+     * nullable, the type check would be silently skipped for null values.
+     *
+     * This exercises the post-construction (offsetSet) path which always runs checkType.
+     */
+    public function testArrayShapeOptionalNonNullableKeyRejectsNull(): void
+    {
+        $this->expectException(\TypeError::class);
+
+        // TypeCheckArrayShapeScoreData defines score?: int (optional, not nullable)
+        $model = new TypeCheckArrayShapeScoreData([]);
+        $model['score'] = null; // offsetSet always calls checkType; null ≠ int → throws
+    }
+
+    /**
+     * Risk: if the `$requiredProperties = array_diff_key(…)` split were removed and all
+     * shape properties were treated as required, constructing the same model a second
+     * time (the cached path) would fail to exclude optional keys from the mismatch check.
+     *
+     * Uses a dedicated fixture so the cache state is deterministic within the test.
+     */
+    public function testArrayShapeCachingPreservesOptionalPropertiesOnSecondInstantiation(): void
+    {
+        // First construction hits the uncached path.
+        $first = new TypeCheckArrayShapeCacheTestModel(['name' => 'Alice']);
+        // Second construction hits the CACHED path – optionalProperties must be restored.
+        $second = new TypeCheckArrayShapeCacheTestModel(['name' => 'Bob']);
+
+        static::assertSame('Alice', $first['name']);
+        static::assertSame('Bob', $second['name']);
+        // Neither construction should have thrown a "Property mismatch" error because
+        // 'tag' is optional; if the cache fix is missing, the second would throw.
+    }
+
+    /**
+     * Risk: the guard `$tag->getTemplateName() === 'T'` ensures that only the canonical
+     * `@template T of array{…}` form is used as a property map. If the check were
+     * removed, ANY template bound to an array shape would be treated as property metadata.
+     */
+    public function testArrayShapeTemplateNameOtherThanTIsIgnored(): void
+    {
+        // TypeCheckArrayShapeWrongTemplateName uses @template Data of array{id: int}.
+        // The name guard must skip it, so no properties are registered and any key is
+        // accepted without type checking.
+        $model = new TypeCheckArrayShapeWrongTemplateName(['id' => 'not-an-int']);
+        static::assertSame('not-an-int', $model['id']);
+    }
+
+    /**
+     * Risk: the @extends inline-shape form (`@extends Arrayy<array{…}, mixed>`) must be
+     * parsed even without a preceding @template T preamble. Removing that branch of
+     * `getArrayShapeItemsFromDocBlock()` would silently drop this annotation style.
+     */
+    public function testArrayShapeInlineExtendsFormParsesShapeProperties(): void
+    {
+        $meta = TypeCheckArrayShapeExtendsOnlyData::meta();
+        static::assertSame('score', $meta->score);
+
+        $model = new TypeCheckArrayShapeExtendsOnlyData([$meta->score => 42]);
+        static::assertSame(42, $model[$meta->score]);
+    }
+
+    /**
+     * Risk: the @extends FQCN guard (`in_array(…, [Arrayy::class, ArrayyStrict::class])`)
+     * must prevent shapes on unrelated classes from being parsed as property metadata.
+     * Removing the guard would inject spurious property definitions.
+     */
+    public function testNonArrayyExtendsShapeIsNotParsed(): void
+    {
+        // TypeCheckNonArrayyExtendsData has @extends stdClass<array{id: int}, mixed>.
+        // The FQCN guard skips stdClass, so no shape properties should be registered;
+        // any key/value combination must be accepted without type checking.
+        $model = new TypeCheckNonArrayyExtendsData(['id' => 'not-an-int', 'extra' => true]);
+        static::assertSame('not-an-int', $model['id']);
+        static::assertSame(true, $model['extra']);
+    }
+
+    /**
+     * Risk: `fromDocTypeObject()` is called with $type = null when a shape item carries
+     * no explicit type annotation. If the null guard (`if ($type) { … }`) were removed,
+     * the function would attempt `parseDocTypeObject(null)` and crash. The checker
+     * it returns must have an empty types list.
+     *
+     * A checker with empty types is maximally restrictive (it throws for all values),
+     * which is intentional; callers must not treat "no type annotation" as "accept all".
+     */
+    public function testFromDocTypeObjectWithNullTypeReturnsCheckerWithEmptyTypes(): void
+    {
+        $checker = TypeCheckPhpDoc::fromDocTypeObject('myProp', null);
+
+        static::assertSame([], $checker->getTypes());
+
+        // An empty types list means there is no declared type that can match, so
+        // checkType() throws for every value – verify the production-safe null path.
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('expected "myProp" to be of type {}');
+        $nullValue = null;
+        $checker->checkType($nullValue);
+    }
+
+    /**
+     * Risk: all shape keys, including optional ones, must be surfaced by meta() so that
+     * callers can use `$meta->city` as a type-safe key reference even when city may be
+     * absent from the constructor input. If optional keys were excluded from the property
+     * map, meta() would return empty strings for them.
+     */
+    public function testArrayShapeMetaIncludesAllKeysIncludingOptional(): void
+    {
+        $meta = TypeCheckArrayShapeUserData::meta();
+
+        static::assertSame('id',        $meta->id);
+        static::assertSame('firstName', $meta->firstName);
+        static::assertSame('lastName',  $meta->lastName);
+        static::assertSame('city',      $meta->city);   // optional key
+        static::assertSame('infos',     $meta->infos);
+    }
+
+    /**
+     * Risk: post-construction writes via offsetSet must continue to be type-checked;
+     * removing checkType() from internalSet() would allow any value after construction.
+     */
+    public function testArrayShapePostConstructionTypeCheckEnforced(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageMatches('#Invalid type: expected "id" to be of type \{int\}#');
+
+        $meta = TypeCheckArrayShapeUserData::meta();
+        $model = new TypeCheckArrayShapeUserData([
+            $meta->id        => 1,
+            $meta->firstName => 'Lars',
+            $meta->lastName  => 'M',
+            $meta->infos     => [],
+        ]);
+        $model[$meta->id] = 'not-an-int'; // offsetSet → internalSet(…, true) → checkType
+    }
+
+    /**
+     * Risk: post-construction writes of unknown keys must be rejected when
+     * checkPropertiesMismatch is true; removing the key-existence guard in checkType()
+     * would allow new keys to be silently injected into a shape-typed model.
+     */
+    public function testArrayShapePostConstructionMismatchEnforced(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('The key "ghost" does not exist');
+
+        $meta = TypeCheckArrayShapeUserData::meta();
+        $model = new TypeCheckArrayShapeUserData([
+            $meta->id        => 1,
+            $meta->firstName => 'Lars',
+            $meta->lastName  => 'M',
+            $meta->infos     => [],
+        ]);
+        $model['ghost'] = 'injected'; // must throw – 'ghost' is not in the shape
+    }
+
+    /**
      * @return iterable<string, array{0: array<int, mixed>}>
      */
     public static function invalidStringArrayProvider(): iterable
@@ -464,6 +642,71 @@ final class TypeCheckArrayShapeUserData extends \Arrayy\Arrayy
  * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
  */
 final class TypeCheckMixedPropertyAnnotationsData extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+}
+
+/**
+ * Optional key whose value type does NOT include null. "Optional" means the key
+ * may be absent; null must still be rejected when the key is present.
+ *
+ * @template T of array{score?: int}
+ * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
+ */
+final class TypeCheckArrayShapeScoreData extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected $checkPropertiesMismatch = true;
+}
+
+/**
+ * Used exclusively by testArrayShapeCachingPreservesOptionalPropertiesOnSecondInstantiation
+ * to exercise the static-cache restore of $optionalProperties.
+ *
+ * @template T of array{name: string, tag?: string}
+ * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
+ */
+final class TypeCheckArrayShapeCacheTestModel extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected $checkPropertiesMismatch = true;
+
+    protected $checkPropertiesMismatchInConstructor = true;
+
+    protected $checkForMissingPropertiesInConstructor = true;
+}
+
+/**
+ * Uses the inline @extends form to define the shape, with no @template T preamble.
+ * Both `@template T of array{…}` and `@extends Arrayy<array{…}, …>` must be supported.
+ *
+ * @extends \Arrayy\Arrayy<array{score: int}, mixed>
+ */
+final class TypeCheckArrayShapeExtendsOnlyData extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+
+    protected $checkPropertiesMismatch = true;
+}
+
+/**
+ * Uses @template with a name other than T – must be silently ignored by the
+ * `getTemplateName() === 'T'` guard in getArrayShapeItemsFromDocBlock().
+ *
+ * @template Data of array{id: int}
+ * @extends \Arrayy\Arrayy<array-key, mixed>
+ */
+final class TypeCheckArrayShapeWrongTemplateName extends \Arrayy\Arrayy
+{
+    protected $checkPropertyTypes = true;
+}
+
+/**
+ * @extends stdClass<array{id: int}, mixed>
+ */
+final class TypeCheckNonArrayyExtendsData extends \Arrayy\Arrayy
 {
     protected $checkPropertyTypes = true;
 }
