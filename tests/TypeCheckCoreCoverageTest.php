@@ -786,6 +786,7 @@ final class TypeCheckMixedPropertyAnnotationsData extends \Arrayy\Arrayy
 
 /**
  * @property int $legacyId
+ * @extends \Arrayy\Arrayy<array-key, mixed>
  */
 abstract class TypeCheckPropertyTagParentData extends \Arrayy\Arrayy
 {
@@ -794,7 +795,6 @@ abstract class TypeCheckPropertyTagParentData extends \Arrayy\Arrayy
 
 /**
  * @template T of array{id: int}
- * @extends \Arrayy\Arrayy<key-of<T>, value-of<T>>
  */
 final class TypeCheckMixedPropertyAnnotationsInheritanceData extends TypeCheckPropertyTagParentData
 {
@@ -845,6 +845,11 @@ final class TypeCheckArrayShapeExtendsOnlyData extends \Arrayy\Arrayy
     protected $checkPropertiesMismatch = true;
 }
 
+/**
+ * @template TShape
+ * @template TValue
+ * @extends \Arrayy\Arrayy<array-key, mixed>
+ */
 abstract class TypeCheckCustomArrayyBase extends \Arrayy\Arrayy
 {
     protected $checkPropertyTypes = true;

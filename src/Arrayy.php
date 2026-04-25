@@ -7722,11 +7722,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
 
             $typeCheckPhpDoc = TypeCheckPhpDoc::fromDocTypeObject($typeName, $item->getValue());
-            if ($typeCheckPhpDoc !== null) {
-                $properties[$typeName] = $typeCheckPhpDoc;
-                if ($item->isOptional()) {
-                    $optionalProperties[$typeName] = true;
-                }
+            $properties[$typeName] = $typeCheckPhpDoc;
+            if ($item->isOptional()) {
+                $optionalProperties[$typeName] = true;
             }
         }
     }
