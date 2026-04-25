@@ -7703,8 +7703,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $properties[$typeName] = $typeCheckPhpDoc;
                 if ($item->isOptional()) {
                     $optionalProperties[$typeName] = true;
-                } else {
-                    unset($optionalProperties[$typeName]);
                 }
             }
         }
@@ -8285,7 +8283,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             &&
             $this->checkPropertiesMismatch === true
         ) {
-            throw new \TypeError('The key "' . $key . '" does not exists as a property definition. (' . \get_class($this) . ').');
+            throw new \TypeError('The key "' . $key . '" does not exist as a property definition. (' . \get_class($this) . ').');
         }
 
         if (isset($this->properties[self::ARRAYY_HELPER_TYPES_FOR_ALL_PROPERTIES])) {

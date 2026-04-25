@@ -78,7 +78,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
     public function testNativeTypedPropertiesRejectUnknownKeysWhenMismatchCheckIsEnabled()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('The key "unknown" does not exists');
+        $this->expectExceptionMessage('The key "unknown" does not exist');
 
         new NativeCityData(
             [
@@ -200,7 +200,7 @@ final class NativePropertyTypeTest extends \PHPUnit\Framework\TestCase
     public function testNativePropertyMismatchIsEnforcedAfterConstruction()
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('The key "unknown" does not exists');
+        $this->expectExceptionMessage('The key "unknown" does not exist');
 
         $cityMeta = NativeCityData::meta();
         $model = new NativeCityData([

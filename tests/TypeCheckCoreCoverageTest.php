@@ -378,7 +378,7 @@ DOC);
     public function testArrayShapeTemplateRejectsUnknownProperties(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('The key "unknown" does not exists');
+        $this->expectExceptionMessage('The key "unknown" does not exist');
 
         $meta = TypeCheckArrayShapeUserData::meta();
         new TypeCheckArrayShapeUserData([
