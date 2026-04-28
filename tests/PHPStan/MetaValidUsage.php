@@ -24,9 +24,9 @@ $user = new ArrayShapeUser([
 ]);
 
 \PHPStan\Testing\assertType('int|null', $user[$userMeta->id]);
-\PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity|null', $user[$userMeta->city]);
+\PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity<array{name: string, plz: null}>|null', $user[$userMeta->city]);
 
 if ($user[$userMeta->city] !== null) {
-    \PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity', $user[$userMeta->city]);
+    \PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity<array{name: string, plz: null}>', $user[$userMeta->city]);
     \PHPStan\Testing\assertType('string|null', $user[$userMeta->city][$cityMeta->name]);
 }

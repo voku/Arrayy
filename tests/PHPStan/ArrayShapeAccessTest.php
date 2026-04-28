@@ -26,12 +26,12 @@ final class ArrayShapeAccessTest extends \PHPUnit\Framework\TestCase
         \PHPStan\Testing\assertType('int|null', $user['id']);
         \PHPStan\Testing\assertType('string|null', $user['firstName']);
         \PHPStan\Testing\assertType('string|null', $user['lastName']);
-        \PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity|null', $user['city']);
+        \PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity<array{name: string, plz: null}>|null', $user['city']);
 
         if ($user['city'] !== null) {
-            \PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity', $user['city']);
+            \PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity<array{name: string, plz: null}>', $user['city']);
             \PHPStan\Testing\assertType('string|null', $user['city']['name']);
-            \PHPStan\Testing\assertType('string|null', $user['city']['plz']);
+            \PHPStan\Testing\assertType('null', $user['city']['plz']);
         }
 
         self::assertSame('Moelleken', $user['lastName']);
