@@ -32,7 +32,7 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
             return null;
         }
 
-        $className = $scope->resolveTypeByName($methodCall->class)->getClassName();
+        $className = $scope->resolveName($methodCall->class);
         if (!\is_a($className, Arrayy::class, true)) {
             return null;
         }

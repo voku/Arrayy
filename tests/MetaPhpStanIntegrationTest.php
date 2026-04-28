@@ -21,7 +21,7 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
         [$exitCode, $output] = $this->runPhpStanFixture('MetaInvalidUsage.php');
 
         static::assertSame(1, $exitCode, $output);
-        static::assertStringContainsString('undefined property', \strtolower($output));
+        static::assertStringContainsString('Access to an undefined property', $output);
         static::assertStringContainsString('$ghost', $output);
         static::assertStringContainsString('Parameter #1 $string of function strlen expects string, int|null given.', $output);
     }
