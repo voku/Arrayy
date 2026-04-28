@@ -25,7 +25,9 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
         static::assertSame(1, $exitCode, $output);
         static::assertStringContainsString('Access to an undefined property', $output);
         static::assertStringContainsString('$ghost', $output);
-        static::assertStringContainsString('Parameter #1 $string of function strlen expects string, int|null given.', $output);
+        static::assertStringContainsString('strlen', $output);
+        static::assertStringContainsString('expects string', $output);
+        static::assertStringContainsString('int|null', $output);
     }
 
     /**

@@ -39,7 +39,7 @@ final class MetaRuntimeTest extends \PHPUnit\Framework\TestCase
     public function testArrayShapeMetaRejectsWrongRuntimeTypes(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Invalid type: expected "id" to be of type {int}');
+        $this->expectExceptionMessageMatches('#Invalid type: expected "id" to be of type \{int\}#');
 
         $userMeta = ArrayShapeUser::meta();
         $user = new ArrayShapeUser([
