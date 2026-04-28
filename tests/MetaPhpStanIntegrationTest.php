@@ -36,7 +36,7 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
     private function runPhpStanFixture(string $fixtureFile): array
     {
         if (!\function_exists('proc_open')) {
-            self::markTestSkipped('proc_open() is required to execute PHPStan.');
+            static::markTestSkipped('proc_open() is required to execute PHPStan.');
         }
 
         $repoRoot = \dirname(__DIR__);

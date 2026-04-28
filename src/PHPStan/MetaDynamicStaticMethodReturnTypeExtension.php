@@ -17,6 +17,11 @@ use PhpParser\Node\Name;
 
 final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension
 {
+    /**
+     * @var array<class-string, ObjectShapeType>
+     */
+    private array $types = [];
+
     public function getClass(): string
     {
         return Arrayy::class;
@@ -38,6 +43,10 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
             return null;
         }
 
+        if (isset($this->types[$className])) {
+            return $this->types[$className];
+        }
+
         $properties = [];
         foreach (\get_object_vars((new ArrayyMeta())->getMetaObject($className)) as $propertyName => $value) {
             if (!\is_string($propertyName) || !\is_string($value)) {
@@ -47,6 +56,6 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
             $properties[$propertyName] = new ConstantStringType($value);
         }
 
-        return new ObjectShapeType($properties, []); // no optional meta properties
+        return $this->types[$className] = new ObjectShapeType($properties, []); // no optional meta properties
     }
 }
