@@ -66,6 +66,6 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $exitCode = \proc_close($process);
 
-        return [$exitCode, $stdout, $stderr];
+        return [$exitCode, $stdout !== false ? $stdout : '', $stderr !== false ? $stderr : ''];
     }
 }

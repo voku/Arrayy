@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arrayy\tests\PHPStan;
 
-require_once __DIR__ . '/../../.phpUnitAndStanFix.php';
+require_once \dirname(__DIR__, 2) . '/.phpUnitAndStanFix.php';
 
 $cityMeta = ArrayShapeCity::meta();
 $userMeta = ArrayShapeUser::meta();
