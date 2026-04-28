@@ -44,7 +44,7 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
                 continue;
             }
 
-            $properties[$propertyName] = new ConstantStringType($propertyName);
+            $properties[$propertyName] = new ConstantStringType($value);
         }
 
         return new ObjectShapeType($properties, []); // no optional meta properties
