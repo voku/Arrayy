@@ -11,14 +11,16 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
 {
     public function testPhpStanAcceptsValidMetaUsage(): void
     {
-        [$exitCode, $output] = $this->runPhpStanFixture('MetaValidUsage.php');
+        [$exitCode, $stdout, $stderr] = $this->runPhpStanFixture('MetaValidUsage.php');
+        $output = \trim($stdout . $stderr);
 
         static::assertSame(0, $exitCode, $output);
     }
 
     public function testPhpStanRejectsInvalidMetaUsage(): void
     {
-        [$exitCode, $output] = $this->runPhpStanFixture('MetaInvalidUsage.php');
+        [$exitCode, $stdout, $stderr] = $this->runPhpStanFixture('MetaInvalidUsage.php');
+        $output = \trim($stdout . $stderr);
 
         static::assertSame(1, $exitCode, $output);
         static::assertStringContainsString('Access to an undefined property', $output);
@@ -27,7 +29,7 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array{int, string}
+     * @return array{int, string, string}
      */
     private function runPhpStanFixture(string $fixtureFile): array
     {
@@ -62,6 +64,6 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $exitCode = \proc_close($process);
 
-        return [$exitCode, \trim($stdout . $stderr)];
+        return [$exitCode, $stdout, $stderr];
     }
 }
