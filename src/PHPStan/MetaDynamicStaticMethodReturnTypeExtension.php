@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Arrayy\PHPStan;
 
 use Arrayy\Arrayy;
-use Arrayy\ArrayyMeta;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Constant\ConstantStringType;
@@ -47,8 +46,10 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
             return $this->types[$className];
         }
 
+        /** @var object $meta */
+        $meta = $className::meta();
         $properties = [];
-        foreach (\get_object_vars((new ArrayyMeta())->getMetaObject($className)) as $propertyName => $value) {
+        foreach (\get_object_vars($meta) as $propertyName => $value) {
             if (!\is_string($propertyName) || !\is_string($value)) {
                 continue;
             }
@@ -56,6 +57,6 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
             $properties[$propertyName] = new ConstantStringType($value);
         }
 
-        return $this->types[$className] = new ObjectShapeType($properties, []); // no optional meta properties
+        return $this->types[$className] = new ObjectShapeType($properties, []); // second argument is optionalProperties; meta exposes only concrete keys
     }
 }
