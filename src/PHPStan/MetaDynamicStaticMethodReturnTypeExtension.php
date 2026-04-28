@@ -46,7 +46,7 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
             return $this->types[$className];
         }
 
-        /** @var object $meta */
+        /** @var \Arrayy\ArrayyMeta $meta */
         $meta = $className::meta();
         $properties = [];
         foreach (\get_object_vars($meta) as $propertyName => $value) {
@@ -57,6 +57,7 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
             $properties[$propertyName] = new ConstantStringType($value);
         }
 
-        return $this->types[$className] = new ObjectShapeType($properties, []); // second argument is optionalProperties; meta exposes only concrete keys
+        // Passing an empty optionalProperties list makes every inferred meta key concrete/required.
+        return $this->types[$className] = new ObjectShapeType($properties, []);
     }
 }

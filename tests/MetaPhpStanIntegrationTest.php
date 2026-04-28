@@ -38,11 +38,10 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array{int, string, string}
+     * @return array{0: int, 1: string, 2: string}
      */
     private function runPhpStanFixture(string $fixtureFile): array
     {
-
         $repoRoot = \dirname(__DIR__);
         $command = [
             \PHP_BINARY,
@@ -62,8 +61,8 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
         $process = \proc_open($command, $descriptorSpec, $pipes, $repoRoot);
         static::assertIsResource($process);
 
-        $stdout = \stream_get_contents($pipes[1]);
-        $stderr = \stream_get_contents($pipes[2]);
+        $stdout = \stream_get_contents($pipes[1]) ?: '';
+        $stderr = \stream_get_contents($pipes[2]) ?: '';
 
         \fclose($pipes[1]);
         \fclose($pipes[2]);
