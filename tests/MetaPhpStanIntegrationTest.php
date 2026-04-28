@@ -9,6 +9,13 @@ namespace Arrayy\tests;
  */
 final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
 {
+    protected function setUp(): void
+    {
+        if (!\function_exists('proc_open')) {
+            static::markTestSkipped('proc_open() is required to execute PHPStan.');
+        }
+    }
+
     public function testPhpStanAcceptsValidMetaUsage(): void
     {
         [$exitCode, $stdout, $stderr] = $this->runPhpStanFixture('MetaValidUsage.php');
@@ -35,10 +42,6 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
      */
     private function runPhpStanFixture(string $fixtureFile): array
     {
-        if (!\function_exists('proc_open')) {
-            // Without proc_open() the test cannot execute the PHPStan CLI process, so skipping is the only meaningful fallback.
-            static::markTestSkipped('proc_open() is required to execute PHPStan.');
-        }
 
         $repoRoot = \dirname(__DIR__);
         $command = [
