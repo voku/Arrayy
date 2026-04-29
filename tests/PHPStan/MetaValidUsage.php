@@ -7,14 +7,18 @@ namespace Arrayy\tests\PHPStan;
 require_once \dirname(__DIR__, 2) . '/.phpUnitAndStanFix.php';
 
 /**
- * @param ArrayShapeCity|null $city
+ * @template TCity of array{name: string, plz?: string|null}
+ *
+ * @param ArrayShapeCity<TCity>|null $city
  */
 function assertMetaFixtureNullableCity(?ArrayShapeCity $city): void
 {
 }
 
 /**
- * @param ArrayShapeCity $city
+ * @template TCity of array{name: string, plz?: string|null}
+ *
+ * @param ArrayShapeCity<TCity> $city
  */
 function assertMetaFixtureCity(ArrayShapeCity $city): void
 {
