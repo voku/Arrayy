@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Arrayy\PHPStan;
 
 use Arrayy\Arrayy;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\ObjectShapeType;
 use PHPStan\Type\Type;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 
 final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticMethodReturnTypeExtension
 {
