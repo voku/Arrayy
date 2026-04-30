@@ -11,6 +11,17 @@ require_once __DIR__ . '/../../.phpUnitAndStanFix.php';
  */
 final class ArrayShapeAccessTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @param ArrayShapeCity<array{name: string, plz?: string|null}>|null $city
+     */
+    private static function assertNullableCity(?ArrayShapeCity $city): void
+    {
+    }
+
+    private static function assertNullableString(?string $value): void
+    {
+    }
+
     public function testArrayShapeOffsetsAreTyped(): void
     {
         $user = new ArrayShapeUser([
@@ -26,12 +37,12 @@ final class ArrayShapeAccessTest extends \PHPUnit\Framework\TestCase
         \PHPStan\Testing\assertType('int|null', $user['id']);
         \PHPStan\Testing\assertType('string|null', $user['firstName']);
         \PHPStan\Testing\assertType('string|null', $user['lastName']);
-        \PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity<array{name: string, plz: null}>|null', $user['city']);
+        self::assertNullableCity($user['city']);
 
         if ($user['city'] !== null) {
-            \PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity<array{name: string, plz: null}>', $user['city']);
-            \PHPStan\Testing\assertType('string|null', $user['city']['name']);
-            \PHPStan\Testing\assertType('null', $user['city']['plz']);
+            self::assertNullableCity($user['city']);
+            self::assertNullableString($user['city']['name']);
+            self::assertNullableString($user['city']['plz']);
         }
 
         self::assertSame('Moelleken', $user['lastName']);

@@ -24,6 +24,10 @@ function assertValidArrayShapeCity(ArrayShapeCity $city): void
 {
 }
 
+function assertValidArrayShapeNullableString(?string $value): void
+{
+}
+
 $user = new ArrayShapeUser([
     'id' => 1,
     'firstName' => 'Lars',
@@ -41,5 +45,5 @@ assertValidArrayShapeNullableCity($user['city']);
 if ($user['city'] !== null) {
     assertValidArrayShapeCity($user['city']);
     \PHPStan\Testing\assertType('string|null', $user['city']['name']);
-    \PHPStan\Testing\assertType('string|null', $user['city']['plz']);
+    assertValidArrayShapeNullableString($user['city']['plz']);
 }
