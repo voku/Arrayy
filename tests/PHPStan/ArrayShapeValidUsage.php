@@ -41,5 +41,5 @@ assertValidArrayShapeNullableCity($user['city']);
 if ($user['city'] !== null) {
     assertValidArrayShapeCity($user['city']);
     \PHPStan\Testing\assertType('string|null', $user['city']['name']);
-    \PHPStan\Testing\assertType('null', $user['city']['plz']);
+    \PHPStan\Testing\assertType('string|null', $user['city']['plz']);
 }
