@@ -119,6 +119,18 @@ $arrayy->Lars->lastname; // 'Müller'
 
 The library offers type checking for phpdoc array-shape annotations, legacy `@property` phpdoc-class-comments, and native declared properties. Prefer the array-shape form because it can reuse the `Arrayy` template for IDE autocompletion and static-analysis support. `meta()` is also understood by PHPStan, so `meta()`-derived keys such as `$userMeta->city` and `$cityMeta->name` keep precise literal-string information during static analysis. When you want PHPStan to check reads precisely, prefer array-like access with literal keys (for example `$user['lastName']`) or narrowed `meta()` keys on these array-shape-based models. Do not combine array-shape annotations and `@property` tags on the same model.
 
+If you use PHPStan and call `YourArrayySubclass::meta()`, you can register the custom return-type extension from `src/PHPStan/MetaDynamicStaticMethodReturnTypeExtension.php`. Use it when you want PHPStan to understand that `meta()` returns an object shape whose properties are the exact array keys collected from your array-shape annotations, `@property` tags, or native declared properties. That keeps expressions such as `$userMeta->id` typed as the literal string `'id'`, helps nested lookups like `$user[$userMeta->city][$cityMeta->name]`, and lets PHPStan report invalid meta-property access such as `$userMeta->ghost`.
+
+The repository's own `phpstan.neon` registers the extension like this; copy the same service definition into your project's PHPStan config because this repository file is not shipped in the Composer package:
+
+```neon
+services:
+    -
+        class: Arrayy\PHPStan\MetaDynamicStaticMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
+```
+
 ```php
 /**
  * @template T of array{id: int, firstName: int|string, lastName: string, city?: City|null}
