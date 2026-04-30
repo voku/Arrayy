@@ -6,6 +6,24 @@ namespace Arrayy\tests\PHPStan;
 
 require_once \dirname(__DIR__, 2) . '/.phpUnitAndStanFix.php';
 
+/**
+ * @template TCity of array{name: string, plz?: string|null}
+ *
+ * @param ArrayShapeCity<TCity>|null $city
+ */
+function assertValidArrayShapeNullableCity(?ArrayShapeCity $city): void
+{
+}
+
+/**
+ * @template TCity of array{name: string, plz?: string|null}
+ *
+ * @param ArrayShapeCity<TCity> $city
+ */
+function assertValidArrayShapeCity(ArrayShapeCity $city): void
+{
+}
+
 $user = new ArrayShapeUser([
     'id' => 1,
     'firstName' => 'Lars',
@@ -18,10 +36,10 @@ $user = new ArrayShapeUser([
 
 \PHPStan\Testing\assertType('int|null', $user['id']);
 \PHPStan\Testing\assertType('string|null', $user['firstName']);
-\PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity<array{name: string, plz: null}>|null', $user['city']);
+assertValidArrayShapeNullableCity($user['city']);
 
 if ($user['city'] !== null) {
-    \PHPStan\Testing\assertType('Arrayy\tests\PHPStan\ArrayShapeCity<array{name: string, plz: null}>', $user['city']);
+    assertValidArrayShapeCity($user['city']);
     \PHPStan\Testing\assertType('string|null', $user['city']['name']);
     \PHPStan\Testing\assertType('null', $user['city']['plz']);
 }
