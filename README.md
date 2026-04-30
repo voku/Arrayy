@@ -118,7 +118,7 @@ $arrayy->Lars->lastname; // 'Müller'
 
 ## PhpDoc array-shape / property checking
 
-The library offers type checking for phpdoc array-shape annotations, legacy `@property` phpdoc-class-comments, and native declared properties. Prefer the array-shape form because it can reuse the `Arrayy` template for IDE autocompletion and static-analysis support. When you want PHPStan to check reads precisely, prefer array-like access with literal keys (for example `$user['lastName']`) on these array-shape-based models. Do not combine array-shape annotations and `@property` tags on the same model.
+The library offers type checking for phpdoc array-shape annotations, legacy `@property` phpdoc-class-comments, and native declared properties. Prefer the array-shape form because it can reuse the `Arrayy` template for IDE autocompletion and static-analysis support. `meta()` is also understood by PHPStan, so `meta()`-derived keys such as `$userMeta->city` and `$cityMeta->name` keep precise literal-string information during static analysis. When you want PHPStan to check reads precisely, prefer array-like access with literal keys (for example `$user['lastName']`) or narrowed `meta()` keys on these array-shape-based models. Do not combine array-shape annotations and `@property` tags on the same model.
 
 ```php
 /**
