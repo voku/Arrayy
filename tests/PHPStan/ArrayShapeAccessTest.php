@@ -12,7 +12,9 @@ require_once __DIR__ . '/../../.phpUnitAndStanFix.php';
 final class ArrayShapeAccessTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @param ArrayShapeCity<array{name: string, plz?: string|null}>|null $city
+     * @template TCity of array{name: string, plz?: string|null}
+     *
+     * @param ArrayShapeCity<TCity>|null $city
      */
     private static function assertNullableCity(?ArrayShapeCity $city): void
     {
