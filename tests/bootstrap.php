@@ -5,7 +5,7 @@
 
 $buildLogsDir = __DIR__ . '/../build/logs';
 if (!\is_dir($buildLogsDir)) {
-    \mkdir($buildLogsDir, 0755, true);
+    \mkdir($buildLogsDir, 0700, true);
 }
 
 require_once __DIR__ . '/../vendor/autoload.php';
