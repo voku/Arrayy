@@ -5,6 +5,8 @@
 - fix `average()` so non-numeric values no longer error on modern PHP versions
 - make `changeKeyCase()` Unicode case conversion deterministic across PHP 8.0–8.5
 - strengthen native property type checks, array-shape contracts, and regression coverage across Json mapper and collection helpers
+- add PHPStan + runtime coverage for `meta()` with array-shape-backed models and document the recommended usage in the README
+- stabilize the full PHPUnit / PHPStan CI matrix across PHP 8.0–8.5 for both lowest and current dependency sets
 - remove stale PHP 8-only compatibility branches, clean up PHPStan ignores, and refresh the PHP 8.0+ docs/CI matrix
 
 ### 7.10.0 (2026-04-24)

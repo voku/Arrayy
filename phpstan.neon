@@ -4,3 +4,9 @@ parameters:
     paths:
         - %currentWorkingDirectory%/src/
         - %currentWorkingDirectory%/tests/
+
+services:
+    -
+        class: Arrayy\PHPStan\MetaDynamicStaticMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension

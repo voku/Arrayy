@@ -117,6 +117,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                             true, otherwise this option didn't not work anyway.
      *                                             </p>
      *
+     * @phpstan-param TData|self<TKey,T,TData>|\Traversable<TKey,T>|callable|object|scalar|null $data
      * @phpstan-param class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass
      */
     public function __construct(
@@ -1752,6 +1753,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
+     * @phpstan-param  TData|self<TKey,T,TData>|\Traversable<TKey,T>|callable|object|scalar|null $data
      * @phpstan-param  class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass
      * @phpstan-return static
      * @psalm-mutation-free
