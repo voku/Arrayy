@@ -9,6 +9,7 @@ parameters:
         - %currentWorkingDirectory%/tests/
     excludePaths:
         analyse:
+            # This file is a PHPStan assertion harness; it is validated separately from the repo-wide pass.
             - %currentWorkingDirectory%/tests/PHPStan/AnalyseTest.php
 
 services:

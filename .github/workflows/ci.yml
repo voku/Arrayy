@@ -66,6 +66,7 @@ jobs:
           mkdir -p build/logs
           php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
 
+      # Infection 0.32.x requires PHP 8.3+, so keep the linked PHPStan/Infection checks on the basic 8.3 job.
       - name: Run phpstan
         if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
         run: |
