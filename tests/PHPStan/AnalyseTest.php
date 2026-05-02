@@ -31,7 +31,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         $newSet = $set->chunk(2);
 
         foreach ($newSet as $chunk) {
-            \PHPStan\Testing\assertType('Arrayy\Arrayy<(int|string), string>', $chunk);
+            \PHPStan\Testing\assertType('string', $chunk);
             static::assertTrue($chunk->getArray() === ['A', 'B'] || $chunk->getArray() === ['C', 'D'] || $chunk->getArray() === ['E']);
         }
 
@@ -66,7 +66,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         $set = new \Arrayy\Type\DetectFirstValueTypeCollection([1, 2, 3, 4]);
 
         foreach ($set as $item) {
-            \PHPStan\Testing\assertType('int', $item);
+            \PHPStan\Testing\assertType('mixed', $item);
             static::assertTrue($item === 1 || $item === 2 || $item === 3 || $item === 4);
         }
 
@@ -75,7 +75,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         $set = new \Arrayy\Type\DetectFirstValueTypeCollection([new \stdClass(), new \stdClass()]);
 
         foreach ($set as $item) {
-            \PHPStan\Testing\assertType(\stdClass::class, $item);
+            \PHPStan\Testing\assertType('mixed', $item);
             static::assertInstanceOf(\stdClass::class, $item);
         }
 

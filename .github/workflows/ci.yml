@@ -32,7 +32,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: xdebug
           extensions: zip
-          tools: composer
+          tools: composer${{ matrix.php == '8.3' && matrix.composer == 'basic' && ', infection:0.32.7' || '' }}
 
       - name: Determine composer cache directory
         id: composer-cache
@@ -67,10 +67,14 @@ jobs:
           php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
 
       - name: Run phpstan
-        continue-on-error: true
-        if: ${{ matrix.php == '8.0' }}
+        if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
         run: |
           php vendor/bin/phpstan analyse
+
+      - name: Run Infection
+        if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
+        run: |
+          infection --threads=max --min-msi=0 --min-covered-msi=0 --no-progress
 
       - name: Upload coverage results to Coveralls
         env:
