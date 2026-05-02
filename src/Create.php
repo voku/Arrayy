@@ -17,7 +17,10 @@ namespace Arrayy {
          */
         function create($data): Arrayy
         {
-            return new Arrayy($data);
+            /** @var Arrayy<int|string,mixed,array<int|string,mixed>> $array */
+            $array = new Arrayy($data);
+
+            return $array;
         }
     }
 

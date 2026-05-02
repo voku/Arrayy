@@ -15,11 +15,6 @@ namespace Arrayy\TypeCheck;
 final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterface
 {
     /**
-     * @var bool
-     */
-    private $hasTypeDeclaration = false;
-
-    /**
      * @var string
      */
     private $property_name;
@@ -68,8 +63,6 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         $tmpReflection = new self($property);
 
         if ($type) {
-            $tmpReflection->hasTypeDeclaration = true;
-
             $docTypes = self::parseDocTypeObject($type);
             if (\is_array($docTypes) === true) {
                 foreach ($docTypes as $docType) {
@@ -94,8 +87,6 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
         $docTypes = self::getTypesFromReflectionPropertyDocBlock($reflectionProperty);
 
         if ($docTypes !== null) {
-            $tmpReflection->hasTypeDeclaration = true;
-
             if (\is_array($docTypes) === true) {
                 foreach ($docTypes as $docType) {
                     $tmpReflection->types[] = $docType;
@@ -109,8 +100,6 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
 
             return $tmpReflection;
         } else {
-            $tmpReflection->hasTypeDeclaration = true;
-
             $docTypes = self::parseReflectionTypeObject($type);
             if (\is_array($docTypes) === true) {
                 foreach ($docTypes as $docType) {
@@ -237,7 +226,7 @@ final class TypeCheckPhpDoc extends AbstractTypeCheck implements TypeCheckInterf
     }
 
     /**
-     * @return list<class-string>
+     * @return list<string>
      */
     private static function getScalarPseudoTypeClasses(): array
     {
