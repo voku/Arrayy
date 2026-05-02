@@ -7,6 +7,9 @@ parameters:
     paths:
         - %currentWorkingDirectory%/src/
         - %currentWorkingDirectory%/tests/
+    excludePaths:
+        analyse:
+            - %currentWorkingDirectory%/tests/PHPStan/AnalyseTest.php
 
 services:
     -

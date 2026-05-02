@@ -32,7 +32,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: xdebug
           extensions: zip
-          tools: composer${{ matrix.php == '8.3' && matrix.composer == 'basic' && ', infection:0.32.7' || '' }}
+          tools: composer
 
       - name: Determine composer cache directory
         id: composer-cache
@@ -71,10 +71,18 @@ jobs:
         run: |
           php vendor/bin/phpstan analyse
 
+      - name: Install Infection
+        if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
+        run: |
+          curl --fail --silent --show-error --location \
+            --output infection.phar \
+            https://github.com/infection/infection/releases/download/0.32.7/infection.phar
+          chmod +x infection.phar
+
       - name: Run Infection
         if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
         run: |
-          infection --threads=max --min-msi=0 --min-covered-msi=0 --no-progress
+          php infection.phar --threads=max --min-msi=0 --min-covered-msi=0 --no-progress
 
       - name: Upload coverage results to Coveralls
         env:
