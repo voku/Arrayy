@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicStaticMethodReturnTypeExtension;
 use PHPStan\Type\ObjectShapeType;
@@ -20,6 +21,13 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
      * @var array<class-string, ObjectShapeType>
      */
     private array $types = [];
+
+    private ReflectionProvider $reflectionProvider;
+
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
 
     public function getClass(): string
     {
@@ -38,7 +46,11 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
         }
 
         $className = $scope->resolveName($methodCall->class);
-        if (!\is_a($className, Arrayy::class, true)) {
+        if (
+            !$this->reflectionProvider->hasClass($className)
+            ||
+            !$this->reflectionProvider->getClass($className)->isSubclassOf(Arrayy::class)
+        ) {
             return null;
         }
 

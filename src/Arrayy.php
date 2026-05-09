@@ -237,9 +237,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *               <p>Get a Value from the current array.</p>
      *
-     * @template TAccessKey of key-of<TData>
-     * @phpstan-param TAccessKey $key
-     * @phpstan-return TData[TAccessKey]|null|self<array-key,T,array<array-key,T>>
+     * @phpstan-param array-key $key
+     * @phpstan-return mixed
      */
     public function &__get($key)
     {
@@ -777,9 +776,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *               <p>Will return null if the offset did not exists.</p>
      *
-     * @template TOffset of key-of<TData>
-     * @phpstan-param TOffset $offset
-     * @phpstan-return TData[TOffset]|null
+     * @phpstan-param array-key $offset
+     * @phpstan-return mixed
      */
     #[\ReturnTypeWillChange]
     public function &offsetGet($offset)
@@ -1052,7 +1050,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      *
-     * @phpstan-param  array<T> $values
+     * @phpstan-param array<mixed> $values
      * @phpstan-param  TKey|null $key
      * @phpstan-return static
      */
@@ -1067,6 +1065,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 \is_array($this->array[$key])
             ) {
                 foreach ($values as $value) {
+                    /* @phpstan-ignore assign.propertyType */
                     $this->array[$key][] = $value;
                 }
             } else {
@@ -1753,7 +1752,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @phpstan-param  TData|self<TKey,T,TData>|\Traversable<TKey,T>|callable|object|scalar|null $data
+     * @phpstan-param mixed $data
      * @phpstan-param  class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass
      * @phpstan-return static
      * @psalm-mutation-free
@@ -7451,7 +7450,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return void
      *
-     * @phpstan-param array<TKey,T>|null $currentOffset
+     * @phpstan-param array<array-key,mixed>|null $currentOffset
      * @psalm-mutation-free
      */
     protected function callAtPath($path, $callable, &$currentOffset = null)
@@ -7487,7 +7486,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Extracts the value of the given property or method from the object.
      *
-     * @param static $object
+     * @param mixed $object
      *                                         <p>The object to extract the value from.</p>
      * @param string    $keyOrPropertyOrMethod
      *                                         <p>The property or method for which the
@@ -7498,11 +7497,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *               <p>The value extracted from the specified property or method.</p>
      *
-     * @phpstan-param self<TKey,T,TData> $object
      */
-    final protected function extractValue(self $object, string $keyOrPropertyOrMethod)
+    final protected function extractValue($object, string $keyOrPropertyOrMethod)
     {
-        if (isset($object[$keyOrPropertyOrMethod])) {
+        if ($object instanceof self && isset($object[$keyOrPropertyOrMethod])) {
             $return = $object->get($keyOrPropertyOrMethod);
 
             if ($return instanceof self) {
@@ -7512,11 +7510,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $return;
         }
 
-        if (\property_exists($object, $keyOrPropertyOrMethod)) {
+        if (\is_object($object) && \property_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod};
         }
 
-        if (\method_exists($object, $keyOrPropertyOrMethod)) {
+        if (\is_object($object) && \method_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod}();
         }
 
@@ -8049,6 +8047,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $key = \array_shift($path);
         }
 
+        \assert(\is_int($key) || \is_string($key));
         unset($this->array[$key]);
 
         return true;
@@ -8064,7 +8063,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *
      * @phpstan-param TKey|null $key
-     * @phpstan-param T $value
+     * @phpstan-param mixed $value
      */
     protected function internalSet(
         $key,
