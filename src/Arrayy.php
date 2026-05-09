@@ -282,6 +282,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 );
             }
 
+            /* @phpstan-ignore argument.type */
             $this->internalSet($key, $value);
 
             return $this;
@@ -1054,7 +1055,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      *
-     * @phpstan-param array<mixed> $values
+     * @phpstan-param array<T> $values
      * @phpstan-param  TKey|null $key
      * @phpstan-return static
      */
@@ -7491,7 +7492,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Extracts the value of the given property or method from the object.
      *
      * @param mixed $object
-     *                                         <p>The value from which to extract the property or method value.</p>
+     *                                         <p>The Arrayy instance, object, or other value from which to extract the property or method value.</p>
      * @param string    $keyOrPropertyOrMethod
      *                                         <p>The property or method for which the
      *                                         value should be extracted.</p>
@@ -8074,7 +8075,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return bool
      *
      * @phpstan-param TKey|null $key
-     * @phpstan-param mixed $value
+     * @phpstan-param T $value
      */
     protected function internalSet(
         $key,
