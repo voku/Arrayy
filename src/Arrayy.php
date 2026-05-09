@@ -7491,7 +7491,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * Extracts the value of the given property or method from the object.
      *
      * @param mixed $object
-     *                                         <p>The Arrayy instance or object from which to extract the property or method value.</p>
+     *                                         <p>The value from which to extract the property or method value.</p>
      * @param string    $keyOrPropertyOrMethod
      *                                         <p>The property or method for which the
      *                                         value should be extracted.</p>
@@ -8055,7 +8055,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return false;
         }
 
-        /** @var int|string $key */
+        if (\is_float($key)) {
+            return false;
+        }
+
         unset($this->array[$key]);
 
         return true;
