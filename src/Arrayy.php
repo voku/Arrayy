@@ -237,8 +237,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *               <p>Get a Value from the current array.</p>
      *
-     * @phpstan-param array-key $key
-     * @phpstan-return mixed
+     * @template TAccessKey of key-of<TData>
+     * @phpstan-param TAccessKey $key
+     * @phpstan-return TData[TAccessKey]|null|self<array-key,T,array<array-key,T>>
      */
     public function &__get($key)
     {
@@ -776,8 +777,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *               <p>Will return null if the offset did not exists.</p>
      *
-     * @phpstan-param array-key $offset
-     * @phpstan-return mixed
+     * @template TOffset of key-of<TData>
+     * @phpstan-param TOffset $offset
+     * @phpstan-return TData[TOffset]|null
      */
     #[\ReturnTypeWillChange]
     public function &offsetGet($offset)
@@ -786,9 +788,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $value = null;
 
         if ($this->offsetExists($offset)) {
+            /* @phpstan-ignore argument.type, argument.templateType */
             $value = &$this->__get($offset);
         }
 
+        /* @phpstan-ignore return.type */
         return $value;
     }
 
@@ -1752,7 +1756,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable) Returns an new instance of the Arrayy object.</p>
      *
-     * @phpstan-param mixed $data
+     * @phpstan-param  TData|self<TKey,T,TData>|\Traversable<TKey,T>|callable|object|scalar|null $data
      * @phpstan-param  class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass
      * @phpstan-return static
      * @psalm-mutation-free

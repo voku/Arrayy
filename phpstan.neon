@@ -4,6 +4,10 @@ parameters:
     paths:
         # Keep the repo-wide CI pass focused on production code; fixture-style PHPStan tests run via phpstan-fixtures.neon.
         - %currentWorkingDirectory%/src/
+    ignoreErrors:
+        -
+            message: '#^Parameter \#1 \$data of static method Arrayy\\Arrayy<.*>::create\(\) expects .*, .* given\.$#'
+            path: %currentWorkingDirectory%/src/Arrayy.php
 
 services:
     -
