@@ -44,7 +44,7 @@ final class BoolTypeTest extends TestCase
         }
         \assert(\is_bool($test));
 
-        static::assertTrue($test);
+        static::assertTrue($test); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
     }
 
     public function testWrongValue(): void

@@ -38,7 +38,7 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
         }
 
         $className = $scope->resolveName($methodCall->class);
-        if (!\is_a($className, Arrayy::class, true)) {
+        if (!\is_a($className, Arrayy::class, true)) { // @phpstan-ignore-line phpstanApi.runtimeReflection (the extension requires runtime reflection because PHPStan does not expose this check as a stable API)
             return null;
         }
 

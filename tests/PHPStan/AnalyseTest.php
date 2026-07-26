@@ -22,7 +22,6 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
             static::assertTrue($user->city === null || $user->city instanceof \Arrayy\tests\CityData); /* @phpstan-ignore staticMethod.alreadyNarrowedType, instanceof.alwaysTrue, booleanOr.alwaysTrue */
 
             \PHPStan\Testing\assertType('string|null', $user->city->name ?? null);
-            static::assertTrue(($user->city->name ?? null) === null || is_string($user->city->name ?? null));
         }
 
         // -------------------------------------------------------------------------
@@ -31,7 +30,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         $newSet = $set->chunk(2);
 
         foreach ($newSet as $chunk) {
-            \PHPStan\Testing\assertType('Arrayy\Arrayy<(int|string), string>', $chunk);
+            \PHPStan\Testing\assertType('Arrayy\Arrayy<(int|string), string, array<string>>', $chunk);
             static::assertTrue($chunk->getArray() === ['A', 'B'] || $chunk->getArray() === ['C', 'D'] || $chunk->getArray() === ['E']);
         }
 
@@ -63,6 +62,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
 
         // -------------------------------------------------------------------------
 
+        /** @var \Arrayy\Type\DetectFirstValueTypeCollection<int,int> $set */
         $set = new \Arrayy\Type\DetectFirstValueTypeCollection([1, 2, 3, 4]);
 
         foreach ($set as $item) {
@@ -72,6 +72,7 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
 
         // -------------------------------------------------------------------------
 
+        /** @var \Arrayy\Type\DetectFirstValueTypeCollection<int,\stdClass> $set */
         $set = new \Arrayy\Type\DetectFirstValueTypeCollection([new \stdClass(), new \stdClass()]);
 
         foreach ($set as $item) {
@@ -105,8 +106,9 @@ final class AnalyseTest extends \PHPUnit\Framework\TestCase
         $closure = function ($value) use ($search) {
             return $value === $search;
         };
-        \PHPStan\Testing\assertType('bool|float|int|string', $set->find($closure));
-        static::assertTrue(is_scalar($set->find($closure)));
+        $found = $set->find($closure);
+        \PHPStan\Testing\assertType('bool|float|int|string', $found);
+        static::assertSame('6', $found);
 
         // -------------------------------------------------------------------------
     }

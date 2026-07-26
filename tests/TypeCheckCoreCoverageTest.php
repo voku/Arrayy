@@ -9,7 +9,9 @@ use Arrayy\TypeCheck\TypeCheckCallback;
 use Arrayy\TypeCheck\TypeCheckPhpDoc;
 use Arrayy\TypeCheck\TypeCheckSimple;
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
+use phpDocumentor\Reflection\DocBlock\Tags\Template;
 use phpDocumentor\Reflection\DocBlockFactory;
+use phpDocumentor\Reflection\PseudoTypes\ArrayShape;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -208,10 +210,10 @@ DOC);
 
         static::assertContainsOnlyInstancesOf(Property::class, $tags);
 
-        $scalarTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[0]);
-        $callableTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[1]);
-        $objectTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[2]);
-        $arrayTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[3]);
+        $scalarTypeCheck = $this->typeCheckFromPropertyTag($tags, 0);
+        $callableTypeCheck = $this->typeCheckFromPropertyTag($tags, 1);
+        $objectTypeCheck = $this->typeCheckFromPropertyTag($tags, 2);
+        $arrayTypeCheck = $this->typeCheckFromPropertyTag($tags, 3);
 
         static::assertSame(['string|int|float|bool'], $scalarTypeCheck->getTypes());
         static::assertSame(['callable'], $callableTypeCheck->getTypes());
@@ -232,6 +234,7 @@ DOC);
  */
 DOC);
         $tag = $docBlock->getTagsByName('property')[0];
+        static::assertInstanceOf(Property::class, $tag);
 
         $checker = TypeCheckPhpDoc::fromDocTypeObject('city', $tag->getType());
 
@@ -256,7 +259,10 @@ DOC);
  * @template T of array{data: array{x: int}}
  */
 DOC);
-        $bound = $docBlock->getTagsByName('template')[0]->getBound();
+        $template = $docBlock->getTagsByName('template')[0];
+        static::assertInstanceOf(Template::class, $template);
+        $bound = $template->getBound();
+        static::assertInstanceOf(ArrayShape::class, $bound);
         $nestedShapeType = $bound->getItems()[0]->getValue(); // array{x: int}
 
         $checker = TypeCheckPhpDoc::fromDocTypeObject('data', $nestedShapeType);
@@ -283,11 +289,11 @@ DOC);
         ]);
 
         $model = new TypeCheckArrayShapeUserData([
-            $meta->id        => 1,
-            $meta->firstName => 'Lars',
-            $meta->lastName  => 'Moelleken',
-            $meta->infos     => ['a'],
-            $meta->city      => $city,
+            'id'        => 1,
+            'firstName' => 'Lars',
+            'lastName'  => 'Moelleken',
+            'infos'     => ['a'],
+            'city'      => $city,
         ]);
 
         static::assertInstanceOf(\Arrayy\tests\CityData::class, $model[$meta->city]);
@@ -304,11 +310,11 @@ DOC);
         $meta = TypeCheckArrayShapeUserData::meta();
 
         $model = new TypeCheckArrayShapeUserData([
-            $meta->id        => 1,
-            $meta->firstName => 'Lars',
-            $meta->lastName  => 'Moelleken',
-            $meta->infos     => ['a'],
-            $meta->city      => null,
+            'id'        => 1,
+            'firstName' => 'Lars',
+            'lastName'  => 'Moelleken',
+            'infos'     => ['a'],
+            'city'      => null,
         ]);
 
         static::assertArrayHasKey($meta->city, $model->getArray());
@@ -334,12 +340,12 @@ DOC);
 
         $tags = $docBlock->getTagsByName('property');
 
-        $boolTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[0]);
-        $floatTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[1]);
-        $stringTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[2]);
-        $intTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[3]);
-        $mixedTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[4]);
-        $nullTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[5]);
+        $boolTypeCheck = $this->typeCheckFromPropertyTag($tags, 0);
+        $floatTypeCheck = $this->typeCheckFromPropertyTag($tags, 1);
+        $stringTypeCheck = $this->typeCheckFromPropertyTag($tags, 2);
+        $intTypeCheck = $this->typeCheckFromPropertyTag($tags, 3);
+        $mixedTypeCheck = $this->typeCheckFromPropertyTag($tags, 4);
+        $nullTypeCheck = $this->typeCheckFromPropertyTag($tags, 5);
 
         $boolValue = true;
         $floatValue = 1.5;
@@ -446,10 +452,10 @@ DOC);
     {
         $meta = TypeCheckArrayShapeUserData::meta();
         $model = new TypeCheckArrayShapeUserData([
-            $meta->id        => 1,
-            $meta->firstName => 'Lars',
-            $meta->lastName  => 'Moelleken',
-            $meta->infos     => ['foo'],
+            'id'        => 1,
+            'firstName' => 'Lars',
+            'lastName'  => 'Moelleken',
+            'infos'     => ['foo'],
         ]);
 
         static::assertSame('id', $meta->id);
@@ -462,12 +468,11 @@ DOC);
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
 
-        $meta = TypeCheckArrayShapeUserData::meta();
-        new TypeCheckArrayShapeUserData([
-            $meta->id        => 1,
-            $meta->firstName => 'Lars',
-            $meta->lastName  => 'Moelleken',
-            $meta->infos     => [1],
+        new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the invalid shape value deliberately verifies runtime constructor validation)
+            'id'        => 1,
+            'firstName' => 'Lars',
+            'lastName'  => 'Moelleken',
+            'infos'     => [1],
         ]);
     }
 
@@ -476,13 +481,12 @@ DOC);
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('The key "unknown" does not exist');
 
-        $meta = TypeCheckArrayShapeUserData::meta();
         new TypeCheckArrayShapeUserData([
-            $meta->id        => 1,
-            $meta->firstName => 'Lars',
-            $meta->lastName  => 'Moelleken',
-            $meta->infos     => ['foo'],
-            'unknown'        => 'value',
+            'id'        => 1,
+            'firstName' => 'Lars',
+            'lastName'  => 'Moelleken',
+            'infos'     => ['foo'],
+            'unknown'   => 'value',
         ]);
     }
 
@@ -512,13 +516,12 @@ DOC);
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type');
 
-        $meta = TypeCheckArrayShapeUserData::meta();
-        new TypeCheckArrayShapeUserData([
-            $meta->id        => 1,
-            $meta->firstName => 'Lars',
-            $meta->lastName  => 'Moelleken',
-            $meta->infos     => ['foo'],
-            $meta->city      => new \stdClass(), // wrong type – must throw
+        new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the invalid shape value deliberately verifies runtime constructor validation)
+            'id'        => 1,
+            'firstName' => 'Lars',
+            'lastName'  => 'Moelleken',
+            'infos'     => ['foo'],
+            'city'      => new \stdClass(), // wrong type – must throw
         ]);
     }
 
@@ -647,6 +650,7 @@ DOC);
  */
 DOC);
         $tag = $docBlock->getTagsByName('property')[0];
+        static::assertInstanceOf(Property::class, $tag);
 
         $checker = TypeCheckPhpDoc::fromDocTypeObject('myProp', $tag->getType());
 
@@ -686,10 +690,10 @@ DOC);
 
         $meta = TypeCheckArrayShapeUserData::meta();
         $model = new TypeCheckArrayShapeUserData([
-            $meta->id        => 1,
-            $meta->firstName => 'Lars',
-            $meta->lastName  => 'M',
-            $meta->infos     => [],
+            'id'        => 1,
+            'firstName' => 'Lars',
+            'lastName'  => 'M',
+            'infos'     => [],
         ]);
         $model[$meta->id] = 'not-an-int'; // offsetSet → internalSet(…, true) → checkType
     }
@@ -706,12 +710,26 @@ DOC);
 
         $meta = TypeCheckArrayShapeUserData::meta();
         $model = new TypeCheckArrayShapeUserData([
-            $meta->id        => 1,
-            $meta->firstName => 'Lars',
-            $meta->lastName  => 'M',
-            $meta->infos     => [],
+            'id'        => 1,
+            'firstName' => 'Lars',
+            'lastName'  => 'M',
+            'infos'     => [],
         ]);
         $model['ghost'] = 'injected'; // must throw – 'ghost' is not in the shape
+    }
+
+    /**
+     * @param array<mixed> $tags
+     */
+    private function typeCheckFromPropertyTag(array $tags, int $index): TypeCheckPhpDoc
+    {
+        $tag = $tags[$index];
+        static::assertInstanceOf(Property::class, $tag);
+
+        $typeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tag);
+        static::assertNotNull($typeCheck);
+
+        return $typeCheck;
     }
 
     /**
@@ -727,7 +745,7 @@ DOC);
 
 final class TypeCheckNoTypeFixture
 {
-    public $value;
+    public $value; // @phpstan-ignore-line missingType.property (this fixture deliberately exercises reflection of a property without native or PHPDoc type information)
 }
 
 final class TypeCheckDocTypesFixture
@@ -738,7 +756,7 @@ final class TypeCheckDocTypesFixture
     public $scalarValue;
 
     /**
-     * @var \ArrayObject
+     * @var \ArrayObject<array-key,mixed>
      */
     public $objectValue;
 
@@ -758,7 +776,7 @@ final class TypeCheckDocOverridesNativeFixture
     /**
      * @var int|string
      */
-    public string $value = '';
+    public string $value = ''; // @phpstan-ignore-line property.phpDocType (runtime reflection supplies a broader property value than the declared PHPDoc permits)
 }
 
 /**
@@ -885,7 +903,7 @@ final class TypeCheckArrayShapeWrongTemplateName extends \Arrayy\Arrayy
  *
  * @extends stdClass<array{id: int}, mixed>
  */
-final class TypeCheckNonArrayyExtendsData extends \Arrayy\Arrayy
+final class TypeCheckNonArrayyExtendsData extends \Arrayy\Arrayy // @phpstan-ignore-line generics.wrongParent, missingType.generics (the runtime subtype specializes its parent beyond what PHPStan can express here)
 {
     protected $checkPropertyTypes = true;
 }

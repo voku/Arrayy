@@ -7,7 +7,7 @@ namespace Arrayy\tests;
  */
 class Account
 {
-    public function __construct($accountName)
+    public function __construct(string $accountName)
     {
         $this->accountName = $accountName;
     }

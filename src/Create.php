@@ -17,7 +17,7 @@ namespace Arrayy {
          */
         function create($data): Arrayy
         {
-            return new Arrayy($data);
+            return new Arrayy($data); // @phpstan-ignore return.type (the convenience factory deliberately accepts mixed input)
         }
     }
 

@@ -9,6 +9,7 @@ use Arrayy\tests\ModelB;
 use Arrayy\tests\ModelC;
 use Arrayy\tests\ModelD;
 use Arrayy\tests\ModelInterface;
+use Arrayy\tests\UserData;
 use function Arrayy\collection;
 
 /**
@@ -93,11 +94,13 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $userDataCollection->getAll();
 
         $userData0 = $userDataCollection[0];
+        static::assertInstanceOf(UserData::class, $userData0);
         static::assertSame('Lars', $userData0->firstName);
         static::assertInstanceOf(CityData::class, $userData0->city);
         static::assertSame('Düsseldorf', $userData0->city->name);
 
         $userData1 = $userDataCollection[1];
+        static::assertInstanceOf(UserData::class, $userData1);
         static::assertSame('Sven', $userData1->firstName);
         static::assertInstanceOf(CityData::class, $userData1->city);
         static::assertSame('Köln', $userData1->city->name);
@@ -135,10 +138,8 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         static::assertSame([$pets, $colors], $jsonSerializableCollection->getCollection());
 
         $first = $jsonSerializableCollection->first();
-        if ($first) {
-            \assert($first instanceof \Arrayy\Arrayy);
-            static::assertSame('fooooo', $first->get('foo'));
-        }
+        static::assertInstanceOf(\Arrayy\Arrayy::class, $first);
+        static::assertSame('fooooo', $first->get('foo'));
     }
 
     public function testBasic(): void
@@ -417,10 +418,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         foreach ($barCollection as $item) {
             static::assertInstanceOf(ModelInterface::class, $item);
-
-            if ($item instanceof ModelInterface) {
-                static::assertStringStartsWith('foo', $item->getFoo());
-            }
+            static::assertStringStartsWith('foo', $item->getFoo());
         }
     }
 

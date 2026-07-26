@@ -11,6 +11,7 @@ final class JsonMapperTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['accounts' => [new Account('Foo'), new Account('Bar')]];
         $json = json_encode($data);
+        static::assertIsString($json);
 
         $found = false;
 

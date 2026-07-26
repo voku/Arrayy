@@ -17,6 +17,69 @@ use PHPUnit\Framework\TestCase;
  */
 final class InfrastructureCoverageTest extends TestCase
 {
+    public function testMagicGetWrapsNestedArraysByReference(): void
+    {
+        $arrayy = new Arrayy(['profile' => ['name' => 'Lars']]);
+
+        $profile = $arrayy->__get('profile');
+        static::assertInstanceOf(Arrayy::class, $profile);
+
+        $profile->set('name', 'Sven');
+        static::assertSame('Sven', $arrayy->get('profile.name'));
+    }
+
+    public function testKeyDecorationRecursesIntoArrayyAndArrayValues(): void
+    {
+        $arrayy = new Arrayy([
+            'object' => new Arrayy(['name' => 'Lars']),
+            'array'  => ['name' => 'Sven'],
+            'scalar' => 'kept',
+        ]);
+
+        static::assertSame(
+            [
+                'prefix-object' => ['prefix-name' => 'Lars'],
+                'prefix-array'  => ['prefix-name' => 'Sven'],
+                'prefix-scalar' => 'kept',
+            ],
+            $arrayy->appendToEachKey('prefix-')->toArray(true)
+        );
+        static::assertSame(
+            [
+                'object'        => ['name-suffix' => 'Lars'],
+                'array'         => ['name-suffix' => 'Sven'],
+                'scalar-suffix' => 'kept',
+            ],
+            $arrayy->prependToEachKey('-suffix')->toArray(true)
+        );
+    }
+
+    public function testValueDecorationRecursesAndPreservesObjects(): void
+    {
+        $preserved = new \stdClass();
+        $arrayy = new Arrayy([
+            'object-arrayy' => new Arrayy(['name' => 'Lars']),
+            'array'         => ['name' => 'Sven'],
+            'object'        => $preserved,
+            'scalar'        => 'value',
+        ]);
+
+        $result = $arrayy->prependToEachValue('-suffix');
+
+        static::assertSame('Lars-suffix', $result->get('object-arrayy.name'));
+        static::assertSame('Sven-suffix', $result->get('array.name'));
+        static::assertSame($preserved, $result->get('object'));
+        static::assertSame('value-suffix', $result->get('scalar'));
+    }
+
+    public function testEmptyRandomAndSearchOperationsReturnEmptyCollections(): void
+    {
+        $arrayy = new Arrayy([]);
+
+        static::assertSame([], $arrayy->randomMutable()->toArray());
+        static::assertSame([], $arrayy->searchValue('missing')->toArray());
+    }
+
     public function testArrayyIteratorOffsetGetWrapsNestedArrays(): void
     {
         $iterator = new ArrayyIterator([['foo' => 'bar']], 0, Arrayy::class);

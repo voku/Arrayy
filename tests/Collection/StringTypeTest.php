@@ -22,7 +22,7 @@ final class StringTypeTest extends TestCase
         $strings[] = 'A';
         $strings[] = 'B';
         $strings[] = 'C';
-        $strings[] = 1.0;
+        $strings[] = 1.0; // @phpstan-ignore-line offsetAssign.valueType (the test intentionally verifies runtime rejection of an invalid collection value)
     }
 
     public function testArray(): void
@@ -51,8 +51,7 @@ final class StringTypeTest extends TestCase
     {
         $this->expectException(\TypeError::class);
 
-        /* @phpstan-ignore offsetAssign.valueType */
-        new StringCollection(['A', 'B', 'C', 1]);
+        new StringCollection(['A', 'B', 'C', 1]); // @phpstan-ignore-line argument.type (the invalid integer element deliberately verifies the collection runtime type check)
     }
 
     public function testWrongValueFromJsonMapper(): void

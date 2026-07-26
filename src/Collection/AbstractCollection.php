@@ -317,11 +317,11 @@ abstract class AbstractCollection extends Arrayy implements CollectionInterface
             if (\is_array($jsonObject)) {
                 foreach ($jsonObject as $jsonObjectSingle) {
                     $collectionData = $mapper->map($jsonObjectSingle, $type);
-                    $return->add($collectionData);
+                    $return->add($collectionData); // @phpstan-ignore-line argument.type (map() instantiates the runtime class-string from getType(), whose relationship to T cannot be expressed)
                 }
             } else {
                 $collectionData = $mapper->map($jsonObject, $type);
-                $return->add($collectionData);
+                $return->add($collectionData); // @phpstan-ignore-line argument.type (map() instantiates the runtime class-string from getType(), whose relationship to T cannot be expressed)
             }
         } else {
             foreach ($jsonObject as $key => $jsonValue) {
