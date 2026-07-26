@@ -2,6 +2,10 @@
 
 ### Upcoming release
 
+- add PHPStan inference for literal `Arrayy::get()` dot-notation paths on typed subclasses while keeping custom path separators sound
+- improve callable generic inference and preserve transformed value types across `each()` and `map()`
+- fix nested dot-notation removal so removing a deep key preserves the root array and sibling values
+- preserve `Traversable` entries when mapping JSON data and harden array/object path traversal around scalar intermediates
 - fix `average()` so non-numeric values no longer error on modern PHP versions
 - make `changeKeyCase()` Unicode case conversion deterministic across PHP 8.0–8.5
 - strengthen native property type checks, array-shape contracts, and regression coverage across Json mapper and collection helpers
