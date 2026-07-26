@@ -29,7 +29,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     protected $arrayyClassName = A::class;
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function simpleArrayProvider(): array
     {
@@ -67,7 +67,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function stringWithSeparatorProvider(): array
     {
@@ -90,7 +90,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testContains(array $array): void
     {
@@ -105,7 +105,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testContainsKey(array $array): void
     {
@@ -120,7 +120,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testCount(array $array): void
     {
@@ -133,7 +133,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testCurrent(array $array): void
     {
@@ -147,7 +147,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testDebugReturn(array $array): void
     {
@@ -160,7 +160,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testExists(array $array): void
     {
@@ -189,7 +189,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testFirstMutable(array $array): void
     {
@@ -209,7 +209,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testFirstInLoop(array $array): void
     {
@@ -242,7 +242,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testFirstImmutable(array $array): void
     {
@@ -262,7 +262,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testFirstImmutableInLoop(array $array): void
     {
@@ -361,7 +361,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetKeys(array $array): void
     {
@@ -374,7 +374,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetObject(array $array): void
     {
@@ -387,7 +387,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetRandom(array $array): void
     {
@@ -398,14 +398,14 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             static::assertNotNull($value[0]);
             static::assertContains($value[0], $arrayy->toArray());
         } else {
-            static::assertIsArray($value);
+            static::assertIsArray($value); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
         }
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetRandomKey(array $array): void
     {
@@ -415,24 +415,24 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             /** @var array-key $key */
             $key = $arrayy->getRandomKey();
 
-            static::assertNotNull($key);
+            static::assertNotNull($key); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
             static::assertArrayHasKey($key, $arrayy->toArray());
         } else {
-            static::assertIsArray($arrayy->getArray());
+            static::assertIsArray($arrayy->getArray()); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
         }
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetRandomKeys(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) < 2) {
-            static::assertIsArray($arrayy->getArray());
+            static::assertIsArray($arrayy->getArray()); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
         } else {
             $keys = $arrayy->getRandomKeys(2);
 
@@ -462,32 +462,32 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetRandomKeysShouldReturnArray(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) === 0) {
-            static::assertIsArray($arrayy->getArray());
+            static::assertIsArray($arrayy->getArray()); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
         } else {
             $keys = $arrayy->getRandomKeys(\count($array))->getArray();
 
-            static::assertIsArray($keys);
+            static::assertIsArray($keys); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
         }
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetRandomValueSingle(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) === 0) {
-            static::assertIsArray($arrayy->getArray());
+            static::assertIsArray($arrayy->getArray()); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
         } else {
             $value = $arrayy->getRandomValue();
 
@@ -503,14 +503,14 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetRandomValues(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) < 2) {
-            static::assertIsArray($arrayy->getArray());
+            static::assertIsArray($arrayy->getArray()); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
 
             return;
         }
@@ -528,14 +528,14 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetRandomValuesSingle(array $array): void
     {
         $arrayy = $this->createArrayy($array);
 
         if (\count($array) === 0) {
-            static::assertIsArray($arrayy->getArray());
+            static::assertIsArray($arrayy->getArray()); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
 
             return;
         }
@@ -543,7 +543,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
         $values = $arrayy->getRandomValues(1)->getArray();
 
         static::assertCount(1, $values);
-        static::assertIsArray($arrayy->getArray());
+        static::assertIsArray($arrayy->getArray()); // @phpstan-ignore-line staticMethod.alreadyNarrowedType (the runtime assertion is retained although PHPStan has already narrowed this fixture)
         foreach ($values as $value) {
             if (!$value instanceof \Arrayy\Arrayy) {
                 static::assertContains($value, $array);
@@ -554,7 +554,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testIndexOf(array $array): void
     {
@@ -569,7 +569,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array  $array
+     * @param array<mixed>  $array
      * @param string $type
      */
     public function testIsAssoc(array $array, $type = null): void
@@ -583,7 +583,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testIsEmpty(array $array): void
     {
@@ -596,7 +596,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array  $array
+     * @param array<mixed>  $array
      * @param string $type
      */
     public function testIsNumeric(array $array, $type = null): void
@@ -610,7 +610,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testKey(array $array): void
     {
@@ -624,7 +624,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testLast(array $array): void
     {
@@ -646,7 +646,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testLastKey(array $array): void
     {
@@ -669,7 +669,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testArrayyFirst(array $array): void
     {
@@ -691,7 +691,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testArrayyLast(array $array): void
     {
@@ -713,7 +713,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testFirstKey(array $array): void
     {
@@ -731,15 +731,14 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testMostUsedValue(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         if ($arrayy->isMultiArray()) {
             // not supported by php (array_count_values)
-            static::assertTrue(true);
-
+            static::addToAssertionCount(1);
             return;
         }
 
@@ -777,15 +776,14 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testMostUsedValues(array $array): void
     {
         $arrayy = $this->createArrayy($array);
         if ($arrayy->isMultiArray()) {
             // not supported by php (array_count_values)
-            static::assertTrue(true);
-
+            static::addToAssertionCount(1);
             return;
         }
 
@@ -799,7 +797,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
             $firsts = [];
         }
 
-        if ($result instanceof Arrayy) {
+        if ($result instanceof Arrayy) { // @phpstan-ignore-line instanceof.alwaysTrue (the runtime branch is required for values that are less narrowly typed outside this fixture)
             $result = $result->getArray();
         }
 
@@ -809,7 +807,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testNext(array $array): void
     {
@@ -822,7 +820,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testOffsetExists(array $array): void
     {
@@ -837,7 +835,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testOffsetGet(array $array): void
     {
@@ -852,7 +850,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testPrevious(array $array): void
     {
@@ -865,7 +863,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testReIndex(array $array): void
     {
@@ -975,7 +973,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testToJson(array $array): void
     {
@@ -995,7 +993,7 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     public function testToString($string, $separator): void
     {
         $array = \explode($separator, $string);
-        \assert(\is_array($array));
+        \assert(\is_array($array)); // @phpstan-ignore-line function.alreadyNarrowedType (the runtime guard is retained for inputs from supported PHP versions and data providers)
 
         $arrayy = $this->createArrayy($array);
         $resultString = \implode(',', $array);
@@ -1007,10 +1005,10 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @param A<array-key,mixed> $arrayy
      * @param A<array-key,mixed> $resultArrayy
-     * @param array              $array
-     * @param array              $resultArray
+     * @param array<mixed>              $array
+     * @param array<mixed>              $resultArray
      */
-    protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray): void
+    protected function assertImmutable(A $arrayy, A $resultArrayy, array $array, array $resultArray): void // @phpstan-ignore-line generics.lessTypes, missingType.iterableValue (the shared test helper intentionally accepts multiple concrete Arrayy generic shapes)
     {
         static::assertNotSame($arrayy, $resultArrayy);
         static::assertSame($array, $arrayy->toArray());
@@ -1020,9 +1018,9 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     /**
      * @param A<array-key,mixed> $arrayy
      * @param A<array-key,mixed> $resultArrayy
-     * @param array              $resultArray
+     * @param array<mixed>              $resultArray
      */
-    protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray): void
+    protected function assertMutable(A $arrayy, A $resultArrayy, array $resultArray): void // @phpstan-ignore-line generics.lessTypes, missingType.iterableValue (the shared test helper intentionally accepts multiple concrete Arrayy generic shapes)
     {
         static::assertSame($arrayy, $resultArrayy);
         static::assertSame($resultArray, $arrayy->toArray());
@@ -1032,12 +1030,12 @@ final class BasicArrayTest extends \PHPUnit\Framework\TestCase
     // The method list order by ASC
 
     /**
-     * @param array $array
+     * @param array<mixed> $array
      *
      * @return A<array-key, mixed>
      */
-    protected function createArrayy(array $array = []): A
+    protected function createArrayy(array $array = []): A // @phpstan-ignore-line generics.lessTypes, missingType.iterableValue (the shared test helper intentionally accepts multiple concrete Arrayy generic shapes)
     {
-        return new $this->arrayyClassName($array);
+        return new $this->arrayyClassName($array); // @phpstan-ignore return.type (the test factory selects its Arrayy subclass dynamically)
     }
 }

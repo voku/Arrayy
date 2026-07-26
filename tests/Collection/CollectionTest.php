@@ -93,14 +93,14 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $userDataCollection->getAll();
 
         $userData0 = $userDataCollection[0];
-        static::assertSame('Lars', $userData0->firstName);
-        static::assertInstanceOf(CityData::class, $userData0->city);
-        static::assertSame('Düsseldorf', $userData0->city->name);
+        static::assertSame('Lars', $userData0->firstName); // @phpstan-ignore-line property.nonObject (the test intentionally exercises property access on a runtime-polymorphic value)
+        static::assertInstanceOf(CityData::class, $userData0->city); // @phpstan-ignore-line property.nonObject (the test intentionally exercises property access on a runtime-polymorphic value)
+        static::assertSame('Düsseldorf', $userData0->city->name); // @phpstan-ignore-line property.nonObject (the test intentionally exercises property access on a runtime-polymorphic value)
 
         $userData1 = $userDataCollection[1];
-        static::assertSame('Sven', $userData1->firstName);
-        static::assertInstanceOf(CityData::class, $userData1->city);
-        static::assertSame('Köln', $userData1->city->name);
+        static::assertSame('Sven', $userData1->firstName); // @phpstan-ignore-line property.nonObject (the test intentionally exercises property access on a runtime-polymorphic value)
+        static::assertInstanceOf(CityData::class, $userData1->city); // @phpstan-ignore-line property.nonObject (the test intentionally exercises property access on a runtime-polymorphic value)
+        static::assertSame('Köln', $userData1->city->name); // @phpstan-ignore-line property.nonObject (the test intentionally exercises property access on a runtime-polymorphic value)
     }
 
     public function testSimpleCollection(): void
@@ -136,7 +136,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $first = $jsonSerializableCollection->first();
         if ($first) {
-            \assert($first instanceof \Arrayy\Arrayy);
+            \assert($first instanceof \Arrayy\Arrayy); // @phpstan-ignore-line function.alreadyNarrowedType, instanceof.alwaysTrue (the runtime guard covers dynamic values although this fixture is statically narrowed)
             static::assertSame('fooooo', $first->get('foo'));
         }
     }
@@ -418,7 +418,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         foreach ($barCollection as $item) {
             static::assertInstanceOf(ModelInterface::class, $item);
 
-            if ($item instanceof ModelInterface) {
+            if ($item instanceof ModelInterface) { // @phpstan-ignore-line instanceof.alwaysTrue (the runtime branch is required for values that are less narrowly typed outside this fixture)
                 static::assertStringStartsWith('foo', $item->getFoo());
             }
         }

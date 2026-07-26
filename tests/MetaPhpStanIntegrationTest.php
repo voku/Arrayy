@@ -77,7 +77,7 @@ final class MetaPhpStanIntegrationTest extends \PHPUnit\Framework\TestCase
             'analyse',
             '--no-progress',
             '--error-format=raw',
-            '--configuration=' . $repoRoot . '/phpstan.neon',
+            '--configuration=' . $repoRoot . '/tests/PHPStan/phpstan-fixtures.neon',
             $repoRoot . '/tests/PHPStan/' . $fixtureFile,
         ];
 

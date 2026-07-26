@@ -18,7 +18,7 @@ final class JsonMapperCoverageTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('JsonMapper::map() requires second argument to be an object, integer given.');
 
-        (new Json())->map([], 123);
+        (new Json())->map([], 123); // @phpstan-ignore-line argument.templateType, argument.type (the invalid target is the subject of this test)
     }
 
     public function testMapInvokesUndefinedPropertyHandlerWithSafeName(): void
@@ -35,6 +35,14 @@ final class JsonMapperCoverageTest extends TestCase
 
         static::assertSame($target, $result);
         static::assertSame([$target, 'UnknownKey', 'value'], $captured);
+    }
+
+    public function testMapPreservesTraversableEntries(): void
+    {
+        $input = new \ArrayIterator(['name' => 'From iterator']);
+        $target = (new Json())->map($input, new JsonMapperStringFixture());
+
+        static::assertSame('From iterator', $target->name);
     }
 
     public function testMapSkipsPrivatePropertiesWithoutSetters(): void

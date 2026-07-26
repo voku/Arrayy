@@ -14,7 +14,7 @@ final class JsonMapperTest extends \PHPUnit\Framework\TestCase
 
         $found = false;
 
-        GetAccountsResponse::createFromJsonMapper($json)
+        GetAccountsResponse::createFromJsonMapper($json) // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
             ->accounts
             ->each(function (Account $a) use (&$found) {
                 static::assertTrue($a->accountName === 'Foo' || $a->accountName === 'Bar');

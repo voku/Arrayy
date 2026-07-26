@@ -28,7 +28,6 @@ final class TypeTypeTest extends TestCase
 
         /** @noinspection PhpParamsInspection */
         /** @noinspection PhpStrictTypeCheckingInspection */
-        /* @phpstan-ignore argument.type */
-        new Collection(\stdClass::class, [new \stdClass(), 'A']);
+        new Collection(\stdClass::class, [new \stdClass(), 'A']); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
     }
 }

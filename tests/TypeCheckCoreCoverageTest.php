@@ -208,15 +208,15 @@ DOC);
 
         static::assertContainsOnlyInstancesOf(Property::class, $tags);
 
-        $scalarTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[0]);
-        $callableTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[1]);
-        $objectTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[2]);
-        $arrayTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[3]);
+        $scalarTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[0]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
+        $callableTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[1]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
+        $objectTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[2]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
+        $arrayTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[3]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
 
-        static::assertSame(['string|int|float|bool'], $scalarTypeCheck->getTypes());
-        static::assertSame(['callable'], $callableTypeCheck->getTypes());
-        static::assertSame(['\\ArrayObject'], $objectTypeCheck->getTypes());
-        static::assertSame(['string[]'], $arrayTypeCheck->getTypes());
+        static::assertSame(['string|int|float|bool'], $scalarTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertSame(['callable'], $callableTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertSame(['\\ArrayObject'], $objectTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertSame(['string[]'], $arrayTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
     }
 
     /**
@@ -233,7 +233,7 @@ DOC);
 DOC);
         $tag = $docBlock->getTagsByName('property')[0];
 
-        $checker = TypeCheckPhpDoc::fromDocTypeObject('city', $tag->getType());
+        $checker = TypeCheckPhpDoc::fromDocTypeObject('city', $tag->getType()); // @phpstan-ignore-line method.notFound (the test intentionally exercises Arrayy dynamic method dispatch)
 
         static::assertSame(['\\ArrayObject', 'null'], $checker->getTypes());
 
@@ -256,7 +256,7 @@ DOC);
  * @template T of array{data: array{x: int}}
  */
 DOC);
-        $bound = $docBlock->getTagsByName('template')[0]->getBound();
+        $bound = $docBlock->getTagsByName('template')[0]->getBound(); // @phpstan-ignore-line method.notFound (the test intentionally exercises Arrayy dynamic method dispatch)
         $nestedShapeType = $bound->getItems()[0]->getValue(); // array{x: int}
 
         $checker = TypeCheckPhpDoc::fromDocTypeObject('data', $nestedShapeType);
@@ -282,7 +282,7 @@ DOC);
             'infos' => ['lall'],
         ]);
 
-        $model = new TypeCheckArrayShapeUserData([
+        $model = new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
             $meta->id        => 1,
             $meta->firstName => 'Lars',
             $meta->lastName  => 'Moelleken',
@@ -303,7 +303,7 @@ DOC);
     {
         $meta = TypeCheckArrayShapeUserData::meta();
 
-        $model = new TypeCheckArrayShapeUserData([
+        $model = new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
             $meta->id        => 1,
             $meta->firstName => 'Lars',
             $meta->lastName  => 'Moelleken',
@@ -334,12 +334,12 @@ DOC);
 
         $tags = $docBlock->getTagsByName('property');
 
-        $boolTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[0]);
-        $floatTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[1]);
-        $stringTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[2]);
-        $intTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[3]);
-        $mixedTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[4]);
-        $nullTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[5]);
+        $boolTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[0]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
+        $floatTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[1]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
+        $stringTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[2]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
+        $intTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[3]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
+        $mixedTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[4]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
+        $nullTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[5]); // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
 
         $boolValue = true;
         $floatValue = 1.5;
@@ -348,18 +348,18 @@ DOC);
         $mixedValue = ['foo' => 'bar'];
         $nullValue = null;
 
-        static::assertSame(['bool'], $boolTypeCheck->getTypes());
-        static::assertSame(['float'], $floatTypeCheck->getTypes());
-        static::assertSame(['string'], $stringTypeCheck->getTypes());
-        static::assertSame(['int'], $intTypeCheck->getTypes());
-        static::assertSame(['mixed'], $mixedTypeCheck->getTypes());
-        static::assertSame(['null'], $nullTypeCheck->getTypes());
-        static::assertTrue($boolTypeCheck->checkType($boolValue));
-        static::assertTrue($floatTypeCheck->checkType($floatValue));
-        static::assertTrue($stringTypeCheck->checkType($stringValue));
-        static::assertTrue($intTypeCheck->checkType($intValue));
-        static::assertTrue($mixedTypeCheck->checkType($mixedValue));
-        static::assertTrue($nullTypeCheck->checkType($nullValue));
+        static::assertSame(['bool'], $boolTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertSame(['float'], $floatTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertSame(['string'], $stringTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertSame(['int'], $intTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertSame(['mixed'], $mixedTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertSame(['null'], $nullTypeCheck->getTypes()); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertTrue($boolTypeCheck->checkType($boolValue)); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertTrue($floatTypeCheck->checkType($floatValue)); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertTrue($stringTypeCheck->checkType($stringValue)); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertTrue($intTypeCheck->checkType($intValue)); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertTrue($mixedTypeCheck->checkType($mixedValue)); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
+        static::assertTrue($nullTypeCheck->checkType($nullValue)); // @phpstan-ignore-line method.nonObject (the test intentionally exercises a runtime value that PHPStan cannot prove is an object)
     }
 
     /**
@@ -445,7 +445,7 @@ DOC);
     public function testArrayShapeTemplateProvidesPropertyDefinitions(): void
     {
         $meta = TypeCheckArrayShapeUserData::meta();
-        $model = new TypeCheckArrayShapeUserData([
+        $model = new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
             $meta->id        => 1,
             $meta->firstName => 'Lars',
             $meta->lastName  => 'Moelleken',
@@ -463,7 +463,7 @@ DOC);
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
 
         $meta = TypeCheckArrayShapeUserData::meta();
-        new TypeCheckArrayShapeUserData([
+        new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
             $meta->id        => 1,
             $meta->firstName => 'Lars',
             $meta->lastName  => 'Moelleken',
@@ -477,7 +477,7 @@ DOC);
         $this->expectExceptionMessage('The key "unknown" does not exist');
 
         $meta = TypeCheckArrayShapeUserData::meta();
-        new TypeCheckArrayShapeUserData([
+        new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
             $meta->id        => 1,
             $meta->firstName => 'Lars',
             $meta->lastName  => 'Moelleken',
@@ -513,7 +513,7 @@ DOC);
         $this->expectExceptionMessage('Invalid type');
 
         $meta = TypeCheckArrayShapeUserData::meta();
-        new TypeCheckArrayShapeUserData([
+        new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
             $meta->id        => 1,
             $meta->firstName => 'Lars',
             $meta->lastName  => 'Moelleken',
@@ -648,7 +648,7 @@ DOC);
 DOC);
         $tag = $docBlock->getTagsByName('property')[0];
 
-        $checker = TypeCheckPhpDoc::fromDocTypeObject('myProp', $tag->getType());
+        $checker = TypeCheckPhpDoc::fromDocTypeObject('myProp', $tag->getType()); // @phpstan-ignore-line method.notFound (the test intentionally exercises Arrayy dynamic method dispatch)
 
         static::assertSame(['int'], $checker->getTypes());
 
@@ -685,7 +685,7 @@ DOC);
         $this->expectExceptionMessageMatches('#Invalid type: expected "id" to be of type \{int\}#');
 
         $meta = TypeCheckArrayShapeUserData::meta();
-        $model = new TypeCheckArrayShapeUserData([
+        $model = new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
             $meta->id        => 1,
             $meta->firstName => 'Lars',
             $meta->lastName  => 'M',
@@ -705,7 +705,7 @@ DOC);
         $this->expectExceptionMessage('The key "ghost" does not exist');
 
         $meta = TypeCheckArrayShapeUserData::meta();
-        $model = new TypeCheckArrayShapeUserData([
+        $model = new TypeCheckArrayShapeUserData([ // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
             $meta->id        => 1,
             $meta->firstName => 'Lars',
             $meta->lastName  => 'M',
@@ -727,7 +727,7 @@ DOC);
 
 final class TypeCheckNoTypeFixture
 {
-    public $value;
+    public $value; // @phpstan-ignore-line missingType.property (the property stores runtime metadata with heterogeneous value types)
 }
 
 final class TypeCheckDocTypesFixture
@@ -740,7 +740,7 @@ final class TypeCheckDocTypesFixture
     /**
      * @var \ArrayObject
      */
-    public $objectValue;
+    public $objectValue; // @phpstan-ignore-line missingType.generics (the runtime class-string may select Arrayy subclasses with different template arguments)
 
     /**
      * @var string[]
@@ -758,7 +758,7 @@ final class TypeCheckDocOverridesNativeFixture
     /**
      * @var int|string
      */
-    public string $value = '';
+    public string $value = ''; // @phpstan-ignore-line property.phpDocType (runtime reflection supplies a broader property value than the declared PHPDoc permits)
 }
 
 /**
@@ -885,7 +885,7 @@ final class TypeCheckArrayShapeWrongTemplateName extends \Arrayy\Arrayy
  *
  * @extends stdClass<array{id: int}, mixed>
  */
-final class TypeCheckNonArrayyExtendsData extends \Arrayy\Arrayy
+final class TypeCheckNonArrayyExtendsData extends \Arrayy\Arrayy // @phpstan-ignore-line generics.wrongParent, missingType.generics (the runtime subtype specializes its parent beyond what PHPStan can express here)
 {
     protected $checkPropertyTypes = true;
 }

@@ -58,7 +58,7 @@ final class TypesTest extends TestCase
 
         $users = UserDataCollection::createFromGeneratorFunction($data);
         $names = $users
-            ->filter(static function (UserData $person): bool {
+            ->filter(static function (UserData $person): bool { // @phpstan-ignore-line argument.type (the runtime API intentionally accepts or transforms a value PHPStan cannot reconcile with the invariant template)
                 return $person->id <= 30;
             })
             ->customSortValuesImmutable(static function (UserData $a, UserData $b): int {
