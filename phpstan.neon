@@ -11,6 +11,10 @@ parameters:
 
 services:
     -
+        class: Arrayy\PHPStan\GetDynamicMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+    -
         class: Arrayy\PHPStan\MetaDynamicStaticMethodReturnTypeExtension
         tags:
             - phpstan.broker.dynamicStaticMethodReturnTypeExtension
