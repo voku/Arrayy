@@ -93,13 +93,19 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         $userDataCollection->getAll();
 
         $userData0 = $userDataCollection[0];
+        /* @phpstan-ignore-next-line property.nonObject */
         static::assertSame('Lars', $userData0->firstName);
+        /* @phpstan-ignore-next-line property.nonObject */
         static::assertInstanceOf(CityData::class, $userData0->city);
+        /* @phpstan-ignore-next-line property.nonObject */
         static::assertSame('Düsseldorf', $userData0->city->name);
 
         $userData1 = $userDataCollection[1];
+        /* @phpstan-ignore-next-line property.nonObject */
         static::assertSame('Sven', $userData1->firstName);
+        /* @phpstan-ignore-next-line property.nonObject */
         static::assertInstanceOf(CityData::class, $userData1->city);
+        /* @phpstan-ignore-next-line property.nonObject */
         static::assertSame('Köln', $userData1->city->name);
     }
 
@@ -136,6 +142,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $first = $jsonSerializableCollection->first();
         if ($first) {
+            /* @phpstan-ignore-next-line function.alreadyNarrowedType, instanceof.alwaysTrue */
             \assert($first instanceof \Arrayy\Arrayy);
             static::assertSame('fooooo', $first->get('foo'));
         }
@@ -418,6 +425,7 @@ final class CollectionTest extends \PHPUnit\Framework\TestCase
         foreach ($barCollection as $item) {
             static::assertInstanceOf(ModelInterface::class, $item);
 
+            /* @phpstan-ignore-next-line instanceof.alwaysTrue */
             if ($item instanceof ModelInterface) {
                 static::assertStringStartsWith('foo', $item->getFoo());
             }

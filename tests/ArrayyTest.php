@@ -19,7 +19,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     const TYPE_NUMERIC = 'numeric';
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function appendProvider(): array
     {
@@ -45,7 +45,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function appendToEachKeyProvider(): array
     {
@@ -114,7 +114,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function appendToEachValueProvider(): array
     {
@@ -194,7 +194,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function averageProvider(): array
     {
@@ -213,37 +213,23 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function cleanProvider(): array
     {
-        // breaking-change from PHP8
-        // -> Implement the negative_array_index RFC: https://github.com/php/php-src/commit/6732028273b109cb342387ab5580c367f629d0ac
-        if (\PHP_VERSION_ID >= 80000) {
-            return [
-                [[], []],
-                [[null, false], []],
-                [[0 => true], [0 => true]],
-                [[0 => -9, 0], [0 => -9]],
-                [[-8 => -9, 1, 2 => false], [-8 => -9, -7 => 1]],
-                [[0 => 1.18, 1 => false], [0 => 1.18]],
-                [['foo' => false, 'foo', 'lall'], ['foo', 'lall']],
-            ];
-        }
-
         return [
             [[], []],
             [[null, false], []],
             [[0 => true], [0 => true]],
             [[0 => -9, 0], [0 => -9]],
-            [[-8 => -9, 1, 2 => false], [-8 => -9, 0 => 1]],
+            [[-8 => -9, 1, 2 => false], [-8 => -9, -7 => 1]],
             [[0 => 1.18, 1 => false], [0 => 1.18]],
             [['foo' => false, 'foo', 'lall'], ['foo', 'lall']],
         ];
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function containsCaseInsensitiveProvider(): array
     {
@@ -265,7 +251,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function containsCaseInsensitiveProviderRecursive(): array
     {
@@ -287,7 +273,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function containsOnlyProvider(): array
     {
@@ -306,7 +292,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function containsProvider(): array
     {
@@ -324,7 +310,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function containsProviderRecursive(): array
     {
@@ -342,7 +328,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function countProvider(): array
     {
@@ -361,7 +347,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function countProviderRecursive(): array
     {
@@ -380,7 +366,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function diffProvider(): array
     {
@@ -454,7 +440,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function diffKeyProvider(): array
     {
@@ -527,7 +513,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function diffKeyAndValueProvider(): array
     {
@@ -604,7 +590,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function diffReverseProvider(): array
     {
@@ -679,7 +665,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function fillWithDefaultsProvider(): array
     {
@@ -695,7 +681,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function findProvider(): array
     {
@@ -711,7 +697,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function firstProvider(): array
     {
@@ -731,7 +717,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function firstsProvider(): array
     {
@@ -751,7 +737,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getProvider(): array
     {
@@ -769,7 +755,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function hasProvider(): array
     {
@@ -789,7 +775,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function implodeKeysProvider(): array
     {
@@ -813,7 +799,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function implodeProvider(): array
     {
@@ -837,7 +823,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function initialProvider(): array
     {
@@ -858,7 +844,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function isAssocProvider(): array
     {
@@ -877,7 +863,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function isMultiArrayProvider(): array
     {
@@ -899,7 +885,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function lastProvider(): array
     {
@@ -921,7 +907,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function matchesAnyProvider(): array
     {
@@ -943,7 +929,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function matchesProvider(): array
     {
@@ -966,7 +952,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function maxProvider(): array
     {
@@ -985,7 +971,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function mergeAppendKeepIndexProvider(): array
     {
@@ -1077,7 +1063,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function mergeAppendNewIndexProvider(): array
     {
@@ -1175,7 +1161,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function mergePrependKeepIndexProvider(): array
     {
@@ -1267,7 +1253,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function mergePrependNewIndexProvider(): array
     {
@@ -1365,7 +1351,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function minProvider(): array
     {
@@ -1384,7 +1370,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function prependProvider(): array
     {
@@ -1409,7 +1395,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function prependToEachKeyProvider(): array
     {
@@ -1478,7 +1464,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function prependToEachValueProvider(): array
     {
@@ -1547,7 +1533,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function randomProvider(): array
     {
@@ -1565,7 +1551,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function randomWeightedProvider(): array
     {
@@ -1582,7 +1568,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function removeFirstProvider(): array
     {
@@ -1598,7 +1584,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function removeLastProvider(): array
     {
@@ -1614,7 +1600,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function removeProvider(): array
     {
@@ -1633,7 +1619,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function removeV2Provider(): array
     {
@@ -1649,7 +1635,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function removeValueProvider(): array
     {
@@ -1666,7 +1652,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function restProvider(): array
     {
@@ -1686,7 +1672,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function reverseProvider(): array
     {
@@ -1710,7 +1696,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function searchIndexProvider(): array
     {
@@ -1726,7 +1712,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function searchValueProvider(): array
     {
@@ -1744,7 +1730,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function setAndGetProvider(): array
     {
@@ -1763,7 +1749,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function setProvider(): array
     {
@@ -1782,7 +1768,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function simpleArrayProvider(): array
     {
@@ -1823,7 +1809,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function reduceDimensionProvider(): array
     {
@@ -1846,7 +1832,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function sortKeysProvider(): array
     {
@@ -1864,7 +1850,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function stringWithSeparatorProvider(): array
     {
@@ -1895,6 +1881,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->add(3);
         $array[] = 3;
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertMutable($arrayy, $resultArrayy, $array);
     }
 
@@ -1906,6 +1893,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayResult = $array;
         $arrayResult[] = 3;
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $arrayResult);
     }
 
@@ -1916,14 +1904,15 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->prependImmutable(3);
         $arrayResult = [3, 3 => 1, 2];
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $arrayResult);
     }
 
     /**
      * @dataProvider appendProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      * @param mixed $value
      */
     public function testAppend($array, $result, $value): void
@@ -1936,8 +1925,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider appendToEachKeyProvider
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testAppendToEachKey($array, $result): void
     {
@@ -1949,8 +1938,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider appendToEachValueProvider
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testAppendToEachValue($array, $result): void
     {
@@ -1962,7 +1951,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider averageProvider()
      *
-     * @param array     $array
+     * @param array<mixed>     $array
      * @param mixed     $value
      * @param float|int $expected
      */
@@ -2156,7 +2145,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testChunk(array $array): void
     {
@@ -2164,6 +2153,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->chunk(2);
         $resultArray = \array_chunk($array, 2);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
 
         // ---
@@ -2177,8 +2167,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider cleanProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testClean($array, $result): void
     {
@@ -2190,7 +2180,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testClear(array $array): void
     {
@@ -2298,7 +2288,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider containsOnlyProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $value
      * @param bool  $expected
      */
@@ -2312,7 +2302,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider containsProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $value
      * @param bool  $expected
      */
@@ -2328,7 +2318,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider containsCaseInsensitiveProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $value
      * @param bool  $expected
      */
@@ -2343,7 +2333,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider containsCaseInsensitiveProviderRecursive()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $value
      * @param bool  $expected
      */
@@ -2416,7 +2406,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider containsProviderRecursive()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $value
      * @param bool  $expected
      */
@@ -2440,7 +2430,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider countProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param int   $expected
      */
     public function testCount($array, $expected): void
@@ -2457,7 +2447,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider countProviderRecursive()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param int   $expected
      */
     public function testCountRecursive($array, $expected): void
@@ -2576,12 +2566,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         } else {
             $array = [$string];
         }
+        /* @phpstan-ignore-next-line function.alreadyNarrowedType */
         \assert(\is_array($array));
 
         $arrayy = new A($array);
 
         $resultArrayy = A::createFromString($string, $separator);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
@@ -2593,6 +2585,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $resultArrayy = A::createFromTraversableImmutable($iterator);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
@@ -2650,7 +2643,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testCustomSort(array $array): void
     {
@@ -2673,7 +2666,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testCustomSortImmutable(array $array): void
     {
@@ -2690,13 +2683,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArray = $array;
         \usort($resultArray, $callable);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testCustomSortKeys(array $array): void
     {
@@ -2780,6 +2774,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             'two'   => 2,
         ];
         static::assertSame($expected, $resultArrayy->getArray());
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $input, $resultArrayy->getArray());
     }
 
@@ -2808,8 +2803,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         /**
          * sort by date - helper-function
          *
-         * @param array $a
-         * @param array $b
+         * @param array<mixed> $a
+         * @param array<mixed> $b
          *
          * @return int
          */
@@ -2829,10 +2824,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         /**
          * reduce by date - helper-function
          *
-         * @param array $resultArray
-         * @param array $value
+         * @param array<mixed> $resultArray
+         * @param array<mixed> $value
          *
-         * @return array
+         * @return array<mixed>
          */
         $closureReduce = static function ($resultArray, $value) use ($currentDate) {
             /* @var $valueDate \DateTime */
@@ -2857,7 +2852,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         /* @var $resultMatch Arrayy|Arrayy[] */
         $resultMatch = $birthDatesAraayy->reduce($closureReduce);
 
+        /* @phpstan-ignore-next-line method.nonObject */
         $thisYear = $resultMatch['thisYear']->customSortValues($closureSort);
+        /* @phpstan-ignore-next-line method.nonObject */
         $nextYear = $resultMatch['nextYear']->customSortValues($closureSort);
 
         $resultMatch = $nextYear->reverse()->mergePrependNewIndex($thisYear->reverse()->getArray());
@@ -2894,9 +2891,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider diffProvider()
      *
-     * @param array $array
-     * @param array $arrayNew
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $arrayNew
+     * @param array<mixed> $result
      */
     public function testDiff($array, $arrayNew, $result): void
     {
@@ -2908,9 +2905,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider diffKeyProvider()
      *
-     * @param array $array
-     * @param array $arrayNew
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $arrayNew
+     * @param array<mixed> $result
      */
     public function testDiffKey($array, $arrayNew, $result): void
     {
@@ -2922,9 +2919,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider diffKeyAndValueProvider()
      *
-     * @param array $array
-     * @param array $arrayNew
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $arrayNew
+     * @param array<mixed> $result
      */
     public function testDiffKeyAndValue($array, $arrayNew, $result): void
     {
@@ -3000,7 +2997,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testDiffWith(array $array): void
     {
@@ -3014,6 +3011,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->diff($secondArray);
         $resultArray = \array_diff($array, $secondArray);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -3063,10 +3061,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider fillWithDefaultsProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param int   $num
      * @param mixed $default
-     * @param array $expected
+     * @param array<mixed> $expected
      */
     public function testFillWithDefaults($array, $num, $default, $expected): void
     {
@@ -3139,6 +3137,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $under = A::create([0 => 1, 1 => 2, 2 => 3, 3 => 4, 7 => 7])->filter(
             /* @phpstan-ignore argument.type */
             static function ($key, $value): bool {
+                /* @phpstan-ignore-next-line notIdentical.alwaysTrue */
                 return ($value % 2 !== 0) && ($key & 2 !== 0);
             },
             \ARRAY_FILTER_USE_BOTH
@@ -3172,16 +3171,19 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $b = $arrayy->filterBy('name', 'baz');
         static::assertCount(1, $b);
         /** @noinspection OffsetOperationsInspection */
+        /* @phpstan-ignore-next-line offsetAccess.notFound */
         static::assertSame(2365, $b[0]['value']);
 
         $b = $arrayy->filterBy('name', ['baz']);
         static::assertCount(1, $b);
         /** @noinspection OffsetOperationsInspection */
+        /* @phpstan-ignore-next-line offsetAccess.notFound */
         static::assertSame(2365, $b[0]['value']);
 
         $c = $arrayy->filterBy('value', 2468);
         static::assertCount(1, $c);
         /** @noinspection OffsetOperationsInspection */
+        /* @phpstan-ignore-next-line offsetAccess.notFound */
         static::assertSame('primary', $c[0]['group']);
 
         $d = $arrayy->filterBy('group', 'primary');
@@ -3190,6 +3192,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $e = $arrayy->filterBy('value', 2000, 'lt');
         static::assertCount(1, $e);
         /** @noinspection OffsetOperationsInspection */
+        /* @phpstan-ignore-next-line offsetAccess.notFound */
         static::assertSame(1468, $e[0]['value']);
 
         $e = $arrayy->filterBy('value', [2468, 2365], 'contains');
@@ -3207,7 +3210,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider findProvider()
      *
-     * @param array       $array
+     * @param array<mixed>       $array
      * @param mixed       $search
      * @param false|mixed $result
      */
@@ -3224,7 +3227,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function findKeyProvider(): array
     {
@@ -3246,7 +3249,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider findKeyProvider()
      *
-     * @param array       $array
+     * @param array<mixed>       $array
      * @param mixed       $search
      * @param false|mixed $result
      */
@@ -3305,8 +3308,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider firstProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testFirst($array, $result): void
     {
@@ -3318,8 +3321,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider firstsProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      * @param null  $take
      */
     public function testFirsts($array, $result, $take = null): void
@@ -3368,7 +3371,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @dataProvider getProvider()
      *
      * @param mixed $expected
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $key
      */
     public function testGetV2($expected, $array, $key): void
@@ -3400,7 +3403,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @dataProvider hasProvider()
      *
      * @param mixed $expected
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $key
      */
     public function testHas($expected, $array, $key): void
@@ -3412,7 +3415,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider implodeProvider()
      *
-     * @param array  $array
+     * @param array<mixed>  $array
      * @param string $result
      * @param string $with
      */
@@ -3426,7 +3429,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider implodeKeysProvider()
      *
-     * @param array  $array
+     * @param array<mixed>  $array
      * @param string $result
      * @param string $with
      */
@@ -3464,8 +3467,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider initialProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      * @param int   $to
      */
     public function testInitial($array, $result, $to = 1): void
@@ -3622,7 +3625,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider isAssocProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param bool  $result
      */
     public function testIsAssoc($array, $result): void
@@ -3879,8 +3882,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider lastProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      * @param null  $take
      */
     public function testLast($array, $result, $take = null): void
@@ -3947,7 +3950,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testMap(array $array): void
     {
@@ -3957,6 +3960,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayy = new A($array);
         $resultArrayy = $arrayy->map($callable);
         $resultArray = \array_map($callable, $array);
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
 
         // ---
@@ -3970,6 +3974,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         /* @phpstan-ignore argument.type */
         $resultArrayy = $arrayy->map('str_repeat', false, 2);
         $resultArray = \array_map($callable, $array);
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -3983,7 +3988,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider matchesProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $search
      * @param bool  $result
      */
@@ -4007,8 +4012,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider matchesAnyProvider()
      *
-     * @param array $array
-     * @param array $search
+     * @param array<mixed> $array
+     * @param array<mixed> $search
      * @param bool  $result
      */
     public function testMatchesAny($array, $search, $result): void
@@ -4069,7 +4074,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider maxProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $expected
      */
     public function testMax($array, $expected): void
@@ -4127,9 +4132,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider mergeAppendKeepIndexProvider()
      *
-     * @param array $array
-     * @param array $arrayNew
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $arrayNew
+     * @param array<mixed> $result
      */
     public function testMergeAppendKeepIndex($array, $arrayNew, $result): void
     {
@@ -4141,9 +4146,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider mergeAppendNewIndexProvider()
      *
-     * @param array $array
-     * @param array $arrayNew
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $arrayNew
+     * @param array<mixed> $result
      */
     public function testMergeAppendNewIndex($array, $arrayNew, $result): void
     {
@@ -4155,9 +4160,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider mergePrependKeepIndexProvider()
      *
-     * @param array $array
-     * @param array $arrayNew
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $arrayNew
+     * @param array<mixed> $result
      */
     public function testMergePrependKeepIndex($array, $arrayNew, $result): void
     {
@@ -4169,9 +4174,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider mergePrependNewIndexProvider()
      *
-     * @param array $array
-     * @param array $arrayNew
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $arrayNew
+     * @param array<mixed> $result
      */
     public function testMergePrependNewIndex($array, $arrayNew, $result): void
     {
@@ -4183,7 +4188,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testMergePrependNewIndexV2(array $array): void
     {
@@ -4197,13 +4202,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergePrependNewIndex($secondArray);
         $resultArray = \array_merge($secondArray, $array);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testMergeToRecursively(array $array): void
     {
@@ -4217,13 +4223,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergePrependNewIndex($secondArray, true);
         $resultArray = \array_merge_recursive($secondArray, $array);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testMergeWith(array $array): void
     {
@@ -4237,13 +4244,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray);
         $resultArray = \array_merge($array, $secondArray);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testMergeWithRecursively(array $array): void
     {
@@ -4257,13 +4265,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->mergeAppendNewIndex($secondArray, true);
         $resultArray = \array_merge_recursive($array, $secondArray);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
     /**
      * @dataProvider minProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $expected
      */
     public function testMin($array, $expected): void
@@ -4378,7 +4387,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testOffsetNullSet(array $array): void
     {
@@ -4395,7 +4404,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testOffsetSet(array $array): void
     {
@@ -4412,7 +4421,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testOffsetUnset(array $array): void
     {
@@ -4431,7 +4440,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testDeleteKey(array $array): void
     {
@@ -4477,8 +4486,20 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame([0 => 'a', 'b' => []], $array);
         static::assertSame($array, $arrayy->toArray());
+        /* @phpstan-ignore-next-line isset.offset, staticMethod.alreadyNarrowedType */
         static::assertFalse(isset($array[$offset]));
         static::assertFalse($arrayy->offsetExists($offset));
+    }
+
+    public function testDotNotationStopsAtScalarIntermediateValue(): void
+    {
+        $arrayy = new A(['user' => 'not-an-array']);
+
+        static::assertFalse($arrayy->offsetExists('user.name'));
+
+        $arrayy->offsetUnset('user.name');
+
+        static::assertSame(['user' => null], $arrayy->toArray());
     }
 
     public function testOrderByKey(): void
@@ -4579,7 +4600,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testPad(array $array): void
     {
@@ -4587,13 +4608,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->pad(10, 5);
         $resultArray = \array_pad($array, 10, 5);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testPop(array $array): void
     {
@@ -4609,8 +4631,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider prependProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      * @param mixed $value
      */
     public function testPrepend($array, $result, $value): void
@@ -4656,8 +4678,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider prependToEachKeyProvider
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testPrependToEachKey($array, $result): void
     {
@@ -4676,8 +4698,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider prependToEachValueProvider
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testPrependToEachValue($array, $result): void
     {
@@ -4689,7 +4711,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testPush(array $array): void
     {
@@ -4707,7 +4729,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider randomProvider()
      *
-     * @param array    $array
+     * @param array<mixed>    $array
      * @param int|null $take
      */
     public function testRandom($array, $take = null): void
@@ -4760,7 +4782,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider randomWeightedProvider()
      *
-     * @param array    $array
+     * @param array<mixed>    $array
      * @param int|null $take
      */
     public function testRandomWeighted($array, $take = null): void
@@ -4794,10 +4816,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $testArray = ['foo', 2 => 'bar', 4 => 'lall'];
 
         /**
-         * @param array $resultArray
+         * @param array<mixed> $resultArray
          * @param mixed $value
          *
-         * @return array
+         * @return array<mixed>
          */
         $myReducer = static function ($resultArray, $value): array {
             if ($value === 'foo') {
@@ -4816,8 +4838,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider reduceDimensionProvider
      *
-     * @param array $array
-     * @param array $expected
+     * @param array<mixed> $array
+     * @param array<mixed> $expected
      * @param bool  $unique
      */
     public function testReduceDimension(array $array, array $expected, bool $unique = false): void
@@ -4831,7 +4853,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testTestgetValues(array $array): void
     {
@@ -4845,7 +4867,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetValuesYield(array $array): void
     {
@@ -4864,7 +4886,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testGetGetBackwardsGenerator(array $array): void
     {
@@ -4883,7 +4905,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testReindex(array $array): void
     {
@@ -4983,9 +5005,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider removeProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $key
-     * @param array $result
+     * @param array<mixed> $result
      */
     public function testRemove($array, $key, $result): void
     {
@@ -4997,8 +5019,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider removeFirstProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testRemoveFirst($array, $result): void
     {
@@ -5010,8 +5032,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider removeLastProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testRemoveLast($array, $result): void
     {
@@ -5023,8 +5045,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider removeV2Provider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      * @param mixed $key
      */
     public function testRemoveV2($array, $result, $key): void
@@ -5037,8 +5059,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider removeValueProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      * @param mixed $value
      */
     public function testRemoveValue($array, $result, $value): void
@@ -5158,6 +5180,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->replaceAllValues($secondArray);
         $resultArray = (array) \array_combine($firstArray, $secondArray);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $firstArray, $resultArray);
     }
 
@@ -5189,7 +5212,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testReplaceIn(array $array): void
     {
@@ -5209,7 +5232,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testReplaceInRecursively(array $array): void
     {
@@ -5237,6 +5260,15 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame('bar', $arrayy[1]);
         static::assertSame('foo', $arrayy['replaced']);
+    }
+
+    public function testReplacementMethodsReturnEmptyForMismatchedSizes(): void
+    {
+        $arrayy = A::create(['one', 'two']);
+
+        static::assertSame([], $arrayy->replaceAllKeys(['only-one'])->toArray());
+        static::assertSame([], $arrayy->replaceAllValues([1])->toArray());
+        static::assertSame([], $arrayy->replaceKeys(['only-one'])->toArray());
     }
 
     public function testReplaceOneValue(): void
@@ -5275,7 +5307,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testReplaceWith(array $array): void
     {
@@ -5295,7 +5327,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testReplaceWithRecursively(array $array): void
     {
@@ -5315,8 +5347,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider restProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      * @param int   $from
      */
     public function testRest($array, $result, $from = 1): void
@@ -5329,8 +5361,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider reverseProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testReverse($array, $result): void
     {
@@ -5343,7 +5375,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @dataProvider searchIndexProvider()
      *
      * @param false|int|string $expected
-     * @param array            $array
+     * @param array<mixed>            $array
      * @param mixed            $value
      */
     public function testSearchIndex($expected, $array, $value): void
@@ -5356,8 +5388,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider searchValueProvider()
      *
-     * @param array $expected
-     * @param array $array
+     * @param array<mixed> $expected
+     * @param array<mixed> $array
      * @param mixed $value
      */
     public function testSearchValue($expected, $array, $value): void
@@ -5385,13 +5417,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($object->arrayy, $arrayy);
 
         // serialize + tests
-        if (\PHP_VERSION_ID < 70400) {
-            static::assertStringContainsString('O:8:"stdClass":1:{s:6:"arrayy";C:13:"Arrayy\Arrayy":', \serialize($object));
-            static::assertNotSame($object, \unserialize(\serialize($object)));
-        } else {
-            static::assertStringContainsString('O:8:"stdClass":1:{s:6:"arrayy";O:13:"Arrayy\\Arrayy":', \serialize($object));
-            static::assertNotSame($object, \unserialize(\serialize($object)));
-        }
+        static::assertStringContainsString('O:8:"stdClass":1:{s:6:"arrayy";O:13:"Arrayy\\Arrayy":', \serialize($object));
+        static::assertNotSame($object, \unserialize(\serialize($object)));
 
         $arrayy = new A([1 => 1, 2 => 2, 3 => 3]);
         $serialized = $arrayy->serialize();
@@ -5412,17 +5439,10 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         );
 
         // serialize + tests
-        if (\PHP_VERSION_ID < 70400) {
-            static::assertInstanceOf(CityData::class, $model);
-            static::assertStringContainsString('C:21:"Arrayy\tests\CityData":', \serialize($model));
-            static::assertNotSame($model, \unserialize(\serialize($model)));
-            static::assertInstanceOf(CityData::class, $model);
-        } else {
-            static::assertInstanceOf(CityData::class, $model);
-            static::assertStringContainsString('O:21:"Arrayy\tests\CityData":', \serialize($model));
-            static::assertNotSame($model, \unserialize(\serialize($model)));
-            static::assertInstanceOf(CityData::class, $model);
-        }
+        static::assertInstanceOf(CityData::class, $model);
+        static::assertStringContainsString('O:21:"Arrayy\tests\CityData":', \serialize($model));
+        static::assertNotSame($model, \unserialize(\serialize($model)));
+        static::assertInstanceOf(CityData::class, $model);
     }
 
     public function testSerializeSimple(): void
@@ -5435,7 +5455,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider setProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $key
      * @param mixed $value
      */
@@ -5449,7 +5469,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider setAndGetProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param mixed $key
      * @param mixed $value
      */
@@ -5519,11 +5539,13 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     {
         $arrayy = new A(['Lars' => ['lastname' => 'Moelleken']]);
 
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['lastname' => 'Moelleken'], $arrayy['Lars']->getArray());
 
         $result = $arrayy->get('Lars.lastname');
         static::assertSame('Moelleken', $result);
 
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['lastname' => 'Moelleken'], $arrayy['Lars']->getArray());
 
         /* @phpstan-ignore property.notFound */
@@ -5532,6 +5554,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         /* @phpstan-ignore property.notFound */
         static::assertSame('Moelleken', $arrayy->Lars->lastname);
 
+        /* @phpstan-ignore-next-line offsetAccess.notFound */
         static::assertSame('Moelleken', $arrayy['Lars']['lastname']);
 
         $tmp = $arrayy['Lars'];
@@ -5584,7 +5607,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testShift(array $array): void
     {
@@ -5715,7 +5738,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testSlice(array $array): void
     {
@@ -5723,6 +5746,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArrayy = $arrayy->slice(1, 1);
         $resultArray = \array_slice($array, 1, 1);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
     }
 
@@ -5774,7 +5798,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testSortAscWithPreserveKeys(array $array): void
     {
@@ -5801,13 +5825,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayV2 = new A($array);
         $resultArrayV2 = $arrayV2->asortImmutable();
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testSortAscWithoutPreserveKeys(array $array): void
     {
@@ -5831,7 +5856,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testSortDescWithPreserveKeys(array $array): void
     {
@@ -5855,7 +5880,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testSortImmutableDescWithPreserveKeys(array $array): void
     {
@@ -5864,6 +5889,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $resultArray = $array;
         \arsort($resultArray, \SORT_REGULAR);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArray);
 
         // ---
@@ -5873,13 +5899,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayV2 = new A($array);
         $resultArrayV2 = $arrayV2->arsortImmutable();
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testSortDescWithoutPreserveKeys(array $array): void
     {
@@ -5906,14 +5933,15 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayV2 = new A($array);
         $resultArrayV2 = $arrayV2->rsortImmutable();
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
     }
 
     /**
      * @dataProvider sortKeysProvider()
      *
-     * @param array  $array
-     * @param array  $result
+     * @param array<mixed>  $array
+     * @param array<mixed>  $result
      * @param string $direction
      */
     public function testSortKeys($array, $result, $direction = 'ASC'): void
@@ -5926,7 +5954,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testSortKeysAsc(array $array): void
     {
@@ -5953,13 +5981,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayV2 = new A($array);
         $resultArrayV2 = $arrayV2->ksortImmutable();
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testNatcasesort(array $array): void
     {
@@ -5975,7 +6004,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testNatsortImmutable(array $array): void
     {
@@ -5985,13 +6014,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayResult = $arrayyResult->getArray();
 
         static::assertSame($array, $arrayResult);
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $arrayyResult, $array, $arrayResult);
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testNatsort(array $array): void
     {
@@ -6007,7 +6037,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testNatcasesortImmutable(array $array): void
     {
@@ -6017,13 +6047,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayResult = $arrayyResult->getArray();
 
         static::assertSame($array, $arrayResult);
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $arrayyResult, $array, $arrayResult);
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testUasort(array $array): void
     {
@@ -6046,7 +6077,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testUasortImmutable(array $array): void
     {
@@ -6063,13 +6094,14 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayResult = $arrayyResult->getArray();
 
         static::assertSame($array, $arrayResult);
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $arrayyResult, $array, $arrayResult);
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testSortKeysDesc(array $array): void
     {
@@ -6096,6 +6128,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         $arrayV2 = new A($array);
         $resultArrayV2 = $arrayV2->krsortImmutable();
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $resultArrayV2->getArray());
     }
 
@@ -6172,20 +6205,21 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testStaticCreate(array $array): void
     {
         $arrayy = new A($array);
         $resultArrayy = A::create($array);
 
+        /* @phpstan-ignore-next-line argument.type */
         self::assertImmutable($arrayy, $resultArrayy, $array, $array);
     }
 
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testStaticCreateFromGeneratorImmutableFromArray(array $array): void
     {
@@ -6199,7 +6233,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param int   $count
      */
     public function testStaticCreateFromGeneratorFunctionFromArray(array $array, int $count): void
@@ -6219,7 +6253,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testStaticCreateFromJson(array $array): void
     {
@@ -6234,7 +6268,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testStaticCreateFromObject(array $array): void
     {
@@ -6334,6 +6368,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         } else {
             $array = [$string];
         }
+        /* @phpstan-ignore-next-line function.alreadyNarrowedType */
         \assert(\is_array($array));
 
         $arrayy = A::create($array);
@@ -6369,9 +6404,9 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider diffReverseProvider()
      *
-     * @param array $array
-     * @param array $arrayNew
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $arrayNew
+     * @param array<mixed> $result
      */
     public function testTestdiffReverse($array, $arrayNew, $result): void
     {
@@ -6383,7 +6418,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider isMultiArrayProvider()
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param bool  $result
      */
     public function testTestisMultiArray($array, $result): void
@@ -6397,7 +6432,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      * @dataProvider toStringProvider()
      *
      * @param string $expected
-     * @param array  $array
+     * @param array<mixed>  $array
      */
     public function testToString($expected, $array): void
     {
@@ -6407,8 +6442,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider uniqueProvider()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testUnique($array, $result): void
     {
@@ -6422,8 +6457,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider uniqueProviderKeepIndex()
      *
-     * @param array $array
-     * @param array $result
+     * @param array<mixed> $array
+     * @param array<mixed> $result
      */
     public function testUniqueKeepIndex($array, $result): void
     {
@@ -6456,7 +6491,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testUnshift(array $array): void
     {
@@ -6480,10 +6515,30 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($matcher, $values->getArray());
     }
 
+    public function testWhereSupportsArraysAndObjects(): void
+    {
+        $object = new \stdClass();
+        $object->status = 'active';
+
+        $result = A::create([
+            ['status' => 'active', 'name' => 'array'],
+            ['status' => 'inactive', 'name' => 'other'],
+            $object,
+        ])->where('status', 'active');
+
+        static::assertSame(
+            [
+                ['status' => 'active', 'name' => 'array'],
+                2 => $object,
+            ],
+            $result->toArray()
+        );
+    }
+
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testWalk(array $array): void
     {
@@ -6502,7 +6557,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider simpleArrayProvider
      *
-     * @param array $array
+     * @param array<mixed> $array
      */
     public function testWalkRecursively(array $array): void
     {
@@ -6547,7 +6602,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function toStringProvider(): array
     {
@@ -6562,7 +6617,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function uniqueProvider(): array
     {
@@ -6619,7 +6674,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function uniqueProviderKeepIndex(): array
     {
@@ -6678,8 +6733,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @param A<int|string,mixed,array<int|string,mixed>>                            $arrayzy
      * @param A<int,mixed,array<int,mixed>>|A<int,string,array<int,string>>|A<int|string,mixed,array<int|string,mixed>> $resultArrayzy
-     * @param array                                          $array
-     * @param array                                          $resultArray
+     * @param array<mixed>                                          $array
+     * @param array<mixed>                                          $resultArray
      */
     protected static function assertImmutable(A $arrayzy, A $resultArrayzy, array $array, array $resultArray): void
     {
@@ -6691,7 +6746,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
     /**
      * @param A<array-key,mixed,array<array-key,mixed>> $arrayzy
      * @param A<array-key,mixed,array<array-key,mixed>> $resultArrayzy
-     * @param array              $resultArray
+     * @param array<mixed>              $resultArray
      */
     protected static function assertMutable(A $arrayzy, A $resultArrayzy, array $resultArray): void
     {

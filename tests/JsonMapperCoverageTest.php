@@ -18,6 +18,7 @@ final class JsonMapperCoverageTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('JsonMapper::map() requires second argument to be an object, integer given.');
 
+        /* @phpstan-ignore-next-line argument.templateType, argument.type (the invalid target is the subject of this test) */
         (new Json())->map([], 123);
     }
 

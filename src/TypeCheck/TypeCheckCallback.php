@@ -51,7 +51,7 @@ class TypeCheckCallback implements TypeCheckInterface
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function getTypes(): array
     {

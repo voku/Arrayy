@@ -38,6 +38,7 @@ final class MetaDynamicStaticMethodReturnTypeExtension implements DynamicStaticM
         }
 
         $className = $scope->resolveName($methodCall->class);
+        /* @phpstan-ignore-next-line phpstanApi.runtimeReflection */
         if (!\is_a($className, Arrayy::class, true)) {
             return null;
         }

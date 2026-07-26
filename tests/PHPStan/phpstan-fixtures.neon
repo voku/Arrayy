@@ -1,0 +1,8 @@
+parameters:
+    level: 8
+
+services:
+    -
+        class: Arrayy\PHPStan\MetaDynamicStaticMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension

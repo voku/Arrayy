@@ -44,6 +44,7 @@ final class BoolTypeTest extends TestCase
         }
         \assert(\is_bool($test));
 
+        /* @phpstan-ignore-next-line staticMethod.alreadyNarrowedType */
         static::assertTrue($test);
     }
 

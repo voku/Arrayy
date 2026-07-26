@@ -12,7 +12,7 @@ class ModelA extends \Arrayy\Arrayy implements ModelInterface
     /**
      * ModelA constructor.
      *
-     * @param array  $array
+     * @param array<array-key,mixed> $array
      * @param string $iteratorClass
      *
      * @phpstan-param class-string<\Arrayy\ArrayyIterator<array-key,mixed>> $iteratorClass

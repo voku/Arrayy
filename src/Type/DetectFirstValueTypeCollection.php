@@ -40,6 +40,7 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
          */
         if ($data instanceof Arrayy) {
             $firstValue = $data->first();
+        /* @phpstan-ignore-next-line function.alreadyNarrowedType */
         } elseif (\is_array($data)) {
             $firstValue = array_first($data);
         } else {

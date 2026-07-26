@@ -1,6 +1,10 @@
 parameters:
     level: 8
     reportUnmatchedIgnoredErrors: true
+    excludePaths:
+        analyse:
+            - %currentWorkingDirectory%/tests/PHPStan/ArrayShapeInvalidUsage.php
+            - %currentWorkingDirectory%/tests/PHPStan/MetaInvalidUsage.php
     paths:
         - %currentWorkingDirectory%/src/
         - %currentWorkingDirectory%/tests/

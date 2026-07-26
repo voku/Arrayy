@@ -247,6 +247,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if (\is_array($return) === true) {
             $return = static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 [],
                 $this->iteratorClass,
                 false
@@ -282,6 +283,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 );
             }
 
+            /* @phpstan-ignore-next-line argument.type */
             $this->internalSet($key, $value);
 
             return $this;
@@ -761,7 +763,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $this->callAtPath(
                 $containerPath,
                 static function ($container) use ($lastOffset, &$offsetExists) {
-                    $offsetExists = \array_key_exists($lastOffset, $container);
+                    $offsetExists = \is_array($container) && \array_key_exists($lastOffset, $container);
                 }
             );
         }
@@ -788,9 +790,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $value = null;
 
         if ($this->offsetExists($offset)) {
+            /* @phpstan-ignore-next-line argument.templateType, argument.type */
             $value = &$this->__get($offset);
         }
 
+        /* @phpstan-ignore-next-line return.type */
         return $value;
     }
 
@@ -1067,6 +1071,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 \is_array($this->array[$key])
             ) {
                 foreach ($values as $value) {
+                    /* @phpstan-ignore-next-line assign.propertyType */
                     $this->array[$key][] = $value;
                 }
             } else {
@@ -1103,6 +1108,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if ($item instanceof self) {
                 $result[$prefix . $key] = $item->appendToEachKey($prefix);
             } elseif (\is_array($item)) {
+                /* @phpstan-ignore-next-line argument.type */
                 $result[$prefix . $key] = self::create($item, $this->iteratorClass, false)
                     ->appendToEachKey($prefix)
                     ->toArray();
@@ -1112,6 +1118,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return self::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -1138,6 +1145,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             if ($item instanceof self) {
                 $result[$key] = $item->appendToEachValue($prefix);
             } elseif (\is_array($item)) {
+                /* @phpstan-ignore-next-line argument.type */
                 $result[$key] = self::create($item, $this->iteratorClass, false)->appendToEachValue($prefix)->toArray();
             } elseif (\is_object($item) === true) {
                 $result[$key] = $item;
@@ -1146,6 +1154,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
+        /* @phpstan-ignore-next-line argument.type */
         return self::create($result, $this->iteratorClass, false);
     }
 
@@ -1215,6 +1224,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $that->toArray(),
             $this->iteratorClass,
             false
@@ -1307,6 +1317,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $return,
             $this->iteratorClass,
             false
@@ -1738,6 +1749,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function countValues(): self
     {
         /** @phpstan-var static $return - help for phpstan */
+        /* @phpstan-ignore-next-line argument.type */
         $return = self::create(\array_count_values($this->toArray()), $this->iteratorClass);
 
         return $return;
@@ -1868,6 +1880,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromGeneratorImmutable(\Generator $generator): self
     {
+        /* @phpstan-ignore-next-line argument.type */
         return self::create(\iterator_to_array($generator, true));
     }
 
@@ -1901,6 +1914,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromArray(array $array): self
     {
+        /* @phpstan-ignore-next-line argument.type */
         return static::create($array);
     }
 
@@ -1998,6 +2012,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         );
 
         /** @var static $return - help for phpstan */
+        /* @phpstan-ignore-next-line argument.type */
         $return = static::create($array);
 
         return $return;
@@ -2020,6 +2035,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public static function createFromTraversableImmutable(\Traversable $traversable, bool $use_keys = true): self
     {
+        /* @phpstan-ignore-next-line argument.type */
         return self::create(\iterator_to_array($traversable, $use_keys));
     }
 
@@ -2039,6 +2055,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public static function createWithRange($low, $high, $step = 1): self
     {
         /** @phpstan-var static $return - help for phpstan */
+        /* @phpstan-ignore-next-line argument.type */
         $return = static::create(\range($low, $high, $step));
 
         return $return;
@@ -2365,6 +2382,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -2390,6 +2408,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function diffReverse(array $array = []): self
     {
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             \array_diff($array, $this->toArray()),
             $this->iteratorClass,
             false
@@ -2412,6 +2431,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function divide(): self
     {
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             [
                 $this->keys(),
                 $this->values(),
@@ -2437,8 +2457,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param \Closure(T,?TKey):T $closure
-     * @phpstan-return static
+     * @template TEach
+     *                 <p>The output value type.</p>
+     *
+     * @phpstan-param \Closure(T,?TKey):TEach $closure
+     * @phpstan-return static<TKey,TEach,array<TKey,TEach>>
      * @psalm-mutation-free
      */
     public function each(\Closure $closure): self
@@ -2450,7 +2473,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $array[$key] = $closure($value, $key);
         }
 
-        return static::create(
+        return static::create( // @phpstan-ignore return.type (create() is intentionally re-parameterized with TEach)
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -2552,6 +2576,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $tmpArray,
             $this->iteratorClass,
             false
@@ -2729,6 +2754,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     $comparisonOp
                 ) {
                     $item = (array) $item;
+                    /* @phpstan-ignore-next-line argument.type */
                     $itemArrayy = static::create($item);
                     $item[$property] = $itemArrayy->get($property, []);
 
@@ -2738,6 +2764,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         );
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -2901,6 +2928,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -2930,6 +2958,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -3057,6 +3086,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($key === null) {
             return static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 [],
                 $this->iteratorClass,
                 false
@@ -3072,6 +3102,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if (\array_key_exists($key, $usedArray) === true) {
             if (\is_array($usedArray[$key])) {
                 return static::create(
+                    /* @phpstan-ignore-next-line argument.type */
                     [],
                     $this->iteratorClass,
                     false
@@ -3124,6 +3155,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                     unset($segmentsTmp[0]);
                     $keyTmp = \implode('.', $segmentsTmp);
                     $returnTmp = static::create(
+                        /* @phpstan-ignore-next-line argument.type */
                         [],
                         $this->iteratorClass,
                         false
@@ -3170,6 +3202,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
             if (\is_array($usedArrayTmp)) {
                 return static::create(
+                    /* @phpstan-ignore-next-line argument.type */
                     [],
                     $this->iteratorClass,
                     false
@@ -3184,6 +3217,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             [],
             $this->iteratorClass,
             false
@@ -3561,6 +3595,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->generatorToArray(false);
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             \array_values($this->array),
             $this->iteratorClass,
             false
@@ -3630,6 +3665,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -3745,6 +3781,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $results,
             $this->iteratorClass,
             false
@@ -3814,6 +3851,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
              * @psalm-suppress MissingClosureParamType
              */
             return static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 \array_uintersect(
                     $this->toArray(),
                     $search,
@@ -3827,6 +3865,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             \array_values(\array_intersect($this->toArray(), $search)),
             $this->iteratorClass,
             false
@@ -3848,6 +3887,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function intersectionMulti(...$array): self
     {
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             \array_values(\array_intersect($this->toArray(), ...$array)),
             $this->iteratorClass,
             false
@@ -3904,6 +3944,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -4049,6 +4090,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 &&
                 (\is_array($value) || $value instanceof \Traversable)
                 &&
+                /* @phpstan-ignore-next-line argument.type */
                 self::create($value)->isSequential() === false
             ) {
                 return false;
@@ -4157,6 +4199,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             );
 
             return static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 $array,
                 $this->iteratorClass,
                 false
@@ -4324,6 +4367,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         if ($this->isEmpty()) {
             return static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 [],
                 $this->iteratorClass,
                 false
@@ -4340,6 +4384,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
 
             $arrayy = static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 $poppedValue,
                 $this->iteratorClass,
                 false
@@ -4412,7 +4457,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *              <p>The output value type.</p>
      *
      * @phpstan-param callable(T,TKey=,mixed=):T2 $callable
-     * @phpstan-return static
+     * @phpstan-return static<TKey,T2,array<TKey,T2>>
      * @psalm-mutation-free
      */
     public function map(
@@ -4581,6 +4626,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -4623,6 +4669,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -4664,6 +4711,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -4706,6 +4754,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -4832,6 +4881,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $output,
             $this->iteratorClass,
             false
@@ -4863,6 +4913,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -4894,6 +4945,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -4997,6 +5049,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function pad(int $size, $value): self
     {
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             \array_pad($this->toArray(), $size, $value),
             $this->iteratorClass,
             false
@@ -5032,6 +5085,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
         }
 
+        /* @phpstan-ignore-next-line argument.type */
         return [self::create($matches), self::create($noMatches)];
     }
 
@@ -5148,6 +5202,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $result[$key] = $item->prependToEachKey($suffix);
             } elseif (\is_array($item)) {
                 $result[$key] = self::create(
+                    /* @phpstan-ignore-next-line argument.type */
                     $item,
                     $this->iteratorClass,
                     false
@@ -5159,6 +5214,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return self::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -5186,6 +5242,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 $result[$key] = $item->prependToEachValue($suffix);
             } elseif (\is_array($item)) {
                 $result[$key] = self::create(
+                    /* @phpstan-ignore-next-line argument.type */
                     $item,
                     $this->iteratorClass,
                     false
@@ -5199,6 +5256,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return self::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -5294,6 +5352,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($this->count() === 0) {
             return static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 [],
                 $this->iteratorClass,
                 false
@@ -5304,6 +5363,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $arrayRandValue = [$this->array[\array_rand($this->array)]];
 
             return static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 $arrayRandValue,
                 $this->iteratorClass,
                 false
@@ -5314,6 +5374,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         \shuffle($arrayTmp);
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $arrayTmp,
             $this->iteratorClass,
             false
@@ -5385,6 +5446,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $result = (array) \array_rand($this->array, $number);
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -5411,6 +5473,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($this->count() === 0) {
             return static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 [],
                 $this->iteratorClass,
                 false
@@ -5562,6 +5625,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         foreach ($this->getGenerator() as $val) {
             if (\is_array($val)) {
+                /* @phpstan-ignore-next-line argument.type */
                 $result[] = static::create($val)->reduce_dimension($unique)->toArray();
             } else {
                 $result[] = [$val];
@@ -5570,6 +5634,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         $result = $result === [] ? [] : \array_merge(...$result);
 
+        /* @phpstan-ignore-next-line argument.type */
         $resultArrayy = static::create($result);
 
         /**
@@ -5631,6 +5696,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $filtered,
             $this->iteratorClass,
             false
@@ -5661,6 +5727,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
 
             return static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 $this->toArray(),
                 $this->iteratorClass,
                 false
@@ -5670,6 +5737,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $this->internalRemove($key);
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $this->toArray(),
             $this->iteratorClass,
             false
@@ -5713,6 +5781,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         \array_shift($tmpArray);
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $tmpArray,
             $this->iteratorClass,
             false
@@ -5739,6 +5808,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         \array_pop($tmpArray);
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $tmpArray,
             $this->iteratorClass,
             false
@@ -5779,6 +5849,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $this->array,
             $this->iteratorClass,
             false
@@ -5799,10 +5870,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function repeat($times): self
     {
         if ($times === 0) {
+            /* @phpstan-ignore-next-line argument.type */
             return static::create([], $this->iteratorClass);
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             \array_fill(0, (int) $times, $this->toArray()),
             $this->iteratorClass,
             false
@@ -5872,13 +5945,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function replaceAllKeys(array $keys): self
     {
-        $data = \array_combine($keys, $this->toArray());
-        /* @phpstan-ignore identical.alwaysFalse */
-        if ($data === false) {
-            $data = [];
-        }
+        $values = $this->toArray();
+        $data = \count($keys) === \count($values) ? \array_combine($keys, $values) : [];
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $data,
             $this->iteratorClass,
             false
@@ -5916,13 +5987,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function replaceAllValues(array $array): self
     {
-        $data = \array_combine($this->toArray(), $array);
-        /* @phpstan-ignore identical.alwaysFalse */
-        if ($data === false) {
-            $data = [];
-        }
+        $keys = $this->toArray();
+        $data = \count($keys) === \count($array) ? \array_combine($keys, $array) : [];
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $data,
             $this->iteratorClass,
             false
@@ -5948,13 +6017,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function replaceKeys(array $keys): self
     {
         $values = \array_values($this->toArray());
-        $result = \array_combine($keys, $values);
-        /* @phpstan-ignore identical.alwaysFalse */
-        if ($result === false) {
-            $result = [];
-        }
+        $result = \count($keys) === \count($values) ? \array_combine($keys, $values) : [];
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $result,
             $this->iteratorClass,
             false
@@ -5990,6 +6056,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -6019,7 +6086,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return \str_replace($search, $replacement, $value);
         };
 
-        /* @phpstan-ignore argument.type */
+        /* @phpstan-ignore-next-line return.type */
         return $this->each($callable);
     }
 
@@ -6043,6 +6110,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $tmpArray = $this->toArray();
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             \array_splice($tmpArray, $from),
             $this->iteratorClass,
             false
@@ -6194,6 +6262,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($this->array === []) {
             return static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 [],
                 $this->iteratorClass,
                 false
@@ -6211,6 +6280,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $return,
             $this->iteratorClass,
             false
@@ -6343,6 +6413,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -6514,6 +6585,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     public function slice(int $offset, ?int $length = null, bool $preserveKeys = false)
     {
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             \array_slice(
                 $this->toArray(),
                 $offset,
@@ -6730,6 +6802,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         // Transform all values into their results.
         if ($sorter) {
             $arrayy = static::create(
+                /* @phpstan-ignore-next-line argument.type */
                 $array,
                 $this->iteratorClass,
                 false
@@ -6758,6 +6831,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         \array_multisort($results, $direction, $strategy, $array);
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -6788,6 +6862,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         );
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $tmpArray,
             $this->iteratorClass,
             false
@@ -6924,6 +6999,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         list($array[$swapA], $array[$swapB]) = [$array[$swapB], $array[$swapA]];
 
         return static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $array,
             $this->iteratorClass,
             false
@@ -7061,6 +7137,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         /** @var static $return  - help for phpstan */
         $return = static::create(
+            /* @phpstan-ignore-next-line argument.type */
             $return,
             $this->iteratorClass,
             false
@@ -7321,6 +7398,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         return $this->filter(
             function ($item) use ($keyOrPropertyOrMethod, $value) {
                 $accessorValue = $this->extractValue(
+                    /* @phpstan-ignore-next-line argument.type (filter() does not retain the item type in this callback) */
                     $item,
                     $keyOrPropertyOrMethod
                 );
@@ -7451,7 +7529,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return void
      *
-     * @phpstan-param array<TKey,T>|null $currentOffset
+     * @phpstan-param array<array-key,mixed>|null $currentOffset
      * @psalm-mutation-free
      */
     protected function callAtPath($path, $callable, &$currentOffset = null)
@@ -7463,10 +7541,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         $explodedPath = \explode($this->pathSeparator, $path);
-        /* @phpstan-ignore identical.alwaysFalse */
-        if ($explodedPath === false) {
-            return;
-        }
 
         $nextPath = \array_shift($explodedPath);
         if (!isset($currentOffset[$nextPath])) {
@@ -7474,10 +7548,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         }
 
         if ($explodedPath !== []) {
+            if (!\is_array($currentOffset[$nextPath])) {
+                return;
+            }
+
+            $nestedOffset = &$currentOffset[$nextPath];
             $this->callAtPath(
                 \implode($this->pathSeparator, $explodedPath),
                 $callable,
-                $currentOffset[$nextPath]
+                $nestedOffset
             );
         } else {
             $callable($currentOffset[$nextPath]);
@@ -7487,7 +7566,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Extracts the value of the given property or method from the object.
      *
-     * @param static $object
+     * @param array|object $object
      *                                         <p>The object to extract the value from.</p>
      * @param string    $keyOrPropertyOrMethod
      *                                         <p>The property or method for which the
@@ -7498,11 +7577,15 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *               <p>The value extracted from the specified property or method.</p>
      *
-     * @phpstan-param self<TKey,T,TData> $object
+     * @phpstan-param array<array-key,mixed>|object $object
      */
-    final protected function extractValue(self $object, string $keyOrPropertyOrMethod)
+    final protected function extractValue($object, string $keyOrPropertyOrMethod)
     {
-        if (isset($object[$keyOrPropertyOrMethod])) {
+        if (\is_array($object)) {
+            if (\array_key_exists($keyOrPropertyOrMethod, $object)) {
+                return $object[$keyOrPropertyOrMethod];
+            }
+        } elseif ($object instanceof self && isset($object[$keyOrPropertyOrMethod])) {
             $return = $object->get($keyOrPropertyOrMethod);
 
             if ($return instanceof self) {
@@ -7512,11 +7595,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $return;
         }
 
-        if (\property_exists($object, $keyOrPropertyOrMethod)) {
+        if (\is_object($object) && \property_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod};
         }
 
-        if (\method_exists($object, $keyOrPropertyOrMethod)) {
+        if (\is_object($object) && \method_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod}();
         }
 
@@ -8026,6 +8109,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     protected function internalRemove($key): bool
     {
         $this->generatorToArray();
+
+        if (\is_float($key)) {
+            $key = (int) $key;
+        }
 
         if (
             $this->pathSeparator

@@ -14,6 +14,7 @@ final class JsonMapperTest extends \PHPUnit\Framework\TestCase
 
         $found = false;
 
+        /* @phpstan-ignore-next-line argument.type */
         GetAccountsResponse::createFromJsonMapper($json)
             ->accounts
             ->each(function (Account $a) use (&$found) {
