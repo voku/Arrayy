@@ -130,7 +130,7 @@ $name = $user['profile']['name'];            // ArrayAccess / array-shape infere
 $name = $user->profile->name;                // @property-read declarations
 ```
 
-Dot-notation inference intentionally applies to literal dotted paths on typed `Arrayy` subclasses with a stable array-shape `TData`. Dynamic strings and wildcard paths retain the method's safe general return type. Object-property access should be declared with `@property` or `@property-read`; `meta()` keeps generated key access precise.
+Dot-notation inference intentionally applies to literal dotted paths on typed `Arrayy` subclasses with a stable array-shape `TData` that implement `Arrayy\PHPStan\DefaultDotNotationTypeInterface`. Implementing this marker is a promise that the subclass keeps Arrayy's default `.` separator and does not switch it with `changeSeparator()`; without that promise, splitting the path statically would be unsound. Dynamic strings, wildcard paths, custom separators, and plain `Arrayy` instances retain the method's safe general return type. Object-property access should be declared with `@property` or `@property-read`; `meta()` keeps generated key access precise.
 
 The repository's own `phpstan.neon` registers the extension like this; copy the same service definition into your project's PHPStan config because this repository file is not shipped in the Composer package:
 
@@ -151,7 +151,7 @@ services:
  * @template T of array{id: int, firstName: int|string, lastName: string, city?: City|null}
  * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
-class User extends \Arrayy\Arrayy
+class User extends \Arrayy\Arrayy implements \Arrayy\PHPStan\DefaultDotNotationTypeInterface
 {
   protected $checkPropertyTypes = true;
 
@@ -162,7 +162,7 @@ class User extends \Arrayy\Arrayy
  * @template T of array{plz: string|null, name: string, infos: string[]}
  * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
-class City extends \Arrayy\Arrayy
+class City extends \Arrayy\Arrayy implements \Arrayy\PHPStan\DefaultDotNotationTypeInterface
 {
     protected $checkPropertyTypes = true;
 

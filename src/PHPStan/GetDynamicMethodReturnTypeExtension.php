@@ -98,6 +98,12 @@ final class GetDynamicMethodReturnTypeExtension implements DynamicMethodReturnTy
                 continue;
             }
 
+            if ($classReflection->getAncestorWithClassName(DefaultDotNotationTypeInterface::class) === null) {
+                // The separator is mutable runtime state. Only an explicit
+                // default-separator contract makes splitting on "." sound.
+                continue;
+            }
+
             $arrayyReflection = $this->getArrayyReflection($classReflection);
             if ($arrayyReflection === null) {
                 continue;

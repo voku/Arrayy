@@ -8,7 +8,7 @@ namespace Arrayy\tests\PHPStan;
  * @extends \Arrayy\Arrayy<'profile',AccessShapeProfile,array{profile: AccessShapeProfile}>
  * @property-read AccessShapeProfile $profile
  */
-final class AccessShapeUser extends \Arrayy\Arrayy
+final class AccessShapeUser extends \Arrayy\Arrayy implements \Arrayy\PHPStan\DefaultDotNotationTypeInterface
 {
     /**
      * @param 'profile' $offset

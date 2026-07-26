@@ -79,7 +79,9 @@ final class Json
         $strClassName = \get_class($object);
         $rc = new \ReflectionClass($object);
         $strNs = $rc->getNamespaceName();
-        $jsonValues = \is_object($json) ? \get_object_vars($json) : $json;
+        $jsonValues = $json instanceof \Traversable
+            ? $json
+            : (\is_object($json) ? \get_object_vars($json) : $json);
         foreach ($jsonValues as $key => $jsonValue) {
             $key = $this->getSafeName($key);
 

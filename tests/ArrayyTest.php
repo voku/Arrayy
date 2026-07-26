@@ -217,12 +217,16 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function cleanProvider(): array
     {
+        $negativeKeyResult = \PHP_VERSION_ID >= 80300
+            ? [-8 => -9, -7 => 1]
+            : [-8 => -9, 0 => 1];
+
         return [
             [[], []],
             [[null, false], []],
             [[0 => true], [0 => true]],
             [[0 => -9, 0], [0 => -9]],
-            [[-8 => -9, 1, 2 => false], [-8 => -9, -7 => 1]],
+            [[-8 => -9, 1, 2 => false], $negativeKeyResult],
             [[0 => 1.18, 1 => false], [0 => 1.18]],
             [['foo' => false, 'foo', 'lall'], ['foo', 'lall']],
         ];

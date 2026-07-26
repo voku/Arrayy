@@ -9,10 +9,10 @@ namespace Arrayy\tests\PHPStan;
  * @property-read string $name
  * @property-read string|null $avatar
  */
-final class AccessShapeProfile extends \Arrayy\Arrayy
+final class AccessShapeProfile extends \Arrayy\Arrayy implements \Arrayy\PHPStan\DefaultDotNotationTypeInterface
 {
     /**
-     * @param 'name' $offset
+     * @param 'avatar'|'name' $offset
      * @return string
      */
     #[\ReturnTypeWillChange]

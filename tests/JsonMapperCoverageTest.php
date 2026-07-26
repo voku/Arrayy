@@ -38,6 +38,14 @@ final class JsonMapperCoverageTest extends TestCase
         static::assertSame([$target, 'UnknownKey', 'value'], $captured);
     }
 
+    public function testMapPreservesTraversableEntries(): void
+    {
+        $input = new \ArrayIterator(['name' => 'From iterator']);
+        $target = (new Json())->map($input, new JsonMapperStringFixture());
+
+        static::assertSame('From iterator', $target->name);
+    }
+
     public function testMapSkipsPrivatePropertiesWithoutSetters(): void
     {
         $mapper = new Json();
