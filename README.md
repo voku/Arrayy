@@ -120,12 +120,26 @@ $arrayy->Lars->lastname; // 'Müller'
 
 The library offers type checking for phpdoc array-shape annotations, legacy `@property` phpdoc-class-comments, and native declared properties. Prefer the array-shape form because it can reuse the `Arrayy` template for IDE autocompletion and static-analysis support. `meta()` is also understood by PHPStan, so `meta()`-derived keys such as `$userMeta->city` and `$cityMeta->name` keep precise literal-string information during static analysis. When you want PHPStan to check reads precisely, prefer array-like access with literal keys (for example `$user['lastName']`) or narrowed `meta()` keys on these array-shape-based models. Do not combine array-shape annotations and `@property` tags on the same model.
 
-If you use PHPStan and call `YourArrayySubclass::meta()`, you can register the custom return-type extension from `src/PHPStan/MetaDynamicStaticMethodReturnTypeExtension.php`. Use it when you want PHPStan to understand that `meta()` returns an object shape whose properties are the exact array keys collected from your array-shape annotations, `@property` tags, or native declared properties. That keeps expressions such as `$userMeta->id` typed as the literal string `'id'`, helps nested lookups like `$user[$userMeta->city][$cityMeta->name]`, and lets PHPStan report invalid meta-property access such as `$userMeta->ghost`.
+If you use PHPStan, register the return-type extensions from `src/PHPStan`. `GetDynamicMethodReturnTypeExtension` resolves literal dot-notation paths against a typed subclass's `TData` array shape, including fallback values. `MetaDynamicStaticMethodReturnTypeExtension` understands that `meta()` returns an object shape whose properties are the exact keys collected from array-shape annotations, `@property` tags, or native declared properties.
+
+All three access styles can therefore participate in static analysis:
+
+```php
+$name = $user->get('profile.name', 'Guest'); // dot path resolved from TData
+$name = $user['profile']['name'];            // ArrayAccess / array-shape inference
+$name = $user->profile->name;                // @property-read declarations
+```
+
+Dot-notation inference intentionally applies to literal dotted paths on typed `Arrayy` subclasses with a stable array-shape `TData` that implement `Arrayy\PHPStan\DefaultDotNotationTypeInterface`. Implementing this marker is a promise that the subclass keeps Arrayy's default `.` separator and does not switch it with `changeSeparator()`; without that promise, splitting the path statically would be unsound. Dynamic strings, wildcard paths, custom separators, and plain `Arrayy` instances retain the method's safe general return type. Object-property access should be declared with `@property` or `@property-read`; `meta()` keeps generated key access precise.
 
 The repository's own `phpstan.neon` registers the extension like this; copy the same service definition into your project's PHPStan config because this repository file is not shipped in the Composer package:
 
 ```neon
 services:
+    -
+        class: Arrayy\PHPStan\GetDynamicMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
     -
         class: Arrayy\PHPStan\MetaDynamicStaticMethodReturnTypeExtension
         tags:
@@ -137,7 +151,7 @@ services:
  * @template T of array{id: int, firstName: int|string, lastName: string, city?: City|null}
  * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
-class User extends \Arrayy\Arrayy
+class User extends \Arrayy\Arrayy implements \Arrayy\PHPStan\DefaultDotNotationTypeInterface
 {
   protected $checkPropertyTypes = true;
 
@@ -148,7 +162,7 @@ class User extends \Arrayy\Arrayy
  * @template T of array{plz: string|null, name: string, infos: string[]}
  * @extends  \Arrayy\Arrayy<key-of<T>,value-of<T>,T>
  */
-class City extends \Arrayy\Arrayy
+class City extends \Arrayy\Arrayy implements \Arrayy\PHPStan\DefaultDotNotationTypeInterface
 {
     protected $checkPropertyTypes = true;
 

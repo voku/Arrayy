@@ -58,6 +58,7 @@ final class TypesTest extends TestCase
 
         $users = UserDataCollection::createFromGeneratorFunction($data);
         $names = $users
+            /* @phpstan-ignore-next-line argument.type */
             ->filter(static function (UserData $person): bool {
                 return $person->id <= 30;
             })

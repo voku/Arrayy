@@ -208,14 +208,22 @@ DOC);
 
         static::assertContainsOnlyInstancesOf(Property::class, $tags);
 
+        /* @phpstan-ignore-next-line argument.type */
         $scalarTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[0]);
+        /* @phpstan-ignore-next-line argument.type */
         $callableTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[1]);
+        /* @phpstan-ignore-next-line argument.type */
         $objectTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[2]);
+        /* @phpstan-ignore-next-line argument.type */
         $arrayTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[3]);
 
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['string|int|float|bool'], $scalarTypeCheck->getTypes());
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['callable'], $callableTypeCheck->getTypes());
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['\\ArrayObject'], $objectTypeCheck->getTypes());
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['string[]'], $arrayTypeCheck->getTypes());
     }
 
@@ -233,6 +241,7 @@ DOC);
 DOC);
         $tag = $docBlock->getTagsByName('property')[0];
 
+        /* @phpstan-ignore-next-line method.notFound */
         $checker = TypeCheckPhpDoc::fromDocTypeObject('city', $tag->getType());
 
         static::assertSame(['\\ArrayObject', 'null'], $checker->getTypes());
@@ -256,6 +265,7 @@ DOC);
  * @template T of array{data: array{x: int}}
  */
 DOC);
+        /* @phpstan-ignore-next-line method.notFound */
         $bound = $docBlock->getTagsByName('template')[0]->getBound();
         $nestedShapeType = $bound->getItems()[0]->getValue(); // array{x: int}
 
@@ -282,6 +292,7 @@ DOC);
             'infos' => ['lall'],
         ]);
 
+        /* @phpstan-ignore-next-line argument.type */
         $model = new TypeCheckArrayShapeUserData([
             $meta->id        => 1,
             $meta->firstName => 'Lars',
@@ -303,6 +314,7 @@ DOC);
     {
         $meta = TypeCheckArrayShapeUserData::meta();
 
+        /* @phpstan-ignore-next-line argument.type */
         $model = new TypeCheckArrayShapeUserData([
             $meta->id        => 1,
             $meta->firstName => 'Lars',
@@ -334,11 +346,17 @@ DOC);
 
         $tags = $docBlock->getTagsByName('property');
 
+        /* @phpstan-ignore-next-line argument.type */
         $boolTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[0]);
+        /* @phpstan-ignore-next-line argument.type */
         $floatTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[1]);
+        /* @phpstan-ignore-next-line argument.type */
         $stringTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[2]);
+        /* @phpstan-ignore-next-line argument.type */
         $intTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[3]);
+        /* @phpstan-ignore-next-line argument.type */
         $mixedTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[4]);
+        /* @phpstan-ignore-next-line argument.type */
         $nullTypeCheck = TypeCheckPhpDoc::fromPhpDocumentorProperty($tags[5]);
 
         $boolValue = true;
@@ -348,17 +366,29 @@ DOC);
         $mixedValue = ['foo' => 'bar'];
         $nullValue = null;
 
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['bool'], $boolTypeCheck->getTypes());
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['float'], $floatTypeCheck->getTypes());
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['string'], $stringTypeCheck->getTypes());
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['int'], $intTypeCheck->getTypes());
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['mixed'], $mixedTypeCheck->getTypes());
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertSame(['null'], $nullTypeCheck->getTypes());
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertTrue($boolTypeCheck->checkType($boolValue));
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertTrue($floatTypeCheck->checkType($floatValue));
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertTrue($stringTypeCheck->checkType($stringValue));
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertTrue($intTypeCheck->checkType($intValue));
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertTrue($mixedTypeCheck->checkType($mixedValue));
+        /* @phpstan-ignore-next-line method.nonObject */
         static::assertTrue($nullTypeCheck->checkType($nullValue));
     }
 
@@ -445,6 +475,7 @@ DOC);
     public function testArrayShapeTemplateProvidesPropertyDefinitions(): void
     {
         $meta = TypeCheckArrayShapeUserData::meta();
+        /* @phpstan-ignore-next-line argument.type */
         $model = new TypeCheckArrayShapeUserData([
             $meta->id        => 1,
             $meta->firstName => 'Lars',
@@ -463,6 +494,7 @@ DOC);
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
 
         $meta = TypeCheckArrayShapeUserData::meta();
+        /* @phpstan-ignore-next-line argument.type */
         new TypeCheckArrayShapeUserData([
             $meta->id        => 1,
             $meta->firstName => 'Lars',
@@ -477,6 +509,7 @@ DOC);
         $this->expectExceptionMessage('The key "unknown" does not exist');
 
         $meta = TypeCheckArrayShapeUserData::meta();
+        /* @phpstan-ignore-next-line argument.type */
         new TypeCheckArrayShapeUserData([
             $meta->id        => 1,
             $meta->firstName => 'Lars',
@@ -513,6 +546,7 @@ DOC);
         $this->expectExceptionMessage('Invalid type');
 
         $meta = TypeCheckArrayShapeUserData::meta();
+        /* @phpstan-ignore-next-line argument.type */
         new TypeCheckArrayShapeUserData([
             $meta->id        => 1,
             $meta->firstName => 'Lars',
@@ -648,6 +682,7 @@ DOC);
 DOC);
         $tag = $docBlock->getTagsByName('property')[0];
 
+        /* @phpstan-ignore-next-line method.notFound */
         $checker = TypeCheckPhpDoc::fromDocTypeObject('myProp', $tag->getType());
 
         static::assertSame(['int'], $checker->getTypes());
@@ -685,6 +720,7 @@ DOC);
         $this->expectExceptionMessageMatches('#Invalid type: expected "id" to be of type \{int\}#');
 
         $meta = TypeCheckArrayShapeUserData::meta();
+        /* @phpstan-ignore-next-line argument.type */
         $model = new TypeCheckArrayShapeUserData([
             $meta->id        => 1,
             $meta->firstName => 'Lars',
@@ -705,6 +741,7 @@ DOC);
         $this->expectExceptionMessage('The key "ghost" does not exist');
 
         $meta = TypeCheckArrayShapeUserData::meta();
+        /* @phpstan-ignore-next-line argument.type */
         $model = new TypeCheckArrayShapeUserData([
             $meta->id        => 1,
             $meta->firstName => 'Lars',
@@ -727,6 +764,7 @@ DOC);
 
 final class TypeCheckNoTypeFixture
 {
+    /* @phpstan-ignore-next-line missingType.property */
     public $value;
 }
 
@@ -740,6 +778,7 @@ final class TypeCheckDocTypesFixture
     /**
      * @var \ArrayObject
      */
+    /* @phpstan-ignore-next-line missingType.generics */
     public $objectValue;
 
     /**
@@ -758,6 +797,7 @@ final class TypeCheckDocOverridesNativeFixture
     /**
      * @var int|string
      */
+    /* @phpstan-ignore-next-line property.phpDocType */
     public string $value = '';
 }
 
@@ -885,6 +925,7 @@ final class TypeCheckArrayShapeWrongTemplateName extends \Arrayy\Arrayy
  *
  * @extends stdClass<array{id: int}, mixed>
  */
+/* @phpstan-ignore-next-line generics.wrongParent, missingType.generics */
 final class TypeCheckNonArrayyExtendsData extends \Arrayy\Arrayy
 {
     protected $checkPropertyTypes = true;

@@ -17,6 +17,7 @@ namespace Arrayy {
          */
         function create($data): Arrayy
         {
+            /* @phpstan-ignore-next-line return.type */
             return new Arrayy($data);
         }
     }
