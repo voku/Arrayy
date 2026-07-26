@@ -5017,6 +5017,28 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result->toArray());
     }
 
+    public function testUnsetWithDotNotationPreservesRootAndSiblingValues(): void
+    {
+        $arrayy = new A([
+            'user' => [
+                'profile' => [
+                    'name'   => 'Lars',
+                    'avatar' => 'avatar.png',
+                ],
+            ],
+            'keep' => 'root value',
+        ]);
+
+        unset($arrayy->{'user.profile.name'});
+
+        static::assertSame([
+            'user' => [
+                'profile' => ['avatar' => 'avatar.png'],
+            ],
+            'keep' => 'root value',
+        ], $arrayy->toArray());
+    }
+
     public function testRemoveWithDotNotationStopsAtScalarIntermediateValue(): void
     {
         $arrayy = new A([

@@ -97,6 +97,7 @@ final class GetDynamicMethodReturnTypeExtensionTest extends TestCase
     {
         $extension = new GetDynamicMethodReturnTypeExtension();
         $method = new \ReflectionMethod($extension, 'getFallbackType');
+        $method->setAccessible(true);
         $scope = $this->createMock(Scope::class);
 
         $withoutFallback = $this->createGetCall('profile.name');
