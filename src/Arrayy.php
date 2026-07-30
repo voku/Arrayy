@@ -282,6 +282,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 );
             }
 
+            /* @phpstan-ignore argument.type */
             $this->internalSet($key, $value);
 
             return $this;
@@ -788,9 +789,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $value = null;
 
         if ($this->offsetExists($offset)) {
+            /* @phpstan-ignore argument.type, argument.templateType */
             $value = &$this->__get($offset);
         }
 
+        /* @phpstan-ignore return.type */
         return $value;
     }
 
@@ -1052,7 +1055,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object, with the appended values.</p>
      *
-     * @phpstan-param  array<T> $values
+     * @phpstan-param array<T> $values
      * @phpstan-param  TKey|null $key
      * @phpstan-return static
      */
@@ -1067,6 +1070,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 \is_array($this->array[$key])
             ) {
                 foreach ($values as $value) {
+                    /* @phpstan-ignore assign.propertyType */
                     $this->array[$key][] = $value;
                 }
             } else {
@@ -7451,7 +7455,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return void
      *
-     * @phpstan-param array<TKey,T>|null $currentOffset
+     * @phpstan-param array<array-key,mixed>|null $currentOffset
      * @psalm-mutation-free
      */
     protected function callAtPath($path, $callable, &$currentOffset = null)
@@ -7487,8 +7491,8 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Extracts the value of the given property or method from the object.
      *
-     * @param static $object
-     *                                         <p>The object to extract the value from.</p>
+     * @param mixed $object
+     *                                         <p>The Arrayy instance, object, or other value from which to extract the property or method value.</p>
      * @param string    $keyOrPropertyOrMethod
      *                                         <p>The property or method for which the
      *                                         value should be extracted.</p>
@@ -7498,11 +7502,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return mixed
      *               <p>The value extracted from the specified property or method.</p>
      *
-     * @phpstan-param self<TKey,T,TData> $object
      */
-    final protected function extractValue(self $object, string $keyOrPropertyOrMethod)
+    final protected function extractValue($object, string $keyOrPropertyOrMethod)
     {
-        if (isset($object[$keyOrPropertyOrMethod])) {
+        if ($object instanceof self && isset($object[$keyOrPropertyOrMethod])) {
             $return = $object->get($keyOrPropertyOrMethod);
 
             if ($return instanceof self) {
@@ -7512,11 +7515,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $return;
         }
 
-        if (\property_exists($object, $keyOrPropertyOrMethod)) {
+        if (\is_object($object) && \property_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod};
         }
 
-        if (\method_exists($object, $keyOrPropertyOrMethod)) {
+        if (\is_object($object) && \method_exists($object, $keyOrPropertyOrMethod)) {
             return $object->{$keyOrPropertyOrMethod}();
         }
 
@@ -8047,6 +8050,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             }
 
             $key = \array_shift($path);
+        }
+
+        if ($key === null) {
+            return false;
+        }
+
+        if (\is_float($key)) {
+            return false;
         }
 
         unset($this->array[$key]);
