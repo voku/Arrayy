@@ -68,6 +68,7 @@ php vendor/bin/phpunit --no-coverage
 
 ```bash
 curl -sSL -o infection.phar https://github.com/infection/infection/releases/download/0.32.7/infection.phar
+echo "91ade5625c397719cd39a135bb68b9993242e92ca72b8a94e8fcc12364588937  infection.phar" | sha256sum --check --strict
 php infection.phar --threads=max
 # only mutate one file while iterating on tests:
 php infection.phar --threads=max --filter=src/Arrayy.php --show-mutations

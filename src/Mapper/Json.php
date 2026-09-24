@@ -101,7 +101,7 @@ final class Json
             ) = $this->arInspectedClasses[$strClassName][$key];
 
             if (!$hasProperty) {
-                if ($this->undefinedPropertyHandler !== null) {
+                if (\is_callable($this->undefinedPropertyHandler)) {
                     ($this->undefinedPropertyHandler)(
                         $object,
                         $key,

@@ -1629,6 +1629,8 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             [[1.18], 0, []],
             [[' string  ', 'foo'], 'foo', [' string  ', 'foo']],
             [[' string  ', 'foo' => 'foo'], 'foo', [' string  ']],
+            // a float key must not be truncated into the int key "1"
+            [[1 => 'one', 2 => 'two'], 1.5, [1 => 'one', 2 => 'two']],
         ];
     }
 
@@ -4994,45 +4996,6 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $resultTmp);
     }
 
-    public function testRemoveWithFloatKeyDoesNotTruncateTheKey(): void
-    {
-        $arrayy = new A([1 => 'one', 2 => 'two']);
-
-        // PHP would cast the float key 1.5 into 1, so it must not remove anything
-        static::assertSame([1 => 'one', 2 => 'two'], $arrayy->remove(1.5)->getArray());
-    }
-
-    public function testWhereWithObjectPropertyAndMethod(): void
-    {
-        $lars = new class() {
-            /**
-             * @var string
-             */
-            public $name = 'Lars';
-
-            public function getCity(): string
-            {
-                return 'Düsseldorf';
-            }
-        };
-        $foo = new class() {
-            /**
-             * @var string
-             */
-            public $name = 'Foo';
-
-            public function getCity(): string
-            {
-                return 'Berlin';
-            }
-        };
-
-        $arrayy = new A([$lars, $foo]);
-
-        static::assertSame([$lars], $arrayy->where('name', 'Lars')->getArray());
-        static::assertSame([1 => $foo], $arrayy->where('getCity', 'Berlin')->getArray());
-    }
-
     /**
      * @dataProvider removeFirstProvider()
      *
@@ -6583,6 +6546,94 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         $expected = [0, 1, [0, 1, [0, 1]]];
         static::assertSame($expected, $resultArrayy->getArray());
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: mixed, 2: int[]}>
+     */
+    public function whereProvider(): array
+    {
+        return [
+            'public property'                => ['name', 'Lars', [0]],
+            'public method'                  => ['getCity', 'Berlin', [1]],
+            'private property is not usable' => ['secret', 'x', []],
+            'protected method is not usable' => ['getSecret', 'x', []],
+        ];
+    }
+
+    /**
+     * @dataProvider whereProvider()
+     *
+     * @param string $keyOrPropertyOrMethod
+     * @param mixed  $value
+     * @param int[]  $expectedKeys
+     */
+    public function testWhere(string $keyOrPropertyOrMethod, $value, array $expectedKeys): void
+    {
+        $objects = [
+            new class('Lars', 'Düsseldorf') {
+                /**
+                 * @var string
+                 */
+                public $name;
+
+                /**
+                 * @var string
+                 */
+                private $city;
+
+                /**
+                 * @var string
+                 */
+                private $secret = 'x';
+
+                public function __construct(string $name, string $city)
+                {
+                    $this->name = $name;
+                    $this->city = $city;
+                }
+
+                public function getCity(): string
+                {
+                    return $this->city;
+                }
+
+                protected function getSecret(): string
+                {
+                    return $this->secret;
+                }
+            },
+            new class('Foo', 'Berlin') {
+                /**
+                 * @var string
+                 */
+                public $name;
+
+                /**
+                 * @var string
+                 */
+                private $city;
+
+                public function __construct(string $name, string $city)
+                {
+                    $this->name = $name;
+                    $this->city = $city;
+                }
+
+                public function getCity(): string
+                {
+                    return $this->city;
+                }
+            },
+        ];
+
+        if ($expectedKeys === []) {
+            $this->expectException(\InvalidArgumentException::class);
+        }
+
+        $result = (new A($objects))->where($keyOrPropertyOrMethod, $value)->getArray();
+
+        static::assertSame($expectedKeys, \array_keys($result));
     }
 
     /**

@@ -7520,11 +7520,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             return $return;
         }
 
-        if (\is_object($object) && \property_exists($object, $keyOrPropertyOrMethod)) {
+        // only use properties / methods that are accessible (and initialized) from here
+        if (\is_object($object) && \array_key_exists($keyOrPropertyOrMethod, \get_object_vars($object))) {
             return $object->{$keyOrPropertyOrMethod};
         }
 
-        if (\is_object($object) && \method_exists($object, $keyOrPropertyOrMethod)) {
+        if (\is_object($object) && \is_callable([$object, $keyOrPropertyOrMethod])) {
             return $object->{$keyOrPropertyOrMethod}();
         }
 
