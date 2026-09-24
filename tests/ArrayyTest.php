@@ -4994,6 +4994,45 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($result, $resultTmp);
     }
 
+    public function testRemoveWithFloatKeyDoesNotTruncateTheKey(): void
+    {
+        $arrayy = new A([1 => 'one', 2 => 'two']);
+
+        // PHP would cast the float key 1.5 into 1, so it must not remove anything
+        static::assertSame([1 => 'one', 2 => 'two'], $arrayy->remove(1.5)->getArray());
+    }
+
+    public function testWhereWithObjectPropertyAndMethod(): void
+    {
+        $lars = new class() {
+            /**
+             * @var string
+             */
+            public $name = 'Lars';
+
+            public function getCity(): string
+            {
+                return 'Düsseldorf';
+            }
+        };
+        $foo = new class() {
+            /**
+             * @var string
+             */
+            public $name = 'Foo';
+
+            public function getCity(): string
+            {
+                return 'Berlin';
+            }
+        };
+
+        $arrayy = new A([$lars, $foo]);
+
+        static::assertSame([$lars], $arrayy->where('name', 'Lars')->getArray());
+        static::assertSame([1 => $foo], $arrayy->where('getCity', 'Berlin')->getArray());
+    }
+
     /**
      * @dataProvider removeFirstProvider()
      *
