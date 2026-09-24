@@ -50,7 +50,7 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
         $this->getTypeHelper = $this->getTypeFromFirstValue($firstValue);
 
         parent::__construct(
-            $data,
+            $data, // @phpstan-ignore argument.type (a single "T" value was wrapped into an array above)
             $iteratorClass,
             $checkPropertiesInConstructor
         );

@@ -1828,7 +1828,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return $this
      *               <p>(Mutable) Return this Arrayy object.</p>
      *
-     * @phpstan-param  array<TKey,T> $array
+     * @phpstan-param  array<array-key|TKey,T> $array
      * @phpstan-return $this
      *
      * @internal this will not check any types because it's set directly as reference
@@ -2094,6 +2094,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
+        /* @phpstan-ignore argument.type (internal keys are array-key|TKey, the callback contract is TKey) */
         \uksort($this->array, $callable);
 
         return $this;
@@ -2124,6 +2125,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         /**
          * @psalm-suppress ImpureFunctionCall - object is already cloned
          */
+        /* @phpstan-ignore argument.type (internal keys are array-key|TKey, the callback contract is TKey) */
         \uksort($that->array, $callable);
 
         return $that;
@@ -2961,7 +2963,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($number === null) {
             $shift = \array_shift($this->array);
-            /* @phpstan-ignore assign.propertyType */
             $this->array = $shift !== null ? [$shift] : [];
         } else {
             $splice = \array_splice($this->array, 0, $number);
@@ -3025,7 +3026,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return mixed|static
      *
-     * @phpstan-param TKey $key
+     * @phpstan-param array-key|null $key
      * @phpstan-param array<array-key,mixed>|array<TKey,T> $array
      * @psalm-mutation-free
      */
@@ -3647,7 +3648,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *
-     * @phpstan-param null|TKey|TKey[] $key
+     * @phpstan-param null|array-key|array<array-key> $key
      */
     public function has($key): bool
     {
@@ -4306,7 +4307,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     {
         $this->generatorToArray();
 
-        return \array_key_last($this->array);
+        /** @phpstan-var TKey|null $return - help for phpstan */
+        $return = \array_key_last($this->array);
+
+        return $return;
     }
 
     /**
@@ -5082,7 +5086,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         if ($key === null) {
             \array_unshift($this->array, $value);
         } else {
-            $this->array = [$key => $value] + $this->array; // @phpstan-ignore assign.propertyType
+            $this->array = [$key => $value] + $this->array;
         }
 
         return $this;
@@ -5423,7 +5427,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
 
         if ($number === null) {
             $arrayRandValue = [$this->array[\array_rand($this->array)]];
-            $this->array = $arrayRandValue; // @phpstan-ignore assign.propertyType
+            $this->array = $arrayRandValue;
 
             return $this;
         }
@@ -7295,6 +7299,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 }
             } else {
                 if ($userData !== self::ARRAYY_HELPER_WALK) {
+                    /* @phpstan-ignore argument.type (internal keys are array-key|TKey, the callback contract is TKey) */
                     \array_walk($this->array, $callable, $userData);
                 } else {
                     /* @phpstan-ignore argument.type */
@@ -8022,7 +8027,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Internal mechanics of remove method.
      *
-     * @param float|int|string $key
+     * @param float|int|string|null $key
      *
      * @return bool
      */
@@ -8074,7 +8079,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @return bool
      *
-     * @phpstan-param TKey|null $key
+     * @phpstan-param array-key|null $key
      * @phpstan-param T $value
      */
     protected function internalSet(
