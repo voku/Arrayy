@@ -100,7 +100,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.37.0
+        uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # 2.37.0
         with:
           php-version: '8.3'
           coverage: pcov
@@ -120,14 +120,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer update --prefer-dist --no-interaction
+          composer install --prefer-dist --no-interaction
           composer dump-autoload -o
 
       - name: Install Infection
         run: |
-          curl --fail --silent --show-error --location \
+          curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location \
             --output infection.phar \
             https://github.com/infection/infection/releases/download/0.32.7/infection.phar
+          echo "91ade5625c397719cd39a135bb68b9993242e92ca72b8a94e8fcc12364588937  infection.phar" | sha256sum --check --strict
           chmod +x infection.phar
 
       # MSI thresholds live in infection.json.dist (minMsi / minCoveredMsi).
