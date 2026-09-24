@@ -58,6 +58,23 @@ php vendor/bin/phpunit --no-coverage
 - Known pre-existing failures (unrelated to feature work): 2 errors (`array_sum` on strings) + 1 failure (sigma case)
 - Run targeted tests with `--filter "testMethodName"` to speed up iteration
 
+### Mutation testing (Infection)
+
+- Config: `infection.json.dist` (source: `src/`, static analysis: PHPStan, 2s mutant timeout)
+- CI runs it in the dedicated `mutation` job (PHP 8.3 + pcov, 30 min timeout); a full run takes ~12 minutes, so it is kept out of the 10-minute test matrix
+- Quality gates are set in the config: `minMsi: 65`, `minCoveredMsi: 75`
+- Baseline (2026-09): 2729 mutants, 2114 killed, 594 escaped, covered-code MSI ~78%, line coverage ~91.6%
+- Run locally (requires PHP 8.3+ and pcov or xdebug):
+
+```bash
+curl -sSL -o infection.phar https://github.com/infection/infection/releases/download/0.32.7/infection.phar
+php infection.phar --threads=max
+# only mutate one file while iterating on tests:
+php infection.phar --threads=max --filter=src/Arrayy.php --show-mutations
+```
+
+- Escaped mutants are listed in `infection-log.txt`; raise the thresholds when new tests kill more mutants
+
 ---
 
 ## Regenerating README.md

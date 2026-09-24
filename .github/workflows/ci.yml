@@ -66,24 +66,10 @@ jobs:
           mkdir -p build/logs
           php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
 
-      # Infection 0.32.x requires PHP 8.3+, so keep the linked PHPStan/Infection checks on the basic 8.3 job.
       - name: Run phpstan
         if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
         run: |
           php vendor/bin/phpstan analyse
-
-      - name: Install Infection
-        if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
-        run: |
-          curl --fail --silent --show-error --location \
-            --output infection.phar \
-            https://github.com/infection/infection/releases/download/0.32.7/infection.phar
-          chmod +x infection.phar
-
-      - name: Run Infection
-        if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
-        run: |
-          php infection.phar --threads=max --min-msi=0 --min-covered-msi=0 --no-progress
 
       - name: Upload coverage results to Coveralls
         env:
@@ -104,3 +90,56 @@ jobs:
           name: logs_composer-${{ matrix.composer }}_php-${{ matrix.php }}
           path: |
             build/logs
+
+  mutation:
+    # Infection 0.32.x requires PHP 8.3+; a full run takes ~12 minutes, so it gets its own job.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@2.37.0
+        with:
+          php-version: '8.3'
+          coverage: pcov
+          extensions: zip
+          tools: composer
+
+      - name: Determine composer cache directory
+        id: composer-cache
+        run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.directory }}
+          key: 8.3-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: 8.3-composer-
+
+      - name: Install dependencies
+        run: |
+          composer update --prefer-dist --no-interaction
+          composer dump-autoload -o
+
+      - name: Install Infection
+        run: |
+          curl --fail --silent --show-error --location \
+            --output infection.phar \
+            https://github.com/infection/infection/releases/download/0.32.7/infection.phar
+          chmod +x infection.phar
+
+      # MSI thresholds live in infection.json.dist (minMsi / minCoveredMsi).
+      - name: Run Infection
+        run: |
+          php infection.phar --threads=max --no-progress --logger-github=false
+
+      - name: Archive Infection logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: infection-logs
+          path: |
+            infection-log.txt
+            infection-summary.txt
