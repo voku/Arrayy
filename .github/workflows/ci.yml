@@ -67,8 +67,7 @@ jobs:
           php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
 
       - name: Run phpstan
-        continue-on-error: true
-        if: ${{ matrix.php == '8.0' }}
+        if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
         run: |
           php vendor/bin/phpstan analyse
 
@@ -91,3 +90,57 @@ jobs:
           name: logs_composer-${{ matrix.composer }}_php-${{ matrix.php }}
           path: |
             build/logs
+
+  mutation:
+    # Infection 0.32.x requires PHP 8.3+; a full run takes ~12 minutes, so it gets its own job.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # 2.37.0
+        with:
+          php-version: '8.3'
+          coverage: pcov
+          extensions: zip
+          tools: composer
+
+      - name: Determine composer cache directory
+        id: composer-cache
+        run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.directory }}
+          key: 8.3-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: 8.3-composer-
+
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-interaction
+          composer dump-autoload -o
+
+      - name: Install Infection
+        run: |
+          curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location \
+            --output infection.phar \
+            https://github.com/infection/infection/releases/download/0.32.7/infection.phar
+          echo "91ade5625c397719cd39a135bb68b9993242e92ca72b8a94e8fcc12364588937  infection.phar" | sha256sum --check --strict
+          chmod +x infection.phar
+
+      # MSI thresholds live in infection.json.dist (minMsi / minCoveredMsi).
+      - name: Run Infection
+        run: |
+          php infection.phar --threads=max --no-progress --logger-github=false
+
+      - name: Archive Infection logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: infection-logs
+          path: |
+            infection-log.txt
+            infection-summary.txt

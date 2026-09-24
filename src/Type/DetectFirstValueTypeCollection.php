@@ -26,7 +26,7 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
      * @param string             $iteratorClass
      * @param bool               $checkPropertiesInConstructor
      *
-     * @phpstan-param array<TKey,T>|Arrayy<TKey,T,array<TKey,T>> $data
+     * @phpstan-param array<TKey,T>|Arrayy<TKey,T,array<TKey,T>>|T $data
      * @phpstan-param class-string<\Arrayy\ArrayyIterator<TKey,T>> $iteratorClass
      */
     public function __construct(
@@ -50,7 +50,7 @@ final class DetectFirstValueTypeCollection extends Collection implements TypeInt
         $this->getTypeHelper = $this->getTypeFromFirstValue($firstValue);
 
         parent::__construct(
-            $data,
+            $data, // @phpstan-ignore argument.type (a single "T" value was wrapped into an array above)
             $iteratorClass,
             $checkPropertiesInConstructor
         );

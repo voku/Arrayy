@@ -103,8 +103,13 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
         $staticArrayyClass = new \ReflectionClass(A::class);
         $arrayyClass = new \ReflectionClass(Arrayy::class);
 
+        // "methodArgs" is filled lazily by the first static call, so don't depend on test order
+        A::first([1]); // @phpstan-ignore staticMethod.notFound
+
         // getStaticPropertyValue can't access protected properties
         $properties = $staticArrayyClass->getStaticProperties();
+
+        static::assertNotEmpty($properties['methodArgs']);
 
         foreach ((array) $properties['methodArgs'] as $method => $expected) {
             $num = $arrayyClass->getMethod($method)->getNumberOfParameters() + 2;

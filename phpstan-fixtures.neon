@@ -1,0 +1,12 @@
+parameters:
+    level: 8
+    reportUnmatchedIgnoredErrors: true
+    paths:
+        - %currentWorkingDirectory%/src/
+        - %currentWorkingDirectory%/tests/
+
+services:
+    -
+        class: Arrayy\PHPStan\MetaDynamicStaticMethodReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
