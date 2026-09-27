@@ -19,7 +19,7 @@ final class Json
      * Override class names that JsonMapper uses to create objects.
      * Useful when your setter methods accept abstract classes or interfaces.
      *
-     * @var array
+     * @var array<string, class-string|callable(string|null, mixed): (class-string|string|null)>
      */
     public $classMap = [];
 
@@ -33,7 +33,7 @@ final class Json
      * 2. Name of the unknown JSON property
      * 3. JSON value of the property
      *
-     * @var callable
+     * @var null|callable(object, string, mixed): void
      */
     public $undefinedPropertyHandler;
 
@@ -41,14 +41,14 @@ final class Json
      * Runtime cache for inspected classes. This is particularly effective if
      * mapArray() is called with a large number of objects
      *
-     * @var array property inspection result cache
+     * @var array<string, array<string, array{0: bool, 1: \ReflectionMethod|\ReflectionProperty|string|null, 2: string|null}>> property inspection result cache
      */
     private $arInspectedClasses = [];
 
     /**
      * Map data all data in $json into the given $object instance.
      *
-     * @param object|iterable $json
+     * @param object|iterable<array-key,mixed> $json
      *                                                      <p>JSON object structure from json_decode()</p>
      * @param object|string $object
      *                                                      <p>Object to map $json data into</p>
@@ -58,7 +58,8 @@ final class Json
      *
      * @see mapArray()
      *
-     * @template TObject
+     * @template TObject of object
+     * @phpstan-param object|iterable<array-key,mixed> $json
      * @phpstan-param TObject|class-string<TObject> $object
      *                                                      <p>Object to map $json data into.</p>
      * @phpstan-return TObject
@@ -79,6 +80,11 @@ final class Json
         $strClassName = \get_class($object);
         $rc = new \ReflectionClass($object);
         $strNs = $rc->getNamespaceName();
+
+        if (\is_object($json) && !($json instanceof \Traversable)) {
+            $json = \get_object_vars($json);
+        }
+
         foreach ($json as $key => $jsonValue) {
             $key = $this->getSafeName($key);
 
@@ -95,9 +101,8 @@ final class Json
             ) = $this->arInspectedClasses[$strClassName][$key];
 
             if (!$hasProperty) {
-                if (\is_callable($this->undefinedPropertyHandler)) {
-                    \call_user_func(
-                        $this->undefinedPropertyHandler,
+                if ($this->undefinedPropertyHandler !== null) {
+                    ($this->undefinedPropertyHandler)(
                         $object,
                         $key,
                         $jsonValue
@@ -111,7 +116,7 @@ final class Json
                 continue;
             }
 
-            if ($this->isNullable($type)) {
+            if ($type !== null && $this->isNullable($type)) {
                 if ($jsonValue === null) {
                     $this->setProperty($object, $accessor, null);
 
@@ -247,7 +252,7 @@ final class Json
     /**
      * Map an array
      *
-     * @param array       $json       JSON array structure from json_decode()
+     * @param array<array-key,mixed> $json       JSON array structure from json_decode()
      * @param mixed       $array      Array or ArrayObject that gets filled with
      *                                data from $json
      * @param string|null $class      Class name for children objects.
@@ -261,6 +266,8 @@ final class Json
      * @pslam-param null|class-string $class
      *
      * @return mixed Mapped $array is returned
+     *
+     * @phpstan-param array<array-key,mixed> $json
      */
     public function mapArray($json, $array, $class = null, $parent_key = '')
     {
@@ -301,8 +308,12 @@ final class Json
                                 )
                                 &&
                                 \count($typesTmp->getTypes()) === 1
+                                &&
+                                \class_exists($typesTmp->getTypes()[0])
                             ) {
-                                $array[$key] = $this->map($jsonValue, $typesTmp->getTypes()[0]);
+                                /** @var class-string<object> $mappedClass */
+                                $mappedClass = $typesTmp->getTypes()[0];
+                                $array[$key] = $this->map($jsonValue, $mappedClass);
                                 $foundArrayy = true;
 
                                 break;
@@ -404,7 +415,7 @@ final class Json
      * @param \ReflectionClass<object> $rc   Reflection class to check
      * @param string                   $name Property name
      *
-     * @return array First value: if the property exists
+     * @return array{0: bool, 1: \ReflectionMethod|\ReflectionProperty|string|null, 2: string|null} First value: if the property exists
      *               Second value: the accessor to use (
      *               Array-Key-String or ReflectionMethod or ReflectionProperty, or null)
      *               Third value: type of the property
@@ -485,7 +496,7 @@ final class Json
      *
      * @param string $docblock Full method docblock
      *
-     * @return array
+     * @return array<string, list<string>>
      */
     private static function parseAnnotations($docblock): array
     {
@@ -739,7 +750,7 @@ final class Json
      *
      * @internal
      *
-     * @template TClass
+     * @template TClass of object
      * @phpstan-param TClass|class-string<TClass> $class
      * @phpstan-return TClass
      */

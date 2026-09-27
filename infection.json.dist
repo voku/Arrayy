@@ -8,6 +8,7 @@
     "phpUnit": {
         "customPath": "vendor\/bin\/phpunit"
     },
+    "staticAnalysisTool": "phpstan",
     "tmpDir": "build/infection/",
     "logs": {
         "text": "infection-log.txt"
