@@ -1627,6 +1627,7 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
             [[-9, 1, 0, false], 1, [0 => -9, 2 => 0, 3 => false]],
             [[-9, 1, 0, false], [1, 2, 99], [0 => -9, 3 => false]],
             [[1.18], 0, []],
+            [['value'], 1.5, ['value']],
             [[' string  ', 'foo'], 'foo', [' string  ', 'foo']],
             [[' string  ', 'foo' => 'foo'], 'foo', [' string  ']],
         ];
