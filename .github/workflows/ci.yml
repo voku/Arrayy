@@ -51,6 +51,12 @@ jobs:
             composer require phpstan/phpstan --no-update
           fi;
 
+          # Keep the Infection-linked static-analysis job on the last version
+          # proven green for this unchanged source snapshot.
+          if [[ "${{ matrix.php }}" == "8.3" && "${{ matrix.composer }}" == "basic" ]]; then
+            composer require --dev phpstan/phpstan:2.1.54 --no-update
+          fi;
+
           if [[ "${{ matrix.composer }}" == "lowest" ]]; then
             composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable
           fi;
