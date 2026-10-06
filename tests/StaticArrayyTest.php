@@ -100,11 +100,16 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
      */
     public function testArgumentNumbers(): void
     {
+        /** @noinspection PhpUndefinedMethodInspection */
+        A::first(); // @phpstan-ignore staticMethod.notFound
+
         $staticArrayyClass = new \ReflectionClass(A::class);
         $arrayyClass = new \ReflectionClass(Arrayy::class);
 
         // getStaticPropertyValue can't access protected properties
         $properties = $staticArrayyClass->getStaticProperties();
+
+        static::assertNotEmpty($properties['methodArgs']);
 
         foreach ((array) $properties['methodArgs'] as $method => $expected) {
             $num = $arrayyClass->getMethod($method)->getNumberOfParameters() + 2;
