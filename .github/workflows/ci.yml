@@ -47,15 +47,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [[ "${{ matrix.php }}" == "8.0" ]]; then
-            composer require phpstan/phpstan --no-update
-          fi;
-
-          # Keep the Infection-linked static-analysis job on the last version
-          # proven green for this unchanged source snapshot.
-          if [[ "${{ matrix.php }}" == "8.3" && "${{ matrix.composer }}" == "basic" ]]; then
-            composer require --dev phpstan/phpstan:2.1.54 --no-update
-          fi;
+          # Keep PHPStan deterministic across the matrix. The unchanged source
+          # snapshot is proven green with 2.1.54; newer 2.x releases currently
+          # change the fixture/static-analysis results.
+          composer require --dev phpstan/phpstan:2.1.54 --no-update
 
           if [[ "${{ matrix.composer }}" == "lowest" ]]; then
             composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable
