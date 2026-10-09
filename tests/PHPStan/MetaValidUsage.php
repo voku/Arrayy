@@ -42,9 +42,10 @@ $user = new ArrayShapeUser([
 ]);
 
 \PHPStan\Testing\assertType('int|null', $user[$userMeta->id]);
-assertMetaFixtureNullableCity($user[$userMeta->city]);
+$city = $user[$userMeta->city];
+assertMetaFixtureNullableCity($city);
 
-if ($user[$userMeta->city] !== null) {
-    assertMetaFixtureCity($user[$userMeta->city]);
-    \PHPStan\Testing\assertType('string|null', $user[$userMeta->city][$cityMeta->name]);
+if ($city !== null) {
+    assertMetaFixtureCity($city);
+    \PHPStan\Testing\assertType('string|null', $city[$cityMeta->name]);
 }
