@@ -14,6 +14,7 @@
         "text": "infection-log.txt",
         "summary": "infection-summary.txt"
     },
+    "timeoutsAsEscaped": true,
     "minMsi": 65,
     "minCoveredMsi": 75
 }
