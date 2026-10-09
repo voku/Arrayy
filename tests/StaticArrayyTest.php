@@ -97,6 +97,10 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
      * Use reflection to ensure that all argument numbers are correct. Each
      * static method should accept 2 more arguments than their Stringy
      * equivalent.
+     *
+     * The call initializes the static facade's lazy method argument map.
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function testArgumentNumbers(): void
     {
