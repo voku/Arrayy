@@ -47,10 +47,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # Keep the PHPStan fixture contract stable across the supported PHP matrix.
-          # PHPStan 2.3.1 currently changes array-shape fixture inference.
-          composer require --dev phpstan/phpstan:2.1.54 --no-update
-
           if [[ "${{ matrix.composer }}" == "lowest" ]]; then
             composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable
           fi;
@@ -120,7 +116,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require --dev phpstan/phpstan:2.1.54 --no-update
           composer install --prefer-dist --no-interaction
           composer dump-autoload -o
 
