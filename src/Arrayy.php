@@ -780,7 +780,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @template TOffset of key-of<TData>
      * @phpstan-param TOffset $offset
-     * @phpstan-return TData[TOffset]|null|self<array-key,T,array<array-key,T>>
+     * @phpstan-return TData[TOffset]|null
      */
     #[\ReturnTypeWillChange]
     public function &offsetGet($offset)
@@ -793,6 +793,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
             $value = &$this->__get($offset);
         }
 
+        /** @var TData[TOffset]|null $value */
         return $value;
     }
 
