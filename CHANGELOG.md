@@ -2,13 +2,32 @@
 
 ### Upcoming release
 
-- fix `average()` so non-numeric values no longer error on modern PHP versions
-- make `changeKeyCase()` Unicode case conversion deterministic across PHP 8.0–8.5
-- strengthen native property type checks, array-shape contracts, and regression coverage across Json mapper and collection helpers
-- add PHPStan + runtime coverage for `meta()` with array-shape-backed models and document the recommended usage in the README
-- stabilize the full PHPUnit / PHPStan CI matrix across PHP 8.0–8.5 for both lowest and current dependency sets
-- remove stale PHP 8-only compatibility branches, clean up PHPStan ignores, and refresh the PHP 8.0+ docs/CI matrix
-- run Infection mutation testing in a dedicated CI job with enforced MSI thresholds (min MSI 65%, min covered MSI 75%)
+#### Breaking and compatibility changes
+
+- **PHPStan generics:** `Arrayy<TKey, T>` now declares a required third template parameter, `TData`, for the underlying keyed array or array shape. Update explicit PHPStan annotations and `@extends` declarations; for example, `Arrayy<int, string>` becomes `Arrayy<int, string, array<int, string>>`. The public native PHP method signatures have not changed.
+- **Stricter property validation:** native typed properties, nullable/union/intersection types, and PHPDoc-backed property definitions are now checked more thoroughly. For `Foo[]` property types, every element must match (previously one matching element could pass); empty arrays are accepted. Previously tolerated invalid values can now raise `TypeError`.
+- **Unicode key casing:** `changeKeyCase()` uses Unicode simple case mapping when available. Some characters with multi-character case mappings can produce different keys than before.
+- **Invalid sort callbacks:** `uasort()` now delegates invalid callback handling to native PHP instead of throwing its own `InvalidArgumentException`; callers observing exception classes should account for PHP's `TypeError`.
+
+#### Added and improved
+
+- Support native property type declarations and richer PHPDoc property and array-shape validation, including optional keys and inheritance.
+- Improve `Arrayy::meta()` with a PHPStan dynamic return type extension and precise type inference for array-shape-backed models and property/offset access.
+- Add reflection-based type parsing helpers to `TypeCheckPhpDoc` and expand coverage for native property types.
+- Improve JSON mapping of simple-typed members in Arrayy collections.
+
+#### Fixed
+
+- Handle non-numeric entries in `average()` without triggering PHP 8 type errors. Non-numeric entries contribute zero to the sum while still counting toward the divisor.
+- Improve `changeKeyCase()` consistency across supported PHP 8 versions.
+- Refresh old compatibility paths and PHPStan suppression comments; retain PHP `>=8.0.0` as the runtime requirement.
+
+#### Validation and tooling
+
+- Expand PHPUnit and PHPStan regression coverage for array shapes, native properties, meta access, collections, and JSON mapping.
+- Run the PHP 8.0–8.5 test matrix, including a lowest-dependency job and PHPStan 2.3.1 analysis.
+- Enforce mutation-testing quality gates in a dedicated Infection CI job (minimum MSI 65%, covered MSI 75%). Count mutation timeouts as escapes rather than kills, and archive the reports.
+- Update CI actions and developer documentation.
 
 ### 7.10.0 (2026-04-24)
 
