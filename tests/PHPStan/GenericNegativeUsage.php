@@ -15,10 +15,9 @@ use Arrayy\Arrayy;
  *
  * @param Arrayy<int, string, array{id: int, name: string}> $contradictory
  */
-function consumeContradictoryGeneric(Arrayy $contradictory): void
+function consumeContradictoryGeneric(Arrayy $contradictory): ?string
 {
-    // Read a value using the declared integer-key/string-value contract.
-    $contradictory[1];
+    return $contradictory[1];
 }
 
 /**
