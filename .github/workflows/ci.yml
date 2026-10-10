@@ -71,6 +71,8 @@ jobs:
           # Require PHPStan to report at least two independent diagnostics;
           # a successful analysis would mean the negative contract is unenforced.
           php vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=json tests/PHPStan/GenericNegativeUsage.php > /tmp/arrayy-generic-negative.json || true
+          # Emit real diagnostic identifiers and lines for the release contract review.
+          cat /tmp/arrayy-generic-negative.json
           php -r '
             $result = json_decode(file_get_contents("/tmp/arrayy-generic-negative.json"), true, 512, JSON_THROW_ON_ERROR);
             $errors = (int) ($result["totals"]["file_errors"] ?? 0);
