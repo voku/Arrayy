@@ -67,21 +67,43 @@ jobs:
         run: |
           php vendor/bin/phpstan analyse
           php vendor/bin/phpstan analyse -c phpstan.neon --no-progress tests/PHPStan/LegacyTwoParameterArrayy.php
-          # Negative fixtures intentionally contain invalid generic usage.
-          # Require PHPStan to report at least two independent diagnostics;
-          # a successful analysis would mean the negative contract is unenforced.
-          php vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=json tests/PHPStan/GenericNegativeUsage.php > /tmp/arrayy-generic-negative.json || true
-          # Emit real diagnostic identifiers and lines for the release contract review.
-          cat /tmp/arrayy-generic-negative.json
+          # Negative usages must fail for the *expected* reasons, not any two errors.
+          if php vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=json tests/PHPStan/GenericNegativeUsage.php > /tmp/arrayy-generic-negative.json; then
+            echo "PHPStan unexpectedly accepted invalid generic usages"
+            exit 1
+          fi
           php -r '
             $result = json_decode(file_get_contents("/tmp/arrayy-generic-negative.json"), true, 512, JSON_THROW_ON_ERROR);
-            $errors = (int) ($result["totals"]["file_errors"] ?? 0);
-            fwrite(STDOUT, "PHPStan negative generic fixture: " . $errors . " file errors\\n");
-            if ($errors < 2) {
-                fwrite(STDERR, "Expected at least two generic-contract errors; see PHPStan JSON.\\n");
-                fwrite(STDERR, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\\n");
+            $messages = [];
+            foreach ($result["files"] ?? [] as $file) {
+                foreach ($file["messages"] ?? [] as $message) {
+                    $messages[] = $message;
+                }
+            }
+
+            $expected = ["consumeLegacyGeneric", "consumeShapeGeneric"];
+            if (($result["totals"]["errors"] ?? -1) !== 0
+                || ($result["totals"]["file_errors"] ?? -1) !== count($expected)
+                || count($messages) !== count($expected)) {
+                fwrite(STDERR, "Unexpected PHPStan diagnostic count or global errors" . PHP_EOL);
+                fwrite(STDERR, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
                 exit(1);
             }
+
+            foreach ($expected as $functionName) {
+                $matches = array_filter(
+                    $messages,
+                    static fn (array $message): bool =>
+                        ($message["identifier"] ?? null) === "argument.type"
+                        && str_contains($message["message"] ?? "", $functionName)
+                );
+                if (count($matches) !== 1) {
+                    fwrite(STDERR, "Missing exact argument.type for " . $functionName . PHP_EOL);
+                    fwrite(STDERR, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL);
+                    exit(1);
+                }
+            }
+            fwrite(STDOUT, "PHPStan rejected both invalid generic consumers with argument.type" . PHP_EOL);
           '
 
       - name: Upload coverage results to Coveralls
