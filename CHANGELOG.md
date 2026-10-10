@@ -1,14 +1,35 @@
 # Changelog
 
-### Upcoming release
+### 7.11.0 (unreleased)
 
-- fix `average()` so non-numeric values no longer error on modern PHP versions
-- make `changeKeyCase()` Unicode case conversion deterministic across PHP 8.0–8.5
-- strengthen native property type checks, array-shape contracts, and regression coverage across Json mapper and collection helpers
-- add PHPStan + runtime coverage for `meta()` with array-shape-backed models and document the recommended usage in the README
-- stabilize the full PHPUnit / PHPStan CI matrix across PHP 8.0–8.5 for both lowest and current dependency sets
-- remove stale PHP 8-only compatibility branches, clean up PHPStan ignores, and refresh the PHP 8.0+ docs/CI matrix
-- run Infection mutation testing in a dedicated CI job with enforced MSI thresholds (min MSI 65%, min covered MSI 75%)
+#### Compatibility and behavior
+
+- Property validation now supports native PHP property types, union/intersection types and PHPDoc array shapes, including optional keys and inherited properties. `Foo[]` validates every element instead of accepting an array when only one matches; empty arrays are accepted. Previously tolerated invalid input can now raise `TypeError`.
+- `changeKeyCase()` uses Unicode simple case mapping where available for consistent results across PHP 8.0–8.5. Certain characters with multi-character case mappings may yield different keys.
+- `remove()` no longer coerces null or floating-point removal keys into other key types. For example, removing key `1.5` no longer deletes integer key `1`; callers relying on that implicit conversion will observe different behavior.
+
+#### Added and improved
+
+- Introduce an optional third PHPStan generic `TData` on `Arrayy<TKey, T, TData>` for precise array-shape and offset types. Existing `Arrayy<TKey, T>` annotations remain supported by a default; native public method signatures are unchanged.
+- Add opt-in PHPStan dynamic return-type inference for `Arrayy::meta()`, with an example service registration in the README.
+- Expand reflection-based parsing for native properties and PHPDoc types with `TypeCheckPhpDoc` helpers.
+- Improve JSON mapping for simple-typed members in Arrayy collections and ordinary object input.
+
+#### Fixed
+
+- Avoid PHP 8 errors in `average()` for non-numeric entries; those entries contribute zero to the sum and remain in the divisor.
+- Preserve the historical `InvalidArgumentException` for invalid `uasort()` callbacks, including immutable sorting.
+- Restrict object property/method extraction to accessible, initialized properties and callable methods.
+- Guard undefined-property JSON handlers and nullable-type handling before invocation.
+- Remove obsolete compatibility paths for unsupported PHP versions. Minimum supported PHP version remains `>=8.0.0`.
+
+#### Tests and tooling
+
+- Expand PHPUnit regression coverage for native and PHPDoc property validation, array shapes, JSON mapping, collections and Unicode case conversion.
+- Verify both legacy two-argument and explicit three-argument `Arrayy` generics with PHPStan 2.3.1 in CI.
+- Run PHPUnit across PHP 8.0–8.5, including a lowest-dependency PHP 8.0 build.
+- Enforce Infection mutation gates in a dedicated CI job (MSI >=65%, covered MSI >=75%, timeouts counted as escapes).
+- Update CI actions, development documentation and the development-only PHPStan constraint.
 
 ### 7.10.0 (2026-04-24)
 
