@@ -68,6 +68,21 @@ jobs:
           php vendor/bin/phpstan analyse
           php vendor/bin/phpstan analyse -c phpstan.neon --no-progress tests/PHPStan/LegacyTwoParameterArrayy.php
 
+      - name: Assert contradictory generic parameters are rejected
+        if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
+        run: |
+          set -o pipefail
+          if php vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=raw tests/PHPStan/GenericsInvalidUsage.php > /tmp/arrayy-negative-phpstan.txt 2>&1; then
+            cat /tmp/arrayy-negative-phpstan.txt
+            echo 'ERROR: PHPStan accepted contradictory Arrayy generic parameters.'
+            exit 1
+          fi
+          cat /tmp/arrayy-negative-phpstan.txt
+          if ! grep -F 'template type TData' /tmp/arrayy-negative-phpstan.txt; then
+            echo 'ERROR: Negative fixture failed for a reason other than the TData bound.'
+            exit 1
+          fi
+
       - name: Upload coverage results to Coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
