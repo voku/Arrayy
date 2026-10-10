@@ -23,7 +23,8 @@ final class ReleaseCompatibilityArrayyContractTest extends TestCase
      */
     public function testUnicodeCaseMappingReturnsExactKeys(string $input, int $case, string $expected): void
     {
-        $result = new Arrayy([$input => 'value'])->changeKeyCase($case);
+        $arrayy = new Arrayy([$input => 'value']);
+        $result = $arrayy->changeKeyCase($case);
 
         static::assertSame([$expected => 'value'], $result->toArray());
     }
