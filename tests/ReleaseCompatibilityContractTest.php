@@ -71,7 +71,9 @@ final class ReleaseCompatibilityContractTest extends TestCase
             'infos' => $values,
         ]);
 
-        static::assertSame($values, $model['infos']);
+        // Nested array properties are returned as Arrayy objects by offset access.
+        // Normalize through the public recursive conversion API before comparing values.
+        static::assertSame($values, $model->toArray(true)['infos']);
     }
 
     /**
