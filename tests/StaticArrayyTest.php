@@ -97,14 +97,23 @@ final class StaticArrayyTest extends \PHPUnit\Framework\TestCase
      * Use reflection to ensure that all argument numbers are correct. Each
      * static method should accept 2 more arguments than their Stringy
      * equivalent.
+     *
+     * The call initializes the static facade's lazy method argument map.
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function testArgumentNumbers(): void
     {
         $staticArrayyClass = new \ReflectionClass(A::class);
         $arrayyClass = new \ReflectionClass(Arrayy::class);
 
+        // "methodArgs" is filled lazily by the first static call, so don't depend on test order
+        A::first([1]); // @phpstan-ignore staticMethod.notFound
+
         // getStaticPropertyValue can't access protected properties
         $properties = $staticArrayyClass->getStaticProperties();
+
+        static::assertNotEmpty($properties['methodArgs']);
 
         foreach ((array) $properties['methodArgs'] as $method => $expected) {
             $num = $arrayyClass->getMethod($method)->getNumberOfParameters() + 2;

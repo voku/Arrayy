@@ -40,10 +40,11 @@ $user = new ArrayShapeUser([
 
 \PHPStan\Testing\assertType('int|null', $user['id']);
 \PHPStan\Testing\assertType('string|null', $user['firstName']);
-assertValidArrayShapeNullableCity($user['city']);
+$city = $user['city'];
+assertValidArrayShapeNullableCity($city);
 
-if ($user['city'] !== null) {
-    assertValidArrayShapeCity($user['city']);
-    \PHPStan\Testing\assertType('string|null', $user['city']['name']);
-    assertValidArrayShapeNullableString($user['city']['plz']);
+if ($city !== null) {
+    assertValidArrayShapeCity($city);
+    \PHPStan\Testing\assertType('string|null', $city['name']);
+    assertValidArrayShapeNullableString($city['plz']);
 }

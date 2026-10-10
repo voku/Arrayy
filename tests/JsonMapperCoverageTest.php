@@ -37,6 +37,17 @@ final class JsonMapperCoverageTest extends TestCase
         static::assertSame([$target, 'UnknownKey', 'value'], $captured);
     }
 
+    public function testMapIgnoresNonCallableUndefinedPropertyHandler(): void
+    {
+        $mapper = new Json();
+        $target = new \stdClass();
+
+        /* @phpstan-ignore assign.propertyType (the public property can hold any value at runtime) */
+        $mapper->undefinedPropertyHandler = false;
+
+        static::assertSame($target, $mapper->map(['unknown-key' => 'value'], $target));
+    }
+
     public function testMapSkipsPrivatePropertiesWithoutSetters(): void
     {
         $mapper = new Json();

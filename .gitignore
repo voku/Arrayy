@@ -9,6 +9,7 @@ build/logs/
 # php (infection)
 build/infection/
 infection-log.txt
+infection-summary.txt
 
 # php (phpcs fixer)
 .php_cs.cache

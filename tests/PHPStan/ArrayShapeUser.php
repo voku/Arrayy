@@ -10,6 +10,14 @@ namespace Arrayy\tests\PHPStan;
  */
 final class ArrayShapeUser extends \Arrayy\Arrayy
 {
+    /**
+     * @param T $data
+     */
+    public function __construct(array $data)
+    {
+        parent::__construct($data);
+    }
+
     protected $checkPropertyTypes = true;
 
     protected $checkPropertiesMismatchInConstructor = true;

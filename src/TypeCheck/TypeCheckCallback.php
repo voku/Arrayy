@@ -52,6 +52,8 @@ class TypeCheckCallback implements TypeCheckInterface
 
     /**
      * @return array
+     *
+     * @phpstan-return list<never>
      */
     public function getTypes(): array
     {
