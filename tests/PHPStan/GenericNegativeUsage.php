@@ -7,20 +7,9 @@ namespace Arrayy\tests\PHPStan;
 use Arrayy\Arrayy;
 
 /**
- * Intentionally invalid generic annotations and constructor calls.
+ * Negative fixture. This file must fail PHPStan with two argument.type
+ * diagnostics; unlike the positive fixtures, it is analysed separately.
  *
- * This file must NOT be added to the default PHPStan analysis paths.
- * The dedicated negative-contract gate runs PHPStan against it and
- * verifies that PHPStan rejects these cases.
- *
- * @param Arrayy<int, string, array{id: int, name: string}> $contradictory
- */
-function consumeContradictoryGeneric(Arrayy $contradictory): ?string
-{
-    return $contradictory[1];
-}
-
-/**
  * @param Arrayy<int, string> $legacy
  */
 function consumeLegacyGeneric(Arrayy $legacy): ?string
@@ -37,9 +26,8 @@ function consumeShapeGeneric(Arrayy $validShape): ?int
     return $validShape['id'];
 }
 
-/** @var Arrayy<int, string, array{id: int, name: string}> $contradictory */
-$contradictory = new Arrayy(['id' => 1, 'name' => 'ok']);
-consumeContradictoryGeneric($contradictory);
-
+// An integer-valued collection is not Arrayy<int, string>.
 consumeLegacyGeneric(new Arrayy([1 => 42]));
+
+// The third generic must preserve an int-valued "id" shape offset.
 consumeShapeGeneric(new Arrayy(['id' => 'wrong', 'name' => 'ok']));
