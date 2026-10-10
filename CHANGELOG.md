@@ -2,16 +2,15 @@
 
 ### Upcoming release
 
-#### Breaking and compatibility changes
+#### Compatibility and behavioral notes
 
-- **PHPStan generics:** `Arrayy<TKey, T>` now declares a required third template parameter, `TData`, for the underlying keyed array or array shape. Update explicit PHPStan annotations and `@extends` declarations; for example, `Arrayy<int, string>` becomes `Arrayy<int, string, array<int, string>>`. The public native PHP method signatures have not changed.
-- **Stricter property validation:** native typed properties, nullable/union/intersection types, and PHPDoc-backed property definitions are now checked more thoroughly. For `Foo[]` property types, every element must match (previously one matching element could pass); empty arrays are accepted. Previously tolerated invalid values can now raise `TypeError`.
-- **Unicode key casing:** `changeKeyCase()` uses Unicode simple case mapping when available. Some characters with multi-character case mappings can produce different keys than before.
-- **Invalid sort callbacks:** `uasort()` now delegates invalid callback handling to native PHP instead of throwing its own `InvalidArgumentException`; callers observing exception classes should account for PHP's `TypeError`.
+- **Property validation:** native typed properties, nullable/union/intersection types, and PHPDoc-backed property definitions are checked more thoroughly. For `Foo[]` property types, every element must match (previously one matching element could pass); empty arrays are accepted. Previously tolerated invalid values may now raise `TypeError`.
+- **Unicode key casing:** `changeKeyCase()` uses Unicode simple case mapping when available for consistent PHP 8.0–8.5 behavior. Some characters with multi-character case mappings may produce different keys.
 
 #### Added and improved
 
 - Support native property type declarations and richer PHPDoc property and array-shape validation, including optional keys and inheritance.
+- Add optional third PHPStan generic `TData` to `Arrayy<TKey, T, TData>` for precise array-shape/offset typing. Existing `Arrayy<TKey, T>` annotations remain supported with the default; no native public method signatures have changed.
 - Improve `Arrayy::meta()` with a PHPStan dynamic return type extension and precise type inference for array-shape-backed models and property/offset access.
 - Add reflection-based type parsing helpers to `TypeCheckPhpDoc` and expand coverage for native property types.
 - Improve JSON mapping of simple-typed members in Arrayy collections.
@@ -20,11 +19,13 @@
 
 - Handle non-numeric entries in `average()` without triggering PHP 8 type errors. Non-numeric entries contribute zero to the sum while still counting toward the divisor.
 - Improve `changeKeyCase()` consistency across supported PHP 8 versions.
+- Preserve `InvalidArgumentException` for invalid `uasort()` callbacks, including immutable usage, after PHPStan cleanup.
 - Refresh old compatibility paths and PHPStan suppression comments; retain PHP `>=8.0.0` as the runtime requirement.
 
 #### Validation and tooling
 
 - Expand PHPUnit and PHPStan regression coverage for array shapes, native properties, meta access, collections, and JSON mapping.
+- Check legacy two-argument PHPStan annotations alongside explicit three-argument array shapes in CI.
 - Run the PHP 8.0–8.5 test matrix, including a lowest-dependency job and PHPStan 2.3.1 analysis.
 - Enforce mutation-testing quality gates in a dedicated Infection CI job (minimum MSI 65%, covered MSI 75%). Count mutation timeouts as escapes rather than kills, and archive the reports.
 - Update CI actions and developer documentation.
