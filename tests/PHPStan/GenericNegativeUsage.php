@@ -27,7 +27,9 @@ function consumeShapeGeneric(Arrayy $validShape): ?int
 }
 
 // An integer-valued collection is not Arrayy<int, string>.
-consumeLegacyGeneric(new Arrayy([1 => 42]));
+$legacyResult = consumeLegacyGeneric(new Arrayy([1 => 42]));
+\PHPStan\Testing\assertType('string|null', $legacyResult);
 
 // The third generic must preserve an int-valued "id" shape offset.
-consumeShapeGeneric(new Arrayy(['id' => 'wrong', 'name' => 'ok']));
+$shapeResult = consumeShapeGeneric(new Arrayy(['id' => 'wrong', 'name' => 'ok']));
+\PHPStan\Testing\assertType('int|null', $shapeResult);
