@@ -2155,6 +2155,19 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
+    public function testChangeKeyCaseUsesUnicodeSimpleMappingForSpecialCases(): void
+    {
+        // Simple case mapping must not apply PHP 8.3's contextual final sigma rule.
+        $lower = A::create(['ΟΣ' => 'word'])->changeKeyCase(\CASE_LOWER);
+        static::assertSame(['οσ' => 'word'], $lower->toArray());
+
+        // Full uppercasing can expand ß to SS; simple mapping preserves key length.
+        $upper = A::create(['Straße' => 'street'])->changeKeyCase(\CASE_UPPER);
+        $keys = \array_keys($upper->toArray());
+        static::assertCount(1, $keys);
+        static::assertSame(6, \mb_strlen((string) $keys[0], 'UTF-8'));
+    }
+
     /**
      * @dataProvider simpleArrayProvider
      *
@@ -6066,6 +6079,26 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame($array, $arrayResult);
         self::assertImmutable($arrayy, $arrayyResult, $array, $arrayResult);
+    }
+
+    public function testUasortRejectsInvalidCallbackWithHistoricalException(): void
+    {
+        $arrayy = new A([3, 1, 2]);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Passed function must be callable');
+
+        $arrayy->uasort('not_a_callable');
+    }
+
+    public function testUasortImmutableRejectsInvalidCallbackWithHistoricalException(): void
+    {
+        $arrayy = new A([3, 1, 2]);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Passed function must be callable');
+
+        $arrayy->uasortImmutable('not_a_callable');
     }
 
     /**
