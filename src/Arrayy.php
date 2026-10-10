@@ -789,11 +789,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $value = null;
 
         if ($this->offsetExists($offset)) {
-            /* @phpstan-ignore argument.type, argument.templateType */
             $value = &$this->__get($offset);
         }
 
-        /* @phpstan-ignore return.type */
         return $value;
     }
 
