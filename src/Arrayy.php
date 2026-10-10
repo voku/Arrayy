@@ -32,7 +32,7 @@ use Arrayy\TypeCheck\TypeCheckPhpDoc;
  *
  * @template TKey of array-key
  * @template T
- * @template TData of array<TKey, T>
+ * @template TData of array<array-key, mixed> = array<TKey, T>
  * @extends \ArrayObject<TKey,T>
  * @implements \IteratorAggregate<TKey,T>
  * @implements \ArrayAccess<TKey,T>
@@ -789,11 +789,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $value = null;
 
         if ($this->offsetExists($offset)) {
-            /* @phpstan-ignore argument.type, argument.templateType */
             $value = &$this->__get($offset);
         }
 
-        /* @phpstan-ignore return.type */
         return $value;
     }
 
@@ -951,6 +949,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     #[\ReturnTypeWillChange]
     public function uasort($callable): self
     {
+        // Preserve the public exception contract for invalid callbacks.
+        if (!\is_callable($callable)) { // @phpstan-ignore function.alreadyNarrowedType
+            throw new \InvalidArgumentException('Passed function must be callable');
+        }
+
         $this->generatorToArray();
 
         \uasort($this->array, $callable);
