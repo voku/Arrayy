@@ -66,6 +66,7 @@ jobs:
         if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
         run: |
           php vendor/bin/phpstan analyse
+          php vendor/bin/phpstan analyse -c phpstan.neon --no-progress tests/PHPStan/LegacyTwoParameterArrayy.php
 
       - name: Upload coverage results to Coveralls
         env:
