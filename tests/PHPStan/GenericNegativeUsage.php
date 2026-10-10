@@ -17,23 +17,25 @@ use Arrayy\Arrayy;
  */
 function consumeContradictoryGeneric(Arrayy $contradictory): void
 {
-    // Third generic describes string keys and an int id, while the
-    // first generic demands integer keys and string values.
+    // Read a value using the declared integer-key/string-value contract.
+    $contradictory[1];
 }
 
 /**
  * @param Arrayy<int, string> $legacy
  */
-function consumeLegacyGeneric(Arrayy $legacy): void
+function consumeLegacyGeneric(Arrayy $legacy): ?string
 {
+    return $legacy[1];
 }
 
 /**
  * @param Arrayy<key-of<T>, value-of<T>, T> $validShape
  * @template T of array{id: int, name: string}
  */
-function consumeShapeGeneric(Arrayy $validShape): void
+function consumeShapeGeneric(Arrayy $validShape): ?int
 {
+    return $validShape['id'];
 }
 
 /** @var Arrayy<int, string, array{id: int, name: string}> $contradictory */
