@@ -6,6 +6,7 @@
 
 - Property validation now supports native PHP property types, union/intersection types and PHPDoc array shapes, including optional keys and inherited properties. `Foo[]` validates every element instead of accepting an array when only one matches; empty arrays are accepted. Previously tolerated invalid input can now raise `TypeError`.
 - `changeKeyCase()` uses Unicode simple case mapping where available for consistent results across PHP 8.0–8.5. Certain characters with multi-character case mappings may yield different keys.
+- `remove()` no longer coerces null or floating-point removal keys into other key types. For example, removing key `1.5` no longer deletes integer key `1`; callers relying on that implicit conversion will observe different behavior.
 
 #### Added and improved
 
@@ -18,7 +19,6 @@
 
 - Avoid PHP 8 errors in `average()` for non-numeric entries; those entries contribute zero to the sum and remain in the divisor.
 - Preserve the historical `InvalidArgumentException` for invalid `uasort()` callbacks, including immutable sorting.
-- Prevent null or floating-point removal keys from deleting unintended entries.
 - Restrict object property/method extraction to accessible, initialized properties and callable methods.
 - Guard undefined-property JSON handlers and nullable-type handling before invocation.
 - Remove obsolete compatibility paths for unsupported PHP versions. Minimum supported PHP version remains `>=8.0.0`.
