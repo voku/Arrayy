@@ -97,5 +97,4 @@ final class ReleaseCompatibilityContractTest extends TestCase
 
         static::assertTrue($typeCheck->checkType($values));
     }
-
 }
