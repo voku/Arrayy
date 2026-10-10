@@ -951,6 +951,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     #[\ReturnTypeWillChange]
     public function uasort($callable): self
     {
+        // Preserve the public exception contract for invalid callbacks.
+        if (!\is_callable($callable)) { // @phpstan-ignore function.alreadyNarrowedType
+            throw new \InvalidArgumentException('Passed function must be callable');
+        }
+
         $this->generatorToArray();
 
         \uasort($this->array, $callable);
