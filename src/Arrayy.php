@@ -32,7 +32,7 @@ use Arrayy\TypeCheck\TypeCheckPhpDoc;
  *
  * @template TKey of array-key
  * @template T
- * @template TData of array<TKey, T>
+ * @template TData of array<TKey, T> = array<TKey, T>
  * @extends \ArrayObject<TKey,T>
  * @implements \IteratorAggregate<TKey,T>
  * @implements \ArrayAccess<TKey,T>
