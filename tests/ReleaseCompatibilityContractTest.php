@@ -33,11 +33,12 @@ final class ReleaseCompatibilityContractTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('Invalid type: expected "infos" to be of type {string[]}');
 
-        new $modelClass([
+        // The instance would exist only if the constructor failed to reject invalid data.
+        static::assertInstanceOf($modelClass, new $modelClass([
             'name' => 'Düsseldorf',
             'plz' => null,
             'infos' => $values,
-        ]);
+        ]));
     }
 
     /**
