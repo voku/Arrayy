@@ -32,7 +32,7 @@ use Arrayy\TypeCheck\TypeCheckPhpDoc;
  *
  * @template TKey of array-key
  * @template T
- * @template TData of array<TKey, T> = array<TKey, T>
+ * @template TData of array<array-key, mixed> = array<TKey, T>
  * @extends \ArrayObject<TKey,T>
  * @implements \IteratorAggregate<TKey,T>
  * @implements \ArrayAccess<TKey,T>
@@ -789,11 +789,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
         $value = null;
 
         if ($this->offsetExists($offset)) {
-            /** @var TKey $offset */
             $value = &$this->__get($offset);
         }
 
-        /** @var TData[TOffset]|null $value */
         return $value;
     }
 
