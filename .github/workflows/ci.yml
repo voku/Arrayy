@@ -67,6 +67,20 @@ jobs:
         run: |
           php vendor/bin/phpstan analyse
           php vendor/bin/phpstan analyse -c phpstan.neon --no-progress tests/PHPStan/LegacyTwoParameterArrayy.php
+          # Negative fixtures intentionally contain invalid generic usage.
+          # Require PHPStan to report at least two independent diagnostics;
+          # a successful analysis would mean the negative contract is unenforced.
+          php vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=json tests/PHPStan/GenericNegativeUsage.php > /tmp/arrayy-generic-negative.json || true
+          php -r '
+            $result = json_decode(file_get_contents("/tmp/arrayy-generic-negative.json"), true, 512, JSON_THROW_ON_ERROR);
+            $errors = (int) ($result["totals"]["file_errors"] ?? 0);
+            fwrite(STDOUT, "PHPStan negative generic fixture: " . $errors . " file errors\\n");
+            if ($errors < 2) {
+                fwrite(STDERR, "Expected at least two generic-contract errors; see PHPStan JSON.\\n");
+                fwrite(STDERR, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\\n");
+                exit(1);
+            }
+          '
 
       - name: Upload coverage results to Coveralls
         env:
