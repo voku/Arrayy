@@ -6068,6 +6068,26 @@ final class ArrayyTest extends \PHPUnit\Framework\TestCase
         self::assertImmutable($arrayy, $arrayyResult, $array, $arrayResult);
     }
 
+    public function testUasortRejectsInvalidCallbackWithHistoricalException(): void
+    {
+        $arrayy = new A([3, 1, 2]);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Passed function must be callable');
+
+        $arrayy->uasort('not_a_callable');
+    }
+
+    public function testUasortImmutableRejectsInvalidCallbackWithHistoricalException(): void
+    {
+        $arrayy = new A([3, 1, 2]);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Passed function must be callable');
+
+        $arrayy->uasortImmutable('not_a_callable');
+    }
+
     /**
      * @dataProvider simpleArrayProvider
      *
