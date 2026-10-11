@@ -49,7 +49,7 @@ final class PortableGenericReturnPhpDocTest extends TestCase
             'array_first' => 'TFirst|TFirstFallback',
             'array_last' => 'TLast|TLastFallback',
         ] as $function => $expected) {
-            $doc = (new ReflectionFunction('Arrayy\\\\' . $function))->getDocComment();
+            $doc = (new ReflectionFunction('Arrayy\\' . $function))->getDocComment();
             self::assertIsString($doc, $function);
             self::assertStringContainsString('@return ' . $expected, $doc, $function);
             self::assertStringContainsString('@phpstan-return ' . $expected, $doc, $function);
