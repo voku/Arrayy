@@ -127,6 +127,37 @@ jobs:
           path: |
             build/logs
 
+  docs-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout proposed revision
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP for canonical README generator
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.4'
+          tools: composer
+
+      - name: Install generator dependencies
+        run: |
+          composer install --no-dev --prefer-dist --no-interaction
+          composer install --working-dir=build --prefer-dist --no-interaction
+
+      - name: Render README from canonical source
+        run: php build/generate_docs.php
+
+      - name: Upload exact generated README
+        uses: actions/upload-artifact@v7
+        with:
+          name: arrayy-generated-readme
+          path: README.md
+          if-no-files-found: error
+
+
   mutation:
     # Infection 0.32.x requires PHP 8.3+; a full run takes ~12 minutes, so it gets its own job.
     runs-on: ubuntu-latest
