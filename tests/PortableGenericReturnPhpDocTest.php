@@ -53,6 +53,11 @@ final class PortableGenericReturnPhpDocTest extends TestCase
             self::assertIsString($doc, $function);
             self::assertStringContainsString('@return ' . $expected, $doc, $function);
             self::assertStringContainsString('@phpstan-return ' . $expected, $doc, $function);
+            $template = $function === 'array_first' ? 'TFirst' : 'TLast';
+            self::assertStringContainsString('@param ' . $template . '[] $array', $doc, $function);
+            self::assertStringContainsString('@param ' . $template . 'Fallback $fallback', $doc, $function);
+            self::assertStringContainsString('@phpstan-param ' . $template . '[] $array', $doc, $function);
+            self::assertStringContainsString('@phpstan-param ' . $template . 'Fallback $fallback', $doc, $function);
         }
     }
 
