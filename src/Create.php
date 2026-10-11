@@ -45,8 +45,8 @@ namespace Arrayy {
     }
 
     /**
-     * @param array<mixed> $array
-     * @param mixed        $fallback <p>This fallback will be used, if the array is empty.</p>
+     * @param TFirst[]       $array
+     * @param TFirstFallback $fallback <p>This fallback will be used, if the array is empty.</p>
      *
      * @return TLast|TLastFallback
      *
