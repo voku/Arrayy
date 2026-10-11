@@ -2764,7 +2764,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
      * </code>
      *
-     * @param \Closure $closure
+     * @param \Closure(T,TKey):bool $closure
      *
      * @return T|false
      *                     <p>Return false if we did not find the value.</p>
@@ -2794,7 +2794,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a(['foo', 'bar', 'lall'])->findKey($closure); // 0
      * </code>
      *
-     * @param \Closure $closure
+     * @param \Closure(T,TKey):bool $closure
      *
      * @return TKey|false
      *                          <p>Return false if we did not find the key.</p>
@@ -5621,12 +5621,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
      * </code>
      *
-     * @param \Closure $closure
+     * @param \Closure(T,TKey):bool $closure
      *
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param \Closure(T,TKey):bool  $closure
+     * @phpstan-param \Closure(T,TKey):bool $closure
      * @phpstan-return static
      * @psalm-mutation-free
      */
@@ -7211,7 +7211,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Tests whether the given closure return something valid for all elements of this array.
      *
-     * @param \Closure $closure the predicate
+     * @param \Closure(T,TKey):bool $closure the predicate
      *
      * @return bool
      *              <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>

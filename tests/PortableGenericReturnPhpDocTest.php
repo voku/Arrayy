@@ -78,4 +78,14 @@ final class PortableGenericReturnPhpDocTest extends TestCase
             self::assertStringContainsString('@phpstan-return ' . $expected['phpstan'], $doc, $method);
         }
     }
+
+    public function testCallableInputsCarryGenericTypesInStandardPhpDoc(): void
+    {
+        foreach (['find', 'findKey', 'reject', 'validate'] as $method) {
+            $doc = (new ReflectionMethod(Arrayy::class, $method))->getDocComment();
+            self::assertIsString($doc, $method);
+            self::assertStringContainsString('@param \\Closure(T,TKey):bool $closure', $doc, $method);
+            self::assertStringContainsString('@phpstan-param \\Closure(T,TKey):bool $closure', $doc, $method);
+        }
+    }
 }
