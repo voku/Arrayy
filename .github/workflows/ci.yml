@@ -108,6 +108,7 @@ jobs:
           '
 
       - name: Upload coverage results to Coveralls
+        if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
