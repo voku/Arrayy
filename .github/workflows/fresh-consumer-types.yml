@@ -13,7 +13,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout exact PR source
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
@@ -24,69 +24,27 @@ jobs:
           tools: composer
           coverage: none
 
-      - name: Install as an independent Composer consumer
+      # Temporary proof-generation phase: capture a lockfile for exact deps.
+      # Replace update with composer install after the lock is committed.
+      - name: Resolve consumer lockfile candidate
+        working-directory: tests/consumer
+        run: composer update --no-interaction --prefer-dist --no-progress
+
+      - name: Archive lockfile candidate
+        uses: actions/upload-artifact@v7
+        with:
+          name: arrayy-consumer-lock
+          path: tests/consumer/composer.lock
+          if-no-files-found: error
+
+      - name: Check package is installed as a copy
+        working-directory: tests/consumer
         run: |
-          mkdir -p "$RUNNER_TEMP/arrayy-typing-consumer"
-          cd "$RUNNER_TEMP/arrayy-typing-consumer"
-          php <<'PHP'
-          <?php
-          $source = getenv('GITHUB_WORKSPACE');
-          if (!$source || !is_dir($source)) {
-              throw new RuntimeException('Missing source checkout');
-          }
-          $config = [
-              'name' => 'arrayy/fresh-consumer-proof',
-              'repositories' => [[
-                  'type' => 'path',
-                  'url' => $source,
-                  'options' => [
-                      'symlink' => false,
-                      'versions' => ['voku/arrayy' => 'dev-pr-193'],
-                  ],
-              ]],
-              'require' => [
-                  'voku/arrayy' => 'dev-pr-193',
-                  'phpstan/phpstan' => '2.3.1',
-              ],
-              'minimum-stability' => 'dev',
-              'prefer-stable' => true,
-          ];
-          file_put_contents('composer.json', json_encode($config, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
-          PHP
-          composer update --no-interaction --prefer-dist --no-progress
           test -f vendor/voku/arrayy/src/Arrayy.php
           test ! -L vendor/voku/arrayy
 
-      - name: Prove installed generics with PHPStan
+      - name: Verify external type inference
+        working-directory: tests/consumer
         run: |
-          cd "$RUNNER_TEMP/arrayy-typing-consumer"
-          cat > consumer.php <<'PHP'
-          <?php
-          declare(strict_types=1);
-
-          use Arrayy\Arrayy;
-          use DateTimeImmutable;
-          use function PHPStan\Testing\assertType;
-
-          /**
-           * @param Arrayy<int, DateTimeImmutable> $dates
-           * @param list<DateTimeImmutable> $values
-           */
-          function useInstalledPackage(Arrayy $dates, array $values): void
-          {
-              assertType('DateTimeImmutable|null', $dates->first());
-              assertType('int|null', $dates->firstKey());
-              assertType('DateTimeImmutable|false', $dates->find(
-                  static fn (DateTimeImmutable $date): bool => $date->getTimestamp() > 0
-              ));
-              assertType('array<int, DateTimeImmutable>', $dates->getAll());
-              assertType('list<DateTimeImmutable>', $dates->toList());
-              assertType('DateTimeImmutable|null', \Arrayy\array_first($values));
-              assertType('DateTimeImmutable|null', \Arrayy\array_last($values));
-              foreach ($dates->getIterator() as $value) {
-                  assertType('DateTimeImmutable', $value);
-              }
-          }
-          PHP
-          php vendor/bin/phpstan analyse --no-progress --level=8 consumer.php
+          php vendor/bin/phpstan analyse --no-progress --level=8 usage.php
           php -r 'require "vendor/autoload.php"; $a = new \Arrayy\Arrayy([new \DateTimeImmutable("2025-01-01")]); if (!$a->first() instanceof \DateTimeImmutable) { exit(1); }'
