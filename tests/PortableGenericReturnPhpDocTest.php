@@ -55,4 +55,27 @@ final class PortableGenericReturnPhpDocTest extends TestCase
             self::assertStringContainsString('@phpstan-return ' . $expected, $doc, $function);
         }
     }
+
+    public function testArrayAndGeneratorReturnsRetainGenericValues(): void
+    {
+        /** @var array<string, array{portable: string, phpstan: string}> $types */
+        $types = [
+            'getRandomKey' => ['portable' => 'TKey|null', 'phpstan' => 'TKey|null'],
+            'getRandomValue' => ['portable' => 'T|null', 'phpstan' => 'T|null'],
+            'getValuesYield' => ['portable' => '\\Generator<TKey,T>', 'phpstan' => '\\Generator<TKey,T>'],
+            'getGenerator' => ['portable' => '\\Generator<mixed,T>|\\Generator<TKey,T>', 'phpstan' => '\\Generator<mixed,T>|\\Generator<TKey,T>'],
+            'getBackwardsGenerator' => ['portable' => '\\Generator<mixed,T>|\\Generator<TKey,T>', 'phpstan' => '\\Generator<mixed,T>|\\Generator<TKey,T>'],
+            'getAll' => ['portable' => 'array<TKey,T>', 'phpstan' => 'array<TKey,T>'],
+            'getArray' => ['portable' => 'array<array-key,T>|array<TKey,T>', 'phpstan' => 'array<array-key,T>|array<TKey,T>'],
+            'toArray' => ['portable' => 'array<TKey,T>|list<T>', 'phpstan' => '($preserveKeys is true ? array<TKey,T> : T[])'],
+            'toList' => ['portable' => 'list<T>', 'phpstan' => 'list<T>'],
+        ];
+
+        foreach ($types as $method => $expected) {
+            $doc = (new ReflectionMethod(Arrayy::class, $method))->getDocComment();
+            self::assertIsString($doc, $method);
+            self::assertStringContainsString('@return ' . $expected['portable'], $doc, $method);
+            self::assertStringContainsString('@phpstan-return ' . $expected['phpstan'], $doc, $method);
+        }
+    }
 }

@@ -3201,7 +3201,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->toArray()"
      *
-     * @return array
+     * @return array<TKey,T>
      *
      * @see          Arrayy::getArray()
      *
@@ -3228,7 +3228,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       so maybe you will ignore the keys.
      *                                       </p>
      *
-     * @return array
+     * @return array<array-key,T>|array<TKey,T>
      *
      * @phpstan-return array<array-key,T>|array<TKey,T>
      * @psalm-mutation-free
@@ -3421,7 +3421,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the current array from the "Arrayy"-object as generator.
      *
-     * @return \Generator
+     * @return \Generator<mixed,T>|\Generator<TKey,T>
      *
      * @phpstan-return \Generator<mixed,T>|\Generator<TKey,T>
      * @psalm-mutation-free
@@ -3440,7 +3440,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the current array from the "Arrayy"-object as generator.
      *
-     * @return \Generator
+     * @return \Generator<mixed,T>|\Generator<TKey,T>
      *
      * @phpstan-return \Generator<mixed,T>|\Generator<TKey,T>
      * @psalm-mutation-free
@@ -3494,10 +3494,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomKey()"
      *
-     * @return mixed|null
+     * @return TKey|null
      *                    <p>Get a key/index or null if there wasn't a key/index.</p>
      *
-     * @phpstan-return null|TKey
+     * @phpstan-return TKey|null
      *
      * @see Arrayy::randomKey()
      */
@@ -3526,10 +3526,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomValue()"
      *
-     * @return mixed|null
+     * @return T|null
      *                    <p>Get a random value or null if there wasn't a value.</p>
      *
-     * @phpstan-return null|T
+     * @phpstan-return T|null
      *
      * @see Arrayy::randomValue()
      */
@@ -3578,7 +3578,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Gets all values via Generator.
      *
-     * @return \Generator
+     * @return \Generator<TKey,T>
      *                    <p>The values of all elements in this array, in the order they
      *                    appear in the array as Generator.</p>
      *
@@ -6953,7 +6953,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       so maybe you will ignore the keys.
      *                                       </p>
      *
-     * @return array
+     * @return array<TKey,T>|list<T>
      *
      * @phpstan-return ($preserveKeys is true ? array<TKey,T> : T[])
      * @psalm-mutation-free
@@ -6995,7 +6995,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       Convert all Child-"Arrayy" objects also to arrays.
      *                                       </p>
      *
-     * @return array
+     * @return list<T>
      *
      * @phpstan-return list<T>
      * @psalm-mutation-free
