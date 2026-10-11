@@ -3768,7 +3768,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return TKey|false
      *
      * @phpstan-param T $value
-     * @phpstan-return false|TKey
+     * @phpstan-return TKey|false
      *
      * @see Arrayy::searchIndex()
      */
@@ -4303,7 +4303,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return TKey|null
      *                    <p>Return null if there wasn't a element.</p>
      *
-     * @phpstan-return null|TKey
+     * @phpstan-return TKey|null
      * @psalm-mutation-free
      */
     public function lastKey()
@@ -5344,7 +5344,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @return TKey|null
      *                    <p>Get a key/index or null if there wasn't a key/index.</p>
      *
-     * @phpstan-return null|TKey
+     * @phpstan-return TKey|null
      */
     public function randomKey()
     {
@@ -6165,7 +6165,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                          <p>Will return <b>FALSE</b> if the value can't be found.</p>
      *
      * @phpstan-param T $value
-     * @phpstan-return false|TKey
+     * @phpstan-return TKey|false
      *
      * @psalm-mutation-free
      */
