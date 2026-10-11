@@ -107,6 +107,13 @@ jobs:
             fwrite(STDOUT, "PHPStan rejected both invalid generic consumers with argument.type" . PHP_EOL);
           '
 
+      - name: Verify generated README
+        if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
+        run: |
+          composer --working-dir=build install --prefer-dist --no-interaction --no-progress
+          php build/generate_docs.php
+          git diff --exit-code -- README.md
+
       - name: Upload coverage results to Coveralls
         if: ${{ matrix.php == '8.3' && matrix.composer == 'basic' }}
         env:
