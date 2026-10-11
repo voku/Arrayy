@@ -27,6 +27,7 @@
 
 - Expand PHPUnit regression coverage for native and PHPDoc property validation, array shapes, JSON mapping, collections and Unicode case conversion.
 - Verify both legacy two-argument and explicit three-argument `Arrayy` generics with PHPStan 2.3.1 in CI.
+- Reject invalid generic consumer arguments with exact PHPStan `argument.type` diagnostic assertions (PR #190); the stricter `TData` bound remains deferred (issue #192).
 - Run PHPUnit across PHP 8.0–8.5, including a lowest-dependency PHP 8.0 build.
 - Enforce Infection mutation gates in a dedicated CI job (MSI >=65%, covered MSI >=75%, timeouts counted as escapes).
 - Update CI actions, development documentation and the development-only PHPStan constraint.
