@@ -24,18 +24,12 @@ jobs:
           tools: composer
           coverage: none
 
-      # Temporary proof-generation phase: capture a lockfile for exact deps.
-      # Replace update with composer install after the lock is committed.
-      - name: Resolve consumer lockfile candidate
+      - name: Install locked consumer dependencies
         working-directory: tests/consumer
-        run: composer update --no-interaction --prefer-dist --no-progress
+        run: composer install --no-interaction --prefer-dist --no-progress
 
-      - name: Archive lockfile candidate
-        uses: actions/upload-artifact@v7
-        with:
-          name: arrayy-consumer-lock
-          path: tests/consumer/composer.lock
-          if-no-files-found: error
+      - name: Verify lockfile remains unchanged
+        run: git diff --exit-code -- tests/consumer/composer.lock
 
       - name: Check package is installed as a copy
         working-directory: tests/consumer
