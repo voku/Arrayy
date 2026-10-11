@@ -693,45 +693,45 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#fillwithdefaultsint-num-mixed-default-static">fillWithDefaults</a>
 </td><td><a href="#filterclosurenull-closure-int-flag-static">filter</a>
 </td><td><a href="#filterbystring-property-mixed-value-stringnull-comparisonop-static">filterBy</a>
-</td><td><a href="#findclosure-closure-falsemixed">find</a>
+</td><td><a href="#findclosuret-tkey-bool-closure-tfalse">find</a>
 </td></tr><tr><td><a href="#findbystring-property-mixed-value-string-comparisonop-static">findBy</a>
-</td><td><a href="#findkeyclosure-closure-falseintstring">findKey</a>
-</td><td><a href="#first-mixednull">first</a>
-</td><td><a href="#firstkey-mixednull">firstKey</a>
+</td><td><a href="#findkeyclosuret-tkey-bool-closure-tkeyfalse">findKey</a>
+</td><td><a href="#first-tnull">first</a>
+</td><td><a href="#firstkey-tkeynull">firstKey</a>
 </td></tr><tr><td><a href="#firstsimmutableintnull-number-static">firstsImmutable</a>
 </td><td><a href="#firstskeysintnull-number-static">firstsKeys</a>
 </td><td><a href="#firstsmutableintnull-number-this">firstsMutable</a>
 </td><td><a href="#flattenstring-delimiter-string-prepend-arraynull-items-array">flatten</a>
 </td></tr><tr><td><a href="#flip-static">flip</a>
 </td><td><a href="#getintstring-key-mixed-fallback-arraynull-array-bool-usebyreference-mixedstatic">get</a>
-</td><td><a href="#getall-array">getAll</a>
-</td><td><a href="#getarraybool-convertallarrayyelements-bool-preservekeys-array">getArray</a>
+</td><td><a href="#getall-arraytkey-t">getAll</a>
+</td><td><a href="#getarraybool-convertallarrayyelements-bool-preservekeys-arrayarray-key-tarraytkey-t">getArray</a>
 </td></tr><tr><td><a href="#getarraycopy-array">getArrayCopy</a>
-</td><td><a href="#getbackwardsgenerator-generator">getBackwardsGenerator</a>
+</td><td><a href="#getbackwardsgenerator-generatormixed-tgeneratortkey-t">getBackwardsGenerator</a>
 </td><td><a href="#getcolumnintstringnull-columnkey-intstringnull-indexkey-static">getColumn</a>
 </td><td><a href="#getflags">getFlags</a>
-</td></tr><tr><td><a href="#getgenerator-generator">getGenerator</a>
+</td></tr><tr><td><a href="#getgenerator-generatormixed-tgeneratortkey-t">getGenerator</a>
 </td><td><a href="#getgeneratorbyreference-generator">getGeneratorByReference</a>
-</td><td><a href="#getiterator-iteratormixed-mixed">getIterator</a>
+</td><td><a href="#getiterator-iteratortkey-t">getIterator</a>
 </td><td><a href="#getiteratorclass-string">getIteratorClass</a>
 </td></tr><tr><td><a href="#getkeys-static">getKeys</a>
 </td><td><a href="#getlistbool-convertallarrayyelements-array">getList</a>
 </td><td><a href="#getobject-stdclass">getObject</a>
 </td><td><a href="#getphpdocpropertiesfromclass-arrayarray-key-typecheckinterfacetypecheckarrayarray-key-typecheckinterface">getPhpDocPropertiesFromClass</a>
 </td></tr><tr><td><a href="#getrandom-static">getRandom</a>
-</td><td><a href="#getrandomkey-mixednull">getRandomKey</a>
+</td><td><a href="#getrandomkey-tkeynull">getRandomKey</a>
 </td><td><a href="#getrandomkeysint-number-static">getRandomKeys</a>
-</td><td><a href="#getrandomvalue-mixednull">getRandomValue</a>
+</td><td><a href="#getrandomvalue-tnull">getRandomValue</a>
 </td></tr><tr><td><a href="#getrandomvaluesint-number-static">getRandomValues</a>
 </td><td><a href="#getvalues-static">getValues</a>
-</td><td><a href="#getvaluesyield-generator">getValuesYield</a>
+</td><td><a href="#getvaluesyield-generatortkey-t">getValuesYield</a>
 </td><td><a href="#groupcallableintstring-grouper-bool-savekeys-static">group</a>
 </td></tr><tr><td><a href="#hasmixed-key-bool">has</a>
 </td><td><a href="#hasvaluemixed-value-bool">hasValue</a>
 </td><td><a href="#implodestring-glue-string-prefix-string">implode</a>
 </td><td><a href="#implodekeysstring-glue-string">implodeKeys</a>
 </td></tr><tr><td><a href="#indexbyintstring-key-static">indexBy</a>
-</td><td><a href="#indexofmixed-value-falseintstring">indexOf</a>
+</td><td><a href="#indexofmixed-value-tkeyfalse">indexOf</a>
 </td><td><a href="#initialint-to-static">initial</a>
 </td><td><a href="#intersectionarray-search-bool-keepkeys-static">intersection</a>
 </td></tr><tr><td><a href="#intersectionmultiarray-array-static">intersectionMulti</a>
@@ -751,8 +751,8 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#krsortimmutableint-sort_flags-this">krsortImmutable</a>
 </td><td><a href="#ksortint-sort_flags-this">ksort</a>
 </td></tr><tr><td><a href="#ksortimmutableint-sort_flags-this">ksortImmutable</a>
-</td><td><a href="#last-mixednull">last</a>
-</td><td><a href="#lastkey-mixednull">lastKey</a>
+</td><td><a href="#last-tnull">last</a>
+</td><td><a href="#lastkey-tkeynull">lastKey</a>
 </td><td><a href="#lastsimmutableintnull-number-static">lastsImmutable</a>
 </td></tr><tr><td><a href="#lastsmutableintnull-number-this">lastsMutable</a>
 </td><td><a href="#lengthint-mode-int">length</a>
@@ -784,7 +784,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#onlyintstring-keys-static">only</a>
 </td></tr><tr><td><a href="#padint-size-mixed-value-static">pad</a>
 </td><td><a href="#partitionclosure-closure-arrayint-static">partition</a>
-</td><td><a href="#pop-mixednull">pop</a>
+</td><td><a href="#pop-tnull">pop</a>
 </td><td><a href="#prependmixed-value-mixed-key-this">prepend</a>
 </td></tr><tr><td><a href="#prependimmutablemixed-value-mixed-key-this">prependImmutable</a>
 </td><td><a href="#prependtoeachkeyfloatintstring-suffix-static">prependToEachKey</a>
@@ -792,16 +792,16 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#pullintintstringstringnull-keyorkeys-mixed-fallback-mixed">pull</a>
 </td></tr><tr><td><a href="#pushmixed-args-this">push</a>
 </td><td><a href="#randomimmutableintnull-number-static">randomImmutable</a>
-</td><td><a href="#randomkey-mixednull">randomKey</a>
+</td><td><a href="#randomkey-tkeynull">randomKey</a>
 </td><td><a href="#randomkeysint-number-static">randomKeys</a>
 </td></tr><tr><td><a href="#randommutableintnull-number-this">randomMutable</a>
-</td><td><a href="#randomvalue-mixed">randomValue</a>
+</td><td><a href="#randomvalue-tnull">randomValue</a>
 </td><td><a href="#randomvaluesint-number-static">randomValues</a>
 </td><td><a href="#randomweightedarray-array-intnull-number-static">randomWeighted</a>
 </td></tr><tr><td><a href="#reducecallable-callable-mixed-initial-static">reduce</a>
 </td><td><a href="#reduce_dimensionbool-unique-static">reduce_dimension</a>
 </td><td><a href="#reindex-this">reindex</a>
-</td><td><a href="#rejectclosure-closure-static">reject</a>
+</td><td><a href="#rejectclosuret-tkey-bool-closure-static">reject</a>
 </td></tr><tr><td><a href="#removemixed-key-static">remove</a>
 </td><td><a href="#removeelementmixed-element-static">removeElement</a>
 </td><td><a href="#removefirst-static">removeFirst</a>
@@ -819,14 +819,14 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#reversekeepindex-this">reverseKeepIndex</a>
 </td><td><a href="#rsortint-sort_flags-this">rsort</a>
 </td></tr><tr><td><a href="#rsortimmutableint-sort_flags-this">rsortImmutable</a>
-</td><td><a href="#searchindexmixed-value-falseintstring">searchIndex</a>
+</td><td><a href="#searchindexmixed-value-tkeyfalse">searchIndex</a>
 </td><td><a href="#searchvaluemixed-index-static">searchValue</a>
 </td><td><a href="#serialize-string">serialize</a>
 </td></tr><tr><td><a href="#setstring-key-mixed-value-this">set</a>
 </td><td><a href="#setandgetmixed-key-mixed-fallback-mixed">setAndGet</a>
 </td><td><a href="#setflagsint-flags">setFlags</a>
 </td><td><a href="#setiteratorclassstring-iteratorclass-void">setIteratorClass</a>
-</td></tr><tr><td><a href="#shift-mixednull">shift</a>
+</td></tr><tr><td><a href="#shift-tnull">shift</a>
 </td><td><a href="#shufflebool-secure-arraynull-array-static">shuffle</a>
 </td><td><a href="#sizeint-mode-int">size</a>
 </td><td><a href="#sizeisint-size-bool">sizeIs</a>
@@ -846,9 +846,9 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#splitint-numberofpieces-bool-keepkeys-static">split</a>
 </td><td><a href="#stripempty-static">stripEmpty</a>
 </td><td><a href="#swapintstring-swapa-intstring-swapb-static">swap</a>
-</td></tr><tr><td><a href="#toarraybool-convertallarrayyelements-bool-preservekeys-array">toArray</a>
+</td></tr><tr><td><a href="#toarraybool-convertallarrayyelements-bool-preservekeys-arraytkey-tlistt">toArray</a>
 </td><td><a href="#tojsonint-options-int-depth-string">toJson</a>
-</td><td><a href="#tolistbool-convertallarrayyelements-array">toList</a>
+</td><td><a href="#tolistbool-convertallarrayyelements-listt">toList</a>
 </td><td><a href="#topermutationstringnull-items-string-helper-staticstatic">toPermutation</a>
 </td></tr><tr><td><a href="#tostringstring-separator-string">toString</a>
 </td><td><a href="#uasortcallable-callable-this">uasort</a>
@@ -860,7 +860,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#uniquenewindex-this">uniqueNewIndex</a>
 </td></tr><tr><td><a href="#unserializestring-string-this">unserialize</a>
 </td><td><a href="#unshiftmixed-args-this">unshift</a>
-</td><td><a href="#validateclosure-closure-bool">validate</a>
+</td><td><a href="#validateclosuret-tkey-bool-closure-bool">validate</a>
 </td><td><a href="#values-static">values</a>
 </td></tr><tr><td><a href="#walkcallable-callable-bool-recursive-mixed-userdata-this">walk</a>
 </td><td><a href="#wherestring-keyorpropertyormethod-mixed-value-static">where</a>
@@ -1740,7 +1740,7 @@ property within that.
 
 --------
 
-## find(\Closure $closure): false|mixed
+## find(\Closure(\T, \TKey): bool $closure): T|false
 <a href="#voku-php-readme-class-methods">↑</a>
 Find the first item in an array that passes the truth test, otherwise return false.
 
@@ -1753,10 +1753,10 @@ a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(\T, \TKey): bool $closure`
 
 **Return:**
-- `false|mixed <p>Return false if we did not find the value.</p>`
+- `T|false`
 
 --------
 
@@ -1782,7 +1782,7 @@ a($array)->filterBy('name', 'foo'); // Arrayy[0 => ['id' => 123, 'name' => 'foo'
 
 --------
 
-## findKey(\Closure $closure): false|int|string
+## findKey(\Closure(\T, \TKey): bool $closure): TKey|false
 <a href="#voku-php-readme-class-methods">↑</a>
 Find the key of the first item in an array that passes the truth test, otherwise return false.
 
@@ -1795,14 +1795,14 @@ a(['foo', 'bar', 'lall'])->findKey($closure); // 0
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(\T, \TKey): bool $closure`
 
 **Return:**
-- `false|int|string <p>Return false if we did not find the key.</p>`
+- `TKey|false`
 
 --------
 
-## first(): mixed|null
+## first(): T|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the first value from the current array.
 
@@ -1814,11 +1814,11 @@ a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
 __nothing__
 
 **Return:**
-- `mixed|null <p>Return null if there wasn't a element.</p>`
+- `T|null`
 
 --------
 
-## firstKey(): mixed|null
+## firstKey(): TKey|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the first key from the current array.
 
@@ -1826,7 +1826,7 @@ Get the first key from the current array.
 __nothing__
 
 **Return:**
-- `mixed|null <p>Return null if there wasn't a element.</p>`
+- `TKey|null`
 
 --------
 
@@ -1944,7 +1944,7 @@ $arrayy['user.firstname']; // Lars
 
 --------
 
-## getAll(): array
+## getAll(): array<\TKey, \T>
 <a href="#voku-php-readme-class-methods">↑</a>
 alias: for "Arrayy->toArray()"
 
@@ -1952,11 +1952,11 @@ alias: for "Arrayy->toArray()"
 __nothing__
 
 **Return:**
-- `array`
+- `array<\TKey, \T>`
 
 --------
 
-## getArray(bool $convertAllArrayyElements, bool $preserveKeys): array
+## getArray(bool $convertAllArrayyElements, bool $preserveKeys): array<array-key, \T>|array<\TKey, \T>
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the current array from the "Arrayy"-object.
 
@@ -1967,7 +1967,7 @@ alias for "toArray()"
 - `bool $preserveKeys <p> e.g.: A generator maybe return the same key more than once, so maybe you will ignore the keys. </p>`
 
 **Return:**
-- `array`
+- `array<array-key, \T>|array<\TKey, \T>`
 
 --------
 
@@ -1983,7 +1983,7 @@ __nothing__
 
 --------
 
-## getBackwardsGenerator(): Generator
+## getBackwardsGenerator(): Generator<mixed, \T>|\Generator<\TKey, \T>
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the current array from the "Arrayy"-object as generator.
 
@@ -1991,7 +1991,7 @@ Get the current array from the "Arrayy"-object as generator.
 __nothing__
 
 **Return:**
-- `Generator`
+- `Generator<mixed, \T>|\Generator<\TKey, \T>`
 
 --------
 
@@ -2028,7 +2028,7 @@ __nothing__
 
 --------
 
-## getGenerator(): Generator
+## getGenerator(): Generator<mixed, \T>|\Generator<\TKey, \T>
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the current array from the "Arrayy"-object as generator.
 
@@ -2036,7 +2036,7 @@ Get the current array from the "Arrayy"-object as generator.
 __nothing__
 
 **Return:**
-- `Generator`
+- `Generator<mixed, \T>|\Generator<\TKey, \T>`
 
 --------
 
@@ -2052,7 +2052,7 @@ __nothing__
 
 --------
 
-## getIterator(): Iterator<mixed, mixed>
+## getIterator(): Iterator<\TKey, \T>
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns a new iterator, thus implementing the \Iterator interface.
 
@@ -2064,7 +2064,7 @@ a(['foo', 'bar'])->getIterator(); // ArrayyIterator['foo', 'bar']
 __nothing__
 
 **Return:**
-- `Iterator<mixed, mixed>`
+- `Iterator<\TKey, \T>`
 
 --------
 
@@ -2142,7 +2142,7 @@ __nothing__
 
 --------
 
-## getRandomKey(): mixed|null
+## getRandomKey(): TKey|null
 <a href="#voku-php-readme-class-methods">↑</a>
 alias: for "Arrayy->randomKey()"
 
@@ -2150,7 +2150,7 @@ alias: for "Arrayy->randomKey()"
 __nothing__
 
 **Return:**
-- `mixed|null <p>Get a key/index or null if there wasn't a key/index.</p>`
+- `TKey|null`
 
 --------
 
@@ -2166,7 +2166,7 @@ alias: for "Arrayy->randomKeys()"
 
 --------
 
-## getRandomValue(): mixed|null
+## getRandomValue(): T|null
 <a href="#voku-php-readme-class-methods">↑</a>
 alias: for "Arrayy->randomValue()"
 
@@ -2174,7 +2174,7 @@ alias: for "Arrayy->randomValue()"
 __nothing__
 
 **Return:**
-- `mixed|null <p>Get a random value or null if there wasn't a value.</p>`
+- `T|null`
 
 --------
 
@@ -2202,7 +2202,7 @@ __nothing__
 
 --------
 
-## getValuesYield(): Generator
+## getValuesYield(): Generator<\TKey, \T>
 <a href="#voku-php-readme-class-methods">↑</a>
 Gets all values via Generator.
 
@@ -2210,7 +2210,7 @@ Gets all values via Generator.
 __nothing__
 
 **Return:**
-- `Generator`
+- `Generator<\TKey, \T>`
 
 --------
 
@@ -2296,7 +2296,7 @@ returns an object with an index of each item.
 
 --------
 
-## indexOf(mixed $value): false|int|string
+## indexOf(mixed $value): TKey|false
 <a href="#voku-php-readme-class-methods">↑</a>
 alias: for "Arrayy->searchIndex()"
 
@@ -2304,7 +2304,7 @@ alias: for "Arrayy->searchIndex()"
 - `mixed $value <p>The value to search for.</p>`
 
 **Return:**
-- `false|int|string`
+- `TKey|false`
 
 --------
 
@@ -2577,7 +2577,7 @@ Sort the entries by key.
 
 --------
 
-## last(): mixed|null
+## last(): T|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the last value from the current array.
 
@@ -2589,11 +2589,11 @@ a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(); // 'lall'
 __nothing__
 
 **Return:**
-- `mixed|null <p>Return null if there wasn't a element.</p>`
+- `T|null`
 
 --------
 
-## lastKey(): mixed|null
+## lastKey(): TKey|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the last key from the current array.
 
@@ -2601,7 +2601,7 @@ Get the last key from the current array.
 __nothing__
 
 **Return:**
-- `mixed|null <p>Return null if there wasn't a element.</p>`
+- `TKey|null`
 
 --------
 
@@ -3088,7 +3088,7 @@ Keys are preserved in the resulting array.
 
 --------
 
-## pop(): mixed|null
+## pop(): T|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Pop a specified value off the end of the current array.
 
@@ -3096,7 +3096,7 @@ Pop a specified value off the end of the current array.
 __nothing__
 
 **Return:**
-- `mixed|null <p>(Mutable) The popped element from the current array or null if the array is e.g. empty.</p>`
+- `T|null`
 
 --------
 
@@ -3200,7 +3200,7 @@ a([1, 2, 3, 4])->randomImmutable(2); // e.g.: Arrayy[1, 4]
 
 --------
 
-## randomKey(): mixed|null
+## randomKey(): TKey|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Pick a random key/index from the keys of this array.
 
@@ -3213,7 +3213,7 @@ $arrayy->randomKey(); // e.g. 2
 __nothing__
 
 **Return:**
-- `mixed|null <p>Get a key/index or null if there wasn't a key/index.</p>`
+- `TKey|null`
 
 --------
 
@@ -3249,7 +3249,7 @@ a([1, 2, 3, 4])->randomMutable(2); // e.g.: Arrayy[1, 4]
 
 --------
 
-## randomValue(): mixed
+## randomValue(): T|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Pick a random value from the values of this array.
 
@@ -3261,7 +3261,7 @@ a([1 => 'one', 2 => 'two'])->randomValue(); // e.g. 'one'
 __nothing__
 
 **Return:**
-- `mixed <p>Get a random value or null if there wasn't a value.</p>`
+- `T|null`
 
 --------
 
@@ -3348,7 +3348,7 @@ __nothing__
 
 --------
 
-## reject(\Closure $closure): static
+## reject(\Closure(\T, \TKey): bool $closure): static
 <a href="#voku-php-readme-class-methods">↑</a>
 Return all items that fail the truth test.
 
@@ -3360,7 +3360,7 @@ a([1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
 </code>
 
 **Parameters:**
-- `\Closure $closure`
+- `\Closure(\T, \TKey): bool $closure`
 
 **Return:**
 - `static <p>(Immutable)</p>`
@@ -3652,7 +3652,7 @@ Sort an array in reverse order.
 
 --------
 
-## searchIndex(mixed $value): false|int|string
+## searchIndex(mixed $value): TKey|false
 <a href="#voku-php-readme-class-methods">↑</a>
 Search for the first index of the current array via $value.
 
@@ -3664,7 +3664,7 @@ a(['fòô' => 'bàř', 'lall' => 'bàř'])->searchIndex('bàř'); // Arrayy[0 =>
 - `mixed $value`
 
 **Return:**
-- `false|int|string <p>Will return <b>FALSE</b> if the value can't be found.</p>`
+- `TKey|false`
 
 --------
 
@@ -3763,7 +3763,7 @@ Sets the iterator classname for the current "Arrayy"-object.
 
 --------
 
-## shift(): mixed|null
+## shift(): T|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Shifts a specified value off the beginning of array.
 
@@ -3771,7 +3771,7 @@ Shifts a specified value off the beginning of array.
 __nothing__
 
 **Return:**
-- `mixed|null <p>(Mutable) A shifted element from the current array.</p>`
+- `T|null`
 
 --------
 
@@ -4076,7 +4076,7 @@ a(['a' => 1, 'b' => ''])->swap('a', 'b'); // Arrayy[['a' => '', 'b' => 1]]
 
 --------
 
-## toArray(bool $convertAllArrayyElements, bool $preserveKeys): array
+## toArray(bool $convertAllArrayyElements, bool $preserveKeys): array<\TKey, \T>|list<\T>
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the current array from the "Arrayy"-object.
 
@@ -4087,7 +4087,7 @@ alias for "getArray()"
 - `bool $preserveKeys <p> e.g.: A generator maybe return the same key more than once, so maybe you will ignore the keys. </p>`
 
 **Return:**
-- `array`
+- `array<\TKey, \T>|list<\T>`
 
 --------
 
@@ -4108,7 +4108,7 @@ a(['bar', ['foo']])->toJson(); // '["bar",{"1":"foo"}]'
 
 --------
 
-## toList(bool $convertAllArrayyElements): array
+## toList(bool $convertAllArrayyElements): list<\T>
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the current array from the "Arrayy"-object as list.
 
@@ -4116,7 +4116,7 @@ Get the current array from the "Arrayy"-object as list.
 - `bool $convertAllArrayyElements <p> Convert all Child-"Arrayy" objects also to arrays. </p>`
 
 **Return:**
-- `array`
+- `list<\T>`
 
 --------
 
@@ -4266,12 +4266,12 @@ Prepends one or more values to the beginning of array at once.
 
 --------
 
-## validate(\Closure $closure): bool
+## validate(\Closure(\T, \TKey): bool $closure): bool
 <a href="#voku-php-readme-class-methods">↑</a>
 Tests whether the given closure return something valid for all elements of this array.
 
 **Parameters:**
-- `\Closure $closure the predicate`
+- `\Closure(\T, \TKey): bool $closure the predicate`
 
 **Return:**
 - `bool <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>`
