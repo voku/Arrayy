@@ -539,7 +539,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a(['foo', 'bar'])->getIterator(); // ArrayyIterator['foo', 'bar']
      * </code>
      *
-     * @return \Iterator<mixed, mixed>
+     * @return \Iterator<TKey, T>
      *                          <p>An iterator for the values in the array.</p>
      * @phpstan-return \Iterator<TKey, T>
      */
@@ -2766,7 +2766,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param \Closure $closure
      *
-     * @return false|mixed
+     * @return T|false
      *                     <p>Return false if we did not find the value.</p>
      *
      * @phpstan-param \Closure(T,TKey):bool $closure
@@ -2796,7 +2796,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param \Closure $closure
      *
-     * @return false|int|string
+     * @return TKey|false
      *                          <p>Return false if we did not find the key.</p>
      *
      * @phpstan-param \Closure(T,TKey):bool $closure
@@ -2847,7 +2847,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
      * </code>
      *
-     * @return mixed|null
+     * @return T|null
      *                    <p>Return null if there wasn't a element.</p>
      *
      * @phpstan-return T|null
@@ -2866,7 +2866,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the first key from the current array.
      *
-     * @return mixed|null
+     * @return TKey|null
      *                    <p>Return null if there wasn't a element.</p>
      *
      * @phpstan-return TKey|null
@@ -3765,7 +3765,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param mixed $value
      *                     <p>The value to search for.</p>
      *
-     * @return false|int|string
+     * @return TKey|false
      *
      * @phpstan-param T $value
      * @phpstan-return false|TKey
@@ -4278,7 +4278,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(); // 'lall'
      * </code>
      *
-     * @return mixed|null
+     * @return T|null
      *                    <p>Return null if there wasn't a element.</p>
      *
      * @phpstan-return T|null
@@ -4300,7 +4300,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the last key from the current array.
      *
-     * @return mixed|null
+     * @return TKey|null
      *                    <p>Return null if there wasn't a element.</p>
      *
      * @phpstan-return null|TKey
@@ -5049,7 +5049,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Pop a specified value off the end of the current array.
      *
-     * @return mixed|null
+     * @return T|null
      *                    <p>(Mutable) The popped element from the current array or null if the array is e.g. empty.</p>
      *
      * @phpstan-return T|null
@@ -5341,7 +5341,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @throws \RangeException If array is empty
      *
-     * @return mixed|null
+     * @return TKey|null
      *                    <p>Get a key/index or null if there wasn't a key/index.</p>
      *
      * @phpstan-return null|TKey
@@ -5447,7 +5447,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([1 => 'one', 2 => 'two'])->randomValue(); // e.g. 'one'
      * </code>
      *
-     * @return mixed
+     * @return T|null
      *               <p>Get a random value or null if there wasn't a value.</p>
      *
      * @phpstan-return T|null
@@ -6161,7 +6161,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param mixed $value
      *
-     * @return false|int|string
+     * @return TKey|false
      *                          <p>Will return <b>FALSE</b> if the value can't be found.</p>
      *
      * @phpstan-param T $value
@@ -6288,7 +6288,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Shifts a specified value off the beginning of array.
      *
-     * @return mixed|null
+     * @return T|null
      *                    <p>(Mutable) A shifted element from the current array.</p>
      *
      * @phpstan-return T|null

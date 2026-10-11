@@ -67,6 +67,7 @@ jobs:
         run: |
           php vendor/bin/phpstan analyse
           php vendor/bin/phpstan analyse -c phpstan.neon --no-progress tests/PHPStan/LegacyTwoParameterArrayy.php
+          php vendor/bin/phpstan analyse -c phpstan.neon --no-progress tests/PHPStan/PortableGenericReturnUsage.php
           # Negative usages must fail for the *expected* reasons, not any two errors.
           if php vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=json tests/PHPStan/GenericNegativeUsage.php > /tmp/arrayy-generic-negative.json; then
             echo "PHPStan unexpectedly accepted invalid generic usages"

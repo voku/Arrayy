@@ -48,7 +48,7 @@ namespace Arrayy {
      * @param array<mixed> $array
      * @param mixed        $fallback <p>This fallback will be used, if the array is empty.</p>
      *
-     * @return mixed|null
+     * @return TLast|TLastFallback
      *
      * @template TLast
      * @template TLastFallback
@@ -70,7 +70,7 @@ namespace Arrayy {
      * @param array<mixed> $array
      * @param mixed        $fallback <p>This fallback will be used, if the array is empty.</p>
      *
-     * @return mixed|null
+     * @return TFirst|TFirstFallback
      *
      * @template TFirst
      * @template TFirstFallback
