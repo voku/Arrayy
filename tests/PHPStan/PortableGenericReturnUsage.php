@@ -48,20 +48,9 @@ function assertPortableGenericReturns(Arrayy $dates, array $values): void
  */
 function assertWrappedArrayAccessorReturns(Arrayy $nested): void
 {
-    $wrapped = $nested->first();
-    if ($wrapped !== null) {
-        $wrapped->toArray(); // PHPStan must know this is Arrayy, not the stored PHP array.
-    }
-    $wrapped = $nested->last();
-    if ($wrapped !== null) {
-        $wrapped->toArray(); // PHPStan must know this is Arrayy, not the stored PHP array.
-    }
-    $wrapped = $nested->randomValue();
-    if ($wrapped !== null) {
-        $wrapped->toArray(); // PHPStan must know this is Arrayy, not the stored PHP array.
-    }
-    $wrapped = $nested->getRandomValue();
-    if ($wrapped !== null) {
-        $wrapped->toArray(); // PHPStan must know this is Arrayy, not the stored PHP array.
+    foreach ([$nested->first(), $nested->last(), $nested->randomValue(), $nested->getRandomValue()] as $wrapped) {
+        if ($wrapped !== null) {
+            $wrapped->toArray(); // The stored array must be exposed as an Arrayy instance.
+        }
     }
 }
