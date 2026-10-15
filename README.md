@@ -705,7 +705,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#flip-static">flip</a>
 </td><td><a href="#getintstring-key-mixed-fallback-arraynull-array-bool-usebyreference-mixedstatic">get</a>
 </td><td><a href="#getall-arraytkey-t">getAll</a>
-</td><td><a href="#getarraybool-convertallarrayyelements-bool-preservekeys-arrayarray-key-tarraytkey-t">getArray</a>
+</td><td><a href="#getarraybool-convertallarrayyelements-bool-preservekeys-arrayarray-key-tarrayarray-key-mixedarraytkey-t">getArray</a>
 </td></tr><tr><td><a href="#getarraycopy-array">getArrayCopy</a>
 </td><td><a href="#getbackwardsgenerator-generatormixed-tgeneratortkey-t">getBackwardsGenerator</a>
 </td><td><a href="#getcolumnintstringnull-columnkey-intstringnull-indexkey-static">getColumn</a>
@@ -715,7 +715,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#getiterator-iteratortkey-t">getIterator</a>
 </td><td><a href="#getiteratorclass-string">getIteratorClass</a>
 </td></tr><tr><td><a href="#getkeys-static">getKeys</a>
-</td><td><a href="#getlistbool-convertallarrayyelements-array">getList</a>
+</td><td><a href="#getlistbool-convertallarrayyelements-listtarrayarray-key-mixed">getList</a>
 </td><td><a href="#getobject-stdclass">getObject</a>
 </td><td><a href="#getphpdocpropertiesfromclass-arrayarray-key-typecheckinterfacetypecheckarrayarray-key-typecheckinterface">getPhpDocPropertiesFromClass</a>
 </td></tr><tr><td><a href="#getrandom-static">getRandom</a>
@@ -846,9 +846,9 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#splitint-numberofpieces-bool-keepkeys-static">split</a>
 </td><td><a href="#stripempty-static">stripEmpty</a>
 </td><td><a href="#swapintstring-swapa-intstring-swapb-static">swap</a>
-</td></tr><tr><td><a href="#toarraybool-convertallarrayyelements-bool-preservekeys-arraytkey-tlistt">toArray</a>
+</td></tr><tr><td><a href="#toarraybool-convertallarrayyelements-bool-preservekeys-arraytkey-tarrayarray-key-mixedlisttarrayarray-key-mixed">toArray</a>
 </td><td><a href="#tojsonint-options-int-depth-string">toJson</a>
-</td><td><a href="#tolistbool-convertallarrayyelements-listt">toList</a>
+</td><td><a href="#tolistbool-convertallarrayyelements-listtarrayarray-key-mixed">toList</a>
 </td><td><a href="#topermutationstringnull-items-string-helper-staticstatic">toPermutation</a>
 </td></tr><tr><td><a href="#tostringstring-separator-string">toString</a>
 </td><td><a href="#uasortcallable-callable-this">uasort</a>
@@ -1956,7 +1956,7 @@ __nothing__
 
 --------
 
-## getArray(bool $convertAllArrayyElements, bool $preserveKeys): array<array-key, \T>|array<\TKey, \T>
+## getArray(bool $convertAllArrayyElements, bool $preserveKeys): array<array-key, \T|array<array-key, mixed>>|array<\TKey, \T>
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the current array from the "Arrayy"-object.
 
@@ -1967,7 +1967,7 @@ alias for "toArray()"
 - `bool $preserveKeys <p> e.g.: A generator maybe return the same key more than once, so maybe you will ignore the keys. </p>`
 
 **Return:**
-- `array<array-key, \T>|array<\TKey, \T>`
+- `array<array-key, \T|array<array-key, mixed>>|array<\TKey, \T>`
 
 --------
 
@@ -2092,7 +2092,7 @@ __nothing__
 
 --------
 
-## getList(bool $convertAllArrayyElements): array
+## getList(bool $convertAllArrayyElements): list<\T|array<array-key, mixed>>
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the current array from the "Arrayy"-object as list.
 
@@ -2102,7 +2102,7 @@ alias for "toList()"
 - `bool $convertAllArrayyElements <p> Convert all Child-"Arrayy" objects also to arrays. </p>`
 
 **Return:**
-- `array`
+- `list<\T|array<array-key, mixed>>`
 
 --------
 
@@ -4076,7 +4076,7 @@ a(['a' => 1, 'b' => ''])->swap('a', 'b'); // Arrayy[['a' => '', 'b' => 1]]
 
 --------
 
-## toArray(bool $convertAllArrayyElements, bool $preserveKeys): array<\TKey, \T>|list<\T>
+## toArray(bool $convertAllArrayyElements, bool $preserveKeys): array<\TKey, \T|array<array-key, mixed>>|list<\T|array<array-key, mixed>>
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the current array from the "Arrayy"-object.
 
@@ -4087,7 +4087,7 @@ alias for "getArray()"
 - `bool $preserveKeys <p> e.g.: A generator maybe return the same key more than once, so maybe you will ignore the keys. </p>`
 
 **Return:**
-- `array<\TKey, \T>|list<\T>`
+- `array<\TKey, \T|array<array-key, mixed>>|list<\T|array<array-key, mixed>>`
 
 --------
 
@@ -4108,7 +4108,7 @@ a(['bar', ['foo']])->toJson(); // '["bar",{"1":"foo"}]'
 
 --------
 
-## toList(bool $convertAllArrayyElements): list<\T>
+## toList(bool $convertAllArrayyElements): list<\T|array<array-key, mixed>>
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the current array from the "Arrayy"-object as list.
 
@@ -4116,7 +4116,7 @@ Get the current array from the "Arrayy"-object as list.
 - `bool $convertAllArrayyElements <p> Convert all Child-"Arrayy" objects also to arrays. </p>`
 
 **Return:**
-- `list<\T>`
+- `list<\T|array<array-key, mixed>>`
 
 --------
 
