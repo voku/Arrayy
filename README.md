@@ -1802,7 +1802,7 @@ a(['foo', 'bar', 'lall'])->findKey($closure); // 0
 
 --------
 
-## first(): T|null
+## first(): T|static|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the first value from the current array.
 
@@ -2166,7 +2166,7 @@ alias: for "Arrayy->randomKeys()"
 
 --------
 
-## getRandomValue(): T|null
+## getRandomValue(): T|static|null
 <a href="#voku-php-readme-class-methods">↑</a>
 alias: for "Arrayy->randomValue()"
 
@@ -2577,7 +2577,7 @@ Sort the entries by key.
 
 --------
 
-## last(): T|null
+## last(): T|static|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the last value from the current array.
 
@@ -3249,7 +3249,7 @@ a([1, 2, 3, 4])->randomMutable(2); // e.g.: Arrayy[1, 4]
 
 --------
 
-## randomValue(): T|null
+## randomValue(): T|static|null
 <a href="#voku-php-readme-class-methods">↑</a>
 Pick a random value from the values of this array.
 
