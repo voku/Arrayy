@@ -696,7 +696,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#findclosuret-tkey-bool-closure-tfalse">find</a>
 </td></tr><tr><td><a href="#findbystring-property-mixed-value-string-comparisonop-static">findBy</a>
 </td><td><a href="#findkeyclosuret-tkey-bool-closure-tkeyfalse">findKey</a>
-</td><td><a href="#first-tnull">first</a>
+</td><td><a href="#first-tstaticnull">first</a>
 </td><td><a href="#firstkey-tkeynull">firstKey</a>
 </td></tr><tr><td><a href="#firstsimmutableintnull-number-static">firstsImmutable</a>
 </td><td><a href="#firstskeysintnull-number-static">firstsKeys</a>
@@ -721,7 +721,7 @@ foreach ($arrayy) as $key => $value) {
 </td></tr><tr><td><a href="#getrandom-static">getRandom</a>
 </td><td><a href="#getrandomkey-tkeynull">getRandomKey</a>
 </td><td><a href="#getrandomkeysint-number-static">getRandomKeys</a>
-</td><td><a href="#getrandomvalue-tnull">getRandomValue</a>
+</td><td><a href="#getrandomvalue-tstaticnull">getRandomValue</a>
 </td></tr><tr><td><a href="#getrandomvaluesint-number-static">getRandomValues</a>
 </td><td><a href="#getvalues-static">getValues</a>
 </td><td><a href="#getvaluesyield-generatortkey-t">getValuesYield</a>
@@ -751,7 +751,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#krsortimmutableint-sort_flags-this">krsortImmutable</a>
 </td><td><a href="#ksortint-sort_flags-this">ksort</a>
 </td></tr><tr><td><a href="#ksortimmutableint-sort_flags-this">ksortImmutable</a>
-</td><td><a href="#last-tnull">last</a>
+</td><td><a href="#last-tstaticnull">last</a>
 </td><td><a href="#lastkey-tkeynull">lastKey</a>
 </td><td><a href="#lastsimmutableintnull-number-static">lastsImmutable</a>
 </td></tr><tr><td><a href="#lastsmutableintnull-number-this">lastsMutable</a>
@@ -795,7 +795,7 @@ foreach ($arrayy) as $key => $value) {
 </td><td><a href="#randomkey-tkeynull">randomKey</a>
 </td><td><a href="#randomkeysint-number-static">randomKeys</a>
 </td></tr><tr><td><a href="#randommutableintnull-number-this">randomMutable</a>
-</td><td><a href="#randomvalue-tnull">randomValue</a>
+</td><td><a href="#randomvalue-tstaticnull">randomValue</a>
 </td><td><a href="#randomvaluesint-number-static">randomValues</a>
 </td><td><a href="#randomweightedarray-array-intnull-number-static">randomWeighted</a>
 </td></tr><tr><td><a href="#reducecallable-callable-mixed-initial-static">reduce</a>
@@ -1814,7 +1814,7 @@ a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
 __nothing__
 
 **Return:**
-- `T|null`
+- `T|static|null`
 
 --------
 
@@ -2174,7 +2174,7 @@ alias: for "Arrayy->randomValue()"
 __nothing__
 
 **Return:**
-- `T|null`
+- `T|static|null`
 
 --------
 
@@ -2589,7 +2589,7 @@ a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(); // 'lall'
 __nothing__
 
 **Return:**
-- `T|null`
+- `T|static|null`
 
 --------
 
@@ -3261,7 +3261,7 @@ a([1 => 'one', 2 => 'two'])->randomValue(); // e.g. 'one'
 __nothing__
 
 **Return:**
-- `T|null`
+- `T|static|null`
 
 --------
 
