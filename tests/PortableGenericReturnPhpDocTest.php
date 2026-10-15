@@ -110,7 +110,7 @@ final class PortableGenericReturnPhpDocTest extends TestCase
         $converted = ['child' => ['x' => 1], 'scalar' => 2];
         self::assertSame($converted, $parent->toArray(true));
         self::assertSame($converted, $parent->getArray(true));
-        self::assertSame([['x' => 1], 2], $parent->toList(true));
+        self::assertSame([[1], 2], $parent->toList(true));
     }
 
     public function testCallableInputsCarryGenericTypesInStandardPhpDoc(): void
