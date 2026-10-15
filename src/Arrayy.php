@@ -3301,9 +3301,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       Convert all Child-"Arrayy" objects also to arrays.
      *                                       </p>
      *
-     * @return array
+     * @return list<T|array<array-key,mixed>>
      *
-     * @phpstan-return list<T>
+     * @phpstan-return ($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)
      * @psalm-mutation-free
      *
      * @see Arrayy::toList()
@@ -6981,7 +6981,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 }
             }
 
-            /* @phpstan-ignore return.type */
             return $array;
         }
 
@@ -7002,10 +7001,14 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      */
     public function toList(bool $convertAllArrayyElements = false): array
     {
-        return $this->toArray(
+        // $preserveKeys=false guarantees sequential numeric keys for both code paths.
+        /** @var list<T|array<array-key,mixed>> $values */
+        $values = $this->toArray(
             $convertAllArrayyElements,
             false
         );
+
+        return $values;
     }
 
     /**
