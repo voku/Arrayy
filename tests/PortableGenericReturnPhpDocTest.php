@@ -87,6 +87,7 @@ final class PortableGenericReturnPhpDocTest extends TestCase
             'getAll' => ['portable' => 'array<TKey,T>', 'phpstan' => 'array<TKey,T>'],
             'getArray' => ['portable' => 'array<array-key,T|array<array-key,mixed>>|array<TKey,T>', 'phpstan' => '($convertAllArrayyElements is true ? array<array-key,T|array<array-key,mixed>> : ($preserveKeys is true ? array<TKey,T> : list<T>))'],
             'toArray' => ['portable' => 'array<TKey,T|array<array-key,mixed>>|list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? ($preserveKeys is true ? array<TKey,T|array<array-key,mixed>> : list<T|array<array-key,mixed>>) : ($preserveKeys is true ? array<TKey,T> : list<T>))'],
+            'getList' => ['portable' => 'list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)'],
             'toList' => ['portable' => 'list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)'],
         ];
 
@@ -106,11 +107,13 @@ final class PortableGenericReturnPhpDocTest extends TestCase
         self::assertSame($child, $parent->toArray()['child']);
         self::assertSame($child, $parent->getArray()['child']);
         self::assertSame([$child, 2], $parent->toList());
+        self::assertSame([$child, 2], $parent->getList());
 
         $converted = ['child' => ['x' => 1], 'scalar' => 2];
         self::assertSame($converted, $parent->toArray(true));
         self::assertSame($converted, $parent->getArray(true));
         self::assertSame([[1], 2], $parent->toList(true));
+        self::assertSame([[1], 2], $parent->getList(true));
     }
 
     public function testCallableInputsCarryGenericTypesInStandardPhpDoc(): void
