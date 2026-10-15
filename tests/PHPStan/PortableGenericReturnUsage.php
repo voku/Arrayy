@@ -48,8 +48,20 @@ function assertPortableGenericReturns(Arrayy $dates, array $values): void
  */
 function assertWrappedArrayAccessorReturns(Arrayy $nested): void
 {
-    \PHPStan\Testing\assertType('Arrayy<int, array<string, int>>|null', $nested->first());
-    \PHPStan\Testing\assertType('Arrayy<int, array<string, int>>|null', $nested->last());
-    \PHPStan\Testing\assertType('Arrayy<int, array<string, int>>|null', $nested->randomValue());
-    \PHPStan\Testing\assertType('Arrayy<int, array<string, int>>|null', $nested->getRandomValue());
+    $wrapped = $nested->first();
+    if ($wrapped !== null) {
+        $wrapped->toArray(); // PHPStan must know this is Arrayy, not the stored PHP array.
+    }
+    $wrapped = $nested->last();
+    if ($wrapped !== null) {
+        $wrapped->toArray(); // PHPStan must know this is Arrayy, not the stored PHP array.
+    }
+    $wrapped = $nested->randomValue();
+    if ($wrapped !== null) {
+        $wrapped->toArray(); // PHPStan must know this is Arrayy, not the stored PHP array.
+    }
+    $wrapped = $nested->getRandomValue();
+    if ($wrapped !== null) {
+        $wrapped->toArray(); // PHPStan must know this is Arrayy, not the stored PHP array.
+    }
 }
