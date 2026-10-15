@@ -3228,9 +3228,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       so maybe you will ignore the keys.
      *                                       </p>
      *
-     * @return array<array-key,T>|array<TKey,T>
+     * @return array<array-key,T|array<array-key,mixed>>|array<TKey,T>
      *
-     * @phpstan-return array<array-key,T>|array<TKey,T>
+     * @phpstan-return ($convertAllArrayyElements is true ? array<array-key,T|array<array-key,mixed>> : ($preserveKeys is true ? array<TKey,T> : list<T>))
      * @psalm-mutation-free
      *
      * @see Arrayy::toArray()
@@ -6953,9 +6953,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       so maybe you will ignore the keys.
      *                                       </p>
      *
-     * @return array<TKey,T>|list<T>
+     * @return array<TKey,T|array<array-key,mixed>>|list<T|array<array-key,mixed>>
      *
-     * @phpstan-return ($preserveKeys is true ? array<TKey,T> : T[])
+     * @phpstan-return ($convertAllArrayyElements is true ? ($preserveKeys is true ? array<TKey,T|array<array-key,mixed>> : list<T|array<array-key,mixed>>) : ($preserveKeys is true ? array<TKey,T> : list<T>))
      * @psalm-mutation-free
      */
     public function toArray(
@@ -6995,14 +6995,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       Convert all Child-"Arrayy" objects also to arrays.
      *                                       </p>
      *
-     * @return list<T>
+     * @return list<T|array<array-key,mixed>>
      *
-     * @phpstan-return list<T>
+     * @phpstan-return ($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)
      * @psalm-mutation-free
      */
     public function toList(bool $convertAllArrayyElements = false): array
     {
-        /** @var list<T> - currently phpstan can't return different types depending on the phpdocs params */
         return $this->toArray(
             $convertAllArrayyElements,
             false
