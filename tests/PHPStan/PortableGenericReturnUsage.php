@@ -40,3 +40,16 @@ function assertPortableGenericReturns(Arrayy $dates, array $values): void
         \PHPStan\Testing\assertType('DateTimeImmutable', $date);
     }
 }
+
+/**
+ * The accessor wraps stored PHP arrays, but keeps scalar element types precise.
+ *
+ * @param Arrayy<int, array<string, int>> $nested
+ */
+function assertWrappedArrayAccessorReturns(Arrayy $nested): void
+{
+    \PHPStan\Testing\\assertType('Arrayy<int, array<string, int>>|null', $nested->first());
+    \PHPStan\Testing\\assertType('Arrayy<int, array<string, int>>|null', $nested->last());
+    \PHPStan\Testing\\assertType('Arrayy<int, array<string, int>>|null', $nested->randomValue());
+    \PHPStan\Testing\\assertType('Arrayy<int, array<string, int>>|null', $nested->getRandomValue());
+}
