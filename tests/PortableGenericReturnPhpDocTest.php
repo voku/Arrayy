@@ -85,9 +85,9 @@ final class PortableGenericReturnPhpDocTest extends TestCase
             'getGenerator' => ['portable' => '\\Generator<mixed,T>|\\Generator<TKey,T>', 'phpstan' => '\\Generator<mixed,T>|\\Generator<TKey,T>'],
             'getBackwardsGenerator' => ['portable' => '\\Generator<mixed,T>|\\Generator<TKey,T>', 'phpstan' => '\\Generator<mixed,T>|\\Generator<TKey,T>'],
             'getAll' => ['portable' => 'array<TKey,T>', 'phpstan' => 'array<TKey,T>'],
-            'getArray' => ['portable' => 'array<array-key,T>|array<TKey,T>', 'phpstan' => 'array<array-key,T>|array<TKey,T>'],
-            'toArray' => ['portable' => 'array<TKey,T>|list<T>', 'phpstan' => '($preserveKeys is true ? array<TKey,T> : T[])'],
-            'toList' => ['portable' => 'list<T>', 'phpstan' => 'list<T>'],
+            'getArray' => ['portable' => 'array<array-key,T|array<array-key,mixed>>|array<TKey,T>', 'phpstan' => '($convertAllArrayyElements is true ? array<array-key,T|array<array-key,mixed>> : ($preserveKeys is true ? array<TKey,T> : list<T>))'],
+            'toArray' => ['portable' => 'array<TKey,T|array<array-key,mixed>>|list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? ($preserveKeys is true ? array<TKey,T|array<array-key,mixed>> : list<T|array<array-key,mixed>>) : ($preserveKeys is true ? array<TKey,T> : list<T>))'],
+            'toList' => ['portable' => 'list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)'],
         ];
 
         foreach ($types as $method => $expected) {
@@ -96,6 +96,21 @@ final class PortableGenericReturnPhpDocTest extends TestCase
             self::assertStringContainsString('@return ' . $expected['portable'], $doc, $method);
             self::assertStringContainsString('@phpstan-return ' . $expected['phpstan'], $doc, $method);
         }
+    }
+
+    public function testChildConversionKeepsRawValuesByDefaultAndConvertsOnRequest(): void
+    {
+        $child = new Arrayy(['x' => 1]);
+        $parent = new Arrayy(['child' => $child, 'scalar' => 2]);
+
+        self::assertSame($child, $parent->toArray()['child']);
+        self::assertSame($child, $parent->getArray()['child']);
+        self::assertSame([$child, 2], $parent->toList());
+
+        $converted = ['child' => ['x' => 1], 'scalar' => 2];
+        self::assertSame($converted, $parent->toArray(true));
+        self::assertSame($converted, $parent->getArray(true));
+        self::assertSame([['x' => 1], 2], $parent->toList(true));
     }
 
     public function testCallableInputsCarryGenericTypesInStandardPhpDoc(): void
