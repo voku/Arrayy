@@ -2847,10 +2847,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
      * </code>
      *
-     * @return T|null
+     * @return T|static|null
      *                    <p>Return null if there wasn't a element.</p>
      *
-     * @phpstan-return T|null
+     * @phpstan-return (T is array ? static : T)|null
      * @psalm-mutation-free
      */
     public function first()
@@ -3526,10 +3526,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomValue()"
      *
-     * @return T|null
+     * @return T|static|null
      *                    <p>Get a random value or null if there wasn't a value.</p>
      *
-     * @phpstan-return T|null
+     * @phpstan-return (T is array ? static : T)|null
      *
      * @see Arrayy::randomValue()
      */
@@ -4278,10 +4278,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(); // 'lall'
      * </code>
      *
-     * @return T|null
+     * @return T|static|null
      *                    <p>Return null if there wasn't a element.</p>
      *
-     * @phpstan-return T|null
+     * @phpstan-return (T is array ? static : T)|null
      * @psalm-mutation-free
      */
     public function last()
@@ -5447,10 +5447,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([1 => 'one', 2 => 'two'])->randomValue(); // e.g. 'one'
      * </code>
      *
-     * @return T|null
+     * @return T|static|null
      *               <p>Get a random value or null if there wasn't a value.</p>
      *
-     * @phpstan-return T|null
+     * @phpstan-return (T is array ? static : T)|null
      */
     public function randomValue()
     {
