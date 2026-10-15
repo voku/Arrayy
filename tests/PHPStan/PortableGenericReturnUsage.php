@@ -48,8 +48,8 @@ function assertPortableGenericReturns(Arrayy $dates, array $values): void
  */
 function assertWrappedArrayAccessorReturns(Arrayy $nested): void
 {
-    \PHPStan\Testing\\assertType('Arrayy<int, array<string, int>>|null', $nested->first());
-    \PHPStan\Testing\\assertType('Arrayy<int, array<string, int>>|null', $nested->last());
-    \PHPStan\Testing\\assertType('Arrayy<int, array<string, int>>|null', $nested->randomValue());
-    \PHPStan\Testing\\assertType('Arrayy<int, array<string, int>>|null', $nested->getRandomValue());
+    \PHPStan\Testing\assertType('Arrayy<int, array<string, int>>|null', $nested->first());
+    \PHPStan\Testing\assertType('Arrayy<int, array<string, int>>|null', $nested->last());
+    \PHPStan\Testing\assertType('Arrayy<int, array<string, int>>|null', $nested->randomValue());
+    \PHPStan\Testing\assertType('Arrayy<int, array<string, int>>|null', $nested->getRandomValue());
 }
