@@ -68,6 +68,27 @@ jobs:
           php vendor/bin/phpstan analyse
           php vendor/bin/phpstan analyse -c phpstan.neon --no-progress tests/PHPStan/LegacyTwoParameterArrayy.php
           php vendor/bin/phpstan analyse -c phpstan.neon --no-progress tests/PHPStan/PortableGenericReturnUsage.php
+          php vendor/bin/phpstan analyse -c phpstan.neon --no-progress tests/PHPStan/KeyMutationPositiveUsage.php
+          if php vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=json tests/PHPStan/KeyMutationNegativeUsage.php > /tmp/arrayy-key-mutation-negative.json; then
+            echo "PHPStan unexpectedly accepted string-only key callback after append"
+            exit 1
+          fi
+          php -r '
+            $result = json_decode(file_get_contents("/tmp/arrayy-key-mutation-negative.json"), true, 512, JSON_THROW_ON_ERROR);
+            $messages = [];
+            foreach ($result["files"] ?? [] as $file) {
+                foreach ($file["messages"] ?? [] as $entry) { $messages[] = $entry; }
+            }
+            if (($result["totals"]["errors"] ?? -1) !== 0
+                || ($result["totals"]["file_errors"] ?? -1) !== 1
+                || count($messages) !== 1
+                || ($messages[0]["identifier"] ?? "") !== "argument.type"
+                || !str_contains($messages[0]["message"] ?? "", "reject")) {
+                fwrite(STDERR, "Unexpected key-mutation PHPStan negative proof:" . PHP_EOL);
+                fwrite(STDERR, json_encode($result, JSON_PRETTY_PRINT) . PHP_EOL);
+                exit(1);
+            }
+          '
           # Negative usages must fail for the *expected* reasons, not any two errors.
           if php vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=json tests/PHPStan/GenericNegativeUsage.php > /tmp/arrayy-generic-negative.json; then
             echo "PHPStan unexpectedly accepted invalid generic usages"

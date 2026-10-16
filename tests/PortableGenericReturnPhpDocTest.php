@@ -25,14 +25,14 @@ final class PortableGenericReturnPhpDocTest extends TestCase
             'pop' => 'T|null',
             'shift' => 'T|null',
             'randomValue' => 'T|static|null',
-            'firstKey' => 'TKey|null',
-            'lastKey' => 'TKey|null',
-            'randomKey' => 'TKey|null',
+            'firstKey' => 'TKey|int|null',
+            'lastKey' => 'TKey|int|null',
+            'randomKey' => 'TKey|int|null',
             'find' => 'T|false',
-            'findKey' => 'TKey|false',
-            'indexOf' => 'TKey|false',
-            'searchIndex' => 'TKey|false',
-            'getIterator' => '\\Iterator<TKey, T>',
+            'findKey' => 'TKey|int|false',
+            'indexOf' => 'TKey|int|false',
+            'searchIndex' => 'TKey|int|false',
+            'getIterator' => '\\Iterator<TKey|int, T>',
         ];
 
         foreach ($types as $method => $expected) {
@@ -79,14 +79,14 @@ final class PortableGenericReturnPhpDocTest extends TestCase
     {
         /** @var array<string, array{portable: string, phpstan: string}> $types */
         $types = [
-            'getRandomKey' => ['portable' => 'TKey|null', 'phpstan' => 'TKey|null'],
+            'getRandomKey' => ['portable' => 'TKey|int|null', 'phpstan' => 'TKey|int|null'],
             'getRandomValue' => ['portable' => 'T|static|null', 'phpstan' => '(T is array ? static : T)|null'],
-            'getValuesYield' => ['portable' => '\\Generator<TKey,T>', 'phpstan' => '\\Generator<TKey,T>'],
-            'getGenerator' => ['portable' => '\\Generator<mixed,T>|\\Generator<TKey,T>', 'phpstan' => '\\Generator<mixed,T>|\\Generator<TKey,T>'],
-            'getBackwardsGenerator' => ['portable' => '\\Generator<mixed,T>|\\Generator<TKey,T>', 'phpstan' => '\\Generator<mixed,T>|\\Generator<TKey,T>'],
-            'getAll' => ['portable' => 'array<TKey,T>', 'phpstan' => 'array<TKey,T>'],
-            'getArray' => ['portable' => 'array<array-key,T|array<array-key,mixed>>|array<TKey,T>', 'phpstan' => '($convertAllArrayyElements is true ? array<array-key,T|array<array-key,mixed>> : ($preserveKeys is true ? array<TKey,T> : list<T>))'],
-            'toArray' => ['portable' => 'array<TKey,T|array<array-key,mixed>>|list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? ($preserveKeys is true ? array<TKey,T|array<array-key,mixed>> : list<T|array<array-key,mixed>>) : ($preserveKeys is true ? array<TKey,T> : list<T>))'],
+            'getValuesYield' => ['portable' => '\\Generator<TKey|int,T>', 'phpstan' => '\\Generator<TKey|int,T>'],
+            'getGenerator' => ['portable' => '\\Generator<mixed,T>|\\Generator<TKey|int,T>', 'phpstan' => '\\Generator<mixed,T>|\\Generator<TKey|int,T>'],
+            'getBackwardsGenerator' => ['portable' => '\\Generator<mixed,T>|\\Generator<TKey|int,T>', 'phpstan' => '\\Generator<mixed,T>|\\Generator<TKey|int,T>'],
+            'getAll' => ['portable' => 'array<TKey|int,T>', 'phpstan' => 'array<TKey|int,T>'],
+            'getArray' => ['portable' => 'array<array-key,T|array<array-key,mixed>>|array<TKey|int,T>', 'phpstan' => '($convertAllArrayyElements is true ? array<array-key,T|array<array-key,mixed>> : ($preserveKeys is true ? array<TKey|int,T> : list<T>))'],
+            'toArray' => ['portable' => 'array<TKey,T|array<array-key,mixed>>|list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? ($preserveKeys is true ? array<TKey,T|array<array-key,mixed>> : list<T|array<array-key,mixed>>) : ($preserveKeys is true ? array<TKey|int,T> : list<T>))'],
             'getList' => ['portable' => 'list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)'],
             'toList' => ['portable' => 'list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)'],
         ];
@@ -116,13 +116,40 @@ final class PortableGenericReturnPhpDocTest extends TestCase
         self::assertSame([[1], 2], $parent->getList(true));
     }
 
+    public function testUnkeyedAppendExposesIntegerKeysToConsumers(): void
+    {
+        $items = new Arrayy(['name' => 1]);
+        $items->append(2);
+
+        $seen = [];
+        self::assertTrue($items->validate(
+            static function (int $value, int|string $key) use (&$seen): bool {
+                $seen[$key] = $value;
+
+                return true;
+            }
+        ));
+        self::assertSame(['name' => 1, 0 => 2], $seen);
+        self::assertSame(['name' => 1, 0 => 2], iterator_to_array($items->getIterator()));
+        self::assertSame(0, $items->findKey(static fn (int $value): bool => $value === 2));
+    }
+
+    public function testNarrowStringKeyCallbackCannotHandleUnkeyedAppend(): void
+    {
+        $items = new Arrayy(['name' => 1]);
+        $items->append(2);
+
+        $this->expectException(\\TypeError::class);
+        $items->reject(static fn (int $value, string $key): bool => false);
+    }
+
     public function testCallableInputsCarryGenericTypesInStandardPhpDoc(): void
     {
         foreach (['find', 'findKey', 'reject', 'validate'] as $method) {
             $doc = (new ReflectionMethod(Arrayy::class, $method))->getDocComment();
             self::assertIsString($doc, $method);
-            self::assertStringContainsString('@param \\Closure(T,TKey):bool $closure', $doc, $method);
-            self::assertStringContainsString('@phpstan-param \\Closure(T,TKey):bool $closure', $doc, $method);
+            self::assertStringContainsString('@param \\Closure(T,TKey|int):bool $closure', $doc, $method);
+            self::assertStringContainsString('@phpstan-param \\Closure(T,TKey|int):bool $closure', $doc, $method);
         }
     }
 }
