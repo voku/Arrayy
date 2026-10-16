@@ -19,4 +19,9 @@ function validMutationKeyConsumer(Arrayy $items): void
     foreach ($items->getIterator() as $key => $value) {
         \PHPStan\Testing\assertType('int|string', $key);
     }
+    // Direct iteration may use the inherited IteratorAggregate<TKey,T> contract
+    // rather than the widened getIterator() annotation.
+    foreach ($items as $key => $value) {
+        \PHPStan\Testing\assertType('int|string', $key);
+    }
 }
