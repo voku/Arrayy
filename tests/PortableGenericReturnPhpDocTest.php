@@ -86,7 +86,7 @@ final class PortableGenericReturnPhpDocTest extends TestCase
             'getBackwardsGenerator' => ['portable' => '\\Generator<mixed,T>|\\Generator<TKey|int,T>', 'phpstan' => '\\Generator<mixed,T>|\\Generator<TKey|int,T>'],
             'getAll' => ['portable' => 'array<TKey|int,T>', 'phpstan' => 'array<TKey|int,T>'],
             'getArray' => ['portable' => 'array<array-key,T|array<array-key,mixed>>|array<TKey|int,T>', 'phpstan' => '($convertAllArrayyElements is true ? array<array-key,T|array<array-key,mixed>> : ($preserveKeys is true ? array<TKey|int,T> : list<T>))'],
-            'toArray' => ['portable' => 'array<TKey,T|array<array-key,mixed>>|list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? ($preserveKeys is true ? array<TKey,T|array<array-key,mixed>> : list<T|array<array-key,mixed>>) : ($preserveKeys is true ? array<TKey|int,T> : list<T>))'],
+            'toArray' => ['portable' => 'array<TKey|int,T|array<array-key,mixed>>|list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? ($preserveKeys is true ? array<TKey|int,T|array<array-key,mixed>> : list<T|array<array-key,mixed>>) : ($preserveKeys is true ? array<TKey|int,T> : list<T>))'],
             'getList' => ['portable' => 'list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)'],
             'toList' => ['portable' => 'list<T|array<array-key,mixed>>', 'phpstan' => '($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)'],
         ];
