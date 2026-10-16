@@ -17,7 +17,6 @@ function validMutationKeyConsumer(Arrayy $items): void
     $items->find(static fn (int $value, int|string $key): bool => $key === 0);
     $items->findKey(static fn (int $value, int|string $key): bool => $key === 0);
     foreach ($items->getIterator() as $key => $value) {
-        $acceptKey = static fn (int|string $key): bool => true;
-        $acceptKey($key);
+        \PHPStan\Testing\assertType('int|string', $key);
     }
 }
