@@ -139,7 +139,7 @@ final class PortableGenericReturnPhpDocTest extends TestCase
         $items = new Arrayy(['name' => 1]);
         $items->append(2);
 
-        $this->expectException(\\TypeError::class);
+        $this->expectException(\TypeError::class);
         $items->reject(static fn (int $value, string $key): bool => false);
     }
 
