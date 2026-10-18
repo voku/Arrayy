@@ -23,7 +23,7 @@ function createKeepsAssociativeArrayTypes(array $map): void
     \PHPStan\Testing\assertType('Iterator<string, DateTimeImmutable>', $arrayy->getIterator());
 
     $arrayy->map(
-        static function ($value, $key = "") {
+        static function ($value, $key = '') {
             \PHPStan\Testing\assertType('DateTimeImmutable', $value);
             \PHPStan\Testing\assertType('string', $key);
 
