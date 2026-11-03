@@ -539,9 +539,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a(['foo', 'bar'])->getIterator(); // ArrayyIterator['foo', 'bar']
      * </code>
      *
-     * @return \Iterator<mixed, mixed>
+     * @return \Iterator<TKey|int, T>
      *                          <p>An iterator for the values in the array.</p>
-     * @phpstan-return \Iterator<TKey, T>
+     * @phpstan-return \Iterator<TKey|int, T>
      */
     public function getIterator(): \Iterator
     {
@@ -2764,12 +2764,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a(['foo', 'bar', 'lall'])->find($closure); // 'foo'
      * </code>
      *
-     * @param \Closure $closure
+     * @param \Closure(T,TKey|int):bool $closure
      *
-     * @return false|mixed
+     * @return T|false
      *                     <p>Return false if we did not find the value.</p>
      *
-     * @phpstan-param \Closure(T,TKey):bool $closure
+     * @phpstan-param \Closure(T,TKey|int):bool $closure
      * @phpstan-return T|false
      */
     public function find(\Closure $closure)
@@ -2794,13 +2794,13 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a(['foo', 'bar', 'lall'])->findKey($closure); // 0
      * </code>
      *
-     * @param \Closure $closure
+     * @param \Closure(T,TKey|int):bool $closure
      *
-     * @return false|int|string
+     * @return TKey|int|false
      *                          <p>Return false if we did not find the key.</p>
      *
-     * @phpstan-param \Closure(T,TKey):bool $closure
-     * @phpstan-return TKey|false
+     * @phpstan-param \Closure(T,TKey|int):bool $closure
+     * @phpstan-return TKey|int|false
      */
     public function findKey(\Closure $closure)
     {
@@ -2847,10 +2847,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->first(); // 'foo'
      * </code>
      *
-     * @return mixed|null
+     * @return T|static|null
      *                    <p>Return null if there wasn't a element.</p>
      *
-     * @phpstan-return T|null
+     * @phpstan-return (T is array ? static : T)|null
      * @psalm-mutation-free
      */
     public function first()
@@ -2866,10 +2866,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the first key from the current array.
      *
-     * @return mixed|null
+     * @return TKey|int|null
      *                    <p>Return null if there wasn't a element.</p>
      *
-     * @phpstan-return TKey|null
+     * @phpstan-return TKey|int|null
      *
      * @psalm-mutation-free
      */
@@ -3201,11 +3201,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->toArray()"
      *
-     * @return array
+     * @return array<TKey|int,T>
      *
      * @see          Arrayy::getArray()
      *
-     * @phpstan-return array<TKey,T>
+     * @phpstan-return array<TKey|int,T>
      */
     public function getAll(): array
     {
@@ -3228,9 +3228,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       so maybe you will ignore the keys.
      *                                       </p>
      *
-     * @return array
+     * @return array<array-key,T|array<array-key,mixed>>|array<TKey|int,T>
      *
-     * @phpstan-return array<array-key,T>|array<TKey,T>
+     * @phpstan-return ($convertAllArrayyElements is true ? array<array-key,T|array<array-key,mixed>> : ($preserveKeys is true ? array<TKey|int,T> : list<T>))
      * @psalm-mutation-free
      *
      * @see Arrayy::toArray()
@@ -3301,9 +3301,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       Convert all Child-"Arrayy" objects also to arrays.
      *                                       </p>
      *
-     * @return array
+     * @return list<T|array<array-key,mixed>>
      *
-     * @phpstan-return list<T>
+     * @phpstan-return ($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)
      * @psalm-mutation-free
      *
      * @see Arrayy::toList()
@@ -3421,9 +3421,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the current array from the "Arrayy"-object as generator.
      *
-     * @return \Generator
+     * @return \Generator<mixed,T>|\Generator<TKey|int,T>
      *
-     * @phpstan-return \Generator<mixed,T>|\Generator<TKey,T>
+     * @phpstan-return \Generator<mixed,T>|\Generator<TKey|int,T>
      * @psalm-mutation-free
      */
     public function getGenerator(): \Generator
@@ -3440,9 +3440,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the current array from the "Arrayy"-object as generator.
      *
-     * @return \Generator
+     * @return \Generator<mixed,T>|\Generator<TKey|int,T>
      *
-     * @phpstan-return \Generator<mixed,T>|\Generator<TKey,T>
+     * @phpstan-return \Generator<mixed,T>|\Generator<TKey|int,T>
      * @psalm-mutation-free
      */
     public function getBackwardsGenerator(): \Generator
@@ -3494,10 +3494,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomKey()"
      *
-     * @return mixed|null
+     * @return TKey|int|null
      *                    <p>Get a key/index or null if there wasn't a key/index.</p>
      *
-     * @phpstan-return null|TKey
+     * @phpstan-return TKey|int|null
      *
      * @see Arrayy::randomKey()
      */
@@ -3526,10 +3526,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * alias: for "Arrayy->randomValue()"
      *
-     * @return mixed|null
+     * @return T|static|null
      *                    <p>Get a random value or null if there wasn't a value.</p>
      *
-     * @phpstan-return null|T
+     * @phpstan-return (T is array ? static : T)|null
      *
      * @see Arrayy::randomValue()
      */
@@ -3578,11 +3578,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Gets all values via Generator.
      *
-     * @return \Generator
+     * @return \Generator<TKey|int,T>
      *                    <p>The values of all elements in this array, in the order they
      *                    appear in the array as Generator.</p>
      *
-     * @phpstan-return \Generator<TKey,T>
+     * @phpstan-return \Generator<TKey|int,T>
      */
     public function getValuesYield(): \Generator
     {
@@ -3765,10 +3765,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * @param mixed $value
      *                     <p>The value to search for.</p>
      *
-     * @return false|int|string
+     * @return TKey|int|false
      *
      * @phpstan-param T $value
-     * @phpstan-return false|TKey
+     * @phpstan-return TKey|int|false
      *
      * @see Arrayy::searchIndex()
      */
@@ -4278,10 +4278,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([2 => 'foo', 3 => 'bar', 4 => 'lall'])->last(); // 'lall'
      * </code>
      *
-     * @return mixed|null
+     * @return T|static|null
      *                    <p>Return null if there wasn't a element.</p>
      *
-     * @phpstan-return T|null
+     * @phpstan-return (T is array ? static : T)|null
      * @psalm-mutation-free
      */
     public function last()
@@ -4300,10 +4300,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Get the last key from the current array.
      *
-     * @return mixed|null
+     * @return TKey|int|null
      *                    <p>Return null if there wasn't a element.</p>
      *
-     * @phpstan-return null|TKey
+     * @phpstan-return TKey|int|null
      * @psalm-mutation-free
      */
     public function lastKey()
@@ -5049,7 +5049,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Pop a specified value off the end of the current array.
      *
-     * @return mixed|null
+     * @return T|null
      *                    <p>(Mutable) The popped element from the current array or null if the array is e.g. empty.</p>
      *
      * @phpstan-return T|null
@@ -5341,10 +5341,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @throws \RangeException If array is empty
      *
-     * @return mixed|null
+     * @return TKey|int|null
      *                    <p>Get a key/index or null if there wasn't a key/index.</p>
      *
-     * @phpstan-return null|TKey
+     * @phpstan-return TKey|int|null
      */
     public function randomKey()
     {
@@ -5447,10 +5447,10 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([1 => 'one', 2 => 'two'])->randomValue(); // e.g. 'one'
      * </code>
      *
-     * @return mixed
+     * @return T|static|null
      *               <p>Get a random value or null if there wasn't a value.</p>
      *
-     * @phpstan-return T|null
+     * @phpstan-return (T is array ? static : T)|null
      */
     public function randomValue()
     {
@@ -5621,12 +5621,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      * a([1, 2, 3, 4])->reject($closure); // Arrayy[1 => 2, 3 => 4]
      * </code>
      *
-     * @param \Closure $closure
+     * @param \Closure(T,TKey|int):bool $closure
      *
      * @return static
      *                <p>(Immutable)</p>
      *
-     * @phpstan-param \Closure(T,TKey):bool  $closure
+     * @phpstan-param \Closure(T,TKey|int):bool $closure
      * @phpstan-return static
      * @psalm-mutation-free
      */
@@ -6161,11 +6161,11 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *
      * @param mixed $value
      *
-     * @return false|int|string
+     * @return TKey|int|false
      *                          <p>Will return <b>FALSE</b> if the value can't be found.</p>
      *
      * @phpstan-param T $value
-     * @phpstan-return false|TKey
+     * @phpstan-return TKey|int|false
      *
      * @psalm-mutation-free
      */
@@ -6288,7 +6288,7 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Shifts a specified value off the beginning of array.
      *
-     * @return mixed|null
+     * @return T|null
      *                    <p>(Mutable) A shifted element from the current array.</p>
      *
      * @phpstan-return T|null
@@ -6953,9 +6953,9 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       so maybe you will ignore the keys.
      *                                       </p>
      *
-     * @return array
+     * @return array<TKey|int,T|array<array-key,mixed>>|list<T|array<array-key,mixed>>
      *
-     * @phpstan-return ($preserveKeys is true ? array<TKey,T> : T[])
+     * @phpstan-return ($convertAllArrayyElements is true ? ($preserveKeys is true ? array<TKey|int,T|array<array-key,mixed>> : list<T|array<array-key,mixed>>) : ($preserveKeys is true ? array<TKey|int,T> : list<T>))
      * @psalm-mutation-free
      */
     public function toArray(
@@ -6981,7 +6981,6 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
                 }
             }
 
-            /* @phpstan-ignore return.type */
             return $array;
         }
 
@@ -6995,18 +6994,21 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
      *                                       Convert all Child-"Arrayy" objects also to arrays.
      *                                       </p>
      *
-     * @return array
+     * @return list<T|array<array-key,mixed>>
      *
-     * @phpstan-return list<T>
+     * @phpstan-return ($convertAllArrayyElements is true ? list<T|array<array-key,mixed>> : list<T>)
      * @psalm-mutation-free
      */
     public function toList(bool $convertAllArrayyElements = false): array
     {
-        /** @var list<T> - currently phpstan can't return different types depending on the phpdocs params */
-        return $this->toArray(
+        // $preserveKeys=false guarantees sequential numeric keys for both code paths.
+        /** @var list<T|array<array-key,mixed>> $values */
+        $values = $this->toArray(
             $convertAllArrayyElements,
             false
         );
+
+        return $values;
     }
 
     /**
@@ -7211,12 +7213,12 @@ class Arrayy extends \ArrayObject implements \IteratorAggregate, \ArrayAccess, \
     /**
      * Tests whether the given closure return something valid for all elements of this array.
      *
-     * @param \Closure $closure the predicate
+     * @param \Closure(T,TKey|int):bool $closure the predicate
      *
      * @return bool
      *              <p>TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.</p>
      *
-     * @phpstan-param \Closure(T,TKey):bool $closure
+     * @phpstan-param \Closure(T,TKey|int):bool $closure
      */
     public function validate(\Closure $closure): bool
     {

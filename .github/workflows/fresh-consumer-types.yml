@@ -1,0 +1,44 @@
+name: Fresh consumer typing proof
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  consumer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact PR source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP and Composer
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: '8.3'
+          tools: composer
+          coverage: none
+
+      - name: Install locked consumer dependencies
+        working-directory: tests/consumer
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Verify lockfile remains unchanged
+        run: git diff --exit-code -- tests/consumer/composer.lock
+
+      - name: Check package is installed as a copy
+        working-directory: tests/consumer
+        run: |
+          test -f vendor/voku/arrayy/src/Arrayy.php
+          test ! -L vendor/voku/arrayy
+
+      - name: Verify external type inference
+        working-directory: tests/consumer
+        run: |
+          php vendor/bin/phpstan analyse --no-progress --level=8 usage.php
+          php -r 'require "vendor/autoload.php"; $a = new \Arrayy\Arrayy([new \DateTimeImmutable("2025-01-01")]); if (!$a->first() instanceof \DateTimeImmutable) { exit(1); }'

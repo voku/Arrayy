@@ -1,0 +1,25 @@
+{
+  "name": "arrayy/fresh-consumer-proof",
+  "type": "project",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../..",
+      "options": {
+        "symlink": false,
+        "versions": {
+          "voku/arrayy": "dev-pr-193"
+        }
+      }
+    }
+  ],
+  "require": {
+    "voku/arrayy": "dev-pr-193",
+    "phpstan/phpstan": "2.3.1"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true
+  }
+}
