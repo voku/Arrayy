@@ -14,10 +14,14 @@ namespace Arrayy {
          * @param mixed $data
          *
          * @return Arrayy<int|string,mixed,array<int|string,mixed>>
+         *
+         * @template TCreateData
+         * @phpstan-param TCreateData $data
+         * @phpstan-return Arrayy<(TCreateData is array<array-key,mixed> ? key-of<TCreateData> : int|string),(TCreateData is array<array-key,mixed> ? value-of<TCreateData> : mixed),(TCreateData is array<array-key,mixed> ? TCreateData : array<int|string,mixed>)>
          */
         function create($data): Arrayy
         {
-            /** @var Arrayy<int|string,mixed,array<int|string,mixed>> $array */
+            /** @phpstan-var Arrayy<(TCreateData is array<array-key,mixed> ? key-of<TCreateData> : int|string),(TCreateData is array<array-key,mixed> ? value-of<TCreateData> : mixed),(TCreateData is array<array-key,mixed> ? TCreateData : array<int|string,mixed>)> $array */
             $array = new Arrayy($data);
 
             return $array;
